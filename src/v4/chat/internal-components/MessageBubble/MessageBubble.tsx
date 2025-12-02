@@ -5,17 +5,11 @@ import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
-import Flag from '~/v4/icons/Flag';
-import { useDeleteMessage } from '~/v4/chat/hooks/useDeleteMessage';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
 import { PromoteToModerator } from '~/v4/icons/PromoteToModerator';
 import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
 import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
 import { DemoteToMember } from '~/v4/icons/DemoteToMember';
 import Muted from '~/v4/icons/Muted';
-import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import { LivestreamModerationOptions } from '~/v4/social/features/livestream/internal-components/LivestreamModerationOptions';
 import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
 import { MessageOptions } from '~/v4/chat/internal-components/MessageOptions';
@@ -46,11 +40,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   handlePopoverStateChange,
   isJoinedCommunity,
 }) => {
-  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
-
   const { currentUserId } = useSDK();
-  const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
   const { isModerator: isChannelModerator } = useChannelPermission(message.channelId);
   const { room, invitationByMe: invitation, hostId, coHostId } = useLivestreamData();
   const isModerator =
@@ -78,58 +68,13 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     invitation,
   });
 
-  const { deleteMessage } = useDeleteMessage();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { demoteFromModerator, muteUser, promoteToModerator, unmuteUser } = useChatModeration();
-
-  const onClickReportMessage = () => {
-    if (isDesktop) {
-      openPopup({
-        id: 'report_post_reason',
-        pageId,
-        view: 'desktop',
-        isDismissable: false,
-        children: (
-          <ContentReportReason
-            pageId={pageId}
-            componentId={componentId}
-            onCloseMenu={removeDrawerData}
-            message={message}
-            showReportPostButton={false}
-          />
-        ),
-      });
-    } else {
-      setTimeout(() => {
-        setDrawerData({
-          content: (
-            <ContentReportReason
-              pageId={pageId}
-              componentId={componentId}
-              onCloseMenu={removeDrawerData}
-              message={message}
-              showReportPostButton={false}
-            />
-          ),
-        });
-      }, 500);
-    }
-  };
 
   const { handleCreateInvitation, isPending: isPendingCreateInvitation } = useCreateInvitation({
     room,
     pageId,
   });
-
-  const handleReportMessage = () => {
-    removeDrawerData();
-    handleClickReportMessage();
-  };
-
-  const handleDeleteMessage = (messageId: string) => {
-    deleteMessage(messageId);
-    removeDrawerData();
-  };
 
   const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
     return (
@@ -296,13 +241,6 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     );
   };
 
-  const handleClickReportMessage = () =>
-    handleCommunityProfileBehavior({
-      defaultBehavior: onClickReportMessage,
-      isJoined: isJoinedCommunity,
-      allowNonMember: false,
-    });
-
   return (
     <div className={styles.messageBubble__container}>
       <div className={styles.messageBubble__topSectionWrap}>
@@ -371,11 +309,12 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                     <MessageOptions
                       isOwner={isOwner}
                       isModerator={isModerator}
-                      messageId={message.messageId}
-                      syncState={message.syncState}
-                      onReportMessage={handleReportMessage}
-                      onDeleteMessage={handleDeleteMessage}
-                      onClose={closePopover}
+                      message={message}
+                      isJoinedCommunity={isJoinedCommunity}
+                      onCloseMenu={() => {
+                        removeDrawerData();
+                        closePopover();
+                      }}
                     />
                   ),
                 }),
@@ -385,11 +324,12 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
               <MessageOptions
                 isOwner={isOwner}
                 isModerator={isModerator}
-                messageId={message.messageId}
-                syncState={message.syncState}
-                onReportMessage={handleReportMessage}
-                onDeleteMessage={handleDeleteMessage}
-                onClose={closePopover}
+                message={message}
+                isJoinedCommunity={isJoinedCommunity}
+                onCloseMenu={() => {
+                  removeDrawerData();
+                  closePopover();
+                }}
               />
             )}
           </Popover>
@@ -421,11 +361,12 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                             <MessageOptions
                               isOwner={isOwner}
                               isModerator={isModerator}
-                              messageId={message.messageId}
-                              syncState={message.syncState}
-                              onReportMessage={handleReportMessage}
-                              onDeleteMessage={handleDeleteMessage}
-                              onClose={closePopover}
+                              message={message}
+                              isJoinedCommunity={isJoinedCommunity}
+                              onCloseMenu={() => {
+                                removeDrawerData();
+                                closePopover();
+                              }}
                             />
                           ),
                         })
@@ -439,11 +380,11 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                 <MessageOptions
                   isOwner={isOwner}
                   isModerator={isModerator}
-                  messageId={message.messageId}
-                  syncState={message.syncState}
-                  onReportMessage={handleReportMessage}
-                  onDeleteMessage={handleDeleteMessage}
-                  onClose={closePopover}
+                  message={message}
+                  isJoinedCommunity={isJoinedCommunity}
+                  onCloseMenu={() => {
+                    closePopover();
+                  }}
                 />
               )}
             </Popover>

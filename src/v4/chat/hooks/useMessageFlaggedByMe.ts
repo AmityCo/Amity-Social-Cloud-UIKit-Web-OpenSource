@@ -6,18 +6,16 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 export const useMessageFlaggedByMe = ({
   messageId,
-  reasonReport,
   onCloseMenu,
 }: {
   messageId: string;
-  reasonReport?: Amity.ContentFlagReason;
   onCloseMenu?: () => void;
 }): {
   isLoading: boolean;
   isFlaggedByMe: boolean;
   isMessageDeleted: boolean;
-  isFlagLoading: boolean;
-  mutateReportMessage: () => Promise<unknown>;
+  isPending: boolean;
+  mutateReportMessage: (reasonReport?: Amity.ContentFlagReason) => Promise<unknown>;
   mutateUnreportMessage: () => Promise<unknown>;
 } => {
   const { success, info } = useNotifications();
@@ -34,8 +32,8 @@ export const useMessageFlaggedByMe = ({
     enabled: messageId != null,
   });
 
-  const { mutateAsync: mutateReportMessage, isPending: isFlagLoading } = useMutation({
-    mutationFn: async () => {
+  const { mutateAsync: mutateReportMessage, isPending: isPendingReport } = useMutation({
+    mutationFn: async (reasonReport?: Amity.ContentFlagReason) => {
       if (messageId == null) return;
       return MessageRepository.flagMessage(messageId, reasonReport);
     },
@@ -69,7 +67,7 @@ export const useMessageFlaggedByMe = ({
     },
   });
 
-  const { mutateAsync: mutateUnreportMessage } = useMutation({
+  const { mutateAsync: mutateUnreportMessage, isPending: isPendingUnreport } = useMutation({
     mutationFn: async () => {
       if (messageId == null) return;
       return MessageRepository.unflagMessage(messageId);
@@ -104,7 +102,7 @@ export const useMessageFlaggedByMe = ({
     isLoading,
     isFlaggedByMe: data || false,
     isMessageDeleted,
-    isFlagLoading,
+    isPending: isPendingReport || isPendingUnreport,
     mutateReportMessage,
     mutateUnreportMessage,
   };
