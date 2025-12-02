@@ -98,7 +98,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
           </div>
         </div>
 
-        {event.rsvpCount > 0 && event.status === AmityEventStatus.Scheduled && !isVisitorOrBot && (
+        {event.rsvpCount > 0 && !isVisitorOrBot && (
           <Button
             onPress={() =>
               AmityEventDetailPageBehavior?.goToEventAttendeesPage?.({

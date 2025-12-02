@@ -11,7 +11,6 @@ import CloseIcon from '~/v4/icons/Close';
 import { UpdateStatusBottomSheet } from './UpdateStatusBottomSheet';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { checkIsWithinMinutes } from '~/v4/social/utils/timezone';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Popover } from '~/v4/core/components/AriaPopover';
@@ -37,8 +36,6 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
   const { community } = useCommunity({ communityId: event.targetCommunity?.communityId });
 
   const isDisabledStatusButton = event.status !== AmityEventStatus.Scheduled;
-
-  const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
   const { isVisitorOrBot } = useSDK();
 
@@ -240,7 +237,6 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
           </Popover>
         ) : (
           event.status === AmityEventStatus.Scheduled &&
-          !isWithin15Minutes &&
           event.userId !== currentUserId && (
             <Button
               onPress={
@@ -282,7 +278,6 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
         </Button>
       ) : (
         event.status === AmityEventStatus.Scheduled &&
-        !isWithin15Minutes &&
         event.userId !== currentUserId && (
           <Button
             onPress={

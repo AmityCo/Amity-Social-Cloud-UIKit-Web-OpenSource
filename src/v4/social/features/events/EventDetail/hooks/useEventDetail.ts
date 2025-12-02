@@ -21,7 +21,7 @@ export function useEventDetail(eventId: string) {
 
   const [isBackgroundShown, setIsBackgroundShown] = useState(false);
   const [sticky, setSticky] = useState(false);
-  const { event, isLoading } = useEvent({ eventId });
+  const { event, refresh, isLoading } = useEvent({ eventId });
   const [activeTab, setActiveTab] = useState<Key>(EventDetailTab.About);
   const [myRSVP, setMyRSVP] = useState<Amity.EventResponse | undefined>(undefined);
   const { getMyRSVP } = useRSVP(event!);
@@ -62,6 +62,12 @@ export function useEventDetail(eventId: string) {
     };
     fetchRSVP();
   }, [event]);
+
+  useEffect(() => {
+    if (myRSVP) {
+      refresh();
+    }
+  }, [myRSVP?.status]);
 
   return {
     event,
