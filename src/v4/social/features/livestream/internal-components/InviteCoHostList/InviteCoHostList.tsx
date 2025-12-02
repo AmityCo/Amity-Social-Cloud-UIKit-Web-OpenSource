@@ -14,6 +14,7 @@ import {
 } from '~/v4/social/features/livestream/hooks';
 import { Button } from '~/v4/core/components/AriaButton';
 import { UserListItemSkeleton } from '~/v4/social/internal-components/Skeleton';
+import { BrandBadge } from '~/v4/social/elements';
 
 export interface InviteCoHostListProps {
   pageId?: string;
@@ -70,7 +71,7 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
         <Typography.BodyBold className={styles.watchingUserItem__displayName}>
           {user?.displayName || user?.userId}
         </Typography.BodyBold>
-        {user?.isBrand && <UserOfficialBadge />}
+        {user?.isBrand && <BrandBadge />}
       </div>
       {isInvited ? (
         <Button

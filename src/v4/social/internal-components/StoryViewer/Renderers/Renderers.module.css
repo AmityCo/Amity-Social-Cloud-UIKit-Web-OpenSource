@@ -88,7 +88,7 @@
 }
 
 .closeButton {
-  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
   width: 1.25rem;
   height: 1.25rem;
   cursor: pointer;
@@ -317,4 +317,11 @@
   display: flex;
   align-items: center;
   gap: 0.2rem;
+}
+
+.creatorDisplayName {
+  max-width: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

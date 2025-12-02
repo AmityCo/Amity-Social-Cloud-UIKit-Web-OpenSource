@@ -16,6 +16,10 @@
   gap: 0.25rem;
 }
 
+.userProfileHeader__displayName--multiLine {
+  align-items: end;
+}
+
 .userProfileHeader__avatar {
   width: 3.5rem !important;
   height: 3.5rem !important;

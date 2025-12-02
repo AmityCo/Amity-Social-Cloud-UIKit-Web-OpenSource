@@ -76,11 +76,9 @@ export const ReactionListPanel = ({
                         {reaction.user?.displayName}
                       </Typography.BodyBold>
                       {reaction.user?.isBrand && (
-                        <BrandBadge
-                          pageId="reaction_list_panel"
-                          componentId="brand_badge"
-                          className={styles.userDetailsBrandBadge}
-                        />
+                        <div className={styles.userDetailsBrandBadge}>
+                          <BrandBadge pageId="reaction_list_panel" componentId="brand_badge" />
+                        </div>
                       )}
                     </Button>
                     {currentUserId === reaction.user?.userId && (

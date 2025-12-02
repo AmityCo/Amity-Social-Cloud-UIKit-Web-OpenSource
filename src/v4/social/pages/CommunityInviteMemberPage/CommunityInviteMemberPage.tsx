@@ -416,12 +416,9 @@ function MemberLabel({ pageId = '*', user }: MemberLabelProps) {
       >
         {user.displayName ?? user.userId}
       </Typography.BodyBold>
-      {user.isBrand && (
-        <BrandBadge
-          pageId={pageId}
-          className={styles.communityInviteMemberPage__selectedUserBrandBadge}
-        />
-      )}
+      <div className={styles.communityInviteMemberPage__selectedUserBrandBadge}>
+        {user.isBrand && <BrandBadge pageId={pageId} />}
+      </div>
     </div>
   );
 }

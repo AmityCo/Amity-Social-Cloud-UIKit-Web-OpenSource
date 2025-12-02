@@ -143,6 +143,9 @@
 }
 
 .communityInviteMemberPage__selectedUserBrandBadge {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
   margin-left: -0.25rem;
 }
 

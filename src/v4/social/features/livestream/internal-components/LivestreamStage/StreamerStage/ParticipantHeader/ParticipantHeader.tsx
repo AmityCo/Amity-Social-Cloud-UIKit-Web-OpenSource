@@ -10,6 +10,7 @@ import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/u
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import MuteMic from '~/v4/icons/MutedMic';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { BrandBadge } from '~/v4/social/elements';
 
 export interface ParticipantHeaderProps {
   pageId?: string;
@@ -50,12 +51,19 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
       ? currentUser?.userId
       : invitedCoHost?.displayName ?? coHost?.user?.displayName;
 
+  const isBrandUser =
+    hostId !== currentUser?.userId
+      ? currentUser?.isBrand
+      : invitedCoHost?.isBrand ?? coHost?.user?.isBrand;
+
   return (
     <div className={clsx(styles.participantHeader, className)}>
       <div className={styles.participantHeader__displayName}>
         <Typography.Body className={styles.participantHeader__displayName__text}>
           {displayName}
         </Typography.Body>
+        <div className={styles.participantHeader__brandBadge}>{isBrandUser && <BrandBadge />}</div>
+
         {isMuted && <MuteMic className={styles.participantHeader__muteMic__icon} />}
       </div>
 

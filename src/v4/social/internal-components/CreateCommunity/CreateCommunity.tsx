@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage';
 import { Title } from '~/v4/social/elements/Title';
-import { BackButton, CloseButton } from '~/v4/social/elements';
+import { BackButton, BrandBadge, CloseButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -647,12 +647,19 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                       <Clear className={styles.createCommunity__removeUser} />
                     </Button>
                   </div>
-                  <Typography.Body
-                    key={user.userId}
-                    className={styles.createCommunity__selectedUserDisplayName}
-                  >
-                    {user.displayName}
-                  </Typography.Body>
+                  <div className={styles.createCommunity__selectedUserDisplayNameWrapper}>
+                    <Typography.Body
+                      key={user.userId}
+                      className={styles.createCommunity__selectedUserDisplayName}
+                    >
+                      {user.displayName}
+                    </Typography.Body>
+                    {user.isBrand && (
+                      <div className={styles.createCommunity__brandBadge}>
+                        <BrandBadge />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
               <CommunityAddMemberButton
@@ -706,12 +713,19 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                         <Clear className={styles.createCommunity__removeUser} />
                       </Button>
                     </div>
-                    <Typography.Body
-                      key={user.userId}
-                      className={styles.createCommunity__selectedUserDisplayName}
-                    >
-                      {user.displayName}
-                    </Typography.Body>
+                    <div className={styles.createCommunity__selectedUserDisplayNameWrapper}>
+                      <Typography.Body
+                        key={user.userId}
+                        className={styles.createCommunity__selectedUserDisplayName}
+                      >
+                        {user.displayName}
+                      </Typography.Body>
+                      {user.isBrand && (
+                        <div className={styles.createCommunity__brandBadge}>
+                          <BrandBadge />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

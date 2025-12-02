@@ -19,6 +19,7 @@
   max-width: 15rem;
   padding: 0.25rem 0.625rem;
   display: flex;
+  gap: 0.25rem;
   align-items: center;
   border-radius: 50rem;
   background: rgb(0 0 0 / 20%);
@@ -29,6 +30,7 @@
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .participantHeader__optionButton {
@@ -44,4 +46,9 @@
 
 .participantHeader__optionButton__icon {
   color: var(--asc-color-white);
+}
+
+.participantHeader__brandBadge {
+  display: flex;
+  align-items: center;
 }

@@ -49,7 +49,9 @@ export const UserSearchItem = ({
           >
             {user.displayName}
           </Typography.BodyBold>
-          {user.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
+          <div className={styles.userItem__brandBadge}>
+            {user.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
+          </div>
         </div>
       </div>
     </Button>

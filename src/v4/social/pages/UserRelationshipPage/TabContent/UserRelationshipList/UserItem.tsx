@@ -8,6 +8,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { UserItemMenu } from './UserItemMenu';
+import { BrandBadge } from '~/v4/social/elements';
 
 type UserItemProps = {
   userId: string;
@@ -46,6 +47,12 @@ export const UserItem: FC<UserItemProps> = ({
         <Typography.BodyBold className={styles.userItem__displayName}>
           {user.displayName}
         </Typography.BodyBold>
+
+        {user.isBrand && (
+          <div className={styles.userItem__brandBadge}>
+            <BrandBadge />
+          </div>
+        )}
       </Button>
       {isShowMenuButton && (
         <Popover

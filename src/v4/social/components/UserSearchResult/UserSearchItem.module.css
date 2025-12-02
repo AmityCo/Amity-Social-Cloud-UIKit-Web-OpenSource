@@ -50,3 +50,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.userItem__brandBadge {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+}

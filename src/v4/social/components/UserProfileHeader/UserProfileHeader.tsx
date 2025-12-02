@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './UserProfileHeader.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { UserFollowing } from '~/v4/social/elements/UserFollowing/UserFollowing';
@@ -33,6 +33,45 @@ interface UserProfileHeaderProps {
   pageId?: string;
 }
 
+const calculateLineHeight = (element: HTMLElement): number => {
+  const computedStyle = getComputedStyle(element);
+  const lineHeight = parseFloat(computedStyle.lineHeight);
+
+  if (isNaN(lineHeight)) {
+    const fontSize = parseFloat(computedStyle.fontSize);
+    return fontSize * 1.2;
+  }
+
+  return lineHeight;
+};
+
+const useMultiLineDetection = (
+  containerRef: React.RefObject<HTMLElement>,
+  dependencies: [string | undefined, string | undefined],
+) => {
+  const [isMultiLine, setIsMultiLine] = useState(false);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const timer = setTimeout(() => {
+      const element = containerRef.current?.querySelector('[data-testid*="user_name"]');
+      if (!element) return;
+
+      const textElement = element.querySelector('div') || element;
+      const lineHeight = calculateLineHeight(textElement as HTMLElement);
+      const height = textElement.clientHeight;
+      const lineCount = height / lineHeight;
+
+      setIsMultiLine(lineCount > 1.5);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, dependencies);
+
+  return isMultiLine;
+};
+
 const UserProfileHeaderSkeleton: React.FC = () => {
   return (
     <div className={styles.userProfileHeader__skeleton}>
@@ -55,6 +94,7 @@ const UserProfileHeaderSkeleton: React.FC = () => {
 export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, pageId = '*' }) => {
   const componentId = 'user_profile_header';
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+  const displayNameRef = useRef<HTMLDivElement>(null);
 
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const { currentUserId, isVisitorOrBot } = useSDK();
@@ -66,6 +106,9 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { online } = useNetworkState();
   const notification = useNotifications();
+  const { isDesktop } = useResponsive();
+
+  const isMultiLine = useMultiLineDetection(displayNameRef, [user?.displayName, user?.userId]);
 
   const unFollowUserButton = ({
     onClickButton,
@@ -89,8 +132,6 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
       </Typography.BodyBold>
     </Button>
   );
-
-  const { isDesktop } = useResponsive();
 
   const onPressFollowingButton = (userId: string) => {
     setDrawerData({
@@ -153,7 +194,12 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
             componentId={componentId}
           />
         </Button>
-        <div className={styles.userProfileHeader__displayName}>
+        <div
+          ref={displayNameRef}
+          className={`${styles.userProfileHeader__displayName} ${
+            isMultiLine ? styles['userProfileHeader__displayName--multiLine'] : ''
+          }`}
+        >
           <UserName
             name={user.displayName ?? user.userId}
             pageId={pageId}

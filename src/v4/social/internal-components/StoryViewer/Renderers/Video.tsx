@@ -344,7 +344,12 @@ export const renderer: CustomRenderer = ({
           createdAt && creator?.displayName ? (
             <span className={rendererStyles.creatorWrapper}>
               <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-              <span data-testid="creator_display_name">{creator?.displayName}</span>
+              <span
+                data-testid="creator_display_name"
+                className={rendererStyles.creatorDisplayName}
+              >
+                {creator?.displayName}
+              </span>
               {creator?.isBrand && <BrandBadge pageId={pageId} />}
             </span>
           ) : (
