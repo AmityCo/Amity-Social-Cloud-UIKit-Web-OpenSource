@@ -31,11 +31,20 @@ function formatCount(count: number): string {
   return `${millions.toFixed(1)}M`;
 }
 
-export function WatchingCountBadge({ className, count }: { className?: string; count?: number }) {
+export function WatchingCountBadge({
+  className,
+  count,
+  isWatcher,
+}: {
+  className?: string;
+  count?: number;
+  isWatcher?: boolean;
+}) {
   return (
     <div className={clsx(styles.watchingCountBadge, className)}>
       {count ? (
         <>
+          {isWatcher && <LiveDot className={styles.watchingCountBadge__liveDotIcon} />}
           <UserOutlined className={styles.watchingCountBadge__userIcon} />
           <Typography.CaptionBold className={styles.watchingCountBadge__text}>
             {formatCount(count)}

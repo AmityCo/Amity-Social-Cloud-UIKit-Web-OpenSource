@@ -332,6 +332,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   isEnded={isEnded}
                   isUserBanned={!!isUserBanned}
                   onClose={onClose}
+                  room={room}
                 />
                 <LivestreamPlayer
                   themeStyles={themeStyles}
