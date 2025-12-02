@@ -61,6 +61,8 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isModeratorMessage = channel?.metadata?.moderators?.includes(message.creatorId);
   const isCoHostMessage = coHostId === message.creatorId;
   const isUserMuted = channel?.metadata?.mutedMembers?.includes(message.creatorId);
+  const isCurrentUserMuted = channel?.metadata?.mutedMembers?.includes(currentUserId);
+  const showMutedIndicator = isUserMuted && (isCurrentUserMuted || isModerator);
 
   const {
     coHost,
@@ -353,7 +355,9 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
           ) : isModeratorMessage ? (
             <ModeratorBadge pageId={pageId} componentId={componentId} type="live" />
           ) : null}
-          {isUserMuted && <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />}
+          {showMutedIndicator && (
+            <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
+          )}
         </div>
         {message.syncState !== 'error' && !message.isDeleted && (
           <Popover

@@ -307,7 +307,7 @@ export const LivestreamChatMessageComposer = ({
     if (
       (isMuted || channel?.metadata?.mutedMembers?.includes(currentUserId)) &&
       channel?.attachedTo?.postId &&
-      channel?.attachedTo?.videoStreamId
+      channel?.attachedTo?.roomId
     )
       return renderReadOnlyState({
         allowReaction: !isHost,

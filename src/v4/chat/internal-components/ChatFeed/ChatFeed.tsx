@@ -134,7 +134,6 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
                     key={message.messageId}
                     message={message}
                     channel={liveChannel}
-                    streamerId={room?.createdBy}
                     handlePopoverStateChange={handlePopoverStateChange}
                     isJoinedCommunity={isJoinedCommunity}
                   />
