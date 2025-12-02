@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { useEvent } from '~/v4/social/features/events/hooks';
+import { useRSVP } from '~/v4/social/features/events/hooks/useRSVP';
 
 enum EventDetailTab {
   About = 'about',
@@ -22,6 +23,8 @@ export function useEventDetail(eventId: string) {
   const [sticky, setSticky] = useState(false);
   const { event, isLoading } = useEvent({ eventId });
   const [activeTab, setActiveTab] = useState<Key>(EventDetailTab.About);
+  const [myRSVP, setMyRSVP] = useState<Amity.EventResponse | undefined>(undefined);
+  const { getMyRSVP } = useRSVP(event!);
 
   const actionBackground: React.CSSProperties = {
     background: isBackgroundShown
@@ -52,6 +55,14 @@ export function useEventDetail(eventId: string) {
     return () => observer.disconnect();
   }, [eventCoverRef?.current]);
 
+  useEffect(() => {
+    const fetchRSVP = async () => {
+      const rsvpData = await getMyRSVP();
+      setMyRSVP(rsvpData ?? undefined);
+    };
+    fetchRSVP();
+  }, [event]);
+
   return {
     event,
     pageId,
@@ -66,5 +77,7 @@ export function useEventDetail(eventId: string) {
     accessibilityId,
     actionBackground,
     isBackgroundShown,
+    myRSVP,
+    setMyRSVP,
   };
 }

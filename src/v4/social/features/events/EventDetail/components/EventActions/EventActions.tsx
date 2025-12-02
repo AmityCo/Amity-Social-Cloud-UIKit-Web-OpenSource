@@ -12,20 +12,29 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useEventActions } from '~/v4/social/features/events/EventDetail/hooks';
 import styles from './EventActions.module.css';
+import { AddCalendar } from '~/v4/icons/AddCalendar';
+import { downloadICS } from '~/v4/social/utils/downloadICS';
+import { useRSVP } from '~/v4/social/features/events/hooks/useRSVP';
+import { AmityEventResponseStatus } from '@amityco/ts-sdk';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export type EventActionsProps = {
   event: Amity.Event;
   withTitle?: boolean;
   pop?: number;
+  myRSVP?: Amity.EventResponse | null;
 };
 
-export function EventActions({ event, withTitle, pop = 1 }: EventActionsProps) {
+export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActionsProps) {
   const { onBack } = useNavigation();
   const { info } = useConfirmContext();
   const { deleteEvent } = useEventActions();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
   const { hasDeleteEventPermission, hasUpdateEventPermission } = useEventPermission(event.originId);
+  const { currentUserId } = useSDK();
+
+  const isHostEvent = event.creator?.userId === currentUserId;
 
   const actions = [
     {
@@ -47,6 +56,17 @@ export function EventActions({ event, withTitle, pop = 1 }: EventActionsProps) {
             event,
           });
         }
+      },
+    },
+    {
+      key: 'add-to-calendar',
+      Icon: AddCalendar,
+      label: 'Add to calendar',
+      condition:
+        (isHostEvent || myRSVP?.status === AmityEventResponseStatus.Going) &&
+        event.status !== 'ended',
+      onPress: () => {
+        downloadICS(event);
       },
     },
     {

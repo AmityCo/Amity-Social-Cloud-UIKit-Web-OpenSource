@@ -5,7 +5,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { MemberBottomSheet } from './MemberBottomSheet';
 import { NonMemberBottomSheet } from './NonMemberBottomSheet';
 import { AmityEventResponseStatus, AmityEventStatus } from '@amityco/ts-sdk';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Check } from '~/icons';
 import CloseIcon from '~/v4/icons/Close';
 import { UpdateStatusBottomSheet } from './UpdateStatusBottomSheet';
@@ -22,12 +22,13 @@ import useCommunity from '~/v4/social/hooks/objects/useCommunity';
 
 type RSVPButtonProps = {
   event: Amity.Event;
+  myRSVP?: Amity.EventResponse;
+  setMyRSVP: Dispatch<SetStateAction<Amity.EventResponse | undefined>>;
 };
 
-export const RSVPButton = ({ event }: RSVPButtonProps) => {
+export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { getMyRSVP, createRSVP, updateRSVP } = useRSVP(event);
-  const [myRSVP, setMyRSVP] = useState<Amity.EventResponse | undefined>(undefined);
+  const { createRSVP, updateRSVP } = useRSVP(event);
   const { error } = useNotifications();
   const { info } = useConfirmContext();
   const { currentUserId } = useSDK();
@@ -40,14 +41,6 @@ export const RSVPButton = ({ event }: RSVPButtonProps) => {
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
   const { isVisitorOrBot } = useSDK();
-
-  useEffect(() => {
-    const fetchRSVP = async () => {
-      const rsvpData = await getMyRSVP();
-      setMyRSVP(rsvpData);
-    };
-    fetchRSVP();
-  }, [event]);
 
   const handleAddToCalendar = () => {
     downloadICS(event);
@@ -118,6 +111,16 @@ export const RSVPButton = ({ event }: RSVPButtonProps) => {
           "Requested to join the community. You'll be notified once your request is accepted. ",
       });
     } else {
+      const response = await createRSVP(AmityEventResponseStatus.Going);
+      setMyRSVP(response);
+      if (isDesktop) {
+        openPopup({
+          children: ({ close }) => (
+            <MemberBottomSheet onPressAddToCalendar={handleAddToCalendar} onClose={close} />
+          ),
+        });
+        return;
+      }
       setDrawerData({
         content: (
           <MemberBottomSheet

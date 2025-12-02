@@ -32,6 +32,8 @@ export function EventDetail({ eventId, pop }: EventDetailProps) {
     accessibilityId,
     actionBackground,
     isBackgroundShown,
+    myRSVP,
+    setMyRSVP,
   } = useEventDetail(eventId);
 
   if (!event || event.isDeleted) return <FailedToShow />;
@@ -40,7 +42,7 @@ export function EventDetail({ eventId, pop }: EventDetailProps) {
     <section style={themeStyles} data-testid={accessibilityId} className={styles.eventDetail}>
       <div className={styles.eventDetail__header}>
         <div className={styles.eventDetail__topBar} style={actionBackground}>
-          <EventActions event={event} withTitle={isBackgroundShown} pop={pop} />
+          <EventActions event={event} myRSVP={myRSVP} withTitle={isBackgroundShown} pop={pop} />
           {sticky && (
             <Tabs
               ref={tabRef}
@@ -64,7 +66,7 @@ export function EventDetail({ eventId, pop }: EventDetailProps) {
         </div>
         <EventCover url={event.coverImage?.fileUrl} ref={eventCoverRef} />
         <EventDescription event={event} />
-        <RSVPButton event={event} />
+        <RSVPButton event={event} myRSVP={myRSVP} setMyRSVP={setMyRSVP} />
         <Tabs
           ref={tabRef}
           variant="icon"
