@@ -113,7 +113,7 @@
   .liveStreamPlayer__dialog[data-is-live='true'],
   .liveStreamPlayer__dialog[data-backstage='true'] {
     display: grid;
-    grid-template-columns: 1fr 30vw;
+    grid-template-columns: 1fr 26.4375rem;
     width: 100dvw;
   }
 
