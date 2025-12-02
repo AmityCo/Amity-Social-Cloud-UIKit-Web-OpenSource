@@ -2,8 +2,8 @@ import { AmityEventResponseStatus } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
-export const useRSVP = (event: Amity.Event) => {
-  const { success, error } = useNotifications();
+export const useRSVP = ({ event }: { event: Amity.Event }) => {
+  const { success, info } = useNotifications();
 
   const { mutateAsync: createRSVP } = useMutation({
     networkMode: 'always',
@@ -12,7 +12,7 @@ export const useRSVP = (event: Amity.Event) => {
     },
 
     onError: () => {
-      error({
+      info({
         content: 'Failed to update your attending status. Please try again.',
       });
     },
@@ -28,13 +28,18 @@ export const useRSVP = (event: Amity.Event) => {
         success({
           content: 'Successfully updated your attending status.',
         });
-        return;
       }
     },
-    onError: () => {
-      error({
-        content: 'Failed to update your attending status. Please try again.',
-      });
+    onError: (error) => {
+      if (error.message.includes('Cannot update RSVP for live events')) {
+        info({
+          content: 'Your attending status cannot be changed once the event has started.',
+        });
+      } else {
+        info({
+          content: 'Failed to update your attending status. Please try again.',
+        });
+      }
     },
   });
 

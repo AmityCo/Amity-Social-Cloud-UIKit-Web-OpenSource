@@ -14,7 +14,6 @@ import { useEventActions } from '~/v4/social/features/events/EventDetail/hooks';
 import styles from './EventActions.module.css';
 import { AddCalendar } from '~/v4/icons/AddCalendar';
 import { downloadICS } from '~/v4/social/utils/downloadICS';
-import { useRSVP } from '~/v4/social/features/events/hooks/useRSVP';
 import { AmityEventResponseStatus } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 
@@ -31,7 +30,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   const { deleteEvent } = useEventActions();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
-  const { hasDeleteEventPermission, hasUpdateEventPermission } = useEventPermission(event.originId);
+  const { hasDeleteEventPermission } = useEventPermission(event.originId);
   const { currentUserId } = useSDK();
 
   const isHostEvent = event.creator?.userId === currentUserId;
@@ -41,7 +40,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       key: 'edit',
       Icon: Pencil,
       label: 'Edit event',
-      condition: hasUpdateEventPermission,
+      condition: isHostEvent,
       onPress: () => {
         if (checkIsWithinMinutes(event.startTime)) {
           info({

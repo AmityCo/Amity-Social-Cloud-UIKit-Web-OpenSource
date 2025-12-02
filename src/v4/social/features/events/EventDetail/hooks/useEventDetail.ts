@@ -24,7 +24,7 @@ export function useEventDetail(eventId: string) {
   const { event, refresh, isLoading } = useEvent({ eventId });
   const [activeTab, setActiveTab] = useState<Key>(EventDetailTab.About);
   const [myRSVP, setMyRSVP] = useState<Amity.EventResponse | undefined>(undefined);
-  const { getMyRSVP } = useRSVP(event!);
+  const { getMyRSVP } = useRSVP({ event: event! });
 
   const actionBackground: React.CSSProperties = {
     background: isBackgroundShown
@@ -85,5 +85,6 @@ export function useEventDetail(eventId: string) {
     isBackgroundShown,
     myRSVP,
     setMyRSVP,
+    refresh,
   };
 }

@@ -34,6 +34,7 @@ export function EventDetail({ eventId, pop }: EventDetailProps) {
     isBackgroundShown,
     myRSVP,
     setMyRSVP,
+    refresh,
   } = useEventDetail(eventId);
 
   if (!event || event.isDeleted) return <FailedToShow />;
@@ -66,7 +67,7 @@ export function EventDetail({ eventId, pop }: EventDetailProps) {
         </div>
         <EventCover url={event.coverImage?.fileUrl} ref={eventCoverRef} />
         <EventDescription event={event} />
-        <RSVPButton event={event} myRSVP={myRSVP} setMyRSVP={setMyRSVP} />
+        <RSVPButton event={event} myRSVP={myRSVP} setMyRSVP={setMyRSVP} onRefresh={refresh} />
         <Tabs
           ref={tabRef}
           variant="icon"

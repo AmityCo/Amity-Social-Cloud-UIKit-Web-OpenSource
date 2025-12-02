@@ -23,11 +23,12 @@ type RSVPButtonProps = {
   event: Amity.Event;
   myRSVP?: Amity.EventResponse;
   setMyRSVP: Dispatch<SetStateAction<Amity.EventResponse | undefined>>;
+  onRefresh?: () => void;
 };
 
-export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
+export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonProps) => {
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { createRSVP, updateRSVP } = useRSVP(event);
+  const { createRSVP, updateRSVP } = useRSVP({ event });
   const { error } = useNotifications();
   const { info } = useConfirmContext();
   const { currentUserId } = useSDK();
@@ -161,6 +162,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
             rsvp={myRSVP}
             onPressChangeStatus={async (status) => {
               await handleStatusChange(status, removeDrawerData);
+              onRefresh?.();
             }}
           />
         ),
@@ -202,6 +204,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
                 rsvp={myRSVP}
                 onPressChangeStatus={async (status) => {
                   await handleStatusChange(status, closePopover);
+                  onRefresh?.();
                 }}
               />
             )}
@@ -231,6 +234,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP }: RSVPButtonProps) => {
                 rsvp={myRSVP}
                 onPressChangeStatus={async (status) => {
                   await handleStatusChange(status, closePopover);
+                  onRefresh?.();
                 }}
               />
             )}
