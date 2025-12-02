@@ -24,7 +24,7 @@ interface LivestreamPlayerHeaderProps {
   isLive: boolean;
   isEnded: boolean;
   isUserBanned: boolean;
-  room?: Amity.Room;
+  room?: Amity.Room | null;
   onClose: () => void;
 }
 
@@ -80,7 +80,7 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
           </div>
 
           <div className={styles.livestreamPlayerHeader__liveDetail__optionWrapper}>
-            <WatchingCountBadge count={watchingCount} />
+            <WatchingCountBadge count={watchingCount} isWatcher={true} />
             {community?.isPublic && (
               <Popover
                 trigger={({ openPopover }) => (

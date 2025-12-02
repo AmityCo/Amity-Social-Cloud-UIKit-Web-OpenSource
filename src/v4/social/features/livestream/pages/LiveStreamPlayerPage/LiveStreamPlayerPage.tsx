@@ -377,6 +377,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   uiState="player"
                   isLive={isLive && !isUserBanned}
                   onClose={onClose}
+                  room={room}
                 />
                 <LivestreamPlayer
                   themeStyles={themeStyles}
