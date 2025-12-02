@@ -51,6 +51,7 @@ export const NonMemberBottomSheet = ({
           userId={currentUserId}
           imageContainerClassName={styles.rsvpButton__userAvatar__container}
           className={styles.rsvpButton__userAvatar}
+          textPlaceholderClassName={styles.rsvpButton__userAvatar__textPlaceholder}
         />
       </div>
       <div className={styles.rsvpButton__bottomSheetMenuText}>

@@ -138,6 +138,10 @@
   border: 4px solid var(--asc-color-white);
 }
 
+.rsvpButton__userAvatar__textPlaceholder {
+  font-size: 2rem;
+}
+
 @media (width >= 48em) {
   .rsvpButton__container {
     border-left: 1px solid var(--asc-color-base-shade4);
@@ -171,5 +175,13 @@
     width: 1.5rem;
     height: 1.5rem;
     fill: var(--asc-color-base-shade3);
+  }
+
+  .rsvpButton__divider {
+    display: none !important;
+  }
+
+  .rsvpButton__addToCalendarButton {
+    margin-top: 1rem;
   }
 }

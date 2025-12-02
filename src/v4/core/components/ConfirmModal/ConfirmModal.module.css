@@ -37,7 +37,7 @@
 
 .popup__header {
   display: flex;
-  align-items: center;
+  align-items: start;
   padding: 1.25rem 1.5rem;
   justify-content: space-between;
 }
@@ -54,7 +54,7 @@
 .popup__content {
   line-height: 1.5;
   font-size: 0.875rem;
-  padding: 0 1.5rem;
+  padding: 0.5rem 1.5rem;
   color: var(--asc-color-base-shade1);
 }
 

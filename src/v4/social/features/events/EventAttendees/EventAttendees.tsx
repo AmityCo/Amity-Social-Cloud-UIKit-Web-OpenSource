@@ -20,7 +20,7 @@ export const EventAttendees = ({ event }: EventAttendeesProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
-  const { items, isLoading, hasMore, loadMore } = useRSVPEventsCollection({
+  const { items, isLoading, isLoadingFirstPage, hasMore, loadMore } = useRSVPEventsCollection({
     event,
     status: AmityEventResponseStatus.Going,
     shouldCall: !!event,
@@ -51,6 +51,8 @@ export const EventAttendees = ({ event }: EventAttendeesProps) => {
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const showLoading = isLoadingFirstPage || isLoading;
+
   return (
     <div ref={containerRef}>
       <div data-scrolled={isScrolled} className={styles.eventAttendees__topBar}>
@@ -60,7 +62,7 @@ export const EventAttendees = ({ event }: EventAttendeesProps) => {
       </div>
 
       <div className={styles.eventAttendees__content}>
-        {!isLoading &&
+        {!showLoading &&
           items.length > 0 &&
           items.map((data) => (
             <UserItem
@@ -71,7 +73,7 @@ export const EventAttendees = ({ event }: EventAttendeesProps) => {
               isShowMenuButton={false}
             />
           ))}
-        {isLoading &&
+        {showLoading &&
           Array.from({ length: 3 }).map((_, index) => (
             <SearchResultSkeleton key={index} pageId={pageId} />
           ))}
