@@ -45,6 +45,17 @@
   gap: 0.5rem;
 }
 
+.livestreamPlayerHeader__liveDetail__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.livestreamPlayerHeader__liveDetail__userAvatar {
+  height: 2.5rem !important;
+  width: 2.5rem !important;
+}
+
 .livestreamPlayerHeader__liveDetail__optionWrapper {
   display: flex;
   align-items: center;
