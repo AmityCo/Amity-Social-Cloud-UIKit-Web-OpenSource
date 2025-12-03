@@ -61,6 +61,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   });
 
   React.useEffect(() => {
+    console.log('loading 1', isLoading);
     onLoadingChange?.(isLoading);
   }, [isLoading]);
 

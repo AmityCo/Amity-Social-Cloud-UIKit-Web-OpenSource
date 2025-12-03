@@ -9,7 +9,10 @@ import { LiveRoomTarget } from '~/v4/social/features/livestream/elements/LiveRoo
 import styles from './StoryTab.module.css';
 import clsx from 'clsx';
 import { CommunityLiveRoomTarget } from '~/v4/social/features/livestream/elements/CommunityLiveRoomTarget';
-import { GlobalFeedStorySkeleton } from '~/v4/social/internal-components/Skeleton';
+import {
+  CommunityFeedStorySkeleton,
+  GlobalFeedStorySkeleton,
+} from '~/v4/social/internal-components/Skeleton';
 
 type StoryTabProps = ({ type: 'communityFeed'; communityId: string } | { type: 'globalFeed' }) & {
   pageId?: string;
@@ -37,6 +40,11 @@ export const StoryTab: React.FC<StoryTabProps> = ({ pageId = '*', ...props }) =>
       case 'communityFeed':
         return (
           <div className={styles.storyTabContainer__communityStory}>
+            {isLoading &&
+              Array.from({ length: 10 }).map((_, index) => (
+                <CommunityFeedStorySkeleton key={index} />
+              ))}
+
             <StoryTabCommunityFeed
               componentId={componentId}
               communityId={props.communityId || ''}

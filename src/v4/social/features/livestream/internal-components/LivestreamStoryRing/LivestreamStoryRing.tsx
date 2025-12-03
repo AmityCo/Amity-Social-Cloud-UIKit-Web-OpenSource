@@ -8,9 +8,9 @@ import { LiveStreamLiveBadge } from '~/v4/social/features/livestream/internal-co
 import { LivestreamFill } from '~/v4/icons/LivestreamFill';
 import { StoryTabDisplayName } from '~/v4/social/components/StoryTab/StoryTabDisplayName';
 import { PAGE_ID, COMPONENT_ID } from '~/v4/constants/customization';
-import { useRoomSubscription } from '~/v4/social/features/livestream/hooks';
 import { useEvent } from '~/v4/social/features/events/hooks';
 import DefaultEventThumbnail from '~/v4/icons/DefaultEventThumbnail';
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 
 export interface LivestreamStoryRingProps {
   pageId?: string;
@@ -33,29 +33,32 @@ export function LivestreamStoryRing({
 
   const { event } = useEvent({ eventId: eventId! });
 
-  const communityAvatarUrl = post?.targetCommunity?.avatar?.fileUrl;
   const communityName = post?.targetCommunity?.displayName;
-
-  const eventThumbnailFileUrl = event?.coverImage?.fileUrl;
   const eventTitle = event?.title;
-
   const name = eventId ? eventTitle : communityName;
-  const avatarFileUrl = eventId ? eventThumbnailFileUrl : communityAvatarUrl;
-
-  useRoomSubscription({ room: post?.childrenPosts[0]?.getRoomInfo() });
-
-  const defaultImage = eventId ? (
-    <DefaultEventThumbnail className={styles.livestreamHeader__event__thumbnailImage} />
-  ) : (
-    <Community />
-  );
 
   if (type === 'globalFeed')
     return (
       <div className={clsx(styles.livestreamStoryRing, className)} onClick={onClick}>
         <div className={styles.livestreamStoryRing__ring}>
-          <div className={styles.livestreamStoryRing__avatar}>
-            <Avatar avatarUrl={avatarFileUrl} defaultImage={defaultImage} />
+          <div className={styles.livestreamStoryRing__avatarContainer}>
+            {eventId ? (
+              <Avatar
+                avatarUrl={event?.coverImage?.fileUrl}
+                defaultImage={
+                  <DefaultEventThumbnail
+                    className={styles.livestreamHeader__event__thumbnailImage}
+                  />
+                }
+              />
+            ) : (
+              <CommunityAvatar
+                pageId={pageId}
+                componentId={componentId}
+                community={post?.targetCommunity}
+                className={styles.livestreamStoryRing__communityAvatar}
+              />
+            )}
           </div>
           <LiveStreamLiveBadge size="small" className={styles.livestreamStoryRing__liveBadge} />
           <div className={styles.livestreamStoryRing__userAvatar__container}>
@@ -79,7 +82,7 @@ export function LivestreamStoryRing({
     <div className={clsx(styles.livestreamStoryRing, className)} onClick={onClick}>
       <div className={styles.livestreamStoryRing__ringWrapper}>
         <div className={styles.livestreamStoryRing__ring} data-community={true}>
-          <div className={styles.livestreamStoryRing__avatar}>
+          <div className={styles.livestreamStoryRing__avatarContainer}>
             <UserAvatar
               userId={post?.postedUserId}
               userData={post?.creator}
