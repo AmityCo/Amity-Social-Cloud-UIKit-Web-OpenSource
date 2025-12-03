@@ -32,6 +32,7 @@ interface LivestreamChatMessageComposerProps {
   pageId?: string;
   community?: Amity.Community | null;
   isPendingPost?: boolean;
+  isPlayer?: boolean;
 }
 
 const LIVESTREAM_MESSAGE_MAX_CHARACTOR = 200;
@@ -48,6 +49,7 @@ export const LivestreamChatMessageComposer = ({
   disabled = false,
   community,
   isPendingPost = false,
+  isPlayer = false,
 }: LivestreamChatMessageComposerProps) => {
   // Get values from context
   const { hostId, coHostId, room, coHost } = useLivestreamData();
@@ -79,7 +81,7 @@ export const LivestreamChatMessageComposer = ({
   const isHost = hostId === currentUserId;
   const isCoHost = coHostId === currentUserId;
 
-  const canReact = !isHost && !isCoHost && (isEmpty || isMuted);
+  const canReact = ((!isHost && !isCoHost) || isPlayer) && (isEmpty || isMuted);
 
   const clearMessage = () => {
     editorRef.current?.update(() => {
@@ -323,9 +325,9 @@ export const LivestreamChatMessageComposer = ({
           style={themeStyles}
           data-disabled={disabled}
           ref={containerRef}
-          data-is-host={isHost}
+          data-is-host={isHost && !isPlayer}
         >
-          {isHost && (
+          {isHost && !isPlayer && (
             <ActionButton
               pageId={pageId}
               componentId={componentId}

@@ -396,6 +396,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                         isPoorConnection={false}
                         community={community}
                         isLoading={isChannelLoading}
+                        isPlayer={uiState === 'player'}
                       />
                     ) : (
                       <>
@@ -438,6 +439,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                             disabled={room?.status === liveStreamStatus.ended || isPoorConnection}
                             community={community}
                             isPendingPost={post.feedType === 'reviewing'}
+                            isPlayer={uiState === 'player'}
                           />
                         )}
                       </>

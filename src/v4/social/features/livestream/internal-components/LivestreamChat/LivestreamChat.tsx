@@ -11,6 +11,7 @@ export interface LivestreamChatProps {
   isPoorConnection?: boolean;
   isLoading?: boolean;
   disabled?: boolean;
+  isPlayer?: boolean;
 }
 
 export const LivestreamChat: React.FC<LivestreamChatProps> = ({
@@ -19,6 +20,7 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
   isPoorConnection = false,
   isLoading = false,
   disabled = false,
+  isPlayer = false,
 }) => {
   // Get values from context
   const { channel, room, livestreamPost: post } = useLivestreamData();
@@ -46,6 +48,7 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
           disabled={disableComposer}
           community={community}
           isPendingPost={isPendingPost}
+          isPlayer={isPlayer}
         />
       </div>
     </div>
