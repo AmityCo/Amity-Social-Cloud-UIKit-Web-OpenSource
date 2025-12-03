@@ -321,6 +321,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
             className={styles.liveStreamPlayer__dialog}
             data-is-live={isLive}
             data-backstage={uiState === 'backStage'}
+            data-community={!!community}
           >
             {uiState === 'player' ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">

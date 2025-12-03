@@ -55,7 +55,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
   event,
 }) => {
   // Constants for livestream limits
-  const { room, hostId } = useLivestreamData();
+  const { room, hostId, livestreamPost } = useLivestreamData();
   const { currentUserId } = useSDK();
   const LIVESTREAM_LIMIT_HOURS = 4;
   const COUNTDOWN_SECONDS = 10; // Last 10 seconds
@@ -174,7 +174,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
         <div className={styles.livestreamHeader__headerRight__wrapper}>
           {showWatchingCount && <WatchingCountBadge count={watchingCount} />}
           {!isCoHost && <LiveStreamLiveBadge duration={duration} />}
-          {targetType && setReadOnly && (
+          {targetType && (
             <Popover
               placement="bottom end"
               trigger={({ openPopover }) => (
@@ -192,11 +192,12 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
                 <LivestreamHeaderMenu
                   pageId={pageId}
                   targetType={targetType}
-                  isCommunityPublic={community?.isPublic}
+                  isCommunityPublic={community && community?.isPublic}
                   readOnly={readOnly}
                   onChangeReadOnly={(readOnly: boolean) => {
-                    setReadOnly(readOnly);
+                    setReadOnly?.(readOnly);
                   }}
+                  postId={livestreamPost?.postId}
                   onLinkCopied={closePopover}
                 />
               )}

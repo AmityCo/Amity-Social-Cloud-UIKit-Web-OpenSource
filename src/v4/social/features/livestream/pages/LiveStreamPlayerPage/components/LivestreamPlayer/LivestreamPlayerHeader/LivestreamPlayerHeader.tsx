@@ -15,7 +15,7 @@ import { WatchingCountBadge } from '~/v4/social/features/livestream/internal-com
 import CloseIcon from '~/v4/icons/Close';
 import Kebub from '~/v4/icons/Kebub';
 import styles from './LivestreamPlayerHeader.module.css';
-import { BrandBadge } from '~/v4/social/elements';
+import { BrandBadge, UserAvatar } from '~/v4/social/elements';
 
 interface LivestreamPlayerHeaderProps {
   pageId: string;
@@ -43,6 +43,8 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
 
   const { watchingCount } = useWatchingCount({ roomId: room?.roomId });
 
+  const showMenu = (community && community?.isPublic) || !community;
+
   return (
     <div className={styles.livestreamPlayerHeader}>
       {isLive ? (
@@ -60,20 +62,38 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
                 data-is-ended={isEnded}
               />
             </Button>
-            <CommunityAvatar
-              pageId={pageId}
-              community={community}
-              className={styles.livestreamPlayerHeader__liveDetail__avatar}
-            />
 
-            <div>
-              <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
-                {community?.displayName}
-              </Typography.CaptionBold>
+            {community ? (
+              <CommunityAvatar
+                pageId={pageId}
+                community={community}
+                className={styles.livestreamPlayerHeader__liveDetail__avatar}
+              />
+            ) : (
+              <UserAvatar
+                userData={post.creator}
+                className={styles.livestreamPlayerHeader__liveDetail__userAvatar}
+                imageContainerClassName={styles.livestreamPlayerHeader__liveDetail__userAvatar}
+                textPlaceholderClassName={styles.livestreamPlayerHeader__liveDetail__userAvatar}
+              />
+            )}
+
+            <div className={styles.livestreamPlayerHeader__liveDetail__wrapper}>
+              {community && (
+                <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
+                  {community?.displayName}
+                </Typography.CaptionBold>
+              )}
               <div className={styles.livestreamPlayer__liveDetail__displayName}>
-                <Typography.CaptionSmall className={styles.livestreamPlayer__liveDetail__text}>
-                  By {post.creator?.displayName}
-                </Typography.CaptionSmall>
+                {community ? (
+                  <Typography.CaptionSmall className={styles.livestreamPlayer__liveDetail__text}>
+                    By {post.creator?.displayName}
+                  </Typography.CaptionSmall>
+                ) : (
+                  <Typography.BodyBold className={styles.livestreamPlayer__liveDetail__text}>
+                    {post.creator?.displayName}
+                  </Typography.BodyBold>
+                )}
                 {post.creator?.isBrand && <BrandBadge pageId={pageId} />}
               </div>
             </div>
@@ -81,7 +101,7 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
 
           <div className={styles.livestreamPlayerHeader__liveDetail__optionWrapper}>
             <WatchingCountBadge count={watchingCount} isWatcher={true} />
-            {community?.isPublic && (
+            {showMenu && (
               <Popover
                 trigger={({ openPopover }) => (
                   <IconButton

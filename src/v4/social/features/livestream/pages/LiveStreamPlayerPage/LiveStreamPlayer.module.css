@@ -117,6 +117,10 @@
     width: 100dvw;
   }
 
+  .liveStreamPlayer__dialog[data-community='false'] {
+    grid-template-columns: unset;
+  }
+
   .liveStreamPlayer__dialog[data-backstage='true'] {
     height: 100dvh;
   }

@@ -34,7 +34,7 @@ export const LivestreamHeaderMenu: React.FC<LivestreamHeaderMenuProps> = ({
           className={styles.livestreamHeaderMenu__readOnlyToggle}
         />
       )}
-      {postId && isCommunityPublic && (
+      {postId && (isCommunityPublic || targetType === 'user') && (
         <CopyLinkButton
           pageId={pageId}
           model={SharableModel.POST}
