@@ -6,7 +6,6 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
-import { LiveStreamLiveBadge } from '~/v4/social/features/livestream/internal-components/LiveStreamLiveBadge';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { SharableModel } from '~/v4/utils/sharableLink';
@@ -16,6 +15,8 @@ import CloseIcon from '~/v4/icons/Close';
 import Kebub from '~/v4/icons/Kebub';
 import styles from './LivestreamPlayerHeader.module.css';
 import { BrandBadge, UserAvatar } from '~/v4/social/elements';
+import Lock from '~/v4/icons/Lock';
+import { VerifyBadgeIcon } from '~/v4/icons/VerifyBadge';
 
 interface LivestreamPlayerHeaderProps {
   pageId: string;
@@ -80,9 +81,21 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
 
             <div className={styles.livestreamPlayerHeader__liveDetail__wrapper}>
               {community && (
-                <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
-                  {community?.displayName}
-                </Typography.CaptionBold>
+                <>
+                  <div className={styles.livestreamPlayer__liveDetail__communityNameWrapper}>
+                    {!community?.isPublic && (
+                      <Lock className={styles.livestreamPlayer__liveDetail__lockIcon} />
+                    )}
+                    <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
+                      {community?.displayName} very longggggg longggggg nameeeeeeeeeee ss
+                    </Typography.CaptionBold>
+                    {community.isOfficial && (
+                      <VerifyBadgeIcon
+                        className={styles.livestreamPlayer__liveDetail__verifiedIcon}
+                      />
+                    )}
+                  </div>
+                </>
               )}
               <div className={styles.livestreamPlayer__liveDetail__displayName}>
                 {community ? (
