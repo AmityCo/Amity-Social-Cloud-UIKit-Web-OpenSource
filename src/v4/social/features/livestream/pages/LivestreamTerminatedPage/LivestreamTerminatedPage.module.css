@@ -27,6 +27,7 @@
 .liveStreamTerminatedPage__terminatedIcon {
   width: 3.5rem;
   height: 3.5rem;
+  fill: var(--asc-color-base-default);
 }
 
 .liveStreamTerminatedPage__content__description {
@@ -48,6 +49,7 @@
 .liveStreamTerminatedPage__deletedIcon {
   width: 1.75rem;
   height: 1.75rem;
+  fill: var(--asc-color-base-default);
 }
 
 .liveStreamTerminatedPage__footer {

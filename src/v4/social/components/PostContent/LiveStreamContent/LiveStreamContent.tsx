@@ -9,6 +9,7 @@ import {
   LiveStreamUpcomingBadge,
   LiveStreamRecordedBadge,
   LiveStreamBanThumbnail,
+  LiveStreamTerminatedThumbnail,
 } from '~/v4/social/features/livestream/internal-components';
 import styles from './LiveStreamContent.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -68,6 +69,9 @@ export function LiveStreamContent({
   if (room.isDeleted) return <LiveStreamIdleThumbnail />;
 
   if (room.status === liveStreamStatus.ended) return <LiveStreamEndThumbnail />;
+
+  if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
+    return <LiveStreamTerminatedThumbnail />;
 
   return (
     <Button

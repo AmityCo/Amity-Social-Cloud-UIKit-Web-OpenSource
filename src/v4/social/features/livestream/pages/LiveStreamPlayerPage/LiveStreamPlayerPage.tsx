@@ -153,7 +153,8 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
     post.targetType !== 'user' &&
     !isEnded &&
     !isRecorded &&
-    (uiState == 'broadcast' || uiState === 'player');
+    (uiState == 'broadcast' || uiState === 'player') &&
+    !isTerminated;
 
   const showWaitingApprovalBanner = isLive && isDesktop && post.feedType === 'reviewing';
 
@@ -250,7 +251,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
 
   // Livestream has been terminated.
   useEffect(() => {
-    if (!isDesktop && (isLive || isEnded) && isTerminated) {
+    if (!isDesktop && isTerminated) {
       onClose();
       goToLiveStreamTerminatedPage?.();
     }

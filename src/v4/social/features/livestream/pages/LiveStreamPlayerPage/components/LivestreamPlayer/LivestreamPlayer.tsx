@@ -55,7 +55,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
         {showWaitingApprovalBanner && <LivestreamOverlay.WaitForApproval view="moderator" />}
         {isLoading && !isPoorConnection && isLive && <LivestreamOverlay />}
         {isLoading && isPoorConnection && isLive && <LivestreamOverlay.Reconnecting />}
-        {isDesktop && (isLive || isEnded) && isTerminated && <LiveStreamTerminatedThumbnail />}
+        {isDesktop && isTerminated && <LiveStreamTerminatedThumbnail />}
         {room?.status === liveStreamStatus.idle && <LiveStreamIdleThumbnail view="full-screen" />}
         {isUserBanned && <LiveStreamBanThumbnail />}
         {isEnded && !isTerminated && <LiveStreamEndThumbnail view="full-screen" />}
