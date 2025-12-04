@@ -17,6 +17,8 @@
   padding: 1rem 1rem 0.125rem;
   flex-grow: 1;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .chatFeed__messageList__container {
@@ -25,6 +27,13 @@
   height: 100%;
   overflow: auto;
   pointer-events: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chatFeed__container::-webkit-scrollbar,
+.chatFeed__messageList__container::-webkit-scrollbar {
+  display: none;
 }
 
 .chatFeed__messageList__container[data-disable-scroll='true'] {

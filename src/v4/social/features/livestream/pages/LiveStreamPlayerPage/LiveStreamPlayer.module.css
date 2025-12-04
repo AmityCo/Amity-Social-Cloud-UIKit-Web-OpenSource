@@ -135,6 +135,7 @@
 
   .liveStreamPlayer__rightSection__wrapper {
     padding: 1.5rem;
+    height: 100dvh;
   }
 
   .livestreamChat__container {

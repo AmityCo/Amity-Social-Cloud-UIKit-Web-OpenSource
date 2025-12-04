@@ -144,7 +144,7 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
         >
           <LexicalComposer initialConfig={editorConfig}>
             <RichTextPlugin
-              contentEditable={<ContentEditable />}
+              contentEditable={<ContentEditable className={styles.editorEditableContent} />}
               placeholder={
                 <span className={styles.editorPlaceholder}>
                   {config.placeholder_text ?? 'Chat...'}

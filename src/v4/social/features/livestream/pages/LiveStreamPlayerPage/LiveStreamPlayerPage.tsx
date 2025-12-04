@@ -342,7 +342,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   isLive={isLive}
                   showWaitingApprovalBanner={showWaitingApprovalBanner}
                   isLoading={isLoading}
-                  isPoorConnection={isPoorConnection}
+                  isPoorConnection={isPoorConnection || room?.status == 'waitingReconnect'}
                   isDesktop={isDesktop}
                   isEnded={isEnded}
                   isTerminated={!!isTerminated}
