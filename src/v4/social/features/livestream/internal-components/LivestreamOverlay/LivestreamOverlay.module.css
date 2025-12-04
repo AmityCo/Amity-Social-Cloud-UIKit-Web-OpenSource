@@ -42,7 +42,7 @@
   justify-content: center;
   text-align: center;
   gap: 0.5rem;
-  padding: 16rem;
+  padding: 1.5rem;
 }
 
 .livestreamOverlay__icon {
@@ -97,4 +97,10 @@
 .livestreamOverlay__watingApproval__bottomText {
   color: var(--asc-color-secondary-shade2);
   padding-bottom: 2rem;
+}
+
+@media only screen and (width >= 48em) {
+  .livestreamOverlay__content {
+    padding: 16rem;
+  }
 }

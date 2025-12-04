@@ -30,7 +30,7 @@
 .liveStreamPlayer__player__wrapper {
   position: relative;
   height: 100%;
-  width: 100%;
+  width: 100dvw;
 }
 
 .liveStreamPlayer__cameraSection__wrapper {
@@ -172,5 +172,9 @@
     justify-content: center;
     align-items: flex-end;
     height: 100%;
+  }
+
+  .liveStreamPlayer__player__wrapper {
+    width: 100%;
   }
 }

@@ -41,6 +41,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
     ref,
   ) => {
     const { room } = useLivestreamData();
+
     return (
       <>
         <video
@@ -58,7 +59,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
         {room?.status === liveStreamStatus.idle && <LiveStreamIdleThumbnail view="full-screen" />}
         {isUserBanned && <LiveStreamBanThumbnail />}
         {isEnded && !isTerminated && <LiveStreamEndThumbnail view="full-screen" />}
-        {isLive && isDesktop && room?.post && <ReactionFloating post={room.post as Amity.Post} />}
+        {isLive && isDesktop && room?.post && <ReactionFloating post={room?.post as Amity.Post} />}
       </>
     );
   },
