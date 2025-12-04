@@ -73,7 +73,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       danger: true,
       key: 'delete',
       label: 'Delete event',
-      condition: hasDeleteEventPermission,
+      condition: hasDeleteEventPermission || isHostEvent,
       onPress: () => deleteEvent(event.eventId),
     },
   ].filter((action) => action.condition);
