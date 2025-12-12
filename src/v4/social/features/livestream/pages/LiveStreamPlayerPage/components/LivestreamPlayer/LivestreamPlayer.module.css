@@ -76,7 +76,7 @@
     width: auto;
   }
 
-  .liveStreamPlayer__video[data-is-terminated='true'] {
+  .liveStreamPlayer__video[data-is-hidden='true'] {
     display: none;
   }
 }

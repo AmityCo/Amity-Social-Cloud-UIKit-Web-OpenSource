@@ -49,11 +49,13 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
           playsInline={true}
           className={styles.liveStreamPlayer__video}
           data-is-live={isLive}
-          data-is-terminated={isEnded || isTerminated}
+          data-is-hidden={isEnded || isTerminated || isUserBanned}
           ref={ref}
         />
         {showWaitingApprovalBanner && <LivestreamOverlay.WaitForApproval view="moderator" />}
-        {isLoading && !isPoorConnection && isLive && <LivestreamOverlay />}
+        {isLoading && !isPoorConnection && isLive && !isEnded && !isUserBanned && (
+          <LivestreamOverlay />
+        )}
         {isLoading && isPoorConnection && isLive && <LivestreamOverlay.Reconnecting />}
         {isDesktop && isTerminated && <LiveStreamTerminatedThumbnail />}
         {room?.status === liveStreamStatus.idle && <LiveStreamIdleThumbnail view="full-screen" />}

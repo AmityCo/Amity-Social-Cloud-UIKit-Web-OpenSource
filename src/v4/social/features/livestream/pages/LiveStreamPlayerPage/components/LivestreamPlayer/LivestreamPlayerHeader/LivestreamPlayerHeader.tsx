@@ -50,7 +50,7 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
 
   return (
     <div className={styles.livestreamPlayerHeader}>
-      {isLive ? (
+      {isLive && !isUserBanned ? (
         <div className={styles.livestreamPlayerHeader__liveDetail} key="live-header">
           <div className={styles.livestreamPlayerHeader__liveDetail__detail}>
             <Button

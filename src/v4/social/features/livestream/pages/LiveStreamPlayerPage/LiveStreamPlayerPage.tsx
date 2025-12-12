@@ -164,7 +164,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isEnded &&
     !isRecorded &&
     (uiState == 'broadcast' || uiState === 'player') &&
-    !isTerminated;
+    !isTerminated &&
+    !isUserBanned;
 
   const showWaitingApprovalBanner = isLive && isDesktop && livestreamPost?.feedType === 'reviewing';
 
@@ -364,7 +365,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   isLive={isLive}
                   showWaitingApprovalBanner={showWaitingApprovalBanner}
                   isLoading={isLoading}
-                  isPoorConnection={isPoorConnection || room?.status == 'waitingReconnect'}
+                  isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
                   isDesktop={isDesktop}
                   isEnded={isEnded}
                   isTerminated={!!isTerminated}
