@@ -203,6 +203,18 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   }, [room?.roomId]);
 
   useEffect(() => {
+    // if there is roomId, the page open from notification tray
+    if (room?.roomId && roomId)
+      room.getInvitations().then((invitation) => {
+        if (invitation) setInvitations([invitation]);
+        else
+          info({
+            content: 'This invitation is no longer available.',
+          });
+      });
+  }, [room?.roomId]);
+
+  useEffect(() => {
     if (invitations && invitations?.length > 0) {
       const myInvitation = invitations?.find(
         (invitation) =>

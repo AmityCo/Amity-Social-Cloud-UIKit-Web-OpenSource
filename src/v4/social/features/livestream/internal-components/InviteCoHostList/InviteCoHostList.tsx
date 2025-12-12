@@ -31,6 +31,7 @@ interface WatchingUserItemProps {
   isInvited?: boolean;
   isCoHost?: boolean;
   isLoading?: boolean;
+
   hasPendingInvitation?: boolean;
   hasCoHost?: boolean;
   onInviteUser?: (userId: string) => void;
