@@ -52,7 +52,7 @@ export const LivestreamChatMessageComposer = ({
   isPlayer = false,
 }: LivestreamChatMessageComposerProps) => {
   // Get values from context
-  const { hostId, coHostId, room, coHost } = useLivestreamData();
+  const { hostId, coHostId, room, coHost, invitationByMe } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
 
   const componentId = 'livestream_chat_compose_bar';
@@ -353,6 +353,7 @@ export const LivestreamChatMessageComposer = ({
                       room={room}
                       onAction={closePopup}
                       coHost={coHost}
+                      invitation={invitationByMe}
                     />
                   ),
                 })
@@ -410,6 +411,7 @@ export const LivestreamChatMessageComposer = ({
     channel?.attachedTo?.roomId,
     coHost?.userId,
     channel?.metadata?.mutedMembers,
+    invitationByMe?.status,
   ]);
 
   return (

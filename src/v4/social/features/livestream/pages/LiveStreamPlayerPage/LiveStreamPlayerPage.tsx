@@ -46,15 +46,25 @@ import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import { PAGE_ID } from '~/v4/constants/customization';
 
 export type LiveStreamPlayerPageProps = {
-  post: Amity.Post;
+  post?: Amity.Post;
   goToDetailPage?: (context?: GoToPostDetailPageParams) => void;
+  roomId?: string;
 };
 
-export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerPageProps) {
+export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStreamPlayerPageProps) {
   const pageId = PAGE_ID.LIVESTREAM_PLAYER_PAGE;
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const { room } = useRoom(post.childrenPosts[0]?.getRoomInfo()?.roomId);
+  const [livestreamPost, setLivestreamPost] = useState(post);
+
+  const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
+  const { room } = useRoom(subscribedPost?.childrenPosts?.[0]?.getRoomInfo()?.roomId ?? roomId);
+
+  useEffect(() => {
+    if (room?.roomId && livestreamPost?.postId) return;
+    if (room?.roomId && room.post) setLivestreamPost(room.post as Amity.Post);
+  }, [room]);
+
   const { success, info } = useNotifications();
 
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
@@ -64,9 +74,9 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
   const { currentUserId } = useSDK();
   const { keyboardOffset } = useKeyboardVisibility();
   const { isDesktop } = useResponsive();
-  const { post: subscribedPost } = usePostSubscription(post.postId);
+
   const { community } = useCommunity({
-    communityId: post.targetId,
+    communityId: livestreamPost?.targetId,
   });
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -115,7 +125,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
 
   const { channel, isLoading: isChannelLoading } = useLivechat({
     room,
-    targetType: post.targetType,
+    targetType: livestreamPost?.targetType,
   });
 
   const { members } = useCommunityMembersCollection({
@@ -150,20 +160,32 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
 
   const showLivestreamChat =
     !!channel &&
-    post.targetType !== 'user' &&
+    livestreamPost?.targetType !== 'user' &&
     !isEnded &&
     !isRecorded &&
     (uiState == 'broadcast' || uiState === 'player') &&
     !isTerminated;
 
-  const showWaitingApprovalBanner = isLive && isDesktop && post.feedType === 'reviewing';
+  const showWaitingApprovalBanner = isLive && isDesktop && livestreamPost?.feedType === 'reviewing';
 
-  const { invitations } = useObserveRoomAndInvitation({ room });
+  const { invitations, setInvitations } = useObserveRoomAndInvitation({ room });
 
   useSyncWatchingHeartbeat({
     roomId: room?.roomId,
     enabled: room?.status !== 'recorded' && room?.status !== 'ended',
   });
+
+  useEffect(() => {
+    // if there is roomId, the page open from notification tray
+    if (room?.roomId && roomId)
+      room.getInvitations().then((invitation) => {
+        if (invitation) setInvitations([invitation]);
+        else
+          info({
+            content: 'This invitation is no longer available.',
+          });
+      });
+  }, [room?.roomId]);
 
   useEffect(() => {
     if (invitations && invitations?.length > 0) {
@@ -328,7 +350,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
                 <LivestreamPlayerHeader
                   pageId={pageId}
-                  post={post}
+                  post={subscribedPost}
                   community={community}
                   isLive={isLive}
                   isEnded={isEnded}
@@ -358,7 +380,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   onClose={onClose}
                   uiState={uiState}
                   deviceManagement={deviceManagement}
-                  targetType={post.targetType}
+                  targetType={subscribedPost?.targetType}
                   broadcasterData={broadcasterData}
                   isStarting={isGettingBroadcasterData}
                   onLeaveStreamStage={() => {
@@ -381,8 +403,11 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                     deviceManagement.cameraPermission === 'denied' ||
                     isGettingBroadcasterData
                   }
-                  isTargetEvent={post.targetType !== 'user' && post.targetType !== 'community'}
-                  targetType={post.targetType}
+                  isTargetEvent={
+                    subscribedPost?.targetType !== 'user' &&
+                    subscribedPost?.targetType !== 'community'
+                  }
+                  targetType={subscribedPost?.targetType}
                   isPending={isGettingBroadcasterData}
                   pageId={pageId}
                   onGoLive={handleGoLive}
@@ -440,7 +465,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                             channelId={channel.channelId}
                             disabled={room?.status === liveStreamStatus.ended || isPoorConnection}
                             community={community}
-                            isPendingPost={post.feedType === 'reviewing'}
+                            isPendingPost={subscribedPost?.feedType === 'reviewing'}
                             isPlayer={uiState === 'player'}
                           />
                         )}

@@ -23,7 +23,7 @@
 .inviteSheet__closeIcon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-shade3);
 }
 
 .inviteSheet__avatar__wrapper {

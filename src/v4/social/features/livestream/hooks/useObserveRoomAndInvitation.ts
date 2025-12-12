@@ -31,5 +31,6 @@ export const useObserveRoomAndInvitation = ({ room }: { room?: Amity.Room | null
 
   return {
     invitations,
+    setInvitations,
   };
 };

@@ -20,6 +20,7 @@ export interface InviteCoHostListProps {
   pageId?: string;
   room?: Amity.Room | null;
   coHost?: Amity.RoomParticipant;
+  invitation?: Amity.Invitation;
   onAction?: () => void;
 }
 
@@ -30,6 +31,7 @@ interface WatchingUserItemProps {
   isInvited?: boolean;
   isCoHost?: boolean;
   isLoading?: boolean;
+
   hasPendingInvitation?: boolean;
   hasCoHost?: boolean;
   onInviteUser?: (userId: string) => void;
@@ -112,12 +114,12 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
   pageId = '*',
   room,
   coHost,
+  invitation,
   onAction,
 }) => {
   const componentId = 'inivte_co_host_list';
-
   const { watchingUsers, isLoading } = useWatchingUsers({ room });
-  const { invitations } = useRoomInvitationsCollection({ room: room!, shouldCall: !!room });
+
   const { handleCreateInvitation, isPending: isPendingCreateInvitation } = useCreateInvitation({
     room,
     pageId,
@@ -148,9 +150,9 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
   }, []);
 
   const pendingInvitation = useMemo(() => {
-    if (invitations?.[0]?.status !== 'pending') return;
-    else return invitations?.[0];
-  }, [invitations?.[0]?.status, invitations?.[0]?.user?.userId]);
+    if (invitation?.status !== 'pending') return;
+    else return invitation;
+  }, [invitation?.status, invitation?.user?.userId]);
 
   if (isLoading)
     return (

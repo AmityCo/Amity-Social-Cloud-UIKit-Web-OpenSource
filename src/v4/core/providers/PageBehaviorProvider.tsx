@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
-import { EventDetailProps, EventSetupProps } from '~/v4/social/features';
+import { EventDetailProps, EventSetupProps, LiveStreamPlayerPageProps } from '~/v4/social/features';
 import {
   AmityCommunitySetupPageMode,
   MemberCommunitySetup,
@@ -232,6 +232,7 @@ export interface PageBehavior {
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToUserProfilePage?(context: { userId: string }): void;
     goToEventDetailPage?(context: EventDetailProps): void;
+    goToLivestreamPlayerPage?(context: LiveStreamPlayerPageProps): void;
   };
   AmityDraftClipPageBehavior?: {
     goToPostComposerPage?(context: {
@@ -355,6 +356,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToEventAttendeesPage,
     goToCreateLivestreamPage,
     goToEventDetailPage,
+    goToLiveStreamPlayerPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -914,6 +916,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityNotificationTrayPageBehavior.goToEventDetailPage(context);
         }
         goToEventDetailPage(context);
+      },
+      goToLivestreamPlayerPage: (context: LiveStreamPlayerPageProps) => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage)
+          return pageBehavior.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage(context);
+
+        goToLiveStreamPlayerPage?.(context);
       },
     },
     AmityDraftClipPageBehavior: {

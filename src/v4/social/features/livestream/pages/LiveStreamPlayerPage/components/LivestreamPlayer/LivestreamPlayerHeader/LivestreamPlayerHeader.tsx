@@ -20,7 +20,7 @@ import { VerifyBadgeIcon } from '~/v4/icons/VerifyBadge';
 
 interface LivestreamPlayerHeaderProps {
   pageId: string;
-  post: Amity.Post;
+  post: Amity.Post | null;
   community?: Amity.Community | null;
   isLive: boolean;
   isEnded: boolean;
@@ -45,6 +45,8 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
   const { watchingCount } = useWatchingCount({ roomId: room?.roomId });
 
   const showMenu = (community && community?.isPublic) || !community;
+
+  if (!post) return null;
 
   return (
     <div className={styles.livestreamPlayerHeader}>
@@ -87,7 +89,7 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
                       <Lock className={styles.livestreamPlayer__liveDetail__lockIcon} />
                     )}
                     <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
-                      {community?.displayName} very longggggg longggggg nameeeeeeeeeee ss
+                      {community?.displayName}
                     </Typography.CaptionBold>
                     {community.isOfficial && (
                       <VerifyBadgeIcon
