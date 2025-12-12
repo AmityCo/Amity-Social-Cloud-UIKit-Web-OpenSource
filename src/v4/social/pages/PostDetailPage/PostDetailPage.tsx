@@ -142,6 +142,11 @@ export function PostDetailPage({
     }
   }, [commentId, post, commentListRef.current]);
 
+  const handleBack = useCallback(() => {
+    if (prevPage?.type === PageTypes.CreateLivestreamPage) onBack(2);
+    else onBack();
+  }, [prevPage?.type, onBack]);
+
   const handleReplyClick = useCallback(
     (comment: Amity.Comment) =>
       setReplyComment((prevComment) =>
@@ -153,9 +158,9 @@ export function PostDetailPage({
   const handlePostDeleted = useCallback(
     (post: Amity.Post) => {
       removeItem(post.postId);
-      onBack();
+      handleBack();
     },
-    [onBack],
+    [handleBack],
   );
 
   if (isPostLoading) {
@@ -182,10 +187,7 @@ export function PostDetailPage({
         <BackButton
           pageId={pageId}
           defaultClassName={styles.postDetailPage__backIcon}
-          onPress={() => {
-            if (prevPage?.type === PageTypes.CreateLivestreamPage) onBack(2);
-            else onBack();
-          }}
+          onPress={handleBack}
         />
         <Typography.TitleBold
           data-testid={`${pageId}/page_title`}
