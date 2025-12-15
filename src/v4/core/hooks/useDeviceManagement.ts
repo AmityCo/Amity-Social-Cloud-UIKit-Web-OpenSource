@@ -32,7 +32,7 @@ export interface UseDeviceManagementReturn {
   handleDeviceSelect: (deviceType: 'audio' | 'video' | 'speaker', deviceId: string) => void;
 }
 
-export const useDeviceManagement = (): UseDeviceManagementReturn => {
+export const useDeviceManagement = (enabled: boolean = true): UseDeviceManagementReturn => {
   // Device management state
   const [currentDevices, setCurrentDevices] = useState<CurrentDevices>({
     audioDeviceId: undefined,
@@ -50,7 +50,7 @@ export const useDeviceManagement = (): UseDeviceManagementReturn => {
     videoDevices,
     audioOutputDevices,
     isLoading,
-  } = useMediaPermissions();
+  } = useMediaPermissions(enabled);
 
   // Computed permission state
   const permissionDenied =

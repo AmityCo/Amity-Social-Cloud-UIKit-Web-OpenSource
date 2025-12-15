@@ -14,6 +14,8 @@ import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 
+export type LivestreamUiState = 'preview' | 'broadcast' | 'backStage' | 'player';
+
 export interface LivestreamStageProps {
   // Core properties
   pageId: string;
@@ -21,7 +23,7 @@ export interface LivestreamStageProps {
   targetId?: string | null;
 
   // UI state
-  uiState: 'preview' | 'broadcast' | 'backStage';
+  uiState: LivestreamUiState;
 
   // Community data
   community?: Amity.Community | null;

@@ -23,58 +23,11 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
   const plyrRef = useRef<Plyr | null>(null);
   const hlsRef = useRef<Hls | null>(null);
 
-  const loadAuthorizedRecordedVideo = async (recordedUrl: string) => {
-    if (!client) {
-      console.warn('No client available for authorization');
-      return recordedUrl;
-    }
-
-    try {
-      const authToken = client.token?.accessToken;
-
-      // Prepare fetch options
-      const fetchOptions: RequestInit = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/octet-stream',
-        },
-      };
-
-      // Add authorization header if token is available
-      if (authToken) {
-        (fetchOptions.headers as Record<string, string>).Authorization = `Bearer ${authToken}`;
-      }
-
-      // Fetch video with optional authorization headers
-      const response = await fetch(recordedUrl, fetchOptions);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch recorded video: ${response.status} ${response.statusText}`,
-        );
-      }
-
-      // Convert to blob and create object URL
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-
-      // Clean up previous blob URL before setting new one
-      setAuthorizedRecordedUrl((prevUrl) => {
-        if (prevUrl && prevUrl.startsWith('blob:')) {
-          URL.revokeObjectURL(prevUrl);
-        }
-        return blobUrl;
-      });
-
-      return blobUrl;
-    } catch (error) {
-      console.error('❌ Failed to load authorized recorded video:', error);
-
-      return recordedUrl;
-    }
-  };
-
-  const setupHlsForLiveVideo = (player: HTMLVideoElement, livePlaybackUrl: string) => {
+  const setUpHLS = (
+    player: HTMLVideoElement,
+    livePlaybackUrl: string,
+    isRecorded: boolean = false,
+  ) => {
     // Clean up existing HLS instance
     if (hlsRef.current) {
       hlsRef.current.destroy();
@@ -83,6 +36,9 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
 
     const hls = new Hls({
       debug: false,
+      xhrSetup: (xhr) => {
+        xhr.setRequestHeader('Authorization', `Bearer ${client?.token?.accessToken}`);
+      },
     });
 
     hlsRef.current = hls;
@@ -121,12 +77,14 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
     });
 
     hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
-      // Initialize Plyr for live videos only
-      plyrRef.current = new Plyr(player, {
-        controls: ['pause', 'play'],
-        fullscreen: { enabled: false },
-        clickToPlay: true,
-      });
+      // Initialize Plyr for live videos only, not for recorded
+      if (!isRecorded) {
+        plyrRef.current = new Plyr(player, {
+          controls: ['pause', 'play'],
+          fullscreen: { enabled: false },
+          clickToPlay: true,
+        });
+      }
     });
 
     if (Hls.isSupported()) {
@@ -183,18 +141,17 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
     player.addEventListener('canplay', handleCanPlay);
 
     // Handle video source based on room status
-    if (room?.status === 'live' && room?.livePlaybackUrl) {
+    if ((room?.status === 'live' || room?.status === 'waitingReconnect') && room?.livePlaybackUrl) {
       // Setup for live video - with Plyr controls and HLS
 
       player.controls = false;
-      setupHlsForLiveVideo(player, room.livePlaybackUrl);
+      setUpHLS(player, room.livePlaybackUrl);
     } else if (room?.status === 'recorded') {
-      // Setup for recorded video - with native controls, no Plyr
+      // Setup for recorded video - with HLS but no Plyr
       player.controls = true;
       const recordedUrl = room?.recordedPlaybackInfos?.[0]?.url;
       if (recordedUrl) {
-        const authorizedUrl = await loadAuthorizedRecordedVideo(recordedUrl);
-        player.src = authorizedUrl;
+        setUpHLS(player, recordedUrl, true);
       }
     }
 

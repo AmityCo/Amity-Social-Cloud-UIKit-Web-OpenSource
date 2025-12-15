@@ -44,6 +44,7 @@ import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hoo
 import { LivestreamDataProvider } from '~/v4/social/features/livestream/providers';
 import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import { PAGE_ID } from '~/v4/constants/customization';
+import { LivestreamUiState } from '~/v4/social/features/livestream/internal-components/LivestreamStage/LivestreamStage';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -69,7 +70,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
   const [hideChatFeed, setHideChatFeed] = useState(false);
-  const [uiState, setUiState] = useState<'player' | 'backStage' | 'broadcast'>('player');
+  const [uiState, setUiState] = useState<LivestreamUiState>('player');
+  const [shouldRequestDevicePermissions, setShouldRequestDevicePermissions] = useState(false);
 
   const { currentUserId } = useSDK();
   const { keyboardOffset } = useKeyboardVisibility();
@@ -91,7 +93,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     reloadPlayer,
   } = useLiveStreamPlayer({ videoRef, room });
 
-  const deviceManagement = useDeviceManagement();
+  // Only request device permissions when not in player mode
+  const deviceManagement = useDeviceManagement(shouldRequestDevicePermissions);
 
   useForceDarkTheme();
 
@@ -101,23 +104,6 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     broadcasterData,
     isPending: isGettingBroadcasterData,
   } = useGetBroadcasterData();
-
-  const cameraProps = {
-    videoDevices: deviceManagement.videoDevices,
-    permissionDenied: deviceManagement.permissionDenied,
-    currentDevices: deviceManagement.currentDevices,
-    cameraPermission: deviceManagement.cameraPermission,
-    microphonePermission: deviceManagement.microphonePermission,
-    onValidate: (values: any) => {
-      deviceManagement.setCurrentDevices((prev) => ({
-        ...prev,
-        audioDeviceId: values.audioDeviceId,
-        videoDeviceId: values.videoDeviceId,
-        audioEnabled: values.audioEnabled ?? true,
-        videoEnabled: values.videoEnabled ?? true,
-      }));
-    },
-  };
 
   const { setStreamPlayer } = useLayoutContext();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
@@ -199,6 +185,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
       const acceptInvitaion = async (onDone?: () => void) => {
         try {
           await myInvitation?.accept();
+          setShouldRequestDevicePermissions(true);
           setUiState('backStage');
           success({
             content: 'Invitation accepted.',
@@ -391,7 +378,6 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     setUiState('player');
                     reloadPlayer();
                   }}
-                  isLive={isLive}
                   community={community}
                 />
               </div>

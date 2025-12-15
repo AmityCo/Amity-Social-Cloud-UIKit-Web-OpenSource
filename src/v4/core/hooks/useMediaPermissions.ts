@@ -26,7 +26,7 @@ export interface UseMediaPermissionsReturn {
   checkPermissionsStatus: () => Promise<void>;
 }
 
-export const useMediaPermissions = (): UseMediaPermissionsReturn => {
+export const useMediaPermissions = (enabled: boolean = true): UseMediaPermissionsReturn => {
   // Permission states
   const [microphonePermission, setMicrophonePermission] = useState<PermissionState>('checking');
   const [cameraPermission, setCameraPermission] = useState<PermissionState>('checking');
@@ -170,10 +170,15 @@ export const useMediaPermissions = (): UseMediaPermissionsReturn => {
 
   // Initialize permissions and devices on mount
   useEffect(() => {
+    if (!enabled) {
+      setIsLoading(false);
+      return;
+    }
+
     checkPermissionsStatus().then(() => {
       enumerateDevices();
     });
-  }, [enumerateDevices, checkPermissionsStatus]);
+  }, [enumerateDevices, checkPermissionsStatus, enabled]);
 
   return {
     // Permission states

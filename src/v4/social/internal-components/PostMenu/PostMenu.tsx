@@ -61,7 +61,7 @@ export const PostMenu = ({
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const poll = post?.childrenPosts?.[0]?.getPollInfo();
-  const isLiveStreamPost = post?.childrenPosts?.[0]?.dataType === 'livestream';
+  const isLiveStreamPost = post?.childrenPosts?.[0]?.dataType === 'room';
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
 
