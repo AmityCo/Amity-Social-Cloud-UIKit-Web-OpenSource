@@ -4,8 +4,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 1rem 0.5rem 0.5rem;
   flex-shrink: 0;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.livestreamHeader__header[data-normal='true'] {
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .livestreamHeader__headerRight__wrapper {
@@ -21,17 +32,94 @@
   color: var(--asc-color-white);
 }
 
+.livestreamHeader__liveDetail__detail {
+  margin-left: 0.25rem;
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.livestreamHeader__liveDetail__avatar {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.livestreamHeader__liveDetail__userAvatar {
+  height: 2.5rem !important;
+  width: 2.5rem !important;
+}
+
+.livestreamHeader__liveDetail__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.livestreamHeader__liveDetail__optionWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.livestreamHeader__liveDetail__communityNameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.livestreamHeader__liveDetail__lockIcon {
+  fill: var(--asc-color-white) !important;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.livestreamHeader__liveDetail__verifiedIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.livestreamHeader__liveDetail__displayName {
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
+}
+
+.livestreamHeader__liveDetail__text {
+  display: block;
+  color: var(--asc-color-white);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
 /* Header Button Styles */
 .livestreamHeader__closeButton {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem;
-  transition: background-color 0.2s ease;
+}
+
+.livestreamHeader__closeButton[data-normal='true'] {
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: var(--asc-color-base-default);
+  border-radius: 50%;
+  padding: 0.125rem;
+  margin-top: 1.25rem;
 }
 
 .livestreamHeader__closeButton:hover {
@@ -39,10 +127,16 @@
 }
 
 .livestreamHeader__closeButton__icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   color: var(--asc-color-white);
   fill: var(--asc-color-white);
+}
+
+.livestreamHeader__closeButton__icon[data-normal='true'] {
+  fill: var(--asc-color-base-shade4);
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .livestreamHeader__selectTarget__button {

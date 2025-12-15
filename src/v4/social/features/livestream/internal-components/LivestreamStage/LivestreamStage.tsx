@@ -24,7 +24,7 @@ export interface LivestreamStageProps {
   uiState: 'preview' | 'broadcast' | 'backStage';
 
   // Community data
-  community?: Amity.Community;
+  community?: Amity.Community | null;
 
   // Settings
   readOnly?: boolean;
@@ -70,6 +70,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
 }) => {
   // Internal countdown state - moved to parent for overlay management
   const [showCountdownOverlay, setShowCountdownOverlay] = useState(false);
+  const [coHostLeaveHandler, setCoHostLeaveHandler] = useState<(() => void) | null>(null);
   const { room, channel } = useLivestreamData();
   const { confirm } = useConfirmContext();
 
@@ -125,13 +126,17 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       // 1. Co-host leave back stage, leave room + change ui back to player
       if (isCoHost && uiState === 'backStage') return handleLeaveBackStage();
       // 2. Host leave stage, stop room
-      return onClose();
-      // 3. Co-host leave stage, leave livekit room, leave room, change ui back to player - use the livekit api, the close button is inside livestream stage component
+      if (!isCoHost) return onClose();
+      // 3. Co-host leave broadcast stage, leave livekit room, leave room, change ui back to player
+      if (isCoHost && uiState === 'broadcast' && coHostLeaveHandler) {
+        coHostLeaveHandler();
+      }
     },
     onTargetSelection,
     onStreamEnd,
     showCountdownOverlay,
     setShowCountdownOverlay,
+    isLive: room?.status === 'live',
   };
 
   return (
@@ -142,9 +147,11 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       )}
       {uiState === 'broadcast' && broadcasterData && room && (
         <StreamerStage
+          pageId={pageId}
           deviceManagement={deviceManagement}
           broadcasterData={broadcasterData}
           onLeaveStreamStage={onLeaveStreamStage}
+          onCoHostLeaveRequest={(handler) => setCoHostLeaveHandler(() => handler)}
         />
       )}
       {isStarting && <LivestreamOverlay.Starting />}

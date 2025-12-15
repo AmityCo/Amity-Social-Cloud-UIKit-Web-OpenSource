@@ -31,20 +31,26 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { InvitationStatusEnum } from '@amityco/ts-sdk';
+import { PAGE_ID } from '~/v4/constants/customization';
 
 interface StreamerStageProps {
   pageId?: string;
   broadcasterData: Amity.BroadcasterData;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
   onLeaveStreamStage?: () => void;
+  onCoHostLeaveRequest?: (handler: () => void) => void;
 }
 
 const Stage = ({
+  pageId,
   onLeaveStreamStage,
   deviceManagement,
+  onCoHostLeaveRequest,
 }: {
+  pageId?: string;
   onLeaveStreamStage?: () => void;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
+  onCoHostLeaveRequest?: (handler: () => void) => void;
 }) => {
   // Get values from context
   const [isLeaving, setIsLeaving] = useState(false);
@@ -209,7 +215,7 @@ const Stage = ({
     onLeaveStreamStage?.();
   };
 
-  const onCoHostLeaveLiveKitRoom = () => {
+  const onCoHostLeaveLiveKitRoom = useCallback(() => {
     confirm({
       type: 'confirm',
       okButtonColor: 'alert',
@@ -219,9 +225,16 @@ const Stage = ({
       title: 'Leave as co-host',
       pageId: '*',
       content:
-        'Are you sure you want to stop co-hosting? You’ll leave the stage and continue watching as a viewer.',
+        "Are you sure you want to stop co-hosting? You'll leave the stage and continue watching as a viewer.",
     });
-  };
+  }, [confirm, handleLeaveAsCoHost]);
+
+  // Expose the leave handler to parent via callback
+  useEffect(() => {
+    if (hostId !== currentUserId && onCoHostLeaveRequest) {
+      onCoHostLeaveRequest(onCoHostLeaveLiveKitRoom);
+    }
+  }, [hostId, currentUserId, onCoHostLeaveRequest, onCoHostLeaveLiveKitRoom]);
 
   const onLeaveByKickout = () => {
     buttonProps.onClick();
@@ -237,15 +250,39 @@ const Stage = ({
 
   // Sort tracks to put host first
   const tracks = useMemo(() => {
-    if (allTracks.length <= 1) {
-      return allTracks;
+    // Filter out local participant track from allTracks
+    const filteredTracks = allTracks.filter(
+      (track) => track.participant?.identity !== localParticipant.identity,
+    );
+
+    // Create local participant track object
+    const localTrack = {
+      participant: localParticipant,
+      publication: videoTrack
+        ? Array.from(localParticipant.videoTrackPublications.values())[0]
+        : undefined,
+      source: Track.Source.Camera,
+    };
+
+    const hasLocalTrack = localTrack.publication;
+
+    // If on create livestream page, add local track at the beginning
+    if (pageId === PAGE_ID.CREATE_LIVESTREAM_PAGE && hasLocalTrack) {
+      return [localTrack, ...filteredTracks];
     }
 
-    const hostTrack = allTracks.find((track) => track.participant?.name === hostId);
-    const otherTracks = allTracks.filter((track) => track.participant?.name !== hostId);
+    // For other pages, sort by host first, then add local track at the end
+    if (filteredTracks.length <= 1) {
+      return hasLocalTrack ? [...filteredTracks, localTrack] : filteredTracks;
+    }
 
-    return hostTrack ? [hostTrack, ...otherTracks] : allTracks;
-  }, [allTracks, room?.participants, hostId]);
+    const hostTrack = filteredTracks.find((track) => track.participant?.name === hostId);
+    const otherTracks = filteredTracks.filter((track) => track.participant?.name !== hostId);
+    const sortedTracks = hostTrack ? [hostTrack, ...otherTracks] : filteredTracks;
+
+    // Add local track at the end for non-create-livestream pages
+    return hasLocalTrack ? [...sortedTracks, localTrack] : sortedTracks;
+  }, [allTracks, room?.participants, hostId, localParticipant, videoTrack, pageId]);
 
   const isCoHostView =
     tracks.length === 2 || (tracks.length === 1 && (!!invitationByMe || !!coHost));
@@ -259,17 +296,6 @@ const Stage = ({
 
   return (
     <>
-      {hostId !== currentUserId && (
-        <Button
-          variant="text"
-          className={styles.streamerStage__coHostLeaveButton}
-          onPress={onCoHostLeaveLiveKitRoom}
-          aria-label="Close"
-        >
-          <CloseIcon className={styles.streamerStage__coHostLeaveButton__icon} />
-        </Button>
-      )}
-
       <div className={styles.streamerStage__videoContainer} data-co-host={isCoHostView}>
         <TrackLoop tracks={tracks}>
           <TrackRefContext.Consumer>
@@ -322,6 +348,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   broadcasterData,
   deviceManagement,
   onLeaveStreamStage,
+  onCoHostLeaveRequest,
 }) => {
   // Get values from context
   const { room, invitationByMe, setInvitationByMe } = useLivestreamData();
@@ -380,7 +407,12 @@ export const StreamerStage: FC<StreamerStageProps> = ({
       >
         <RoomAudioRenderer />
         {connected && (
-          <Stage onLeaveStreamStage={onLeaveStreamStage} deviceManagement={deviceManagement} />
+          <Stage
+            onLeaveStreamStage={onLeaveStreamStage}
+            deviceManagement={deviceManagement}
+            pageId={pageId}
+            onCoHostLeaveRequest={onCoHostLeaveRequest}
+          />
         )}
       </LiveKitRoomComponent>
     </div>

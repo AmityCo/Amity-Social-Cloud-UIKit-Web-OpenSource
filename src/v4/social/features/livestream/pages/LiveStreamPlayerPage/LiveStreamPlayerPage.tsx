@@ -25,8 +25,8 @@ import useCommunityMembersCollection from '~/v4/social/hooks/collections/useComm
 import useSDK from '~/v4/core/hooks/useSDK';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { InviteSheet } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage/components/InviteSheet';
-import { LivestreamPlayerHeader } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage/components/LivestreamPlayer/LivestreamPlayerHeader';
 import { LivestreamPlayer } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage/components/LivestreamPlayer';
+import { LivestreamHeader } from '~/v4/social/features/livestream/internal-components/LivestreamStage/LivestreamHeader';
 import {
   usePostSubscription,
   useLivechat,
@@ -278,12 +278,18 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
       onClose();
       goToLiveStreamTerminatedPage?.();
     }
-  }, [isTerminated, isLive, isEnded, isDesktop]);
+  }, [isTerminated, isDesktop]);
 
   // User has been banned.
   useEffect(() => {
     if (!isDesktop && isUserBanned) goToLiveStreamBannedPage?.();
   }, [isDesktop, isUserBanned]);
+
+  useEffect(() => {
+    if (isEnded && uiState !== 'player') {
+      setUiState('player');
+    }
+  }, [isEnded]);
 
   //  Livestream has been deleted
   useEffect(() => {
@@ -297,10 +303,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   // Handle UI state change when broadcaster data is received (Step 2)
   useEffect(() => {
-    if (broadcasterData) {
+    if (broadcasterData && isLive) {
       setUiState('broadcast');
     }
-  }, [broadcasterData]);
+  }, [broadcasterData, isLive]);
 
   // Use chat container's height to position reaction floating lane
   useEffect(() => {
@@ -347,17 +353,14 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
           >
-            {uiState === 'player' ? (
+            {uiState === 'player' && isLive ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
-                <LivestreamPlayerHeader
+                <LivestreamHeader
                   pageId={pageId}
-                  post={subscribedPost}
                   community={community}
-                  isLive={isLive}
-                  isEnded={isEnded}
-                  isUserBanned={!!isUserBanned}
+                  uiState="player"
+                  isLive={isLive && !isUserBanned}
                   onClose={onClose}
-                  room={room}
                 />
                 <LivestreamPlayer
                   themeStyles={themeStyles}
@@ -388,6 +391,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     setUiState('player');
                     reloadPlayer();
                   }}
+                  isLive={isLive}
+                  community={community}
                 />
               </div>
             )}
