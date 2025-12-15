@@ -319,6 +319,12 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     if (!isDesktop && isUserBanned) goToLiveStreamBannedPage?.();
   }, [isDesktop, isUserBanned]);
 
+  useEffect(() => {
+    if (isEnded && uiState !== 'player') {
+      setUiState('player');
+    }
+  }, [isEnded]);
+
   //  Livestream has been deleted
   useEffect(() => {
     if (room?.isDeleted || subscribedPost?.isDeleted) {
@@ -381,7 +387,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
           >
-            {uiState === 'player' ? (
+            {uiState === 'player' && isLive ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
                 <LivestreamHeader
                   pageId={pageId}
@@ -389,7 +395,6 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   uiState="player"
                   isLive={isLive && !isUserBanned}
                   onClose={onClose}
-                  room={room}
                 />
                 <LivestreamPlayer
                   themeStyles={themeStyles}

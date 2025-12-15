@@ -22,7 +22,6 @@ export function CommunityLiveRoomTarget({
   const { goToLiveStreamPlayerPage, goToPostDetailPage } = useNavigation();
 
   React.useEffect(() => {
-    console.log('live room ', isLoading);
     onLoadingChange?.(isLoading);
   }, [isLoading]);
 
