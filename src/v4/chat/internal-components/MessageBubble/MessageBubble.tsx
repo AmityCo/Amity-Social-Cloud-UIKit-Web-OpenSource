@@ -91,7 +91,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
               </div>
             )}
           </div>
-          {coHostId ? (
+          {isCoHostMessage ? (
             <CoHostBadge />
           ) : (
             channel?.metadata?.moderators?.includes(message.creatorId) && (
@@ -99,21 +99,24 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
             )
           )}
         </div>
-        <LivestreamModerationOptions
-          displayName={message.creator?.displayName ?? coHost?.displayName}
-          isHost={isHost}
-          coHostId={invitedCoHost?.userId ?? coHost?.userId}
-          isModerator={isModerator}
-          onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
-          onCancelInvitation={handleCancelInvitation}
-          onRemoveCoHost={handleRemoveCoHost}
-          onLeaveAsCoHost={handleLeaveAsCoHost}
-          onClickOption={closePopover}
-          isPendingCoHost={
-            invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
-          }
-        />
-        {!coHostId && (
+        {((coHost && isCoHostMessage) || !coHost) && (
+          <LivestreamModerationOptions
+            displayName={message.creator?.displayName ?? coHost?.displayName}
+            isHost={isHost}
+            coHostId={invitedCoHost?.userId ?? coHost?.userId}
+            isModerator={isModerator}
+            onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
+            onCancelInvitation={handleCancelInvitation}
+            onRemoveCoHost={handleRemoveCoHost}
+            onLeaveAsCoHost={handleLeaveAsCoHost}
+            onClickOption={closePopover}
+            isPendingCoHost={
+              invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
+            }
+          />
+        )}
+
+        {!isCoHostMessage && (
           <>
             {channel?.metadata?.moderators?.includes(message.creatorId) ? (
               <Button
@@ -241,11 +244,13 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     );
   };
 
+  const disableModerationPopup = isHostMessage || isOwner || (isCoHostMessage && !isHost);
+
   return (
     <div className={styles.messageBubble__container}>
       <div className={styles.messageBubble__topSectionWrap}>
         <div className={styles.messageBubble__displayName__container}>
-          {isHostMessage || isOwner || (!isHost && !isModerator) ? (
+          {disableModerationPopup ? (
             <div className={styles.messageBubble__displayName__container}>
               <Typography.CaptionSmall className={styles.messageBubble__displayName}>
                 {message.creator?.displayName}
