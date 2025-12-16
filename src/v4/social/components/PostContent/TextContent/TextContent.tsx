@@ -50,6 +50,7 @@ export const TextContent = ({
       PostContentType.POLL,
       PostContentType.LIVESTREAM,
       PostContentType.CLIP,
+      PostContentType.ROOM,
     ].includes(childPost?.dataType);
 
   const canPreviewShown = linksFounded && linksFounded.length > 0 && !isHasMedia;
