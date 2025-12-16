@@ -59,9 +59,9 @@ export function CreateLivestreamButton({
         configIconName={config.image}
         defaultIconName={defaultConfig.image}
       />
-      <Typography.Body className={styles.createLivestreamButton__text}>
+      <Typography.BodyBold className={styles.createLivestreamButton__text}>
         {config.text}
-      </Typography.Body>
+      </Typography.BodyBold>
     </Button>
   );
 }

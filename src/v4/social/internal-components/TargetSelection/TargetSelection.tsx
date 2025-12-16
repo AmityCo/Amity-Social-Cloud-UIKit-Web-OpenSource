@@ -69,39 +69,41 @@ export function TargetSelection({
       </div>
       <div className={styles.targetSelection__line} />
       <div className={styles.targetSelection__myCommunities}>My Communities</div>
-      {communities
-        .filter((community) => canCreatePostCommunity(client, community))
-        .map((community) => {
-          return (
-            <Button
-              key={community.communityId}
-              className={styles.targetSelection__timeline}
-              data-testid={`${testIdPrefix}-target-selection-community-item`}
-              onPress={() =>
-                onSelectTarget({
-                  targetType: 'community',
-                  targetId: community.communityId,
-                })
-              }
-            >
-              <div className={styles.targetSelection__communityAvatar}>
-                <CommunityAvatar pageId={pageId} community={community} />
-              </div>
-              <div className={styles.targetSelection__communityName}>
-                {!community.isPublic && <CommunityPrivateBadge />}
-                <CommunityDisplayName pageId={pageId} community={community} />
-                {community.isOfficial && <CommunityOfficialBadge />}
-              </div>
-            </Button>
-          );
-        })}
-      {isLoading && (
-        <div className={styles.targetSelection__skeletonWrapper}>
-          {Array.from({ length: 3 }).map((_, index) => (
-            <CommunitySmallListItemSkeleton key={index} />
-          ))}
-        </div>
-      )}
+      <div className={styles.targetSelection__myCommunitiesList}>
+        {communities
+          .filter((community) => canCreatePostCommunity(client, community))
+          .map((community) => {
+            return (
+              <Button
+                key={community.communityId}
+                className={styles.targetSelection__communityItem}
+                data-testid={`${testIdPrefix}-target-selection-community-item`}
+                onPress={() =>
+                  onSelectTarget({
+                    targetType: 'community',
+                    targetId: community.communityId,
+                  })
+                }
+              >
+                <div className={styles.targetSelection__communityAvatar}>
+                  <CommunityAvatar pageId={pageId} community={community} />
+                </div>
+                <div className={styles.targetSelection__communityName}>
+                  {!community.isPublic && <CommunityPrivateBadge />}
+                  <CommunityDisplayName pageId={pageId} community={community} />
+                  {community.isOfficial && <CommunityOfficialBadge />}
+                </div>
+              </Button>
+            );
+          })}
+        {isLoading && (
+          <div className={styles.targetSelection__skeletonWrapper}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <CommunitySmallListItemSkeleton key={index} />
+            ))}
+          </div>
+        )}
+      </div>
       <div
         ref={(node) => setIntersectionNode(node)}
         className={styles.targetSelection__intersectionObserver}
