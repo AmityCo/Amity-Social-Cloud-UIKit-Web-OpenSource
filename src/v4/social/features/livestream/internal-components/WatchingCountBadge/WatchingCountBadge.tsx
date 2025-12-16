@@ -13,22 +13,28 @@ function formatCount(count: number): string {
   // 1,000-999,999: show K for thousands
   if (count < 1000000) {
     const thousands = count / 1000;
+    // Floor to 1 decimal place
+    const floored = Math.floor(thousands * 10) / 10;
+
     // If it's a whole number, don't show decimal
-    if (thousands % 1 === 0) {
-      return `${Math.floor(thousands)}K`;
+    if (floored % 1 === 0) {
+      return `${Math.floor(floored)}K`;
     }
     // Show 1 decimal place
-    return `${thousands.toFixed(1)}K`;
+    return `${floored.toFixed(1)}K`;
   }
 
   // 1,000,000+: show M for millions
   const millions = count / 1000000;
+  // Floor to 1 decimal place
+  const floored = Math.floor(millions * 10) / 10;
+
   // If it's a whole number, don't show decimal
-  if (millions % 1 === 0) {
-    return `${Math.floor(millions)}M`;
+  if (floored % 1 === 0) {
+    return `${Math.floor(floored)}M`;
   }
   // Show 1 decimal place
-  return `${millions.toFixed(1)}M`;
+  return `${floored.toFixed(1)}M`;
 }
 
 export function WatchingCountBadge({
