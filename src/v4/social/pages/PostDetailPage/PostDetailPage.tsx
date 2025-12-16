@@ -77,7 +77,7 @@ export function PostDetailPage({
   });
 
   const isJoinedCommunity = post?.targetType === 'community' && community?.isJoined;
-  const canSeeCommentComposer = post && isDesktop && isJoinedCommunity && !isVisitorOrBot;
+  const canSeeCommentComposer = post && isJoinedCommunity && !isVisitorOrBot;
 
   useEffect(() => {
     refresh();
