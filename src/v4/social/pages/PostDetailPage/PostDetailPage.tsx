@@ -77,7 +77,8 @@ export function PostDetailPage({
   });
 
   const isJoinedCommunity = post?.targetType === 'community' && community?.isJoined;
-  const canSeeCommentComposer = post && isJoinedCommunity && !isVisitorOrBot;
+  const canSeeCommentComposer =
+    post && (isJoinedCommunity || post?.targetType === 'user') && !isVisitorOrBot;
 
   useEffect(() => {
     refresh();
@@ -243,7 +244,7 @@ export function PostDetailPage({
             expandAllContent={isPollPost(post.childrenPosts[0])}
           />
         </div>
-        {canSeeCommentComposer && (
+        {isDesktop && canSeeCommentComposer && (
           <CommentComposer
             pageId={pageId}
             referenceId={post.postId}
@@ -290,6 +291,20 @@ export function PostDetailPage({
           </div>
         )}
       </div>
+      {!isDesktop && canSeeCommentComposer && (
+        <CommentComposer
+          pageId={pageId}
+          referenceId={post.postId}
+          referenceType={'post'}
+          onCancelReply={() => setReplyComment(undefined)}
+          community={community}
+          containerClassName={
+            post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+          }
+          isFromCommentClick={isFromCommentClick}
+          replyTo={replyComment}
+        />
+      )}
     </div>
   );
 }
