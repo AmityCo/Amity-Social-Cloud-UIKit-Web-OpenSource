@@ -272,7 +272,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                       openPopover();
                     } else {
                       setDrawerData({
-                        content: () => renderModerationOptions({ closePopover }),
+                        content: renderModerationOptions({ closePopover }),
                       });
                     }
                   }}
