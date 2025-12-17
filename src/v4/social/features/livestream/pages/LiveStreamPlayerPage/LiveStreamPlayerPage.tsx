@@ -340,7 +340,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
           >
-            {uiState === 'player' && isLive ? (
+            {(uiState === 'player' && isLive) || isRecorded ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
                 <LivestreamHeader
                   pageId={pageId}
