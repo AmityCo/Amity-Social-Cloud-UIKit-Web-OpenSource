@@ -153,7 +153,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isTerminated &&
     !isUserBanned;
 
-  const showWaitingApprovalBanner = isLive && isDesktop && livestreamPost?.feedType === 'reviewing';
+  const showWaitingApprovalBanner = isLive && isDesktop && subscribedPost?.feedType === 'reviewing';
 
   const { invitations, setInvitations } = useObserveRoomAndInvitation({ room });
 
