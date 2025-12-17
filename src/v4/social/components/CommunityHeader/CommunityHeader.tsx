@@ -217,7 +217,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
           </div>
         )}
 
-        {community.isPublic && (
+        {(community.isJoined || community.isPublic) && (
           <div>
             <StoryTab type="communityFeed" pageId={pageId} communityId={community.communityId} />
           </div>
