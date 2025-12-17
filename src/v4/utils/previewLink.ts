@@ -39,10 +39,11 @@ const parseMetadata = (text: string, url: string, domain: string): PreviewMetada
     '';
 
   return {
+    ...data,
+    title: data.title || '',
+    imageUrl: data.image || '',
     url,
-    domain,
-    title,
-    imageUrl,
+    domain: data.domain,
     timestamp: new Date(),
   };
 };
