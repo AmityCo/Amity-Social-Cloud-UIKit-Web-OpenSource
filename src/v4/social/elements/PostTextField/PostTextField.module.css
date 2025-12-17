@@ -51,3 +51,26 @@
   height: 1px;
   background-color: var(--asc-color-background-default);
 }
+
+.linkPreviewContainer {
+  position: relative;
+  padding: 1rem 1.5rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.linkPreviewContainer__closeButton {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--asc-color-background-transparent-black);
+}
+
+.linkPreviewContainer__closeButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-white);
+}

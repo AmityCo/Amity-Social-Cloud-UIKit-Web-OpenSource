@@ -44,6 +44,7 @@ import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { Play } from '~/v4/icons/Play';
 import { useImage } from '~/v4/core/hooks/useImage';
 import { TextArea } from '~/v4/core/components/TextField';
+import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -60,7 +61,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
-  const { confirm } = useConfirmContext();
+  const { confirm, info } = useConfirmContext();
   const { updateGlobalFeaturedPosts } = useGlobalFeedContext();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
     useFilePostUpload(pageId);
@@ -102,12 +103,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     mentioned: post.metadata?.mentioned || [],
     hashtagsMetadata: [],
     mentionees: post.mentionees as Amity.UserMention[],
-    attachments: [
-      {
-        fileId: '',
-        type: 'image',
-      },
-    ],
+    attachments: [],
+    links: post.links || [],
   });
 
   const online = useNetworkState();
@@ -119,6 +116,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   const useMutateUpdatePost = () =>
     useMutation({
@@ -162,6 +160,15 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     const clipPosts = posts.filter((post) => post.dataType === 'clip') as Amity.Post<'clip'>[];
     setPostClip(clipPosts);
   }, [posts]);
+
+  useEffect(() => {
+    if (post.links && post.links.length > 0) {
+      setTextValue((prev) => ({
+        ...prev,
+        links: post.links,
+      }));
+    }
+  }, [post.links]);
 
   const handleRemoveThumbnailImage = useCallback((fieldId: string) => {
     setPostImages((prevImages) =>
@@ -226,6 +233,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             },
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
+            links: textValue.links,
           })
         : mutateUpdatePostAsync({
             data: { text: textValue.text, title: title.trim() },
@@ -236,6 +244,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
+            links: textValue.links,
           });
     }
   };
@@ -243,6 +252,16 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const onSave = () => {
     if (textValue.text?.length && textValue.text.length > MAXIMUM_POST_CHARACTERS) {
       setPostErrorText('You have reached maximum 50,000 characters in a post.');
+      return;
+    }
+
+    if (textValue.links && textValue.links.length > MAXIMUM_POST_CHARACTERS) {
+      info({
+        title: 'Link limit reached',
+        content: `You can only add link up to ${MAX_LINKS_PER_POST} links per post.`,
+        pageId,
+        okText: 'OK',
+      });
       return;
     }
 
@@ -279,6 +298,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     mentionees: Mentionees;
     hashtags: Amity.Hashtag[];
     text: string;
+    links?: Amity.Link[];
   }) => {
     setTextValue((prev) => ({
       ...prev,
@@ -286,6 +306,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       text: val.text,
       mentionees: val.mentionees,
       hashtagsMetadata: val.hashtags,
+      links: val.links,
     }));
   };
 
@@ -344,6 +365,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     isTextPost(post) &&
     post.data?.text === textValue.text &&
     post.data?.title === title &&
+    post.links?.[0]?.renderPreview === textValue.links?.[0]?.renderPreview &&
+    post.links?.[0]?.url === textValue.links?.[0]?.url &&
     !hasMediaChange;
 
   const hasNoContent = !(
@@ -361,6 +384,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     isLoading ||
     isPending ||
     isError ||
+    isPreviewLoading ||
     files.some((file) => !isAmityFile(file.file)); // to make sure that files are uploaded with fileId
 
   // Move the useImage hook outside conditional rendering
@@ -425,13 +449,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionContainer={isDesktop ? null : mentionRef.current}
             mentionContainerClassName={styles.editPost__mentionContainer}
             communityId={post.targetType === 'community' ? post.targetId : undefined}
+            attachmentAmount={totalMedia}
             dataValue={{
               mentionees: post.mentionees,
-              data: { text: (post as Amity.Post<'text'>)?.data?.text || '' },
+              data: { text: textValue.text },
               metadata: {
                 mentioned: post.metadata?.mentioned || [],
                 hashtags: post.metadata?.hashtags || [],
               },
+              links: textValue.links || [],
+            }}
+            onPreviewLinkChange={(showPreview, isLoading) => {
+              setIsPreviewLoading(isLoading || false);
             }}
           />
 

@@ -64,4 +64,5 @@ export type CreatePostParams = {
     fileId: string;
     type: string;
   }[];
+  links?: Amity.Link[];
 };

@@ -40,8 +40,6 @@ export const TextContent = ({
 }: TextContentProps) => {
   const { post: childPost } = usePost(post?.children?.[0]);
 
-  const linksFounded = linkify.find(text).filter((link) => link.type === 'url');
-
   const isHasMedia =
     post?.children?.[0] &&
     [
@@ -53,7 +51,7 @@ export const TextContent = ({
       PostContentType.ROOM,
     ].includes(childPost?.dataType);
 
-  const canPreviewShown = linksFounded && linksFounded.length > 0 && !isHasMedia;
+  const canPreviewShown = post?.links?.[0]?.renderPreview && !isHasMedia;
 
   const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
 
@@ -108,7 +106,11 @@ export const TextContent = ({
         </>
       )}
       {canPreviewShown && (
-        <LinkPreview pageId={pageId} componentId={componentId} url={linksFounded[0].href} />
+        <LinkPreview
+          pageId={pageId}
+          componentId={componentId}
+          url={post?.links?.[0]?.url as string}
+        />
       )}
     </>
   );

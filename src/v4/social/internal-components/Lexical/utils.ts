@@ -341,6 +341,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
 
   const mentioned: Mentioned[] = [];
   const hashtags: Amity.Hashtag[] = [];
+  const links: Amity.Link[] = [];
   let isChannelMentioned = false;
   const mentioneeUserIds: string[] = [];
   let runningIndex = 0;
@@ -355,13 +356,33 @@ export function editorStateToText(editorState: SerializedEditorState) {
           | SerializedTextNode
           | SerializedMentionNode<MentionData>
           | SerializedAutoLinkNode
-          | SerializedHashtagNode,
+          | SerializedHashtagNode
+          | { type: 'linebreak'; version: number },
       ) => {
+        // Handle line break nodes (Shift+Enter)
+        if (child.type === 'linebreak') {
+          paragraphText.push('\n');
+          runningIndex += 1;
+          return;
+        }
+
         if ($isSerializedTextNode(child)) {
           paragraphText.push(child.text);
           runningIndex += child.text.length;
         }
         if ($isSerializedLinkNode(child) || $isSerializedAutoLinkNode(child)) {
+          const linkText = child.children
+            .filter((c): c is SerializedTextNode => $isSerializedTextNode(c))
+            .map((c) => c.text)
+            .join('');
+
+          links.push({
+            index: runningIndex,
+            length: linkText.length,
+            url: linkText,
+            renderPreview: true,
+          });
+
           child.children.forEach((c) => {
             if (!$isSerializedTextNode(c)) return;
             paragraphText.push(c.text);
@@ -422,7 +443,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
     mentionees.push({ type: 'channel' });
   }
 
-  return { mentioned, hashtags, text: editorStateTextString.join('\n'), mentionees };
+  return { mentioned, hashtags, text: editorStateTextString.join('\n'), mentionees, links };
 }
 
 const defaultTheme = {
