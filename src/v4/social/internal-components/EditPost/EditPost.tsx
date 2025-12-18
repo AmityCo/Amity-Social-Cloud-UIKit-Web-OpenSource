@@ -62,7 +62,6 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
   const { confirm, info } = useConfirmContext();
-  const { updateGlobalFeaturedPosts } = useGlobalFeedContext();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
     useFilePostUpload(pageId);
   const posts = usePostByIds(post?.children || []);
@@ -118,6 +117,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [isError, setIsError] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
+  const isModerator =
+    (moderators || []).find((moderator) => moderator.userId === currentUserId) != null;
+
+  const isPostNeedsApproval =
+    (community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+      ?.needApprovalOnPostCreation ||
+    (community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED &&
+      !isModerator &&
+      !isAdmin(user?.roles));
+
+  const { updateGlobalFeaturedPosts } = useGlobalFeedContext();
+
   const useMutateUpdatePost = () =>
     useMutation({
       mutationFn: async (params: Parameters<typeof PostRepository.editPost>[1]) => {
@@ -131,7 +142,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       onSuccess: (response) => {
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
-        updateGlobalFeaturedPosts(response.data);
+        updateGlobalFeaturedPosts(response.data, isPostNeedsApproval);
       },
       onError: (error) => {
         setIsUpdating(false);
@@ -266,17 +277,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     }
 
     // Check if post needs approval and show confirmation popup before API call
-    const isModerator =
-      (moderators || []).find((moderator) => moderator.userId === currentUserId) != null;
 
-    if (
-      shouldCallCommunity &&
-      ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
-        ?.needApprovalOnPostCreation ||
-        community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED) &&
-      !isModerator &&
-      !isAdmin(user?.roles)
-    ) {
+    if (shouldCallCommunity && isPostNeedsApproval) {
       confirm({
         pageId,
         title: 'Post will be sent for review',
