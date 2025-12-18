@@ -244,6 +244,22 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     );
   };
 
+  const renderMessageOptions = ({ closePopover }: { closePopover: () => void }) => {
+    return (
+      <MessageOptions
+        isOwner={isOwner}
+        isModerator={isModerator}
+        message={message}
+        isJoinedCommunity={isJoinedCommunity}
+        onCloseMenu={() => {
+          removeDrawerData();
+          closePopover();
+        }}
+        isHostMessage={isHostMessage}
+      />
+    );
+  };
+
   const disableModerationPopup = isHostMessage || isOwner || (isCoHostMessage && !isHost);
 
   return (
@@ -310,33 +326,11 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
               componentId,
               onClick: ({ closePopover }) =>
                 setDrawerData({
-                  content: (
-                    <MessageOptions
-                      isOwner={isOwner}
-                      isModerator={isModerator}
-                      message={message}
-                      isJoinedCommunity={isJoinedCommunity}
-                      onCloseMenu={() => {
-                        removeDrawerData();
-                        closePopover();
-                      }}
-                    />
-                  ),
+                  content: renderMessageOptions({ closePopover }),
                 }),
             }}
           >
-            {({ closePopover }) => (
-              <MessageOptions
-                isOwner={isOwner}
-                isModerator={isModerator}
-                message={message}
-                isJoinedCommunity={isJoinedCommunity}
-                onCloseMenu={() => {
-                  removeDrawerData();
-                  closePopover();
-                }}
-              />
-            )}
+            {({ closePopover }) => renderMessageOptions({ closePopover })}
           </Popover>
         )}
       </div>
@@ -362,18 +356,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                     isDesktop
                       ? openPopover()
                       : setDrawerData({
-                          content: (
-                            <MessageOptions
-                              isOwner={isOwner}
-                              isModerator={isModerator}
-                              message={message}
-                              isJoinedCommunity={isJoinedCommunity}
-                              onCloseMenu={() => {
-                                removeDrawerData();
-                                closePopover();
-                              }}
-                            />
-                          ),
+                          content: renderMessageOptions({ closePopover }),
                         })
                   }
                 >
@@ -381,17 +364,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                 </Button>
               )}
             >
-              {({ closePopover }) => (
-                <MessageOptions
-                  isOwner={isOwner}
-                  isModerator={isModerator}
-                  message={message}
-                  isJoinedCommunity={isJoinedCommunity}
-                  onCloseMenu={() => {
-                    closePopover();
-                  }}
-                />
-              )}
+              {({ closePopover }) => renderMessageOptions({ closePopover })}
             </Popover>
           )}
         </div>

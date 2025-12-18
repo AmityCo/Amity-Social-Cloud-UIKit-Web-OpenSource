@@ -19,6 +19,7 @@ export interface MessageOptionsProps {
   componentId?: string;
   isOwner: boolean;
   isModerator: boolean;
+  isHostMessage?: boolean;
   message: Amity.Message;
   isJoinedCommunity?: boolean;
   onCloseMenu: () => void;
@@ -29,6 +30,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
   componentId = COMPONENT_ID.WILD_CARD,
   isOwner,
   isModerator,
+  isHostMessage,
   message,
   onCloseMenu,
   isJoinedCommunity,
@@ -116,7 +118,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
           )}
         </>
       )}
-      {(isOwner || isModerator) && (
+      {(isOwner || (isModerator && !isHostMessage)) && (
         <MenuOptionButton
           text="Delete message"
           icon={<Bin />}
