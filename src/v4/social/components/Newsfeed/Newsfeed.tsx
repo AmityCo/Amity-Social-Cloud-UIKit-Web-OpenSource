@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Divider } from '~/v4/social/elements/Divider';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { StoryTab } from '~/v4/social/components/StoryTab';
@@ -35,7 +35,8 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
     if (hasMore && !isLoading) loadMore?.();
   };
 
-  if (itemWithAds.length === 0 && !isLoading) return <EmptyNewsfeed pageId={pageId} />;
+  if (itemWithAds.length === 0 && !isLoading && globalFeaturedPostsItems.length === 0)
+    return <EmptyNewsfeed pageId={pageId} />;
 
   return (
     <PullToRefresh className={styles.newsfeed} style={themeStyles} onTouchEndCallback={refetch}>
