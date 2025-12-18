@@ -9,11 +9,18 @@
 }
 
 .streamerStage_videoItem__container {
-  position: relative;
   display: flex;
   height: 100%;
   align-items: center;
   justify-content: center;
+}
+
+.streamerStage_videoItem__container__inner {
+  position: relative;
+}
+
+.streamerStage_videoItem__container__inner[data-co-host='true'] {
+  height: 100%;
 }
 
 .streamerStage_videoItem__container[data-co-host='true'] {
@@ -69,5 +76,23 @@
   width: 1.5rem;
   height: 1.5rem;
   color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.streamerStage__localMutedIndicator {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--asc-color-transparent-black);
+  border-radius: 100%;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streamerStage__localMutedIndicator__icon {
+  width: 1.25rem;
+  height: 1.25rem;
   fill: var(--asc-color-white);
 }

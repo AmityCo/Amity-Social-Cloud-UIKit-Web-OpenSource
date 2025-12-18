@@ -24,14 +24,13 @@ import styles from './StreamerStage.module.css';
 import { CoHostPlaceholder } from './CoHostPlaceholder';
 import { ParticipantHeader } from './ParticipantHeader';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { CloseIcon } from '~/icons';
 import { useLeaveRoom } from '~/v4/social/features/livestream/hooks/useLeaveRoom';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { InvitationStatusEnum } from '@amityco/ts-sdk';
 import { PAGE_ID } from '~/v4/constants/customization';
+import MuteMic from '~/v4/icons/MutedMic';
 
 interface StreamerStageProps {
   pageId?: string;
@@ -306,26 +305,42 @@ const Stage = ({
                   data-co-host={isCoHostView}
                 >
                   {isTrackReference(trackRef) && (
-                    <>
+                    <div
+                      className={styles.streamerStage_videoItem__container__inner}
+                      data-co-host={isCoHostView}
+                    >
                       <VideoTrackComponent
                         trackRef={trackRef}
                         className={styles.streamerStage_video}
                       />
-                      {trackRef.participant.name !== hostId && (
+                      {((pageId === PAGE_ID.CREATE_LIVESTREAM_PAGE &&
+                        trackRef.participant.identity === localParticipant.identity) ||
+                        (pageId !== PAGE_ID.CREATE_LIVESTREAM_PAGE &&
+                          trackRef.participant.identity !== localParticipant.identity)) &&
+                        !trackRef.participant.isMicrophoneEnabled && (
+                          <div className={styles.streamerStage__localMutedIndicator}>
+                            <MuteMic className={styles.streamerStage__localMutedIndicator__icon} />
+                          </div>
+                        )}
+
+                      {((pageId !== PAGE_ID.CREATE_LIVESTREAM_PAGE &&
+                        trackRef.participant.identity === localParticipant.identity) ||
+                        (pageId === PAGE_ID.CREATE_LIVESTREAM_PAGE &&
+                          trackRef.participant.identity !== localParticipant.identity)) && (
                         <ParticipantHeader
                           showOptions={true}
                           onCoHostLeaveLiveKitRoom={onCoHostLeaveLiveKitRoom}
                           isMuted={!trackRef.participant.isMicrophoneEnabled}
                         />
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               )
             }
           </TrackRefContext.Consumer>
         </TrackLoop>
-        {tracks.length !== 2 && <CoHostPlaceholder />}
+        {tracks.length !== 2 && (invitationByMe || coHost) && <CoHostPlaceholder />}
       </div>
 
       <div
