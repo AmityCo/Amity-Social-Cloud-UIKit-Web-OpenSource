@@ -200,7 +200,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             });
           } else {
             info({
-              content: 'Something went wrong',
+              content: 'Failed to accept invitation. Please try again.',
             });
           }
         }
@@ -223,7 +223,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             });
           } else {
             info({
-              content: 'Something went wrong',
+              content: 'Failed to decline invitation. Please try again.',
             });
           }
         }

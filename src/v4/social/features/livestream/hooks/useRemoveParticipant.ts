@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { RoomRepository } from '@amityco/ts-sdk';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export interface UseRemoveParticipantProps {
   room?: Amity.Room | null;
@@ -18,10 +19,19 @@ export const useRemoveParticipant = ({
   pageId = '*',
 }: UseRemoveParticipantProps): UseRemoveParticipantReturn => {
   const { confirm } = useConfirmContext();
+  const { success, error } = useNotifications();
 
   const { mutate: removeParticipant, isPending } = useMutation({
     mutationFn: async (userId: string) =>
       RoomRepository.removeParticipant(room?.roomId || '', userId),
+    onSuccess: () =>
+      success({
+        content: 'Co-host removed from live.',
+      }),
+    onError: () =>
+      error({
+        content: 'Failed to remove co-host. Please try again.',
+      }),
   });
 
   const handleRemoveParticipant = (userId: string) => {
