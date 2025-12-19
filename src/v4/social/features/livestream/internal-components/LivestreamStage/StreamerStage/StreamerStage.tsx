@@ -231,7 +231,11 @@ const Stage = ({
   // Expose the leave handler to parent via callback
   useEffect(() => {
     if (hostId !== currentUserId && onCoHostLeaveRequest) {
-      onCoHostLeaveRequest(onCoHostLeaveLiveKitRoom);
+      onCoHostLeaveRequest(() => {
+        // only for leaving the state
+        buttonProps.onClick();
+        leaveRoom();
+      });
     }
   }, [hostId, currentUserId, onCoHostLeaveRequest, onCoHostLeaveLiveKitRoom]);
 

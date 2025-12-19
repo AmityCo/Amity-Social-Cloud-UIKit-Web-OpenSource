@@ -108,6 +108,23 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
     });
   };
 
+  const handleCoHostLeaveStage = () => {
+    confirm({
+      type: 'confirm',
+      okButtonColor: 'alert',
+      onOk: () => {
+        coHostLeaveHandler?.();
+        onClose();
+      },
+      okText: 'Leave',
+      cancelText: 'Cancel',
+      title: 'Leave live stream',
+      pageId,
+      content:
+        'Are you sure you want to leave this livestream? You’ll stop broadcasting and exit the session completely.',
+    });
+  };
+
   // Calculate countdown display
   const countdownDisplay = remainingSeconds > 0 ? remainingSeconds : null;
   // Computed values
@@ -131,7 +148,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       if (!isCoHost) return onClose();
       // 3. Co-host leave broadcast stage, leave livekit room, leave room, change ui back to player
       if (isCoHost && uiState === 'broadcast' && coHostLeaveHandler) {
-        coHostLeaveHandler();
+        handleCoHostLeaveStage();
       }
     },
     onTargetSelection,
