@@ -40,7 +40,6 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
 
   return (
     <PullToRefresh className={styles.newsfeed} style={themeStyles} onTouchEndCallback={refetch}>
-      <Divider isShown={!isDesktop} />
       <div className={styles.newsfeed__storyTab}>
         <StoryTab type="globalFeed" pageId={pageId} />
       </div>
