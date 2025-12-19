@@ -62,6 +62,7 @@ const Stage = ({
 
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
+  const { success } = useNotifications();
   const { buttonProps } = useDisconnectButton({});
 
   // LiveKit device management (inside room context)
