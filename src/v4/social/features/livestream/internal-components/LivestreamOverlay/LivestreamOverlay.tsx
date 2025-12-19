@@ -99,6 +99,14 @@ const CountdownEnding: React.FC<{ countdown: number; className?: string }> = ({
   </LivestreamOverlayBase>
 );
 
+const LeavingStage: React.FC<{ className?: string }> = ({ className }) => (
+  <LivestreamOverlayBase
+    title="Leaving stage…"
+    description="You’ll return to the livestream as a viewer shortly."
+    className={className}
+  />
+);
+
 // Main component with compound pattern
 export const LivestreamOverlay = Object.assign(LivestreamOverlayBase, {
   Starting,
@@ -106,4 +114,5 @@ export const LivestreamOverlay = Object.assign(LivestreamOverlayBase, {
   Reconnecting,
   WaitForApproval,
   CountdownEnding,
+  LeavingStage,
 });

@@ -5,6 +5,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 export interface UseLeaveRoomProps {
   room?: Amity.Room | null;
   pageId?: string;
+  onSettled?: () => void;
 }
 
 export interface UseLeaveRoomReturn {
@@ -12,9 +13,10 @@ export interface UseLeaveRoomReturn {
   isPending: boolean;
 }
 
-export const useLeaveRoom = ({ room, pageId = '*' }: UseLeaveRoomProps): UseLeaveRoomReturn => {
+export const useLeaveRoom = ({ room, onSettled }: UseLeaveRoomProps): UseLeaveRoomReturn => {
   const { mutate: leaveRoom, isPending } = useMutation({
     mutationFn: async () => RoomRepository.leaveRoom(room?.roomId || ''),
+    onSettled,
   });
 
   return {

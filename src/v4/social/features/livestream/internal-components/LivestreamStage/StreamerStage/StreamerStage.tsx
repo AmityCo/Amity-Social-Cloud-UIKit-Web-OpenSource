@@ -24,7 +24,6 @@ import styles from './StreamerStage.module.css';
 import { CoHostPlaceholder } from './CoHostPlaceholder';
 import { ParticipantHeader } from './ParticipantHeader';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import { useLeaveRoom } from '~/v4/social/features/livestream/hooks/useLeaveRoom';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -39,17 +38,20 @@ interface StreamerStageProps {
   broadcasterData: Amity.BroadcasterData;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
   onLeaveStreamStage?: () => void;
+  onLeaveByKickout?: () => void;
   onCoHostLeaveRequest?: (handler: () => void) => void;
 }
 
 const Stage = ({
   pageId,
   onLeaveStreamStage,
+  onLeaveByKickout,
   deviceManagement,
   onCoHostLeaveRequest,
 }: {
   pageId?: string;
   onLeaveStreamStage?: () => void;
+  onLeaveByKickout?: () => void;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
   onCoHostLeaveRequest?: (handler: () => void) => void;
 }) => {
@@ -60,8 +62,8 @@ const Stage = ({
 
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
+  const { success } = useNotifications();
   const { buttonProps } = useDisconnectButton({});
-  const { leaveRoom } = useLeaveRoom({ room });
 
   // LiveKit device management (inside room context)
   const { localParticipant } = useLocalParticipant();
@@ -211,7 +213,6 @@ const Stage = ({
 
   const handleLeaveAsCoHost = () => {
     buttonProps.onClick();
-    leaveRoom();
     // Co-host leave any stage, change ui back to player
     onLeaveStreamStage?.();
   };
@@ -241,9 +242,9 @@ const Stage = ({
     }
   }, [hostId, currentUserId, onCoHostLeaveRequest, onCoHostLeaveLiveKitRoom]);
 
-  const onLeaveByKickout = () => {
+  const onLeaveByKickoutByHost = () => {
     buttonProps.onClick();
-    onLeaveStreamStage?.();
+    onLeaveByKickout?.();
   };
 
   const allTracks = useTracks([
@@ -295,7 +296,7 @@ const Stage = ({
   useEffect(() => {
     if (hostId !== currentUserId && !coHost && tracks?.length === 2 && !isLeaving) {
       setIsLeaving(true);
-      onLeaveByKickout();
+      onLeaveByKickoutByHost();
     }
   }, [coHost, tracks?.length, currentUserId, hostId, isLeaving]);
 
@@ -368,6 +369,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   pageId = '*',
   broadcasterData,
   deviceManagement,
+  onLeaveByKickout,
   onLeaveStreamStage,
   onCoHostLeaveRequest,
 }) => {
@@ -446,6 +448,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
             deviceManagement={deviceManagement}
             pageId={pageId}
             onCoHostLeaveRequest={onCoHostLeaveRequest}
+            onLeaveByKickout={onLeaveByKickout}
           />
         )}
       </LiveKitRoomComponent>

@@ -47,6 +47,7 @@ export interface LivestreamStageProps {
   broadcasterData?: Amity.BroadcasterData;
 
   onLeaveStreamStage?: () => void;
+  onLeaveByKickout?: () => void;
 
   event?: Amity.Event;
 }
@@ -68,6 +69,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
   isEnding,
   broadcasterData,
   onLeaveStreamStage,
+  onLeaveByKickout,
   event,
 }) => {
   // Internal countdown state - moved to parent for overlay management
@@ -170,6 +172,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
           deviceManagement={deviceManagement}
           broadcasterData={broadcasterData}
           onLeaveStreamStage={onLeaveStreamStage}
+          onLeaveByKickout={onLeaveByKickout}
           onCoHostLeaveRequest={(handler) => setCoHostLeaveHandler(() => handler)}
         />
       )}

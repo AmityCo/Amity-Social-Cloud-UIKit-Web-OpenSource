@@ -45,6 +45,8 @@ import { LivestreamDataProvider } from '~/v4/social/features/livestream/provider
 import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { LivestreamUiState } from '~/v4/social/features/livestream/internal-components/LivestreamStage/LivestreamStage';
+import { useLeaveRoom } from '~/v4/social/features/livestream/hooks/useLeaveRoom';
+import { LivestreamOverlay } from '~/v4/social/features/livestream/internal-components';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -67,6 +69,16 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   }, [room]);
 
   const { success, info } = useNotifications();
+  const { leaveRoom, isPending: isLeaving } = useLeaveRoom({
+    room,
+    onSettled: () => {
+      setUiState('player');
+      reloadPlayer();
+      success({
+        content: 'You left the stage and are now watching as a viewer.',
+      });
+    },
+  });
 
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
   const [hideChatFeed, setHideChatFeed] = useState(false);
@@ -365,6 +377,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
               </div>
             ) : (
               <div key="backstage-view" className={styles.liveStreamPlayer__cameraSection__wrapper}>
+                {isLeaving && <LivestreamOverlay.LeavingStage />}
                 <LivestreamStage
                   pageId={pageId}
                   isCoHost={true}
@@ -375,6 +388,9 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   broadcasterData={broadcasterData}
                   isStarting={isGettingBroadcasterData}
                   onLeaveStreamStage={() => {
+                    leaveRoom();
+                  }}
+                  onLeaveByKickout={() => {
                     setUiState('player');
                     reloadPlayer();
                   }}
