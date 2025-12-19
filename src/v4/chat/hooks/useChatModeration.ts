@@ -76,12 +76,12 @@ export const useChatModeration = () => {
               channelId: payload.channelId,
               userIds: [payload.creatorId],
             });
-            notification.success({ content: 'User promoted.', alignment: 'fullscreen' });
+            notification.success({ content: 'User promoted.', alignment: 'live-chat' });
           },
           onError: () => {
             notification.info({
               content: 'Failed to promote user. Please try again.',
-              alignment: 'fullscreen',
+              alignment: 'live-chat',
             });
           },
         }),
@@ -103,12 +103,12 @@ export const useChatModeration = () => {
               channelId: payload.channelId,
               userIds: [payload.creatorId],
             });
-            notification.success({ content: 'User demoted.', alignment: 'fullscreen' });
+            notification.success({ content: 'User demoted.', alignment: 'live-chat' });
           },
           onError: () => {
             notification.info({
               content: 'Failed to demote user. Please try again.',
-              alignment: 'fullscreen',
+              alignment: 'live-chat',
             });
           },
         }),
@@ -126,12 +126,12 @@ export const useChatModeration = () => {
       onOk: () =>
         moderateChat(payload, {
           onSuccess: () => {
-            notification.success({ content: 'User muted.', alignment: 'fullscreen' });
+            notification.success({ content: 'User muted.', alignment: 'live-chat' });
           },
           onError: () => {
             notification.info({
               content: 'Failed to mute user. Please try again.',
-              alignment: 'fullscreen',
+              alignment: 'live-chat',
             });
           },
         }),
@@ -150,12 +150,12 @@ export const useChatModeration = () => {
       onOk: () =>
         moderateChat(payload, {
           onSuccess: () => {
-            notification.success({ content: 'User unmuted.', alignment: 'fullscreen' });
+            notification.success({ content: 'User unmuted.', alignment: 'live-chat' });
           },
           onError: () => {
             notification.info({
               content: 'Failed to unmute user. Please try again.',
-              alignment: 'fullscreen',
+              alignment: 'live-chat',
             });
           },
         }),
