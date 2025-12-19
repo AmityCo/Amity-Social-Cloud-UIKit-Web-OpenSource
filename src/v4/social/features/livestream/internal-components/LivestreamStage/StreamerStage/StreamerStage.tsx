@@ -30,6 +30,8 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { InvitationStatusEnum } from '@amityco/ts-sdk';
 import { PAGE_ID } from '~/v4/constants/customization';
+import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
+import { useChannel } from '~/v4/chat/hooks/useChannel';
 import MuteMic from '~/v4/icons/MutedMic';
 
 interface StreamerStageProps {
@@ -370,8 +372,11 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   onCoHostLeaveRequest,
 }) => {
   // Get values from context
-  const { room, invitationByMe, setInvitationByMe } = useLivestreamData();
+
+  const { room, invitationByMe, setInvitationByMe, channel } = useLivestreamData();
+  const { channel: liveChannel } = useChannel({ channelId: channel?.channelId });
   const { success } = useNotifications();
+  const { moderateChat } = useChatModeration();
   const [liveKitRoom] = useState(new Room());
   const [connected, setConnected] = useState(false);
 
@@ -382,6 +387,16 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Approved) {
       success({ content: 'Co-host accepted the invitation.' });
+      liveChannel?.channelId &&
+        moderateChat({
+          channelId: liveChannel?.channelId,
+          moderators: liveChannel?.metadata?.moderators,
+          mutedMembers:
+            channel?.metadata?.mutedMembers?.filter(
+              (id: string) => id !== invitationByMe?.invitedUserId,
+            ) || [],
+          creatorId: invitationByMe?.invitedUserId,
+        });
       setInvitationByMe?.(undefined);
     }
   }, [invitationByMe?.status]);

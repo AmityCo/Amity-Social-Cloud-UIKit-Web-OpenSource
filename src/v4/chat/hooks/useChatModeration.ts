@@ -168,5 +168,6 @@ export const useChatModeration = () => {
     demoteFromModerator,
     muteUser,
     unmuteUser,
+    moderateChat,
   };
 };
