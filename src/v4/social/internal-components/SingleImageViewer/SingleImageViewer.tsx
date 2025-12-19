@@ -15,6 +15,7 @@ interface SingleImageViewerProps {
   componentId?: string;
   elementId?: string;
   fileId: string;
+  fileUrl?: string;
   isOwner?: boolean;
   onClose(): void;
 }
@@ -25,6 +26,7 @@ export function SingleImageViewer({
   elementId = '*',
   fileId,
   isOwner,
+  fileUrl,
   onClose,
 }: SingleImageViewerProps) {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
@@ -32,7 +34,9 @@ export function SingleImageViewer({
 
   const imageFile = useFile(fileId) as Amity.File<'image'>;
 
-  const url = FileRepository.fileUrlWithSize(imageFile.fileUrl, 'large');
+  const url = imageFile?.fileUrl
+    ? FileRepository.fileUrlWithSize(imageFile.fileUrl, 'medium')
+    : fileUrl;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
@@ -44,7 +48,7 @@ export function SingleImageViewer({
           {url && !isBrokenImg ? (
             <img
               src={url}
-              alt={imageFile.altText}
+              alt={imageFile?.altText}
               className={styles.fullImage}
               onError={() => setIsBrokenImg(true)}
             />

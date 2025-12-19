@@ -185,15 +185,15 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
       data-testid={accessibilityId}
     >
       <div className={styles.userProfileHeader__header}>
-        <Button variant="text" onPress={() => setIsImageViewerOpen(true)}>
-          <UserAvatar
-            userId={user.userId}
-            className={styles.userProfileHeader__avatar}
-            textPlaceholderClassName={styles.userProfileHeader__avatar__placeholder}
-            pageId={pageId}
-            componentId={componentId}
-          />
-        </Button>
+        <UserAvatar
+          userId={user.userId}
+          userData={user}
+          className={styles.userProfileHeader__avatar}
+          textPlaceholderClassName={styles.userProfileHeader__avatar__placeholder}
+          pageId={pageId}
+          componentId={componentId}
+          onPressAvatar={() => setIsImageViewerOpen(true)}
+        />
         <div
           ref={displayNameRef}
           className={`${styles.userProfileHeader__displayName} ${
@@ -314,9 +314,10 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         />
       )}
 
-      {isImageViewerOpen && user.avatarFileId && (
+      {isImageViewerOpen && user.avatar?.fileId && (
         <SingleImageViewer
-          fileId={user.avatarFileId}
+          fileId={user.avatar.fileId}
+          fileUrl={user.avatar?.fileUrl || ''}
           onClose={() => setIsImageViewerOpen(false)}
           pageId={pageId}
           componentId={componentId}
