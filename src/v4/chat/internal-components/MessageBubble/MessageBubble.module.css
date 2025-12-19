@@ -48,6 +48,7 @@
 
 .messageBubble__messageText {
   color: var(--asc-color-white);
+  word-break: break-word;
 }
 
 .messageBubble__optionsMenu__header {
