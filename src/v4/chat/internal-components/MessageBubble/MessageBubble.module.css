@@ -14,10 +14,19 @@
   gap: 0.25rem;
   display: flex;
   align-items: center;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .messageBubble__displayName {
   color: var(--asc-color-secondary-default);
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .messageBubble__optionIcon {
@@ -114,6 +123,9 @@
 .messageBubble__optionUserInfo__displayName {
   text-align: center;
   width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .messageBubble__optionUserInfo__button {

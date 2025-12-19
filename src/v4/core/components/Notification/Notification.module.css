@@ -60,7 +60,7 @@
 .notificationContainer[data-alignment='live-chat'] {
   right: 2.5rem;
   bottom: 5rem;
-  width: 20rem;
+  width: 21.4375rem;
   position: fixed;
   background-color: var(--asc-color-base-shade3);
   box-shadow: var(--asc-box-shadow-02);
