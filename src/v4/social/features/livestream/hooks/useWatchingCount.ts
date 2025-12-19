@@ -1,7 +1,13 @@
 import { RoomPresenceRepository } from '@amityco/ts-sdk';
 import { useQuery } from '@tanstack/react-query';
 
-export function useWatchingCount({ roomId }: { roomId?: string | null }): {
+export function useWatchingCount({
+  roomId,
+  role,
+}: {
+  roomId?: string | null;
+  role: 'streamer' | 'viewer';
+}): {
   watchingCount: number;
   isLoading: boolean;
   error: Error | null;
@@ -15,12 +21,12 @@ export function useWatchingCount({ roomId }: { roomId?: string | null }): {
       return typeof result === 'number' ? result : result?.count || 0;
     },
     enabled: !!roomId,
-    refetchInterval: 10000, // Refetch every 10 seconds
+    refetchInterval: role === 'streamer' ? 5000 : 20000, // Streamer: 5 seconds, Viewer: 20 seconds
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     // Keep the data for a short time
     gcTime: 30000, // 30 seconds
-    staleTime: 10000, // Consider data stale after 10 seconds
+    staleTime: role === 'streamer' ? 5000 : 20000, // Match refetch interval
   });
 
   return {

@@ -22,7 +22,8 @@ export const useCreateLivestreamPost = () => {
         targetType,
         targetId,
         data: {
-          text: roomParams.title + '\n\n' + roomParams.description,
+          title: roomParams.title,
+          text: roomParams.description,
           roomId: room.roomId,
         },
         dataType: 'room',

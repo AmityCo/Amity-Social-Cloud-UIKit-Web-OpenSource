@@ -67,7 +67,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
   isLive = false,
 }) => {
   // Constants for livestream limits
-  const { room, hostId, livestreamPost } = useLivestreamData();
+  const { room, hostId, livestreamPost, coHostId } = useLivestreamData();
   const { currentUserId } = useSDK();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { isDesktop } = useResponsive();
@@ -84,7 +84,10 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
     isActive: uiState === 'broadcast' && !isCoHost,
   });
 
-  const { watchingCount } = useWatchingCount({ roomId: room?.roomId });
+  const { watchingCount } = useWatchingCount({
+    roomId: room?.roomId,
+    role: uiState === 'broadcast' ? 'streamer' : 'viewer',
+  });
 
   const showWatchingCount = useMemo(() => {
     if (isPlayer) return true; // Always show for viewers
