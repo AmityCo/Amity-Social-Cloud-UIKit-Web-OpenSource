@@ -237,7 +237,6 @@ const Stage = ({
       onCoHostLeaveRequest(() => {
         // only for leaving the state
         buttonProps.onClick();
-        leaveRoom();
       });
     }
   }, [hostId, currentUserId, onCoHostLeaveRequest, onCoHostLeaveLiveKitRoom]);

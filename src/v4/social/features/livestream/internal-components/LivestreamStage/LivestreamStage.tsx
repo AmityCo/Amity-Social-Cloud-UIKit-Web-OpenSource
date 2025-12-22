@@ -90,14 +90,11 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
     },
   });
 
-  const { leaveRoom } = useLeaveRoom({ room });
-
   const handleLeaveBackStage = () => {
     confirm({
       type: 'confirm',
       okButtonColor: 'alert',
       onOk: () => {
-        leaveRoom();
         // In case of co-host is leaving the back stage, the ui will be changed back to player
         onLeaveStreamStage?.();
       },
@@ -116,6 +113,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       okButtonColor: 'alert',
       onOk: () => {
         coHostLeaveHandler?.();
+        onLeaveStreamStage?.();
         onClose();
       },
       okText: 'Leave',

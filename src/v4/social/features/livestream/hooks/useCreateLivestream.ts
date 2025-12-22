@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
@@ -12,6 +12,8 @@ import { useCreateLivestreamPost } from './useCreateLivestreamPost';
 import { useGetBroadcasterData } from './useGetBroadcasterData';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useRoom } from './useRoom';
+import { RoomRepository } from '@amityco/ts-sdk';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export type CreateLivestreamUiState = 'preview' | 'broadcast' | 'backStage';
 
@@ -78,6 +80,7 @@ export const useCreateLivestream = ({
   const { currentUserId } = useSDK();
   const { onBack, goToPostDetailPage } = useNavigation();
   const { confirm } = useConfirmContext();
+  const { success } = useNotifications();
   const { openPopup } = usePopupContext();
   const { isPending: isEnding, stopStream } = useStopStream();
 
@@ -89,6 +92,7 @@ export const useCreateLivestream = ({
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
   const [roomId, setRoomId] = useState<string | undefined>(event?.room?.roomId);
+  const coHostJoinedRef = useRef<boolean>(false);
 
   const { room } = useRoom(roomId);
 
@@ -118,6 +122,35 @@ export const useCreateLivestream = ({
       setUiState('broadcast');
     }
   }, [broadcasterData, room?.roomId]);
+
+  useEffect(() => {
+    const unsubscriber: Amity.Unsubscriber[] = [];
+    if (room?.status === 'live') {
+      unsubscriber.push(
+        RoomRepository.onRoomParticipantLeft((room) => {
+          if (coHostJoinedRef.current)
+            success({
+              content: 'Co-host left the live stream.',
+            });
+          else
+            success({
+              content: 'Co-host left the stage.',
+            });
+
+          coHostJoinedRef.current = false;
+        }),
+      );
+
+      unsubscriber.push(
+        RoomRepository.onRoomParticipantStageJoined((room) => {
+          if (room.participants.find((participant) => participant.type === 'coHost'))
+            coHostJoinedRef.current = true;
+        }),
+      );
+    }
+
+    return () => unsubscriber.forEach((fn) => fn());
+  }, [room]);
 
   // Computed states
   const isTargetEvent = !!event;
