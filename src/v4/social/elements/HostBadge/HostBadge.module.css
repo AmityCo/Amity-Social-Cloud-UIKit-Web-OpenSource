@@ -7,6 +7,7 @@
   background-color: var(--asc-color-live);
   border-radius: 0.25rem;
   width: max-content;
+  flex-shrink: 0;
 }
 
 .hostBadge__icon {

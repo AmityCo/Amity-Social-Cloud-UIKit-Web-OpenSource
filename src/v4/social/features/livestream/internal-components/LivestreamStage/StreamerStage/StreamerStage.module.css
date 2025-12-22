@@ -25,6 +25,8 @@
 
 .streamerStage_videoItem__container[data-co-host='true'] {
   flex: 1;
+  height: unset;
+  min-height: 0;
 }
 
 .streamerStage_videoItem__container video {

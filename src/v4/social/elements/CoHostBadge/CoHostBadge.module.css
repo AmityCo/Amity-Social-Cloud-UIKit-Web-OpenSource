@@ -1,5 +1,6 @@
 .coHostBadge {
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
   gap: 0.12rem;
