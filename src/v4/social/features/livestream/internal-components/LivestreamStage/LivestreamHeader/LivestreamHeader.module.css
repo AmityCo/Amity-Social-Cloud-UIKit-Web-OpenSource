@@ -122,10 +122,6 @@
   margin-top: 1.25rem;
 }
 
-.livestreamHeader__closeButton:hover {
-  background: var(--asc-color-base-shade3);
-}
-
 .livestreamHeader__closeButton__icon {
   width: 2rem;
   height: 2rem;

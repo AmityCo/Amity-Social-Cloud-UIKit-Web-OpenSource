@@ -1,10 +1,19 @@
+import clsx from 'clsx';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import styles from './LiveStreamTerminatedThumbnail.module.css';
 
-export function LiveStreamTerminatedThumbnail() {
+type LiveStreamTerminatedThumbnailProps = {
+  className?: string;
+  view?: 'post' | 'full-screen';
+};
+
+export function LiveStreamTerminatedThumbnail({
+  view = 'post',
+  className,
+}: LiveStreamTerminatedThumbnailProps) {
   return (
-    <div className={styles.liveStreamTerminatedThumbnail}>
+    <div className={clsx(className, styles.liveStreamTerminatedThumbnail)} data-view={view}>
       <Typography.TitleBold>The live stream has been terminated.</Typography.TitleBold>
       <Typography.Caption>
         It looks like the live stream you're watching goes against our content moderation

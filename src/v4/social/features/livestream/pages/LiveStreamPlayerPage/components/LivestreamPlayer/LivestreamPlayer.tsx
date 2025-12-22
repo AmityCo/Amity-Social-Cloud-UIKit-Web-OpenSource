@@ -41,6 +41,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
     ref,
   ) => {
     const { room } = useLivestreamData();
+    const isHidden = isEnded || isTerminated || isUserBanned;
 
     return (
       <>
@@ -49,7 +50,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
           playsInline={true}
           className={styles.liveStreamPlayer__video}
           data-is-live={isLive}
-          data-is-hidden={isEnded || isTerminated || isUserBanned}
+          data-is-hidden={isHidden}
           ref={ref}
         />
         {showWaitingApprovalBanner && <LivestreamOverlay.WaitForApproval view="moderator" />}
@@ -57,7 +58,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
           <LivestreamOverlay />
         )}
         {isLoading && isPoorConnection && isLive && <LivestreamOverlay.Reconnecting />}
-        {isDesktop && isTerminated && <LiveStreamTerminatedThumbnail />}
+        {isDesktop && isTerminated && <LiveStreamTerminatedThumbnail view="full-screen" />}
         {room?.status === liveStreamStatus.idle && <LiveStreamIdleThumbnail view="full-screen" />}
         {isUserBanned && <LiveStreamBanThumbnail />}
         {isEnded && !isTerminated && <LiveStreamEndThumbnail view="full-screen" />}

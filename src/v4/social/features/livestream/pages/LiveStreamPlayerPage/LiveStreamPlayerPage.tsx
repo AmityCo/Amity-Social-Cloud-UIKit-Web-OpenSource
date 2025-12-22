@@ -165,6 +165,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isTerminated &&
     !isUserBanned;
 
+  const showPlayer = isLive || isEnded || isTerminated || isUserBanned;
+
   const showWaitingApprovalBanner = isLive && isDesktop && subscribedPost?.feedType === 'reviewing';
 
   const { invitations, setInvitations } = useObserveRoomAndInvitation({ room });
@@ -284,12 +286,6 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     if (!isDesktop && isUserBanned) goToLiveStreamBannedPage?.();
   }, [isDesktop, isUserBanned]);
 
-  useEffect(() => {
-    if (isEnded && uiState !== 'player') {
-      setUiState('player');
-    }
-  }, [isEnded]);
-
   //  Livestream has been deleted
   useEffect(() => {
     if (room?.isDeleted || subscribedPost?.isDeleted) {
@@ -344,7 +340,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         <Modal
           className={styles.livestreamPlayer__modal}
           data-is-live={isLive}
-          data-is-ended={isEnded && !isTerminated}
+          data-is-ended={isEnded || isTerminated}
         >
           <Dialog
             className={styles.liveStreamPlayer__dialog}
@@ -352,7 +348,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
           >
-            {(uiState === 'player' && isLive) || isRecorded ? (
+            {uiState === 'player' && showPlayer ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
                 <LivestreamHeader
                   pageId={pageId}
@@ -364,7 +360,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                 <LivestreamPlayer
                   themeStyles={themeStyles}
                   accessibilityId={accessibilityId}
-                  isLive={isLive}
+                  isLive={isLive && !isTerminated}
                   showWaitingApprovalBanner={showWaitingApprovalBanner}
                   isLoading={isLoading}
                   isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
