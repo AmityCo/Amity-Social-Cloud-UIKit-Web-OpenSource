@@ -10,6 +10,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import styles from './CoverImage.module.css';
 
 type CoverImageProps = {
@@ -17,13 +18,22 @@ type CoverImageProps = {
   onChange: (file: Amity.File<'image'> | null) => void;
 };
 
+const MAX_FILE_SIZE_ONE_BG = 5 * 1024 * 1024;
+
 export function CoverImage({ value, onChange }: CoverImageProps) {
   const { isDesktop } = useResponsive();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { uploadSingleImage, isUploading } = useImageUpload();
+  const { info } = useConfirmContext();
 
   const handleCoverPhotoChange = async (files: File[]) => {
-    if (files.length === 0) return;
+    const oversizedFile = files.find((file) => file.size > MAX_FILE_SIZE_ONE_BG);
+    if (oversizedFile) {
+      return info({
+        title: 'File too large',
+        content: 'The file exceeds the maximum upload size.',
+      });
+    }
     removeDrawerData();
     const uploadedImage = await uploadSingleImage({ file: files[0] });
     onChange(uploadedImage.data[0]);
