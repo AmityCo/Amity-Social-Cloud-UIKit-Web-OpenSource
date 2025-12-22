@@ -80,6 +80,7 @@ export const useCreateLivestream = ({
   const { currentUserId } = useSDK();
   const { onBack, goToPostDetailPage } = useNavigation();
   const { confirm } = useConfirmContext();
+  const { success } = useNotifications();
   const { openPopup } = usePopupContext();
   const { isPending: isEnding, stopStream } = useStopStream();
 
@@ -91,6 +92,7 @@ export const useCreateLivestream = ({
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
   const [roomId, setRoomId] = useState<string | undefined>(event?.room?.roomId);
+  const coHostJoinedRef = useRef<boolean>(false);
 
   const { room } = useRoom(roomId);
 
@@ -120,6 +122,35 @@ export const useCreateLivestream = ({
       setUiState('broadcast');
     }
   }, [broadcasterData, room?.roomId]);
+
+  useEffect(() => {
+    const unsubscriber: Amity.Unsubscriber[] = [];
+    if (room?.status === 'live') {
+      unsubscriber.push(
+        RoomRepository.onRoomParticipantLeft((room) => {
+          if (coHostJoinedRef.current)
+            success({
+              content: 'Co-host left the live stream.',
+            });
+          else
+            success({
+              content: 'Co-host left the stage.',
+            });
+
+          coHostJoinedRef.current = false;
+        }),
+      );
+
+      unsubscriber.push(
+        RoomRepository.onRoomParticipantStageJoined((room) => {
+          if (room.participants.find((participant) => participant.type === 'coHost'))
+            coHostJoinedRef.current = true;
+        }),
+      );
+    }
+
+    return () => unsubscriber.forEach((fn) => fn());
+  }, [room]);
 
   // Computed states
   const isTargetEvent = !!event;
