@@ -29,7 +29,6 @@ export function MyCommunitiesSearchPage() {
       {searchValue.length > 0 && (
         <CommunitySearchResult
           pageId={pageId}
-          keyword={searchValue}
           communityCollection={communities}
           isLoading={isLoading}
           onLoadMore={() => {
