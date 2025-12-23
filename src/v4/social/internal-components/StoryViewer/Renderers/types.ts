@@ -35,6 +35,7 @@ export type CustomStory = Story & { story?: Amity.Story; ad?: Amity.Ad } & {
   dragEventTarget?: React.RefObject<HTMLElement>;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isBottomSheetOpen: boolean;
+  isConfirmDialogOpen?: boolean;
 };
 
 export type CustomRendererProps = RendererProps & {

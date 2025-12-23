@@ -71,6 +71,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lastSeenIndex, setLastSeenIndex] = useState(-1);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const { page } = useNavigation();
@@ -133,50 +134,50 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   const onDeleteStory = async (storyId: string) => {
     const isLastStory = currentIndex === stories.length - 1;
+
     try {
       await StoryRepository.softDeleteStory(storyId);
-    } catch (error) {
+    } catch (error: Error | unknown) {
       setIsError(true);
-      notification.error({
+      notification.info({
         content: 'Failed to delete story',
         alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
       });
+
       return;
-    } finally {
-      if (!isError) {
-        notification.success({
-          content: 'Story deleted',
-          alignment:
-            (page.type === PageTypes.ViewStoryPage && stories.length > 1 && isLastStory) ||
-            !isLastStory
-              ? 'fullscreen'
-              : 'withSidebar',
-        });
-        refresh();
-        if (stories.length === 1) {
-          // If it's the only story, close the ViewStory screen
-          onChangePage?.();
-        } else if (isLastStory) {
-          // If it's the last story, move to the previous one
-          previousStory();
-        } else {
-          // For any other case (including first story), stay on the same index
-          // The next story will automatically take its place
-          setCurrentIndex((prevIndex) => prevIndex);
-        }
-      }
+    }
+
+    notification.success({
+      content: 'Story deleted',
+      alignment:
+        (page.type === PageTypes.ViewStoryPage && stories.length > 1 && isLastStory) || !isLastStory
+          ? 'fullscreen'
+          : 'withSidebar',
+    });
+    refresh();
+    if (stories.length === 1) {
+      onChangePage?.();
+    } else if (isLastStory) {
+      previousStory();
+    } else {
+      setCurrentIndex((prevIndex) => prevIndex);
     }
   };
 
   const confirmDeleteStory = (storyId: string) => {
+    setIsConfirmDialogOpen(true);
     confirm({
       pageId,
       title: 'Delete this story?',
       content:
-        'This story will be permanently deleted. You’ll no longer to see and find this story.',
+        "This story will be permanently deleted. You'll no longer to see and find this story.",
       okText: 'Delete',
       onOk: async () => {
+        setIsConfirmDialogOpen(false);
         await onDeleteStory(storyId);
+      },
+      onCancel: () => {
+        setIsConfirmDialogOpen(false);
       },
     });
   };
@@ -285,6 +286,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         storiesCount: stories?.length,
         increaseIndex,
         pageId,
+        isConfirmDialogOpen,
       };
     } else {
       return {

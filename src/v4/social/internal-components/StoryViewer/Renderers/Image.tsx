@@ -40,6 +40,7 @@ export const renderer: CustomRenderer = ({
     dragEventTarget,
     story,
     url,
+    isConfirmDialogOpen,
   },
   action,
   config,
@@ -296,7 +297,7 @@ export const renderer: CustomRenderer = ({
         duration={5000}
         currentIndex={currentIndex}
         storiesCount={storiesCount}
-        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
+        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet || isConfirmDialogOpen}
         onComplete={handleProgressComplete}
       />
       <Header

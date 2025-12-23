@@ -92,6 +92,7 @@ export const renderer: CustomRenderer = ({
     pageId,
     dragEventTarget,
     story,
+    isConfirmDialogOpen,
   },
   action,
   config,
@@ -204,7 +205,7 @@ export const renderer: CustomRenderer = ({
 
   useEffect(() => {
     if (vid.current) {
-      if (isPaused || isBottomSheetOpen || isOpenCommentSheet) {
+      if (isPaused || isBottomSheetOpen || isOpenCommentSheet || isConfirmDialogOpen) {
         vid.current.pause();
         action('pause', true);
       } else {
@@ -213,7 +214,7 @@ export const renderer: CustomRenderer = ({
         action('play', true);
       }
     }
-  }, [isPaused, isBottomSheetOpen, isOpenCommentSheet, vid, action]);
+  }, [isPaused, isBottomSheetOpen, isOpenCommentSheet, isConfirmDialogOpen, vid, action]);
 
   useEffect(() => {
     if (fileInputRef.current) {
