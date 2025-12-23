@@ -266,7 +266,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       return;
     }
 
-    if (textValue.links && textValue.links.length > MAXIMUM_POST_CHARACTERS) {
+    if (textValue.links && textValue.links.length > MAX_LINKS_PER_POST) {
       info({
         title: 'Link limit reached',
         content: `You can only add link up to ${MAX_LINKS_PER_POST} links per post.`,
