@@ -121,9 +121,12 @@ export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
     setDragPosition({ x: mouseX, y: rect.height / 2 });
     onDragging(true);
 
-    // Pause the video during dragging
+    // Pause the video during dragging and remember if it was playing
     if (!video.paused) {
+      (video as any).__wasPlayingBeforeScrub = true;
       video.pause();
+    } else {
+      (video as any).__wasPlayingBeforeScrub = false;
     }
 
     handleProgressClick(e);
@@ -160,6 +163,11 @@ export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
 
     onDragging(false);
 
+    // Resume playback if video was playing before scrubbing
+    if ((video as any).__wasPlayingBeforeScrub) {
+      video.play().catch(() => {});
+    }
+
     delete (video as any).__wasPlayingBeforeScrub;
   };
 
@@ -186,9 +194,12 @@ export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
     setDragPosition({ x: clickX, y: rect.height / 2 });
     onDragging(true);
 
-    // Pause the video during dragging
+    // Pause the video during dragging and remember if it was playing
     if (!video.paused) {
+      (video as any).__wasPlayingBeforeScrub = true;
       video.pause();
+    } else {
+      (video as any).__wasPlayingBeforeScrub = false;
     }
 
     const clickProgress = Math.max(0, Math.min(100, (clickX / progressBarWidth) * 100));
