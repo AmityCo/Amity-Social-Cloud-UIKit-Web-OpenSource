@@ -191,7 +191,7 @@ export const PostMenu = ({
       onOk: () => {
         const isCurrentlyOnline = navigator.onLine;
         if (!isCurrentlyOnline) {
-          info({ content: 'Oops, something went wrong.' });
+          info({ content: 'Failed to delete post. Please try again.' });
           return;
         }
         mutateDeletePost();
