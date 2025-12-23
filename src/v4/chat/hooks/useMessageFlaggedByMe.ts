@@ -7,9 +7,11 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 export const useMessageFlaggedByMe = ({
   messageId,
   onCloseMenu,
+  type = 'chat',
 }: {
   messageId: string;
   onCloseMenu?: () => void;
+  type?: 'live-chat' | 'chat';
 }): {
   isLoading: boolean;
   isFlaggedByMe: boolean;
@@ -40,6 +42,7 @@ export const useMessageFlaggedByMe = ({
     onSuccess: () => {
       success({
         content: 'Message reported.',
+        alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();
     },
@@ -56,7 +59,7 @@ export const useMessageFlaggedByMe = ({
       } else {
         info({
           content: `Failed to report message. Please try again.`,
-          alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+          alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
         });
       }
     },
@@ -75,6 +78,7 @@ export const useMessageFlaggedByMe = ({
     onSuccess: () => {
       success({
         content: `Message unreported.`,
+        alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
     },
     onMutate: async () => {
@@ -87,7 +91,7 @@ export const useMessageFlaggedByMe = ({
     onError: () => {
       info({
         content: `Failed to unreport Message. Please try again.`,
-        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+        alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();
     },

@@ -137,6 +137,7 @@ export const ContentReportReason = ({
   const { mutateReportMessage, isPending: isMessageReportLoading } = useMessageFlaggedByMe({
     messageId: message?.messageId as string,
     onCloseMenu: handleCloseReportReason,
+    type: 'live-chat',
   });
 
   const isDisabledSubmitButton =

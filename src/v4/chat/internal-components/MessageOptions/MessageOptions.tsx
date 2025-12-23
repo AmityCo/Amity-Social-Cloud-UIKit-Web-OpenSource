@@ -43,6 +43,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
 
   const { isLoading, isFlaggedByMe, mutateUnreportMessage } = useMessageFlaggedByMe({
     messageId: message.messageId,
+    type: 'live-chat',
   });
 
   const handleReportMessage = () => {
