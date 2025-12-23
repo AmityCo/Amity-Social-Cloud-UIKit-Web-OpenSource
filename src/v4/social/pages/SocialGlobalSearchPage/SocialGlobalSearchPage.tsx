@@ -186,6 +186,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
       content: () => (
         <CommunitySearchResult
           pageId={pageId}
+          keyword={searchValue}
           isLoading={communityCollection.isLoading}
           onClosePopover={() => setOpenSearchResult(false)}
           communityCollection={communityCollection.communities}
@@ -204,6 +205,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
       content: () => (
         <UserSearchResult
           pageId={pageId}
+          keyword={searchValue}
           isLoading={userCollection.isLoading}
           userCollection={userCollection.users}
           onClosePopover={() => setOpenSearchResult(false)}

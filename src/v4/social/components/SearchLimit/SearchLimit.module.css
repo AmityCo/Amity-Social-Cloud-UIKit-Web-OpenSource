@@ -1,0 +1,27 @@
+.searchLimit {
+  gap: 0.5rem;
+  height: 20rem;
+  display: flex;
+  padding: 1.5rem;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.searchLimit__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+.searchLimit__title {
+  color: var(--asc-color-base-shade3);
+}
+
+@media screen and (width < 48em) {
+  .searchLimit {
+    width: 100%;
+    height: calc(100vh - 10rem);
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { SearchLimit } from '~/v4/social/components/SearchLimit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { CommunityRowItem } from '~/v4/social/internal-components/CommunityRowItem';
@@ -11,6 +12,7 @@ import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInter
 
 type CommunitySearchResultProps = {
   pageId?: string;
+  keyword?: string;
   isLoading: boolean;
   onLoadMore: () => void;
   showJoinButton?: boolean;
@@ -19,6 +21,7 @@ type CommunitySearchResultProps = {
 };
 
 export const CommunitySearchResult = ({
+  keyword,
   isLoading,
   onLoadMore,
   pageId = '*',
@@ -37,35 +40,39 @@ export const CommunitySearchResult = ({
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.communitySearchResult}>
-      <NoInternetConnectionHoc
-        page="global-search"
-        className={styles.communitySearchResult__noInternetConnectionHoc}
-      >
-        {communityCollection.length > 0 &&
-          communityCollection.map((community) => (
-            <CommunityRowItem
-              pageId={pageId}
-              community={community}
-              componentId={componentId}
-              maxCategoryCharacters={24}
-              key={community.communityId}
-              showJoinButton={showJoinButton}
-              maxCategoriesLength={isDesktop ? 2 : 5}
-              onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-              onClick={(communityId) => {
-                onClosePopover?.();
-                goToCommunityProfilePage(communityId);
-              }}
-            />
-          ))}
-        {isLoading
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <CommunityRowItemSkeleton key={index} pageId={pageId} componentId={componentId} />
-            ))
-          : null}
-        {!isLoading && communityCollection.length === 0 && <EmptySearchResult />}
-      </NoInternetConnectionHoc>
-      <div ref={(node) => setIntersectionNode(node)} />
+      {keyword && keyword?.length < 3 ? (
+        <SearchLimit />
+      ) : (
+        <NoInternetConnectionHoc
+          page="global-search"
+          className={styles.communitySearchResult__noInternetConnectionHoc}
+        >
+          {communityCollection.length > 0 &&
+            communityCollection.map((community) => (
+              <CommunityRowItem
+                pageId={pageId}
+                community={community}
+                componentId={componentId}
+                maxCategoryCharacters={24}
+                key={community.communityId}
+                showJoinButton={showJoinButton}
+                maxCategoriesLength={isDesktop ? 2 : 5}
+                onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
+                onClick={(communityId) => {
+                  onClosePopover?.();
+                  goToCommunityProfilePage(communityId);
+                }}
+              />
+            ))}
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <CommunityRowItemSkeleton key={index} pageId={pageId} componentId={componentId} />
+              ))
+            : null}
+          {!isLoading && communityCollection.length === 0 && <EmptySearchResult />}
+          <div ref={(node) => setIntersectionNode(node)} />
+        </NoInternetConnectionHoc>
+      )}
     </div>
   );
 };
