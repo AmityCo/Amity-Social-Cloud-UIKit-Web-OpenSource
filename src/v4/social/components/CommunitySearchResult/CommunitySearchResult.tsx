@@ -12,6 +12,7 @@ import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInter
 
 type CommunitySearchResultProps = {
   pageId?: string;
+  keyword?: string;
   isLoading: boolean;
   onLoadMore: () => void;
   showJoinButton?: boolean;
@@ -20,6 +21,7 @@ type CommunitySearchResultProps = {
 };
 
 export const CommunitySearchResult = ({
+  keyword,
   isLoading,
   onLoadMore,
   pageId = '*',

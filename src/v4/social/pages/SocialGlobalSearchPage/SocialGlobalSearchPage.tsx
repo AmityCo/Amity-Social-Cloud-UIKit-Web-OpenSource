@@ -186,6 +186,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
       content: () => (
         <CommunitySearchResult
           pageId={pageId}
+          keyword={searchValue}
           isLoading={communityCollection.isLoading}
           onClosePopover={() => setOpenSearchResult(false)}
           communityCollection={communityCollection.communities}
