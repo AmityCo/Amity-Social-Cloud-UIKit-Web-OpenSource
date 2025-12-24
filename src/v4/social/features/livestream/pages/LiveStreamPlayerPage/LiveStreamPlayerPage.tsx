@@ -279,6 +279,13 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     }
   }, [isTerminated, isDesktop]);
 
+  useEffect(() => {
+    if (room?.status && ['ended', 'recorded'].includes(room?.status)) {
+      setUiState('player');
+      if (room?.recordedPlaybackInfos && room?.recordedPlaybackInfos?.length > 0) reloadPlayer();
+    }
+  }, [room?.status]);
+
   // User has been banned.
   useEffect(() => {
     if (!isDesktop && isUserBanned) goToLiveStreamBannedPage?.();
