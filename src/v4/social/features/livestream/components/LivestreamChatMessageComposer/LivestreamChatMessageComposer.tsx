@@ -67,8 +67,6 @@ export const LivestreamChatMessageComposer = ({
 
   const { openPopup, closePopup } = usePopupContext();
 
-  const { info } = useNotifications();
-
   const [error, setError] = useState<string | null>(null);
   const [isEmpty, setIsEmpty] = useState(true);
   const [isSpacebar, setIsSpacebar] = useState(false);

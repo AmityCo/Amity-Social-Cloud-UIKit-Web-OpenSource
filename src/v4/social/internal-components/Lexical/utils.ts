@@ -200,47 +200,6 @@ function isMentionData(data: HashtagMentionOrLink): data is Mentioned {
   return (data as Mentioned)?.userId !== undefined;
 }
 
-function extractHashtagsFromText(
-  text: string,
-  urlRanges: Array<{ start: number; end: number }> = [],
-): Amity.Hashtag[] {
-  const hashtags: Amity.Hashtag[] = [];
-  let match;
-  let count = 0;
-
-  // Helper function to check if a position is within any URL range
-  const isWithinUrlRange = (position: number): boolean => {
-    return urlRanges.some((range) => position >= range.start && position <= range.end);
-  };
-
-  while ((match = hashtagRegex.exec(text)) !== null && count < 30) {
-    const hashtagText = match[1];
-    const hashtagStart = match.index;
-
-    // Skip if the hashtag is within a URL range
-    if (isWithinUrlRange(hashtagStart)) {
-      continue;
-    }
-
-    if (hashtagTextRegex.test(hashtagText)) {
-      hashtags.push({
-        text: hashtagText,
-        index: hashtagStart,
-        length: match[0].length, // includes #
-      });
-      count++;
-    }
-  }
-
-  return hashtags;
-}
-
-type HashtagMentionOrLink = Mentioned | LinkData | Amity.Hashtag;
-
-function isHashtagData(data: HashtagMentionOrLink): data is Amity.Hashtag {
-  return (data as Amity.Hashtag)?.text !== undefined;
-}
-
 export function textToEditorState(value: {
   data: { text: string };
   metadata?: {
@@ -267,14 +226,6 @@ export function textToEditorState(value: {
           end: link.index && link.length ? link.index + link.length - 1 : 0,
         }))
       : undefined;
-
-  const hashtags = extractHashtagsFromText(value.data.text, urlRanges);
-
-  // Create URL ranges for hashtag extraction
-  const urlRanges = links.map((link) => ({
-    start: link.index,
-    end: link.index + link.length - 1,
-  }));
 
   const hashtags = extractHashtagsFromText(value.data.text, urlRanges);
 

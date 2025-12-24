@@ -28,7 +28,6 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { isVisitorOrBot } = useSDK();
 
-  const { isVisitorOrBot } = useSDK();
   const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
     channelId: channel.channelId,
   });
