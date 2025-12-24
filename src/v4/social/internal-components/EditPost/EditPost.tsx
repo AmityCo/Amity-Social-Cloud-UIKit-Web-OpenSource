@@ -45,6 +45,7 @@ import { Play } from '~/v4/icons/Play';
 import { useImage } from '~/v4/core/hooks/useImage';
 import { TextArea } from '~/v4/core/components/TextField';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -107,6 +108,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   });
 
   const online = useNetworkState();
+  const { success } = useNotifications();
+
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
   const [postImages, setPostImages] = useState<Amity.Post<'image'>[]>([]);
@@ -143,6 +146,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
         updateGlobalFeaturedPosts(response.data, isPostNeedsApproval);
+
+        if (isPostNeedsApproval) {
+          success({
+            content: 'Post sent for review.',
+          });
+        }
       },
       onError: (error) => {
         setIsUpdating(false);
