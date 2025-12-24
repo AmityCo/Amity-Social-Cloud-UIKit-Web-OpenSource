@@ -1,5 +1,5 @@
 .timeField__container {
-  padding: 0.7rem 0;
+  padding: 0;
 }
 
 .timeField__wrap {
@@ -22,10 +22,6 @@
   background-color: var(--asc-color-base-shade4);
   outline: none;
   text-transform: uppercase;
-}
-
-.timeField__dateSegment:focus {
-  border: 1px solid var(--asc-color-primary-default);
 }
 
 .timeField__validateText {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
 import { FileType } from '@amityco/ts-sdk';
 import { useForm } from 'react-hook-form';
@@ -44,12 +44,14 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { TextArea } from '~/v4/core/components/TextField';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
 
 export function CreatePost({
   community,
   targetType,
   targetId,
   isClipPost = false,
+  targetName,
 }: AmityPostComposerCreateOptions) {
   const pageId = 'post_composer_page';
 
@@ -69,7 +71,7 @@ export function CreatePost({
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { closePopup } = usePopupContext();
-  const { setVideoThumbnail } = useLayoutContext();
+  const { setVideoThumbnail, setCanBeDiscarded } = useLayoutContext();
 
   const { online } = useNetworkState();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
@@ -88,6 +90,7 @@ export function CreatePost({
   const [isCreating, setIsCreating] = useState(false);
   const [isError, setIsError] = useState(false);
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   const [title, setTitle] = useState<string>('');
   const [textValue, setTextValue] = useState<CreatePostParams>({
@@ -106,7 +109,14 @@ export function CreatePost({
         type: 'image',
       },
     ],
+    links: [],
   });
+
+  useEffect(() => {
+    if (isPreviewLoading && files.length > 0) {
+      setIsPreviewLoading(false);
+    }
+  }, [isPreviewLoading, files.length]);
 
   const {
     HEIGHT_MEDIA_ATTACHMENT_MENU,
@@ -183,6 +193,16 @@ export function CreatePost({
       return;
     }
 
+    if (textValue.links && textValue.links.length > MAX_LINKS_PER_POST) {
+      info({
+        title: 'Link limit reached',
+        content: `You can only add link up to ${MAX_LINKS_PER_POST} links per post.`,
+        pageId,
+        okText: 'OK',
+      });
+      return;
+    }
+
     const attachments = isClipPost
       ? [
           {
@@ -205,6 +225,7 @@ export function CreatePost({
       mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
       hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
+      links: textValue.links,
     };
 
     createPost(createPostParams);
@@ -232,6 +253,7 @@ export function CreatePost({
     mentionees: Mentionees;
     hashtags: Amity.Hashtag[];
     text: string;
+    links?: Amity.Link[];
   }) => {
     setTextValue((prev) => ({
       ...prev,
@@ -239,6 +261,7 @@ export function CreatePost({
       text: val.text,
       mentionees: val.mentionees,
       hashtagsMetadata: val.hashtags,
+      links: val.links,
     }));
   };
 
@@ -308,7 +331,17 @@ export function CreatePost({
   const hasNoChanges = textValue.text.length === 0 && files.length === 0 && clipFile == undefined;
 
   const canSubmitPost =
-    !hasNoChanges && hasContent && !hasErrors && !isCreating && online && !isLoading;
+    !hasNoChanges &&
+    hasContent &&
+    !hasErrors &&
+    !isCreating &&
+    online &&
+    !isLoading &&
+    !isPreviewLoading;
+
+  useEffect(() => {
+    setCanBeDiscarded(hasNoChanges);
+  }, [hasNoChanges]);
 
   const renderPosting = () => {
     if (isCreating || !online) {
@@ -365,7 +398,7 @@ export function CreatePost({
       >
         <div className={styles.createPost__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
-          <CommunityDisplayName pageId={pageId} community={community} />
+          <CommunityDisplayName pageId={pageId} community={community} displayName={targetName} />
           <CreateNewPostButton pageId={pageId} variant="text" isDisabled={!canSubmitPost} />
         </div>
         {isClipPost && (
@@ -402,9 +435,14 @@ export function CreatePost({
             onChange={onChange}
             communityId={targetId}
             className={styles.createPost__input}
-            dataValue={{ data: { text: textValue.text } }}
+            dataValue={{ data: { text: textValue.text }, links: textValue.links }}
             mentionContainer={isDesktop ? null : mentionRef.current}
             mentionContainerClassName={styles.createPost__mentionContainer}
+            attachmentAmount={files.length}
+            onPreviewLinkChange={(showPreview, isLoading) => {
+              setIsPreviewLoading(isLoading || false);
+            }}
+            isClipPost={isClipPost}
           />
           <ImageThumbnail
             files={files}

@@ -1,56 +1,51 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './PollTypeSelection.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
+import { useDiscardPostCreation } from '~/v4/social/hooks';
 import { ImagePollSvg, TextPollSvg } from './PollTypeIcons';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
+import { PAGE_ID } from '~/v4/constants/customization';
 
 export type PollTypeSelectionProps = {
   targetType: 'community' | 'user';
   targetId: string | null;
   onClickNext?: () => void;
   target?: Amity.Community | null;
+  targetName?: string;
 };
 
 export function PollTypeSelection({
   targetId,
   targetType,
   target,
+  targetName,
   onClickNext,
 }: PollTypeSelectionProps) {
   const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
-  const { confirm } = useConfirmContext();
+  const { openPopup, closePopup } = usePopupContext();
+  const { discardPostCreation } = useDiscardPostCreation();
   const { AmityPollTargetSelectionPageBehavior } = usePageBehavior();
   const [selectedPollType, setSelectedPollType] = useState<'text' | 'image'>('text');
 
   const onClickNextButton = () => {
     isDesktop
       ? openPopup({
-          pageId: 'post_composer_page',
+          pageId: PAGE_ID.POLL_POST_COMPOSER_PAGE,
           view: 'desktop',
           isDismissable: false,
-          onClose: ({ close }) => {
-            confirm({
-              onOk: close,
-              type: 'confirm',
-              okText: 'Discard',
-              cancelText: 'Keep editing',
-              title: 'Discard this post?',
-              pageId: 'post_composer_page',
-              content: 'The post will be permanently discarded. It cannot be undone.',
-            });
-          },
+          onClose: () =>
+            discardPostCreation({ onDiscard: closePopup, pageId: PAGE_ID.POLL_POST_COMPOSER_PAGE }),
           header: (
             <CommunityDisplayName
               community={target}
-              pageId="post_composer_page"
-              className={styles.pollTypeSelection__displayName}
+              typography="Headline"
+              displayName={targetName}
+              pageId={PAGE_ID.POLL_POST_COMPOSER_PAGE}
             />
           ),
           children: (

@@ -17,6 +17,8 @@
   padding: 1rem 1rem 0.125rem;
   flex-grow: 1;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .chatFeed__messageList__container {
@@ -24,6 +26,19 @@
   flex-direction: column-reverse;
   height: 100%;
   overflow: auto;
+  pointer-events: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chatFeed__container::-webkit-scrollbar,
+.chatFeed__messageList__container::-webkit-scrollbar {
+  display: none;
+}
+
+.chatFeed__messageList__container[data-disable-scroll='true'] {
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .chatFeed__messageList__inner {
@@ -64,6 +79,13 @@
   }
 
   .chatFeed__container {
+    position: relative;
     padding: 1rem 1rem 0;
+  }
+
+  .chatFeed__container__overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 }

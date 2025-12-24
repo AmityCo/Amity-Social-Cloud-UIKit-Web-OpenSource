@@ -3,7 +3,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { Typography } from '~/v4/core/components';
 import styles from './ClipCaption.module.css';
-import { UserAvatar } from '~/v4/social/elements';
+import { BrandBadge, UserAvatar } from '~/v4/social/elements';
 import { Button } from '~/v4/core/components/AriaButton';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
@@ -113,13 +113,18 @@ export const ClipCaption = ({
           ) : (
             <div className={styles.clipCaption__userContentContainer}>
               <div className={styles.clipCaption__usernameContainer}>
-                <Button variant="text" onPress={onClickUser}>
+                <Button
+                  variant="text"
+                  onPress={onClickUser}
+                  className={styles.clipCaption__usernameButton}
+                >
                   <Typography.BodyBold
                     className={styles.clipCaption__userName}
                     data-testid={`${pageId}/${componentId}/username`}
                   >
                     {creator?.displayName ?? ''}
                   </Typography.BodyBold>
+                  {creator?.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
                 </Button>
                 <span className={styles.clipCaption__textWhite}>• </span>
                 <Timestamp

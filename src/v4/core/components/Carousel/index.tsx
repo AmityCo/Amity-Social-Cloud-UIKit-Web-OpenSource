@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { ArrowLeft } from '~/v4/icons/ArrowLeft';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { Button } from '~/v4/core/natives/Button/Button';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './styles.module.css';
 
 type CarouselProps = PropsWithChildren<{
@@ -12,6 +13,7 @@ type CarouselProps = PropsWithChildren<{
   iconClassName?: string;
   leftArrowClassName?: string;
   rightArrowClassName?: string;
+  dataAttributes?: { [key: string]: string | boolean | number };
 }>;
 
 export const Carousel = ({
@@ -22,7 +24,9 @@ export const Carousel = ({
   leftArrowClassName,
   scrollOffset = 250,
   rightArrowClassName,
+  dataAttributes,
 }: CarouselProps) => {
+  const { isDesktop } = useResponsive();
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isScrollable, setIsScrollable] = useState(false);
   const [isArrowLeftButtonShown, setIsArrowLeftButtonShown] = useState(false);
@@ -58,10 +62,11 @@ export const Carousel = ({
   }, [carouselRef.current]);
 
   return (
-    <section className={clsx(styles.carousel, className)}>
-      {isScrollable && !isHidden && (
+    <section className={clsx(styles.carousel, className)} {...dataAttributes}>
+      {isDesktop && isScrollable && !isHidden && (
         <Button
           onPress={scrollLeft}
+          aria-label="Scroll Left"
           className={clsx(leftArrowClassName)}
           data-shown={isArrowLeftButtonShown}
           isDisabled={!isArrowLeftButtonShown}
@@ -70,9 +75,10 @@ export const Carousel = ({
         </Button>
       )}
       {React.cloneElement(children as React.ReactElement, { ref: carouselRef })}
-      {isScrollable && !isHidden && (
+      {isDesktop && isScrollable && !isHidden && (
         <Button
           onPress={scrollRight}
+          aria-label="Scroll Right"
           data-shown={isArrowRightButtonShown}
           isDisabled={!isArrowRightButtonShown}
           className={clsx(rightArrowClassName)}

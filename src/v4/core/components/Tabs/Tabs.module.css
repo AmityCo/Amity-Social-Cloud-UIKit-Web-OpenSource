@@ -1,0 +1,109 @@
+.tabs {
+  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabList[data-variant='icon'],
+.tabList[data-variant='underlined'] {
+  gap: 1.25rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem 1rem 0;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-left: 1px solid var(--asc-color-base-shade4);
+  border-right: 1px solid var(--asc-color-base-shade4);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
+}
+
+.tab[data-variant='icon'] {
+  width: 100%;
+  outline: none;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  padding-bottom: 1rem;
+  justify-content: center;
+  color: var(--color);
+  transition: color 200ms;
+
+  --border-color: transparent;
+  --color: var(--asc-color-base-shade2);
+
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tab[data-variant='underlined'] {
+  display: flex;
+  outline: none;
+  cursor: pointer;
+  align-items: center;
+  padding-bottom: 1rem;
+  justify-content: center;
+  color: var(--color);
+  transition: color 200ms;
+
+  --border-color: transparent;
+  --color: var(--asc-color-base-shade2);
+
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tab[data-variant='icon'][data-hovered] {
+  color: var(--asc-color-base-default);
+}
+
+.tab[data-variant='underlined'][data-hovered] {
+  color: var(--asc-color-primary-default);
+}
+
+.tab[data-variant='icon'][data-selected] {
+  color: var(--asc-color-base-default);
+
+  --border-color: var(--asc-color-primary-default);
+}
+
+.tab[data-variant='underlined'][data-selected] {
+  color: var(--asc-color-primary-default);
+
+  --border-color: var(--asc-color-primary-default);
+}
+
+.tab[data-variant='icon'][data-disabled],
+.tab[data-variant='underlined'][data-disabled] {
+  color: var(--asc-color-base-shade3);
+}
+
+.tabIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentcolor;
+}
+
+.tabPanel {
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabPanel::-webkit-scrollbar {
+  display: none;
+}
+
+@media only screen and (width < 48em) {
+  .tabs {
+    gap: 0;
+  }
+
+  .tabList[data-variant='icon'],
+  .tabList[data-variant='underlined'] {
+    border-left: none;
+    border-right: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+}

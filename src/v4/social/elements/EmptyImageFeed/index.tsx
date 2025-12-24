@@ -1,0 +1,1 @@
+export { EmptyImageFeed } from './EmptyImageFeed';

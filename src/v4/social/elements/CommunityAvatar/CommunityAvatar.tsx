@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import useImage from '~/core/hooks/useImage';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CommunityAvatar.module.css';
 import clsx from 'clsx';
+import { FileRepository } from '@amityco/ts-sdk';
 
 const CommunityAvatarSvg = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -42,7 +43,11 @@ export function CommunityAvatar({
     elementId,
   });
 
-  const avatarFile = useImage({ fileId: community?.avatarFileId });
+  const avatarFile = useMemo(() => {
+    if (!community?.avatar?.fileUrl) return;
+
+    return FileRepository.fileUrlWithSize(community?.avatar?.fileUrl, 'medium');
+  }, [community?.avatar?.fileUrl]);
 
   if (isExcluded) return null;
 
@@ -56,7 +61,7 @@ export function CommunityAvatar({
       data-testid={accessibilityId}
       className={clsx(styles.communityAvatar__image, className)}
     >
-      <CommunityAvatarSvg className={className} />
+      <CommunityAvatarSvg style={themeStyles} className={className} />
     </object>
   );
 }

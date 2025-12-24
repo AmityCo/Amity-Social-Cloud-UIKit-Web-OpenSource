@@ -121,17 +121,23 @@ const useGlobalFeed = () => {
     setItems(newItems);
   };
 
-  const updateGlobalFeaturedPosts = (incomingPost: Amity.Post) => {
+  const updateGlobalFeaturedPosts = (incomingPost: Amity.Post, isPostNeedsApproval?: boolean) => {
     if (!globalFeaturedPosts) return;
 
-    const newItems = globalFeaturedPosts.map((item) => {
-      if (item.post?.postId === incomingPost.postId) {
-        return { ...item, post: { ...item.post, ...incomingPost } };
-      }
-      return item;
-    });
-
-    setGlobalFeaturedPostsItems(newItems);
+    if (isPostNeedsApproval) {
+      const newItems = globalFeaturedPosts.filter(
+        (item) => item.post?.postId !== incomingPost.postId,
+      );
+      setGlobalFeaturedPostsItems(newItems);
+    } else {
+      const newItems = globalFeaturedPosts.map((item) => {
+        if (item.post?.postId === incomingPost.postId) {
+          return { ...item, post: { ...item.post, ...incomingPost } };
+        }
+        return item;
+      });
+      setGlobalFeaturedPostsItems(newItems);
+    }
   };
 
   const loadMore = useCallback(() => {

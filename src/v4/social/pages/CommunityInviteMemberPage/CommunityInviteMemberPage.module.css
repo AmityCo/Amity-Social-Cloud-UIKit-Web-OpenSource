@@ -29,7 +29,7 @@
 }
 
 .communityInviteMemberPage__search {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0;
 }
 
 .communityInviteMemberPage__selectedUsers {
@@ -94,6 +94,10 @@
   color: var(--asc-color-base-default);
 }
 
+.communityInviteMemberPage__selectedUserDisplayName[data-is-brand='true'] {
+  width: 3rem;
+}
+
 .communityInviteMemberPage__memberList {
   padding: 1rem;
 }
@@ -136,6 +140,13 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--asc-color-base-default);
+}
+
+.communityInviteMemberPage__selectedUserBrandBadge {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  margin-left: -0.25rem;
 }
 
 .communityInviteMemberPage__inviteMember {
@@ -201,5 +212,9 @@
   .communityInviteMemberPage__inviteMember {
     margin-top: 0;
     position: static;
+  }
+
+  .communityInviteMemberPage__search {
+    padding: 0.75rem 1rem;
   }
 }

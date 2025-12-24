@@ -26,6 +26,7 @@ import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { Pencil } from '~/v4/icons/Pencil';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -60,7 +61,7 @@ export const PostMenu = ({
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const poll = post?.childrenPosts?.[0]?.getPollInfo();
-  const isLiveStreamPost = post?.childrenPosts?.[0]?.dataType === 'livestream';
+  const isLiveStreamPost = post?.childrenPosts?.[0]?.dataType === 'room';
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
 
@@ -190,7 +191,7 @@ export const PostMenu = ({
       onOk: () => {
         const isCurrentlyOnline = navigator.onLine;
         if (!isCurrentlyOnline) {
-          info({ content: 'Oops, something went wrong.' });
+          info({ content: 'Failed to delete post. Please try again.' });
           return;
         }
         mutateDeletePost();
@@ -336,7 +337,7 @@ export const PostMenu = ({
           className={styles.postMenu__item}
           onPress={onEditClick}
         >
-          <CreatePost className={styles.postMenu__editPost__icon} />
+          <Pencil className={styles.postMenu__editPost__icon} />
           <Typography.BodyBold className={styles.postMenu__editPost__text}>
             Edit post
           </Typography.BodyBold>

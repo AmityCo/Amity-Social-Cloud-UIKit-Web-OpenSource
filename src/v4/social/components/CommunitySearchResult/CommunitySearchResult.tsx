@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { SearchLimit } from '~/v4/social/components/SearchLimit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { CommunityRowItem } from '~/v4/social/internal-components/CommunityRowItem';
@@ -64,8 +65,8 @@ export const CommunitySearchResult = ({
             ))
           : null}
         {!isLoading && communityCollection.length === 0 && <EmptySearchResult />}
+        <div ref={(node) => setIntersectionNode(node)} />
       </NoInternetConnectionHoc>
-      <div ref={(node) => setIntersectionNode(node)} />
     </div>
   );
 };

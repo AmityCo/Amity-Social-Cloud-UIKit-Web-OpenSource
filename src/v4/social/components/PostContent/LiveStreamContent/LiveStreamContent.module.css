@@ -23,8 +23,8 @@
 
 .liveStreamContent__statusBadge {
   top: 1rem;
-  left: 1rem;
-  z-index: 100;
+  right: 1rem;
+  z-index: 5;
   position: absolute;
   display: inline-block;
 }

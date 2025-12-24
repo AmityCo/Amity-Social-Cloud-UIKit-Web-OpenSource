@@ -9,7 +9,7 @@ import {
   UserHeaderTitle,
 } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge/BrandBadge';
+import { BrandBadge } from '~/v4/social/elements';
 
 interface UIUserHeaderProps {
   userId?: string | null;

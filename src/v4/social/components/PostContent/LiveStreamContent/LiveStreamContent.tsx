@@ -1,24 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import VideoControl from '~/v4/icons/VideoControl';
 import { liveStreamStatus } from '~/v4/social/constants/livestream';
-import { LiveStreamThumbnail } from '~/v4/social/internal-components/LiveStreamThumbnail';
-import { LiveStreamLiveBadge } from '~/v4/social/internal-components/LiveStreamLiveBadge';
-import { LiveStreamEndThumbnail } from '~/v4/social/internal-components/LiveStreamEndThumbnail';
-import { LiveStreamIdleThumbnail } from '~/v4/social/internal-components/LiveStreamIdleThumbnail';
-import { LiveStreamUpcomingBadge } from '~/v4/social/internal-components/LiveStreamUpcomingBadge';
-import { LiveStreamRecordedBadge } from '~/v4/social/internal-components/LiveStreamRecordedBadge';
+import {
+  LiveStreamThumbnail,
+  LiveStreamLiveBadge,
+  LiveStreamEndThumbnail,
+  LiveStreamIdleThumbnail,
+  LiveStreamUpcomingBadge,
+  LiveStreamRecordedBadge,
+  LiveStreamBanThumbnail,
+  LiveStreamTerminatedThumbnail,
+} from '~/v4/social/features/livestream/internal-components';
 import styles from './LiveStreamContent.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail/LiveStreamBanThumbnail';
 import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
+import { useRoomSubscription, useRoom } from '~/v4/social/features/livestream/hooks';
+import clsx from 'clsx';
 
 type LiveStreamContentProps = {
+  roomId?: string;
+  className?: string;
   parentPost: Amity.Post;
-  posts: Amity.Post<'liveStream'>[];
+  posts?: Amity.Post<'room'>[];
   goToPostDetail?: (
     context?: Pick<
       PostDetailPageProps,
@@ -27,18 +33,19 @@ type LiveStreamContentProps = {
   ) => void;
 };
 
-export function LiveStreamContent({ parentPost, posts, goToPostDetail }: LiveStreamContentProps) {
+export function LiveStreamContent({
+  parentPost,
+  posts,
+  roomId,
+  goToPostDetail,
+  className,
+}: LiveStreamContentProps) {
   const { goToLiveStreamPlayerPage } = useNavigation();
-  const [isUpcoming, setIsUpcoming] = useState(false);
-
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const stream = posts?.[0]?.getLivestreamInfo();
-
+  const { room } = useRoom(roomId ?? posts?.[0]?.getRoomInfo()?.roomId);
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
-    communityId: parentPost.targetId,
+    communityId: parentPost?.targetId,
   });
-
   const { members } = useCommunityMembersCollection({
     queryParams: {
       communityId: community?.communityId as string,
@@ -46,68 +53,53 @@ export function LiveStreamContent({ parentPost, posts, goToPostDetail }: LiveStr
   });
 
   const myMembership = members.find((member) => member.userId === currentUserId);
-  const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
+  // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
+  const isUserBanned = false;
 
-  useEffect(() => {
-    const updateUpcomingStatus = () => {
-      if (
-        stream?.startedAt &&
-        (stream.status === liveStreamStatus.idle || stream.status === liveStreamStatus.live)
-      ) {
-        const delay = 15000;
-        const timeSinceStart = new Date().getTime() - new Date(stream.startedAt).getTime();
-        const isWithinTimeWindow = timeSinceStart < delay;
-        setIsUpcoming(isWithinTimeWindow);
+  useRoomSubscription({ room });
 
-        if (isWithinTimeWindow) {
-          const timeToNextCheck = delay - timeSinceStart + 50;
-          timerRef.current = setTimeout(() => {
-            setIsUpcoming(false);
-          }, timeToNextCheck);
-        }
-      } else {
-        setIsUpcoming(false);
-      }
-    };
+  if (!roomId && !posts) return null;
 
-    updateUpcomingStatus();
+  if (posts && posts[0]?.dataType !== 'room') return null;
 
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [stream]);
-
-  if (!posts || posts[0]?.dataType !== 'liveStream' || !stream) return null;
+  if (!room) return null;
 
   if (isUserBanned) return <LiveStreamBanThumbnail />;
 
-  if (stream.isDeleted) return <LiveStreamIdleThumbnail />;
+  if (room.isDeleted) return <LiveStreamIdleThumbnail />;
 
-  if (stream.status === liveStreamStatus.ended) return <LiveStreamEndThumbnail />;
+  if (room.status === liveStreamStatus.ended) return <LiveStreamEndThumbnail />;
+
+  if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
+    return <LiveStreamTerminatedThumbnail />;
 
   return (
     <Button
-      className={styles.liveStreamContent}
-      data-idle={stream.status === liveStreamStatus.idle || isUpcoming}
+      className={clsx(styles.liveStreamContent, className)}
+      data-idle={room.status === liveStreamStatus.idle}
       onPress={() => {
-        if (stream.status !== liveStreamStatus.idle && !isUpcoming) {
+        if (room.status !== liveStreamStatus.idle) {
           goToLiveStreamPlayerPage?.({ post: parentPost, goToDetailPage: goToPostDetail });
         }
       }}
     >
-      <LiveStreamThumbnail fileId={stream.thumbnailFileId} alt={stream.title} />
-      {(stream.status === liveStreamStatus.idle || isUpcoming) && <LiveStreamUpcomingBadge />}
-      {stream.status === liveStreamStatus.live && !isUpcoming && (
+      <LiveStreamThumbnail fileId={room.thumbnailFileId} alt={room.title} />
+      {room.status === liveStreamStatus.idle && (
+        <div className={styles.liveStreamContent__statusBadge}>
+          <LiveStreamUpcomingBadge />
+        </div>
+      )}
+      {room.status === liveStreamStatus.live && (
         <div className={styles.liveStreamContent__statusBadge}>
           <LiveStreamLiveBadge />
         </div>
       )}
-      {stream.status === liveStreamStatus.recorded && <LiveStreamRecordedBadge />}
-
-      {stream.status !== liveStreamStatus.idle && !isUpcoming && (
+      {room.status === liveStreamStatus.recorded && (
+        <div className={styles.liveStreamContent__statusBadge}>
+          <LiveStreamRecordedBadge />
+        </div>
+      )}
+      {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />
       )}
     </Button>

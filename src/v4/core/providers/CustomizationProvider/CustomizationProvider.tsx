@@ -103,7 +103,7 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
 }) => {
   const [config, setConfig] = useState<Config | null>(null);
 
-  const currentTheme = useTheme();
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     if (validateConfig(initialConfig)) {

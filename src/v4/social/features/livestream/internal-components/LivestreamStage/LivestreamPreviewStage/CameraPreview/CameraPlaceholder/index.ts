@@ -1,0 +1,1 @@
+export { CameraPlaceholder } from './CameraPlaceholder';

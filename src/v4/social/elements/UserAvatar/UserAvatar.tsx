@@ -9,6 +9,9 @@ import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import styles from './UserAvatar.module.css';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
+import { useMemo } from 'react';
+import { FileRepository } from '@amityco/ts-sdk';
 
 type UserAvatarProps = {
   pageId?: string;
@@ -39,9 +42,13 @@ export function UserAvatar({
 
   const { onClickUser } = useNavigation();
   const { user, isLoading } = useUser({ userId, shouldCall: !!userId });
-  const userImage = useImage({
-    fileId: userData?.avatarFileId || user?.avatar?.fileId,
-  });
+
+  const userImage = useMemo(() => {
+    const url = userData?.avatar?.fileUrl ?? user?.avatar?.fileUrl;
+    if (!url) return;
+    return FileRepository.fileUrlWithSize(url, 'small');
+  }, [userData?.avatar?.fileUrl, user?.avatar?.fileUrl]);
+
   const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
   const { closePopup } = usePopupContext();
 
@@ -76,7 +83,9 @@ export function UserAvatar({
           data-testid={`${accessibilityId}-${user?.userId}`}
           className={clsx(styles.userAvatar__img, className)}
         />
-        {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}
+        {isShowModeratorBadge && (
+          <ModeratorBadge className={styles.userAvatar__badge} variant="iconOnly" />
+        )}
       </Button>
     );
   }
@@ -93,7 +102,9 @@ export function UserAvatar({
       >
         {firstChar}
       </Typography.TitleBold>
-      {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}
+      {isShowModeratorBadge && (
+        <ModeratorBadge className={styles.userAvatar__badge} variant="iconOnly" />
+      )}
     </Button>
   );
 }

@@ -13,6 +13,7 @@ interface EmptyContentProps {
   text?: string;
   emptyContentClassName?: string;
   defaultIcon: () => JSX.Element;
+  variant?: 'container' | 'item';
 }
 
 export const EmptyContent: React.FC<EmptyContentProps> = ({
@@ -22,6 +23,7 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
   infoElementId = '*',
   text,
   emptyContentClassName,
+  variant = 'container',
   defaultIcon,
 }) => {
   const { config, defaultConfig, isExcluded, themeStyles, accessibilityId, uiReference } =
@@ -42,6 +44,7 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
   return (
     <div
       style={themeStyles}
+      data-variant={variant}
       data-testid={accessibilityId}
       className={clsx(styles.emptyContent, emptyContentClassName)}
     >

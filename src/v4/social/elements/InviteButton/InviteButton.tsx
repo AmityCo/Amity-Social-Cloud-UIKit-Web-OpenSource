@@ -13,7 +13,6 @@ export function InviteButton({ pageId = '*', componentId = '*', ...props }: Invi
 
   return (
     <Button
-      fullWidth
       size="medium"
       type="button"
       variant="fill"
@@ -21,7 +20,7 @@ export function InviteButton({ pageId = '*', componentId = '*', ...props }: Invi
       data-testid={accessibilityId}
       {...props}
     >
-      {config.text}
+      {config.text ?? 'Invite'}
     </Button>
   );
 }

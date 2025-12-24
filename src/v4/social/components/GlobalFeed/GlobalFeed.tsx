@@ -105,7 +105,7 @@ export const GlobalFeed = ({
                   onPollPostDeleted={onPostDeleted}
                   onClick={(context) => {
                     AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
-                      hideTarget: true,
+                      hideTarget: false,
                       postId: item.post?.postId as string,
                       category: AmityPostCategory.ANNOUNCEMENT,
                       commentId: context?.commentId,

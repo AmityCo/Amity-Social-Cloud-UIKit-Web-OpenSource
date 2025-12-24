@@ -16,6 +16,7 @@ import { SerializedMentionNode } from './nodes/MentionNode';
 import { hashtagRegex, hashtagTextRegex } from '~/v4/social/utils/hashtagRegex';
 import { SerializedHashtagNode } from './nodes/HashtagNode';
 import * as linkify from 'linkifyjs';
+import { URL_REGEX } from '~/v4/social/constants/post';
 
 export interface EditorStateJson extends SerializedLexicalNode {
   children: [];
@@ -150,13 +151,53 @@ function createSerializeLinkNode({
   };
 }
 
-type LinkData = Mentioned & {
-  href: string;
-  value: string;
-};
+function isLinkData(data: HashtagMentionOrLink): data is Amity.Link {
+  return (data as Amity.Link)?.url !== undefined;
+}
 
-function isLinkData(data: HashtagMentionOrLink): data is LinkData {
-  return (data as LinkData)?.type === 'url';
+function extractHashtagsFromText(
+  text: string,
+  urlRanges: Array<{ start: number; end: number }> = [],
+): Amity.Hashtag[] {
+  const hashtags: Amity.Hashtag[] = [];
+  let match;
+  let count = 0;
+
+  // Helper function to check if a position is within any URL range
+  const isWithinUrlRange = (position: number): boolean => {
+    return urlRanges.some((range) => position >= range.start && position <= range.end);
+  };
+
+  while ((match = hashtagRegex.exec(text)) !== null && count < 30) {
+    const hashtagText = match[1];
+    const hashtagStart = match.index;
+
+    // Skip if the hashtag is within a URL range
+    if (isWithinUrlRange(hashtagStart)) {
+      continue;
+    }
+
+    if (hashtagTextRegex.test(hashtagText)) {
+      hashtags.push({
+        text: hashtagText,
+        index: hashtagStart,
+        length: match[0].length, // includes #
+      });
+      count++;
+    }
+  }
+
+  return hashtags;
+}
+
+type HashtagMentionOrLink = Mentioned | Amity.Link | Amity.Hashtag;
+
+function isHashtagData(data: HashtagMentionOrLink): data is Amity.Hashtag {
+  return (data as Amity.Hashtag)?.text !== undefined;
+}
+
+function isMentionData(data: HashtagMentionOrLink): data is Mentioned {
+  return (data as Mentioned)?.userId !== undefined;
 }
 
 function extractHashtagsFromText(
@@ -208,6 +249,7 @@ export function textToEditorState(value: {
   };
   mentionees?: Mentionees;
   hashtags?: string[];
+  links?: Amity.Link[];
 }) {
   const rootNode = createRootNode();
 
@@ -215,16 +257,18 @@ export function textToEditorState(value: {
 
   const mentions = value.metadata?.mentioned ?? [];
 
-  const links: Array<LinkData> = linkify
-    .find(value.data.text)
-    .filter((link) => link.type === 'url')
-    .map((link) => ({
-      index: link.start,
-      length: link.end - link.start + 1,
-      href: link.href,
-      value: link.value,
-      type: 'url',
-    }));
+  const links = value.links ?? [];
+
+  // Create URL ranges for hashtag extraction
+  const urlRanges =
+    links.length > 0
+      ? links.map((link) => ({
+          start: link.index || 0,
+          end: link.index && link.length ? link.index + link.length - 1 : 0,
+        }))
+      : undefined;
+
+  const hashtags = extractHashtagsFromText(value.data.text, urlRanges);
 
   // Create URL ranges for hashtag extraction
   const urlRanges = links.map((link) => ({
@@ -237,10 +281,10 @@ export function textToEditorState(value: {
   const indexMap: Record<number, boolean> = {};
 
   const mentionsLinksAndHashtags = [...mentions, ...links, ...hashtags]
-    .sort((a, b) => a.index - b.index)
+    .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
     .reduce((acc, item) => {
       // this function is used to remove duplicate mentions and links that cause an infinite loop
-      if (indexMap[item.index]) {
+      if (item.index === undefined || indexMap[item.index]) {
         return acc;
       }
 
@@ -263,15 +307,19 @@ export function textToEditorState(value: {
       if (itemIndex < mentionsLinksAndHashtags.length && currentItem.index === globalIndex) {
         const currentItem = mentionsLinksAndHashtags[itemIndex];
 
-        if (isLinkData(currentItem)) {
+        if (isLinkData(currentItem) && currentItem.index !== undefined) {
+          const linkText = value.data.text.substring(
+            currentItem.index,
+            currentItem.index + (currentItem.length ?? 0),
+          );
           paragraph.children.push(
             createSerializeLinkNode({
-              title: currentItem.value,
-              url: currentItem.href,
+              title: linkText,
+              url: currentItem.url,
             }),
           );
-          runningIndex += currentItem.value.length;
-          globalIndex += currentItem.value.length;
+          runningIndex += currentItem.length ?? 0;
+          globalIndex += currentItem.length ?? 0;
         } else if (isHashtagData(currentItem)) {
           paragraph.children.push(
             createSerializeHashtagNode({
@@ -281,7 +329,7 @@ export function textToEditorState(value: {
           );
           runningIndex += currentItem.length;
           globalIndex += currentItem.length;
-        } else {
+        } else if (isMentionData(currentItem)) {
           paragraph.children.push(
             createSerializeMentionNode({
               text: value.data.text,
@@ -296,17 +344,19 @@ export function textToEditorState(value: {
       } else {
         const nextItemIndex =
           itemIndex < mentionsLinksAndHashtags.length
-            ? currentItem.index
+            ? currentItem.index ?? globalIndex + currentLine.length
             : globalIndex + currentLine.length;
 
-        const textSegment = currentLine.slice(
-          runningIndex,
-          nextItemIndex - globalIndex + runningIndex,
+        const endIndex = Math.min(
+          Math.max(nextItemIndex - globalIndex + runningIndex, runningIndex),
+          currentLine.length,
         );
+        const textSegment = currentLine.slice(runningIndex, endIndex);
+
         if (textSegment && textSegment.length > 0) {
           paragraph.children.push(createSerializeTextNode(textSegment));
-          runningIndex += textSegment.length;
           globalIndex += textSegment.length;
+          runningIndex += textSegment.length;
         } else {
           runningIndex += 1;
           globalIndex += 1;
@@ -316,10 +366,10 @@ export function textToEditorState(value: {
 
     if (runningIndex < currentLine.length) {
       const textSegment = currentLine.slice(runningIndex);
-      if (textSegment) {
+      if (textSegment && textSegment.length > 0) {
         paragraph.children.push(createSerializeTextNode(textSegment));
+        globalIndex += textSegment.length;
       }
-      globalIndex += textSegment.length;
     }
 
     globalIndex += 1;
@@ -341,6 +391,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
 
   const mentioned: Mentioned[] = [];
   const hashtags: Amity.Hashtag[] = [];
+  const links: Amity.Link[] = [];
   let isChannelMentioned = false;
   const mentioneeUserIds: string[] = [];
   let runningIndex = 0;
@@ -355,13 +406,37 @@ export function editorStateToText(editorState: SerializedEditorState) {
           | SerializedTextNode
           | SerializedMentionNode<MentionData>
           | SerializedAutoLinkNode
-          | SerializedHashtagNode,
+          | SerializedHashtagNode
+          | { type: 'linebreak'; version: number },
       ) => {
+        // Handle line break nodes (Shift+Enter)
+        if (child.type === 'linebreak') {
+          paragraphText.push('\n');
+          runningIndex += 1;
+          return;
+        }
+
         if ($isSerializedTextNode(child)) {
           paragraphText.push(child.text);
           runningIndex += child.text.length;
         }
         if ($isSerializedLinkNode(child) || $isSerializedAutoLinkNode(child)) {
+          const linkText = child.children
+            .filter((c): c is SerializedTextNode => $isSerializedTextNode(c))
+            .map((c) => c.text)
+            .join('');
+
+          // Validate link against URL_REGEX pattern
+          const urlRegex = new RegExp(URL_REGEX);
+          if (urlRegex.test(linkText)) {
+            links.push({
+              index: runningIndex,
+              length: linkText.length,
+              url: linkText,
+              renderPreview: true,
+            });
+          }
+
           child.children.forEach((c) => {
             if (!$isSerializedTextNode(c)) return;
             paragraphText.push(c.text);
@@ -422,7 +497,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
     mentionees.push({ type: 'channel' });
   }
 
-  return { mentioned, hashtags, text: editorStateTextString.join('\n'), mentionees };
+  return { mentioned, hashtags, text: editorStateTextString.join('\n'), mentionees, links };
 }
 
 const defaultTheme = {

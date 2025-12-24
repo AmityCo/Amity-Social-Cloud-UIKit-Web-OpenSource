@@ -36,7 +36,7 @@ export const generateShades = (hexColor?: string, isDarkMode = false): string[] 
 };
 
 export function useGenerateStylesShadeColors(config: GetConfigReturnValue) {
-  const currentTheme = useTheme();
+  const { currentTheme } = useTheme();
 
   const preferredTheme = useMemo(() => {
     if (config?.preferred_theme && config?.preferred_theme !== 'default') {
@@ -84,12 +84,16 @@ export function useGenerateStylesShadeColors(config: GetConfigReturnValue) {
   return generatedColors as React.CSSProperties;
 }
 
+type Theme = 'light' | 'dark';
+
 export const ThemeContext = createContext<{
-  currentTheme: 'light' | 'dark';
-  toggleTheme: () => void;
+  currentTheme: Theme;
+  toggleTheme: (theme: Theme) => void;
+  setDefaultTheme: () => void;
 }>({
   currentTheme: 'light',
   toggleTheme: () => {},
+  setDefaultTheme: () => {},
 });
 
 export const ThemeProvider: React.FC<PropsWithChildren<{ config?: Config }>> = ({
@@ -125,17 +129,27 @@ export const ThemeProvider: React.FC<PropsWithChildren<{ config?: Config }>> = (
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [config?.preferred_theme]);
 
-  const toggleTheme = () => {
-    setCurrentTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  const setDefaultTheme = () => {
+    if (!isDefaultTheme) {
+      setCurrentTheme(config.preferred_theme as 'dark' | 'light');
+    } else {
+      setCurrentTheme(mediaQuery.matches ? 'dark' : 'light');
+    }
+  };
+
+  const toggleTheme = (theme?: Theme) => {
+    setCurrentTheme((prevTheme) => (theme ? theme : prevTheme === 'light' ? 'dark' : 'light'));
   };
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, toggleTheme }}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={{ currentTheme, toggleTheme, setDefaultTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
 };
 
 export const useTheme = () => {
-  const { currentTheme } = useContext(ThemeContext);
+  const { currentTheme, toggleTheme, setDefaultTheme } = useContext(ThemeContext);
 
-  return currentTheme;
+  return { currentTheme, toggleTheme, setDefaultTheme };
 };

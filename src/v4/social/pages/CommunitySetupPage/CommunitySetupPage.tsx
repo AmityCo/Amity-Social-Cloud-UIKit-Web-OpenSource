@@ -5,6 +5,7 @@ import { EditCommunity } from '~/v4/social/internal-components/EditCommunity';
 type MemberCommunitySetup = {
   userId: string;
   displayName: string;
+  isBrand: boolean;
 };
 
 enum AmityCommunitySetupPageMode {

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -33,6 +33,9 @@ import { MentionItem } from '~/v4/social/internal-components/Lexical/MentionItem
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
 import styles from './PostTextField.module.css';
+import { LinkPreview } from '~/v4/social/components/PostContent/LinkPreview';
+import { CloseButton } from '~/v4/social/elements/CloseButton';
+import { DEBOUNCE_PREVIEW_LINK } from '~/v4/social/constants/post';
 
 interface PostTextFieldProps {
   pageId?: string;
@@ -45,6 +48,7 @@ interface PostTextFieldProps {
   mentionContainerClassName?: string;
   placeholder?: string;
   isValidInput?: string | boolean;
+  isClipPost?: boolean;
   dataValue: {
     data: { text: string };
     metadata?: {
@@ -52,13 +56,16 @@ interface PostTextFieldProps {
       hashtags?: Amity.Hashtag[];
     };
     mentionees?: Mentionees;
+    links?: Amity.Link[];
   };
   onChange: (data: {
     mentioned: Mentioned[];
     mentionees: Mentionees;
     hashtags: Amity.Hashtag[];
     text: string;
+    links?: Amity.Link[];
   }) => void;
+  onPreviewLinkChange?: (showPreview: boolean, isLoading?: boolean) => void;
 }
 
 const useSuggestions = (communityId?: string | null) => {
@@ -154,12 +161,96 @@ export const PostTextField = ({
   placeholderClassName,
   mentionContainerClassName,
   placeholder,
+  isClipPost = false,
   isValidInput: dataInputAttributes,
+  attachmentAmount = 0,
+  onPreviewLinkChange,
 }: PostTextFieldProps) => {
   const elementId = 'post_text_field';
   const [intersectionNode, setIntersectionNode] = useState<HTMLElement | null>(null);
+  const [hiddenPreviewUrl, setHiddenPreviewUrl] = useState<string | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+
+  const firstUrl = React.useMemo(() => {
+    const links = dataValue?.links;
+
+    if (links && links.length > 0) {
+      return links[0].url;
+    }
+    return null;
+  }, [dataValue?.links]);
+
+  const firstLinkRenderPreview = React.useMemo(() => {
+    const links = dataValue?.links;
+
+    if (links && links.length > 0) {
+      return links[0].renderPreview !== false; // Default to true if not specified
+    }
+    return true;
+  }, [dataValue?.links]);
+
+  // Initialize debouncedFirstUrl with the initial firstUrl value only if renderPreview is not false
+  const [debouncedFirstUrl, setDebouncedFirstUrl] = useState<string | null>(() => {
+    const links = dataValue?.links;
+    if (links && links.length > 0 && links[0].renderPreview !== false) {
+      return links[0].url;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedFirstUrl(firstUrl);
+    }, DEBOUNCE_PREVIEW_LINK);
+
+    return () => clearTimeout(timer);
+  }, [firstUrl]);
+
+  // Reset hidden preview when the debounced URL changes to a different URL
+  useEffect(() => {
+    if (debouncedFirstUrl && hiddenPreviewUrl && debouncedFirstUrl !== hiddenPreviewUrl) {
+      setHiddenPreviewUrl(null);
+    }
+  }, [debouncedFirstUrl, hiddenPreviewUrl]);
+
+  // Notify parent component when preview link state changes
+  useEffect(() => {
+    const showPreview =
+      !!debouncedFirstUrl && debouncedFirstUrl !== hiddenPreviewUrl && firstLinkRenderPreview;
+    onPreviewLinkChange?.(showPreview, isPreviewLoading);
+  }, [
+    debouncedFirstUrl,
+    hiddenPreviewUrl,
+    isPreviewLoading,
+    onPreviewLinkChange,
+    firstLinkRenderPreview,
+  ]);
+
+  // Determine if we should show link preview - only show if there's a valid URL, no attachments, not hidden, and renderPreview is true
+  const shouldShowLinkPreview =
+    debouncedFirstUrl &&
+    !attachmentAmount &&
+    debouncedFirstUrl !== hiddenPreviewUrl &&
+    firstLinkRenderPreview &&
+    !isClipPost;
+
+  const handleClosePreview = () => {
+    if (debouncedFirstUrl) {
+      setHiddenPreviewUrl(debouncedFirstUrl);
+      onChange({
+        mentioned: dataValue.metadata?.mentioned || [],
+        mentionees: dataValue.mentionees || [],
+        hashtags: dataValue.metadata?.hashtags || [],
+        text: dataValue.data.text,
+        links: dataValue.links?.map((link, index) => ({
+          ...link,
+          renderPreview: index === 0 ? false : link.renderPreview,
+        })),
+      });
+    }
+  };
 
   const editorConfig = getEditorConfig({
     namespace: 'PostTextField',
@@ -212,7 +303,58 @@ export const PostTextField = ({
         />
         <OnChangePlugin
           onChange={(_, editor) => {
-            onChange(editorToText(editor));
+            const result = editorToText(editor);
+            // Set renderPreview based on whether the first link is hidden
+            if (result.links && result.links.length > 0) {
+              // Filter out placeholder links (links with index: 0, length: 0) when there are actual hyperlinks
+              const hasActualHyperlinks = result.links.some((link) => (link?.length ?? 0) > 0);
+
+              result.links = result.links
+                .filter((link) => {
+                  // Remove placeholder links if we have actual hyperlinks
+                  if (hasActualHyperlinks && link.index === 0 && link.length === 0) {
+                    return false;
+                  }
+                  return true;
+                })
+                .map((link, index) => {
+                  // Find the corresponding link in dataValue.links by URL to preserve renderPreview
+                  const originalLink = dataValue?.links?.find((l) => l.url === link.url);
+
+                  // For the first link, determine renderPreview value
+                  if (index === 0) {
+                    // If the link was hidden by user, set renderPreview to false
+                    if (link.url === hiddenPreviewUrl) {
+                      return { ...link, renderPreview: false };
+                    }
+                    // If there's an original link with renderPreview explicitly set to false, keep it false
+                    if (originalLink?.renderPreview === false) {
+                      return { ...link, renderPreview: false };
+                    }
+
+                    return { ...link, renderPreview: true };
+                  }
+                  return {
+                    ...link,
+                    renderPreview: originalLink?.renderPreview ?? link.renderPreview,
+                  };
+                });
+            } else if (debouncedFirstUrl && debouncedFirstUrl !== hiddenPreviewUrl) {
+              // Keep link data when link was removed but still in debounce period
+              // Check if the original link had renderPreview set to false
+              const originalLink = dataValue?.links?.find((l) => l.url === debouncedFirstUrl);
+              const shouldRenderPreview = originalLink?.renderPreview !== false;
+
+              result.links = [
+                {
+                  index: 0,
+                  length: 0,
+                  url: debouncedFirstUrl,
+                  renderPreview: shouldRenderPreview,
+                },
+              ];
+            }
+            onChange(result);
           }}
         />
         <HistoryPlugin />
@@ -275,6 +417,25 @@ export const PostTextField = ({
           }}
         />
       </div>
+      {shouldShowLinkPreview && (
+        <div className={styles.linkPreviewContainer}>
+          <LinkPreview
+            pageId={pageId}
+            componentId={componentId}
+            url={debouncedFirstUrl}
+            onLoadingChange={setIsPreviewLoading}
+          />
+          {!isPreviewLoading && (
+            <CloseButton
+              pageId={pageId}
+              componentId={componentId}
+              className={styles.linkPreviewContainer__closeButton}
+              defaultClassName={styles.linkPreviewContainer__closeButton__icon}
+              onPress={handleClosePreview}
+            />
+          )}
+        </div>
+      )}
     </LexicalComposer>
   );
 };

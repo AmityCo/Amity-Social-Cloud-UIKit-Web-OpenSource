@@ -1,8 +1,7 @@
-import React from 'react';
-import styles from './Calendar.module.css';
-import { Calendar, CalendarCell, CalendarGrid, Heading } from 'react-aria-components';
 import { Button } from '~/v4/core/natives/Button';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { Calendar, CalendarCell, CalendarGrid, Heading } from 'react-aria-components';
+import styles from './Calendar.module.css';
 
 import {
   CalendarDate,
@@ -23,6 +22,8 @@ type CalendarComponentProps = {
   minValue?: DateValue;
   maxValue?: DateValue;
   isDisabledDate?: boolean;
+  focusValue?: CalendarDate;
+  onFocusChange?: ((value: CalendarDate | CalendarDateTime | ZonedDateTime) => void) | undefined;
 };
 
 export const CalendarComponent = ({
@@ -44,15 +45,17 @@ export const CalendarComponent = ({
   return (
     <Calendar
       value={date}
+      focusedValue={date}
       defaultValue={defaultValue ?? currentDate}
       defaultFocusedValue={defaultValue ?? currentDate}
       onChange={setDate}
+      onFocusChange={setDate}
       className={styles.calendar}
       aria-label="Select a date"
       minValue={minValue ?? undefined}
       maxValue={maxValue ?? undefined}
     >
-      <header className={styles.calendarHeader}>
+      <div className={styles.calendarHeader}>
         <div className={styles.calendar__subHeader}>
           <Heading
             slot="title"
@@ -76,9 +79,8 @@ export const CalendarComponent = ({
             </Button>
           </div>
         </div>
-      </header>
-
-      <CalendarGrid className={styles.calendar__grid}>
+      </div>
+      <CalendarGrid className={styles.calendar__grid} weekdayStyle="short">
         {(dateVal) => (
           <CalendarCell
             data-testid={accessibilityId}

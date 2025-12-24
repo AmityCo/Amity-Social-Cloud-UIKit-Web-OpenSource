@@ -1,0 +1,1 @@
+export { UserMediaFeed } from './MediaFeed';

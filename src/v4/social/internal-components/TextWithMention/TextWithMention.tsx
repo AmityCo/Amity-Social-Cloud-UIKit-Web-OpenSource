@@ -21,6 +21,7 @@ import styles from './TextWithMention.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
 import { hashtagRegex } from '~/v4/social/utils/hashtagRegex';
+import { URL_REGEX } from '~/v4/social/constants/post';
 
 interface TextWithMentionProps {
   pageId?: string;
@@ -30,6 +31,7 @@ interface TextWithMentionProps {
   data: { text: string };
   mentionees: Mentionees;
   hashtags?: string[];
+  links?: Amity.Link[];
   metadata?: { mentioned?: Mentioned[]; hashtagged?: Amity.Hashtag[] };
   onClickSeeMoreButton?: (isOpen: boolean) => void;
   seeMoreClassName?: string;
@@ -50,6 +52,7 @@ export const TextWithMention = ({
   metadata,
   mentionees,
   hashtags = [],
+  links,
   pageId = '*',
   maxLines = 8,
   isBold = false,
@@ -74,10 +77,32 @@ export const TextWithMention = ({
 
   const Component = isBold ? Typography.BodyBold : Typography.Body;
 
-  const editorState = useMemo(
-    () => textToEditorState({ data, mentionees, hashtags, metadata }),
-    [data, mentionees, hashtags, metadata],
-  );
+  const extractLinks = useCallback((text: string): Amity.Link[] => {
+    const links: Amity.Link[] = [];
+    const matches = text.matchAll(URL_REGEX);
+
+    for (const match of matches) {
+      if (match.index !== undefined && match[0]) {
+        // Only add valid URLs with actual content
+        const url = match[0].trim();
+        if (url.length > 0) {
+          links.push({
+            index: match.index,
+            length: url.length,
+            url,
+            renderPreview: true,
+          });
+        }
+      }
+    }
+
+    return links;
+  }, []);
+
+  const editorState = useMemo(() => {
+    const extractedLinks = links ?? extractLinks(data.text);
+    return textToEditorState({ data, mentionees, hashtags, metadata, links: extractedLinks });
+  }, [data, mentionees, hashtags, metadata, links, extractLinks]);
 
   const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -357,6 +382,16 @@ export const TextWithMention = ({
     }
 
     if ($isSerializedAutoLinkNode(child) || $isSerializedLinkNode(child)) {
+      const linkText = $isSerializedTextNode(child.children[0])
+        ? child.children[0]?.text
+        : child.url;
+      const linkUrl = child.url;
+
+      // Skip rendering if link has no text or invalid URL
+      if (!linkText || !linkUrl) {
+        return null;
+      }
+
       return (
         <a
           target="_blank"
@@ -372,12 +407,16 @@ export const TextWithMention = ({
           className={clsx(styles.textWithMention__link, linkClassName)}
           data-testid={`${pageId}/${componentId}/post_link`}
         >
-          {$isSerializedTextNode(child.children[0]) ? child.children[0]?.text : child.url}
+          {linkText}
         </a>
       );
     }
 
     if ($isSerializedTextNode(child)) {
+      // Skip empty text nodes
+      if (!child.text) {
+        return null;
+      }
       return <React.Fragment key={childIndex}>{parseTextWithHashtags(child.text)}</React.Fragment>;
     }
 
@@ -385,12 +424,18 @@ export const TextWithMention = ({
   };
 
   const renderText = (paragraph: SerializedParagraphNode[]) => {
-    return paragraph.map((p, index) => (
-      <React.Fragment key={index}>
-        {p.children.map((child, childIndex) => convertSerializedToText(child, childIndex))}
-        <br />
-      </React.Fragment>
-    ));
+    return paragraph.map((p, index) => {
+      const renderedChildren = p.children
+        .map((child, childIndex) => convertSerializedToText(child, childIndex))
+        .filter(Boolean); // Filter out null values from invalid links
+
+      return (
+        <React.Fragment key={index}>
+          {renderedChildren}
+          {index < paragraph.length - 1 && <br />}
+        </React.Fragment>
+      );
+    });
   };
 
   useEffect(() => {

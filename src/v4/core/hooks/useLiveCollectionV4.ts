@@ -5,18 +5,23 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * It provides same functionalities of useLiveCollection.
  */
 
-export function useLiveCollectionV4<TCallback, TParams>({
+export function useLiveCollectionV4<TCallback, TParams = void>({
   fetcher,
   params,
   callback = () => {},
   shouldCall = true,
 }: {
-  fetcher: (
-    params: Amity.LiveCollectionParams<TParams>,
-    callback: Amity.LiveCollectionCallback<TCallback>,
-    config?: Amity.LiveCollectionConfig,
-  ) => Amity.Unsubscriber;
-  params: Amity.LiveCollectionParams<TParams>;
+  fetcher:
+    | ((
+        params: Amity.LiveCollectionParams<TParams>,
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber)
+    | ((
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber);
+  params?: Amity.LiveCollectionParams<TParams>;
   callback?: Amity.LiveCollectionCallback<TCallback>;
   shouldCall?: boolean;
 }): {
@@ -27,9 +32,12 @@ export function useLiveCollectionV4<TCallback, TParams>({
   error: Error | null;
   loadMoreHasBeenCalled: boolean;
   refresh: () => void;
+  isLoadingFirstPage: boolean;
 } {
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(shouldCall ? shouldCall : true);
+  const loadingCountRef = useRef(0);
+  const [isLoadingFirstPage, setIsLoadingFirstPage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<TCallback[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -47,7 +55,13 @@ export function useLiveCollectionV4<TCallback, TParams>({
     (response) => {
       if (!shouldCall) return;
       if (response.data) setItems(response.data);
-      setIsLoading(response.loading);
+      if (loadingCountRef.current === 0) {
+        setIsLoadingFirstPage(response.loading);
+      } else {
+        setIsLoadingFirstPage(false);
+        setIsLoading(response.loading);
+      }
+      loadingCountRef.current += 1;
       setHasMore(response.hasNextPage);
       setError(response.error);
       loadMoreFnRef.current = response.onNextPage;
@@ -62,7 +76,7 @@ export function useLiveCollectionV4<TCallback, TParams>({
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, [JSON.stringify(params), shouldCall]);
+  }, [JSON.stringify(params), shouldCall, callbackFn]);
 
   const refresh = useCallback(() => {
     if (unsubscribeRef.current) unsubscribeRef.current();
@@ -76,7 +90,7 @@ export function useLiveCollectionV4<TCallback, TParams>({
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, []);
+  }, [fetcher, params, callbackFn]);
 
   return {
     error,
@@ -85,6 +99,7 @@ export function useLiveCollectionV4<TCallback, TParams>({
     isLoading,
     loadMore,
     refresh,
+    isLoadingFirstPage,
     loadMoreHasBeenCalled,
   };
 }
@@ -95,16 +110,25 @@ const subscribe = <TParams, TCallback>({
   callback,
   config,
 }: {
-  fetcher: (
-    params: Amity.LiveCollectionParams<TParams>,
-    callback: Amity.LiveCollectionCallback<TCallback>,
-    config?: Amity.LiveCollectionConfig,
-  ) => Amity.Unsubscriber;
-  params: Amity.LiveCollectionParams<TParams>;
+  fetcher:
+    | ((
+        params: Amity.LiveCollectionParams<TParams>,
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber)
+    | ((
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber);
+  params?: Amity.LiveCollectionParams<TParams>;
   callback: Amity.LiveCollectionCallback<TCallback>;
   config?: Amity.LiveCollectionConfig;
   refresh?: boolean;
 }) => {
-  const unsubscribe = fetcher(params, (response) => callback(response), config);
+  // Check if fetcher accepts params (has 2-3 arguments) or only callback (has 1-2 arguments)
+  const unsubscribe =
+    params !== undefined
+      ? (fetcher as any)(params, (response: any) => callback(response), config)
+      : (fetcher as any)((response: any) => callback(response), config);
   return { unsubscribe };
 };

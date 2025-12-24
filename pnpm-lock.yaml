@@ -23,9 +23,21 @@ importers:
       '@lexical/react':
         specifier: ^0.18.0
         version: 0.18.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.17)
+      '@livekit/components-react':
+        specifier: ^2.9.14
+        version: 2.9.15(livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.6.3)
+      '@livekit/components-styles':
+        specifier: ^1.1.6
+        version: 1.1.6
+      '@livekit/track-processors':
+        specifier: ^0.6.1
+        version: 0.6.1(@types/dom-mediacapture-transform@0.1.11)(livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22))
       '@tanstack/react-query':
         specifier: ^5.28.14
         version: 5.45.1(react@18.3.1)
+      '@vvo/tzdb':
+        specifier: ^6.187.0
+        version: 6.187.0
       clsx:
         specifier: ^2.1.0
         version: 2.1.1
@@ -42,7 +54,7 @@ importers:
         specifier: ^11.1.7
         version: 11.2.10(@emotion/is-prop-valid@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       hls.js:
-        specifier: ^1.4.14
+        specifier: ^1.5.11
         version: 1.5.11
       js-sha256:
         specifier: ^0.11.0
@@ -56,6 +68,9 @@ importers:
       linkifyjs:
         specifier: ^4.1.3
         version: 4.1.3
+      livekit-client:
+        specifier: ^2.15.14
+        version: 2.15.14(@types/dom-mediacapture-record@1.0.22)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -993,6 +1008,9 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
+  '@bufbuild/protobuf@1.10.1':
+    resolution: {integrity: sha512-wJ8ReQbHxsAfXhrf9ixl0aYbZorRuOWpBNzm8pL8ftmSxQx/wnJD5Eg861NwJU/czy2VXFIebCeZnZrI9rktIQ==}
+
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
@@ -1347,6 +1365,9 @@ packages:
   '@floating-ui/core@1.6.2':
     resolution: {integrity: sha512-+2XpQV9LLZeanU4ZevzRnGFg2neDeKHgFLjP6YLW+tly0IvrhqT4u8enLGjLH3qeh85g19xY5rsAusfwTdn5lg==}
 
+  '@floating-ui/dom@1.6.13':
+    resolution: {integrity: sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==}
+
   '@floating-ui/dom@1.6.5':
     resolution: {integrity: sha512-Nsdud2X65Dz+1RHjAIP0t8z5e2ff/IRbei6BqFrl1urT8sDVzM1HMQ+R0XcU5ceRfyO3I6ayeqIfh+6Wb8LGTw==}
 
@@ -1355,6 +1376,9 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
+
+  '@floating-ui/utils@0.2.10':
+    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
   '@floating-ui/utils@0.2.2':
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
@@ -1628,6 +1652,42 @@ packages:
     peerDependencies:
       yjs: '>=13.5.22'
 
+  '@livekit/components-core@0.12.10':
+    resolution: {integrity: sha512-lSGci8c8IB/qCi42g1tzNtDGpnBWH1XSSk/OA9Lzk7vqOG0LlkwD3zXfBeKfO2eWFmYRfrZ2GD59GaH2NtTgag==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      livekit-client: ^2.13.3
+      tslib: ^2.6.2
+
+  '@livekit/components-react@2.9.15':
+    resolution: {integrity: sha512-b+gA0sRJHMsyr/BoMBoY1vSXQmP3h5NmxZTUt+VG8xjzCYDjmUuiDUrKVwMIUoy1vK9I6uNfo+hp6qbLo84jfQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@livekit/krisp-noise-filter': ^0.2.12 || ^0.3.0
+      livekit-client: ^2.13.3
+      react: '>=18'
+      react-dom: '>=18'
+      tslib: ^2.6.2
+    peerDependenciesMeta:
+      '@livekit/krisp-noise-filter':
+        optional: true
+
+  '@livekit/components-styles@1.1.6':
+    resolution: {integrity: sha512-V6zfuREC2ksW8z6T6WSbEvdLB5ICVikGz1GtLr59UcxHDyAsKDbuDHAyl3bF3xBqPKYmY3GWF3Qk39rnScyOtA==}
+    engines: {node: '>=18'}
+
+  '@livekit/mutex@1.1.1':
+    resolution: {integrity: sha512-EsshAucklmpuUAfkABPxJNhzj9v2sG7JuzFDL4ML1oJQSV14sqrpTYnsaOudMAw9yOaW53NU3QQTlUQoRs4czw==}
+
+  '@livekit/protocol@1.42.2':
+    resolution: {integrity: sha512-0jeCwoMJKcwsZICg5S6RZM4xhJoF78qMvQELjACJQn6/VB+jmiySQKOSELTXvPBVafHfEbMlqxUw2UR1jTXs2g==}
+
+  '@livekit/track-processors@0.6.1':
+    resolution: {integrity: sha512-t9JMDvMUlaaURDDRZFQEkRYR4q2qROPOOIs3aZXQVL6v/QYgJ0tPg/QfbvHC8b6mYPwcaJgVz3KTk5XQ07fEMg==}
+    peerDependencies:
+      '@types/dom-mediacapture-transform': ^0.1.9
+      livekit-client: ^1.12.0 || ^2.1.0
+
   '@lokesh.dhakar/quantize@1.3.0':
     resolution: {integrity: sha512-4KBSyaMj65d8A+2vnzLxtHFu4OmBU4IKO0yLxZ171Itdf9jGV4w+WbG7VsKts2jUdRkFSzsZqpZOz6hTB3qGAw==}
 
@@ -1635,6 +1695,9 @@ packages:
     resolution: {integrity: sha512-zQH//gdOmuu7nt2oJR29vFhDv88oGPmVw6BggmrHeMI+xgEkp1B2dX9/bMBSYtK0dyLX/aOmesKS09g222K1/g==}
     peerDependencies:
       react: '>=16'
+
+  '@mediapipe/tasks-vision@0.10.14':
+    resolution: {integrity: sha512-vOifgZhkndgybdvoRITzRkIueWWSiCKuEUXXK6Q4FaJsFvRJuwgg++vqFUMlL0Uox62U5aEXFhHxlhV7Ja5e3Q==}
 
   '@ndelangen/get-tarball@3.0.9':
     resolution: {integrity: sha512-9JKTEik4vq+yGosHYhZ1tiH/3WpUS0Nh0kej4Agndhox8pAdWhEx5knFVRcb/ya9knCRCs1rPxNrSXTDdfVqpA==}
@@ -3029,6 +3092,15 @@ packages:
   '@types/doctrine@0.0.9':
     resolution: {integrity: sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==}
 
+  '@types/dom-mediacapture-record@1.0.22':
+    resolution: {integrity: sha512-mUMZLK3NvwRLcAAT9qmcK+9p7tpU2FHdDsntR3YI4+GY88XrgG4XiE7u1Q2LAN2/FZOz/tdMDC3GQCR4T8nFuw==}
+
+  '@types/dom-mediacapture-transform@0.1.11':
+    resolution: {integrity: sha512-Y2p+nGf1bF2XMttBnsVPHUWzRRZzqUoJAKmiP10b5umnO6DDrWI0BrGDJy1pOHoOULVmGSfFNkQrAlC5dcj6nQ==}
+
+  '@types/dom-webcodecs@0.1.16':
+    resolution: {integrity: sha512-gRNWaC3YW5EzhPRjVYy7BnxCbtLGqsgu+uTkmV/IxOF1bllFD+FAJ1KBdsDFsuJB+F+CE+nWmMlWt8vaZ3yYXA==}
+
   '@types/ejs@3.1.5':
     resolution: {integrity: sha512-nv+GSx77ZtXiJzwKdsASqi+YQ5Z7vwHsTP0JY2SiQgjGckkBRKZnk8nIM+7oUZ1VCtuTz0+By4qVR7fqzp/Dfg==}
 
@@ -3360,6 +3432,9 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
+
+  '@vvo/tzdb@6.187.0':
+    resolution: {integrity: sha512-SkGZLQyHT3dYxv0HyUHX+h1lDwTMfJs/nXT6BrLdl1nXdpcCEeGJPGiVf/9uv8uD8mCeMok1MM5CcG67VoEypQ==}
 
   '@webassemblyjs/ast@1.14.1':
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -5447,6 +5522,9 @@ packages:
       node-notifier:
         optional: true
 
+  jose@6.1.0:
+    resolution: {integrity: sha512-TTQJyoEoKcC1lscpVDCSsVgYzUDg/0Bt3WE//WiTPK6uOCQC2KZS4MpugbMWt/zyjkopgZoXhZuCi00gLudfUA==}
+
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
     engines: {node: '>=10'}
@@ -5625,6 +5703,11 @@ packages:
       enquirer:
         optional: true
 
+  livekit-client@2.15.14:
+    resolution: {integrity: sha512-q3QY1Md6+2l4LpV7OPSrKYbuMfMoEbcu+UaJL2e8Btrkh7R2wGJzWh8A852Stx4It1508IP9PK4q7U6trDzvYA==}
+    peerDependencies:
+      '@types/dom-mediacapture-record': ^1
+
   load-json-file@4.0.0:
     resolution: {integrity: sha512-Kx8hMakjX03tiGTLAIdJ+lL0htKnXjEZN6hk/tozf/WOuYGdZBJrZ+rCJRbVCugsjB3jMLn9746NsQIf5VjBMw==}
     engines: {node: '>=4'}
@@ -5691,6 +5774,14 @@ packages:
   log-update@5.0.1:
     resolution: {integrity: sha512-5UtUDQ/6edw4ofyljDNcOVJQ4c7OjDro4h3y8e1GQL5iYElYclVHJ3zeWchylvMaKnDbDilC8irOVyexnA/Slw==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  loglevel@1.9.1:
+    resolution: {integrity: sha512-hP3I3kCrDIMuRwAwHltphhDM1r8i55H33GgqjXbrisuJhF4kRhW1dNuxsRklp4bXl8DSdLaNLuiL4A/LWRfxvg==}
+    engines: {node: '>= 0.6.0'}
+
+  loglevel@1.9.2:
+    resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
+    engines: {node: '>= 0.6.0'}
 
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -6830,6 +6921,9 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
+  rxjs@7.8.2:
+    resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
+
   safe-buffer@5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
 
@@ -6864,6 +6958,13 @@ packages:
   screenfull@5.2.0:
     resolution: {integrity: sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==}
     engines: {node: '>=0.10.0'}
+
+  sdp-transform@2.15.0:
+    resolution: {integrity: sha512-KrOH82c/W+GYQ0LHqtr3caRpM3ITglq3ljGUIb8LTki7ByacJZ9z+piSGiwZDsRyhQbYBOBJgr2k6X4BZXi3Kw==}
+    hasBin: true
+
+  sdp@3.2.1:
+    resolution: {integrity: sha512-lwsAIzOPlH8/7IIjjz3K0zYBk7aBVVcvjMwt3M4fLxpjMYyy7i3I97SLHebgn4YBjirkzfp3RvRDWSKsh/+WFw==}
 
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
@@ -7331,6 +7432,9 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
+  ts-debounce@4.0.0:
+    resolution: {integrity: sha512-+1iDGY6NmOGidq7i7xZGA4cm8DAa6fqdYcvO5Z6yBevH++Bdo9Qt/mN0TzHUgcCcKv1gmh9+W5dHqz8pMWbCbg==}
+
   ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
@@ -7462,6 +7566,9 @@ packages:
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
+
+  typed-emitter@2.1.0:
+    resolution: {integrity: sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==}
 
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
@@ -7643,6 +7750,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
+  usehooks-ts@3.1.1:
+    resolution: {integrity: sha512-I4diPp9Cq6ieSUH2wu+fDAVQO43xwtulo+fKEidHUwZPnYImbtkTjzIJYcDcJqxgmX31GVqNFURodvcgHcW0pA==}
+    engines: {node: '>=16.15.0'}
+    peerDependencies:
+      react: ^16.8.0  || ^17 || ^18 || ^19 || ^19.0.0-rc
+
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
@@ -7763,6 +7876,10 @@ packages:
     peerDependenciesMeta:
       webpack-cli:
         optional: true
+
+  webrtc-adapter@9.0.3:
+    resolution: {integrity: sha512-5fALBcroIl31OeXAdd1YUntxiZl1eHlZZWzNg3U4Fn+J9/cGL3eT80YlrsWGvj2ojuz1rZr2OXkgCzIxAZ7vRQ==}
+    engines: {node: '>=6.0.0', npm: '>=3.10.0'}
 
   whatwg-url@5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
@@ -8787,6 +8904,8 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
+  '@bufbuild/protobuf@1.10.1': {}
+
   '@colors/colors@1.5.0':
     optional: true
 
@@ -8997,6 +9116,11 @@ snapshots:
     dependencies:
       '@floating-ui/utils': 0.2.2
 
+  '@floating-ui/dom@1.6.13':
+    dependencies:
+      '@floating-ui/core': 1.6.2
+      '@floating-ui/utils': 0.2.10
+
   '@floating-ui/dom@1.6.5':
     dependencies:
       '@floating-ui/core': 1.6.2
@@ -9007,6 +9131,8 @@ snapshots:
       '@floating-ui/dom': 1.6.5
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  '@floating-ui/utils@0.2.10': {}
 
   '@floating-ui/utils@0.2.2': {}
 
@@ -9486,6 +9612,38 @@ snapshots:
       lexical: 0.18.0
       yjs: 13.6.17
 
+  '@livekit/components-core@0.12.10(livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22))(tslib@2.6.3)':
+    dependencies:
+      '@floating-ui/dom': 1.6.13
+      livekit-client: 2.15.14(@types/dom-mediacapture-record@1.0.22)
+      loglevel: 1.9.1
+      rxjs: 7.8.2
+      tslib: 2.6.3
+
+  '@livekit/components-react@2.9.15(livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.6.3)':
+    dependencies:
+      '@livekit/components-core': 0.12.10(livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22))(tslib@2.6.3)
+      clsx: 2.1.1
+      livekit-client: 2.15.14(@types/dom-mediacapture-record@1.0.22)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      tslib: 2.6.3
+      usehooks-ts: 3.1.1(react@18.3.1)
+
+  '@livekit/components-styles@1.1.6': {}
+
+  '@livekit/mutex@1.1.1': {}
+
+  '@livekit/protocol@1.42.2':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.1
+
+  '@livekit/track-processors@0.6.1(@types/dom-mediacapture-transform@0.1.11)(livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22))':
+    dependencies:
+      '@mediapipe/tasks-vision': 0.10.14
+      '@types/dom-mediacapture-transform': 0.1.11
+      livekit-client: 2.15.14(@types/dom-mediacapture-record@1.0.22)
+
   '@lokesh.dhakar/quantize@1.3.0': {}
 
   '@mdx-js/react@2.3.0(react@18.3.1)':
@@ -9493,6 +9651,8 @@ snapshots:
       '@types/mdx': 2.0.13
       '@types/react': 17.0.80
       react: 18.3.1
+
+  '@mediapipe/tasks-vision@0.10.14': {}
 
   '@ndelangen/get-tarball@3.0.9':
     dependencies:
@@ -11668,6 +11828,14 @@ snapshots:
 
   '@types/doctrine@0.0.9': {}
 
+  '@types/dom-mediacapture-record@1.0.22': {}
+
+  '@types/dom-mediacapture-transform@0.1.11':
+    dependencies:
+      '@types/dom-webcodecs': 0.1.16
+
+  '@types/dom-webcodecs@0.1.16': {}
+
   '@types/ejs@3.1.5': {}
 
   '@types/emscripten@1.39.13': {}
@@ -12091,6 +12259,8 @@ snapshots:
       vite: 4.5.3(@types/node@20.14.4)(less@4.2.0)(sass@1.77.6)(stylus@0.62.0)(terser@5.40.0)
     transitivePeerDependencies:
       - supports-color
+
+  '@vvo/tzdb@6.187.0': {}
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:
@@ -14513,6 +14683,8 @@ snapshots:
       - supports-color
       - ts-node
 
+  jose@6.1.0: {}
+
   joycon@3.1.1: {}
 
   jpeg-js@0.4.4: {}
@@ -14696,6 +14868,20 @@ snapshots:
       rfdc: 1.4.1
       wrap-ansi: 8.1.0
 
+  livekit-client@2.15.14(@types/dom-mediacapture-record@1.0.22):
+    dependencies:
+      '@livekit/mutex': 1.1.1
+      '@livekit/protocol': 1.42.2
+      '@types/dom-mediacapture-record': 1.0.22
+      events: 3.3.0
+      jose: 6.1.0
+      loglevel: 1.9.2
+      sdp-transform: 2.15.0
+      ts-debounce: 4.0.0
+      tslib: 2.8.1
+      typed-emitter: 2.1.0
+      webrtc-adapter: 9.0.3
+
   load-json-file@4.0.0:
     dependencies:
       graceful-fs: 4.2.11
@@ -14761,6 +14947,10 @@ snapshots:
       slice-ansi: 5.0.0
       strip-ansi: 7.1.0
       wrap-ansi: 8.1.0
+
+  loglevel@1.9.1: {}
+
+  loglevel@1.9.2: {}
 
   loose-envify@1.4.0:
     dependencies:
@@ -16023,6 +16213,10 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
+  rxjs@7.8.2:
+    dependencies:
+      tslib: 2.8.1
+
   safe-buffer@5.1.2: {}
 
   safe-buffer@5.2.1: {}
@@ -16058,6 +16252,10 @@ snapshots:
       ajv-keywords: 5.1.0(ajv@8.17.1)
 
   screenfull@5.2.0: {}
+
+  sdp-transform@2.15.0: {}
+
+  sdp@3.2.1: {}
 
   semver@5.7.2: {}
 
@@ -16604,6 +16802,8 @@ snapshots:
     dependencies:
       typescript: 4.9.5
 
+  ts-debounce@4.0.0: {}
+
   ts-dedent@2.2.0: {}
 
   ts-easing@0.2.0: {}
@@ -16707,6 +16907,10 @@ snapshots:
     dependencies:
       media-typer: 0.3.0
       mime-types: 2.1.35
+
+  typed-emitter@2.1.0:
+    optionalDependencies:
+      rxjs: 7.8.2
 
   typedarray@0.0.6: {}
 
@@ -16875,6 +17079,11 @@ snapshots:
     dependencies:
       react: 18.3.1
 
+  usehooks-ts@3.1.1(react@18.3.1):
+    dependencies:
+      lodash.debounce: 4.0.8
+      react: 18.3.1
+
   util-deprecate@1.0.2: {}
 
   util@0.12.5:
@@ -17003,6 +17212,10 @@ snapshots:
       - '@swc/core'
       - esbuild
       - uglify-js
+
+  webrtc-adapter@9.0.3:
+    dependencies:
+      sdp: 3.2.1
 
   whatwg-url@5.0.0:
     dependencies:

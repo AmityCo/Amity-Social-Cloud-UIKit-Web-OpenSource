@@ -10,8 +10,22 @@
   margin-bottom: 0.25rem;
 }
 
+.messageBubble__displayName__container {
+  gap: 0.25rem;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .messageBubble__displayName {
   color: var(--asc-color-secondary-default);
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .messageBubble__optionIcon {
@@ -42,6 +56,14 @@
 
 .messageBubble__messageText {
   color: var(--asc-color-white);
+  word-break: break-word;
+}
+
+.messageBubble__optionsMenu__header {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--asc-color-base-divider-line);
 }
 
 .messageBubble__optionsButton__container {
@@ -56,7 +78,7 @@
   color: var(--asc-color-base-default);
 }
 
-.messageBubble__optionButton__deleteText {
+.messageBubble__optionButton__dangerText {
   color: var(--asc-color-alert-default);
 }
 
@@ -67,7 +89,7 @@
   fill: var(--asc-color-base-default);
 }
 
-.messageBubble__optionButton__deleteIcon {
+.messageBubble__optionButton__dangerIcon {
   margin-right: 0.75rem;
   width: 1.5rem;
   height: 1.5rem;
@@ -78,4 +100,60 @@
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-white);
+}
+
+.messageBubble__button__displayName {
+  color: var(--asc-color-secondary-default);
+}
+
+.messageBubble__button__displayName:hover {
+  text-decoration: underline;
+}
+
+.messageBubble__optionUserInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.messageBubble__optionUserInfo__displayName {
+  text-align: center;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.messageBubble__optionUserInfo__button {
+  padding: 0.75rem 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.messageBubble__optionUserInfo__buttonIcon {
+  margin-right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.messageBubble__optionUserInfo__buttonLabel {
+  color: var(--asc-color-base-default);
+}
+
+.messageBubble__optionUserInfo__mutedIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-base-shade2);
+}
+
+@media (width >= 48em) {
+  .messageBubble__optionButton {
+    padding: 0.75rem 1rem;
+  }
 }

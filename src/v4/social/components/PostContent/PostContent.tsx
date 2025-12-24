@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
-import { ShareButton } from '~/v4/social/elements/ShareButton';
-import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { Typography } from '~/v4/core/components';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
@@ -31,7 +29,7 @@ import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
 import { Share } from '~/v4/icons/Share';
 import { IconButton } from '~/v4/core/components/IconButton';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import useCommunity from '~/v4/social/hooks/objects/useCommunity';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { PostTitle } from './PostTitle';
 import { ChildrenPostContent } from './ChildrenPostContent';
@@ -46,6 +44,7 @@ import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { isEqual } from 'lodash';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { EventHostBadge } from '~/v4/social/elements';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -84,6 +83,7 @@ interface PostContentProps {
   keyword?: string;
   isSearchPost?: boolean;
   expandAllContent?: boolean;
+  eventCreatorId?: Amity.Event['userId'];
 }
 
 const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: boolean }) => {
@@ -139,6 +139,7 @@ export const PostContent = ({
   keyword,
   isSearchPost = false,
   expandAllContent = false,
+  eventCreatorId,
 }: PostContentProps) => {
   const componentId = 'post_content';
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
@@ -412,7 +413,7 @@ export const PostContent = ({
       style={themeStyles}
       className={clsx(styles.postContent__container, className)}
     >
-      <div ref={elementRef} className={clsx(styles.postContent, className)}>
+      <div ref={elementRef} className={clsx(styles.postContent)}>
         {(category === AmityPostCategory.ANNOUNCEMENT ||
           category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
           <AnnouncementBadge pageId={pageId} componentId={componentId} />
@@ -436,7 +437,14 @@ export const PostContent = ({
               />
             </div>
             <div className={styles.postContent__bar__information__subtitle}>
-              {isCommunityModerator ? (
+              {eventCreatorId === post?.postedUserId ? (
+                <div className={styles.postContent__bar__information__subtitle__moderator}>
+                  <EventHostBadge withLabel />
+                  <span className={styles.postContent__bar__information__subtitle__separator}>
+                    •
+                  </span>
+                </div>
+              ) : isCommunityModerator ? (
                 <div className={styles.postContent__bar__information__subtitle__moderator}>
                   <ModeratorBadge pageId={pageId} componentId={componentId} />
                   <span className={styles.postContent__bar__information__subtitle__separator}>
@@ -721,45 +729,48 @@ export const PostContent = ({
        */}
       {!disabledInlineComment && (
         <>
-          <Divider className={styles.postContent__inlineComment__divider} />
           {loadingInlineComment ? (
             <CommentSkeleton pageId={pageId} componentId={componentId} />
           ) : (
             <>
               {inlineComment && (
-                <div
-                  data-testid="post-inline-comment-button"
-                  role="button"
-                  tabIndex={0}
-                  className={styles.postContent__inlineComment__container}
-                  onClick={(e) => {
-                    onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true });
-                  }}
-                >
-                  <Comment
-                    key={inlineComment?.commentId} // Add key to force proper re-rendering
-                    pageId={pageId}
-                    comment={inlineComment}
-                    onClickReply={() => {
-                      onClick?.({
-                        commentId: inlineComment?.commentId,
-                        parentId: inlineComment?.parentId,
-                        selectedReplyComment: inlineComment!,
-                      });
+                <>
+                  <Divider className={styles.postContent__inlineComment__divider} />
+                  <div
+                    data-testid="post-inline-comment-button"
+                    role="button"
+                    tabIndex={0}
+                    className={styles.postContent__inlineComment__container}
+                    onClick={(e) => {
+                      onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true });
                     }}
-                    onClickShowReply={() => {
-                      onClick?.({
-                        commentId: inlineComment?.commentId,
-                        showReplyCommentAt: inlineComment?.commentId,
-                      });
-                    }}
-                    componentId={componentId}
-                    // hide option buttion for inline comment
-                    hideOptionButton={true}
-                    community={targetCommunity}
-                    maxLines={3}
-                  />
-                </div>
+                  >
+                    <Comment
+                      isHost={eventCreatorId === inlineComment?.userId}
+                      key={inlineComment?.commentId} // Add key to force proper re-rendering
+                      pageId={pageId}
+                      comment={inlineComment}
+                      onClickReply={() => {
+                        onClick?.({
+                          commentId: inlineComment?.commentId,
+                          parentId: inlineComment?.parentId,
+                          selectedReplyComment: inlineComment!,
+                        });
+                      }}
+                      onClickShowReply={() => {
+                        onClick?.({
+                          commentId: inlineComment?.commentId,
+                          showReplyCommentAt: inlineComment?.commentId,
+                        });
+                      }}
+                      componentId={componentId}
+                      // hide option buttion for inline comment
+                      hideOptionButton={true}
+                      community={targetCommunity}
+                      maxLines={3}
+                    />
+                  </div>
+                </>
               )}
             </>
           )}

@@ -20,4 +20,10 @@
     border: 1px solid var(--asc-color-base-shade4);
     border-radius: 0.5rem;
   }
+
+  .errorContent__container[data-type='media'] {
+    background-color: var(--asc-color-background-default);
+    border: none;
+    border-radius: 0;
+  }
 }

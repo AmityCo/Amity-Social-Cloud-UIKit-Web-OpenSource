@@ -204,6 +204,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
       content: () => (
         <UserSearchResult
           pageId={pageId}
+          keyword={searchValue}
           isLoading={userCollection.isLoading}
           userCollection={userCollection.users}
           onClosePopover={() => setOpenSearchResult(false)}
@@ -225,6 +226,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
         onFocus={() => setOpenSearchResult(true)}
         initialValue={searchValue}
         hasCancelButton={false}
+        onCloseSearch={() => setActiveTab(DEFAULT_ACTIVE_TAB)}
       />
       {(searchValue.length > 0 || (keyword && keyword.length > 0)) && openSearchResult && (
         <div className={styles.socialGlobalSearchPage__searchResultContainer} ref={ref}>

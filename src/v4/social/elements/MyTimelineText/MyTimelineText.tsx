@@ -23,7 +23,7 @@ export function MyTimelineText({ pageId = '*', componentId = '*' }: MyTimelineTe
       style={{ ...themeStyles }}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {config.text ?? 'My Timeline'}
     </Typography.Body>
   );
 }

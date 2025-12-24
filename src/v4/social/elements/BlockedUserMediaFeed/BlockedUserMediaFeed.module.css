@@ -1,0 +1,25 @@
+.blockedUserMediaFeed {
+  margin: auto;
+  min-height: 15rem;
+  text-align: center;
+  padding: 5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.blockedUserMediaFeed__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-secondary-shade4);
+  fill: var(--asc-color-secondary-shade4);
+}
+
+@media (width >= 48em) {
+  .blockedUserMediaFeed {
+    padding: 3rem;
+    min-height: auto;
+  }
+}

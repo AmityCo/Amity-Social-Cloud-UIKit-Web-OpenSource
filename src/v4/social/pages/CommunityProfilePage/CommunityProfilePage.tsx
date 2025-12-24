@@ -16,12 +16,9 @@ import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
 import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButton';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { FileTrigger } from 'react-aria-components';
-import { CommunityImageFeed } from '~/v4/social/components/CommunityImageFeed';
-import { CommunityVideoFeed } from '~/v4/social/components/CommunityVideoFeed';
 import { CommunityProfileTab } from '~/v4/social/elements/CommunityProfileTab';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
@@ -31,13 +28,17 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
-import { useGetInvitation } from '~/v4/social/hooks';
+import { useDiscardPostCreation, useGetInvitation } from '~/v4/social/hooks';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
 import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
-
+import { EventSetupMode } from '~/v4/social/features';
+import { CreateEventButton } from '~/v4/social/elements/CreateEventButton';
+import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { Typography } from '~/v4/core/components';
+import { CommunityMediaFeed } from '~/v4/social/features/communities/profile/components/MediaFeed';
+import { CommunityEventFeed } from '~/v4/social/features/communities/profile/components/EventFeed';
 interface CommunityProfileProps {
   communityId: string;
   page?: number;
@@ -46,9 +47,9 @@ interface CommunityProfileProps {
 export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communityId, page }) => {
   const pageId = 'community_profile_page';
 
-  const { onScroll, scrollPosition } = useFeedScrollContext();
+  const { onScroll } = useFeedScrollContext();
   const { openPopup } = usePopupContext();
-  const { confirm } = useConfirmContext();
+  const { discardPostCreation } = useDiscardPostCreation();
   const { currentUserId } = useSDK();
   const { file, setFile } = useStoryContext();
   const { file: clipFile, setFile: setClipFile } = useClipContext();
@@ -65,15 +66,13 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     communityId,
     shouldCall: !!communityId,
   });
-  const { invitation, isLoading: isInvitationLoading } = useGetInvitation(
-    community as Amity.Community,
-  );
+  const { isLoading: isInvitationLoading } = useGetInvitation(community as Amity.Community);
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
-  const { onBack } = useNavigation();
+  const { onBack, goToCreateLivestreamPage } = useNavigation();
   const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
-  const initialLoad = useRef(true);
+  const { hasCreateEventPermission } = useEventPermission(communityId);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -81,10 +80,10 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
         return <CommunityFeed pageId={pageId} communityId={communityId} />;
       case 'community_pin':
         return <CommunityPin pageId={pageId} communityId={communityId} />;
-      case 'community_image_feed':
-        return <CommunityImageFeed pageId={pageId} communityId={communityId} />;
-      case 'community_video_feed':
-        return <CommunityVideoFeed pageId={pageId} communityId={communityId} />;
+      case 'community_event_feed':
+        return <CommunityEventFeed pageId={pageId} communityId={communityId} />;
+      case 'community_media_feed':
+        return <CommunityMediaFeed pageId={pageId} communityId={communityId} />;
       default:
         return null;
     }
@@ -107,18 +106,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const checkPostPermission = () => {
     const isOnlyAdminCanPost = community?.postSetting === 'ONLY_ADMIN_CAN_POST';
     return isOnlyAdminCanPost ? isCommunityModerator : !!community?.isJoined;
-  };
-
-  const onCloseCreatePostPopup = ({ close }: { close: () => void }) => {
-    confirm({
-      onOk: close,
-      type: 'confirm',
-      okText: 'Discard',
-      cancelText: 'Keep editing',
-      title: 'Discard this post?',
-      pageId: 'post_composer_page',
-      content: 'The post will be permanently discarded. It cannot be undone.',
-    });
   };
 
   const CreatePostHeader = (
@@ -219,12 +206,19 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
               pageId={pageId}
               communityId={communityId}
               onSelectFile={handleFileSelect}
+              onClickEvent={() => {
+                AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
+                  targetId: communityId,
+                  mode: EventSetupMode.CREATE,
+                  targetName: community?.displayName ?? '',
+                });
+              }}
               onClickPost={() => {
                 openPopup({
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
+                  onClose: ({ close }) => discardPostCreation({ pageId, onDiscard: close }),
                   header: CreatePostHeader,
                   children: (
                     <PostComposerPage
@@ -252,6 +246,13 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                   ),
                 });
               }}
+              onClickLivestream={() =>
+                community?.communityId &&
+                goToCreateLivestreamPage?.({
+                  targetId: community?.communityId,
+                  targetType: 'community',
+                })
+              }
             />
           </div>
         )}
@@ -300,6 +301,19 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                       <FileTrigger onSelect={handleClipFileSelect} acceptedFileTypes={['video/*']}>
                         <CreateClipButton pageId={pageId} componentId={communityId} />
                       </FileTrigger>
+                    )}
+                    {hasCreateEventPermission && (
+                      <CreateEventButton
+                        pageId={pageId}
+                        onPress={() => {
+                          removeDrawerData();
+                          AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
+                            targetId: communityId,
+                            mode: EventSetupMode.CREATE,
+                            targetName: community?.displayName ?? '',
+                          });
+                        }}
+                      />
                     )}
                   </>
                 ),

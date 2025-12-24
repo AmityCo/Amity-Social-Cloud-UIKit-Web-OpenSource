@@ -1,0 +1,63 @@
+/* CameraPreview Component Styles */
+
+.cameraPreview__cameraContainer {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  position: relative;
+}
+
+.cameraPreview__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cameraPreview__cameraContainer :global(.lk-video-container) video {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.cameraPreview__cameraContainer :global(.lk-video-container .lk-camera-off-note) {
+  display: none;
+}
+
+/* Controls Button */
+.cameraPreview__cameraContainer :global(.lk-button-group-container),
+.cameraPreview__cameraContainer :global(.lk-username-container) {
+  display: none !important;
+}
+
+/* Loading State */
+.cameraPreview__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Video Element */
+.cameraPreview__videoElement {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Muted Indicator */
+.cameraPreview__mutedIndicator {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgb(0 0 0 / 20%);
+  border-radius: 100%;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cameraPreview__mutedIndicator__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-white);
+}

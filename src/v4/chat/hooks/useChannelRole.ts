@@ -1,0 +1,33 @@
+import { ChannelRepository } from '@amityco/ts-sdk';
+import { useMutation } from '@tanstack/react-query';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+
+const useChannelRole = ({ channel }: { channel?: Amity.Channel | null }) => {
+  const channelId = channel?.channelId;
+  const { success, info } = useNotifications();
+
+  const { mutate: assingRoleToUsers } = useMutation({
+    mutationFn: ({ userIds, roleId }: { userIds: string[]; roleId: string }) =>
+      channelId
+        ? ChannelRepository.Moderation.addRole(channelId, roleId, userIds)
+        : Promise.resolve(false),
+    onSuccess: () => success({ content: 'Moderator promoted!' }),
+    onError: () => info({ content: 'Moderator promoted!' }),
+  });
+
+  const { mutate: removeRoleFromUsers } = useMutation({
+    mutationFn: ({ userIds, roleId }: { userIds: string[]; roleId: string }) =>
+      channelId
+        ? ChannelRepository.Moderation.removeRole(channelId, roleId, userIds)
+        : Promise.resolve(false),
+    onSuccess: () => success({ content: 'Moderator promoted!' }),
+    onError: () => info({ content: 'Moderator promoted!' }),
+  });
+
+  return {
+    assingRoleToUsers,
+    removeRoleFromUsers,
+  };
+};
+
+export default useChannelRole;

@@ -75,6 +75,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
       FeedDataTypeEnum.Poll,
       FeedDataTypeEnum.Clip,
       FeedDataTypeEnum.LiveStream,
+      FeedDataTypeEnum.Room,
     ],
     limit: 10,
   });

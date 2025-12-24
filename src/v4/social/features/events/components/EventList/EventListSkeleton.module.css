@@ -1,0 +1,12 @@
+.eventListSkeleton {
+  gap: 0.5rem;
+  display: grid;
+}
+
+.eventListSkeleton__item {
+  gap: 1rem;
+  display: grid;
+  max-height: 7.5rem;
+  align-items: center;
+  grid-template-columns: 1fr 1.325fr;
+}

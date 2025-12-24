@@ -5,6 +5,9 @@
   top: 0;
   user-select: none;
   pointer-events: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .editorParagraph {

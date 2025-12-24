@@ -79,6 +79,7 @@
 
   .explore__divider {
     display: block;
+    height: 0.75rem;
     background-color: var(--asc-color-background-shade1);
   }
 

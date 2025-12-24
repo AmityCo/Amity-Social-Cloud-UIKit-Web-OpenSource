@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { UserSearchItem } from './UserSearchItem';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { SearchLimit } from '~/v4/social/components/SearchLimit';
 import { UserSearchItemSkeleton } from './UserSearchItemSkeleton';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { EmptySearchResult } from '~/v4/social/internal-components/EmptySearchResult';
@@ -9,6 +10,7 @@ import styles from './UserSearchResult.module.css';
 
 type UserSearchResultProps = {
   pageId?: string;
+  keyword: string;
   isLoading: boolean;
   onLoadMore: () => void;
   userCollection: Amity.User[];
@@ -16,6 +18,7 @@ type UserSearchResultProps = {
 };
 
 export const UserSearchResult = ({
+  keyword,
   isLoading,
   onLoadMore,
   pageId = '*',
@@ -31,29 +34,32 @@ export const UserSearchResult = ({
 
   return (
     <div className={styles.userSearchResult} style={themeStyles} data-testid={accessibilityId}>
-      <NoInternetConnectionHoc
-        page="global-search"
-        className={styles.userSearchResult__noInternetConnectionHoc}
-      >
-        {userCollection.length > 0 &&
-          userCollection.map((user) => (
-            <UserSearchItem
-              user={user}
-              pageId={pageId}
-              key={user.userId}
-              onClick={onClosePopover}
-              componentId={componentId}
-            />
-          ))}
-        {isLoading
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <UserSearchItemSkeleton key={index} pageId={pageId} componentId={componentId} />
-            ))
-          : null}
-        {!isLoading && userCollection.length === 0 && <EmptySearchResult />}
-      </NoInternetConnectionHoc>
-
-      <div ref={(node) => setIntersectionNode(node)} />
+      {keyword.length < 3 ? (
+        <SearchLimit />
+      ) : (
+        <NoInternetConnectionHoc
+          page="global-search"
+          className={styles.userSearchResult__noInternetConnectionHoc}
+        >
+          {userCollection.length > 0 &&
+            userCollection.map((user) => (
+              <UserSearchItem
+                user={user}
+                pageId={pageId}
+                key={user.userId}
+                onClick={onClosePopover}
+                componentId={componentId}
+              />
+            ))}
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, index) => (
+                <UserSearchItemSkeleton key={index} pageId={pageId} componentId={componentId} />
+              ))
+            : null}
+          {!isLoading && userCollection.length === 0 && <EmptySearchResult />}
+          <div ref={(node) => setIntersectionNode(node)} />
+        </NoInternetConnectionHoc>
+      )}
     </div>
   );
 };

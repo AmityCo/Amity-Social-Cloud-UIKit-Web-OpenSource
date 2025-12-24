@@ -64,12 +64,9 @@ export function Explore({ pageId = '*' }: ExploreProps) {
   return (
     <PullToRefresh className={styles.explore} onTouchEndCallback={refresh}>
       {!isNoCategory && (
-        <>
-          {!isDesktop && <Divider />}
-          <div className={styles.explore__exploreCategories}>
-            <ExploreCommunityCategories pageId={pageId} />
-          </div>
-        </>
+        <div className={styles.explore__exploreCategories}>
+          <ExploreCommunityCategories pageId={pageId} />
+        </div>
       )}
       <Divider className={styles.explore__divider} />
       {!noRecommendedCommunities ? (

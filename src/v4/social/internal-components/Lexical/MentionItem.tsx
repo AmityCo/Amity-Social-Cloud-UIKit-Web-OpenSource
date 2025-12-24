@@ -2,9 +2,9 @@ import React from 'react';
 import { MentionData } from './utils';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { MentionTypeaheadOption } from './plugins/MentionPlugin';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { Button } from '~/v4/core/components/AriaButton';
+import { BrandBadge } from '~/v4/social/elements';
 import styles from './MentionItem.module.css';
 
 type MentionItemProps = {
@@ -48,7 +48,13 @@ export function MentionItem({
       </div>
       <div className={styles.userMentionItem__rightPane}>
         <p className={styles.userMentionItem__displayName}>{user?.displayName}</p>
-        {user?.isBrand ? <BrandBadge className={styles.userMentionItem__brandIcon} /> : null}
+        {user?.isBrand ? (
+          <BrandBadge
+            pageId={pageId}
+            componentId={componentId}
+            className={styles.userMentionItem__brandIcon}
+          />
+        ) : null}
       </div>
     </Button>
   );

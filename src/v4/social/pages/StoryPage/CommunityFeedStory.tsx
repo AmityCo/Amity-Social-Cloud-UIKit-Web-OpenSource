@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
@@ -70,6 +70,7 @@ export const CommunityFeedStory = ({
   const motionRef = useRef<HTMLDivElement>(null);
   const dragEventTarget = useRef(new EventTarget());
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const { page } = useNavigation();
 
@@ -158,26 +159,25 @@ export const CommunityFeedStory = ({
         alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
       });
       return;
-    } finally {
-      if (!isError) {
-        notification.success({
-          content: 'Story deleted',
-          alignment:
-            page.type === PageTypes.ViewStoryPage && !isLastStory ? 'fullscreen' : 'withSidebar',
-        });
-        refresh();
-        if (stories.length === 1) {
-          onBack();
-        } else if (isLastStory) {
-          previousStory();
-        } else {
-          setCurrentIndex((prevIndex) => prevIndex);
-        }
-      }
+    }
+
+    notification.success({
+      content: 'Story deleted',
+      alignment:
+        page.type === PageTypes.ViewStoryPage && !isLastStory ? 'fullscreen' : 'withSidebar',
+    });
+    refresh();
+    if (stories.length === 1) {
+      onBack();
+    } else if (isLastStory) {
+      previousStory();
+    } else {
+      setCurrentIndex((prevIndex) => prevIndex);
     }
   };
 
   const confirmDeleteStory = (story: Amity.Story) => {
+    setIsConfirmDialogOpen(true);
     confirm({
       pageId,
       title: 'Delete this story?',
@@ -186,7 +186,11 @@ export const CommunityFeedStory = ({
       okText: 'Delete',
       onOk: async () => {
         setIsBottomSheetOpen(false);
+        setIsConfirmDialogOpen(false);
         await onDeleteStory(story.storyId);
+      },
+      onCancel: () => {
+        setIsConfirmDialogOpen(false);
       },
     });
   };
@@ -298,6 +302,7 @@ export const CommunityFeedStory = ({
         dragEventTarget: dragEventTarget.current,
         setIsBottomSheetOpen,
         isBottomSheetOpen,
+        isConfirmDialogOpen,
       };
     } else {
       return {

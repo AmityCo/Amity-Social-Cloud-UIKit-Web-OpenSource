@@ -39,6 +39,7 @@ interface StoryTabCommunityFeedProps {
   communityId: string;
   onStoryClick: () => void;
   onFileChange: (file: File | null) => void;
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
 export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
@@ -47,16 +48,21 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   communityId,
   onFileChange,
   onStoryClick,
+  onLoadingChange,
 }) => {
   const { client } = useSDK();
   const { community } = useCommunityInfo(communityId);
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { isExcluded, accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
-  const { stories } = useGetActiveStoriesByTarget({
+  const { stories, isLoading } = useGetActiveStoriesByTarget({
     targetId: communityId,
     targetType: 'community',
     options: { orderBy: 'asc', sortBy: 'createdAt' },
   });
+
+  React.useEffect(() => {
+    onLoadingChange?.(isLoading);
+  }, [isLoading]);
 
   const hasStories = stories?.length > 0;
   const storiesWithoutAds = stories.filter((story) => !(story as Amity.Ad).adId) as Amity.Story[];

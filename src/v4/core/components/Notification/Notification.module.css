@@ -36,7 +36,7 @@
   animation-duration: 0.3s;
   animation-name: appear;
   pointer-events: auto;
-  background-color: var(--asc-color-secondary-default);
+  background-color: var(--asc-color-custom-toast-background);
   padding: 1rem;
   box-shadow: var(--asc-box-shadow-02);
 }
@@ -55,6 +55,22 @@
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.notificationContainer[data-alignment='live-chat'] {
+  right: 2.5rem;
+  bottom: 5rem;
+  width: 21.4375rem;
+  position: fixed;
+  background-color: var(--asc-color-base-shade3);
+  box-shadow: var(--asc-box-shadow-02);
+}
+
+.notificationContainer[data-alignment='livestreamWithChat'] {
+  position: fixed;
+  top: 2.5rem;
+  left: 50%;
+  transform: translateX(calc(-50% - 17.5dvw));
 }
 
 @keyframes appear {
@@ -90,5 +106,15 @@
     top: unset;
     left: unset;
     transform: unset;
+  }
+
+  .notificationContainer[data-alignment='live-chat'] {
+    position: fixed;
+    right: 1rem;
+    left: 1rem;
+    bottom: 4rem;
+    width: auto;
+    background-color: var(--asc-color-base-shade3);
+    box-shadow: var(--asc-box-shadow-02);
   }
 }

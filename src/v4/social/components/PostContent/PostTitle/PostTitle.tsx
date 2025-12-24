@@ -4,11 +4,11 @@ import { Typography } from '~/v4/core/components';
 import AngleRight from '~/v4/icons/AngleRight';
 import { Button } from '~/v4/core/natives/Button';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
 import styles from './PostTitle.module.css';
+import { BrandBadge } from '~/v4/social/elements';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -59,7 +59,13 @@ export const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitlePr
               {post.creator.displayName}
             </Typography.BodyBold>
           </Button>
-          {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
+          {showBrandBadge ? (
+            <BrandBadge
+              pageId={pageId}
+              componentId={componentId}
+              className={styles.postTitle__brandIcon}
+            />
+          ) : null}
           {showTarget ? (
             <AngleRight
               data-testid={`${pageId}/${componentId}/arrow_right`}
@@ -97,7 +103,11 @@ export const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitlePr
             </Typography.BodyBold>
           </Button>
           {targetUser?.isBrand === true ? (
-            <BrandBadge className={styles.postTitle__brandIcon} />
+            <BrandBadge
+              pageId={pageId}
+              componentId={componentId}
+              className={styles.postTitle__brandIcon}
+            />
           ) : null}
         </div>
       )}

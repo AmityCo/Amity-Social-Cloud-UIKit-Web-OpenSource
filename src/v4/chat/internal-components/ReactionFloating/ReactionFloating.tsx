@@ -128,7 +128,7 @@ export const ReactionFloating: React.FC<ReactionFloatingProps> = ({ post }) => {
       topicSubscription();
       unsubscribe?.();
     };
-  }, [containerRef, reactionsConfig?.length, post.postId]);
+  }, [containerRef, reactionsConfig?.length, post?.postId]);
 
   useEffect(() => {
     animate();

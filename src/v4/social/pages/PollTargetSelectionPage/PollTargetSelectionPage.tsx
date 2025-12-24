@@ -36,7 +36,7 @@ export function PollTargetSelectionPage() {
   const { currentUserId } = useSDK();
   const { user } = useUser({ userId: currentUserId });
   const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
+  const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
@@ -71,11 +71,17 @@ export function PollTargetSelectionPage() {
             isDesktop
               ? openPopup({
                   pageId,
+                  id: 'poll-target-my-timeline',
                   view: 'desktop',
                   isDismissable: false,
+                  onClose: () => closePopup(),
                   header: <Typography.Headline>Choose poll type</Typography.Headline>,
-                  children: ({ close }) => (
-                    <PollTypeSelection targetId={null} targetType="user" onClickNext={close} />
+                  children: () => (
+                    <PollTypeSelection
+                      targetId={null}
+                      targetType="user"
+                      onClickNext={() => closePopup('poll-target-my-timeline')}
+                    />
                   ),
                 })
               : setDrawerData({
@@ -107,12 +113,16 @@ export function PollTargetSelectionPage() {
                 isDesktop
                   ? openPopup({
                       pageId,
+                      id: `poll-target-community-${community.communityId}`,
                       view: 'desktop',
                       isDismissable: false,
+                      onClose: () => closePopup(),
                       header: <Typography.Headline>Choose poll type</Typography.Headline>,
-                      children: ({ close }) => (
+                      children: () => (
                         <PollTypeSelection
-                          onClickNext={close}
+                          onClickNext={() =>
+                            closePopup(`poll-target-community-${community.communityId}`)
+                          }
                           targetType="community"
                           target={community}
                           targetId={community.communityId}

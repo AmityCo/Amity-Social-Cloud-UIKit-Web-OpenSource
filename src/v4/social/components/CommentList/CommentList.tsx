@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
+import { CommentRepository } from '@amityco/ts-sdk';
 import { usePaginator } from '~/v4/core/hooks/usePaginator';
 import { CommentAd } from '~/v4/social/internal-components/CommentAd/CommentAd';
 import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
@@ -30,6 +30,7 @@ type CommentListProps = {
   parentId?: string;
   commentListClassName?: string;
   showReplyCommentAt?: string;
+  eventCreatorId?: Amity.Event['userId'];
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -51,6 +52,7 @@ export const CommentList = ({
   parentId,
   commentListClassName,
   showReplyCommentAt,
+  eventCreatorId,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -178,6 +180,7 @@ export const CommentList = ({
           <Comment
             pageId={pageId}
             comment={highlightedComment}
+            isHost={eventCreatorId === highlightedComment.userId}
             onClickReply={(comment) => onClickReply?.(comment)}
             componentId={componentId}
             community={community}
@@ -199,6 +202,7 @@ export const CommentList = ({
           <div key={(item as Amity.Comment).commentId}>
             <Comment
               pageId={pageId}
+              isHost={eventCreatorId === item.userId}
               comment={item as Amity.Comment}
               onClickReply={(comment) => onClickReply?.(comment)}
               componentId={componentId}

@@ -222,7 +222,11 @@ export const CommunityAddMemberPage = ({
               );
               const newSelectedMembers = filteredUsers
                 .filter((user) => newSelectedMemberValue.includes(user.userId))
-                .map((user) => ({ userId: user.userId, displayName: user.displayName ?? '' }));
+                .map((user) => ({
+                  userId: user.userId,
+                  displayName: user.displayName ?? '',
+                  isBrand: user.isBrand,
+                }));
 
               return [...oldSelectedMembers, ...newSelectedMembers];
             });

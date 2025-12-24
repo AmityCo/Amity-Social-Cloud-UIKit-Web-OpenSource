@@ -2,5 +2,14 @@
   height: 100%;
   width: 100%;
   padding: 0;
+  border-radius: 0.5rem;
   background-color: var(--asc-color-background-default);
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+@media only screen and (width < 48em) {
+  .myCommunitiesList {
+    border: none;
+    border-radius: 0;
+  }
 }

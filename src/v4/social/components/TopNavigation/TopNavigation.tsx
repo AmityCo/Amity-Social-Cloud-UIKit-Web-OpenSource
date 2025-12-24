@@ -23,12 +23,8 @@ export function TopNavigation({
   onClickPostCreationButton,
 }: TopNavigationProps) {
   const componentId = 'top_navigation';
-  const {
-    goToSocialGlobalSearchPage,
-    goToMyCommunitiesSearchPage,
-    goToCreateCommunityPage,
-    goToNotificationTrayPage,
-  } = useNavigation();
+  const { goToSocialGlobalSearchPage, goToCreateCommunityPage, goToNotificationTrayPage } =
+    useNavigation();
   const { isExcluded, themeStyles } = useAmityComponent({
     pageId,
     componentId,
@@ -39,12 +35,9 @@ export function TopNavigation({
   const handleGlobalSearchClick = () => {
     switch (selectedTab) {
       case HomePageTab.Newsfeed:
-      case HomePageTab.Explore:
+      case HomePageTab.Events:
+      case HomePageTab.Communities:
         goToSocialGlobalSearchPage();
-        break;
-      case HomePageTab.MyCommunities:
-        goToMyCommunitiesSearchPage();
-        break;
     }
   };
 
@@ -73,7 +66,7 @@ export function TopNavigation({
           componentId={componentId}
           onPress={handleGlobalSearchClick}
         />
-        {selectedTab !== HomePageTab.Explore && (
+        {!isVisitorOrBot && (
           <PostCreationButton
             pageId={pageId}
             componentId={componentId}

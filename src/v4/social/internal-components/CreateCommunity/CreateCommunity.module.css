@@ -253,15 +253,29 @@
   fill: var(--asc-color-background-transparent-black);
 }
 
-.createCommunity__selectedUserDisplayName {
+.createCommunity__selectedUserDisplayNameWrapper {
+  gap: 0.25rem;
   width: 4rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.createCommunity__selectedUserDisplayName {
   overflow: hidden;
   white-space: nowrap;
   align-items: center;
-  margin-top: 0.25rem;
   justify-self: center;
   display: inline-block;
   text-overflow: ellipsis;
+}
+
+.createCommunity__brandBadge {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .createCommunity__createButton {

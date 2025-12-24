@@ -1,12 +1,11 @@
 import clsx from 'clsx';
 import React from 'react';
 import Verified from '~/v4/icons/Verified';
-import { Typography } from '~/v4/core/components';
-import { useImage } from '~/v4/core/hooks/useImage';
 import { StoryRing } from '~/v4/social/elements/StoryRing';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
-import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
+import { StoryTabDisplayName } from './StoryTabDisplayName';
 import styles from './StoryTabItem.module.css';
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -72,10 +71,9 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
   const { community } = useCommunity({
     communityId: targetId,
   });
-  const communityAvatar = useImage({ fileId: community?.avatarFileId, imageSize: 'small' });
 
   return (
-    <div className={clsx(styles.container)} onClick={onClick}>
+    <div className={clsx(styles.container)} onClick={onClick} tabIndex={0} role="button">
       <div className={styles.avatarContainer}>
         <StoryRing
           pageId={pageId}
@@ -83,26 +81,22 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
           hasUnseen={hasUnseen}
           isErrored={isErrored}
         />
-
-        <div
-          data-testid={`${pageId}/${componentId}/community_avatar`}
-          className={styles.avatarBackground}
-        >
-          {communityAvatar && (
-            <img className={styles.avatar} src={communityAvatar} alt={community?.displayName} />
-          )}
-        </div>
+        <CommunityAvatar
+          pageId={pageId}
+          componentId={componentId}
+          community={community}
+          className={styles.avatar}
+        />
         {isErrored && <ErrorIcon className={styles.errorIcon} />}
         {community?.isOfficial && !isErrored && <Verified className={styles.verifiedIcon} />}
       </div>
 
-      <Typography.Caption
-        data-testid={`${pageId}/${componentId}/community_name`}
-        className={clsx(styles.displayName)}
-      >
-        {!community?.isPublic && <CommunityPrivateBadge className={styles.lockIcon} />}
-        {community?.displayName}
-      </Typography.Caption>
+      <StoryTabDisplayName
+        pageId={pageId}
+        componentId={componentId}
+        displayName={community?.displayName}
+        isPublic={community?.isPublic}
+      />
     </div>
   );
 };

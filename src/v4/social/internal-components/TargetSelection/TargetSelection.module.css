@@ -1,0 +1,100 @@
+.targetSelection {
+  height: 100vh;
+  max-width: 100vw;
+  background-color: var(--asc-color-background-default);
+  padding: 0.5rem 0.5rem 0.75rem;
+  overflow: scroll;
+}
+
+.targetSelection__topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-none);
+}
+
+.targetSelection__timelineContainer {
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.targetSelection__timeline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.targetSelection__communityItem {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.targetSelection__line {
+  border-top: 1px solid var(--asc-color-base-shade4);
+  margin: 0.5rem 0;
+}
+
+.targetSelection__skeletonWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.targetSelection__myCommunities {
+  display: flex;
+  text-align: left;
+  color: var(--asc-color-base-default);
+  padding: 0 1rem;
+  font-size: var(--asc-text-font-size-md);
+  line-height: var(--asc-line-height-md);
+  letter-spacing: -0.015rem;
+  opacity: 0.4;
+}
+
+.targetSelection__communityAvatar {
+  margin-right: var(--asc-spacing-s1);
+}
+
+.targetSelection__communityName {
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.targetSelection__closeButton {
+  display: flex;
+  fill: var(--asc-color-base-default);
+}
+
+.targetSelection__intersectionObserver {
+  height: 1px;
+  width: 100%;
+}
+
+.targetSelection__title {
+  font-weight: 600;
+  text-align: center;
+}
+
+.targetSelection__myCommunitiesList {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+@media (width >= 48em) {
+  .targetSelection {
+    width: 30rem;
+  }
+
+  .targetSelection__myCommunitiesList {
+    max-height: calc(100% - 23rem);
+    overflow-y: scroll;
+  }
+}

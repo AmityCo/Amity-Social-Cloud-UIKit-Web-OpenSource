@@ -7,7 +7,7 @@ import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/components/AriaButton';
-import { UserAvatar } from '~/v4/social/elements';
+import { BrandBadge, UserAvatar } from '~/v4/social/elements';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { ReactionListLoadingState } from './ReactionListLoadingState';
@@ -67,6 +67,7 @@ export const ReactionListPanel = ({
                     <Button
                       variant="text"
                       onPress={() => onClickUserDetails(reaction.user?.userId as string)}
+                      className={styles.userDetailsNameContainer}
                     >
                       <Typography.BodyBold
                         testId="user_display_name"
@@ -74,6 +75,11 @@ export const ReactionListPanel = ({
                       >
                         {reaction.user?.displayName}
                       </Typography.BodyBold>
+                      {reaction.user?.isBrand && (
+                        <div className={styles.userDetailsBrandBadge}>
+                          <BrandBadge pageId="reaction_list_panel" componentId="brand_badge" />
+                        </div>
+                      )}
                     </Button>
                     {currentUserId === reaction.user?.userId && (
                       <div

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
@@ -13,7 +13,7 @@ import {
   AmityPostCategory,
   AmityPostContentComponentStyle,
 } from '~/v4/social/components/PostContent/PostContent';
-import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import useCommunity from '~/v4/social/hooks/objects/useCommunity';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -35,6 +35,7 @@ export interface PostDetailPageProps {
   showReplyCommentAt?: string;
   keyword?: string;
   isFromCommentClick?: boolean;
+  eventCreatorId?: Amity.Event['userId'];
 }
 
 export interface GoToPostDetailPageParams extends Omit<PostDetailPageProps, 'id'> {
@@ -52,6 +53,7 @@ export function PostDetailPage({
   showReplyCommentAt,
   keyword,
   isFromCommentClick = false,
+  eventCreatorId,
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
@@ -70,11 +72,13 @@ export function PostDetailPage({
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { community } = useCommunity({
-    communityId: post?.targetType === 'community' ? post.targetId : null,
+    communityId: post?.targetId,
+    shouldCall: post?.targetType === 'community' && !!post?.targetId,
   });
 
-  const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
-  const canSeeCommentComposer = post && isDesktop && !isNotJoinedCommunity && !isVisitorOrBot;
+  const isJoinedCommunity = post?.targetType === 'community' && community?.isJoined;
+  const canSeeCommentComposer =
+    post && (isJoinedCommunity || post?.targetType === 'user') && !isVisitorOrBot;
 
   useEffect(() => {
     refresh();
@@ -139,6 +143,11 @@ export function PostDetailPage({
     }
   }, [commentId, post, commentListRef.current]);
 
+  const handleBack = useCallback(() => {
+    if (prevPage?.type === PageTypes.CreateLivestreamPage) onBack(2);
+    else onBack();
+  }, [prevPage?.type, onBack]);
+
   const handleReplyClick = useCallback(
     (comment: Amity.Comment) =>
       setReplyComment((prevComment) =>
@@ -150,9 +159,9 @@ export function PostDetailPage({
   const handlePostDeleted = useCallback(
     (post: Amity.Post) => {
       removeItem(post.postId);
-      onBack();
+      handleBack();
     },
-    [onBack],
+    [handleBack],
   );
 
   if (isPostLoading) {
@@ -179,7 +188,7 @@ export function PostDetailPage({
         <BackButton
           pageId={pageId}
           defaultClassName={styles.postDetailPage__backIcon}
-          onPress={() => onBack()}
+          onPress={handleBack}
         />
         <Typography.TitleBold
           data-testid={`${pageId}/page_title`}
@@ -226,15 +235,16 @@ export function PostDetailPage({
           <PostContent
             pageId={pageId}
             post={post}
+            eventCreatorId={eventCreatorId}
             className={styles.postDetailPage__postContent}
             category={category ?? AmityPostCategory.GENERAL}
             style={AmityPostContentComponentStyle.DETAIL}
             hideTarget={hideTarget}
             onPollPostDeleted={() => setFailedToShow(true)}
-            expandAllContent={isPollPost(post.childrenPosts[0])}
+            expandAllContent
           />
         </div>
-        {canSeeCommentComposer && (
+        {isDesktop && canSeeCommentComposer && (
           <CommentComposer
             pageId={pageId}
             referenceId={post.postId}
@@ -252,6 +262,7 @@ export function PostDetailPage({
             {post && (
               <CommentList
                 pageId={pageId}
+                eventCreatorId={eventCreatorId}
                 referenceId={post.postId}
                 referenceType="post"
                 onClickReply={handleReplyClick}
@@ -280,6 +291,20 @@ export function PostDetailPage({
           </div>
         )}
       </div>
+      {!isDesktop && canSeeCommentComposer && (
+        <CommentComposer
+          pageId={pageId}
+          referenceId={post.postId}
+          referenceType={'post'}
+          onCancelReply={() => setReplyComment(undefined)}
+          community={community}
+          containerClassName={
+            post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+          }
+          isFromCommentClick={isFromCommentClick}
+          replyTo={replyComment}
+        />
+      )}
     </div>
   );
 }
