@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.1 (2025-12-24)
+
+## 4.15.0-beta.0 (2025-12-24)
+
+
+### Features
+
+* ts sdk bump ([#1403](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1403)) ([ba49239](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/ba49239df591f06dc4b1ac3069357dbeb71e98c1))
+
 ## 4.14.0 (2025-10-17)
 
 
