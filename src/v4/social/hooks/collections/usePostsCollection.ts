@@ -22,8 +22,17 @@ export default function usePostsCollection({
     shouldCall: !!targetId && !!targetType,
   });
 
+  // Filter out posts with children type 'file' or 'audio'
+  const filteredPosts = items.filter((post) => {
+    const children = post.childrenPosts || [];
+    const hasFileOrAudioChild = children.some(
+      (child) => child.dataType === 'file' || child.dataType === 'audio',
+    );
+    return !hasFileOrAudioChild;
+  });
+
   return {
-    posts: items,
+    posts: filteredPosts,
     ...rest,
   };
 }

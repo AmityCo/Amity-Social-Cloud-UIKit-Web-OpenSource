@@ -1,0 +1,1 @@
+export { GlobalFeedStorySkeleton } from './GlobalFeedStorySkeleton';

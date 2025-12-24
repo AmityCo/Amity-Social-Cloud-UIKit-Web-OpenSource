@@ -17,6 +17,7 @@ export type TopSearchBarProps = {
   hasCancelButton?: boolean;
   search: (keyword: string) => void;
   initialValue?: string;
+  onCloseSearch?: () => void;
 };
 
 export function TopSearchBar({
@@ -25,6 +26,7 @@ export function TopSearchBar({
   onFocus,
   hasCancelButton = true,
   initialValue = '',
+  onCloseSearch,
 }: TopSearchBarProps) {
   const componentId = 'top_search_bar';
   const { onBack } = useNavigation();
@@ -82,6 +84,7 @@ export function TopSearchBar({
             onPress={() => {
               resetSearchValue();
               setSearchValue('');
+              onCloseSearch?.();
             }}
             buttonClassName={styles.topSearchBar__clearButton}
             imgClassName={styles.topSearchBar__clearButton__img}

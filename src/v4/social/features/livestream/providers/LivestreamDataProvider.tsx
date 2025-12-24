@@ -1,0 +1,95 @@
+import { InvitationStatusEnum } from '@amityco/ts-sdk';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import useSDK from '~/core/hooks/useSDK';
+import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
+import { NotificationAlignment } from '~/v4/core/components/Notification';
+
+// Define the context type for only the data that needs to be passed to nested components
+interface LivestreamDataContextType {
+  room?: Amity.Room | null;
+  channel?: Amity.Channel<'live'> | null;
+  invitation?: Amity.Invitation;
+  livestreamPost?: Amity.Post | null;
+  // Computed values from room for convenience
+  hostId?: string;
+  coHostId?: string;
+
+  host?: Amity.RoomParticipant;
+  coHost?: Amity.RoomParticipant;
+
+  // Invitation by Host
+  invitationByMe?: Amity.Invitation | undefined;
+  setInvitationByMe?: React.Dispatch<React.SetStateAction<Amity.Invitation | undefined>>;
+
+  invitations?: Amity.Invitation[] | undefined;
+
+  notificationAlignment?: NotificationAlignment | undefined;
+}
+
+const LivestreamDataContext = createContext<LivestreamDataContextType | null>(null);
+
+interface LivestreamDataProviderProps {
+  children: ReactNode;
+  room?: Amity.Room | null;
+  channel?: Amity.Channel<'live'> | null;
+  livestreamPost?: Amity.Post | null;
+  notificationAlignment?: NotificationAlignment;
+}
+
+export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
+  children,
+  room,
+  channel,
+  livestreamPost,
+  notificationAlignment,
+}) => {
+  // Computed values for easier access
+  const host = room?.participants.find((participant) => participant.type === 'host');
+  const coHost = room?.participants.find((participant) => participant.type === 'coHost');
+
+  const hostId = host?.userId;
+  const coHostId = coHost?.userId;
+
+  const [invitationByMe, setInvitationByMe] = useState<Amity.Invitation>();
+
+  const { invitations } = useObserveRoomAndInvitation({ room });
+  const { currentUserId } = useSDK();
+
+  useEffect(() => {
+    if (invitations && invitations.length > 0) {
+      const invitedByMe = invitations.find(
+        (invitation) => invitation.inviterUserId === currentUserId,
+      );
+
+      setInvitationByMe(invitedByMe);
+    }
+  }, [invitations]);
+
+  const contextValue: LivestreamDataContextType = {
+    room,
+    channel,
+    livestreamPost,
+    host,
+    coHost,
+    hostId,
+    coHostId,
+    invitations,
+    invitationByMe,
+    setInvitationByMe,
+    notificationAlignment,
+  };
+
+  return (
+    <LivestreamDataContext.Provider value={contextValue}>{children}</LivestreamDataContext.Provider>
+  );
+};
+
+// Custom hook to use the context
+export const useLivestreamData = (): LivestreamDataContextType => {
+  const context = useContext(LivestreamDataContext);
+  if (!context) {
+    // Return empty object if not in provider context - components should handle null values appropriately
+    return {};
+  }
+  return context;
+};

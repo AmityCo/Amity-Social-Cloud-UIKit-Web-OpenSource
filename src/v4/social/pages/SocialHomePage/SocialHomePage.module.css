@@ -52,6 +52,7 @@
   right: 1rem;
   top: 3.25rem;
   width: 12.5rem;
+  z-index: 20;
 }
 
 .socialHomePage__noConnection {

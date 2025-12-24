@@ -1,5 +1,5 @@
-import React from 'react';
-import { notificationTray } from '@amityco/ts-sdk';
+import { useState } from 'react';
+import { FileRepository, notificationTray } from '@amityco/ts-sdk';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
@@ -7,6 +7,8 @@ import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { highlightedText } from '~/v4/social/utils/highlightedText';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { EVENT_TRAY_CATEGORIES } from '~/constants';
+import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import styles from './NotificationItem.module.css';
 
 type NotificationItemProps = {
@@ -26,7 +28,7 @@ export const NotificationItem = ({
     pageId,
     componentId,
   });
-
+  const [errorImage, setErrorImage] = useState(false);
   const { AmityNotificationTrayPageBehavior } = usePageBehavior();
 
   const communityActionTypes = ['poll', 'post', 'join_request'];
@@ -47,6 +49,14 @@ export const NotificationItem = ({
     } else if (item.trayItemCategory === 'follow') {
       return AmityNotificationTrayPageBehavior?.goToUserProfilePage?.({
         userId: item.actors[0]?.publicId,
+      });
+    } else if (EVENT_TRAY_CATEGORIES.includes(item.trayItemCategory as string)) {
+      return AmityNotificationTrayPageBehavior?.goToEventDetailPage?.({
+        eventId: item.actionReferenceId!,
+      });
+    } else if (item.trayItemCategory === 'room_cohost_invite') {
+      return AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage?.({
+        roomId: item.targetId,
       });
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
@@ -76,14 +86,29 @@ export const NotificationItem = ({
     >
       <div className={styles.notificationItem}>
         <div className={styles.notificationItem__userInfo}>
-          <UserAvatar
-            shouldRedirectToUserProfile={false}
-            onPressAvatar={onClickItem}
-            pageId={pageId}
-            componentId={componentId}
-            userData={item.users[0]}
-            className={styles.notificationItem__avatar}
-          />
+          {item.event ? (
+            <img
+              onError={() => setErrorImage(true)}
+              data-size="small"
+              className={styles.notificationItem__eventCover}
+              src={
+                errorImage
+                  ? eventThumbnail
+                  : item.event.coverImage
+                    ? FileRepository.fileUrlWithSize(item.event.coverImage?.fileUrl, 'medium')
+                    : eventThumbnail
+              }
+            />
+          ) : (
+            <UserAvatar
+              shouldRedirectToUserProfile={false}
+              onPressAvatar={onClickItem}
+              pageId={pageId}
+              componentId={componentId}
+              userData={item.users[0]}
+              className={styles.notificationItem__avatar}
+            />
+          )}
           <Typography.Body className={styles.notificationItem__text}>
             {highlightedText(item.templatedText, item.text)}
           </Typography.Body>

@@ -4,8 +4,15 @@ import { Typography } from '~/v4/core/components';
 import { useNotificationData } from '~/v4/core/providers/NotificationProvider';
 import styles from './Notification.module.css';
 
+export type NotificationAlignment =
+  | 'fullscreen'
+  | 'withSidebar'
+  | 'fixed'
+  | 'live-chat'
+  | 'livestreamWithChat';
+
 interface NotificationProps {
-  alignment?: 'fullscreen' | 'withSidebar' | 'fixed';
+  alignment?: NotificationAlignment;
   content: ReactNode;
   icon?: ReactNode;
   duration?: number;

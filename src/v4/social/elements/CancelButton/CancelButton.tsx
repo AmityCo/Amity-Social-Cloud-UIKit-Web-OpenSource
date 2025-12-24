@@ -8,11 +8,13 @@ type CancelButtonProps = {
   pageId?: string;
   componentId?: string;
   onPress?: ButtonProps['onPress'];
+  disabled?: boolean;
 };
 
 export const CancelButton = ({
   pageId = '*',
   componentId = '*',
+  disabled,
   onPress = () => {},
 }: CancelButtonProps) => {
   const elementId = 'cancel_button';
@@ -30,8 +32,9 @@ export const CancelButton = ({
       style={themeStyles}
       className={styles.cancelButton}
       data-testid={accessibilityId}
+      isDisabled={disabled}
     >
-      <Typography.Body>{config.text}</Typography.Body>
+      <Typography.Body>{config.text ?? 'Cancel'}</Typography.Body>
     </Button>
   );
 };

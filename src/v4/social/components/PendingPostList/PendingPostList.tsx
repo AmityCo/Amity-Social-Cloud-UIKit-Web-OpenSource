@@ -1,6 +1,6 @@
 import { Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { PostsTabDescription } from '~/v4/social/elements';
+import { BrandBadge, PostsTabDescription } from '~/v4/social/elements';
 import React, { useState } from 'react';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Button } from '~/v4/core/natives/Button/Button';
@@ -153,13 +153,21 @@ export const PendingPostList = ({
               }}
             />
             <div>
-              <Typography.BodyBold
-                className={styles.pendingPostList__username}
-                data-testid={`${pageId}/${componentId}/username`}
-                onClick={() => goToUserProfilePage(post?.postedUserId)}
-              >
-                {post?.creator?.displayName}
-              </Typography.BodyBold>
+              <div className={styles.pendingPostList__usernameWrapper}>
+                <Typography.BodyBold
+                  className={styles.pendingPostList__username}
+                  data-testid={`${pageId}/${componentId}/username`}
+                  onClick={() => goToUserProfilePage(post?.postedUserId)}
+                >
+                  {post?.creator?.displayName}
+                </Typography.BodyBold>
+                {post?.creator?.isBrand && (
+                  <div className={styles.pendingPostList__brandBadge}>
+                    <BrandBadge />
+                  </div>
+                )}
+              </div>
+
               <div className={styles.pendingPostList__information__subtitle}>
                 <Timestamp timestamp={post.createdAt} />
                 {post.createdAt !== post.editedAt && (

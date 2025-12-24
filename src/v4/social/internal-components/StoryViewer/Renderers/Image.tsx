@@ -26,6 +26,7 @@ import clsx from 'clsx';
 
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
+import { BrandBadge } from '~/v4/social/elements/';
 
 export const renderer: CustomRenderer = ({
   story: {
@@ -39,6 +40,7 @@ export const renderer: CustomRenderer = ({
     dragEventTarget,
     story,
     url,
+    isConfirmDialogOpen,
   },
   action,
   config,
@@ -101,9 +103,12 @@ export const renderer: CustomRenderer = ({
   const subheading = useMemo(
     () =>
       createdAt && creator?.displayName ? (
-        <span>
+        <span className={styles.creatorWrapper}>
           <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-          <span data-testid="creator_display_name">{creator?.displayName}</span>
+          <span data-testid="creator_display_name" className={styles.creatorDisplayName}>
+            {creator?.displayName}
+          </span>
+          {creator?.isBrand && <BrandBadge pageId={pageId} />}
         </span>
       ) : (
         ''
@@ -292,7 +297,7 @@ export const renderer: CustomRenderer = ({
         duration={5000}
         currentIndex={currentIndex}
         storiesCount={storiesCount}
-        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
+        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet || isConfirmDialogOpen}
         onComplete={handleProgressComplete}
       />
       <Header

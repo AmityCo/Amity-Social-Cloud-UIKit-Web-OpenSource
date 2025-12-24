@@ -64,7 +64,10 @@ export const ContentReportReason = ({
   const handleSubmitReport = () => {
     if (post) return mutateReportPost();
     if (comment) return mutateReportComment();
-    if (message) return mutateReportMessage();
+    if (message)
+      return mutateReportMessage(
+        selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
+      );
     return;
   };
 
@@ -131,11 +134,10 @@ export const ContentReportReason = ({
     isReplyComment: comment?.parentId != null,
   });
 
-  const { mutateReportMessage, isFlagLoading: isMessageReportLoading } = useMessageFlaggedByMe({
+  const { mutateReportMessage, isPending: isMessageReportLoading } = useMessageFlaggedByMe({
     messageId: message?.messageId as string,
-    reasonReport:
-      selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
     onCloseMenu: handleCloseReportReason,
+    type: 'live-chat',
   });
 
   const isDisabledSubmitButton =

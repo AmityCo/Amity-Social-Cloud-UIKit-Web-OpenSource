@@ -1,0 +1,28 @@
+.emptyImageFeed {
+  margin: auto;
+  text-align: center;
+  min-height: 15rem;
+  padding: 5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyImageFeed__text {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.emptyImageFeed__icon {
+  width: 3.75rem;
+  height: 2.8125rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+@media (width >= 48em) {
+  .emptyImageFeed {
+    padding: 3rem;
+    min-height: auto;
+  }
+}

@@ -6,7 +6,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Mentionees } from '~/v4/helpers/utils';
 import { EditCancelButton } from '~/v4/social/elements/EditCancelButton/EditCancelButton';
-import { ReactionButton, SaveButton } from '~/v4/social/elements';
+import { BrandBadge, ReactionButton, SaveButton } from '~/v4/social/elements';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
@@ -18,7 +18,6 @@ import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInpu
 import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Popover } from '~/v4/core/components/AriaPopover';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';

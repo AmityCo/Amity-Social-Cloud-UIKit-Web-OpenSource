@@ -1,4 +1,5 @@
-.emptyContent {
+.emptyContent[data-variant='container'],
+.emptyContent[data-variant='item'] {
   text-align: center;
   padding: 5rem 0.5rem;
 }
@@ -9,11 +10,18 @@
 }
 
 @media (width >= 48rem) {
-  .emptyContent {
+  .emptyContent[data-variant='container'] {
     width: 100%;
     height: 100%;
-    background-color: var(--asc-color-background-default);
-    border: 1px solid var(--asc-color-base-shade4);
     border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .emptyContent[data-variant='item'] {
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem 0.5rem;
+    background-color: var(--asc-color-background-default);
   }
 }

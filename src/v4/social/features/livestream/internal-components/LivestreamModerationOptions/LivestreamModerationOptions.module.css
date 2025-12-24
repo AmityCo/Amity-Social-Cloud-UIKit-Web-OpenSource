@@ -1,0 +1,26 @@
+/* LivestreamModerationOptions Component Styles */
+
+.livestreamModerationOptions {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  background-color: var(--asc-color-background-default);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  overflow: hidden;
+}
+
+.livestreamModerationOptions__header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  text-align: center;
+  display: flex;
+  gap: 0.25;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.livestreamModerationOptions__header__text {
+  color: var(--asc-color-white);
+}

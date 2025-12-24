@@ -1,11 +1,28 @@
-.emptyClipFeed__icon {
-  width: 3.75rem;
-  height: 3.75rem;
-  color: var(--asc-color-base-shade4);
+.emptyClipFeed {
+  margin: auto;
+  min-height: 15rem;
+  text-align: center;
+  padding: 5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-@media screen and (width >= 48em) {
+.emptyClipFeed__text {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.emptyClipFeed__icon {
+  width: 3.75rem;
+  height: 2.8125rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+@media (width >= 48em) {
   .emptyClipFeed {
-    border: none !important;
+    padding: 3rem;
+    min-height: auto;
   }
 }

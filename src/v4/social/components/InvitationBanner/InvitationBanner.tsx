@@ -39,7 +39,9 @@ export function InvitationBanner({
     try {
       await invitation?.accept();
       await CommunityRepository.getCommunityByIds([community.communityId]);
-      notification.success({ content: `You joined ${invitation?.target?.displayName}.` });
+      notification.success({
+        content: `You joined ${(invitation?.target as Amity.Community)?.displayName}.`,
+      });
       invitation && setAcceptedInvitation(invitation);
       removeInvitation?.();
     } catch (error: any) {

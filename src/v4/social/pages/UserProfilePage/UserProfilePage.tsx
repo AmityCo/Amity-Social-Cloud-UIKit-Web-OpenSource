@@ -8,12 +8,8 @@ import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { UserProfileHeader } from '~/v4/social/components/UserProfileHeader';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { UserFeedTabButton } from '~/v4/social/elements/UserFeedTabButton/UserFeedTabButton';
-import { UserImageFeedTabButton } from '~/v4/social/elements/UserImageFeedTabButton/UserImageFeedTabButton';
-import { UserVideoFeedTabButton } from '~/v4/social/elements/UserVideoFeedTabButton/UserVideoFeedTabButton';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 import { UserFeed } from '~/v4/social/components/UserFeed/UserFeed';
-import { UserImageFeed } from '~/v4/social/components/UserImageFeed/UserImageFeed';
-import { UserVideoFeed } from '~/v4/social/components/UserVideoFeed/UserVideoFeed';
 import { Typography } from '~/v4/core/components';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { FloatingActionButton } from '~/v4/core/components/FloatingActionButton/FloatingActionButton';
@@ -35,6 +31,9 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
 import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
+import { UserMediaFeedTabButton } from '~/v4/social/elements/UserMediaFeedTabButton';
+import { UserMediaFeed } from '~/v4/social/features';
+import { useDiscardPostCreation } from '~/v4/social/hooks';
 
 type UserProfilePageProps = {
   userId: string;
@@ -42,8 +41,7 @@ type UserProfilePageProps = {
 
 export const enum UserProfileTabs {
   FEED = 'feed',
-  IMAGE = 'image',
-  VIDEO = 'video',
+  MEDIA = 'media',
 }
 
 export const FeedSource = {
@@ -77,10 +75,10 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { onScroll, scrollPosition } = useFeedScrollContext();
   const { themeStyles } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
-  const { onBack } = useNavigation();
+  const { onBack, goToCreateLivestreamPage } = useNavigation();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { currentUserId } = useSDK();
-  const { confirm } = useConfirmContext();
+  const { discardPostCreation } = useDiscardPostCreation();
   const { openPopup } = usePopupContext();
   const { linkToPost } = useLayoutContext();
   const { socialSettings } = useSocialSettings();
@@ -138,9 +136,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   }, [feedSource]);
 
   const [currentActiveTab, setCurrentActiveTab] = React.useState<UserProfileTabs>(
-    linkToPost?.tab === UserProfileTabs.FEED ||
-      linkToPost?.tab === UserProfileTabs.IMAGE ||
-      linkToPost?.tab === UserProfileTabs.VIDEO
+    linkToPost?.tab === UserProfileTabs.FEED || linkToPost?.tab === UserProfileTabs.MEDIA
       ? linkToPost?.tab
       : UserProfileTabs.FEED,
   );
@@ -162,7 +158,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
+                  onClose: ({ close }) => discardPostCreation({ pageId, onDiscard: close }),
                   header: CreatePostHeader,
                   children: (
                     <PostComposerPage mode={Mode.CREATE} targetType="user" targetId={null} />
@@ -180,6 +176,12 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   ),
                 });
               }}
+              onClickLivestream={() =>
+                goToCreateLivestreamPage?.({
+                  targetId: userId,
+                  targetType: 'user',
+                })
+              }
             />
           )}
           <UserFeed
@@ -190,18 +192,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
           />
         </>
       );
-    } else if (currentActiveTab === UserProfileTabs.IMAGE) {
+    } else if (currentActiveTab === UserProfileTabs.MEDIA) {
       return (
-        <UserImageFeed
-          pageId={pageId}
-          userId={userId}
-          feedSources={feedSources}
-          followStatus={followStatus}
-        />
-      );
-    } else if (currentActiveTab === UserProfileTabs.VIDEO) {
-      return (
-        <UserVideoFeed
+        <UserMediaFeed
           pageId={pageId}
           userId={userId}
           feedSources={feedSources}
@@ -209,18 +202,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
         />
       );
     }
-  };
-
-  const onCloseCreatePostPopup = ({ close }: { close: () => void }) => {
-    confirm({
-      onOk: close,
-      type: 'confirm',
-      okText: 'Discard',
-      cancelText: 'Keep editing',
-      title: 'Discard this post?',
-      pageId: 'post_composer_page',
-      content: 'The post will be permanently discarded. It cannot be undone.',
-    });
   };
 
   const CreatePostHeader = (
@@ -290,15 +271,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                 isActive={currentActiveTab === UserProfileTabs.FEED}
                 onClick={() => onChangeTab(UserProfileTabs.FEED)}
               />
-              <UserImageFeedTabButton
-                pageId={pageId}
-                isActive={currentActiveTab === UserProfileTabs.IMAGE}
-                onClick={() => onChangeTab(UserProfileTabs.IMAGE)}
-              />
-              <UserVideoFeedTabButton
-                pageId={pageId}
-                isActive={currentActiveTab === UserProfileTabs.VIDEO}
-                onClick={() => onChangeTab(UserProfileTabs.VIDEO)}
+              <UserMediaFeedTabButton
+                onPress={() => onChangeTab(UserProfileTabs.MEDIA)}
+                isActive={currentActiveTab === UserProfileTabs.MEDIA}
               />
             </div>
             {isFilterAvailable && (

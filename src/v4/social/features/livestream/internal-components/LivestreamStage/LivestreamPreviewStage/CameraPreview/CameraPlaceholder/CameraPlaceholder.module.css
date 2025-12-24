@@ -1,0 +1,45 @@
+/* CameraPlaceholder Component Styles */
+
+.cameraPlaceholder__container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--asc-color-base-shade4);
+  aspect-ratio: 16/9;
+}
+
+.cameraPlaceholder__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 80%;
+}
+
+.cameraPlaceholder__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cameraPlaceholder__title {
+  color: var(--asc-color-base-shade1);
+  margin: 0;
+}
+
+.cameraPlaceholder__description {
+  color: var(--asc-color-base-shade1);
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.cameraPlaceholder__noCameraIcon {
+  width: 3rem;
+  height: 3rem;
+  fill: var(--asc-color-base-shade1);
+}

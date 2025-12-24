@@ -4,6 +4,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
 import styles from './CreateLivestreamButton.module.css';
 import clsx from 'clsx';
+import { Button } from '~/v4/core/components/AriaButton';
 
 const CreateLivestreamButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -21,7 +22,7 @@ const CreateLivestreamButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
 interface CreateLivestreamButtonProps {
   pageId?: string;
   componentId: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onClick?: () => void;
   defaultClassName?: string;
 }
 
@@ -41,9 +42,10 @@ export function CreateLivestreamButton({
 
   if (isExcluded) return null;
   return (
-    <div
+    <Button
+      variant="default"
       className={styles.createLivestreamButton}
-      onClick={() => {}} //TODO : Add event create livestream
+      onPress={() => onClick?.()}
       data-testid={accessibilityId}
       style={themeStyles}
     >
@@ -57,10 +59,10 @@ export function CreateLivestreamButton({
         configIconName={config.image}
         defaultIconName={defaultConfig.image}
       />
-      <Typography.Body className={styles.createLivestreamButton__text}>
+      <Typography.BodyBold className={styles.createLivestreamButton__text}>
         {config.text}
-      </Typography.Body>
-    </div>
+      </Typography.BodyBold>
+    </Button>
   );
 }
 

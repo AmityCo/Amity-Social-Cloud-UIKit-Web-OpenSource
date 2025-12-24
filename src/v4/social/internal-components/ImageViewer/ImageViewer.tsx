@@ -17,6 +17,7 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
+import { MediaTabType } from '~/v4/social/constants/mediaTabs';
 
 type ImageViewerProps = {
   pageId?: string;
@@ -74,7 +75,8 @@ export function ImageViewer({
     if (target === 'community') {
       if (post) {
         setLinkToPost({
-          tab: 'community_image_feed',
+          tab: 'community_media_feed',
+          mediaTab: MediaTabType.IMAGES,
           index: selectedImageIndex,
           target: 'community',
           parentPostId: post.parentPostId,
@@ -90,7 +92,8 @@ export function ImageViewer({
     if (target === 'user') {
       if (post) {
         setLinkToPost({
-          tab: UserProfileTabs.IMAGE,
+          tab: UserProfileTabs.MEDIA,
+          mediaTab: MediaTabType.IMAGES,
           index: selectedImageIndex,
           target: 'user',
           parentPostId: post.parentPostId,

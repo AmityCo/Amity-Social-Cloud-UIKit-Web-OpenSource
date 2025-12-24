@@ -8,6 +8,7 @@ import { Button } from '~/v4/core/components/AriaButton';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { BrandBadge } from '~/v4/social/elements/BrandBadge/BrandBadge';
 
 type BlockedUserItemProps = {
   pageId?: string;
@@ -33,9 +34,14 @@ export const BlockedUserItem: FC<BlockedUserItemProps> = ({
         onPress={() => goToUserProfilePage(user.userId)}
       >
         <UserAvatar userId={user.userId} className={styles.blockUserItem__avatar} />{' '}
-        <Typography.BodyBold className={styles.blockUserItem__displayName}>
-          {user.displayName}
-        </Typography.BodyBold>
+        <div className={styles.blockUserItem__displayNameWrapper}>
+          <Typography.BodyBold className={styles.blockUserItem__displayName}>
+            {user.displayName}
+          </Typography.BodyBold>
+          <div className={styles.blockUserItem__brandBadge}>
+            {user.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
+          </div>
+        </div>
       </Button>
 
       <UserListUnblockUserButton

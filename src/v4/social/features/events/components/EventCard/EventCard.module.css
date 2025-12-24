@@ -1,0 +1,123 @@
+.eventCard[data-variant='card'][data-size='lg'] {
+  gap: 1rem;
+  display: grid;
+  cursor: pointer;
+}
+
+.eventCard[data-variant='card'][data-size='md'] {
+  cursor: pointer;
+  min-width: 15.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.eventCard[data-variant='list'] {
+  gap: 1rem;
+  display: flex;
+  cursor: pointer;
+  overflow: hidden;
+  align-items: center;
+}
+
+.eventCard:focus-visible {
+  outline-offset: 2px;
+  outline: 2px solid var(--asc-color-primary-default);
+}
+
+.eventCard__figure[data-variant='card'][data-size='lg'] {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.eventCard__figure[data-variant='card'][data-size='md'] {
+  width: 100%;
+  height: 8.875rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.eventCard__figure[data-variant='list'][data-size='lg'],
+.eventCard__figure[data-variant='list'][data-size='md'] {
+  width: 42%;
+  height: 100%;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.eventCard__image[data-variant='card'][data-size='lg'],
+.eventCard__image[data-variant='list'] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.eventCard__image[data-variant='card'][data-size='md'] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.eventCard__eventType {
+  top: 0.5rem;
+  left: 0.5rem;
+  position: absolute;
+}
+
+.eventCard__hostBadge {
+  top: 0.5rem;
+  right: 0.5rem;
+  position: absolute;
+}
+
+.eventCard__info[data-variant='card'][data-size='lg'],
+.eventCard__info[data-variant='list'] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.eventCard__info[data-variant='card'][data-size='md'] {
+  display: flex;
+  padding: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.eventCard__duration {
+  display: flex;
+  align-items: center;
+  color: var(--asc-color-base-default);
+}
+
+.eventCard__title {
+  color: var(--asc-color-base-default);
+}
+
+.eventCard__creator {
+  gap: 0.125rem;
+  display: flex;
+  align-items: center;
+}
+
+.eventCard__creatorName {
+  color: var(--asc-color-base-shade1);
+}
+
+.eventCard__creatorBadgeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eventCard__creatorBadge {
+  width: 1rem;
+  height: 1rem;
+}

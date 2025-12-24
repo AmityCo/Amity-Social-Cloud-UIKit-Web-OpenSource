@@ -1,29 +1,35 @@
-import React from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/natives/Button';
 import { Title } from '~/v4/social/elements/Title';
-import { useImage } from '~/v4/core/hooks/useImage';
 import { FileTrigger } from 'react-aria-components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PollButton } from '~/v4/social/elements/PollButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
+import { EventButton } from '~/v4/social/elements/EventButton/EventButton';
 import { StoryButton } from '~/v4/social/elements/StoryButton/StoryButton';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
+import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events/hooks';
 import styles from './PostComposer.module.css';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { UserAvatar } from '~/v4/social/elements/UserAvatar';
+import { LivestreamButton } from '~/v4/social/elements/LivestreamButton';
+import { LivestreamTargetSelectionPage } from '~/v4/social/features/livestream/pages/LivestreamTargetSelectionPage';
 
 type PostComposerProps = {
   pageId?: string;
   communityId?: string;
+  isDisableStory?: boolean;
+  isDisableEvent?: boolean;
   onClickPost?: () => void;
   onClickPoll?: () => void;
+  onClickLivestream?: () => void;
+  onClickEvent?: () => void;
   onSelectFile?: (files: FileList | null) => void;
 };
 
@@ -32,17 +38,21 @@ export function PostComposer({
   communityId,
   onClickPost,
   onClickPoll,
+  onClickLivestream,
   onSelectFile,
+  onClickEvent,
+  isDisableStory = false,
+  isDisableEvent = false,
 }: PostComposerProps) {
   const componentId = 'post_composer';
 
   const { currentUserId, isVisitorOrBot } = useSDK();
-  const { goToUserProfilePage } = useNavigation();
   const { openPopup } = usePopupContext();
-  const { user, isLoading } = useUser({ userId: currentUserId, shouldCall: !isVisitorOrBot });
+  const { user } = useUser({ userId: currentUserId, shouldCall: !isVisitorOrBot });
   const { hasStoryPermission } = useStoryPermission(communityId);
-  const avatarUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
+  const { hasCreateEventPermission } = useEventPermission(communityId);
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { redirectEventTargetSelectionPage } = useRedirectEventTargetSelectionPage();
 
   const handlePostClick = () => {
     if (onClickPost) return onClickPost();
@@ -90,9 +100,7 @@ export function PostComposer({
     const isExcludedPage = pageId === 'user_profile_page';
     const isFileTriggerPage = pageId === 'community_profile_page';
 
-    if (!hasStoryPermission) return null;
-
-    if (hasStoryPermission && isExcludedPage) return null;
+    if (!hasStoryPermission || isExcludedPage || isDisableStory) return null;
 
     if (isFileTriggerPage) {
       return (
@@ -112,6 +120,33 @@ export function PostComposer({
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
         onPress={onClickStory}
+      />
+    );
+  };
+
+  const handleLivestreamClick = () => {
+    if (onClickLivestream) return onClickLivestream();
+    openPopup({
+      pageId,
+      componentId,
+      view: 'desktop',
+      header: (
+        <Title pageId="select_livestream_target_page" titleClassName={styles.postComposer__title} />
+      ),
+      children: <LivestreamTargetSelectionPage />,
+    });
+  };
+
+  const renderEventButton = () => {
+    const isExcludedPage = pageId === 'user_profile_page';
+    const isFromCommunityPage = pageId === 'community_profile_page';
+
+    if (!hasCreateEventPermission || isExcludedPage || isDisableEvent) return null;
+
+    return (
+      <EventButton
+        pageId="post_composer_page"
+        onPress={isFromCommunityPage ? onClickEvent : redirectEventTargetSelectionPage}
       />
     );
   };
@@ -142,7 +177,9 @@ export function PostComposer({
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
       />
+      <LivestreamButton onPress={handleLivestreamClick} pageId="post_composer_page" />
       <PollButton onPress={handlePollClick} pageId="post_composer_page" componentId="poll_button" />
+      {renderEventButton()}
       {renderStoryButton()}
     </div>
   );

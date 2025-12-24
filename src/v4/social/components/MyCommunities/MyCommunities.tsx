@@ -1,13 +1,12 @@
-import React from 'react';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchResult/';
 import useCommunitiesCollection from '~/v4/social/hooks/collections/useCommunitiesCollection';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
-
+import CreateCommunityRowItem from '~/v4/social/internal-components/CreateCommunityRowItem';
 import styles from './MyCommunities.module.css';
 
-interface MyCommunitiesProps {
+type MyCommunitiesProps = {
   pageId?: string;
-}
+};
 
 export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
   const componentId = 'my_communities';
@@ -22,6 +21,7 @@ export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
 
   return (
     <div style={themeStyles} className={styles.myCommunitiesList}>
+      <CreateCommunityRowItem />
       <CommunitySearchResult
         pageId={pageId}
         communityCollection={communities}

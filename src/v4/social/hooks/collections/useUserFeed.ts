@@ -12,8 +12,17 @@ export default function useUserFeed({ userId, limit = QUERY_LIMIT, ...params }: 
     shouldCall: !!userId,
   });
 
+  // Filter out posts with children type 'file' or 'audio'
+  const filteredPosts = items.filter((post) => {
+    const children = post.childrenPosts || [];
+    const hasFileOrAudioChild = children.some(
+      (child) => child.dataType === 'file' || child.dataType === 'audio',
+    );
+    return !hasFileOrAudioChild;
+  });
+
   return {
     ...rest,
-    posts: items,
+    posts: filteredPosts,
   };
 }

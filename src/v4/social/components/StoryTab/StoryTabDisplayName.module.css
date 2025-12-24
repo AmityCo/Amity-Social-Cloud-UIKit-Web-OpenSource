@@ -1,0 +1,21 @@
+.storyTabDisplayName__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 4rem;
+}
+
+.storyTabDisplayName {
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--asc-color-secondary-default);
+}
+
+.storyTabDisplayName__lockIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentcolor;
+}

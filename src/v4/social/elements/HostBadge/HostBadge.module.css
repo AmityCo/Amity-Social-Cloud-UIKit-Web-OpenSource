@@ -1,0 +1,21 @@
+.hostBadge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.12rem;
+  padding: 0.0625rem 0.1875rem 0.0625rem 0.125rem;
+  background-color: var(--asc-color-live);
+  border-radius: 0.25rem;
+  width: max-content;
+  flex-shrink: 0;
+}
+
+.hostBadge__icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: var(--asc-color-white);
+}
+
+.hostBadge__text {
+  color: var(--asc-color-white);
+}

@@ -1,1 +1,1 @@
-export { LivestreamChatMessageComposer } from './LivestreamChatMessageComposer';
+export { LivechatMessageComposer } from './LivechatMessageComposer';

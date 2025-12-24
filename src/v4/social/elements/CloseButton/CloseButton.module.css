@@ -2,7 +2,6 @@
   all: unset;
   display: flex;
   cursor: pointer;
-  padding: 0.25rem;
   align-items: center;
   justify-content: center;
 
@@ -16,8 +15,8 @@
 }
 
 .closeButton__icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
   fill: var(--asc-color-base-default);
 }
 

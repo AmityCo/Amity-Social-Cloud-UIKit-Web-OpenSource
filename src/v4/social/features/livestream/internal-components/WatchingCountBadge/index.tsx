@@ -1,0 +1,1 @@
+export { WatchingCountBadge } from './WatchingCountBadge';

@@ -58,18 +58,8 @@
 }
 
 .communityProfileSkeleton__storyTab {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background-color: var(--asc-color-base-shade4);
-  margin-bottom: 0.5rem;
-}
-
-.communityProfileSkeleton__storyTab__title {
-  height: 1rem;
-  width: 2.5rem;
-  background-color: var(--asc-color-base-shade4);
-  border-radius: 0.25rem;
+  display: flex;
+  gap: 0.75rem;
 }
 
 @keyframes pulse {

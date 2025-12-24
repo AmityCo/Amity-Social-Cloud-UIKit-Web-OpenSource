@@ -1,9 +1,13 @@
 .floatingActionButton {
+  right: 1rem;
   width: 4rem;
+  z-index: 50;
+  bottom: 1rem;
   height: 4rem;
   border: none;
   display: flex;
   cursor: pointer;
+  position: fixed;
   border-radius: 50%;
   align-items: center;
   justify-content: center;

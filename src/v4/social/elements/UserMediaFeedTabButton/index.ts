@@ -1,0 +1,1 @@
+export { UserMediaFeedTabButton } from './UserMediaFeedTabButton';

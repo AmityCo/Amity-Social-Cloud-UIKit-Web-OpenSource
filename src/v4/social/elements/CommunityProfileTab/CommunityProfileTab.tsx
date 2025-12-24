@@ -1,9 +1,9 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
+import MediaIcon from '~/v4/icons/Media';
+import EventIcon from '~/v4/icons/Events';
 import { Pin as PinIcon } from '~/v4/icons/Pin';
 import { Button } from '~/v4/core/natives/Button';
 import { Feed as FeedIcon } from '~/v4/icons/Feed';
-import { Image as ImageIcon } from '~/v4/icons/Image';
-import { Video as VideoIcon } from '~/v4/icons/Video';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { CommunityTab } from '~/v4/core/providers/CommunityTabProvider';
 import styles from './CommunityProfileTab.module.css';
@@ -53,22 +53,22 @@ export const CommunityProfileTab = forwardRef<HTMLDivElement, CommunityTabsProps
           <PinIcon className={styles.communityTabs__pinIcon} />
         </Button>
         <Button
-          aria-label="Community Image Gallery"
+          aria-label="Community Event Feed"
           className={styles.communityTabs__tab}
-          data-testid={`${accessibilityId}_image_feed`}
-          data-is-active={activeTab === 'community_image_feed'}
-          onPress={() => onTabChange('community_image_feed')}
+          data-testid={`${accessibilityId}_event_feed`}
+          data-is-active={activeTab === 'community_event_feed'}
+          onPress={() => onTabChange('community_event_feed')}
         >
-          <ImageIcon className={styles.communityTabs__icon} />
+          <EventIcon className={styles.communityTabs__icon} />
         </Button>
         <Button
-          aria-label="Community Video Gallery"
+          aria-label="Community Media Feed"
           className={styles.communityTabs__tab}
-          data-testid={`${accessibilityId}_video_feed`}
-          data-is-active={activeTab === 'community_video_feed'}
-          onPress={() => onTabChange('community_video_feed')}
+          data-testid={`${accessibilityId}_media_feed`}
+          data-is-active={activeTab === 'community_media_feed'}
+          onPress={() => onTabChange('community_media_feed')}
         >
-          <VideoIcon className={styles.communityTabs__icon} />
+          <MediaIcon className={styles.communityTabs__icon} />
         </Button>
       </nav>
     );

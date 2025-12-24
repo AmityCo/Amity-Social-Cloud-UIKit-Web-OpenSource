@@ -1,0 +1,33 @@
+.eventFeed {
+  gap: 1rem;
+  display: flex;
+  padding: 0.75rem 0 1rem;
+  flex-direction: column;
+}
+
+.eventFeed__events {
+  gap: 1rem;
+  display: grid;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
+}
+
+.eventFeed__eventsTabs {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (width < 48em) {
+  .eventFeed {
+    gap: 0;
+    padding: 0 0 1rem;
+  }
+
+  .eventFeed__events {
+    border: none;
+    border-radius: 0;
+  }
+}

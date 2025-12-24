@@ -1,4 +1,5 @@
 .linkPreviewSkeleton {
+  width: 100%;
   border: 1px solid var(--asc-color-base-shade4);
   border-radius: 0.5rem;
   overflow: hidden;

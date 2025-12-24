@@ -16,10 +16,10 @@ import Flag from '~/v4/icons/Flag';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { IconComponent } from '~/v4/core/IconComponent';
 import Banned from '~/v4/icons/Banned';
-import GoldenBadge from '~/v4/icons/GoldenBadge';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { useNetworkState } from 'react-use';
+import { BrandBadge } from '~/v4/social/elements';
 
 const { COMMUNITY_MODERATOR, CHANNEL_MODERATOR } = MemberRoles;
 
@@ -187,16 +187,19 @@ export const CommunityMemberItem = ({
             className={styles.communityMemberItem__memberAvatar}
           />
         </div>
-        <Typography.BodyBold className={styles.communityMemberItem__memberName}>
-          {user?.displayName}
-        </Typography.BodyBold>
-        {user?.isBrand && (
-          <IconComponent
-            defaultIconName="badge icon"
-            imgIcon={() => <GoldenBadge className={styles.communityMemberItem__badge} />}
-            defaultIcon={() => <GoldenBadge className={styles.communityMemberItem__badge} />}
-          />
-        )}
+
+        <div className={styles.communityMemberItem__memberNameWrapper}>
+          <Typography.BodyBold className={styles.communityMemberItem__memberName}>
+            {user?.displayName}
+          </Typography.BodyBold>
+          {user?.isBrand && (
+            <IconComponent
+              defaultIconName="badge icon"
+              imgIcon={() => <BrandBadge className={styles.communityMemberItem__badge} />}
+              defaultIcon={() => <BrandBadge className={styles.communityMemberItem__badge} />}
+            />
+          )}
+        </div>
         {isGlobalBanned && (
           <IconComponent
             defaultIconName="banned icon"

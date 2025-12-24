@@ -21,7 +21,6 @@ import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermis
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -35,6 +34,7 @@ import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import styles from './Comment.module.css';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
 
 interface CommentProps {
   pageId?: string;
@@ -55,6 +55,7 @@ interface CommentProps {
   // support inline comment behavior - behavior when click show reply
   onClickShowReply?: () => void;
   testId?: string;
+  isHost?: boolean;
 }
 
 export const Comment = ({
@@ -71,6 +72,7 @@ export const Comment = ({
   onClickShowReply,
   maxLines,
   testId,
+  isHost,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -341,11 +343,20 @@ export const Comment = ({
                 >
                   {comment.creator?.displayName}
                 </Typography.BodyBold>
-                {isBrandUser && <BrandBadge className={styles.postComment__brandBadge} />}
+                {isBrandUser && (
+                  <BrandBadge
+                    pageId={pageId}
+                    componentId={componentId}
+                    className={styles.postComment__brandBadge}
+                  />
+                )}
               </Button>
 
-              {isModeratorUser && !isBrandUser && (
-                <ModeratorBadge pageId={pageId} componentId={componentId} />
+              {isHost ? (
+                <EventHostBadge withLabel />
+              ) : (
+                isModeratorUser &&
+                !isBrandUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
               )}
 
               <TextWithMention
@@ -410,6 +421,7 @@ export const Comment = ({
                     data-testid={`${pageId}/${componentId}/reply_button`}
                     variant="default"
                     onPress={() => handleReplyClick(comment)}
+                    className={styles.postComment__secondRow__replyButton}
                   >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
                       Reply

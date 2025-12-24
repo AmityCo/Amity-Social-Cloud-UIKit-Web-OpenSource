@@ -3,4 +3,6 @@ export enum HomePageTab {
   Explore = 'Explore',
   MyCommunities = 'My communities',
   Clips = 'Clips',
+  Communities = 'Communities',
+  Events = 'Events',
 }

@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import React from 'react';
 import { EllipsisH } from '~/v4/icons/Ellipsis';
 import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -14,6 +13,7 @@ export type MenuButtonProps = {
   onClick?: (event: PressEvent) => void;
   iconClassName?: string;
   onMouseEnter?: () => void;
+  variant?: 'default' | 'filled';
 };
 
 export function MenuButton({
@@ -22,6 +22,7 @@ export function MenuButton({
   pageId = '*',
   iconClassName,
   componentId = '*',
+  variant = 'default',
 }: MenuButtonProps) {
   const elementId = 'menu_button';
   const { isExcluded, accessibilityId, themeStyles, config, defaultConfig, uiReference } =
@@ -36,16 +37,28 @@ export function MenuButton({
   return (
     <Button
       onPress={onClick}
+      data-variant={variant}
       aria-label="Click to open menu"
       data-testid={accessibilityId}
-      className={clsx(styles.menuButton__button, className)}
+      className={clsx(styles.menuButton, className)}
     >
       <IconComponent
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}
-        imgIcon={() => <img src={config.icon} alt={uiReference} />}
+        imgIcon={() => (
+          <img
+            src={config.icon}
+            alt={uiReference}
+            data-variant={variant}
+            className={clsx(styles.menuButton__icon, iconClassName)}
+          />
+        )}
         defaultIcon={() => (
-          <EllipsisH className={clsx(styles.menuButton, iconClassName)} style={themeStyles} />
+          <EllipsisH
+            style={themeStyles}
+            data-variant={variant}
+            className={clsx(styles.menuButton__icon, iconClassName)}
+          />
         )}
       />
     </Button>

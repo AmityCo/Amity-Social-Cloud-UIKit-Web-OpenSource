@@ -61,7 +61,7 @@ export const ChildrenPostContent = ({
         onVideoClick={onVideoClick}
       />
       <LiveStreamContent
-        posts={post.childrenPosts as Amity.Post<'liveStream'>[]}
+        posts={post.childrenPosts as Amity.Post<'room'>[]}
         goToPostDetail={goToPostDetail}
         parentPost={post}
       />

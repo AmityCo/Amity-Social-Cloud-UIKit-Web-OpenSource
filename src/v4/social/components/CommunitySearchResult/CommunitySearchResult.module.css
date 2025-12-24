@@ -5,7 +5,6 @@
   padding: 0.5rem 1rem;
   align-items: start;
   flex-direction: column;
-  background-color: var(--asc-color-background-default);
 }
 
 .communitySearchResult__communityItem {

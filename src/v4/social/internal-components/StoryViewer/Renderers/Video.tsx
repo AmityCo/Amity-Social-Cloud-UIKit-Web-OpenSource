@@ -4,7 +4,7 @@ import {
   CustomRenderer,
   Tester,
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
-import { SpeakerButton, HyperLink } from '~/v4/social/elements';
+import { SpeakerButton, HyperLink, BrandBadge } from '~/v4/social/elements';
 import { BottomSheet, Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { CommentTray } from '~/v4/social/components';
@@ -92,6 +92,7 @@ export const renderer: CustomRenderer = ({
     pageId,
     dragEventTarget,
     story,
+    isConfirmDialogOpen,
   },
   action,
   config,
@@ -204,7 +205,7 @@ export const renderer: CustomRenderer = ({
 
   useEffect(() => {
     if (vid.current) {
-      if (isPaused || isBottomSheetOpen || isOpenCommentSheet) {
+      if (isPaused || isBottomSheetOpen || isOpenCommentSheet || isConfirmDialogOpen) {
         vid.current.pause();
         action('pause', true);
       } else {
@@ -213,7 +214,7 @@ export const renderer: CustomRenderer = ({
         action('play', true);
       }
     }
-  }, [isPaused, isBottomSheetOpen, isOpenCommentSheet, vid, action]);
+  }, [isPaused, isBottomSheetOpen, isOpenCommentSheet, isConfirmDialogOpen, vid, action]);
 
   useEffect(() => {
     if (fileInputRef.current) {
@@ -342,9 +343,15 @@ export const renderer: CustomRenderer = ({
         heading={<div data-testid="community_display_name">{community?.displayName}</div>}
         subheading={
           createdAt && creator?.displayName ? (
-            <span>
+            <span className={rendererStyles.creatorWrapper}>
               <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-              <span data-testid="creator_display_name">{creator?.displayName}</span>
+              <span
+                data-testid="creator_display_name"
+                className={rendererStyles.creatorDisplayName}
+              >
+                {creator?.displayName}
+              </span>
+              {creator?.isBrand && <BrandBadge pageId={pageId} />}
             </span>
           ) : (
             ''

@@ -17,10 +17,15 @@ import {
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { AmityRoute } from './AmityUIKitProvider';
-import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useNotifications } from './NotificationProvider';
+import { CreateLivestreamPageProps } from '~/v4/social/features/livestream/pages/CreateLivestreamPage';
+import { EventSetupProps } from '~/v4/social/features';
+import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
+import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
+import { EventAttendeesPageProps } from '~/v4/social/pages/EventAttendeesPage/EventAttendeesPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -45,6 +50,7 @@ export enum PageTypes {
   MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
   StoryTargetSelectionPage = 'StoryTargetSelectionPage',
   PollTargetSelectionPage = 'PollTargetSelectionPage',
+  EventTargetSelectionPage = 'EventTargetSelectionPage',
   AllCategoriesPage = 'AllCategoriesPage',
   CommunitiesByCategoryPage = 'CommunitiesByCategoryPage',
   CommunityAddCategoryPage = 'CommunityAddCategoryPage',
@@ -61,10 +67,18 @@ export enum PageTypes {
   LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
   LiveStreamBannedPage = 'LiveStreamBannedPage',
   LiveStreamPlayerPage = 'LiveStreamPlayerPage',
+  LivestreamUnsupportedPage = 'LivestreamUnsupportedPage',
+  LivestreamTargetSelectionPage = 'LivestreamTargetSelectionPage',
+  CreateLivestreamPage = 'CreateLivestreamPage',
   NotificationTrayPage = 'NotificationTrayPage',
   PendingRequestPage = 'PendingRequestPage',
   DraftClipPage = 'DraftClipPage',
   ClipFeedPage = 'ClipFeedPage',
+  EventSetupPage = 'EventSetupPage',
+  UpcomingEventsPage = 'UpcomingEventsPage',
+  PastEventsPage = 'PastEventsPage',
+  EventDetailPage = 'EventDetailPage',
+  EventAttendeesPage = 'EventAttendeesPage',
 }
 
 type Page =
@@ -149,10 +163,14 @@ type Page =
         community?: Amity.Community;
         post?: Amity.Post;
         isClipPost?: boolean;
+        targetName?: string;
       };
     }
   | {
       type: PageTypes.StoryTargetSelectionPage;
+    }
+  | {
+      type: PageTypes.EventTargetSelectionPage;
     }
   | {
       type: PageTypes.AllCategoriesPage;
@@ -249,6 +267,16 @@ type Page =
       context: LiveStreamPlayerPageProps;
     }
   | {
+      type: PageTypes.LivestreamUnsupportedPage;
+    }
+  | {
+      type: PageTypes.CreateLivestreamPage;
+      context: CreateLivestreamPageProps;
+    }
+  | {
+      type: PageTypes.LivestreamTargetSelectionPage;
+    }
+  | {
       type: PageTypes.NotificationTrayPage;
     }
   | {
@@ -273,6 +301,25 @@ type Page =
         targetType?: 'community' | 'user';
         targetId?: string;
       };
+    }
+  | {
+      type: PageTypes.EventSetupPage;
+      context: EventSetupProps;
+    }
+  | {
+      type: PageTypes.UpcomingEventsPage;
+      context: UpcomingEventsPageProps;
+    }
+  | {
+      type: PageTypes.PastEventsPage;
+    }
+  | {
+      type: PageTypes.EventDetailPage;
+      context: EventDetailPageProps;
+    }
+  | {
+      type: PageTypes.EventAttendeesPage;
+      context: EventAttendeesPageProps;
     };
 
 type ContextValue = {
@@ -304,6 +351,7 @@ type ContextValue = {
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => void;
   goToSelectPollPostTargetPage: () => void;
   goToStoryTargetSelectionPage: () => void;
+  goToSelectEventTargetPage: () => void;
   goToPollPostComposerPage: (context: {
     targetId: string | null;
     targetType: 'community' | 'user';
@@ -376,6 +424,8 @@ type ContextValue = {
   goToLiveStreamTerminatedPage?: () => void;
   goToLiveStreamBannedPage?: () => void;
   goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
+  goToLivestreamUnsupportedPage: () => void;
+  goToCreateLivestreamPage?: (context: CreateLivestreamPageProps) => void;
   goToPendingRequestPage?: (community: Amity.Community) => void;
   goToDraftClipPage?: (context: {
     targetId: string | null;
@@ -399,6 +449,11 @@ type ContextValue = {
   handleVisitorUserAction: () => void;
   handleNonMemberAction: () => void;
   handleNonFollowerAction: () => void;
+  goToEventSetupPage: (context: EventSetupProps) => void;
+  goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => void;
+  goToPastEventsPage: () => void;
+  goToEventDetailPage: (context: EventDetailPageProps) => void;
+  goToEventAttendeesPage?: (context: EventAttendeesPageProps) => void;
 };
 
 let defaultValue: ContextValue = {
@@ -462,6 +517,8 @@ let defaultValue: ContextValue = {
   goToLiveStreamTerminatedPage: () => {},
   goToLiveStreamBannedPage: () => {},
   goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
+  goToLivestreamUnsupportedPage: () => {},
+  goToCreateLivestreamPage: (context: CreateLivestreamPageProps) => {},
   goToNotificationTrayPage: () => {},
   goToClipFeedPage: (context: {
     currentPostId?: string;
@@ -469,6 +526,7 @@ let defaultValue: ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => {},
+  goToSelectEventTargetPage: () => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -481,6 +539,11 @@ let defaultValue: ContextValue = {
   handleVisitorUserAction: () => {},
   handleNonMemberAction: () => {},
   handleNonFollowerAction: () => {},
+  goToEventSetupPage: (context: EventSetupProps) => {},
+  goToUpcomingEventsPage: () => {},
+  goToPastEventsPage: () => {},
+  goToEventDetailPage: (context: EventDetailPageProps) => {},
+  goToEventAttendeesPage: (context: EventAttendeesPageProps) => {},
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -528,6 +591,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToPollPostComposerPage(${context})`),
     goToStoryTargetSelectionPage: () =>
       console.log('NavigationContext goToStoryTargetSelectionPage()'),
+    goToSelectEventTargetPage: () => console.log('NavigationContext goToSelectEventTargetPage()'),
     goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
     goToPostComposerPage: () => console.log(`NavigationContext goToPostComposerPage()`),
     goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
@@ -548,9 +612,13 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToCommunitySettingPage(${community})`),
     goToLiveStreamTerminatedPage: () =>
       console.log('NavigationContext goToLiveStreamTerminatedPage()'),
-    goToLiveStreamBannedPage: () => console.log('NavigationContext goToLiveStreamTerminatedPage()'),
+    goToLiveStreamBannedPage: () => console.log('NavigationContext goToLiveStreamBannedPage()'),
     goToLiveStreamPlayerPage: (context) =>
       console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
+    goToLivestreamUnsupportedPage: () =>
+      console.log('NavigationContext goToLivestreamUnsupportedPage()'),
+    goToCreateLivestreamPage: (context) =>
+      console.log(`NavigationContext goToCreateLivestreamPage(${JSON.stringify(context)})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
     goToPendingRequestPage: (context) =>
       console.log(`NavigationContext goToPendingRequestPage(${context})`),
@@ -563,6 +631,16 @@ if (process.env.NODE_ENV !== 'production') {
     handleVisitorUserAction: () => console.log('NavigationContext handleVisitorUserAction()'),
     handleNonMemberAction: () => console.log('NavigationContext handleNonMemberAction()'),
     handleNonFollowerAction: () => console.log('NavigationContext handleNonFollowerAction()'),
+
+    goToEventSetupPage: (context) =>
+      console.log(`NavigationContext goToEventSetupPage(${context.mode})`),
+    goToUpcomingEventsPage: (context) =>
+      console.log(`NavigationContext goToUpcomingEventsPage()`, context),
+    goToPastEventsPage: () => console.log('NavigationContext goToPastEventsPage()'),
+    goToEventDetailPage: (context) =>
+      console.log('NavigationContext goToEventDetailPage()', context),
+    goToEventAttendeesPage: (context) =>
+      console.log('NavigationContext goToEventAttendeesPage()', context),
   };
 }
 
@@ -955,32 +1033,10 @@ export default function NavigationProvider({
   );
 
   const goToPostDetailPage = useCallback(
-    ({
-      postId,
-      hideTarget,
-      category,
-      commentId,
-      parentId,
-      posts,
-      selectedReplyComment,
-      showReplyCommentAt,
-      keyword,
-      isFromCommentClick,
-    }) => {
+    (context) => {
       const next = {
         type: PageTypes.PostDetailPage,
-        context: {
-          postId,
-          hideTarget,
-          category,
-          commentId,
-          parentId,
-          posts,
-          selectedReplyComment,
-          showReplyCommentAt,
-          keyword,
-          isFromCommentClick,
-        },
+        context,
       };
       pushPage(next);
     },
@@ -1038,6 +1094,14 @@ export default function NavigationProvider({
   const goToStoryTargetSelectionPage = useCallback(() => {
     const next = {
       type: PageTypes.StoryTargetSelectionPage,
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToSelectEventTargetPage = useCallback(() => {
+    const next = {
+      type: PageTypes.EventTargetSelectionPage,
     };
 
     pushPage(next);
@@ -1367,6 +1431,27 @@ export default function NavigationProvider({
     [setStreamPlayer],
   );
 
+  const goToLivestreamUnsupportedPage = useCallback(() => {
+    const next = {
+      type: PageTypes.LivestreamUnsupportedPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToCreateLivestreamPage = useCallback(
+    (context: CreateLivestreamPageProps) => {
+      const next = {
+        type: PageTypes.CreateLivestreamPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
   const goToNotificationTrayPage = useCallback(() => {
     const next = {
       type: PageTypes.NotificationTrayPage,
@@ -1419,6 +1504,61 @@ export default function NavigationProvider({
     notification.info({ content: 'Follow user to interact.' });
   };
 
+  const goToEventSetupPage = useCallback(
+    (context: EventSetupProps) => {
+      const next = {
+        type: PageTypes.EventSetupPage,
+        context,
+      };
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
+  const goToUpcomingEventsPage = useCallback(
+    (context) => {
+      const next = {
+        type: PageTypes.UpcomingEventsPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
+  const goToPastEventsPage = useCallback(() => {
+    const next = {
+      type: PageTypes.PastEventsPage,
+    };
+
+    pushPage(next);
+  }, [pushPage]);
+
+  const goToEventDetailPage = useCallback(
+    (context: EventDetailPageProps) => {
+      const next = {
+        type: PageTypes.EventDetailPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
+  const goToEventAttendeesPage = useCallback(
+    (context: EventAttendeesPageProps) => {
+      const next = {
+        type: PageTypes.EventAttendeesPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1461,6 +1601,7 @@ export default function NavigationProvider({
         goToSelectClipPostTargetPage,
         goToStoryTargetSelectionPage,
         goToSelectPollPostTargetPage,
+        goToSelectEventTargetPage,
         goToStoryCreationPage,
         goToDraftClipPage,
         goToDraftStoryPage,
@@ -1488,6 +1629,8 @@ export default function NavigationProvider({
         goToLiveStreamTerminatedPage,
         goToLiveStreamBannedPage,
         goToLiveStreamPlayerPage,
+        goToLivestreamUnsupportedPage,
+        goToCreateLivestreamPage,
         onClickStory: handleClickStory,
         goToNotificationTrayPage,
         goToPendingRequestPage,
@@ -1495,6 +1638,11 @@ export default function NavigationProvider({
         handleVisitorUserAction,
         handleNonMemberAction,
         handleNonFollowerAction,
+        goToEventSetupPage,
+        goToUpcomingEventsPage,
+        goToPastEventsPage,
+        goToEventDetailPage,
+        goToEventAttendeesPage,
       }}
     >
       <NavigationContextV3.Provider

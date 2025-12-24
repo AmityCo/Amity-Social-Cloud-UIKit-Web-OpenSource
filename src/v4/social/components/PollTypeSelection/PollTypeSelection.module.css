@@ -63,16 +63,6 @@
   background: var(--asc-color-primary-shade3);
 }
 
-.pollTypeSelection__displayName {
-  display: block;
-  max-width: 100%;
-  overflow: hidden;
-  font-size: 1.25rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  color: var(--asc-color-base-default);
-}
-
 @media only screen and (width >= 48em) {
   .pollTypeSelection {
     min-width: 30rem;

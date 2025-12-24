@@ -1,0 +1,27 @@
+.chipButton {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: 10rem;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  color: var(--asc-color-base-shade1);
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.chipButton[data-transparent='false'] {
+  background: var(--asc-color-base-shade4);
+}
+
+.chipButton[data-active='true'] {
+  border: 1px solid transparent;
+  background-color: var(--asc-color-primary-default);
+}
+
+.chipButton__text[data-active='false'] {
+  color: var(--asc-color-base-shade1);
+}
+
+.chipButton__text[data-active='true'] {
+  color: var(--asc-color-white);
+}

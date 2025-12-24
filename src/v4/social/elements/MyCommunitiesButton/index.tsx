@@ -1,1 +1,0 @@
-export { MyCommunitiesButton } from './MyCommunitiesButton';

@@ -55,14 +55,17 @@
 /* Icon Colors */
 .button.primary .icon {
   color: var(--asc-color-white);
+  fill: var(--asc-color-white);
 }
 
 .button.secondary .icon {
   color: var(--asc-color-base-default);
+  fill: var(--asc-color-base-default);
 }
 
 .button.tertiary .icon {
   color: var(--asc-color-white);
+  fill: var(--asc-color-white);
 }
 
 /* Example button background styles (adjust based on your design) */

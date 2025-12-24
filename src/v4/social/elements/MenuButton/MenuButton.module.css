@@ -1,25 +1,33 @@
-.menuButton {
+.menuButton[data-variant='default'] {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  fill: var(--asc-color-base-default);
-  width: 1rem;
-  height: 0.25rem;
-}
-
-.menuButton__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 1.5rem;
-  height: 1.125rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.menuButton__button:hover {
-  background-color: var(--asc-color-background-shade1);
-  border-radius: 0.5rem;
+.menuButton[data-variant='filled'] {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  border-radius: 10rem;
+  justify-content: center;
+  background-color: var(--asc-color-background-transparent-black);
 }
 
-.menuButton__button[data-focus-visible] {
+.menuButton[data-focus-visible] {
   outline: 2px solid var(--asc-color-primary-default);
+}
+
+.menuButton__icon[data-variant='default'] {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.menuButton__icon[data-variant='filled'] {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-white);
 }

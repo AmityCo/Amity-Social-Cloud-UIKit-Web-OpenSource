@@ -6,18 +6,18 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 export const useMessageFlaggedByMe = ({
   messageId,
-  reasonReport,
   onCloseMenu,
+  type = 'chat',
 }: {
   messageId: string;
-  reasonReport?: Amity.ContentFlagReason;
   onCloseMenu?: () => void;
+  type?: 'live-chat' | 'chat';
 }): {
   isLoading: boolean;
   isFlaggedByMe: boolean;
   isMessageDeleted: boolean;
-  isFlagLoading: boolean;
-  mutateReportMessage: () => Promise<unknown>;
+  isPending: boolean;
+  mutateReportMessage: (reasonReport?: Amity.ContentFlagReason) => Promise<unknown>;
   mutateUnreportMessage: () => Promise<unknown>;
 } => {
   const { success, info } = useNotifications();
@@ -34,14 +34,15 @@ export const useMessageFlaggedByMe = ({
     enabled: messageId != null,
   });
 
-  const { mutateAsync: mutateReportMessage, isPending: isFlagLoading } = useMutation({
-    mutationFn: async () => {
+  const { mutateAsync: mutateReportMessage, isPending: isPendingReport } = useMutation({
+    mutationFn: async (reasonReport?: Amity.ContentFlagReason) => {
       if (messageId == null) return;
       return MessageRepository.flagMessage(messageId, reasonReport);
     },
     onSuccess: () => {
       success({
         content: 'Message reported.',
+        alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();
     },
@@ -58,7 +59,7 @@ export const useMessageFlaggedByMe = ({
       } else {
         info({
           content: `Failed to report message. Please try again.`,
-          alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+          alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
         });
       }
     },
@@ -69,7 +70,7 @@ export const useMessageFlaggedByMe = ({
     },
   });
 
-  const { mutateAsync: mutateUnreportMessage } = useMutation({
+  const { mutateAsync: mutateUnreportMessage, isPending: isPendingUnreport } = useMutation({
     mutationFn: async () => {
       if (messageId == null) return;
       return MessageRepository.unflagMessage(messageId);
@@ -77,6 +78,7 @@ export const useMessageFlaggedByMe = ({
     onSuccess: () => {
       success({
         content: `Message unreported.`,
+        alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
     },
     onMutate: async () => {
@@ -89,7 +91,7 @@ export const useMessageFlaggedByMe = ({
     onError: () => {
       info({
         content: `Failed to unreport Message. Please try again.`,
-        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+        alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();
     },
@@ -104,7 +106,7 @@ export const useMessageFlaggedByMe = ({
     isLoading,
     isFlaggedByMe: data || false,
     isMessageDeleted,
-    isFlagLoading,
+    isPending: isPendingReport || isPendingUnreport,
     mutateReportMessage,
     mutateUnreportMessage,
   };

@@ -1,20 +1,11 @@
 import clsx from 'clsx';
-import React from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { useConfig } from '~/v4/social/providers/ConfigProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { CommunitySideBarTitle } from '~/v4/social/elements/CommunitySideBarTitle';
+import { NotificationTrayPage, SocialGlobalSearchPage } from '~/v4/social/pages';
 import {
-  AmityCommunitySetupPageMode,
-  NotificationTrayPage,
-  SocialGlobalSearchPage,
-} from '~/v4/social/pages';
-import { MyCommunitiesSideBar } from '~/v4/social/internal-components/MyCommunitiesSideBar';
-import { MyCommunitiesSideBarTitle } from '~/v4/social/elements/MyCommunitiesSideBarTitle';
-import {
-  ExploreMenuItem,
   NewsFeedMenuItem,
-  CreateCommunityMenuItem,
+  CommunitiesMenuItem,
+  EventsMenuItem,
 } from '~/v4/social/elements/CommunitySideBarMenuItem';
 import { NotificationTrayButton } from '~/v4/social/elements';
 import styles from './CommunitySideBar.module.css';
@@ -29,17 +20,11 @@ type CommunitySideBarProps = {
   isExploreHidden?: boolean;
 };
 
-export const CommunitySideBar = ({
-  className,
-  pageId = '*',
-  isExploreHidden,
-}: CommunitySideBarProps) => {
+export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarProps) => {
   const componentId = 'community_sidebar';
-  const { goToCreateCommunityPage } = useNavigation();
-  const { socialCommunityCreationButtonVisible } = useConfig();
-  const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
-  const { searchValue } = useSearchResultContext();
   const { isVisitorOrBot } = useSDK();
+  const { searchValue } = useSearchResultContext();
+  const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
 
   const handleNotificationTrayButtonClick = () => {
     notificationTray.markTraySeen(new Date().toISOString());
@@ -82,23 +67,9 @@ export const CommunitySideBar = ({
 
       <div className={styles.communitySideBar__menuSection}>
         {!isVisitorOrBot && <NewsFeedMenuItem pageId={pageId} componentId={componentId} />}
-        {!isExploreHidden && <ExploreMenuItem pageId={pageId} componentId={componentId} />}
+        <CommunitiesMenuItem pageId={pageId} componentId={componentId} />
+        <EventsMenuItem pageId={pageId} componentId={componentId} />
       </div>
-      {!isVisitorOrBot && (
-        <div className={styles.communitySideBar__myCommunitiesSection}>
-          <MyCommunitiesSideBarTitle pageId={pageId} componentId={componentId} />
-          {socialCommunityCreationButtonVisible && (
-            <CreateCommunityMenuItem
-              pageId={pageId}
-              componentId={componentId}
-              onPress={() =>
-                goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE })
-              }
-            />
-          )}
-          <MyCommunitiesSideBar pageId={pageId} />
-        </div>
-      )}
     </div>
   );
 };

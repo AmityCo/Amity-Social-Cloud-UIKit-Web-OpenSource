@@ -26,7 +26,7 @@ const PostVideoThumbnail = ({
 
   return (
     <div
-      key={`post-${post.data?.videoFileId.original}`}
+      key={`post-${post.data?.videoFileId?.original}`}
       data-video-height={String(totalVideos > 2)}
       className={styles.thumbnail__wrapper}
     >

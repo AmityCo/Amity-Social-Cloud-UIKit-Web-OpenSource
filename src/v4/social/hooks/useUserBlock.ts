@@ -6,6 +6,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 const useUserBlock = () => {
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
+
   const { mutateAsync: blockUser } = useMutation({
     mutationFn: (params: Parameters<typeof UserRepository.Relationship.blockUser>[0]) => {
       return UserRepository.Relationship.blockUser(params);
@@ -53,10 +54,18 @@ const useUserBlock = () => {
       pageId,
       componentId,
       title: 'Block user?',
-      content: `${displayName} won’t be able to see posts and comments that you’ve created. They won’t be notified that you’ve blocked them.`,
+      content: `${displayName} won't be able to see posts and comments that you've created. They won't be notified that you've blocked them.`,
       cancelText: 'Cancel',
       okText: 'Block',
-      onOk: () => blockUser(userId),
+      onOk: async () => {
+        if (!navigator.onLine) {
+          notification.error({
+            content: 'Failed to block user. Please try again.',
+          });
+          throw new Error('No internet connection');
+        }
+        await blockUser(userId);
+      },
     });
   };
 
@@ -75,10 +84,18 @@ const useUserBlock = () => {
       pageId,
       componentId,
       title: 'Unblock user?',
-      content: `${displayName} will now be able to see posts and comments that you’ve created. They won’t be notified that you’ve unblocked them.`,
+      content: `${displayName} will now be able to see posts and comments that you've created. They won't be notified that you've unblocked them.`,
       cancelText: 'Cancel',
       okText: 'Unblock',
-      onOk: () => unblockUser(userId),
+      onOk: async () => {
+        if (!navigator.onLine) {
+          notification.error({
+            content: 'Failed to unblock user. Please try again.',
+          });
+          throw new Error('No internet connection');
+        }
+        await unblockUser(userId);
+      },
     });
   };
 

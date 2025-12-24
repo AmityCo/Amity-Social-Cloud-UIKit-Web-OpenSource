@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Tabs, TabList, Tab, TabPanel, Key, TabsProps } from 'react-aria-components';
 import styles from './SecondaryTab.module.css';
@@ -38,7 +38,7 @@ export const SecondaryTab = ({
             className={styles.tab}
             data-testid={tab.accessibilityId}
           >
-            <Typography.TitleBold className={labelClassName}>{tab.label}</Typography.TitleBold>
+            <Typography.BodyBold className={labelClassName}>{tab.label}</Typography.BodyBold>
           </Tab>
         ))}
       </TabList>

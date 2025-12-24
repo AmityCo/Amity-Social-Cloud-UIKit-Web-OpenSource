@@ -1,0 +1,99 @@
+/* InviteSheet Component Styles */
+
+.inviteSheet {
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inviteSheet__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.inviteSheet__header {
+  padding: 1.25rem;
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+.inviteSheet__closeIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-shade3);
+}
+
+.inviteSheet__avatar__wrapper {
+  position: relative;
+  width: 12.25rem; /* 7.5rem + 7.5rem - 0.75rem overlap + some padding */
+  height: 7.5rem;
+  margin: 1.25rem 0;
+}
+
+.inviteSheet__avatar__text {
+  font-size: 3.75rem;
+}
+
+.inviteSheet__hostAvatar {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.inviteSheet__coHostAvatar {
+  position: absolute;
+  left: 6.75rem; /* 7.5rem - 0.75rem overlap */
+  top: 0;
+}
+
+.inviteSheet__avatar {
+  width: 7.5rem !important;
+  height: 7.5rem !important;
+  border: 4px solid var(--asc-color-background-default);
+  border-radius: 50%;
+}
+
+.inviteSheet__hostBadge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid var(--asc-color-background-default);
+}
+
+.inviteSheet__text__wrapper {
+  width: 80%;
+  padding: 1rem;
+}
+
+.inviteSheet__title {
+  color: var(--asc-color-white);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.inviteSheet__description {
+  color: var(--asc-color-base-shade1);
+  text-align: center;
+}
+
+.inviteSheet__footer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  width: 100%;
+}
+
+.inviteSheet__footer__button {
+  flex: 1;
+}
+
+/* Desktop styles */
+@media (width >= 48em) {
+  .inviteSheet {
+    width: 30rem;
+  }
+}

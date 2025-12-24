@@ -11,6 +11,7 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
+import { MediaTabType } from '~/v4/social/constants/mediaTabs';
 
 export const VideoPlayer = memo(
   ({
@@ -122,7 +123,8 @@ export function SingleVideoViewer({
     const postId = post.children.length > 0 ? post.postId : post.parentPostId;
     if (page.type === PageTypes.CommunityProfilePage) {
       setLinkToPost({
-        tab: 'community_video_feed',
+        tab: 'community_media_feed',
+        mediaTab: MediaTabType.VIDEOS,
         index: selectedImageIndex,
         target: 'community',
         parentPostId: post.parentPostId,
@@ -136,9 +138,10 @@ export function SingleVideoViewer({
     }
     if (page.type === PageTypes.UserProfilePage) {
       setLinkToPost({
-        tab: UserProfileTabs.VIDEO,
+        tab: UserProfileTabs.MEDIA,
         index: selectedImageIndex,
         target: 'user',
+        mediaTab: MediaTabType.VIDEOS,
         parentPostId: post.parentPostId,
         postId: post.postId,
         feedSources,

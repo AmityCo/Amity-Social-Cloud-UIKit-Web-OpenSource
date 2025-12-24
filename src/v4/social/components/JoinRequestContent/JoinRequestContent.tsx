@@ -7,6 +7,7 @@ import {
   RejectButton,
   JoinRequestsTabDescription,
   UserAvatar,
+  BrandBadge,
 } from '~/v4/social/elements';
 import styles from './JoinRequestContent.module.css';
 import FireworkPaper from '~/v4/icons/FireworkPaper';
@@ -71,12 +72,17 @@ export const JoinRequestContent = ({
                 userId={joinRequest.user?.userId}
                 onPressAvatar={() => goToUserProfilePage(joinRequest.user?.userId as string)}
               />
-              <Typography.BodyBold
-                className={styles.joinRequestContent__username}
-                onClick={() => goToUserProfilePage(joinRequest.user?.userId as string)}
-              >
-                {joinRequest.user?.displayName}
-              </Typography.BodyBold>
+              <div className={styles.joinRequestContent__displayName}>
+                <Typography.BodyBold
+                  className={styles.joinRequestContent__username}
+                  onClick={() => goToUserProfilePage(joinRequest.user?.userId as string)}
+                >
+                  {joinRequest.user?.displayName}
+                </Typography.BodyBold>
+                {joinRequest.user?.isBrand && (
+                  <BrandBadge pageId={pageId} componentId={componentId} />
+                )}
+              </div>
             </div>
             <div className={styles.joinRequestContent__button}>
               <JoinButton

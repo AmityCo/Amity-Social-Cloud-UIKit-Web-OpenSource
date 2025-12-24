@@ -1,4 +1,8 @@
 .title {
+  max-width: 100%;
+  overflow: hidden;
   text-align: center;
-  color: var(--asc-color-base-shade3);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--asc-color-base-default);
 }

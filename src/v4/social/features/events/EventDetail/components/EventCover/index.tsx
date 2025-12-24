@@ -1,0 +1,1 @@
+export { EventCover } from './EventCover';

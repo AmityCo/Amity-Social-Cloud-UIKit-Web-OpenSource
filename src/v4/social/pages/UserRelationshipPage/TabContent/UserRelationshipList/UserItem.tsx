@@ -8,14 +8,21 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { UserItemMenu } from './UserItemMenu';
+import { BrandBadge } from '~/v4/social/elements';
 
 type UserItemProps = {
   userId: string;
   pageId?: string;
   componentId?: string;
+  isShowMenuButton?: boolean;
 };
 
-export const UserItem: FC<UserItemProps> = ({ userId, pageId = '*', componentId = '*' }) => {
+export const UserItem: FC<UserItemProps> = ({
+  userId,
+  pageId = '*',
+  componentId = '*',
+  isShowMenuButton = true,
+}) => {
   const { AmityUserRelationshipPageBehavior } = usePageBehavior();
   const { setDrawerData } = useDrawer();
 
@@ -34,24 +41,33 @@ export const UserItem: FC<UserItemProps> = ({ userId, pageId = '*', componentId 
           componentId={componentId}
           userId={user.userId}
           className={styles.userItem__avatar}
+          shouldRedirectToUserProfile
         />
 
         <Typography.BodyBold className={styles.userItem__displayName}>
           {user.displayName}
         </Typography.BodyBold>
+
+        {user.isBrand && (
+          <div className={styles.userItem__brandBadge}>
+            <BrandBadge />
+          </div>
+        )}
       </Button>
-      <Popover
-        trigger={{
-          pageId,
-          componentId,
-          onClick: ({ closePopover }) =>
-            setDrawerData({
-              content: <UserItemMenu closePopover={closePopover} user={user} />,
-            }),
-        }}
-      >
-        {({ closePopover }) => <UserItemMenu closePopover={closePopover} user={user} />}
-      </Popover>
+      {isShowMenuButton && (
+        <Popover
+          trigger={{
+            pageId,
+            componentId,
+            onClick: ({ closePopover }) =>
+              setDrawerData({
+                content: <UserItemMenu closePopover={closePopover} user={user} />,
+              }),
+          }}
+        >
+          {({ closePopover }) => <UserItemMenu closePopover={closePopover} user={user} />}
+        </Popover>
+      )}
     </div>
   );
 };

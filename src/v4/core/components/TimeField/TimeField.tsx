@@ -13,7 +13,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 type TimeFieldProps = {
   pageId?: string;
   componentId?: string;
-  defaultValue: Time;
+  defaultValue?: Time;
   value: Time;
   minValue?: Time;
   onChange: (value: Time) => void;
@@ -36,8 +36,7 @@ export const TimeField = ({
       value={value}
       onChange={onChange}
       defaultValue={defaultValue}
-      hourCycle={12}
-      autoFocus
+      hourCycle={24}
       minValue={minValue || undefined}
       className={styles.timeField__container}
     >

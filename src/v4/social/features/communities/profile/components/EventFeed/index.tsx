@@ -1,0 +1,1 @@
+export { CommunityEventFeed } from './EventFeed';

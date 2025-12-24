@@ -1,0 +1,1 @@
+export { PrivateUserMediaFeed } from './PrivateUserMediaFeed';

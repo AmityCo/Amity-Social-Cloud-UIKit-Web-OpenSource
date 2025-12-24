@@ -17,7 +17,7 @@ export const useAmityElement = ({
   const themeStyles = useGenerateStylesShadeColors(config);
   const isComponentExcluded = isExcluded(uiReference);
   const accessibilityId = uiReference;
-  const currentTheme = useTheme();
+  const { currentTheme } = useTheme();
 
   return {
     currentTheme,

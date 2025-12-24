@@ -220,6 +220,15 @@
   z-index: 2;
 }
 
+.editorEditableContent {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.editorEditableContent::-webkit-scrollbar {
+  display: none;
+}
+
 @media only screen and (width >= 48em) {
   .editorPlaceholder {
     top: 0.75rem;
