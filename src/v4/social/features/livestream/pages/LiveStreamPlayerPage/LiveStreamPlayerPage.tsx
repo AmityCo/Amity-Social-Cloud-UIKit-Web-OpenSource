@@ -170,8 +170,6 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isTerminated &&
     !isUserBanned;
 
-  const showPlayer = isLive || isEnded || isTerminated || isUserBanned;
-
   const showWaitingApprovalBanner = isLive && isDesktop && subscribedPost?.feedType === 'reviewing';
 
   const { invitations, setInvitations } = useObserveRoomAndInvitation({ room });
@@ -383,7 +381,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
           >
-            {uiState === 'player' && showPlayer ? (
+            {uiState === 'player' ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
                 <LivestreamHeader
                   pageId={pageId}
