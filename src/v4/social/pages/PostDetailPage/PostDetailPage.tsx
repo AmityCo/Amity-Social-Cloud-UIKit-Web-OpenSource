@@ -241,7 +241,7 @@ export function PostDetailPage({
             style={AmityPostContentComponentStyle.DETAIL}
             hideTarget={hideTarget}
             onPollPostDeleted={() => setFailedToShow(true)}
-            expandAllContent={isPollPost(post.childrenPosts[0])}
+            expandAllContent
           />
         </div>
         {isDesktop && canSeeCommentComposer && (

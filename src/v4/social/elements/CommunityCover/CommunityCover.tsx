@@ -50,6 +50,7 @@ export const CommunityCover: React.FC<CommunityCoverProps> = ({
         <div className={styles.communityCover__topBarLeft}>
           <BackButton
             onPress={onBack}
+            variant="filled"
             className={styles.communityCover__backButton}
             defaultClassName={styles.communityCover__backButton__icon}
           />
