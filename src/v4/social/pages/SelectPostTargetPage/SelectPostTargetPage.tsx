@@ -196,9 +196,9 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
                         pageId,
                         view: 'desktop',
                         isDismissable: false,
-                        onClose: ({ close }) => {
+                        onClose: () => {
                           confirm({
-                            onOk: close,
+                            onOk: closePopup,
                             type: 'confirm',
                             okText: 'Discard',
                             cancelText: 'Keep editing',

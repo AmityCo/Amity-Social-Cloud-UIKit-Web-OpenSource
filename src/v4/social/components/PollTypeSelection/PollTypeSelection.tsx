@@ -27,7 +27,7 @@ export function PollTypeSelection({
   onClickNext,
 }: PollTypeSelectionProps) {
   const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
+  const { openPopup, closePopup } = usePopupContext();
   const { discardPostCreation } = useDiscardPostCreation();
   const { AmityPollTargetSelectionPageBehavior } = usePageBehavior();
   const [selectedPollType, setSelectedPollType] = useState<'text' | 'image'>('text');
@@ -38,8 +38,8 @@ export function PollTypeSelection({
           pageId: PAGE_ID.POLL_POST_COMPOSER_PAGE,
           view: 'desktop',
           isDismissable: false,
-          onClose: ({ close }) =>
-            discardPostCreation({ onDiscard: close, pageId: PAGE_ID.POLL_POST_COMPOSER_PAGE }),
+          onClose: () =>
+            discardPostCreation({ onDiscard: closePopup, pageId: PAGE_ID.POLL_POST_COMPOSER_PAGE }),
           header: (
             <CommunityDisplayName
               community={target}
