@@ -461,6 +461,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionContainerClassName={styles.editPost__mentionContainer}
             communityId={post.targetType === 'community' ? post.targetId : undefined}
             attachmentAmount={totalMedia}
+            isClipPost={isClipPost}
             dataValue={{
               mentionees: post.mentionees,
               data: { text: textValue.text },

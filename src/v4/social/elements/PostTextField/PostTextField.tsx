@@ -48,6 +48,7 @@ interface PostTextFieldProps {
   mentionContainerClassName?: string;
   placeholder?: string;
   isValidInput?: string | boolean;
+  isClipPost?: boolean;
   dataValue: {
     data: { text: string };
     metadata?: {
@@ -160,6 +161,7 @@ export const PostTextField = ({
   placeholderClassName,
   mentionContainerClassName,
   placeholder,
+  isClipPost = false,
   isValidInput: dataInputAttributes,
   attachmentAmount = 0,
   onPreviewLinkChange,
@@ -231,7 +233,8 @@ export const PostTextField = ({
     debouncedFirstUrl &&
     !attachmentAmount &&
     debouncedFirstUrl !== hiddenPreviewUrl &&
-    firstLinkRenderPreview;
+    firstLinkRenderPreview &&
+    !isClipPost;
 
   const handleClosePreview = () => {
     if (debouncedFirstUrl) {

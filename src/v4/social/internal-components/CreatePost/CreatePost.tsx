@@ -438,6 +438,7 @@ export function CreatePost({
             onPreviewLinkChange={(showPreview, isLoading) => {
               setIsPreviewLoading(isLoading || false);
             }}
+            isClipPost={isClipPost}
           />
           <ImageThumbnail
             files={files}

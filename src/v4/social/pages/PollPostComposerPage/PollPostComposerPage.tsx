@@ -609,6 +609,7 @@ export const PollPostComposerPage = ({
             placeholderClassName={styles.pollPostComposerPage__pollQuestion__placeholder}
             placeholder="What's your poll question?"
             attachmentAmount={0}
+            isClipPost={false}
           />
           {textValue.text.length > MAX_POLL_QUESTION_LENGTH && (
             <div className={styles.pollPostComposerPage__pollQuestion__validationWrap}>
