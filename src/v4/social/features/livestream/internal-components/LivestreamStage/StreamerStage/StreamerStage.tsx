@@ -37,7 +37,7 @@ interface StreamerStageProps {
   pageId?: string;
   broadcasterData: Amity.BroadcasterData;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
-  onLeaveStreamStage?: () => void;
+  onLeaveStreamStage?: (isSessionEnded?: boolean) => void;
   onLeaveByKickout?: () => void;
   onCoHostLeaveRequest?: (handler: () => void) => void;
 }
@@ -50,7 +50,7 @@ const Stage = ({
   onCoHostLeaveRequest,
 }: {
   pageId?: string;
-  onLeaveStreamStage?: () => void;
+  onLeaveStreamStage?: (isSessionEnded?: boolean) => void;
   onLeaveByKickout?: () => void;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
   onCoHostLeaveRequest?: (handler: () => void) => void;

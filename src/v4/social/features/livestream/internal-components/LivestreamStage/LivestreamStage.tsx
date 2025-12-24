@@ -46,7 +46,7 @@ export interface LivestreamStageProps {
 
   broadcasterData?: Amity.BroadcasterData;
 
-  onLeaveStreamStage?: () => void;
+  onLeaveStreamStage?: (isSessionEnded?: boolean) => void;
   onLeaveByKickout?: () => void;
 
   event?: Amity.Event;
@@ -113,7 +113,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       okButtonColor: 'alert',
       onOk: () => {
         coHostLeaveHandler?.();
-        onLeaveStreamStage?.();
+        onLeaveStreamStage?.(true);
         onClose();
       },
       okText: 'Leave',

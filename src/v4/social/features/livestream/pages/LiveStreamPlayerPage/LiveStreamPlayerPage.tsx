@@ -59,6 +59,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const [livestreamPost, setLivestreamPost] = useState(post);
+  const coHostEndSessionRef = useRef(false);
 
   const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
   const { room } = useRoom(subscribedPost?.childrenPosts?.[0]?.getRoomInfo()?.roomId ?? roomId);
@@ -74,9 +75,12 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     onSettled: () => {
       setUiState('player');
       reloadPlayer();
-      success({
-        content: 'You left the stage and are now watching as a viewer.',
-      });
+      if (!coHostEndSessionRef.current)
+        success({
+          content: 'You left the stage and are now watching as a viewer.',
+        });
+
+      coHostEndSessionRef.current = false;
     },
   });
 
@@ -388,7 +392,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   targetType={subscribedPost?.targetType}
                   broadcasterData={broadcasterData}
                   isStarting={isGettingBroadcasterData}
-                  onLeaveStreamStage={() => {
+                  onLeaveStreamStage={(isSessionEnded?: boolean) => {
+                    coHostEndSessionRef.current = isSessionEnded ?? false;
                     leaveRoom();
                   }}
                   onLeaveByKickout={() => {

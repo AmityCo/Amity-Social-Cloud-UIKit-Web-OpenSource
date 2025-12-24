@@ -13,6 +13,7 @@ import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { RoomRepository } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
 
 export type CreateLivestreamPageProps = {
   targetType: 'community' | 'user';
@@ -81,7 +82,9 @@ export function CreateLivestreamPage({
     const unsubscriber: Amity.Unsubscriber[] = [];
     if (room?.status === 'live') {
       unsubscriber.push(
-        RoomRepository.onRoomParticipantLeft((room) => {
+        RoomRepository.onRoomParticipantLeft(({ actorInternalId }) => {
+          const coHostInternalId = getRoomParticipant(room, 'coHost')?.userInternalId;
+          if (coHostInternalId !== actorInternalId) return;
           if (coHostJoinedRef.current)
             success({
               content: 'Co-host left the live stream.',
@@ -98,9 +101,8 @@ export function CreateLivestreamPage({
       );
 
       unsubscriber.push(
-        RoomRepository.onRoomParticipantStageJoined((room) => {
-          if (room.participants.find((participant) => participant.type === 'coHost'))
-            coHostJoinedRef.current = true;
+        RoomRepository.onRoomParticipantStageJoined(({ room }) => {
+          if (getRoomParticipant(room, 'coHost')) coHostJoinedRef.current = true;
         }),
       );
     }
