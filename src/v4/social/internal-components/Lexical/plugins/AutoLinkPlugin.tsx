@@ -1,12 +1,9 @@
-import React from 'react';
 import { AutoLinkPlugin as LexicalAutoLinkPlugin } from '@lexical/react/LexicalAutoLinkPlugin';
-
-const URL_MATCHER =
-  /(?:(?:https?|ftp):\/\/(?:[a-zA-Z0-9.-]+|[\d.]+)(?::\d{1,5})?(?:\/[^\s<>|]*)?|mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|www\.[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/[^\s<>|]*)?)/;
+import { URL_REGEX } from '~/v4/social/constants/post';
 
 const MATCHERS = [
   (text: string) => {
-    const match = URL_MATCHER.exec(text);
+    const match = URL_REGEX.exec(text);
     if (!match) return null;
 
     const originalMatch = match[0];
