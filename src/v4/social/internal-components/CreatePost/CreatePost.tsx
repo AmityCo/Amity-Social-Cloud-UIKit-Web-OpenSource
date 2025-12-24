@@ -71,7 +71,7 @@ export function CreatePost({
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { closePopup } = usePopupContext();
-  const { setVideoThumbnail } = useLayoutContext();
+  const { setVideoThumbnail, setCanBeDiscarded } = useLayoutContext();
 
   const { online } = useNetworkState();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
@@ -338,6 +338,10 @@ export function CreatePost({
     online &&
     !isLoading &&
     !isPreviewLoading;
+
+  useEffect(() => {
+    setCanBeDiscarded(hasNoChanges);
+  }, [hasNoChanges]);
 
   const renderPosting = () => {
     if (isCreating || !online) {

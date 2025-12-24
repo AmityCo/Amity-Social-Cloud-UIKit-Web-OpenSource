@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -23,6 +23,7 @@ import { FileTrigger } from 'react-aria-components';
 import styles from './SelectPostTargetPage.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: boolean }) {
   const pageId = 'select_post_target_page';
@@ -35,6 +36,8 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
   const { openPopup, closePopup } = usePopupContext();
   const { user } = useUser({ userId: currentUserId });
   const { AmityPostTargetSelectionPage } = usePageBehavior();
+  const { canBeDiscarded } = useLayoutContext();
+  const canBeDiscardedRef = useRef(canBeDiscarded);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member' },
@@ -51,6 +54,10 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
       threshold: 0.7,
     },
   });
+
+  useEffect(() => {
+    canBeDiscardedRef.current = canBeDiscarded;
+  }, [canBeDiscarded]);
 
   useEffect(() => {
     if (file) {
@@ -111,15 +118,19 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
                     view: 'desktop',
                     isDismissable: false,
                     onClose: () => {
-                      confirm({
-                        type: 'confirm',
-                        onOk: closePopup,
-                        okText: 'Discard',
-                        cancelText: 'Keep editing',
-                        title: 'Discard this post?',
-                        pageId: 'post_composer_page',
-                        content: 'The post will be permanently discarded. It cannot be undone.',
-                      });
+                      if (canBeDiscardedRef.current) {
+                        closePopup();
+                      } else {
+                        confirm({
+                          type: 'confirm',
+                          onOk: closePopup,
+                          okText: 'Discard',
+                          cancelText: 'Keep editing',
+                          title: 'Discard this post?',
+                          pageId: 'post_composer_page',
+                          content: 'The post will be permanently discarded. It cannot be undone.',
+                        });
+                      }
                     },
                     header: (
                       <CommunityDisplayName
@@ -197,15 +208,20 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
                         view: 'desktop',
                         isDismissable: false,
                         onClose: () => {
-                          confirm({
-                            onOk: closePopup,
-                            type: 'confirm',
-                            okText: 'Discard',
-                            cancelText: 'Keep editing',
-                            title: 'Discard this post?',
-                            pageId: 'post_composer_page',
-                            content: 'The post will be permanently discarded. It cannot be undone.',
-                          });
+                          if (canBeDiscardedRef.current) {
+                            closePopup();
+                          } else {
+                            confirm({
+                              type: 'confirm',
+                              onOk: closePopup,
+                              okText: 'Discard',
+                              cancelText: 'Keep editing',
+                              title: 'Discard this post?',
+                              pageId: 'post_composer_page',
+                              content:
+                                'The post will be permanently discarded. It cannot be undone.',
+                            });
+                          }
                         },
                         header: (
                           <CommunityDisplayName

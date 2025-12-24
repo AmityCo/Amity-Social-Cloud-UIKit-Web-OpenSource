@@ -30,6 +30,8 @@ type LayoutContextType = {
   setLinkToPost: (linkToPost: LinkToPost | null) => void;
   videoThumbnail: LocalVideoPost | undefined;
   setVideoThumbnail: React.Dispatch<React.SetStateAction<LocalVideoPost | undefined>>;
+  canBeDiscarded: boolean;
+  setCanBeDiscarded: (canBeDiscarded: boolean) => void;
 };
 
 const LayoutContext = createContext<LayoutContextType>({
@@ -44,6 +46,8 @@ const LayoutContext = createContext<LayoutContextType>({
   setLinkToPost: () => {},
   videoThumbnail: undefined,
   setVideoThumbnail: () => {},
+  canBeDiscarded: true,
+  setCanBeDiscarded: () => {},
 });
 
 export const useLayoutContext = () => {
@@ -66,6 +70,7 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const invitationNotificationTray = useInvitationNotificationTray();
   const { linkToPost, setLinkToPost } = useLinkToPost();
   const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
+  const [canBeDiscarded, setCanBeDiscarded] = useState<boolean>(true);
 
   return (
     <LayoutContext.Provider
@@ -81,6 +86,8 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
         setLinkToPost,
         videoThumbnail,
         setVideoThumbnail,
+        canBeDiscarded,
+        setCanBeDiscarded,
       }}
     >
       {children}
