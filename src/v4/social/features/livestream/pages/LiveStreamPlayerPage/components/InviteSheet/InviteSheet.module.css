@@ -33,6 +33,10 @@
   margin: 1.25rem 0;
 }
 
+.inviteSheet__avatar__text {
+  font-size: 3.75rem;
+}
+
 .inviteSheet__hostAvatar {
   position: absolute;
   left: 0;

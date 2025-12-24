@@ -2,6 +2,7 @@ import { InvitationStatusEnum } from '@amityco/ts-sdk';
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import useSDK from '~/core/hooks/useSDK';
 import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
+import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 // Define the context type for only the data that needs to be passed to nested components
 interface LivestreamDataContextType {
@@ -21,6 +22,8 @@ interface LivestreamDataContextType {
   setInvitationByMe?: React.Dispatch<React.SetStateAction<Amity.Invitation | undefined>>;
 
   invitations?: Amity.Invitation[] | undefined;
+
+  notificationAlignment?: NotificationAlignment | undefined;
 }
 
 const LivestreamDataContext = createContext<LivestreamDataContextType | null>(null);
@@ -30,6 +33,7 @@ interface LivestreamDataProviderProps {
   room?: Amity.Room | null;
   channel?: Amity.Channel<'live'> | null;
   livestreamPost?: Amity.Post | null;
+  notificationAlignment?: NotificationAlignment;
 }
 
 export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
@@ -37,6 +41,7 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   room,
   channel,
   livestreamPost,
+  notificationAlignment,
 }) => {
   // Computed values for easier access
   const host = room?.participants.find((participant) => participant.type === 'host');
@@ -71,6 +76,7 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
     invitations,
     invitationByMe,
     setInvitationByMe,
+    notificationAlignment,
   };
 
   return (

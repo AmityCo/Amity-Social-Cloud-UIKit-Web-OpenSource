@@ -35,11 +35,19 @@ export const InviteSheet: React.FC<InviteSheetProps> = ({
         </div>
         <div className={styles.inviteSheet__avatar__wrapper}>
           <div className={styles.inviteSheet__hostAvatar}>
-            <UserAvatar className={styles.inviteSheet__avatar} userData={host} />
+            <UserAvatar
+              className={styles.inviteSheet__avatar}
+              userData={host}
+              textPlaceholderClassName={styles.inviteSheet__avatar__text}
+            />
             <HostBadge className={styles.inviteSheet__hostBadge} />
           </div>
           <div className={styles.inviteSheet__coHostAvatar}>
-            <UserAvatar className={styles.inviteSheet__avatar} userData={coHost} />
+            <UserAvatar
+              className={styles.inviteSheet__avatar}
+              userData={coHost}
+              textPlaceholderClassName={styles.inviteSheet__avatar__text}
+            />
           </div>
         </div>
         <div className={styles.inviteSheet__text__wrapper}>

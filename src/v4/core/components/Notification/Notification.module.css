@@ -36,7 +36,7 @@
   animation-duration: 0.3s;
   animation-name: appear;
   pointer-events: auto;
-  background-color: var(--asc-color-secondary-default);
+  background-color: var(--asc-color-custom-toast-background);
   padding: 1rem;
   box-shadow: var(--asc-box-shadow-02);
 }
@@ -64,6 +64,13 @@
   position: fixed;
   background-color: var(--asc-color-base-shade3);
   box-shadow: var(--asc-box-shadow-02);
+}
+
+.notificationContainer[data-alignment='livestreamWithChat'] {
+  position: fixed;
+  top: 2.5rem;
+  left: 50%;
+  transform: translateX(calc(-50% - 17.5dvw));
 }
 
 @keyframes appear {

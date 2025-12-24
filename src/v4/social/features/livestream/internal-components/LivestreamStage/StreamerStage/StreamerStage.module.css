@@ -85,7 +85,7 @@
   position: absolute;
   top: 1rem;
   left: 1rem;
-  background: var(--asc-color-transparent-black);
+  background: rgb(0 0 0 / 20%);
   border-radius: 100%;
   padding: 0.25rem;
   display: flex;

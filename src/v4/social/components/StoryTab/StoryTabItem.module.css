@@ -28,7 +28,6 @@
   height: 3.5rem;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid var(--asc-color-white);
 }
 
 .displayName__container {

@@ -5,6 +5,7 @@ import { ReadOnlyToggle } from '~/v4/social/features/livestream/internal-compone
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
 import styles from './LivestreamHeaderMenu.module.css';
+import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 
 export interface LivestreamHeaderMenuProps {
   pageId: string;
@@ -25,6 +26,7 @@ export const LivestreamHeaderMenu: React.FC<LivestreamHeaderMenuProps> = ({
   onChangeReadOnly,
   onLinkCopied,
 }) => {
+  const { notificationAlignment } = useLivestreamData();
   return (
     <div className={styles.livestreamHeaderMenu}>
       {targetType !== 'user' && (
@@ -40,6 +42,7 @@ export const LivestreamHeaderMenu: React.FC<LivestreamHeaderMenuProps> = ({
           model={SharableModel.POST}
           referenceId={postId}
           onDone={onLinkCopied}
+          notificationAlignment={notificationAlignment}
         />
       )}
     </div>

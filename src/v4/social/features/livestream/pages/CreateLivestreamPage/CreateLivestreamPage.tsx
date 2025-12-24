@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './CreateLivestream.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
@@ -11,6 +11,8 @@ import { LivestreamDataProvider } from '~/v4/social/features/livestream/provider
 import { LivestreamChat } from '~/v4/social/features/livestream/internal-components/LivestreamChat';
 import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { RoomRepository } from '@amityco/ts-sdk';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export type CreateLivestreamPageProps = {
   targetType: 'community' | 'user';
@@ -25,6 +27,7 @@ export function CreateLivestreamPage({
 }: CreateLivestreamPageProps) {
   const pageId = PAGE_ID.CREATE_LIVESTREAM_PAGE;
   const { currentUserId } = useSDK();
+  const { success } = useNotifications();
   const { themeStyles } = useAmityPage({
     pageId,
   });
@@ -69,10 +72,49 @@ export function CreateLivestreamPage({
     event,
   });
 
+  const coHostJoinedRef = useRef<boolean>(false);
   const { readOnly, setReadOnly } = useReadOnlySetting({ room, channel });
+  const isShowLivestreamChat = channel && livestreamPost && community && room;
+  const notificationAlignment = isShowLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
+
+  useEffect(() => {
+    const unsubscriber: Amity.Unsubscriber[] = [];
+    if (room?.status === 'live') {
+      unsubscriber.push(
+        RoomRepository.onRoomParticipantLeft((room) => {
+          if (coHostJoinedRef.current)
+            success({
+              content: 'Co-host left the live stream.',
+              alignment: notificationAlignment,
+            });
+          else
+            success({
+              content: 'Co-host left the stage.',
+              alignment: notificationAlignment,
+            });
+
+          coHostJoinedRef.current = false;
+        }),
+      );
+
+      unsubscriber.push(
+        RoomRepository.onRoomParticipantStageJoined((room) => {
+          if (room.participants.find((participant) => participant.type === 'coHost'))
+            coHostJoinedRef.current = true;
+        }),
+      );
+    }
+
+    return () => unsubscriber.forEach((fn) => fn());
+  }, [room]);
 
   return (
-    <LivestreamDataProvider room={room} channel={channel} livestreamPost={livestreamPost}>
+    <LivestreamDataProvider
+      room={room}
+      channel={channel}
+      livestreamPost={livestreamPost}
+      notificationAlignment={notificationAlignment}
+    >
       <ModalOverlay className={styles.createLivestream__overlay} style={themeStyles} isOpen={true}>
         <Modal className={styles.createLivestream}>
           <Dialog
@@ -115,7 +157,7 @@ export function CreateLivestreamPage({
                 />
               ) : (
                 <>
-                  {channel && livestreamPost && community && room && (
+                  {isShowLivestreamChat && (
                     <LivestreamChat
                       pageId={pageId}
                       community={community}

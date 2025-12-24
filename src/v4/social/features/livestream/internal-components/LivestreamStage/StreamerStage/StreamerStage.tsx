@@ -62,7 +62,6 @@ const Stage = ({
 
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
-  const { success } = useNotifications();
   const { buttonProps } = useDisconnectButton({});
 
   // LiveKit device management (inside room context)
@@ -374,7 +373,8 @@ export const StreamerStage: FC<StreamerStageProps> = ({
 }) => {
   // Get values from context
 
-  const { room, invitationByMe, setInvitationByMe, channel } = useLivestreamData();
+  const { room, invitationByMe, setInvitationByMe, channel, notificationAlignment } =
+    useLivestreamData();
   const { channel: liveChannel } = useChannel({ channelId: channel?.channelId });
   const { success } = useNotifications();
   const { moderateChat } = useChatModeration();
@@ -387,7 +387,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
 
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Approved) {
-      success({ content: 'Co-host accepted the invitation.' });
+      success({ content: 'Co-host accepted the invitation.', alignment: notificationAlignment });
       liveChannel?.channelId &&
         moderateChat({
           channelId: liveChannel?.channelId,
@@ -404,7 +404,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
 
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Rejected) {
-      success({ content: 'Co-host declined the invitation.' });
+      success({ content: 'Co-host declined the invitation.', alignment: notificationAlignment });
       setInvitationByMe?.(undefined);
     }
   }, [invitationByMe?.status]);

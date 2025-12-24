@@ -5,6 +5,7 @@ import { CameraPlaceholder } from './CameraPlaceholder';
 import { LocalVideoTrack } from 'livekit-client';
 import styles from './CameraPreview.module.css';
 import clsx from 'clsx';
+import MuteMic from '~/v4/icons/MutedMic';
 
 export interface CameraPreviewProps {
   className?: string;
@@ -84,16 +85,7 @@ export const CameraPreview: React.FC<CameraPreviewProps> = ({
       // Track exists but media stream not ready yet, show loading or fallback to PreJoin
       return (
         <div className={clsx(styles.cameraPreview__cameraContainer, className)}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-            }}
-          >
-            Loading camera...
-          </div>
+          <div className={styles.cameraPreview__loading}>Loading camera...</div>
         </div>
       );
     }
@@ -107,12 +99,13 @@ export const CameraPreview: React.FC<CameraPreviewProps> = ({
           autoPlay
           playsInline
           muted
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
+          className={styles.cameraPreview__videoElement}
         />
+        {!currentDevices.audioEnabled && (
+          <div className={styles.cameraPreview__mutedIndicator}>
+            <MuteMic className={styles.cameraPreview__mutedIndicator__icon} />
+          </div>
+        )}
       </div>
     );
   }

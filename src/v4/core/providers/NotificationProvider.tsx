@@ -5,6 +5,7 @@ import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import Remove from '~/v4/icons/Remove';
 import styles from './NotificationProvider.module.css';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 interface Notification {
   id?: number | string;
@@ -15,7 +16,7 @@ interface Notification {
 
 type NotificationInput = Notification & {
   duration?: number;
-  alignment?: 'fullscreen' | 'withSidebar' | 'fixed' | 'live-chat';
+  alignment?: NotificationAlignment;
 };
 
 interface NotificationContextProps {

@@ -148,8 +148,10 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       if (!isCoHost) return onClose();
       // 3. Co-host leave broadcast stage, leave livekit room, leave room, change ui back to player
       if (isCoHost && uiState === 'broadcast' && coHostLeaveHandler) {
-        handleCoHostLeaveStage();
+        return handleCoHostLeaveStage();
       }
+
+      return onClose();
     },
     onTargetSelection,
     onStreamEnd,
