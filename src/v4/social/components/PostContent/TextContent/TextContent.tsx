@@ -1,5 +1,3 @@
-import React from 'react';
-import * as linkify from 'linkifyjs';
 import { PostContentType } from '@amityco/ts-sdk';
 import useStream from '~/v4/social/hooks/useStream';
 import usePost from '~/v4/core/hooks/objects/usePost';
@@ -8,6 +6,7 @@ import { LinkPreview } from '~/v4/social/components/PostContent/LinkPreview/Link
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import { Typography } from '~/v4/core/components';
 import styles from './TextContent.module.css';
+import { isValidUrl } from '~/v4/social/utils/isValidUrl';
 
 type TextContentProps = {
   title?: string;
@@ -51,7 +50,8 @@ export const TextContent = ({
       PostContentType.ROOM,
     ].includes(childPost?.dataType);
 
-  const canPreviewShown = post?.links?.[0]?.renderPreview && !isHasMedia;
+  const canPreviewShown =
+    post?.links?.[0]?.renderPreview && !isHasMedia && isValidUrl(post?.links?.[0]?.url);
 
   const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
 
