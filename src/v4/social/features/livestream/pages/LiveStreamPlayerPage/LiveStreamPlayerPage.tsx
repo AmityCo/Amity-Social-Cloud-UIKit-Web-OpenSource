@@ -33,6 +33,7 @@ import {
   useLiveStreamPlayer,
   useGetBroadcasterData,
   useSyncWatchingHeartbeat,
+  useRoomWatchTracking,
 } from '~/v4/social/features/livestream/hooks';
 import { LivestreamChat } from '~/v4/social/features/livestream/internal-components/LivestreamChat';
 import { LivestreamSetup } from '~/v4/social/features/livestream/internal-components/LivestreamSetup';
@@ -176,6 +177,17 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   useSyncWatchingHeartbeat({
     roomId: room?.roomId,
     enabled: room?.status !== 'recorded' && room?.status !== 'ended',
+  });
+
+  // Determine if current user is a viewer (not host or co-host)
+  const isViewer = !!room && !!currentUserId && uiState === 'player';
+
+  // Track watch minutes for viewers
+  useRoomWatchTracking({
+    room,
+    currentUserId,
+    isViewer,
+    videoRef,
   });
 
   useEffect(() => {

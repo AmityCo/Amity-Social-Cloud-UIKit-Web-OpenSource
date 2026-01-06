@@ -17,3 +17,4 @@ export { useSyncWatchingHeartbeat } from './useSyncWatchingHeartbeat';
 export { useLeaveRoom } from './useLeaveRoom';
 export { useRoom } from './useRoom';
 export { useRoomSubscription } from './useRoomSubscription';
+export { useRoomWatchTracking } from './useRoomWatchTracking';
