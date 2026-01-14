@@ -6,15 +6,16 @@ import { NoPage } from '~/v4/icons/NoPage';
 import { Button } from '~/v4/core/components/AriaButton';
 import clsx from 'clsx';
 import styles from './FailedToShow.module.css';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 type FailedToShowProps = {
   pageId?: string;
-  onBack?: () => void;
   className?: string;
 };
 
-export const FailedToShow = ({ pageId = '*', onBack, className }: FailedToShowProps) => {
+export const FailedToShow = ({ pageId = '*', className }: FailedToShowProps) => {
   const componentId = 'failed_to_show';
+  const { onBack } = useNavigation();
   const { accessibilityId } = useAmityComponent({
     pageId,
     componentId,
@@ -31,11 +32,9 @@ export const FailedToShow = ({ pageId = '*', onBack, className }: FailedToShowPr
       <Typography.Body className={styles.failedToShow__desc}>
         The content you’re looking for is unavailable.
       </Typography.Body>
-      {onBack && (
-        <Button onPress={onBack} className={styles.failedToShow__button}>
-          <Typography.Body>Go Back</Typography.Body>
-        </Button>
-      )}
+      <Button onPress={() => onBack()} className={styles.failedToShow__button}>
+        <Typography.Body>Go Back</Typography.Body>
+      </Button>
     </div>
   );
 };

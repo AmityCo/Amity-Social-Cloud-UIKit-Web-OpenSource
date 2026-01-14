@@ -173,7 +173,6 @@ export const PostMenu = ({
     },
     onSuccess: () => {
       success({ content: 'Poll closed.' });
-      onPostDeleted?.(post);
       onPollClosed?.();
     },
     onError: () => {
