@@ -40,7 +40,7 @@
   inset: 0;
   position: fixed;
   display: block;
-  z-index: 5;
+  z-index: 100;
   opacity: 1 !important;
 }
 
