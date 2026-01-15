@@ -46,11 +46,13 @@ interface CommentInputProps {
   mentionContainer?: HTMLElement | null;
   mentionContainerClassName?: string;
   shouldAutoFocus?: boolean;
+  onFocus?: () => void;
   onChange: (data: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => void;
 }
 
 export interface CommentInputRef {
   clearEditorState: () => void;
+  focus: () => void;
 }
 
 const useSuggestions = (communityId?: string | null) => {
@@ -148,6 +150,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
       mentionContainer,
       mentionContainerClassName,
       shouldAutoFocus = false,
+      onFocus,
     },
     ref,
   ) => {
@@ -188,6 +191,16 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
 
     useImperativeHandle(ref, () => ({
       clearEditorState,
+      focus: () => {
+        editorRef.current?.focus();
+        const rootElement = editorRef.current?.getRootElement();
+        if (rootElement) {
+          rootElement.focus();
+          setTimeout(() => {
+            rootElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      },
     }));
 
     const editorConfig = getEditorConfig({
@@ -221,6 +234,11 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
               <ContentEditable
                 data-testid={accessibilityId}
                 className={styles.editorEditableContent}
+                onFocus={() => {
+                  if (onFocus) {
+                    onFocus();
+                  }
+                }}
               />
             }
             placeholder={
