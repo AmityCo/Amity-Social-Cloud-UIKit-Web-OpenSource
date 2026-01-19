@@ -184,7 +184,7 @@ export const PostMenu = ({
     onCloseMenu();
     confirm({
       title: 'Delete post',
-      content: "This post will be permanently deleted. You'll no longer see and find this post.",
+      content: 'This post will be permanently deleted.',
       cancelText: 'Cancel',
       okText: 'Delete',
       onOk: () => {
