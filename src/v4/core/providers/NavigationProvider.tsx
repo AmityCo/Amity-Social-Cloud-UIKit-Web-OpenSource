@@ -26,6 +26,7 @@ import { EventSetupProps } from '~/v4/social/features';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
 import { EventAttendeesPageProps } from '~/v4/social/pages/EventAttendeesPage/EventAttendeesPage';
+import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -446,9 +447,9 @@ type ContextValue = {
     targetId?: string[],
   ) => void;
 
-  handleVisitorUserAction: () => void;
-  handleNonMemberAction: () => void;
-  handleNonFollowerAction: () => void;
+  handleVisitorUserAction: (context: { alignment: NotificationAlignment }) => void;
+  handleNonMemberAction: (context: { alignment: NotificationAlignment }) => void;
+  handleNonFollowerAction: (context: { alignment: NotificationAlignment }) => void;
   goToEventSetupPage: (context: EventSetupProps) => void;
   goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => void;
   goToPastEventsPage: () => void;
@@ -1492,16 +1493,19 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const handleVisitorUserAction = () => {
-    notification.info({ content: 'Create an account or sign in to continue.' });
+  const handleVisitorUserAction = (context: { alignment: NotificationAlignment }) => {
+    notification.info({
+      content: 'Create an account or sign in to continue.',
+      alignment: context.alignment,
+    });
   };
 
-  const handleNonMemberAction = () => {
-    notification.info({ content: 'Join community to interact.' });
+  const handleNonMemberAction = (context: { alignment: NotificationAlignment }) => {
+    notification.info({ content: 'Join community to interact.', alignment: context.alignment });
   };
 
-  const handleNonFollowerAction = () => {
-    notification.info({ content: 'Follow user to interact.' });
+  const handleNonFollowerAction = (context: { alignment: NotificationAlignment }) => {
+    notification.info({ content: 'Follow user to interact.', alignment: context.alignment });
   };
 
   const goToEventSetupPage = useCallback(

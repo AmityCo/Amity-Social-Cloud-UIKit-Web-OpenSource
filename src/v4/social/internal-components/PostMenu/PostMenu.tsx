@@ -289,12 +289,14 @@ export const PostMenu = ({
     if (community)
       return handleCommunityProfileBehavior({
         defaultBehavior: () => onClickReportPost(),
+        defaultCallback: onCloseMenu,
         allowNonMember: false,
         isJoined: community?.isJoined,
       });
 
     handleUserProfileBehavior({
       defaultBehavior: () => onClickReportPost(),
+      defaultCallback: onCloseMenu,
       allowNonFollower: true,
     });
   };
