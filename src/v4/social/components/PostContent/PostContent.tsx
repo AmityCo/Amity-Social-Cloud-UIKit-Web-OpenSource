@@ -566,6 +566,8 @@ export const PostContent = ({
                     ? openVideoViewer(0)
                     : goToClipFeedPage?.({
                         currentPostId: post.children[0],
+                        targetId: post.targetId,
+                        targetType: post.targetType,
                       });
                 }}
                 goToPostDetail={onClick}
