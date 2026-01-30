@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.2 (2026-01-30)
+
+
+### Bug Fixes
+
+* build failed ([f363e15](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/f363e15c27b3f0c2089b895fc5d864d71d0e945b))
+
 ## 4.15.0-beta.1 (2025-12-24)
 
 ## 4.15.0-beta.0 (2025-12-24)
