@@ -350,6 +350,7 @@ export function CreatePost({
           data-testid="create-post-posting-notification"
           className={styles.createPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
+          data-is-clip-post={isClipPost}
         >
           <Notification
             className={styles.createPost__notificationToast}
@@ -370,6 +371,7 @@ export function CreatePost({
           data-testid="create-post-error-notification"
           className={styles.createPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
+          data-is-clip-post={isClipPost}
         >
           <Notification
             content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}

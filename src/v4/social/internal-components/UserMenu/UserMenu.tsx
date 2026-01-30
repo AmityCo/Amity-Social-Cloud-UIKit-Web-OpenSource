@@ -52,6 +52,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     handleUserProfileBehavior({
       allowNonFollower: true,
       followStatus,
+      defaultCallback: onCloseMenu,
       defaultBehavior: () => {
         onCloseMenu();
         if (!online) {
@@ -69,6 +70,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     handleUserProfileBehavior({
       allowNonFollower: true,
       followStatus,
+      defaultCallback: onCloseMenu,
       defaultBehavior: () => {
         onCloseMenu();
         if (isCurrentUser) {

@@ -55,6 +55,12 @@ export const PollContent: FC<PollContentProps> = ({
     }
   }, [forceShowResults]);
 
+  useEffect(() => {
+    if (poll?.status === 'closed') {
+      setIsPollEnded(true);
+    }
+  }, [poll?.status]);
+
   const user = useUser(currentUserId);
 
   const showAllChoices = pageId === 'post_detail_page' || pageId === 'pending_request_page';

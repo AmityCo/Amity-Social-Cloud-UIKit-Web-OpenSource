@@ -154,8 +154,8 @@ export const CommunityFeedStory = ({
       await StoryRepository.softDeleteStory(storyId);
     } catch (error) {
       setIsError(true);
-      notification.error({
-        content: 'Failed to delete story',
+      notification.info({
+        content: 'Failed to delete story. Please try again.',
         alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
       });
       return;

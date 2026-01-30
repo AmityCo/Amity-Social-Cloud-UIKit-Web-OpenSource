@@ -41,12 +41,12 @@
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "^7.12.0",
+    "@amityco/ts-sdk": "^7.13.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "^7.12.0",
+    "@amityco/ts-sdk": "^7.13.0",
     "@eslint/js": "^9.4.0",
     "@octokit/core": "^6.1.4",
     "@storybook/addon-a11y": "^7.6.7",
@@ -155,7 +155,7 @@
     "stylis": "^4.3.1",
     "swiper": "^11.2.8",
     "uuid": "^8.3.2",
-    "vaul": "0.8.9",
+    "vaul": "^1.1.2",
     "zod": "^3.22.4"
   },
   "lint-staged": {

@@ -107,7 +107,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     links: post.links || [],
   });
 
-  const online = useNetworkState();
+  const { online } = useNetworkState();
   const { success } = useNotifications();
 
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
@@ -405,6 +405,53 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     imageSize: 'medium',
   });
 
+  const renderPosting = () => {
+    if (isUpdating || !online) {
+      return (
+        <Typography.Body
+          data-testid="edit-post-posting-notification"
+          className={styles.editPost__notification}
+          data-show-detail-media-attachment={showToastPosition()}
+          data-isclip={isClipPost}
+        >
+          <Notification
+            className={styles.editPost__notificationToast}
+            content={online ? 'Posting...' : 'Waiting for network...'}
+            icon={<Spinner />}
+            alignment="fixed"
+          />
+        </Typography.Body>
+      );
+    }
+    return null;
+  };
+
+  const renderError = () => {
+    if (isError || postErrorText) {
+      return (
+        <Typography.Body
+          data-testid="edit-post-error-notification"
+          className={styles.editPost__notification}
+          data-show-detail-media-attachment={showToastPosition()}
+          data-isclip={isClipPost}
+        >
+          <Notification
+            content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+            icon={<ExclamationCircle className={styles.editPost_notificationIcon} />}
+            alignment="fixed"
+            duration={3000}
+            className={styles.editPost__notificationToast}
+            onClose={() => {
+              setPostErrorText(undefined);
+              setIsError(false);
+            }}
+          />
+        </Typography.Body>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={styles.editPost} style={themeStyles}>
       {isDesktop && notifications}
@@ -592,39 +639,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               )
             : null}
 
-          {(isUpdating || !online) && (
-            <Typography.Body
-              className={styles.editPost__notification}
-              data-show-detail-media-attachment={showToastPosition()}
-              data-isclip={isClipPost}
-            >
-              <Notification
-                className={styles.editPost__notificationToast}
-                content={online ? 'Posting...' : 'Waiting for network...'}
-                icon={<Spinner />}
-                alignment="fixed"
-              />
-            </Typography.Body>
-          )}
-          {(isError || postErrorText) && (
-            <Typography.Body
-              className={styles.editPost__notification}
-              data-show-detail-media-attachment={showToastPosition()}
-              data-isclip={isClipPost}
-            >
-              <Notification
-                content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
-                icon={<ExclamationCircle className={styles.editPost_notificationIcon} />}
-                alignment="fixed"
-                duration={3000}
-                className={styles.editPost__notificationToast}
-                onClose={() => {
-                  setPostErrorText(undefined);
-                  setIsError(false);
-                }}
-              />
-            </Typography.Body>
-          )}
+          {renderPosting()}
+          {renderError()}
         </div>
       )}
 
@@ -643,7 +659,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             />
           </div>
         )}
-        {postErrorText && (
+        {(isError || postErrorText) && (
           <div
             className={styles.editPost__notification}
             data-isclip={isClipPost}

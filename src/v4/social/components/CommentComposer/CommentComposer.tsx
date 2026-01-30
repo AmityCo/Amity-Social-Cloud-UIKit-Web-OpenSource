@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -77,6 +77,12 @@ export const CommentComposer = ({
   const { page } = useNavigation();
 
   const { post } = usePost(referenceId);
+
+  useEffect(() => {
+    if (replyTo && editorRef.current) {
+      editorRef.current?.focus();
+    }
+  }, [replyTo]);
 
   const [composerHeight, setComposerHeight] = useState(0);
 
@@ -206,6 +212,14 @@ export const CommentComposer = ({
                   mentioned: mentioned,
                 },
               });
+            }}
+            onFocus={() => {
+              // Scroll composer into view when user taps on input
+              if (composerInputRef.current) {
+                setTimeout(() => {
+                  composerInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+              }
             }}
             targetType={referenceType}
             targetId={referenceId}

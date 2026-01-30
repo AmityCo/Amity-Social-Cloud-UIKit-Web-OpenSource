@@ -11,6 +11,7 @@ import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { type GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
+import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 export interface PageBehavior {
   AmityStoryViewPageBehavior?: {
@@ -250,9 +251,9 @@ export interface PageBehavior {
     goToCommunityProfilePage?(context: { communityId: string }): void;
   };
   AmityGlobalBehavior?: {
-    handleVisitorUserAction?(): void;
-    handleNonMemberAction?(): void;
-    handleNonFollowerAction?(): void;
+    handleVisitorUserAction?(context: { alignment: NotificationAlignment }): void;
+    handleNonMemberAction?(context: { alignment: NotificationAlignment }): void;
+    handleNonFollowerAction?(context: { alignment: NotificationAlignment }): void;
   };
   AmityEventTargetSelectionPageBehavior: {
     goToEventSetupPage?(context: EventSetupProps): void;
@@ -965,24 +966,24 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
     },
     AmityGlobalBehavior: {
-      handleVisitorUserAction: () => {
+      handleVisitorUserAction: (context: { alignment: NotificationAlignment }) => {
         if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction) {
-          return pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction;
+          return pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction(context);
         }
-        handleVisitorUserAction();
+        handleVisitorUserAction(context);
       },
-      handleNonMemberAction: () => {
+      handleNonMemberAction: (context: { alignment: NotificationAlignment }) => {
         if (pageBehavior?.AmityGlobalBehavior?.handleNonMemberAction) {
-          return pageBehavior?.AmityGlobalBehavior?.handleNonMemberAction;
+          return pageBehavior?.AmityGlobalBehavior?.handleNonMemberAction(context);
         }
-        handleNonMemberAction();
+        handleNonMemberAction(context);
       },
 
-      handleNonFollowerAction: () => {
+      handleNonFollowerAction: (context: { alignment: NotificationAlignment }) => {
         if (pageBehavior?.AmityGlobalBehavior?.handleNonFollowerAction) {
-          return pageBehavior?.AmityGlobalBehavior?.handleNonFollowerAction;
+          return pageBehavior?.AmityGlobalBehavior?.handleNonFollowerAction(context);
         }
-        handleNonFollowerAction();
+        handleNonFollowerAction(context);
       },
     },
     AmityMyCommunitiesComponentBehavior: {
