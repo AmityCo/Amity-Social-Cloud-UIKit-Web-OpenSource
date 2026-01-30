@@ -69,7 +69,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { isLoading: isInvitationLoading } = useGetInvitation(community as Amity.Community);
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
-  const { onBack, goToCreateLivestreamPage } = useNavigation();
+  const { goToCreateLivestreamPage } = useNavigation();
   const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
   const { hasCreateEventPermission } = useEventPermission(communityId);
@@ -185,7 +185,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       onScroll={onScroll}
     >
       {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
-      {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
+      {isShowFailed && <FailedToShow pageId={pageId} />}
       {!isLoading && !isShowFailed && !isInvitationLoading && community && !community.isDeleted && (
         <>
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />

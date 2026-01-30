@@ -140,7 +140,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     } catch (error: Error | unknown) {
       setIsError(true);
       notification.info({
-        content: 'Failed to delete story',
+        content: 'Failed to delete story. Please try again.',
         alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
       });
 

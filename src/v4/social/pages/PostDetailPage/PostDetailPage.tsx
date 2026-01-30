@@ -178,7 +178,7 @@ export function PostDetailPage({
     post?.structureType === PostStructureType.FILE ||
     post?.structureType === PostStructureType.MIXED
   )
-    return <FailedToShow pageId={pageId} onBack={onBack} />;
+    return <FailedToShow pageId={pageId} />;
 
   if (!post) return null;
 

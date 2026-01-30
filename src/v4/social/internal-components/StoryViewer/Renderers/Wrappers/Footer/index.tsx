@@ -86,6 +86,7 @@ const Footer: React.FC<
     if (community) {
       handleCommunityProfileBehavior({
         defaultBehavior: () => onReactionClick(),
+        alignment: 'fullscreen',
         allowNonMember: false,
         isJoined: community?.isJoined,
       });
@@ -93,6 +94,7 @@ const Footer: React.FC<
     }
 
     handleUserProfileBehavior({
+      alignment: 'fullscreen',
       defaultBehavior: () => onReactionClick(),
       allowNonFollower: true,
     });

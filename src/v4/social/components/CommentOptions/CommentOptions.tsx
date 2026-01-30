@@ -15,6 +15,7 @@ import UnFlag from '~/v4/icons/UnFlag';
 import styles from './CommentOptions.module.css';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 interface CommentOptionsProps {
   pageId?: string;
@@ -43,6 +44,7 @@ export const CommentOptions = ({
   const isReplyComment = comment.parentId != null;
 
   const { openPopup } = usePopupContext();
+  const { page } = useNavigation();
   const { isDesktop } = useResponsive();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
@@ -85,11 +87,15 @@ export const CommentOptions = ({
     if (community)
       return handleCommunityProfileBehavior({
         defaultBehavior: () => onClickReportComment(),
+        defaultCallback: onCloseMenu,
         allowNonMember: false,
+        alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
         isJoined: community?.isJoined,
       });
 
     handleUserProfileBehavior({
+      alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
+      defaultCallback: onCloseMenu,
       defaultBehavior: () => onClickReportComment(),
       allowNonFollower: true,
     });
@@ -148,7 +154,8 @@ export const CommentOptions = ({
             data-testid={`${pageId}/${componentId}/${option.accessibilityId}`}
             className={styles.commentOptions__actionButton}
             key={index}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               option.action();
             }}
           >

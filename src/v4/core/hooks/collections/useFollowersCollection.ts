@@ -1,5 +1,5 @@
 import { UserRepository } from '@amityco/ts-sdk';
-import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
+import { useLiveCollectionV4 } from '~/v4/core/hooks//useLiveCollectionV4';
 
 type FollowStatusInput = Amity.QueryFollowers['status'];
 
@@ -10,7 +10,7 @@ export default function useFollowersCollection({
   userId?: string | null;
   status: FollowStatusInput;
 }) {
-  const { items, ...rest } = useLiveCollection({
+  const { items, ...rest } = useLiveCollectionV4({
     fetcher: UserRepository.Relationship.getFollowers,
     params: {
       limit: 20,

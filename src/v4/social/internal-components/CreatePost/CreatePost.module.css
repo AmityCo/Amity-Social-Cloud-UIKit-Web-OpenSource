@@ -146,6 +146,10 @@
   bottom: 19rem;
 }
 
+.createPost__notification[data-is-clip-post='true'] {
+  bottom: 1rem;
+}
+
 .createPost_notificationIcon {
   width: 1.5rem;
   height: 1.5rem;

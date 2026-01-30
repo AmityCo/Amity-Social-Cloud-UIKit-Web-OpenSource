@@ -262,13 +262,6 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
 
   const disableModerationPopup = isHostMessage || isOwner || (isCoHostMessage && !isHost);
 
-  const handleClickReportMessage = () =>
-    handleCommunityProfileBehavior({
-      defaultBehavior: onClickReportMessage,
-      isJoined: isJoinedCommunity,
-      allowNonMember: false,
-    });
-
   return (
     <div className={styles.messageBubble__container}>
       <div className={styles.messageBubble__topSectionWrap}>

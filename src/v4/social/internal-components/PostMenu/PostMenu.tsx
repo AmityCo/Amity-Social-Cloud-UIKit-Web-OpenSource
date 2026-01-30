@@ -173,7 +173,6 @@ export const PostMenu = ({
     },
     onSuccess: () => {
       success({ content: 'Poll closed.' });
-      onPostDeleted?.(post);
       onPollClosed?.();
     },
     onError: () => {
@@ -184,7 +183,7 @@ export const PostMenu = ({
   const onDeleteClick = () => {
     onCloseMenu();
     confirm({
-      title: 'Delete post',
+      title: 'Delete post?',
       content: 'This post will be permanently deleted.',
       cancelText: 'Cancel',
       okText: 'Delete',
@@ -290,12 +289,14 @@ export const PostMenu = ({
     if (community)
       return handleCommunityProfileBehavior({
         defaultBehavior: () => onClickReportPost(),
+        defaultCallback: onCloseMenu,
         allowNonMember: false,
         isJoined: community?.isJoined,
       });
 
     handleUserProfileBehavior({
       defaultBehavior: () => onClickReportPost(),
+      defaultCallback: onCloseMenu,
       allowNonFollower: true,
     });
   };
