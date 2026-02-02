@@ -53,7 +53,7 @@ interface MessageComposerProps {
   isMentionSupport?: boolean;
   isReplySupport?: boolean;
   maxLines?: number;
-  maxCharactor?: number;
+  maxCharacters?: number;
   allowEnterNewLine?: boolean;
   enterToSendMessage?: boolean;
   scrollable?: boolean;
@@ -72,7 +72,7 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
       componentId = '*',
       maxLines = 5,
       isMentionSupport = true,
-      maxCharactor = COMPOSEBAR_MAX_CHARACTER_LIMIT,
+      maxCharacters = COMPOSEBAR_MAX_CHARACTER_LIMIT,
       allowEnterNewLine = true,
       enterToSendMessage = false,
       disabled = false,
@@ -163,8 +163,8 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
               onEnter={() => onEnter?.()}
               commandPriority={COMMAND_PRIORITY_LOW}
             />
-            <CharacterLimitPlugin maxCharactor={maxCharactor} />
-            <PasteLimitPlugin maxCharactor={maxCharactor} />
+            <CharacterLimitPlugin maxCharacters={maxCharacters} />
+            <PasteLimitPlugin maxCharacters={maxCharacters} />
             <EditorTextCheckerPlugin setIsEmpty={setIsEmpty} setIsSpacebar={setIsSpacebar} />
 
             {isMentionSupport && (

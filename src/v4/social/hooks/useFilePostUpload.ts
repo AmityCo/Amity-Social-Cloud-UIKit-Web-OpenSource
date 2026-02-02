@@ -11,6 +11,7 @@ export type FileItem<T extends Amity.FileType = any> = {
   status: 'failed' | 'uploaded' | 'selected';
   errorText?: string;
   thumbnailVideo?: string;
+  productTags?: Amity.ProductTag[];
 };
 
 const MAX_PERCENT = 100;
@@ -224,6 +225,24 @@ export function useFilePostUpload(pageId?: string) {
     );
   };
 
+  const handleProductTagsChange = (
+    file: Amity.File<'image'> | Amity.File<'video'>,
+    productTags: Amity.ProductTag[],
+  ) => {
+    setFiles((files) =>
+      files.map((item) => {
+        if (
+          isAmityFile(item.file) &&
+          (item.file.type === 'image' || item.file.type === 'video') &&
+          item.file.fileId === file.fileId
+        ) {
+          return { ...item, file: { ...file }, productTags };
+        }
+        return item;
+      }),
+    );
+  };
+
   const retryUpload = async (fileId: string) => {
     const fileToRetry = files.find((file) => file.id === fileId);
     if (!fileToRetry) {
@@ -268,6 +287,7 @@ export function useFilePostUpload(pageId?: string) {
     removeFile,
     handleFileChange,
     handleAltTextChange,
+    handleProductTagsChange,
     retryUpload,
   };
 }

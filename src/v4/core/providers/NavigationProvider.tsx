@@ -439,7 +439,7 @@ type ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => void;
-
+  onProductTagClick?: (context: { productTag: Amity.ProductTag }) => void;
   //V3 functions
   onClickStory: (
     storyId: string,
@@ -624,7 +624,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingRequestPage: (context) =>
       console.log(`NavigationContext goToPendingRequestPage(${context})`),
     goToClipFeedPage: (context) => console.log(`NavigationContext goToClipFeedPage(${context})`),
-
+    onProductTagClick: (context: { productTag: Amity.ProductTag }) =>
+      console.log(`NavigationContext onProductTagClick(${JSON.stringify(context)})`),
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
       console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
@@ -1563,6 +1564,11 @@ export default function NavigationProvider({
     [pushPage],
   );
 
+  const onProductTagClick = useCallback((context: { productTag: Amity.ProductTag }) => {
+    context.productTag?.product?.productUrl &&
+      window.open(context.productTag.product.productUrl, '_blank');
+  }, []);
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1647,6 +1653,7 @@ export default function NavigationProvider({
         goToPastEventsPage,
         goToEventDetailPage,
         goToEventAttendeesPage,
+        onProductTagClick,
       }}
     >
       <NavigationContextV3.Provider

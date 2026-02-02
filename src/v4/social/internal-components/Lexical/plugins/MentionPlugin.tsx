@@ -6,7 +6,20 @@ import {
   MenuRenderFn,
   MenuTextMatch,
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
-import { $createTextNode, $insertNodes, CommandListenerPriority, NodeKey, TextNode } from 'lexical';
+import {
+  $createTextNode,
+  $insertNodes,
+  CommandListenerPriority,
+  NodeKey,
+  TextNode,
+  $getRoot,
+  $isElementNode,
+} from 'lexical';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { $isMentionNode } from '~/v4/social/internal-components/Lexical/nodes/MentionNode';
+import { ProductMentionData } from '~/v4/core/components/TextEditor/TextEditor';
+import { MentionData } from '~/v4/social/internal-components/Lexical/utils';
+import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
 
 const PUNCTUATION = '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
 const NAME = '\\b[A-Z][^\\s' + PUNCTUATION + ']';
@@ -103,7 +116,36 @@ export class MentionTypeaheadOption<T> extends MenuOption {
   }
 }
 
-export function MentionPlugin<TData, TNode extends TextNode>({
+function countMentions(type: 'user' | 'product' = 'user'): number {
+  let count = 0;
+  const root = $getRoot();
+
+  function traverse(node: any) {
+    if ($isMentionNode(node)) {
+      const data = node.__data as MentionData | ProductMentionData;
+      // Only count user mentions (not product mentions)
+      if (type === 'user' && 'userId' in data && data.userId) {
+        count++;
+      } else if (type === 'product' && 'productId' in data && data.productId) {
+        count++;
+      }
+    }
+    if ($isElementNode(node)) {
+      const children = node.getChildren();
+      for (const child of children) {
+        traverse(child);
+      }
+    }
+  }
+
+  traverse(root);
+  return count;
+}
+
+export function MentionPlugin<
+  TData extends MentionData | ProductMentionData,
+  TNode extends TextNode,
+>({
   suggestions,
   getSuggestionId,
   onQueryChange,
@@ -111,6 +153,8 @@ export function MentionPlugin<TData, TNode extends TextNode>({
   menuRenderFn,
   commandPriority,
   anchorClassName,
+  maxMentions,
+  maxUniqueProductMentions,
 }: {
   suggestions: TData[];
   getSuggestionId: (suggestion: TData) => string;
@@ -119,8 +163,11 @@ export function MentionPlugin<TData, TNode extends TextNode>({
   menuRenderFn: MenuRenderFn<MentionTypeaheadOption<TData>>;
   commandPriority: CommandListenerPriority;
   anchorClassName?: string;
+  maxMentions?: number;
+  maxUniqueProductMentions?: number;
 }) {
   const [editor] = useLexicalComposerContext();
+  const { info } = useConfirmContext();
 
   const options: MentionTypeaheadOption<TData>[] = useMemo(
     () =>
@@ -141,6 +188,35 @@ export function MentionPlugin<TData, TNode extends TextNode>({
       closeMenu: () => void,
     ) => {
       editor.update(() => {
+        // Check if this is a product mention
+        const isProductMention = 'productId' in selectedOption.data;
+
+        // Check if we've reached the mention limit (for user mentions)
+        if (!isProductMention && maxMentions !== undefined) {
+          const currentMentionCount = countMentions();
+          if (currentMentionCount >= maxMentions) {
+            info({
+              title: 'Too many users mentioned',
+              content: `You can only mention up to ${maxMentions} users per message.`,
+            });
+            closeMenu();
+            return;
+          }
+        }
+
+        // Check if we've reached the unique product mention limit
+        if (isProductMention && maxUniqueProductMentions !== undefined) {
+          const currentMentionCount = countMentions('product');
+          if (currentMentionCount >= maxUniqueProductMentions) {
+            info({
+              title: 'Product tag limit reached',
+              content: `You can only tag up to ${DEFAULT_MAX_PRODUCTS} products per post.`,
+            });
+            closeMenu();
+            return;
+          }
+        }
+
         const node = $createNode(selectedOption.data, selectedOption.key);
         const textNode = $createTextNode(' ');
         if (nodeToReplace) {
@@ -152,7 +228,7 @@ export function MentionPlugin<TData, TNode extends TextNode>({
         closeMenu();
       });
     },
-    [editor],
+    [editor, maxMentions, maxUniqueProductMentions, info],
   );
 
   const checkForMentionMatch = useCallback(

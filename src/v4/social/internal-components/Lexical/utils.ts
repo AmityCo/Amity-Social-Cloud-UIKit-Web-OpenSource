@@ -15,8 +15,8 @@ import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { SerializedMentionNode } from './nodes/MentionNode';
 import { hashtagRegex, hashtagTextRegex } from '~/v4/social/utils/hashtagRegex';
 import { SerializedHashtagNode } from './nodes/HashtagNode';
-import * as linkify from 'linkifyjs';
 import { URL_REGEX } from '~/v4/social/constants/post';
+import { ProductMentionData } from '~/v4/core/components/TextEditor/TextEditor';
 
 export interface EditorStateJson extends SerializedLexicalNode {
   children: [];
@@ -89,7 +89,7 @@ function createSerializeTextNode(text: string): SerializedTextNode {
   };
 }
 
-function createSerializeMentionNode({
+function createSerializeUserMentionNode({
   text,
   mention,
 }: {
@@ -107,6 +107,29 @@ function createSerializeMentionNode({
     data: {
       displayName: mention.displayName || (mention.userId as string),
       userId: mention.userId as string,
+    },
+  };
+}
+
+function createSerializeProductMentionNode({
+  text,
+  mention,
+}: {
+  text: string;
+  mention: Amity.TextProductTag;
+}): SerializedMentionNode<ProductMentionData> {
+  return {
+    detail: 0,
+    format: 0,
+    mode: 'normal',
+    style: '',
+    text: text.substring(mention.index, mention.index + mention.length),
+    type: 'mention',
+    version: 1,
+    data: {
+      displayName: mention.product?.productName || (mention.productId as string),
+      productId: mention.productId as string,
+      product: mention.product!,
     },
   };
 }
@@ -151,7 +174,7 @@ function createSerializeLinkNode({
   };
 }
 
-function isLinkData(data: HashtagMentionOrLink): data is Amity.Link {
+function isLinkData(data: HighLightData): data is Amity.Link {
   return (data as Amity.Link)?.url !== undefined;
 }
 
@@ -190,14 +213,18 @@ function extractHashtagsFromText(
   return hashtags;
 }
 
-type HashtagMentionOrLink = Mentioned | Amity.Link | Amity.Hashtag;
+type HighLightData = Mentioned | Amity.Link | Amity.Hashtag | Amity.TextProductTag;
 
-function isHashtagData(data: HashtagMentionOrLink): data is Amity.Hashtag {
+function isHashtagData(data: HighLightData): data is Amity.Hashtag {
   return (data as Amity.Hashtag)?.text !== undefined;
 }
 
-function isMentionData(data: HashtagMentionOrLink): data is Mentioned {
+function isMentionData(data: HighLightData): data is Mentioned {
   return (data as Mentioned)?.userId !== undefined;
+}
+
+function isTextProductTag(data: HighLightData): data is Amity.TextProductTag {
+  return (data as Amity.TextProductTag)?.productId !== undefined;
 }
 
 export function textToEditorState(value: {
@@ -209,12 +236,15 @@ export function textToEditorState(value: {
   mentionees?: Mentionees;
   hashtags?: string[];
   links?: Amity.Link[];
+  productTags?: Amity.TextProductTag[];
 }) {
   const rootNode = createRootNode();
 
   const textArray = value.data.text.split('\n');
 
   const mentions = value.metadata?.mentioned ?? [];
+
+  const productTags = value.productTags ?? [];
 
   const links = value.links ?? [];
 
@@ -231,7 +261,7 @@ export function textToEditorState(value: {
 
   const indexMap: Record<number, boolean> = {};
 
-  const mentionsLinksAndHashtags = [...mentions, ...links, ...hashtags]
+  const mentionsLinksAndHashtags = [...mentions, ...links, ...hashtags, ...productTags]
     .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
     .reduce((acc, item) => {
       // this function is used to remove duplicate mentions and links that cause an infinite loop
@@ -241,7 +271,7 @@ export function textToEditorState(value: {
 
       indexMap[item.index] = true;
       return [...acc, item];
-    }, [] as HashtagMentionOrLink[]);
+    }, [] as HighLightData[]);
 
   let itemIndex = 0;
   let globalIndex = 0;
@@ -282,7 +312,16 @@ export function textToEditorState(value: {
           globalIndex += currentItem.length;
         } else if (isMentionData(currentItem)) {
           paragraph.children.push(
-            createSerializeMentionNode({
+            createSerializeUserMentionNode({
+              text: value.data.text,
+              mention: currentItem,
+            }),
+          );
+          runningIndex += currentItem.length + 1;
+          globalIndex += currentItem.length + 1;
+        } else if (isTextProductTag(currentItem)) {
+          paragraph.children.push(
+            createSerializeProductMentionNode({
               text: value.data.text,
               mention: currentItem,
             }),
@@ -341,6 +380,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
   const paragraphs = editorState.root.children as EditorStateJson[];
 
   const mentioned: Mentioned[] = [];
+  const textProductTags: Amity.TextProductTag[] = [];
   const hashtags: Amity.Hashtag[] = [];
   const links: Amity.Link[] = [];
   let isChannelMentioned = false;
@@ -355,7 +395,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
       (
         child:
           | SerializedTextNode
-          | SerializedMentionNode<MentionData>
+          | SerializedMentionNode<MentionData | ProductMentionData>
           | SerializedAutoLinkNode
           | SerializedHashtagNode
           | { type: 'linebreak'; version: number },
@@ -405,17 +445,17 @@ export function editorStateToText(editorState: SerializedEditorState) {
           runningIndex += child.text.length;
         }
 
-        if ($isSerializedMentionNode<MentionData>(child)) {
+        if ($isSerializedMentionNode<MentionData | ProductMentionData>(child)) {
           const isStartWithAtSign = child.text.charAt(0) === '@';
 
-          if (child.data.userId === 'all') {
+          if ('userId' in child.data && child.data.userId === 'all') {
             mentioned.push({
               index: runningIndex,
               length: child.text.length,
               type: 'channel',
             });
             isChannelMentioned = true;
-          } else {
+          } else if ('userId' in child.data) {
             const textLength = isStartWithAtSign ? child.text.length - 1 : child.text.length;
             mentioned.push({
               index: runningIndex,
@@ -425,6 +465,14 @@ export function editorStateToText(editorState: SerializedEditorState) {
               displayName: child.data.displayName,
             });
             mentioneeUserIds.push(child.data.userId);
+          } else {
+            textProductTags.push({
+              index: runningIndex,
+              length: child.text.length,
+              productId: child.data.productId,
+              text: child.data.displayName,
+              product: child.data.product,
+            });
           }
           paragraphText.push(child.text);
           runningIndex += child.text.length;
@@ -448,7 +496,14 @@ export function editorStateToText(editorState: SerializedEditorState) {
     mentionees.push({ type: 'channel' });
   }
 
-  return { mentioned, hashtags, text: editorStateTextString.join('\n'), mentionees, links };
+  return {
+    mentioned,
+    hashtags,
+    text: editorStateTextString.join('\n'),
+    mentionees,
+    links,
+    textProductTags,
+  };
 }
 
 const defaultTheme = {

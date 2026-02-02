@@ -1,0 +1,73 @@
+.productTagSelection {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-background-default);
+  max-height: inherit;
+  height: 100%;
+}
+
+.productTagSelection[data-display='desktop'] {
+  width: 600px;
+  height: 80vh;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.productTagSelection__selectedProduct__title {
+  color: var(--asc-color-base-default);
+  margin-top: 0.75rem;
+  flex-shrink: 0;
+}
+
+.productTagSelection__selectedProduct {
+  width: 100%;
+  display: flex;
+  overflow-x: scroll;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  flex-shrink: 0;
+}
+
+.productTagSelection__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  padding: 1rem;
+  padding-bottom: 0;
+  gap: 1rem;
+}
+
+.productTagSelection__results {
+  flex: 1;
+  overflow: hidden auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.productTagSelection__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.productTagSelection__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.productTagSelection[data-display='desktop'] .productTagSelection__selectedProduct__title {
+  padding: 0 1rem;
+}
+
+.productTagSelection__submitButton {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.productTagSelection__intersectionObserver {
+  height: 1px;
+}

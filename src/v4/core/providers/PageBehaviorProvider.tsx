@@ -298,6 +298,9 @@ export interface PageBehavior {
   AmityEventAttendeesPageBehavior: {
     goToUserProfilePage?(context: { userId: string }): void;
   };
+  AmityProducTagtListComponentBehavior: {
+    onProductTagClick?(context: { productTag: Amity.ProductTag }): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -358,6 +361,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToCreateLivestreamPage,
     goToEventDetailPage,
     goToLiveStreamPlayerPage,
+    onProductTagClick,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -1099,6 +1103,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventAttendeesPageBehavior.goToUserProfilePage(context);
         }
         goToUserProfilePage(context.userId);
+      },
+    },
+    AmityProducTagtListComponentBehavior: {
+      onProductTagClick: (context: { productTag: Amity.ProductTag }) => {
+        if (pageBehavior?.AmityProducTagtListComponentBehavior?.onProductTagClick) {
+          return pageBehavior.AmityProducTagtListComponentBehavior.onProductTagClick(context);
+        }
+        onProductTagClick?.({ productTag: context.productTag });
       },
     },
   };

@@ -5,6 +5,7 @@
 }
 
 .createPost__form {
+  position: relative;
   overflow-y: scroll;
   max-height: calc(100% - 6.75rem);
 }
@@ -23,8 +24,25 @@
 }
 
 .createPost__formContent {
+  position: relative;
   max-height: auto;
   min-height: auto;
+  padding: 1rem;
+}
+
+.createPost__productTagActionButton {
+  position: absolute;
+  bottom: 12.75rem;
+  right: 1.25rem;
+}
+
+.createPost__productTagActionButton[data-from-media='true'] {
+  bottom: 6.75rem;
+}
+
+.createPost__productTagActionButton__button {
+  /* TODO: check on this css value again */
+  box-shadow: var(--asc-box-shadow-04);
 }
 
 .createPost__formContent .createPost__titleInput {
@@ -33,7 +51,6 @@
   outline: none;
   font-size: 1rem;
   font-weight: 600;
-  padding: 1rem 1rem 0;
 }
 
 .createPost__formContent .createPost__titleInput::placeholder {
@@ -222,6 +239,10 @@
   height: 0.85rem;
 }
 
+.createPost__textEditor {
+  margin-bottom: 0.5rem;
+}
+
 @media (width >= 48em) {
   .createPost {
     width: 30rem;
@@ -244,13 +265,6 @@
     max-height: 50vh;
     min-height: 13rem;
     position: relative;
-  }
-
-  .createPost__formContent .createPost__titleInput {
-    padding: 1rem 1.5rem 0;
-  }
-
-  .createPost__formContent .createPost__input {
     padding: 1rem 1.5rem;
   }
 

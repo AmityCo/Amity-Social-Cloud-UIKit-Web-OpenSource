@@ -1,0 +1,6 @@
+.productMentionItemSkeleton {
+  display: grid;
+  grid-template-columns: 2.5rem auto;
+  align-items: center;
+  gap: 0.5rem;
+}

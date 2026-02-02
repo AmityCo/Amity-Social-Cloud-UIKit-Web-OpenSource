@@ -4,7 +4,11 @@ import { useEffect } from 'react';
 
 const MAX_CHAR_LIMIT = 280;
 
-export function CharacterLimitPlugin({ maxCharactor = MAX_CHAR_LIMIT }: { maxCharactor: number }) {
+export function CharacterLimitPlugin({
+  maxCharacters = MAX_CHAR_LIMIT,
+}: {
+  maxCharacters?: number;
+}) {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
@@ -13,7 +17,7 @@ export function CharacterLimitPlugin({ maxCharactor = MAX_CHAR_LIMIT }: { maxCha
       KEY_DOWN_COMMAND,
       (event) => {
         const currentLength = $getRoot().getTextContentSize();
-        if (currentLength >= maxCharactor) {
+        if (currentLength >= maxCharacters) {
           const allowedKeys = [
             'Backspace',
             'Delete',
@@ -38,7 +42,7 @@ export function CharacterLimitPlugin({ maxCharactor = MAX_CHAR_LIMIT }: { maxCha
     return () => {
       removeKeyDown();
     };
-  }, [editor]);
+  }, [editor, maxCharacters]);
 
   return null;
 }

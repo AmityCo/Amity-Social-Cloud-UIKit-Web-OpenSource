@@ -36,4 +36,14 @@
   .mediaAttachment__swipeDown {
     display: none;
   }
+
+  .mediaAttachment__actionButton_wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .mediaAttachment__productTagButton {
+    width: 2rem;
+    height: 2rem;
+  }
 }

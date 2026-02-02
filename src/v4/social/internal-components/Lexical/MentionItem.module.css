@@ -10,9 +10,9 @@
   cursor: pointer;
 }
 
-.userMentionItem__item[data-is-selected='true'],
-.allMentionItem__item[data-is-selected='true'] {
-  background-color: var(--asc-color-base-shade4);
+.userMentionItem__item[data-hovered='true'],
+.allMentionItem__item[data-hovered='true'] {
+  background-color: var(--asc-color-base-shade4) !important;
 }
 
 .userMentionItem__item:focus,

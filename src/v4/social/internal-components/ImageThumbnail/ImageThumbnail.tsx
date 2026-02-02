@@ -16,6 +16,7 @@ import { AltTextBadge } from '~/v4/social/internal-components/AltTextBadge';
 import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner/ProgressSpinner';
 import styles from './ImageThumbnail.module.css';
+import { ProductTagMediaActionButton } from '~/v4/social/features/product-tagged/internal-components/ProductTagMediaActionButton';
 
 type ImageThumbnailProps = {
   pageId?: string;
@@ -26,8 +27,10 @@ type ImageThumbnailProps = {
   removeFile: (file: File | Amity.File<'image'>, index?: number) => void;
   onRemovePostImage?: (fileId: string) => void;
   onAltTextChange: (file: Amity.File<'image'>, altText: string) => void;
+  onProductTagsChange?: (file: Amity.File<'image'>, productTags: Amity.ProductTag[]) => void;
   isImagePollPost?: boolean;
   ErrorImageMenuButton?: () => void;
+  productTagsReachLimit?: boolean;
 };
 
 export function ImageThumbnail({
@@ -39,8 +42,10 @@ export function ImageThumbnail({
   componentId = '*',
   onRemovePostImage,
   onAltTextChange,
+  onProductTagsChange,
   isImagePollPost = false,
   ErrorImageMenuButton,
+  productTagsReachLimit = false,
 }: ImageThumbnailProps) {
   const hasNewImages = files.length > 0 && files.some((file) => isImageFile(file));
   const hasPostImages = postImages.length > 0;
@@ -80,8 +85,10 @@ export function ImageThumbnail({
             totalImages={totalImages}
             onRemoveFile={() => removeFile(file.file)}
             onAltTextChange={onAltTextChange}
+            onProductTagsChange={onProductTagsChange}
             isImagePollPost={isImagePollPost}
             ErrorImageMenuButton={ErrorImageMenuButton}
+            productTagsReachLimit={productTagsReachLimit}
           />
         ))}
     </div>
@@ -108,11 +115,7 @@ function PostImageItem({
   if (!file) return null;
 
   return (
-    <div
-      key={`post-${post.data?.fileId}`}
-      data-images-height={totalImages > 2}
-      className={styles.thumbnail__wrapper}
-    >
+    <div key={`post-${post.data?.fileId}`} className={styles.thumbnail__wrapper}>
       <img
         alt={file.altText ?? ''}
         className={styles.thumbnail}
@@ -138,8 +141,10 @@ type FileImageItemProps = {
   onRemoveFile: () => void;
   progress: { [key: string]: number };
   onAltTextChange: ImageThumbnailProps['onAltTextChange'];
+  onProductTagsChange: ImageThumbnailProps['onProductTagsChange'];
   isImagePollPost?: boolean;
   ErrorImageMenuButton?: () => void;
+  productTagsReachLimit?: boolean;
 };
 
 function FileImageItem({
@@ -150,8 +155,10 @@ function FileImageItem({
   componentId,
   onRemoveFile,
   onAltTextChange,
+  onProductTagsChange,
   ErrorImageMenuButton,
   isImagePollPost = false,
+  productTagsReachLimit = false,
 }: FileImageItemProps) {
   const isUploading = progress[file.id] && !isAmityFile(file.file);
   const hasError = file.errorText && !('fileId' in file);
@@ -159,7 +166,6 @@ function FileImageItem({
   return (
     <div
       key={`file-${file.id}`}
-      data-images-height={totalImages > 2}
       data-image-poll={isImagePollPost}
       className={styles.thumbnail__wrapper}
     >
@@ -181,7 +187,21 @@ function FileImageItem({
       )}
       {hasError && ErrorImageMenuButton?.()}
       {isAmityFile(file.file) && !isUploading && !hasError && (
-        <AltText file={file.file} onAltTextChange={onAltTextChange} />
+        <>
+          <AltText file={file.file} onAltTextChange={onAltTextChange} />
+          {onProductTagsChange &&
+            ((file.productTags ?? [])?.length !== 0 || !productTagsReachLimit) && (
+              <div className={styles.thumbnail__productTagMediaActionButton}>
+                <ProductTagMediaActionButton
+                  selectedProductTags={file.productTags ?? []}
+                  pageId={pageId}
+                  onTagChanges={(tags) =>
+                    onProductTagsChange(file.file as Amity.File<'image'>, tags)
+                  }
+                />
+              </div>
+            )}
+        </>
       )}
     </div>
   );

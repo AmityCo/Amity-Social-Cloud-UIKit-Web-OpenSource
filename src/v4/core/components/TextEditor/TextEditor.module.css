@@ -1,0 +1,85 @@
+.textEditor {
+  position: relative;
+  width: 100%;
+}
+
+.textEditor__content {
+  outline: none;
+  min-height: calc(1.25rem * var(--asc-min-lines, 1)) !important;
+  max-height: calc(1.25rem * var(--asc-max-lines, 30)) !important;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.textEditor__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--asc-color-base-shade3);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+.textEditor__paragraph {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.textEditor__link {
+  color: var(--asc-color-primary-default);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.textEditor__hashtag {
+  color: var(--asc-color-primary-default);
+  cursor: pointer;
+}
+
+/* Mention menu container */
+.textEditor__mentionMenu {
+  max-height: 11.5rem;
+  background-color: var(--asc-color-background-default);
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  box-shadow:
+    0 0.25rem 1.5rem 0.25rem rgb(41 43 50 / 10%),
+    0 2rem 4rem -0.75rem rgb(41 43 50 / 8%),
+    0 0.375rem 0.375rem -0.25rem rgb(41 43 50 / 4%);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Content type specific styles */
+.textEditor[data-content-type='post'] .textEditor__content {
+  min-height: 7.5rem;
+}
+
+.textEditor[data-content-type='comment'] .textEditor__content {
+  min-height: 3.75rem;
+}
+
+.textEditor[data-content-type='message'] .textEditor__content {
+  min-height: 2.5rem;
+  max-height: 2.5rem;
+  overflow-y: auto;
+}
+
+.textEditor__anchor {
+  z-index: 999;
+  left: 0 !important;
+  width: 100dvw !important;
+}
+
+@media (width >= 48em) {
+  .textEditor__anchor {
+    left: 50% !important;
+    transform: translateX(-15rem);
+    width: 30rem !important;
+  }
+}
