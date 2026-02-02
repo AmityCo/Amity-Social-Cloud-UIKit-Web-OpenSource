@@ -99,6 +99,9 @@ export const COMPONENT_ID = {
   MY_EVENTS: 'my_events',
   EVENT_INFO: 'event_info',
   EVENT_DISCUSSION: 'event_discussion',
+  PRODUCT_TAG_LIST: 'product_tag_list',
+  PRODUCT_TAG_SELECTION: 'product_tag_selection',
+  TEXT_EDITOR_COMPONENT: 'text_editor_component',
 } as const;
 
 export const ELEMENT_ID = {
@@ -323,4 +326,11 @@ export const ELEMENT_ID = {
   NEXT_BUTTON: 'next_button',
   CREATE_NEW_CLIP_BUTTON: 'create_new_clip_button',
   OPTION_BUTTON: 'option_button',
+  PRODUCT_TAG: 'product_tag',
+  PRODUCT_TAG_SELECTION_HEADER: 'product_tag_selection_header',
+  PRODUCT_TAG_SELECTED_ITEM: 'product_tag_selected_item',
+  PRODUCT_TAG_SELECTION_SEARCH_BAR: 'product_tag_selection_search_bar',
+  PRODUCT_TAG_SELECTION: 'product_tag_selection',
+  PRODUCT_TAG_EMPTY: 'product_tag_empty',
+  PRODUCT_TAG_NO_RESULT: 'product_tag_no_result',
 } as const;

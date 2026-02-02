@@ -10,7 +10,7 @@ import {
 
 const MAX_CHAR_LIMIT = 200;
 
-export function PasteLimitPlugin({ maxCharactor = MAX_CHAR_LIMIT }: { maxCharactor: number }) {
+export function PasteLimitPlugin({ maxCharacters = MAX_CHAR_LIMIT }: { maxCharacters: number }) {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
@@ -24,8 +24,8 @@ export function PasteLimitPlugin({ maxCharactor = MAX_CHAR_LIMIT }: { maxCharact
           const currentLength = currentText.length;
 
           // If it is not over the max character length, skip slicing
-          if (currentLength - maxCharactor <= 0) return;
-          const allowedText = currentText.slice(0, maxCharactor);
+          if (currentLength - maxCharacters <= 0) return;
+          const allowedText = currentText.slice(0, maxCharacters);
 
           // Insert the allowed text at the selection
           editor.update(() => {
@@ -57,7 +57,7 @@ export function PasteLimitPlugin({ maxCharactor = MAX_CHAR_LIMIT }: { maxCharact
         rootElement.removeEventListener('paste', handlePaste);
       };
     });
-  }, [editor, maxCharactor]);
+  }, [editor, maxCharacters]);
 
   return null;
 }

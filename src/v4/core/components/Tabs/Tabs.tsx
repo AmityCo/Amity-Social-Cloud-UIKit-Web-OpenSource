@@ -29,7 +29,7 @@ type TabsProps = ($TabsProps & {
         }[];
       }
     | {
-        variant: 'icon';
+        variant: 'icon' | 'iconSmall';
         tabs: {
           value: Key;
           content: () => ReactNode;
@@ -89,7 +89,7 @@ export const Tabs = forwardRef<TabsRef, TabsProps>(
               data-variant={variant}
               data-testid={tab.accessibilityId}
             >
-              {variant === 'icon' ? (
+              {variant === 'icon' || variant === 'iconSmall' ? (
                 createElement(tab.label, { className: styles.tabIcon })
               ) : (
                 <Typography.BodyBold className={labelClassName}>{tab.label}</Typography.BodyBold>

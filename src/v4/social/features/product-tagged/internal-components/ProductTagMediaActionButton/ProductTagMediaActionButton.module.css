@@ -1,0 +1,32 @@
+.productTagMediaActionButton__productTagSelection {
+  height: 90dvh;
+}
+
+.productTagMediaActionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  height: 1.5rem;
+  padding: 0.16rem 0.5rem 0.16rem 0.16rem;
+  background: var(--asc-color-background-transparent-black);
+  backdrop-filter: blur(0.125rem);
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+
+.productTagMediaActionButton[data-label='false'] {
+  width: 1.5rem;
+  padding: 0.16rem 0.12rem 0.16rem 0.16rem;
+}
+
+.productTagMediaActionButton__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-white);
+}
+
+.productTagMediaActionButton__count {
+  color: var(--asc-color-white);
+}

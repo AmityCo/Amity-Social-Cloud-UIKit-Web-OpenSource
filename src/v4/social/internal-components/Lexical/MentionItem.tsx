@@ -10,7 +10,7 @@ import styles from './MentionItem.module.css';
 type MentionItemProps = {
   pageId?: string;
   isSelected: boolean;
-  onClick: () => void;
+  onClick: (user: Amity.User) => void;
   componentId?: string;
   onMouseEnter: () => void;
   option: MentionTypeaheadOption<MentionData>;
@@ -26,10 +26,12 @@ export function MentionItem({
 }: MentionItemProps) {
   const { user } = useUser({ userId: option.data.userId });
 
+  if (!user) return null;
+
   return (
     <Button
       key={option.key}
-      onPress={onClick}
+      onPress={() => onClick(user)}
       ref={option.setRefElement}
       aria-selected={isSelected}
       onHoverStart={onMouseEnter}
