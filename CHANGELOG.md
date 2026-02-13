@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.3 (2026-02-13)
+
+
+### Features
+
+* chat uikit crash ([c074927](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c0749273892fab6d5f0d9546537ec109d6db8143))
+
 ## 4.15.0-beta.2 (2026-01-30)
 
 ## 4.15.0-beta.1 (2025-12-24)
