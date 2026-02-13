@@ -1,14 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const useResizeObserver = (target: any, onResize: any) => {
+  const prevSize = useRef({ height: 0, width: 0 });
+
   useEffect(() => {
     if (target) {
       const observer = new MutationObserver(() => {
         const { height, width } = target.getBoundingClientRect();
-        onResize({ height, width });
+        if (height !== prevSize.current.height || width !== prevSize.current.width) {
+          prevSize.current = { height, width };
+          onResize({ height, width });
+        }
       });
 
-      // const { current: currentObserver } = observer;
       observer.observe(target, {
         attributes: true,
         childList: true,
