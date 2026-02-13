@@ -10,15 +10,18 @@ export const useCreateLivestreamPost = () => {
   } = useMutation({
     mutationFn: async (
       params: Parameters<typeof RoomRepository.createRoom>[0] &
-        Pick<Parameters<typeof PostRepository.createPost>[0], 'targetType' | 'targetId'>,
+        Pick<
+          Parameters<typeof PostRepository.createRoomPost>[0],
+          'targetType' | 'targetId' | 'productTags' | 'pinnedProductId'
+        >,
     ) => {
-      const { targetType, targetId, ...roomParams } = params;
+      const { targetType, targetId, productTags, pinnedProductId, ...roomParams } = params;
 
       // Step 1: Create the room
       const { data: room } = await RoomRepository.createRoom({ ...roomParams, type: 'coHosts' });
 
       // Step 2: Create the post with the room ID
-      const post = await PostRepository.createPost({
+      const post = await PostRepository.createRoomPost({
         targetType,
         targetId,
         data: {
@@ -26,10 +29,11 @@ export const useCreateLivestreamPost = () => {
           text: roomParams.description,
           roomId: room.roomId,
         },
-        dataType: 'room',
+        productTags,
+        pinnedProductId,
       });
 
-      return { room, post };
+      return { room, post, productTags };
     },
   });
 

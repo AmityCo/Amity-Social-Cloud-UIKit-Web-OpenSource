@@ -1,12 +1,15 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { ImageIcon } from '~/v4/icons/Image';
+import { Pin } from '~/v4/icons/Pin';
+import { Typography } from '~/v4/core/components';
 import styles from './ProductImageThumbnail.module.css';
 
 export interface ProductImageThumbnailProps {
   imageUrl?: string;
   alt?: string;
   unavailable?: boolean;
+  isPinned?: boolean;
   size?: 'large' | 'medium' | 'small' | 'tiny';
   className?: string;
 }
@@ -15,6 +18,7 @@ export function ProductImageThumbnail({
   imageUrl,
   alt = '',
   unavailable = false,
+  isPinned = false,
   size = 'large',
   className = '',
 }: ProductImageThumbnailProps) {
@@ -42,6 +46,14 @@ export function ProductImageThumbnail({
       {unavailable && (
         <div className={styles.productImageThumbnail__overlay}>
           <div className={styles.productImageThumbnail__overlayBackground} />
+        </div>
+      )}
+      {isPinned && (
+        <div className={styles.productImageThumbnail__pinnedBanner}>
+          <Pin className={styles.productImageThumbnail__pinnedIcon} />
+          <Typography.CaptionBold as="span" className={styles.productImageThumbnail__pinnedText}>
+            Pinned
+          </Typography.CaptionBold>
         </div>
       )}
     </div>

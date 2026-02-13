@@ -29,6 +29,8 @@ export interface UseCreateLivestreamReturn {
   thumbnailFileId?: string;
   livestreamTitle: string;
   livestreamDescription: string;
+  productTags: Amity.MediaProductTag[];
+  pinnedProductId?: string;
 
   // Community data
   community: any;
@@ -54,6 +56,8 @@ export interface UseCreateLivestreamReturn {
   setLivestreamDescription: React.Dispatch<React.SetStateAction<string>>;
   setUiState: React.Dispatch<React.SetStateAction<CreateLivestreamUiState>>;
   setThumbnailFileId: React.Dispatch<React.SetStateAction<string>>;
+  setProductTags: React.Dispatch<React.SetStateAction<Amity.MediaProductTag[]>>;
+  setPinnedProductId: React.Dispatch<React.SetStateAction<string | undefined>>;
   stopRoom: () => void;
   handleTargetSelection: () => void;
   handleStopRoom: (roomId: string) => void;
@@ -91,6 +95,8 @@ export const useCreateLivestream = ({
   const [livestreamTitle, setLivestreamTitle] = useState('');
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
+  const [productTags, setProductTags] = useState<Amity.MediaProductTag[]>([]);
+  const [pinnedProductId, setPinnedProductId] = useState<string | undefined>(undefined);
   const [roomId, setRoomId] = useState<string | undefined>(event?.room?.roomId);
 
   const { room } = useRoom(roomId);
@@ -158,7 +164,12 @@ export const useCreateLivestream = ({
         pageId,
         content: 'If you end your live stream, it will also end for all your viewers.',
       });
-    } else if (livestreamTitle.length > 0 || livestreamDescription.length > 0 || thumbnailFileId) {
+    } else if (
+      livestreamTitle.length > 0 ||
+      livestreamDescription.length > 0 ||
+      thumbnailFileId ||
+      productTags.length > 0
+    ) {
       confirm({
         onOk: onBack,
         type: 'confirm',
@@ -176,6 +187,7 @@ export const useCreateLivestream = ({
     livestreamTitle.length,
     livestreamDescription.length,
     thumbnailFileId,
+    productTags.length,
     confirm,
     uiState,
     room?.roomId,
@@ -225,6 +237,8 @@ export const useCreateLivestream = ({
             targetType,
             targetId: targetType !== 'user' ? targetId : currentUserId!,
             liveChatEnabled: targetType === 'community',
+            productTags: productTags,
+            pinnedProductId: pinnedProductId,
           },
           {
             onSuccess: (result) => {
@@ -260,6 +274,8 @@ export const useCreateLivestream = ({
     thumbnailFileId,
     livestreamTitle,
     livestreamDescription,
+    productTags,
+    pinnedProductId,
 
     // Community data
     community,
@@ -284,6 +300,8 @@ export const useCreateLivestream = ({
     setLivestreamTitle,
     setLivestreamDescription,
     setThumbnailFileId,
+    setProductTags,
+    setPinnedProductId,
     setUiState,
 
     stopRoom,

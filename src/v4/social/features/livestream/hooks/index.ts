@@ -18,3 +18,5 @@ export { useLeaveRoom } from './useLeaveRoom';
 export { useRoom } from './useRoom';
 export { useRoomSubscription } from './useRoomSubscription';
 export { useRoomWatchTracking } from './useRoomWatchTracking';
+export { useUpdateCohostPermission } from './useUpdateCohostPermission';
+export { useCoHostPermissionNotification } from './useCoHostPermissionNotification';

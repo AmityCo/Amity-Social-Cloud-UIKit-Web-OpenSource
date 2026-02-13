@@ -64,6 +64,10 @@ export function CreateLivestreamPage({
     setLivestreamTitle,
     setLivestreamDescription,
     setThumbnailFileId,
+    productTags,
+    setProductTags,
+    pinnedProductId,
+    setPinnedProductId,
   } = useCreateLivestream({
     initialTargetId: initialTargetId ?? currentUserId!,
     initialTargetType,
@@ -156,6 +160,10 @@ export function CreateLivestreamPage({
                   setReadOnly={setReadOnly}
                   onGoLive={handleGoLive}
                   onThumbnailFileIdChanged={(fileId) => setThumbnailFileId(fileId ?? '')}
+                  productTags={productTags}
+                  onProductTagsChange={setProductTags}
+                  pinnedProductId={pinnedProductId}
+                  onPinnedProductIdChange={setPinnedProductId}
                 />
               ) : (
                 <>

@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
@@ -10,7 +10,10 @@ import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
 import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
 import { DemoteToMember } from '~/v4/icons/DemoteToMember';
 import Muted from '~/v4/icons/Muted';
-import { LivestreamModerationOptions } from '~/v4/social/features/livestream/internal-components/LivestreamModerationOptions';
+import {
+  LivestreamModerationOptions,
+  UserModerationHeader,
+} from '~/v4/social/features/livestream/internal-components';
 import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
 import { MessageOptions } from '~/v4/chat/internal-components/MessageOptions';
 import styles from './MessageBubble.module.css';
@@ -20,7 +23,11 @@ import { HostBadge } from '~/v4/social/elements/HostBadge';
 import { CoHostBadge } from '~/v4/social/elements/CoHostBadge';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import { useCreateInvitation } from '~/v4/social/features/livestream/hooks';
+import {
+  useCreateInvitation,
+  useRoom,
+  useUpdateCohostPermission,
+} from '~/v4/social/features/livestream/hooks';
 import { BrandBadge } from '~/v4/social/elements';
 
 interface MessageBubbleProps {
@@ -54,6 +61,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isCurrentUserMuted = channel?.metadata?.mutedMembers?.includes(currentUserId);
   const showMutedIndicator = isUserMuted && (isCurrentUserMuted || isModerator);
 
+  const { updateCohostPermission } = useUpdateCohostPermission({ room, pageId });
   const {
     coHost,
     isHost,
@@ -61,12 +69,21 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     handleCancelInvitation,
     handleRemoveCoHost,
     handleLeaveAsCoHost,
+    canCoHostManageProductTags,
   } = useLivestreamModeration({
     pageId,
     room,
     channel,
     invitation,
   });
+
+  const [canCoHostManageProductTagsState, setCanCoHostManageProductTagsState] = useState<
+    boolean | undefined
+  >(canCoHostManageProductTags);
+
+  useEffect(() => {
+    setCanCoHostManageProductTagsState(canCoHostManageProductTags);
+  }, [canCoHostManageProductTags]);
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { demoteFromModerator, muteUser, promoteToModerator, unmuteUser } = useChatModeration();
@@ -79,26 +96,16 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
     return (
       <div className={styles.messageBubble__optionsButton__container}>
-        <div className={styles.messageBubble__optionUserInfo}>
-          <div className={styles.messageBubble__displayName__container}>
-            <Typography.TitleBold className={styles.messageBubble__optionUserInfo__displayName}>
-              {message.creator?.displayName}
-            </Typography.TitleBold>
-            {message.creator?.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
-            {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
-              <div className={styles.messageBubble__optionUserInfo__mutedIcon}>
-                <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
-              </div>
-            )}
-          </div>
-          {isCoHostMessage ? (
-            <CoHostBadge />
-          ) : (
-            channel?.metadata?.moderators?.includes(message.creatorId) && (
-              <ModeratorBadge type="live" />
-            )
-          )}
-        </div>
+        <UserModerationHeader
+          pageId={pageId}
+          componentId={componentId}
+          displayName={message.creator?.displayName}
+          isBrandUser={message.creator?.isBrand}
+          isMuted={channel?.metadata?.mutedMembers?.includes(message.creatorId)}
+          isCoHost={isCoHostMessage}
+          isModerator={!!channel?.metadata?.moderators?.includes(message.creatorId)}
+          showMutedIcon={true}
+        />
         {((coHost && isCoHostMessage) || !coHost) && (
           <LivestreamModerationOptions
             displayName={message.creator?.displayName ?? coHost?.displayName}
@@ -113,6 +120,19 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
             isPendingCoHost={
               invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
             }
+            isSelectedCoHostPermission={canCoHostManageProductTagsState ?? false}
+            onCoHostPermissionChange={async (canManageProductTags) => {
+              const currentCoHostId = invitedCoHost?.userId ?? coHost?.userId;
+              if (currentCoHostId) {
+                const previousState = canCoHostManageProductTagsState;
+                setCanCoHostManageProductTagsState(canManageProductTags);
+                try {
+                  updateCohostPermission({ coHostId: currentCoHostId, canManageProductTags });
+                } catch {
+                  setCanCoHostManageProductTagsState(previousState);
+                }
+              }
+            }}
           />
         )}
 

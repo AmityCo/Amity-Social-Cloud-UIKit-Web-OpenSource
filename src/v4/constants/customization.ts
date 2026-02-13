@@ -101,6 +101,7 @@ export const COMPONENT_ID = {
   EVENT_DISCUSSION: 'event_discussion',
   PRODUCT_TAG_LIST: 'product_tag_list',
   PRODUCT_TAG_SELECTION: 'product_tag_selection',
+  MANAGE_PRODUCT_TAG_LIST: 'manage_product_tag_list',
   TEXT_EDITOR_COMPONENT: 'text_editor_component',
 } as const;
 
@@ -333,4 +334,7 @@ export const ELEMENT_ID = {
   PRODUCT_TAG_SELECTION: 'product_tag_selection',
   PRODUCT_TAG_EMPTY: 'product_tag_empty',
   PRODUCT_TAG_NO_RESULT: 'product_tag_no_result',
+  PRODUCT_TAG_NO_TAGS_YET: 'product_tag_no_tags_yet',
+  MANAGE_PRODUCT_TAG: 'manage_product_tag',
+  LIVESTREAM_PINNED_PRODUCT: 'livestream_pinned_product',
 } as const;

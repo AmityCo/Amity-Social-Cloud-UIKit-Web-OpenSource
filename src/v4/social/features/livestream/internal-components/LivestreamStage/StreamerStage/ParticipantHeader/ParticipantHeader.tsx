@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ParticipantHeader.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -11,6 +11,8 @@ import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import MuteMic from '~/v4/icons/MutedMic';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { BrandBadge } from '~/v4/social/elements';
+import { useUpdateCohostPermission } from '~/v4/social/features/livestream/hooks';
+import { UserModerationHeader } from '~/v4/social/features/livestream/internal-components/UserModerationHeader';
 
 export interface ParticipantHeaderProps {
   pageId?: string;
@@ -30,14 +32,15 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
   // Get values from context
   const { room, channel, invitationByMe: invitation, coHost, hostId } = useLivestreamData();
   const { currentUser } = useSDK();
+  const { updateCohostPermission } = useUpdateCohostPermission({ room, pageId });
   const {
     invitedCoHost,
     isHost,
     isModerator,
     handleCancelInvitation,
-    handlePromoteToModerator,
     handleRemoveCoHost,
     handleLeaveAsCoHost,
+    canCoHostManageProductTags,
   } = useLivestreamModeration({
     pageId,
     room,
@@ -45,6 +48,14 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
     invitation,
     onCoHostLeaveLiveKitRoom,
   });
+
+  const [canCoHostManageProductTagsState, setCanCoHostManageProductTagsState] = useState<
+    boolean | undefined
+  >(canCoHostManageProductTags);
+
+  useEffect(() => {
+    setCanCoHostManageProductTagsState(canCoHostManageProductTags);
+  }, [canCoHostManageProductTags]);
 
   const displayName =
     hostId !== currentUser?.userId
@@ -81,22 +92,45 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
           )}
         >
           {({ closePopover }: { closePopover: () => void }) => (
-            <LivestreamModerationOptions
-              displayName={displayName}
-              coHostId={
-                hostId !== currentUser?.userId
-                  ? currentUser?.userId
-                  : invitedCoHost?.userId ?? coHost?.userId
-              }
-              isPendingCoHost={invitation?.status === 'pending'}
-              onCancelInvitation={handleCancelInvitation}
-              onPromoteToModerator={handlePromoteToModerator}
-              onLeaveAsCoHost={handleLeaveAsCoHost}
-              onClickOption={closePopover}
-              onRemoveCoHost={handleRemoveCoHost}
-              isHost={isHost && hostId === currentUser?.userId}
-              isModerator={isModerator && hostId === currentUser?.userId}
-            />
+            <div className={styles.participantHeader__popover}>
+              <UserModerationHeader
+                pageId={pageId}
+                displayName={displayName}
+                isBrandUser={isBrandUser}
+                isMuted={isMuted}
+                isCoHost={!!(coHost || invitedCoHost)}
+                isModerator={isModerator}
+                showMutedIcon={false}
+              />
+              <LivestreamModerationOptions
+                displayName={displayName}
+                coHostId={
+                  hostId !== currentUser?.userId
+                    ? currentUser?.userId
+                    : invitedCoHost?.userId ?? coHost?.userId
+                }
+                isSelectedCoHostPermission={canCoHostManageProductTagsState}
+                isPendingCoHost={invitation?.status === 'pending'}
+                onCoHostPermissionChange={async (canManageProductTags) => {
+                  const currentCoHostId = invitedCoHost?.userId ?? coHost?.userId;
+                  if (currentCoHostId) {
+                    const previousState = canCoHostManageProductTagsState;
+                    setCanCoHostManageProductTagsState(canManageProductTags);
+                    try {
+                      updateCohostPermission({ coHostId: currentCoHostId, canManageProductTags });
+                    } catch {
+                      setCanCoHostManageProductTagsState(previousState);
+                    }
+                  }
+                }}
+                onCancelInvitation={handleCancelInvitation}
+                onLeaveAsCoHost={handleLeaveAsCoHost}
+                onClickOption={closePopover}
+                onRemoveCoHost={handleRemoveCoHost}
+                isHost={isHost && hostId === currentUser?.userId}
+                isModerator={isModerator && hostId === currentUser?.userId}
+              />
+            </div>
           )}
         </Popover>
       )}

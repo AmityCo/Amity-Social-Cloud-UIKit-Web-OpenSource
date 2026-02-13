@@ -15,6 +15,8 @@ export interface ProductTagListProps {
   productTags: Amity.ProductTag[];
   displayMode: DisplayMode;
   onClose?: () => void;
+  mode?: 'post' | 'livestream';
+  pinnedProductId?: string;
 }
 
 export function ProductTagList({
@@ -22,6 +24,8 @@ export function ProductTagList({
   displayMode = DisplayModeEnum.MOBILE,
   pageId = PAGE_ID.WILD_CARD,
   onClose,
+  mode = 'post',
+  pinnedProductId,
 }: ProductTagListProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_LIST;
   const { AmityProducTagtListComponentBehavior } = usePageBehavior();
@@ -39,12 +43,30 @@ export function ProductTagList({
       return AmityProducTagtListComponentBehavior?.onProductTagClick({ productTag });
   };
 
+  const sortedProductTags = React.useMemo(() => {
+    if (mode !== 'livestream' || !pinnedProductId) return productTags;
+
+    return [...productTags].sort((a, b) => {
+      const aIsPinned = a.product?.productId === pinnedProductId;
+      const bIsPinned = b.product?.productId === pinnedProductId;
+      if (aIsPinned && !bIsPinned) return -1;
+      if (!aIsPinned && bIsPinned) return 1;
+      return 0;
+    });
+  }, [productTags, pinnedProductId, mode]);
+
   return (
     <div className={styles.productTagList} data-testid={accessibilityId} data-display={displayMode}>
       <div className={styles.productTagList__header} data-display={displayMode}>
         <div className={styles.productTagList__title}>
-          <Typography.TitleBold as="p" className={styles.productTagListHeader__text}>
-            {config.text ?? 'Products tagged in this post'}
+          <Typography.TitleBold
+            as="p"
+            data-mode={mode}
+            className={styles.productTagListHeader__text}
+          >
+            {mode === 'livestream'
+              ? 'Products tagged'
+              : config.text ?? 'Products tagged in this post'}
           </Typography.TitleBold>
         </div>
         {displayMode === DisplayModeEnum.DESKTOP && (
@@ -60,13 +82,48 @@ export function ProductTagList({
         <Divider type={DividerType.FULL_WIDTH} className={styles.productTagList__divider} />
       )}
       <div className={styles.productTagList__content} data-display={displayMode}>
-        {productTags.map(
-          (productTag) =>
-            productTag.product && (
-              <Button variant="default" onPress={() => handleClickProductLink?.(productTag)}>
-                <ProductTag key={productTag.product.productId} product={productTag.product} />
+        {sortedProductTags.map((productTag) =>
+          productTag.product ? (
+            mode === 'livestream' ? (
+              // In livestream mode, ProductTag has its own internal button, so don't wrap it
+              <ProductTag
+                key={productTag.product.productId}
+                mode={mode}
+                product={productTag.product}
+                isPinned={productTag.product.productId === pinnedProductId}
+                onPress={
+                  productTag.product.status === 'inactive' || productTag.product.isDeleted
+                    ? undefined
+                    : () => handleClickProductLink?.(productTag)
+                }
+              />
+            ) : (
+              // In post mode, ProductTag doesn't have an internal button, so wrap it
+              <Button
+                key={productTag.product.productId}
+                variant="default"
+                isDisabled={
+                  productTag.product.status === 'inactive' || productTag.product.isDeleted
+                }
+                onPress={
+                  productTag.product.status === 'inactive' || productTag.product.isDeleted
+                    ? undefined
+                    : () => handleClickProductLink?.(productTag)
+                }
+              >
+                <ProductTag
+                  mode={mode}
+                  product={productTag.product}
+                  isPinned={false}
+                  onPress={
+                    productTag.product.status === 'inactive' || productTag.product.isDeleted
+                      ? undefined
+                      : () => handleClickProductLink?.(productTag)
+                  }
+                />
               </Button>
-            ),
+            )
+          ) : null,
         )}
       </div>
     </div>

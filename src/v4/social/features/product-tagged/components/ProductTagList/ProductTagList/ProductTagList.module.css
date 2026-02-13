@@ -32,6 +32,10 @@
   white-space: nowrap;
 }
 
+.productTagListHeader__text[data-mode='livestream'] {
+  text-align: left;
+}
+
 .productTagList__title {
   flex: 1;
   text-align: left;

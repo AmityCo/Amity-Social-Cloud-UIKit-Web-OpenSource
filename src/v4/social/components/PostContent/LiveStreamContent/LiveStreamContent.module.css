@@ -28,3 +28,13 @@
   position: absolute;
   display: inline-block;
 }
+
+.liveStreamContent__taggedProducts {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  max-width: 90%;
+}

@@ -319,7 +319,13 @@ export function AltTextBottomSheet({
   mode = 'create',
 }: AltTextBottomSheetProps) {
   return (
-    <$Drawer.Root open={isOpen} onOpenChange={setIsOpen} snapPoints={[1]} activeSnapPoint={1}>
+    <$Drawer.Root
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      snapPoints={[1]}
+      activeSnapPoint={1}
+      modal={false}
+    >
       <$Drawer.Portal>
         <$Drawer.Overlay className={styles.drawer__overlay} />
         <$Drawer.Content className={styles.drawer__content}>

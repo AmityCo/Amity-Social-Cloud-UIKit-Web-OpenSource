@@ -47,6 +47,7 @@
 
   /* overflow: scroll; */
   gap: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .chatFeed__observerTarget {
@@ -65,6 +66,16 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+  }
+
+  .chatFeed__empty__container[data-pinned-product='true'] {
+    position: relative;
+  }
+
+  .chatFeed__empty__container__pinned_overlay {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
   }
 
   .chatFeed__empty__icon {
