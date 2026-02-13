@@ -72,3 +72,33 @@
   background-color: rgb(255 255 255 / 80%);
   border-radius: 0.25rem; /* 4px */
 }
+
+/* Pinned banner */
+.productImageThumbnail__pinnedBanner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem; /* 4px */
+  height: 1.5rem; /* 24px */
+  background: linear-gradient(to bottom, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 80%) 100%);
+  overflow: hidden;
+}
+
+.productImageThumbnail__pinnedIcon {
+  width: 0.75rem; /* 12px */
+  height: 0.75rem; /* 12px */
+  color: var(--asc-color-base-default);
+  flex-shrink: 0;
+}
+
+.productImageThumbnail__pinnedText {
+  color: var(--asc-color-base-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

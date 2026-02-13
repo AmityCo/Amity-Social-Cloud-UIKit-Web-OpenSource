@@ -1,39 +1,35 @@
 import React from 'react';
-import { Typography } from '~/v4/core/components';
 import { MenuOptionButton } from '~/v4/core/internal-components/MenuOptionButton';
 import AddUser from '~/v4/icons/AddUser';
 import SignOut from '~/v4/icons/SignOut';
-import UserShield from '~/v4/icons/UserShield';
 import UserTimes from '~/v4/icons/UserTimes';
-import { CoHostBadge } from '~/v4/social/elements/CoHostBadge';
 import styles from './LivestreamModerationOptions.module.css';
+import { CoHostToggleProductPermission } from '~/v4/social/features/livestream/internal-components/CoHostToggleProductPermission';
 
 export interface LivestreamModerationOptionsProps {
-  displayName?: string;
   isHost?: boolean;
-  isModerator?: boolean;
+  isSelectedCoHostPermission?: boolean;
   isPendingCoHost?: boolean;
   coHostId?: string;
   onInviteAsCoHost?: () => void;
-  onPromoteToModerator?: () => void;
   onCancelInvitation?: () => void;
   onRemoveCoHost?: () => void;
   onLeaveAsCoHost?: () => void;
   onClickOption?: () => void;
+  onCoHostPermissionChange?: (canManageProductTags: boolean) => void;
 }
 
 export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsProps> = ({
-  displayName,
   isHost,
-  isModerator,
   isPendingCoHost,
+  isSelectedCoHostPermission,
   coHostId,
   onInviteAsCoHost,
-  onPromoteToModerator,
   onCancelInvitation,
   onRemoveCoHost,
   onLeaveAsCoHost,
   onClickOption,
+  onCoHostPermissionChange,
 }) => {
   const handleInviteAsCoHost = () => {
     onInviteAsCoHost?.();
@@ -69,12 +65,18 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
         />
       )}
       {isHost && !isPendingCoHost && coHostId && (
-        <MenuOptionButton
-          text="Remove from live"
-          icon={<UserTimes />}
-          onPress={handleRemoveCoHost}
-          isDanger={true}
-        />
+        <div className={styles.livestreamModerationOptions__coHostOptions}>
+          <CoHostToggleProductPermission
+            isSelected={isSelectedCoHostPermission}
+            onChange={(canManageProductTags) => onCoHostPermissionChange?.(canManageProductTags)}
+          />
+          <MenuOptionButton
+            text="Remove from live"
+            icon={<UserTimes />}
+            onPress={handleRemoveCoHost}
+            isDanger={true}
+          />
+        </div>
       )}
       {!isHost && coHostId && !isPendingCoHost && (
         <MenuOptionButton

@@ -16,6 +16,13 @@ import clsx from 'clsx';
 import useImageUpload from '~/v4/social/hooks/useImageUpload';
 import { LoadingSpinner } from '~/v4/social/features/livestream/internal-components/LivestreamOverlay/LivestreamOverlay';
 import CameraMovie from '~/v4/icons/CameraMovie';
+import { TagOutlined } from '~/v4/icons/TagOutlined';
+import ChevronRight from '~/v4/icons/ChevronRight';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagMediaActionButton/ProductTagSelectionWrapper';
+import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 
 export interface LivestreamSetupProps {
   // Target and UI state
@@ -43,6 +50,13 @@ export interface LivestreamSetupProps {
   setReadOnly?: (readOnly: boolean) => void;
   onGoLive: () => void;
   onThumbnailFileIdChanged?: (fileId?: string) => void;
+
+  // Product tags
+  productTags?: Amity.MediaProductTag[];
+  onProductTagsChange?: (tags: Amity.MediaProductTag[]) => void;
+
+  pinnedProductId?: string;
+  onPinnedProductIdChange?: (pinnedProductId: string | undefined) => void;
 }
 
 export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
@@ -60,8 +74,16 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   setReadOnly,
   onThumbnailFileIdChanged,
   onGoLive,
+  productTags = [],
+  onProductTagsChange,
+  pinnedProductId,
+  onPinnedProductIdChange,
 }) => {
+  const MAX_PRODUCTS = 20;
   const { uploadSingleImage, isUploading } = useImageUpload();
+  const { openPopup, closePopup } = usePopupContext();
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+  const { confirm } = useConfirmContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -143,6 +165,104 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
     }
     return null;
   }, [localFile]);
+
+  const onCloseAddProductTag = useCallback(
+    (currentTags: Amity.ProductTag[], hasLocalChanges?: boolean) => {
+      // Check if there are unsaved changes based on hasLocalChanges parameter or currentTags
+
+      const hasUnsavedChanges = hasLocalChanges ?? currentTags.length > 0;
+
+      if (hasUnsavedChanges) {
+        confirm({
+          type: 'confirm',
+          title: 'Discard product selection?',
+          content:
+            "You have products selected that haven't been added yet. If you close now, your selection will be lost.",
+          okText: 'Discard',
+          cancelText: 'Keep editing',
+          okButtonColor: 'alert',
+          onOk: () => {
+            closePopup();
+          },
+        });
+      } else {
+        onProductTagsChange?.(currentTags);
+        closePopup();
+      }
+    },
+    [closePopup, confirm, productTags, onProductTagsChange],
+  );
+
+  const handleOpenProductTagSelection = useCallback(() => {
+    const popupId = 'product-tag-livestream';
+    openPopup({
+      id: popupId,
+      pageId,
+      view: 'desktop',
+      children: ({ close }) => (
+        <ProductTagSelectionWrapper
+          renderMode="livestream"
+          initialProductTags={productTags}
+          onProductTagsChange={onProductTagsChange}
+          pageId={pageId}
+          displayMode="desktop"
+          mode="livestream"
+          maxCount={MAX_PRODUCTS}
+          pinnedProductId={pinnedProductId}
+          onPinnedProductIdChange={onPinnedProductIdChange}
+          onClose={onCloseAddProductTag}
+          onDone={(tags) => {
+            onProductTagsChange?.(tags);
+            closePopup();
+          }}
+        />
+      ),
+    });
+  }, [
+    openPopup,
+    closePopup,
+    pageId,
+    productTags,
+    pinnedProductId,
+    onProductTagsChange,
+    onPinnedProductIdChange,
+    onCloseAddProductTag,
+  ]);
+
+  const handleOpenManageProductTags = useCallback(() => {
+    const popupId = 'manage-product-tags';
+    openPopup({
+      id: popupId,
+      pageId,
+      view: 'desktop',
+      children: ({ close }) => (
+        <ManageProductTagList
+          pageId={pageId}
+          renderMode="livestream"
+          productTags={productTags}
+          onProductTagsChange={onProductTagsChange}
+          onPinnedProductIdChange={onPinnedProductIdChange}
+          maxCount={MAX_PRODUCTS}
+          pinnedProductId={pinnedProductId}
+          onClose={(updatedTags, updatedPinnedId) => {
+            onProductTagsChange?.(updatedTags);
+            if (onPinnedProductIdChange) {
+              onPinnedProductIdChange(updatedPinnedId);
+            }
+            closePopup();
+          }}
+        />
+      ),
+    });
+  }, [
+    openPopup,
+    closePopup,
+    pageId,
+    productTags,
+    pinnedProductId,
+    onProductTagsChange,
+    onPinnedProductIdChange,
+  ]);
 
   return (
     <>
@@ -248,6 +368,39 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                       className={styles.livestreamSetup__readOnly}
                     />
                   </div>
+                )}
+
+                {productCatalogueSettings?.product.enabled && targetType !== 'user' && (
+                  <Button
+                    variant="default"
+                    className={styles.livestreamSetup__tagProducts__button}
+                    onPress={
+                      productTags.length > 0
+                        ? handleOpenManageProductTags
+                        : handleOpenProductTagSelection
+                    }
+                    isDisabled={isPending}
+                  >
+                    <div className={styles.livestreamSetup__tagProducts__left}>
+                      <div className={styles.livestreamSetup__tagProducts__icon__border}>
+                        <TagOutlined className={styles.livestreamSetup__tagProducts__icon} />
+                      </div>
+                      <Label>
+                        <Typography.TitleBold>Tag products</Typography.TitleBold>
+                      </Label>
+                    </div>
+                    <div className={styles.livestreamSetup__tagProducts__right}>
+                      <div className={styles.livestreamSetup__tagProducts__count}>
+                        <Typography.Caption
+                          className={styles.livestreamSetup__tagProducts__countText}
+                        >
+                          {productTags.length}
+                        </Typography.Caption>
+                      </div>
+
+                      <ChevronRight className={styles.livestreamSetup__tagProducts__chevron} />
+                    </div>
+                  </Button>
                 )}
               </form>
             </div>

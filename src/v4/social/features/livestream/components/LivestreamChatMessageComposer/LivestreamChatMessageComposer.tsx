@@ -25,6 +25,12 @@ import AddUser from '~/v4/icons/AddUser';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { InviteCoHostList } from '~/v4/social/features/livestream/internal-components/InviteCoHostList';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
+import { TagOutlined } from '~/v4/icons/TagOutlined';
+import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
+import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
+import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
+import { LivestreamPinnedProduct } from '~/v4/social/features/product-tagged/elements/LivestreamPinnedProduct';
+import { ProductTagList } from '~/v4/social/features/product-tagged/components/ProductTagList';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -52,8 +58,16 @@ export const LivestreamChatMessageComposer = ({
   isPlayer = false,
 }: LivestreamChatMessageComposerProps) => {
   // Get values from context
-  const { hostId, coHostId, room, coHost, invitationByMe } = useLivestreamData();
+  const {
+    hostId,
+    coHostId,
+    coHost,
+    invitationByMe,
+    room,
+    livestreamPost: livestreamPostFromContext,
+  } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { success, info } = useNotifications();
 
   const componentId = 'livestream_chat_compose_bar';
   const editorRef = useRef<LexicalEditor | null>(null);
@@ -63,9 +77,18 @@ export const LivestreamChatMessageComposer = ({
 
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
 
-  const { info } = useNotifications();
-
   const { openPopup, closePopup } = usePopupContext();
+
+  const isHost = hostId === currentUserId;
+  const isCoHost = coHostId === currentUserId;
+
+  const canManageProducts = isHost || (isCoHost && coHost?.canManageProductTags);
+
+  const [livestreamPost, setLivestreamPost] = useState(
+    livestreamPostFromContext?.childrenPosts?.[0],
+  );
+  const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
+  const pinnedProductId = subscribedPost?.pinnedProductId;
 
   const [error, setError] = useState<string | null>(null);
   const [isEmpty, setIsEmpty] = useState(true);
@@ -73,13 +96,26 @@ export const LivestreamChatMessageComposer = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isLoadingMembership, setIsLoadingMembership] = useState(true);
 
+  const [isShowPinnedProduct, setIsShowPinnedProduct] = useState(!!pinnedProductId);
+
+  const hasProductTags = subscribedPost?.productTags && subscribedPost?.productTags.length > 0;
+
+  useEffect(() => {
+    setIsShowPinnedProduct(!!pinnedProductId);
+  }, [pinnedProductId]);
+
+  useEffect(() => {
+    if (livestreamPost?.postId) return;
+    if (room?.roomId && room.post) setLivestreamPost(room.post as Amity.Post);
+  }, [room, subscribedPost?.productTags, pinnedProductId]);
+
+  const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } =
+    useTaggingProduct();
+
   const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
   });
-
-  const isHost = hostId === currentUserId;
-  const isCoHost = coHostId === currentUserId;
 
   const canReact = ((!isHost && !isCoHost) || isPlayer) && (isEmpty || isMuted);
 
@@ -318,7 +354,7 @@ export const LivestreamChatMessageComposer = ({
       });
 
     return (
-      <>
+      <div className={styles.livestreamChatMessageComposer__composeBar__outer}>
         <div
           className={styles.livestreamChatMessageComposer__composeBar__container}
           data-testid={accessibilityId}
@@ -327,6 +363,128 @@ export const LivestreamChatMessageComposer = ({
           ref={containerRef}
           data-is-host={isHost && !isPlayer}
         >
+          {/* Product tagging button */}
+          {!hasProductTags && !canManageProducts ? null : (
+            <div className={styles.livestreamChatMessageComposer__productTaggingButton__wrapper}>
+              {canManageProducts ? (
+                <ActionButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  elementId={'product_tagging_button'}
+                  size="large"
+                  defaultIcon={<TagOutlined />}
+                  isDisabled={disabled}
+                  color="secondary"
+                  onPress={() =>
+                    openPopup({
+                      pageId,
+                      id: 'manage_product_tagging_popup',
+                      view: 'desktop',
+                      children: (
+                        <ManageProductTagList
+                          pageId={pageId}
+                          renderMode="livestream"
+                          productTags={subscribedPost?.productTags}
+                          onClose={() => {
+                            closePopup('manage_product_tagging_popup');
+                          }}
+                          pinnedProductId={pinnedProductId}
+                          onRemove={async (productTag) => {
+                            // Handle product removal - no success toast
+                            if (livestreamPost?.postId) {
+                              const updatedTags = livestreamPost?.productTags?.filter(
+                                (tag) => tag.productId !== productTag.productId,
+                              );
+                              try {
+                                await updateProductTags({
+                                  postId: livestreamPost?.postId,
+                                  productTags: updatedTags || [],
+                                });
+                                success({ content: 'Product tag removed.' });
+                              } catch (error) {
+                                info({
+                                  content: 'Failed to remove product tag. Please try again.',
+                                });
+                              }
+                            }
+                          }}
+                          onUpdateProductTags={async (tags) => {
+                            if (livestreamPost?.postId) {
+                              try {
+                                await updateProductTags({
+                                  postId: livestreamPost?.postId,
+                                  productTags: tags,
+                                });
+                                success({ content: 'Product tags added.' });
+                              } catch (error) {
+                                info({ content: 'Failed to add product tags. Please try again.' });
+                              }
+                            }
+                          }}
+                          onPinnedProductIdChange={async (productId) => {
+                            if (livestreamPost?.postId) {
+                              if (productId) {
+                                // Only pin if the product ID has changed
+                                if (productId !== pinnedProductId) {
+                                  await pinProduct({
+                                    postId: livestreamPost?.postId,
+                                    productId,
+                                  });
+                                }
+                              } else {
+                                // Unpin the product (when toggling pin off, not removing)
+                                await unpinProduct(livestreamPost?.postId);
+                              }
+                            }
+                          }}
+                          isPinning={isPinning}
+                          isUnpinning={isUnpinning}
+                        />
+                      ),
+                    })
+                  }
+                />
+              ) : (
+                hasProductTags && (
+                  <ActionButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    elementId={'product_tagging_button'}
+                    size="large"
+                    defaultIcon={<TagOutlined />}
+                    isDisabled={disabled}
+                    color="secondary"
+                    onPress={() =>
+                      openPopup({
+                        pageId,
+                        id: 'product_tag_list_popup',
+                        view: 'desktop',
+                        children: (
+                          <ProductTagList
+                            mode="livestream"
+                            pageId={pageId}
+                            displayMode="desktop"
+                            onClose={() => {
+                              closePopup('product_tag_list_popup');
+                            }}
+                            productTags={subscribedPost?.productTags as Amity.ProductTag[]}
+                            pinnedProductId={pinnedProductId}
+                          />
+                        ),
+                      })
+                    }
+                  />
+                )
+              )}
+              {hasProductTags && (
+                <div className={styles.livestreamChatMessageComposer__productTaggingButton__badge}>
+                  {subscribedPost?.productTags?.length}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Invite coHost */}
           {isHost && !isPlayer && (
             <ActionButton
               pageId={pageId}
@@ -360,18 +518,20 @@ export const LivestreamChatMessageComposer = ({
               }
             />
           )}
-          <InternalMessageComposer
-            ref={editorRef}
-            pageId={pageId}
-            componentId={componentId}
-            setIsEmpty={setIsEmpty}
-            setIsSpacebar={setIsSpacebar}
-            allowEnterNewLine={false}
-            maxCharacters={200}
-            maxLines={1}
-            scrollable={false}
-            isJoinedCommunity={community?.isJoined}
-          />
+          <div className={styles.livestreamChatMessageComposer__messageComposer__wrapper}>
+            <InternalMessageComposer
+              ref={editorRef}
+              pageId={pageId}
+              componentId={componentId}
+              setIsEmpty={setIsEmpty}
+              setIsSpacebar={setIsSpacebar}
+              allowEnterNewLine={false}
+              maxCharacters={200}
+              maxLines={1}
+              scrollable={false}
+              isJoinedCommunity={community?.isJoined}
+            />
+          </div>
           <div className={styles.livestreamChatMessageComposer__sendButton__container}>
             {canReact ? (
               channel?.attachedTo?.postId &&
@@ -395,7 +555,7 @@ export const LivestreamChatMessageComposer = ({
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   }, [
     community?.isJoined,
@@ -412,6 +572,8 @@ export const LivestreamChatMessageComposer = ({
     coHost?.userId,
     channel?.metadata?.mutedMembers,
     invitationByMe?.status,
+    subscribedPost?.productTags,
+    pinnedProductId,
   ]);
 
   return (

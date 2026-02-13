@@ -19,6 +19,7 @@ export interface UseLivestreamModerationReturn {
   invitedCoHost: Amity.User | undefined;
   coHost: Amity.User | undefined;
   host: Amity.User | undefined;
+  canCoHostManageProductTags: boolean | undefined;
 
   // Permission flags
   isHost: boolean;
@@ -42,7 +43,6 @@ export const useLivestreamModeration = ({
   onCoHostLeaveLiveKitRoom,
 }: UseLivestreamModerationProps): UseLivestreamModerationReturn => {
   const { currentUserId } = useSDK();
-  const { CHANNEL_MODERATOR } = MemberRoles;
 
   // Extract user data
   const invitedCoHost = useMemo(() => {
@@ -52,6 +52,16 @@ export const useLivestreamModeration = ({
 
   const coHost = useMemo(() => {
     return room ? getRoomParticipant(room, 'coHost')?.user : undefined;
+  }, [room]);
+
+  const canCoHostManageProductTags = useMemo(() => {
+    if (!room) return undefined;
+
+    const coHostParticipant = room.participants?.find(
+      (participant) => participant.type === 'coHost',
+    );
+
+    return coHostParticipant?.canManageProductTags;
   }, [room]);
 
   const host = useMemo(() => {
@@ -93,6 +103,7 @@ export const useLivestreamModeration = ({
     invitedCoHost,
     coHost,
     host,
+    canCoHostManageProductTags,
 
     // Permission flags
     isHost,

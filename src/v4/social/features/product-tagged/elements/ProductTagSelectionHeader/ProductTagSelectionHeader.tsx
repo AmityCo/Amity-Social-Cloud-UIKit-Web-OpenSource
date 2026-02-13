@@ -4,10 +4,11 @@ import { Button } from '~/v4/core/components/AriaButton/Button';
 import { CloseButton } from '~/v4/social/elements/CloseButton';
 import styles from './ProductTagSelectionHeader.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { ProductTagSelectionMode } from '~/v4/social/features/product-tagged/components/ProductTagSelection/ProductTagSelection';
 import { PAGE_ID, COMPONENT_ID, ELEMENT_ID } from '~/v4/constants/customization';
 
 export interface ProductTagSelectionHeaderProps {
-  mode: 'create' | 'edit';
+  mode: ProductTagSelectionMode;
   displayMode?: 'mobile' | 'desktop';
   selectedCount?: number;
   maxCount?: number;
@@ -15,6 +16,7 @@ export interface ProductTagSelectionHeaderProps {
   onDone?: () => void;
   pageId?: string;
   componentId?: string;
+  isShowNoProductsTagYet?: boolean;
 }
 
 export function ProductTagSelectionHeader({
@@ -26,6 +28,7 @@ export function ProductTagSelectionHeader({
   onDone,
   pageId = PAGE_ID.WILD_CARD,
   componentId = COMPONENT_ID.WILD_CARD,
+  isShowNoProductsTagYet = false,
 }: ProductTagSelectionHeaderProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG_SELECTION_HEADER;
   const { themeStyles, accessibilityId, config } = useAmityElement({
@@ -35,9 +38,13 @@ export function ProductTagSelectionHeader({
   });
 
   const title =
-    mode === 'create'
-      ? config.create_mode_title || 'Tag products'
-      : config.edit_mode_title || 'Edit tags';
+    mode === 'livestream'
+      ? isShowNoProductsTagYet
+        ? 'Tagged products'
+        : 'Add Products'
+      : mode === 'create'
+        ? config.create_mode_title || 'Tag products'
+        : config.edit_mode_title || 'Edit tags';
 
   const doneButtonText = config.done_button_text || 'Done';
 
@@ -50,8 +57,8 @@ export function ProductTagSelectionHeader({
       data-test-id={accessibilityId}
       data-display={displayMode}
     >
-      <div className={styles.productTagSelectionHeader__content}>
-        {displayMode === 'mobile' && (
+      <div data-mode={mode} className={styles.productTagSelectionHeader__content}>
+        {mode !== 'livestream' && displayMode === 'mobile' && (
           <CloseButton
             pageId={pageId}
             componentId={componentId}
@@ -67,7 +74,7 @@ export function ProductTagSelectionHeader({
             {selectedCount}/{maxCount}
           </Typography.Caption>
         </div>
-        {displayMode === 'mobile' ? (
+        {mode !== 'livestream' && displayMode === 'mobile' ? (
           <Button onPress={onDone} variant="text" color="primary">
             {doneButtonText}
           </Button>
@@ -77,7 +84,7 @@ export function ProductTagSelectionHeader({
             componentId={componentId}
             className={styles.productTagSelectionHeader__closeButton}
             onPress={() => {
-              onClose?.();
+              mode === 'livestream' ? onClose?.() : onDone?.();
             }}
           />
         )}

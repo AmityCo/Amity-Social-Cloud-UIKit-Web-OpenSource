@@ -17,8 +17,13 @@ import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetail
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
-import { useRoomSubscription, useRoom } from '~/v4/social/features/livestream/hooks';
+import {
+  usePostSubscription,
+  useRoomSubscription,
+  useRoom,
+} from '~/v4/social/features/livestream/hooks';
 import clsx from 'clsx';
+import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
 
 type LiveStreamContentProps = {
   roomId?: string;
@@ -42,6 +47,8 @@ export function LiveStreamContent({
 }: LiveStreamContentProps) {
   const { goToLiveStreamPlayerPage } = useNavigation();
   const { room } = useRoom(roomId ?? posts?.[0]?.getRoomInfo()?.roomId);
+  const { post: subscribedPost } = usePostSubscription(parentPost?.childrenPosts[0]?.postId);
+
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
     communityId: parentPost?.targetId,
@@ -95,9 +102,24 @@ export function LiveStreamContent({
         </div>
       )}
       {room.status === liveStreamStatus.recorded && (
-        <div className={styles.liveStreamContent__statusBadge}>
-          <LiveStreamRecordedBadge />
-        </div>
+        <>
+          <div className={styles.liveStreamContent__statusBadge}>
+            <LiveStreamRecordedBadge />
+          </div>
+          {subscribedPost?.productTags && subscribedPost?.productTags.length > 0 && (
+            <TaggedProductIcon
+              onPress={() => {
+                goToLiveStreamPlayerPage?.({
+                  post: parentPost,
+                  goToDetailPage: goToPostDetail,
+                });
+              }}
+              className={styles.liveStreamContent__taggedProducts}
+              iconClassName={styles.liveStreamContent__taggedProducts__icon}
+              productTagAmount={subscribedPost?.productTags?.length || 0}
+            />
+          )}
+        </>
       )}
       {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />

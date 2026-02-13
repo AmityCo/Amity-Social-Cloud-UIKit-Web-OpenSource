@@ -1,7 +1,7 @@
-import { InvitationStatusEnum } from '@amityco/ts-sdk';
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import useSDK from '~/core/hooks/useSDK';
 import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
+import { useCoHostPermissionNotification } from '~/v4/social/features/livestream/hooks';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 // Define the context type for only the data that needs to be passed to nested components
@@ -54,6 +54,12 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
 
   const { invitations } = useObserveRoomAndInvitation({ room });
   const { currentUserId } = useSDK();
+
+  // Monitor co-host permission changes and show toast notification
+  useCoHostPermissionNotification({
+    room,
+    notificationAlignment: notificationAlignment ?? 'fullscreen',
+  });
 
   useEffect(() => {
     if (invitations && invitations.length > 0) {

@@ -52,3 +52,7 @@
   display: flex;
   align-items: center;
 }
+
+.participantHeader__popover {
+  padding: 0.5rem 0;
+}

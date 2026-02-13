@@ -21,6 +21,7 @@ type PopupContent = Omit<ModalOverlayProps, 'children'> & {
   view?: 'desktop' | 'mobile' | 'all' | 'none';
   onClose?: ({ close }: { close: () => void }) => void;
   children: React.ReactNode | (({ close }: { close: () => void }) => React.ReactNode);
+  ariaLabel?: string;
 };
 
 type PopupContextProps = {

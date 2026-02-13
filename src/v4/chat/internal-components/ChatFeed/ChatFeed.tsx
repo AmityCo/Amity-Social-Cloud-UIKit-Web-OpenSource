@@ -6,10 +6,20 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { MessageBubbleSkeleton } from '~/v4/chat/internal-components/MessageBubbleSkeleton/MessageBubbleSkeleton';
 import { Typography } from '~/v4/core/components';
 import styles from './ChatFeed.module.css';
-import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
+import {
+  ChannelRepository,
+  getChannelTopic,
+  subscribeTopic,
+  RoomRepository,
+} from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
+import { usePostSubscription, useRoomSubscription } from '~/v4/social/features/livestream/hooks';
+import { LivestreamPinnedProduct } from '~/v4/social/features/product-tagged/elements/LivestreamPinnedProduct';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { useTaggingProduct } from '~/v4/social/hooks/useTaggingProduct';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -32,6 +42,8 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
     channelId: channel.channelId,
   });
 
+  const { success, info } = useNotifications();
+
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
       subChannelId: channel.channelId,
@@ -40,6 +52,35 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
     },
     joined && !isVisitorOrBot && !!liveChannel,
   );
+
+  const { unpinProduct, updateProductTags } = useTaggingProduct();
+
+  // Livestream pinned product logic
+  const { room, livestreamPost: livestreamPostFromContext, hostId, coHostId } = useLivestreamData();
+
+  const [livestreamPost, setLivestreamPost] = useState(
+    livestreamPostFromContext?.childrenPosts?.[0],
+  );
+  const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
+  const pinnedProductId = subscribedPost?.pinnedProductId;
+  const [isShowPinnedProduct, setIsShowPinnedProduct] = useState(!!pinnedProductId);
+
+  useEffect(() => {
+    setIsShowPinnedProduct(!!pinnedProductId);
+  }, [pinnedProductId]);
+
+  useEffect(() => {
+    if (livestreamPost?.postId) return;
+    if (livestreamPostFromContext?.getRoomInfo()?.roomId && livestreamPostFromContext?.postId)
+      setLivestreamPost(livestreamPostFromContext);
+  }, [livestreamPostFromContext, subscribedPost?.productTags, pinnedProductId]);
+
+  const { canCoHostManageProductTags } = useLivestreamModeration({
+    room,
+  });
+
+  const isHost = hostId === useSDK().currentUserId;
+  const isCoHost = coHostId === useSDK().currentUserId;
 
   const handlePopoverStateChange = (isOpen: boolean) => {
     setCurrentMessages(isOpen ? messages ?? [] : []);
@@ -95,18 +136,66 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
 
   const isEmpty = !loading && messages?.length === 0;
 
+  const renderPinnedProductOverlay = () => {
+    if (subscribedPost?.productTags && pinnedProductId && isShowPinnedProduct) {
+      const pinnedTag = subscribedPost.productTags?.find(
+        (tag) => tag.productId === pinnedProductId,
+      );
+      const updateProduct = subscribedPost.productTags?.filter(
+        (tag) => tag.productId !== pinnedProductId,
+      );
+      if (!pinnedTag) return null;
+
+      // User can manage if they're the host OR if they're the co-host with permission
+      const canManage = isHost || (isCoHost && canCoHostManageProductTags);
+
+      return (
+        <LivestreamPinnedProduct
+          productTag={pinnedTag}
+          isViewer={!canManage}
+          onClosePinnedProduct={() => setIsShowPinnedProduct(false)}
+          onUnpin={async () => {
+            await unpinProduct(livestreamPost?.postId || '');
+          }}
+          onRemove={async () => {
+            try {
+              await updateProductTags({
+                postId: livestreamPost?.postId || '',
+                productTags: updateProduct || [],
+              });
+              success({ content: 'Product tag removed.' });
+            } catch (error) {
+              info({
+                content: 'Failed to remove product tag. Please try again.',
+              });
+            }
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={styles.chatFeed__container}>
       {liveChannelLoading || isEmpty || isVisitorOrBot ? (
-        <div className={styles.chatFeed__empty__container}>
-          <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
-          <Typography.TitleBold className={styles.chatFeed__emptyText}>
-            No messages yet
-          </Typography.TitleBold>
-          <Typography.Caption className={styles.chatFeed__emptyText}>
-            Be the first to start conversation.
-          </Typography.Caption>
-        </div>
+        <>
+          <div
+            data-pinned-product={isShowPinnedProduct}
+            className={styles.chatFeed__empty__container}
+          >
+            <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
+            <Typography.TitleBold className={styles.chatFeed__emptyText}>
+              No messages yet
+            </Typography.TitleBold>
+            <Typography.Caption className={styles.chatFeed__emptyText}>
+              Be the first to start conversation.
+            </Typography.Caption>
+            <div className={styles.chatFeed__empty__container__pinned_overlay}>
+              {renderPinnedProductOverlay()}
+            </div>
+          </div>
+        </>
       ) : (
         <div
           ref={containerRef}
@@ -114,32 +203,36 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
           data-disable-scroll={`${isPopoverOpen}`}
           className={styles.chatFeed__messageList__container}
         >
-          {(loading || isLoading) && renderLoadingSkeleton()}
-          <InfiniteScroll
-            inverse={true}
-            scrollThreshold={0.5}
-            hasMore={hasMore || false}
-            dataLength={messages?.length || 0}
-            next={() => !isPopoverOpen && loadMore?.()}
-            scrollableTarget={'chatFeedScrollableContainer'}
-            style={{ display: 'flex', flexDirection: 'column-reverse' }}
-            loader={loading && !messages ? renderLoadingSkeleton() : null}
-          >
-            <div className={styles.chatFeed__messageList__inner}>
-              {(isPopoverOpen ? currentMessages : messages)?.map((message) => {
-                if (!isAmityTextMessage(message)) return null;
-                return (
-                  <MessageBubble
-                    key={message.messageId}
-                    message={message}
-                    channel={liveChannel}
-                    handlePopoverStateChange={handlePopoverStateChange}
-                    isJoinedCommunity={isJoinedCommunity}
-                  />
-                );
-              })}
-            </div>
-          </InfiniteScroll>
+          {loading || isLoading ? (
+            renderLoadingSkeleton()
+          ) : (
+            <InfiniteScroll
+              inverse={true}
+              scrollThreshold={0.5}
+              hasMore={hasMore || false}
+              dataLength={messages?.length || 0}
+              next={() => !isPopoverOpen && loadMore?.()}
+              scrollableTarget={'chatFeedScrollableContainer'}
+              style={{ display: 'flex', flexDirection: 'column-reverse' }}
+              loader={loading && !messages ? renderLoadingSkeleton() : null}
+            >
+              {renderPinnedProductOverlay()}
+              <div className={styles.chatFeed__messageList__inner}>
+                {(isPopoverOpen ? currentMessages : messages)?.map((message) => {
+                  if (!isAmityTextMessage(message)) return null;
+                  return (
+                    <MessageBubble
+                      key={message.messageId}
+                      message={message}
+                      channel={liveChannel}
+                      handlePopoverStateChange={handlePopoverStateChange}
+                      isJoinedCommunity={isJoinedCommunity}
+                    />
+                  );
+                })}
+              </div>
+            </InfiniteScroll>
+          )}
         </div>
       )}
     </div>
