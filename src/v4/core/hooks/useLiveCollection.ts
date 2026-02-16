@@ -55,6 +55,16 @@ function useLiveCollection<TCallback, TParams>({
     [shouldCall, loadMoreFnRef],
   );
 
+  // Keep refs up to date so refresh() always uses the latest values
+  const subscribeRef = useRef(subscribe);
+  subscribeRef.current = subscribe;
+  const fetcherRef = useRef(fetcher);
+  fetcherRef.current = fetcher;
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+  const callbackFnRef = useRef(callbackFn);
+  callbackFnRef.current = callbackFn;
+
   useEffect(() => {
     if (!shouldCall) return;
     const { unsubscribe } = subscribe({
@@ -75,10 +85,10 @@ function useLiveCollection<TCallback, TParams>({
       unsubscribeRef.current();
     }
 
-    const { unsubscribe } = subscribe({
-      fetcher,
-      params,
-      callback: callbackFn,
+    const { unsubscribe } = subscribeRef.current({
+      fetcher: fetcherRef.current,
+      params: paramsRef.current,
+      callback: callbackFnRef.current,
       refresh: true,
     });
 
