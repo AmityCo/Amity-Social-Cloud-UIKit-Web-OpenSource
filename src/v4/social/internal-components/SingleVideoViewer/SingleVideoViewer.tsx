@@ -7,6 +7,7 @@ import styles from './SingleVideoViewer.module.css';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { MediaMenu } from '~/v4/social/internal-components/MediaMenu';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { MenuButton } from '~/v4/social/elements';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
@@ -168,29 +169,34 @@ export function SingleVideoViewer({
             />
             {isFromGallery && (
               <Popover
-                trigger={{
-                  pageId,
-                  className: styles.videoViewer__menuButton,
-                  iconClassName: styles.videoViewer__menuButton__icon,
-                  onClick: () => {
-                    setDrawerData({
-                      content: (
-                        <MediaMenu
-                          pageId={pageId}
-                          onViewPostPress={
-                            isFromGallery
-                              ? () => {
-                                  onClose();
-                                  removeDrawerData();
-                                  redirectToPostDetailPage();
+                trigger={({ openPopover, isDesktop }) => (
+                  <MenuButton
+                    variant="filled"
+                    pageId={pageId}
+                    className={styles.videoViewer__menuButton}
+                    iconClassName={styles.videoViewer__menuButton__icon}
+                    onClick={() => {
+                      isDesktop
+                        ? openPopover()
+                        : setDrawerData({
+                            content: (
+                              <MediaMenu
+                                pageId={pageId}
+                                onViewPostPress={
+                                  isFromGallery
+                                    ? () => {
+                                        onClose();
+                                        removeDrawerData();
+                                        redirectToPostDetailPage();
+                                      }
+                                    : undefined
                                 }
-                              : undefined
-                          }
-                        />
-                      ),
-                    });
-                  },
-                }}
+                              />
+                            ),
+                          });
+                    }}
+                  />
+                )}
               >
                 {({ closePopover }) => {
                   return (
