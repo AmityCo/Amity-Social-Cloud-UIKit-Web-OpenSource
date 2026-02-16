@@ -105,7 +105,7 @@
 
 .videoViewer__menuButton,
 .videoViewer__menuButton:hover {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 .videoViewer__menuButton__icon {
