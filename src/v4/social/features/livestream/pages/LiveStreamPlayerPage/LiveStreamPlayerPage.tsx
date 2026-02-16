@@ -35,6 +35,7 @@ import {
   useGetBroadcasterData,
   useSyncWatchingHeartbeat,
   useRoomWatchTracking,
+  useCoHostParticipantEvents,
 } from '~/v4/social/features/livestream/hooks';
 import { LivestreamChat } from '~/v4/social/features/livestream/internal-components/LivestreamChat';
 import { LivestreamSetup } from '~/v4/social/features/livestream/internal-components/LivestreamSetup';
@@ -184,6 +185,9 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isUserBanned;
 
   const showWaitingApprovalBanner = isLive && isDesktop && subscribedPost?.feedType === 'reviewing';
+
+  const notificationAlignment = showLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
+  useCoHostParticipantEvents({ room, notificationAlignment, mode: 'viewer' });
 
   const { invitations, setInvitations } = useObserveRoomAndInvitation({ room });
 

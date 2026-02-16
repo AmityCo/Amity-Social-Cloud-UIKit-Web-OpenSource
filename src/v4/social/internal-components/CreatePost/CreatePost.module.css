@@ -45,21 +45,6 @@
   box-shadow: var(--asc-box-shadow-04);
 }
 
-.createPost__productTagActionButton {
-  position: absolute;
-  bottom: 12.75rem;
-  right: 1.25rem;
-}
-
-.createPost__productTagActionButton[data-from-media='true'] {
-  bottom: 6.75rem;
-}
-
-.createPost__productTagActionButton__button {
-  /* TODO: check on this css value again */
-  box-shadow: var(--asc-box-shadow-04);
-}
-
 .createPost__formContent .createPost__titleInput {
   width: 100%;
   border: none;
