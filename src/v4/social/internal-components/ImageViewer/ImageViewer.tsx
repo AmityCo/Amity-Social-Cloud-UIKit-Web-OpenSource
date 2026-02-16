@@ -9,6 +9,7 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
+import { MenuButton } from '~/v4/social/elements';
 import { MediaMenu } from '~/v4/social/internal-components/MediaMenu';
 import { AltTextBottomSheet } from '~/v4/social/internal-components/ImageThumbnail/ImageThumbnail';
 import styles from './ImageViewer.module.css';
@@ -123,38 +124,43 @@ export function ImageViewer({
         />
         {(isFromGallery || isOwner) && (
           <Popover
-            trigger={{
-              pageId,
-              className: styles.imageViewer__menuButton,
-              iconClassName: styles.imageViewer__menuButton__icon,
-              onClick: () => {
-                setDrawerData({
-                  content: (
-                    <MediaMenu
-                      pageId={pageId}
-                      file={imageFile}
-                      onViewPostPress={
-                        isFromGallery
-                          ? () => {
-                              onClose();
-                              removeDrawerData();
-                              redirectToPostDetailPage();
+            trigger={({ openPopover, isDesktop }) => (
+              <MenuButton
+                pageId={pageId}
+                className={styles.imageViewer__menuButton}
+                variant="filled"
+                iconClassName={styles.imageViewer__menuButton__icon}
+                onClick={() => {
+                  isDesktop
+                    ? openPopover()
+                    : setDrawerData({
+                        content: (
+                          <MediaMenu
+                            pageId={pageId}
+                            file={imageFile}
+                            onViewPostPress={
+                              isFromGallery
+                                ? () => {
+                                    onClose();
+                                    removeDrawerData();
+                                    redirectToPostDetailPage();
+                                  }
+                                : undefined
                             }
-                          : undefined
-                      }
-                      onEditAltTextPress={
-                        isOwner
-                          ? () => {
-                              setIsOpen(true);
-                              removeDrawerData();
+                            onEditAltTextPress={
+                              isOwner
+                                ? () => {
+                                    setIsOpen(true);
+                                    removeDrawerData();
+                                  }
+                                : undefined
                             }
-                          : undefined
-                      }
-                    />
-                  ),
-                });
-              },
-            }}
+                          />
+                        ),
+                      });
+                }}
+              />
+            )}
           >
             {({ closePopover }) => {
               return (

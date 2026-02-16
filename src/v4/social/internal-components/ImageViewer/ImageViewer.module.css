@@ -97,7 +97,7 @@
 
 .imageViewer__menuButton,
 .imageViewer__menuButton:hover {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 .imageViewer__menuButton__icon {
