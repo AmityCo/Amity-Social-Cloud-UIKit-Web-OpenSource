@@ -385,7 +385,8 @@ export const TextWithMention = ({
       const linkText = $isSerializedTextNode(child.children[0])
         ? child.children[0]?.text
         : child.url;
-      const linkUrl = child.url;
+      const linkUrl =
+        child.url && !/^https?:\/\//i.test(child.url) ? `https://${child.url}` : child.url;
 
       // Skip rendering if link has no text or invalid URL
       if (!linkText || !linkUrl) {
@@ -396,7 +397,7 @@ export const TextWithMention = ({
         <a
           target="_blank"
           key={child.url}
-          href={child.url}
+          href={linkUrl}
           rel="noopener noreferrer"
           onMouseUp={(e) => e.stopPropagation()}
           onTouchEnd={(e) => e.stopPropagation()}
