@@ -251,6 +251,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
             }
             closePopup();
           }}
+          sourceId=""
         />
       ),
     });

@@ -426,6 +426,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         }}
         onUpdateProductTags={handleUpdateProductTags}
         onRemove={handleRemove}
+        roomId={roomId || room?.roomId}
       />
     );
   }, [
@@ -505,6 +506,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
                       <TaggedProductsModal
                         key={`${livestreamPost?.productTags?.length}-${livestreamPost?.pinnedProductId || 'none'}`}
+                        roomId={roomId || room?.roomId}
                         pageId={pageId}
                         productTags={livestreamPost?.productTags || []}
                         pinnedProductId={livestreamPost?.pinnedProductId}
@@ -617,6 +619,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                                   >
                                     {channel && (
                                       <ChatFeed
+                                        pageId={pageId}
                                         channel={channel}
                                         isJoinedCommunity={!!community?.isJoined}
                                       />

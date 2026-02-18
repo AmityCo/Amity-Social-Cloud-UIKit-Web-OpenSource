@@ -267,6 +267,7 @@ export function ProductTagSelection({
           closePopup();
         }}
         isHost={isHost}
+        sourceId=""
       />
     );
 

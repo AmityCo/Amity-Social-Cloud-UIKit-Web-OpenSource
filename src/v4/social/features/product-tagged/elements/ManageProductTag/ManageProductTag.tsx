@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Typography } from '~/v4/core/components';
 import { ActionButton } from '~/v4/core/components/ActionButton/ActionButton';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -9,10 +9,14 @@ import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/inter
 import { TrashIcon } from '~/v4/icons/Trash';
 import { Pin } from '~/v4/icons/Pin';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
+import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
+import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 export type RenderModeEnum = 'livestream' | 'playback';
 
 export interface ManageProductTagProps {
+  sourceType?: AnalyticsSourceTypeEnum;
+  sourceId: string;
   productTag: Amity.ProductTag;
   isHost?: boolean;
   isPinned?: boolean;
@@ -25,6 +29,8 @@ export interface ManageProductTagProps {
 }
 
 export function ManageProductTag({
+  sourceType = AnalyticsSourceTypeEnum.POST,
+  sourceId,
   productTag,
   isHost = false,
   isPinned = false,
@@ -41,11 +47,27 @@ export function ManageProductTag({
     componentId,
     elementId,
   });
+  const elementRef = useRef<HTMLDivElement>(null);
 
   const product = productTag.product;
   const imageUrl = product?.thumbnailUrl;
   const productName = product?.productName;
   const price = formatPrice(product?.price, product?.currency);
+
+  const handleMarkAsClick = () => {
+    !isHost && product?.analytics?.markAsClicked(accessibilityId, sourceType, sourceId);
+  };
+
+  const { isVisible } = useVisibilitySensor({
+    threshold: 0.6,
+    elementRef,
+  });
+
+  useEffect(() => {
+    if (isVisible && !isHost) {
+      product?.analytics?.markAsViewed(accessibilityId, sourceType, sourceId);
+    }
+  }, [product, isVisible, accessibilityId, sourceType, sourceId, isHost]);
 
   return (
     <div
@@ -56,12 +78,14 @@ export function ManageProductTag({
       }
       style={themeStyles}
       data-test-id={accessibilityId}
+      ref={elementRef}
     >
       <a
         href={product?.productUrl}
         rel="noopener noreferrer"
         target="_blank"
         className={styles.manageProductTag__thumbnail}
+        onClick={handleMarkAsClick}
       >
         <ProductImageThumbnail
           imageUrl={imageUrl}
@@ -77,6 +101,7 @@ export function ManageProductTag({
             rel="noopener noreferrer"
             target="_blank"
             className={styles.manageProductTag__link}
+            onClick={handleMarkAsClick}
           >
             <Typography.BodyBold as="p" className={styles.manageProductTag__title}>
               {productName}
@@ -116,21 +141,19 @@ export function ManageProductTag({
             )}
             {/* Show View button in playback mode */}
             {!isHost && renderMode === 'playback' && (
-              <a
-                className={styles.manageProductTag__viewButtonLink}
-                href={product?.productUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-disabled={!product?.productUrl}
-                style={{
-                  pointerEvents: !product?.productUrl ? 'none' : 'auto',
-                  opacity: !product?.productUrl ? 0.5 : 1,
+              <Button
+                className={styles.manageProductTag__viewButton}
+                onPress={() => {
+                  handleMarkAsClick();
+                  if (product?.productUrl) {
+                    window.open(product.productUrl, '_blank', 'noopener,noreferrer');
+                  }
                 }}
+                isDisabled={!product?.productUrl}
+                aria-label="View product"
               >
-                <Button className={styles.manageProductTag__viewButton}>
-                  <Typography.CaptionBold as="span">View</Typography.CaptionBold>
-                </Button>
-              </a>
+                <Typography.CaptionBold as="span">View</Typography.CaptionBold>
+              </Button>
             )}
 
             {isHost && renderMode === 'playback' && (

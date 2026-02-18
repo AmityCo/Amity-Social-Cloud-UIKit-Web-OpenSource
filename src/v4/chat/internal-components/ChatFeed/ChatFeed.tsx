@@ -25,13 +25,21 @@ interface ChatFeedProps {
   channel: Amity.Channel;
   isJoinedCommunity?: boolean;
   isLoading?: boolean;
+  pageId?: string;
+  componentId?: string;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) => {
+const ChatFeed: FC<ChatFeedProps> = ({
+  channel,
+  isJoinedCommunity,
+  isLoading,
+  pageId,
+  componentId,
+}) => {
   const [joined, setJoined] = useState<boolean>(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
@@ -151,8 +159,11 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
 
       return (
         <LivestreamPinnedProduct
+          pageId={pageId}
+          componentId={componentId}
           productTag={pinnedTag}
           isViewer={!canManage}
+          sourceId={room?.roomId}
           onClosePinnedProduct={() => setIsShowPinnedProduct(false)}
           onUnpin={async () => {
             await unpinProduct(livestreamPost?.postId || '');

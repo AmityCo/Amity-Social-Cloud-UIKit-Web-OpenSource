@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ProductTagSelection } from '~/v4/social/features/product-tagged/components/ProductTagSelection';
 import { ProductTagSelectionMode } from '~/v4/social/features/product-tagged/components/ProductTagSelection/ProductTagSelection';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
@@ -43,16 +43,19 @@ export function ProductTagSelectionWrapper({
   isHost = false,
 }: ProductTagSelectionWrapperProps) {
   // Merge and deduplicate initialProductTags with alreadyTaggedProducts
-  const mergedTags =
-    isFromManageTagList && alreadyTaggedProducts
-      ? (() => {
-          const tagMap = new Map<string, Amity.ProductTag>();
-          [...initialProductTags, ...alreadyTaggedProducts].forEach((tag) => {
-            tagMap.set(tag.productId, tag);
-          });
-          return Array.from(tagMap.values());
-        })()
-      : initialProductTags;
+  const mergedTags = useMemo(
+    () =>
+      isFromManageTagList && alreadyTaggedProducts
+        ? (() => {
+            const tagMap = new Map<string, Amity.ProductTag>();
+            [...initialProductTags, ...alreadyTaggedProducts].forEach((tag) => {
+              tagMap.set(tag.productId, tag);
+            });
+            return Array.from(tagMap.values());
+          })()
+        : initialProductTags,
+    [initialProductTags, alreadyTaggedProducts, isFromManageTagList],
+  );
 
   const [currentProductTags, setCurrentProductTags] = useState<Amity.ProductTag[]>(mergedTags);
 

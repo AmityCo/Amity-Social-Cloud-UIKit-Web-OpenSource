@@ -546,6 +546,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           <div className={styles.editPost__attachment}>
             <MediaAttachment
               pageId={pageId}
+              sourceId={post.postId}
               totalMedia={totalMedia}
               isVisibleCamera={isVisibleCamera}
               isVisibleImage={isVisibleImage}
@@ -619,6 +620,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                         ) : (
                           <MediaAttachment
                             pageId={pageId}
+                            sourceId={post.postId}
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
