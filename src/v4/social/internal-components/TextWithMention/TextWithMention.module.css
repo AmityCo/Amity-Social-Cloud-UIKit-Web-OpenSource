@@ -50,6 +50,15 @@
   cursor: pointer;
 }
 
+.textWithMention__productTag {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: inline;
+  background-color: transparent;
+  color: var(--asc-color-primary-default);
+}
+
 .textWithMention__highlight {
   background-color: rgb(from var(--asc-color-primary-shade1) r g b / 10%);
   font-weight: 700;

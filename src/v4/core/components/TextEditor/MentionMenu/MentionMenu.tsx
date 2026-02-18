@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import ReactDOM from 'react-dom';
 import type { MenuOption } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import { UserMentionItem } from './UserMentionItem';
@@ -29,9 +30,15 @@ export interface MentionMenuProps<T> {
   onMentionSelected?: (user: Amity.User) => void;
   onProductSelected?: (product: any) => void;
   onCloseMenu: () => void;
-  onSetIntersectionNode: (element: HTMLElement | null) => void;
+  // onSetIntersectionNode is no longer needed, handled internally
   pageId: string;
   componentId: string;
+  // Add loadMore and hasMore/isLoading for both users and products
+  loadMoreUsers?: () => void;
+  hasMoreUsers?: boolean;
+  isLoadingUsers?: boolean;
+  loadMoreProducts?: () => void;
+  hasMoreProducts?: boolean;
 }
 
 // Separate function to render mention list
@@ -152,12 +159,18 @@ export function MentionMenu<T>({
   onMentionSelected,
   onProductSelected,
   onCloseMenu,
-  onSetIntersectionNode,
   pageId,
   componentId,
+  loadMoreUsers,
+  hasMoreUsers,
+  isLoadingUsers,
+  loadMoreProducts,
+  hasMoreProducts,
 }: MentionMenuProps<T>) {
   const [activeTab, setActiveTab] = useState<'users' | 'products'>('users');
   const containerRef = useRef<HTMLDivElement>(null);
+  const userIntersectionNode = useRef<HTMLElement | null>(null);
+  const productIntersectionNode = useRef<HTMLElement | null>(null);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -179,7 +192,9 @@ export function MentionMenu<T>({
     setHighlightedIndex,
     selectOptionAndCleanUp,
     onMentionSelected,
-    onSetIntersectionNode,
+    onSetIntersectionNode: (el) => {
+      userIntersectionNode.current = el;
+    },
     pageId,
     componentId,
   });
@@ -192,11 +207,34 @@ export function MentionMenu<T>({
           setHighlightedIndex,
           selectOptionAndCleanUp: selectOptionAndCleanUp as any,
           onMentionSelected: onProductSelected as any,
-          onSetIntersectionNode,
+          onSetIntersectionNode: (el) => {
+            productIntersectionNode.current = el;
+          },
           pageId,
           componentId,
         })
       : null;
+  // Intersection observer for users tab
+  useIntersectionObserver({
+    node: activeTab === 'users' ? userIntersectionNode.current : null,
+    onIntersect: () => {
+      if (activeTab === 'users' && !isLoadingUsers && hasMoreUsers && loadMoreUsers) {
+        loadMoreUsers();
+      }
+    },
+    options: { threshold: 0.7 },
+  });
+
+  // Intersection observer for products tab
+  useIntersectionObserver({
+    node: activeTab === 'products' ? productIntersectionNode.current : null,
+    onIntersect: () => {
+      if (activeTab === 'products' && !isLoadingProducts && hasMoreProducts && loadMoreProducts) {
+        loadMoreProducts();
+      }
+    },
+    options: { threshold: 0.7 },
+  });
 
   const productMentionSkeletons = Array.from({ length: 2 }).map((_, index) => (
     <div className={styles.mentionList__productMentionList__skeletonItem}>
@@ -292,13 +330,14 @@ export function MentionMenu<T>({
                       );
                     }
 
-                    if (isLoadingProducts) return productMentionSkeletons;
+                    if (productOptions.length === 0 && isLoadingProducts)
+                      return productMentionSkeletons;
 
                     // Show product list
                     return (
                       <div className={styles.mentionList}>
                         {productMentionList}
-                        {!isLoadingProducts && productMentionSkeletons}
+                        {isLoadingProducts && productMentionSkeletons}
                       </div>
                     );
                   },
