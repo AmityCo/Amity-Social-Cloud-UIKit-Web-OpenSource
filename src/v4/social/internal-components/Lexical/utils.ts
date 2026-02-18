@@ -326,8 +326,8 @@ export function textToEditorState(value: {
               mention: currentItem,
             }),
           );
-          runningIndex += currentItem.length + 1;
-          globalIndex += currentItem.length + 1;
+          runningIndex += currentItem.length;
+          globalIndex += currentItem.length;
         }
 
         itemIndex += 1;

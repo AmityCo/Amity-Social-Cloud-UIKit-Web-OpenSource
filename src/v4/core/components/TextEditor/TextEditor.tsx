@@ -36,7 +36,6 @@ import {
   MentionData,
   textToEditorState,
 } from '~/v4/social/internal-components/Lexical/utils';
-import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
 import styles from './TextEditor.module.css';
@@ -256,7 +255,9 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
     const {
       suggestions,
       onQueryChange: originalOnQueryChange,
+      hasMore,
       loadMore,
+      isLoading,
     } = useSuggestions(editorContentType, communityId, channelId);
 
     // Use custom hooks for product mentions
@@ -264,6 +265,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       suggestions: productSuggestions,
       onQueryChange: originalProductQueryChange,
       loadMore: loadMoreProducts,
+      hasMore: hasMoreProducts,
       queryString: productQueryString,
       isLoading: isLoadingProducts,
     } = useProductSuggestions(enableProductMention);
@@ -308,16 +310,6 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
         ),
       [filteredProductSuggestions],
     );
-
-    useIntersectionObserver({
-      onIntersect: () => {
-        loadMore();
-      },
-      node: intersectionNode,
-      options: {
-        threshold: 0.7,
-      },
-    });
 
     // Build initial editor state
     const initialEditorState = useMemo(() => {
@@ -612,7 +604,12 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
                       onProductSelected?.(productData.product);
                     }}
                     onCloseMenu={closeMenu}
-                    onSetIntersectionNode={setIntersectionNode}
+                    // onSetIntersectionNode removed, handled internally
+                    loadMoreUsers={loadMore}
+                    hasMoreUsers={hasMore}
+                    isLoadingUsers={isLoading}
+                    loadMoreProducts={loadMoreProducts}
+                    hasMoreProducts={hasMoreProducts}
                     pageId={pageId}
                     componentId={componentId}
                   />

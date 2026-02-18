@@ -549,6 +549,9 @@ export const PostContent = ({
               mentionees={post?.mentionees}
               hashtagged={post?.metadata?.hashtags}
               hashtags={post?.hashtags}
+              productTags={post?.productTags?.filter(
+                (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
+              )}
               post={post}
               keyword={keyword}
               isSearchPost={isSearchPost}
