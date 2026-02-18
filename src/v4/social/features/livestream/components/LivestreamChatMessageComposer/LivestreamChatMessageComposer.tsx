@@ -29,8 +29,8 @@ import { TagOutlined } from '~/v4/icons/TagOutlined';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
-import { LivestreamPinnedProduct } from '~/v4/social/features/product-tagged/elements/LivestreamPinnedProduct';
 import { ProductTagList } from '~/v4/social/features/product-tagged/components/ProductTagList';
+import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -84,9 +84,7 @@ export const LivestreamChatMessageComposer = ({
 
   const canManageProducts = isHost || (isCoHost && coHost?.canManageProductTags);
 
-  const [livestreamPost, setLivestreamPost] = useState(
-    livestreamPostFromContext?.childrenPosts?.[0],
-  );
+  const [livestreamPost, setLivestreamPost] = useState(livestreamPostFromContext);
   const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
   const pinnedProductId = subscribedPost?.pinnedProductId;
 
@@ -383,6 +381,8 @@ export const LivestreamChatMessageComposer = ({
                       children: (
                         <ManageProductTagList
                           pageId={pageId}
+                          sourceType={AnalyticsSourceTypeEnum.ROOM}
+                          sourceId={room?.roomId as string}
                           renderMode="livestream"
                           productTags={subscribedPost?.productTags}
                           onClose={() => {

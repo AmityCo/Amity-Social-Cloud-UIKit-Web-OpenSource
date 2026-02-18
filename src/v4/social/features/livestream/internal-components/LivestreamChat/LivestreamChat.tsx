@@ -4,6 +4,7 @@ import { LivestreamChatMessageComposer } from '~/v4/social/features/livestream/c
 import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import styles from './LivestreamChat.module.css';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 
 export interface LivestreamChatProps {
   pageId: string;
@@ -24,6 +25,7 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
 }) => {
   // Get values from context
   const { channel, room, livestreamPost: post } = useLivestreamData();
+  const componentId = COMPONENT_ID.LIVESTREAM_CHAT;
 
   if (!channel || !post) {
     return null;
@@ -38,6 +40,8 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
     <div className={styles.livestreamChat__container}>
       <div className={styles.livestreamChat__container__inner}>
         <ChatFeed
+          pageId={pageId}
+          componentId={componentId}
           channel={channel}
           isJoinedCommunity={!!community?.isJoined}
           isLoading={isLoading || isPoorConnection}

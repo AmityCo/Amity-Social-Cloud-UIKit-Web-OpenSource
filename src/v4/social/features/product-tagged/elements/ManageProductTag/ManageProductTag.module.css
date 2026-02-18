@@ -82,6 +82,7 @@
 
 .manageProductTag__viewButtonLink {
   text-decoration: none;
+  color: var(--asc-color-white);
 }
 
 .manageProductTag__viewButton {

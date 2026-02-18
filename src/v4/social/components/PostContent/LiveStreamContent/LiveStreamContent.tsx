@@ -115,7 +115,6 @@ export function LiveStreamContent({
                 });
               }}
               className={styles.liveStreamContent__taggedProducts}
-              iconClassName={styles.liveStreamContent__taggedProducts__icon}
               productTagAmount={subscribedPost?.productTags?.length || 0}
             />
           )}

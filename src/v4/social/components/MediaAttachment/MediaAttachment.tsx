@@ -12,6 +12,7 @@ const MAX_UPLOAD_MEDIA = 10;
 
 interface MediaAttachmentProps {
   pageId: string;
+  sourceId?: string;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
@@ -23,6 +24,7 @@ interface MediaAttachmentProps {
 
 export function MediaAttachment({
   pageId,
+  sourceId,
   isVisibleCamera,
   isVisibleImage,
   isVisibleVideo,
@@ -82,6 +84,7 @@ export function MediaAttachment({
             productTags={productTags}
             pageId={pageId}
             className={styles.mediaAttachment__productTagButton}
+            sourceId={sourceId}
           />
         )}
       </div>

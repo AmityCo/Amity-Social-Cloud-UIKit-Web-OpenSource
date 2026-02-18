@@ -14,6 +14,7 @@ import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import CloseIcon from '~/v4/icons/Close';
 import { ActionButton } from '~/v4/core/components/ActionButton';
+import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 type DrawerScreen = 'list' | 'selection';
 
@@ -21,6 +22,7 @@ const MAX_COUNT = 20;
 
 export interface TaggedProductsModalProps {
   pageId?: string;
+  roomId?: string;
   productTags: Amity.ProductTag[];
   pinnedProductId?: string;
   onClose?: () => void;
@@ -35,6 +37,7 @@ export interface TaggedProductsModalProps {
 
 export function TaggedProductsModal({
   productTags,
+  roomId,
   pinnedProductId,
   pageId = PAGE_ID.WILD_CARD,
   onClose,
@@ -174,6 +177,8 @@ export function TaggedProductsModal({
             {productTags.map((productTag) => (
               <ManageProductTag
                 key={productTag.productId}
+                sourceId={roomId as string}
+                sourceType={AnalyticsSourceTypeEnum.ROOM}
                 isHost={isHost}
                 renderMode="playback"
                 productTag={productTag}

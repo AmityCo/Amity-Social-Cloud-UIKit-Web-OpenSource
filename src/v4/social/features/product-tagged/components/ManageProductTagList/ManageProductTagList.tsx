@@ -15,6 +15,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 export interface ManageProductTagListProps {
   //to remove product
@@ -33,6 +34,8 @@ export interface ManageProductTagListProps {
   isUnpinning?: boolean;
   renderMode?: RenderModeEnum;
   isHost?: boolean;
+  sourceType?: AnalyticsSourceTypeEnum;
+  sourceId: string;
 }
 
 export function ManageProductTagList({
@@ -49,6 +52,8 @@ export function ManageProductTagList({
   isUnpinning = false,
   renderMode = 'livestream',
   isHost = false,
+  sourceType,
+  sourceId,
 }: ManageProductTagListProps) {
   const componentId = COMPONENT_ID.MANAGE_PRODUCT_TAG_LIST;
   const { isDesktop } = useResponsive();
@@ -303,6 +308,8 @@ export function ManageProductTagList({
                   <div className={styles.manageProductTagList__pinnedList}>
                     {pinnedProducts.map((productTag) => (
                       <ManageProductTag
+                        sourceType={sourceType}
+                        sourceId={sourceId as string}
                         key={productTag.productId}
                         renderMode={renderMode}
                         productTag={productTag}
@@ -335,6 +342,8 @@ export function ManageProductTagList({
                         isPinned={false}
                         onRemove={handleRemove}
                         onTogglePin={handleTogglePin}
+                        sourceType={sourceType}
+                        sourceId={sourceId}
                         pageId={pageId}
                         componentId={componentId}
                         isDisabled={isPinning || isUnpinning}

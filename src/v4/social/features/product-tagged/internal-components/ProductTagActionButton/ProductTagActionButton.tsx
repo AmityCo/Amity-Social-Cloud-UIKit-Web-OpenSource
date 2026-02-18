@@ -12,12 +12,14 @@ interface ProductTagActionButtonProps {
   productTags?: Amity.ProductTag[];
   pageId?: string;
   className?: string;
+  sourceId?: string;
 }
 
 export function ProductTagActionButton({
   pageId,
   productTags = [],
   className = '',
+  sourceId,
 }: ProductTagActionButtonProps) {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();

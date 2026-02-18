@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
 import clsx from 'clsx';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -10,6 +10,7 @@ import CloseIcon from '~/v4/icons/Close';
 import styles from './LivestreamPinnedProduct.module.css';
 import Trash from '~/v4/social/icons/trash';
 import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/internal-components/ProductImageThumbnail';
+import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 
 interface LivestreamPinnedProductProps {
   pageId?: string;
@@ -20,6 +21,7 @@ interface LivestreamPinnedProductProps {
   className?: string;
   isViewer?: boolean;
   onClosePinnedProduct?: () => void;
+  sourceId?: string;
 }
 
 export function LivestreamPinnedProduct({
@@ -30,6 +32,7 @@ export function LivestreamPinnedProduct({
   onRemove,
   className,
   isViewer = true,
+  sourceId = '',
   onClosePinnedProduct,
 }: LivestreamPinnedProductProps) {
   const elementId = ELEMENT_ID.LIVESTREAM_PINNED_PRODUCT;
@@ -40,6 +43,8 @@ export function LivestreamPinnedProduct({
     elementId,
   });
 
+  const elementRef = useRef<HTMLDivElement>(null);
+
   const product = productTag.product;
   if (!product) return null;
 
@@ -47,14 +52,31 @@ export function LivestreamPinnedProduct({
 
   const price = formatPrice(product.price, product.currency);
 
+  const markAsClicked = () => {
+    product.analytics.markAsClicked(accessibilityId, 'room', sourceId);
+  };
+
   const handleLinkClick = (e: React.MouseEvent) => {
+    isViewer && markAsClicked();
     if (!unavailable && product.productUrl) {
       window.open(product.productUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
+  const { isVisible } = useVisibilitySensor({
+    threshold: 0.6,
+    elementRef,
+  });
+
+  useEffect(() => {
+    if (isVisible && isViewer) {
+      product?.analytics?.markAsViewed(accessibilityId, 'room', sourceId);
+    }
+  }, [product, isVisible, accessibilityId, sourceId, isViewer]);
+
   return (
     <div
+      ref={elementRef}
       style={themeStyles}
       data-testid={accessibilityId}
       className={clsx(styles.livestreamPinnedProduct, className)}
@@ -130,6 +152,7 @@ export function LivestreamPinnedProduct({
                 size="small"
                 isDisabled={unavailable}
                 onPress={() => {
+                  markAsClicked();
                   window.open(product.productUrl, '_blank', 'noopener,noreferrer');
                 }}
               >

@@ -103,6 +103,7 @@ export const COMPONENT_ID = {
   PRODUCT_TAG_SELECTION: 'product_tag_selection',
   MANAGE_PRODUCT_TAG_LIST: 'manage_product_tag_list',
   TEXT_EDITOR_COMPONENT: 'text_editor_component',
+  LIVESTREAM_CHAT: 'livestream_chat',
 } as const;
 
 export const ELEMENT_ID = {
