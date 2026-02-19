@@ -6,7 +6,14 @@ import { Divider, DividerType } from '~/v4/social/elements/Divider/Divider';
 import { ProductTag } from '~/v4/social/features/product-tagged/elements';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PAGE_ID, COMPONENT_ID } from '~/v4/constants/customization';
-import { DisplayModeEnum, DisplayMode } from '~/v4/social/types';
+import {
+  DisplayModeEnum,
+  DisplayMode,
+  ProductTagListRenderMode,
+  ProductTagListRenderModeEnum,
+  LayoutVariant,
+  LayoutVariantEnum,
+} from '~/v4/social/types';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { Button } from '~/v4/core/components/AriaButton';
 
@@ -15,7 +22,8 @@ export interface ProductTagListProps {
   productTags: Amity.ProductTag[];
   displayMode: DisplayMode;
   onClose?: () => void;
-  mode?: 'post' | 'livestream';
+  mode?: ProductTagListRenderMode;
+  layout?: LayoutVariant;
   pinnedProductId?: string;
 }
 
@@ -25,6 +33,7 @@ export function ProductTagList({
   pageId = PAGE_ID.WILD_CARD,
   onClose,
   mode = 'post',
+  layout = LayoutVariantEnum.LIST,
   pinnedProductId,
 }: ProductTagListProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_LIST;
@@ -44,7 +53,7 @@ export function ProductTagList({
   };
 
   const sortedProductTags = React.useMemo(() => {
-    if (mode !== 'livestream' || !pinnedProductId) return productTags;
+    if (mode !== ProductTagListRenderModeEnum.LIVESTREAM || !pinnedProductId) return productTags;
 
     return [...productTags].sort((a, b) => {
       const aIsPinned = a.product?.productId === pinnedProductId;
@@ -55,6 +64,15 @@ export function ProductTagList({
     });
   }, [productTags, pinnedProductId, mode]);
 
+  const headerTextMap = {
+    [ProductTagListRenderModeEnum.LIVESTREAM]: 'Products tagged',
+    [ProductTagListRenderModeEnum.IMAGE]: 'Products tagged in this photo',
+    [ProductTagListRenderModeEnum.VIDEO]: 'Products tagged in this video',
+    [ProductTagListRenderModeEnum.POST]: 'Products tagged in this post',
+  };
+
+  const headerText = config.text ?? headerTextMap[mode];
+
   return (
     <div className={styles.productTagList} data-testid={accessibilityId} data-display={displayMode}>
       <div className={styles.productTagList__header} data-display={displayMode}>
@@ -64,9 +82,7 @@ export function ProductTagList({
             data-mode={mode}
             className={styles.productTagListHeader__text}
           >
-            {mode === 'livestream'
-              ? 'Products tagged'
-              : config.text ?? 'Products tagged in this post'}
+            {headerText}
           </Typography.TitleBold>
         </div>
         {displayMode === DisplayModeEnum.DESKTOP && (
@@ -81,7 +97,11 @@ export function ProductTagList({
       {displayMode === DisplayModeEnum.DESKTOP && (
         <Divider type={DividerType.FULL_WIDTH} className={styles.productTagList__divider} />
       )}
-      <div className={styles.productTagList__content} data-display={displayMode}>
+      <div
+        className={styles.productTagList__content}
+        data-display={displayMode}
+        data-layout={layout}
+      >
         {sortedProductTags.map((productTag) =>
           productTag.product ? (
             mode === 'livestream' ? (
@@ -89,6 +109,7 @@ export function ProductTagList({
               <ProductTag
                 key={productTag.product.productId}
                 mode={mode}
+                layout={layout}
                 product={productTag.product}
                 isPinned={productTag.product.productId === pinnedProductId}
                 onPress={
@@ -113,6 +134,7 @@ export function ProductTagList({
               >
                 <ProductTag
                   mode={mode}
+                  layout={layout}
                   product={productTag.product}
                   isPinned={false}
                   onPress={

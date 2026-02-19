@@ -31,7 +31,7 @@ export function ProductTagActionButton({
       <ActionButton
         pageId={pageId}
         className={clsx(styles.productTagActionButton__button, className)}
-        size="large"
+        size={isDesktop ? 'medium' : 'large'}
         defaultIcon={<TagOutlined />}
         color="secondary"
         onPress={() => {

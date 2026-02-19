@@ -84,7 +84,7 @@
   background-color: var(--asc-color-base-shade4);
 }
 
-.thumbnail__productTagMediaActionButton {
+.thumbnail__productTagBadge {
   position: absolute;
   bottom: 0.5rem;
   right: 0.5rem;

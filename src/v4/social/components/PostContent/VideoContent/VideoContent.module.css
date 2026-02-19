@@ -92,6 +92,12 @@
   align-items: center;
 }
 
+.videoContent__productTagButton {
+  position: absolute;
+  bottom: 0.8125rem;
+  right: 0.75rem;
+}
+
 .videoContent__playButtonCover {
   position: absolute;
   inset: 0;

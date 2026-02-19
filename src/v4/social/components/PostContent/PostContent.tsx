@@ -45,6 +45,7 @@ import { isEqual } from 'lodash';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import { EventHostBadge } from '~/v4/social/elements';
+import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -580,6 +581,7 @@ export const PostContent = ({
                 community={targetCommunity}
               />
             ) : null}
+            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           </Button>
 
           <div className={styles.postContent__reactions_and_comments}>

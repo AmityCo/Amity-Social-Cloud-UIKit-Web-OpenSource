@@ -1,0 +1,1 @@
+export { ProductTagBadge } from './ProductTagBadge';

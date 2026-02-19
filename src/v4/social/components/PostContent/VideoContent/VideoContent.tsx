@@ -6,6 +6,8 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './VideoContent.module.css';
 import VideoControl from '~/v4/icons/VideoControl';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
 
 const VideoThumbnail = ({
   videoPostData,
@@ -71,7 +73,15 @@ const Video = ({
   videoLeftCount: number;
   onVideoClick: () => void;
 }) => {
+  const { showProductTagList } = useShowProductTagList({ pageId, mode: 'video' });
+
   if (!videoPost) return null;
+
+  const handleShowProductTags = () => {
+    if (videoPost.productTags) {
+      showProductTagList(videoPost.productTags);
+    }
+  };
 
   return (
     <Button
@@ -100,6 +110,14 @@ const Video = ({
           </div>
         </div>
       ) : null}
+      {videoPost.productTags && videoPost.productTags.length > 0 && (
+        <div className={styles.videoContent__productTagButton}>
+          <ProductTagBadge
+            selectedProductTags={videoPost.productTags}
+            onClick={handleShowProductTags}
+          />
+        </div>
+      )}
     </Button>
   );
 };

@@ -1337,9 +1337,7 @@ export const defaultConfig: DefaultConfig = {
     '*/*/brand_badge': {
       image: 'value',
     },
-    '*/product_tag_list/*': {
-      text: 'Products tagged in this post',
-    },
+    '*/product_tag_list/*': {},
     '*/product_tag_list/product_tag': {},
     '*/product_tag_selection/*/*': {
       background_color: '',

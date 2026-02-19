@@ -21,7 +21,7 @@ import ChevronRight from '~/v4/icons/ChevronRight';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
-import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagMediaActionButton/ProductTagSelectionWrapper';
+import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 
 export interface LivestreamSetupProps {
