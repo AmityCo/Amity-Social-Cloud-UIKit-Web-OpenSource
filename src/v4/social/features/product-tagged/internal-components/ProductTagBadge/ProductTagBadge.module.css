@@ -1,8 +1,8 @@
-.productTagMediaActionButton__productTagSelection {
+.productTagBadge__productTagSelection {
   height: 90dvh;
 }
 
-.productTagMediaActionButton {
+.productTagBadge {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,17 +16,17 @@
   cursor: pointer;
 }
 
-.productTagMediaActionButton[data-label='false'] {
+.productTagBadge[data-label='false'] {
   width: 1.5rem;
   padding: 0.16rem 0.12rem 0.16rem 0.16rem;
 }
 
-.productTagMediaActionButton__icon {
+.productTagBadge__icon {
   width: 1.25rem;
   height: 1.25rem;
   fill: var(--asc-color-white);
 }
 
-.productTagMediaActionButton__count {
+.productTagBadge__count {
   color: var(--asc-color-white);
 }

@@ -44,6 +44,7 @@
 
 .imageContent__imgContainer {
   cursor: pointer;
+  position: relative;
 }
 
 .imageContent__imgContainer:nth-child(1) {
@@ -60,7 +61,12 @@
 
 .imageContent__imgContainer:nth-child(4) {
   grid-area: image4;
-  position: relative;
+}
+
+.imageContent__productTagButton {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
 }
 
 .imageContent__imgCover {

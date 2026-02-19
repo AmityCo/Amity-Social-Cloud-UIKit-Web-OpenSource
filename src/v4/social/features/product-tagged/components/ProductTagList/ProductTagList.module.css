@@ -1,7 +1,7 @@
 .productTagList {
   display: flex;
   flex-direction: column;
-  background-color: var(--asc-color-background-default, white);
+  background-color: var(--asc-color-background-default);
   border-top-left-radius: 0.75rem; /* 12px */
   border-top-right-radius: 0.75rem; /* 12px */
   overflow: hidden;
@@ -62,9 +62,23 @@
   min-height: 0;
 }
 
+/* Card layout: grid display */
+.productTagList__content[data-layout='card'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
 .productTagList__content[data-display='desktop'] {
   padding: 1rem;
   max-height: calc(80vh - 3.75rem);
+  max-width: 30rem;
+}
+
+/* Card layout on desktop: adjust padding */
+.productTagList__content[data-display='desktop'][data-layout='card'] {
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
 }
 
 .productTagList__divider {

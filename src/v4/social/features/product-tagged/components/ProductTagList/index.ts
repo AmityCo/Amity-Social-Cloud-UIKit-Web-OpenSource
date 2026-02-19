@@ -1,2 +1,2 @@
-export { ProductTagList } from './ProductTagList/ProductTagList';
-export type { ProductTagListProps } from './ProductTagList/ProductTagList';
+export { ProductTagList } from './ProductTagList';
+export type { ProductTagListProps } from './ProductTagList';

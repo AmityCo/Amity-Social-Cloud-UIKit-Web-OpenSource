@@ -15,8 +15,9 @@ import { Button as AriaButton } from '~/v4/core/components/AriaButton';
 import { AltTextBadge } from '~/v4/social/internal-components/AltTextBadge';
 import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner/ProgressSpinner';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge';
+import { useProductTagSelection } from '~/v4/social/features/product-tagged/hooks';
 import styles from './ImageThumbnail.module.css';
-import { ProductTagMediaActionButton } from '~/v4/social/features/product-tagged/internal-components/ProductTagMediaActionButton';
 
 type ImageThumbnailProps = {
   pageId?: string;
@@ -162,6 +163,15 @@ function FileImageItem({
 }: FileImageItemProps) {
   const isUploading = progress[file.id] && !isAmityFile(file.file);
   const hasError = file.errorText && !('fileId' in file);
+  const { openProductTagSelection } = useProductTagSelection<'image'>({
+    pageId,
+    onProductTagsChange,
+  });
+
+  const handleProductTagClick = () => {
+    if (!isAmityFile(file.file)) return;
+    openProductTagSelection(file.file, file.productTags);
+  };
 
   return (
     <div
@@ -191,13 +201,10 @@ function FileImageItem({
           <AltText file={file.file} onAltTextChange={onAltTextChange} />
           {onProductTagsChange &&
             ((file.productTags ?? [])?.length !== 0 || !productTagsReachLimit) && (
-              <div className={styles.thumbnail__productTagMediaActionButton}>
-                <ProductTagMediaActionButton
+              <div className={styles.thumbnail__productTagBadge}>
+                <ProductTagBadge
                   selectedProductTags={file.productTags ?? []}
-                  pageId={pageId}
-                  onTagChanges={(tags) =>
-                    onProductTagsChange(file.file as Amity.File<'image'>, tags)
-                  }
+                  onClick={handleProductTagClick}
                 />
               </div>
             )}

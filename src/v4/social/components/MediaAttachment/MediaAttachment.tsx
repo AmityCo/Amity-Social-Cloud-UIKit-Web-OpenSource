@@ -80,12 +80,7 @@ export function MediaAttachment({
           )}
         </div>
         {isDesktop && productTags.length > 0 && (
-          <ProductTagActionButton
-            productTags={productTags}
-            pageId={pageId}
-            className={styles.mediaAttachment__productTagButton}
-            sourceId={sourceId}
-          />
+          <ProductTagActionButton productTags={productTags} pageId={pageId} />
         )}
       </div>
     </div>

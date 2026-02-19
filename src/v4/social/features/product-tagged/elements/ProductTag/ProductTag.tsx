@@ -8,12 +8,19 @@ import { formatPrice } from '~/v4/social/utils/formatPrice';
 import { Button } from '~/v4/core/components/AriaButton';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import {
+  ProductTagListRenderMode,
+  ProductTagListRenderModeEnum,
+  LayoutVariant,
+  LayoutVariantEnum,
+} from '~/v4/social/types';
 
 export interface ProductTagProps {
   product: Amity.Product;
   pageId?: string;
   componentId?: string;
-  mode?: 'post' | 'livestream';
+  mode?: ProductTagListRenderMode;
+  layout?: LayoutVariant;
   isPinned?: boolean;
   onPress?: () => void;
 }
@@ -22,7 +29,8 @@ export function ProductTag({
   product,
   pageId = PAGE_ID.WILD_CARD,
   componentId = COMPONENT_ID.WILD_CARD,
-  mode = 'post',
+  mode = ProductTagListRenderModeEnum.POST,
+  layout = LayoutVariantEnum.LIST,
   isPinned = false,
   onPress,
 }: ProductTagProps) {
@@ -32,6 +40,12 @@ export function ProductTag({
     componentId,
     elementId,
   });
+
+  // Card layout is not supported in livestream mode, fallback to list
+  const effectiveLayout =
+    layout === LayoutVariantEnum.CARD && mode === ProductTagListRenderModeEnum.LIVESTREAM
+      ? LayoutVariantEnum.LIST
+      : layout;
 
   const { info } = useConfirmContext();
   const { closePopup } = usePopupContext();
@@ -76,20 +90,23 @@ export function ProductTag({
       style={themeStyles}
       data-test-id={accessibilityId}
       data-mode={mode}
+      data-layout={effectiveLayout}
       data-unavailable={unavailable}
       onClick={handleClick}
     >
-      <div className={styles.productTag__thumbnail}>
-        <ProductImageThumbnail
-          imageUrl={imageUrl}
-          alt={product.productName || product.productId}
-          size="large"
-          isPinned={isPinned}
-          unavailable={unavailable}
-        />
-      </div>
-      <div className={styles.productTag__information} data-mode={mode}>
-        <div className={styles.productTag__content} data-mode={mode}>
+      <ProductImageThumbnail
+        imageUrl={imageUrl}
+        alt={product.productName || product.productId}
+        size="large"
+        isPinned={isPinned}
+        unavailable={unavailable}
+      />
+      <div
+        className={styles.productTag__information}
+        data-mode={mode}
+        data-layout={effectiveLayout}
+      >
+        <div className={styles.productTag__content} data-mode={mode} data-layout={effectiveLayout}>
           {unavailable && (
             <Typography.Caption as="p" className={styles.productTag__unavailableLabel}>
               Unavailable
@@ -109,7 +126,7 @@ export function ProductTag({
           )}
         </div>
 
-        {mode === 'livestream' && (
+        {mode === ProductTagListRenderModeEnum.LIVESTREAM && (
           <Button
             variant="fill"
             color="primary"

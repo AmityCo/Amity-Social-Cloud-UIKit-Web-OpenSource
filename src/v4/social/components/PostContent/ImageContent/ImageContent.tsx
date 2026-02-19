@@ -5,6 +5,8 @@ import { formatAltText } from '~/v4/social/utils';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
 import styles from './ImageContent.module.css';
 
 type ImageContentProps = {
@@ -74,10 +76,17 @@ function Image({
   componentId = '*',
 }: ImageProps) {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const { showProductTagList } = useShowProductTagList({ pageId, mode: 'image' });
 
   const file = imagePost?.getImageInfo();
 
   if (!imagePost) return null;
+
+  const handleShowProductTags = () => {
+    if (imagePost.productTags) {
+      showProductTagList(imagePost.productTags);
+    }
+  };
 
   return (
     <Button
@@ -113,6 +122,14 @@ function Image({
         <Typography.Headline className={styles.imageContent__imgCover}>
           + {imageLeftCount + 1}
         </Typography.Headline>
+      )}
+      {imagePost.productTags && imagePost.productTags.length > 0 && (
+        <div className={styles.imageContent__productTagButton}>
+          <ProductTagBadge
+            selectedProductTags={imagePost.productTags}
+            onClick={handleShowProductTags}
+          />
+        </div>
       )}
     </Button>
   );

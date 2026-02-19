@@ -4,9 +4,10 @@ import { CloseIcon, ExclamationCircle, Play } from '~/icons';
 import { Button } from '~/v4/core/natives/Button';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner';
 import { isAmityFile } from '~/v4/utils/checkFileType';
-import styles from './VideoThumbnail.module.css';
 import { useImage } from '~/v4/core/hooks/useImage';
-import { ProductTagMediaActionButton } from '~/v4/social/features/product-tagged/internal-components/ProductTagMediaActionButton';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge';
+import { useProductTagSelection } from '~/v4/social/features/product-tagged/hooks';
+import styles from './VideoThumbnail.module.css';
 
 const PostVideoThumbnail = ({
   post,
@@ -69,6 +70,15 @@ export const VideoThumbnail = ({
   productTagsReachLimit = false,
 }: VideoThumbnailProps) => {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const { openProductTagSelection } = useProductTagSelection<'video'>({
+    pageId,
+    onProductTagsChange,
+  });
+
+  const handleProductTagClick = (file: TFileItem) => {
+    if (!isAmityFile(file.file)) return;
+    openProductTagSelection(file.file as Amity.File<'video'>, file.productTags);
+  };
 
   const isVideoFile = (file: TFileItem) => {
     if (isAmityFile(file.file)) {
@@ -175,13 +185,10 @@ export const VideoThumbnail = ({
                 {onProductTagsChange &&
                   ((file.productTags ?? [])?.length !== 0 || !productTagsReachLimit) &&
                   isAmityFile(file.file) && (
-                    <div className={styles.thumbnail__productTagMediaActionButton}>
-                      <ProductTagMediaActionButton
+                    <div className={styles.thumbnail__productTagBadge}>
+                      <ProductTagBadge
                         selectedProductTags={file.productTags ?? []}
-                        pageId={pageId}
-                        onTagChanges={(tags) =>
-                          onProductTagsChange(file.file as Amity.File<'video'>, tags)
-                        }
+                        onClick={() => handleProductTagClick(file)}
                       />
                     </div>
                   )}

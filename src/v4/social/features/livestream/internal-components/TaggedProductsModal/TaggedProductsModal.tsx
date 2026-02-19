@@ -10,7 +10,7 @@ import {
 } from '~/v4/social/features/product-tagged/elements';
 import { Button } from '~/v4/core/components/AriaButton';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagMediaActionButton/ProductTagSelectionWrapper';
+import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import CloseIcon from '~/v4/icons/Close';
 import { ActionButton } from '~/v4/core/components/ActionButton';
