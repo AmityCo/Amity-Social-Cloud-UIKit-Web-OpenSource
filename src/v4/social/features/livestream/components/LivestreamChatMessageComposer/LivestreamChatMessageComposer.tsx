@@ -84,7 +84,9 @@ export const LivestreamChatMessageComposer = ({
 
   const canManageProducts = isHost || (isCoHost && coHost?.canManageProductTags);
 
-  const [livestreamPost, setLivestreamPost] = useState(livestreamPostFromContext);
+  const [livestreamPost, setLivestreamPost] = useState(
+    isHost ? livestreamPostFromContext?.childrenPosts[0] : livestreamPostFromContext,
+  );
   const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
   const pinnedProductId = subscribedPost?.pinnedProductId;
 
@@ -391,13 +393,13 @@ export const LivestreamChatMessageComposer = ({
                           pinnedProductId={pinnedProductId}
                           onRemove={async (productTag) => {
                             // Handle product removal - no success toast
-                            if (livestreamPost?.postId) {
-                              const updatedTags = livestreamPost?.productTags?.filter(
+                            if (subscribedPost?.postId) {
+                              const updatedTags = subscribedPost?.productTags?.filter(
                                 (tag) => tag.productId !== productTag.productId,
                               );
                               try {
                                 await updateProductTags({
-                                  postId: livestreamPost?.postId,
+                                  postId: subscribedPost?.postId,
                                   productTags: updatedTags || [],
                                 });
                                 success({ content: 'Product tag removed.' });
@@ -409,10 +411,10 @@ export const LivestreamChatMessageComposer = ({
                             }
                           }}
                           onUpdateProductTags={async (tags) => {
-                            if (livestreamPost?.postId) {
+                            if (subscribedPost?.postId) {
                               try {
                                 await updateProductTags({
-                                  postId: livestreamPost?.postId,
+                                  postId: subscribedPost?.postId,
                                   productTags: tags,
                                 });
                                 success({ content: 'Product tags added.' });
@@ -422,18 +424,18 @@ export const LivestreamChatMessageComposer = ({
                             }
                           }}
                           onPinnedProductIdChange={async (productId) => {
-                            if (livestreamPost?.postId) {
+                            if (subscribedPost?.postId) {
                               if (productId) {
                                 // Only pin if the product ID has changed
                                 if (productId !== pinnedProductId) {
                                   await pinProduct({
-                                    postId: livestreamPost?.postId,
+                                    postId: subscribedPost?.postId,
                                     productId,
                                   });
                                 }
                               } else {
                                 // Unpin the product (when toggling pin off, not removing)
-                                await unpinProduct(livestreamPost?.postId);
+                                await unpinProduct(subscribedPost?.postId);
                               }
                             }
                           }}
