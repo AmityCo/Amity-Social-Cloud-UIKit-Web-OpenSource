@@ -447,7 +447,8 @@ export const LivestreamChatMessageComposer = ({
                   }
                 />
               ) : (
-                hasProductTags && (
+                hasProductTags &&
+                room && (
                   <ActionButton
                     pageId={pageId}
                     componentId={componentId}
@@ -463,7 +464,7 @@ export const LivestreamChatMessageComposer = ({
                         view: 'desktop',
                         children: (
                           <ProductTagList
-                            mode="livestream"
+                            renderMode="livestream"
                             pageId={pageId}
                             displayMode="desktop"
                             onClose={() => {
@@ -471,6 +472,7 @@ export const LivestreamChatMessageComposer = ({
                             }}
                             productTags={subscribedPost?.productTags as Amity.ProductTag[]}
                             pinnedProductId={pinnedProductId}
+                            sourceId={room.roomId}
                           />
                         ),
                       })

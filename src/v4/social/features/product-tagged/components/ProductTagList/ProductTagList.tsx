@@ -15,16 +15,17 @@ import {
   LayoutVariantEnum,
 } from '~/v4/social/types';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { Button } from '~/v4/core/components/AriaButton';
+import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 export interface ProductTagListProps {
   pageId?: string;
   productTags: Amity.ProductTag[];
   displayMode: DisplayMode;
   onClose?: () => void;
-  mode?: ProductTagListRenderMode;
+  renderMode?: ProductTagListRenderMode;
   layout?: LayoutVariant;
   pinnedProductId?: string;
+  sourceId: string;
 }
 
 export function ProductTagList({
@@ -32,9 +33,10 @@ export function ProductTagList({
   displayMode = DisplayModeEnum.MOBILE,
   pageId = PAGE_ID.WILD_CARD,
   onClose,
-  mode = 'post',
+  renderMode = ProductTagListRenderModeEnum.POST,
   layout = LayoutVariantEnum.LIST,
   pinnedProductId,
+  sourceId,
 }: ProductTagListProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_LIST;
   const { AmityProducTagtListComponentBehavior } = usePageBehavior();
@@ -53,7 +55,8 @@ export function ProductTagList({
   };
 
   const sortedProductTags = React.useMemo(() => {
-    if (mode !== ProductTagListRenderModeEnum.LIVESTREAM || !pinnedProductId) return productTags;
+    if (renderMode !== ProductTagListRenderModeEnum.LIVESTREAM || !pinnedProductId)
+      return productTags;
 
     return [...productTags].sort((a, b) => {
       const aIsPinned = a.product?.productId === pinnedProductId;
@@ -62,7 +65,7 @@ export function ProductTagList({
       if (!aIsPinned && bIsPinned) return 1;
       return 0;
     });
-  }, [productTags, pinnedProductId, mode]);
+  }, [productTags, pinnedProductId, renderMode]);
 
   const headerTextMap = {
     [ProductTagListRenderModeEnum.LIVESTREAM]: 'Products tagged',
@@ -71,7 +74,7 @@ export function ProductTagList({
     [ProductTagListRenderModeEnum.POST]: 'Products tagged in this post',
   };
 
-  const headerText = config.text ?? headerTextMap[mode];
+  const headerText = config.text ?? headerTextMap[renderMode];
 
   return (
     <div className={styles.productTagList} data-testid={accessibilityId} data-display={displayMode}>
@@ -79,7 +82,7 @@ export function ProductTagList({
         <div className={styles.productTagList__title}>
           <Typography.TitleBold
             as="p"
-            data-mode={mode}
+            data-mode={renderMode}
             className={styles.productTagListHeader__text}
           >
             {headerText}
@@ -104,47 +107,19 @@ export function ProductTagList({
       >
         {sortedProductTags.map((productTag) =>
           productTag.product ? (
-            mode === 'livestream' ? (
-              // In livestream mode, ProductTag has its own internal button, so don't wrap it
-              <ProductTag
-                key={productTag.product.productId}
-                mode={mode}
-                layout={layout}
-                product={productTag.product}
-                isPinned={productTag.product.productId === pinnedProductId}
-                onPress={
-                  productTag.product.status === 'inactive' || productTag.product.isDeleted
-                    ? undefined
-                    : () => handleClickProductLink?.(productTag)
-                }
-              />
-            ) : (
-              // In post mode, ProductTag doesn't have an internal button, so wrap it
-              <Button
-                key={productTag.product.productId}
-                variant="default"
-                isDisabled={
-                  productTag.product.status === 'inactive' || productTag.product.isDeleted
-                }
-                onPress={
-                  productTag.product.status === 'inactive' || productTag.product.isDeleted
-                    ? undefined
-                    : () => handleClickProductLink?.(productTag)
-                }
-              >
-                <ProductTag
-                  mode={mode}
-                  layout={layout}
-                  product={productTag.product}
-                  isPinned={false}
-                  onPress={
-                    productTag.product.status === 'inactive' || productTag.product.isDeleted
-                      ? undefined
-                      : () => handleClickProductLink?.(productTag)
-                  }
-                />
-              </Button>
-            )
+            <ProductTag
+              renderMode={renderMode}
+              layout={layout}
+              product={productTag.product}
+              isPinned={false}
+              onClick={() => handleClickProductLink?.(productTag)}
+              sourceId={sourceId}
+              sourceType={
+                renderMode === ProductTagListRenderModeEnum.LIVESTREAM
+                  ? AnalyticsSourceTypeEnum.ROOM
+                  : AnalyticsSourceTypeEnum.POST
+              }
+            />
           ) : null,
         )}
       </div>

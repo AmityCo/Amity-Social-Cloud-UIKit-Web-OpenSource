@@ -581,8 +581,8 @@ export const PostContent = ({
                 community={targetCommunity}
               />
             ) : null}
-            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           </Button>
+          <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
 
           <div className={styles.postContent__reactions_and_comments}>
             {post?.reactionsCount > 0 && (

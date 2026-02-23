@@ -12,6 +12,8 @@ import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
 import { MenuButton } from '~/v4/social/elements';
 import { MediaMenu } from '~/v4/social/internal-components/MediaMenu';
 import { AltTextBottomSheet } from '~/v4/social/internal-components/ImageThumbnail/ImageThumbnail';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 import styles from './ImageViewer.module.css';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
@@ -50,13 +52,23 @@ export function ImageViewer({
   const { goToPostDetailPage } = useNavigation();
   const { setLinkToPost } = useLayoutContext();
 
-  const imageFile =
-    post.children.length > 0
-      ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
-      : post?.getImageInfo();
+  const isChildPost = post.children.length > 0;
+
+  const imageFile = isChildPost
+    ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
+    : post?.getImageInfo();
+
+  const productTags = isChildPost
+    ? post.childrenPosts[selectedImageIndex]?.productTags
+    : post.productTags;
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'image',
+    sourceId: post.postId,
+  });
 
   const next = () => {
     if (hasNext) setSelectedImageIndex((prev) => prev + 1);
@@ -207,7 +219,7 @@ export function ImageViewer({
         </Button>
       )}
 
-      <div aria-live="assertive">
+      <div aria-live="assertive" className={styles.imageViewer__imageContainer}>
         {imageFile && !isBrokenImg ? (
           <img
             onTouchEnd={handleTouchEnd}
@@ -228,6 +240,14 @@ export function ImageViewer({
             aria-label="loading image"
             className={styles.imageViewer__itemContainer}
           />
+        )}
+        {productTags && productTags.length > 0 && (
+          <div className={styles.imageViewer__productTagBadge}>
+            <ProductTagBadge
+              selectedProductTags={productTags}
+              onClick={() => showProductTagList(productTags)}
+            />
+          </div>
         )}
       </div>
 

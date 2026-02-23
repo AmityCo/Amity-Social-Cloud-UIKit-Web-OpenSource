@@ -9,6 +9,8 @@ import styles from './ProductCarousel.module.css';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import ChevronLeft from '~/v4/icons/ChevronLeft';
 import { Button } from '~/v4/core/components/AriaButton';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 export interface ProductCarouselProps {
   pageId?: string;
@@ -18,7 +20,12 @@ export interface ProductCarouselProps {
 
 export function ProductCarousel({ pageId = '*', componentId = '*', post }: ProductCarouselProps) {
   const { AmityProducTagtListComponentBehavior } = usePageBehavior();
-  const { showProductTagList } = useShowProductTagList({ pageId, mode: 'post' });
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'post',
+    sourceId: post.postId,
+  });
+  const { accessibilityId } = useAmityComponent({ pageId, componentId });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -88,7 +95,7 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
         AmityProducTagtListComponentBehavior.onProductTagClick({ productTag });
       }
     },
-    [AmityProducTagtListComponentBehavior],
+    [AmityProducTagtListComponentBehavior, accessibilityId],
   );
 
   const handleViewAllProducts = useCallback(() => {
@@ -129,10 +136,12 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
                   product={productTag.product}
                   pageId={pageId}
                   componentId={componentId}
-                  mode="post"
+                  renderMode="post"
                   layout={LayoutVariantEnum.CARD}
                   isPinned={false}
-                  onPress={() => handleProductTagClick(productTag)}
+                  onClick={() => handleProductTagClick(productTag)}
+                  sourceId={post.postId}
+                  sourceType={AnalyticsSourceTypeEnum.POST}
                 />
               ),
           )}
