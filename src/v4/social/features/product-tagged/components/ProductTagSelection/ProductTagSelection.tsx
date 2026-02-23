@@ -254,6 +254,7 @@ export function ProductTagSelection({
         onProductTagsChange={(updatedTags) => {
           onTagChanges(updatedTags);
         }}
+        onPinnedProductIdChange={onPinnedProductIdChange}
         onClose={(updatedTags, updatedPinnedId) => {
           onTagChanges(updatedTags);
           if (onPinnedProductIdChange) {
