@@ -588,7 +588,6 @@ export const PostContent = ({
                 community={targetCommunity}
               />
             ) : null}
-            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           </Button>
           {canShowProductTags && (
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />

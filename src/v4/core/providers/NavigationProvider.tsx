@@ -1573,7 +1573,7 @@ export default function NavigationProvider({
 
   const onProductTagClick = useCallback((context: { productTag: Amity.ProductTag }) => {
     context.productTag?.product?.productUrl &&
-      window.open(context.productTag.product.productUrl, '_blank');
+      window.open(context.productTag.product.productUrl, '_blank', 'noopener,noreferrer');
   }, []);
 
   useEffect(() => {

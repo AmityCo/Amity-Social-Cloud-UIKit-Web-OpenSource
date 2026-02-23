@@ -64,6 +64,7 @@ const Video = ({
   pageId = '*',
   videoLeftCount,
   componentId = '*',
+  parentPostId,
 }: {
   videoPost?: Amity.Post<'video'>;
   pageId?: string;
@@ -71,9 +72,14 @@ const Video = ({
   isLastVideo: boolean;
   componentId?: string;
   videoLeftCount: number;
+  parentPostId: string;
   onVideoClick: () => void;
 }) => {
-  const { showProductTagList } = useShowProductTagList({ pageId, mode: 'video' });
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'video',
+    sourceId: parentPostId,
+  });
 
   if (!videoPost) return null;
 
@@ -127,6 +133,7 @@ type VideoContentProps = {
   elementId?: string;
   componentId?: string;
   posts: Amity.Post<'video'>[];
+  parentPostId: string;
   onVideoClick: (index: number) => void;
 };
 
@@ -136,6 +143,7 @@ export const VideoContent = ({
   pageId = '*',
   elementId = '*',
   componentId = '*',
+  parentPostId,
 }: VideoContentProps) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
@@ -161,6 +169,7 @@ export const VideoContent = ({
             postAmount={posts.length}
             onVideoClick={() => onVideoClick(index)}
             isLastVideo={index === first4Videos.length - 1}
+            parentPostId={parentPostId}
           />
         ))}
       </div>

@@ -7,12 +7,14 @@ import { ProductTagListRenderMode } from '~/v4/social/types';
 interface UseShowProductTagListOptions {
   pageId?: string;
   mode?: ProductTagListRenderMode;
+  sourceId: string;
 }
 
 export const useShowProductTagList = ({
   pageId,
   mode = 'post',
-}: UseShowProductTagListOptions = {}) => {
+  sourceId,
+}: UseShowProductTagListOptions) => {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -32,7 +34,8 @@ export const useShowProductTagList = ({
             displayMode="desktop"
             pageId={pageId}
             onClose={() => closePopup(popupId)}
-            mode={mode}
+            renderMode={mode}
+            sourceId={sourceId}
           />
         ),
       });
@@ -44,7 +47,8 @@ export const useShowProductTagList = ({
             displayMode="mobile"
             pageId={pageId}
             onClose={() => removeDrawerData()}
-            mode={mode}
+            renderMode={mode}
+            sourceId={sourceId}
           />
         ),
       });

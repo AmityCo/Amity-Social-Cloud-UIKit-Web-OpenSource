@@ -14,6 +14,7 @@ type ImageContentProps = {
   elementId?: string;
   componentId?: string;
   posts: Amity.Post<'image'>[];
+  parentPostId: string;
   onImageClick: (imageIndex: number) => void;
 };
 
@@ -22,6 +23,7 @@ export const ImageContent = ({
   pageId = '*',
   elementId = '*',
   componentId = '*',
+  parentPostId,
   onImageClick,
 }: ImageContentProps) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
@@ -48,6 +50,7 @@ export const ImageContent = ({
           totalCount={posts.length}
           onImageClick={() => onImageClick(index)}
           isLastImage={index === first4Images.length - 1}
+          parentPostId={parentPostId}
         />
       ))}
     </div>
@@ -62,6 +65,7 @@ type ImageProps = {
   componentId?: string;
   isLastImage: boolean;
   imageLeftCount: number;
+  parentPostId: string;
   onImageClick: () => void;
 };
 
@@ -74,9 +78,14 @@ function Image({
   onImageClick,
   imageLeftCount,
   componentId = '*',
+  parentPostId,
 }: ImageProps) {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
-  const { showProductTagList } = useShowProductTagList({ pageId, mode: 'image' });
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'image',
+    sourceId: parentPostId,
+  });
 
   const file = imagePost?.getImageInfo();
 

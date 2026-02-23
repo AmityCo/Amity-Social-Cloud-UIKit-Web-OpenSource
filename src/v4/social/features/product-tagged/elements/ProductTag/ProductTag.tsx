@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import styles from './ProductTag.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -14,25 +14,30 @@ import {
   LayoutVariant,
   LayoutVariantEnum,
 } from '~/v4/social/types';
+import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 
 export interface ProductTagProps {
   product: Amity.Product;
   pageId?: string;
   componentId?: string;
-  mode?: ProductTagListRenderMode;
+  renderMode?: ProductTagListRenderMode;
   layout?: LayoutVariant;
   isPinned?: boolean;
-  onPress?: () => void;
+  sourceId: string;
+  sourceType: Amity.AnalyticsSourceType;
+  onClick?: () => void;
 }
 
 export function ProductTag({
   product,
   pageId = PAGE_ID.WILD_CARD,
   componentId = COMPONENT_ID.WILD_CARD,
-  mode = ProductTagListRenderModeEnum.POST,
+  renderMode = ProductTagListRenderModeEnum.POST,
   layout = LayoutVariantEnum.LIST,
   isPinned = false,
-  onPress,
+  sourceId,
+  sourceType,
+  onClick,
 }: ProductTagProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG;
   const { themeStyles, accessibilityId } = useAmityElement({
@@ -41,9 +46,20 @@ export function ProductTag({
     elementId,
   });
 
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [hasMarkedAsViewed, setHasMarkedAsViewed] = useState(false);
+  const { isVisible } = useVisibilitySensor({ threshold: 0.6, elementRef });
+
+  useEffect(() => {
+    if (isVisible && !hasMarkedAsViewed && product?.analytics) {
+      product.analytics.markAsViewed(accessibilityId, sourceType, sourceId);
+      setHasMarkedAsViewed(true);
+    }
+  }, [isVisible, hasMarkedAsViewed, product, accessibilityId, sourceType, sourceId]);
+
   // Card layout is not supported in livestream mode, fallback to list
   const effectiveLayout =
-    layout === LayoutVariantEnum.CARD && mode === ProductTagListRenderModeEnum.LIVESTREAM
+    layout === LayoutVariantEnum.CARD && renderMode === ProductTagListRenderModeEnum.LIVESTREAM
       ? LayoutVariantEnum.LIST
       : layout;
 
@@ -56,23 +72,28 @@ export function ProductTag({
   const price = formatPrice(product.price, product.currency);
 
   const handleUnavailableClick = () => {
-    info({
-      title: "Product tagging isn't available",
-      content:
-        "You can no longer manage tagged products in this live stream. Any tagged products have been removed and won't be shown to viewers.",
-      okText: 'OK',
-      shownCancelButton: false,
-      onOk: () => {
-        closePopup();
-      },
-    });
+    if (renderMode === ProductTagListRenderModeEnum.LIVESTREAM)
+      info({
+        title: "Product tagging isn't available",
+        content:
+          "You can no longer manage tagged products in this live stream. Any tagged products have been removed and won't be shown to viewers.",
+        okText: 'OK',
+        shownCancelButton: false,
+        onOk: () => {
+          closePopup();
+        },
+      });
   };
 
-  const handlePress = () => {
+  const handlePress = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (unavailable) {
       handleUnavailableClick();
     } else {
-      onPress?.();
+      product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
+      onClick?.();
     }
   };
 
@@ -86,13 +107,16 @@ export function ProductTag({
 
   return (
     <div
+      ref={elementRef}
+      role="button"
+      tabIndex={0}
       className={styles.productTag}
       style={themeStyles}
       data-test-id={accessibilityId}
-      data-mode={mode}
+      data-mode={renderMode}
       data-layout={effectiveLayout}
       data-unavailable={unavailable}
-      onClick={handleClick}
+      onClick={handlePress}
     >
       <ProductImageThumbnail
         imageUrl={imageUrl}
@@ -103,10 +127,14 @@ export function ProductTag({
       />
       <div
         className={styles.productTag__information}
-        data-mode={mode}
+        data-mode={renderMode}
         data-layout={effectiveLayout}
       >
-        <div className={styles.productTag__content} data-mode={mode} data-layout={effectiveLayout}>
+        <div
+          className={styles.productTag__content}
+          data-mode={renderMode}
+          data-layout={effectiveLayout}
+        >
           {unavailable && (
             <Typography.Caption as="p" className={styles.productTag__unavailableLabel}>
               Unavailable
@@ -126,12 +154,11 @@ export function ProductTag({
           )}
         </div>
 
-        {mode === ProductTagListRenderModeEnum.LIVESTREAM && (
+        {renderMode === ProductTagListRenderModeEnum.LIVESTREAM && (
           <Button
             variant="fill"
             color="primary"
             className={styles.productTag__viewButton}
-            onPress={handlePress}
             isDisabled={unavailable}
           >
             <Typography.CaptionBold as="span">View</Typography.CaptionBold>
