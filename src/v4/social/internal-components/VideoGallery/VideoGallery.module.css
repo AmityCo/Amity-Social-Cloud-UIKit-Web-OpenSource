@@ -44,6 +44,12 @@
   background-color: var(--asc-color-base-shade4);
 }
 
+.videoGallery__productTagBadge {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
+
 @keyframes pulse {
   0% {
     opacity: 1;
