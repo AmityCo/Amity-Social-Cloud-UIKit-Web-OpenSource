@@ -101,7 +101,7 @@ export function CreatePost({
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   const [title, setTitle] = useState<string>('');
-  const [productTags, setProductTags] = useState<Amity.TextProductTag[]>([]);
+  const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>();
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
@@ -253,15 +253,17 @@ export function CreatePost({
       : files.map(({ file, productTags }) => ({
           fileId: (file as Amity.File).fileId,
           type: file.type,
-          productTags: productTags?.map(({ productId }) => ({ productId })) ?? [],
+          productTags: productTags?.map(({ productId }) => ({ productId })),
         }));
 
     const attachmentProductTags = new AmityAttachmentProductTags();
+    let hasAttachmentProductTags = false;
 
     attachments = attachments.map((attachment) => {
       const { productTags, ...rest } = attachment;
       if (productTags && productTags?.length > 0) {
         attachmentProductTags.set(rest.fileId, productTags);
+        hasAttachmentProductTags = true;
       }
 
       return rest;
@@ -279,13 +281,17 @@ export function CreatePost({
     };
 
     if (!removeTag) {
+      const finalProductTags = productTags?.length
+        ? productTags.map((productTag) => {
+            const { product, ...rest } = productTag;
+            return rest;
+          })
+        : undefined;
+
       createPostParams = {
         ...createPostParams,
-        productTags: productTags?.map((productTag) => {
-          const { product, ...rest } = productTag;
-          return rest;
-        }),
-        attachmentProductTags,
+        productTags: finalProductTags,
+        attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
       };
     }
 
@@ -537,7 +543,7 @@ export function CreatePost({
                 }));
                 setTextValue((prev) => ({ ...prev, links }));
               }}
-              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - productTags.length}
+              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - (productTags?.length ?? 0)}
               initialProductMentions={productTags}
             />
           </div>
