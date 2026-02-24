@@ -20,7 +20,6 @@ import { TagOutlined } from '~/v4/icons/TagOutlined';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 
@@ -34,6 +33,7 @@ export interface LivestreamSetupProps {
   livestreamTitle?: string;
   livestreamDescription?: string;
   readOnly?: boolean;
+  isEnabledProductTag?: boolean;
 
   // File upload state
   isPending: boolean;
@@ -67,6 +67,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   readOnly,
   isPending = false,
   isGoLiveButtonDisabled,
+  isEnabledProductTag,
   pageId,
   isCoHost,
   setLivestreamTitle,
@@ -82,7 +83,6 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   const MAX_PRODUCTS = 20;
   const { uploadSingleImage, isUploading } = useImageUpload();
   const { openPopup, closePopup } = usePopupContext();
-  const { productCatalogueSettings } = useProductCatalogueSettings();
   const { confirm } = useConfirmContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -263,6 +263,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
     pinnedProductId,
     onProductTagsChange,
     onPinnedProductIdChange,
+    isEnabledProductTag,
   ]);
 
   return (
@@ -371,7 +372,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                   </div>
                 )}
 
-                {productCatalogueSettings?.product.enabled && targetType !== 'user' && (
+                {isEnabledProductTag && targetType !== 'user' && (
                   <Button
                     variant="default"
                     className={styles.livestreamSetup__tagProducts__button}

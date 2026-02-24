@@ -31,6 +31,7 @@ import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { ProductTagList } from '~/v4/social/features/product-tagged/components/ProductTagList';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -78,11 +79,14 @@ export const LivestreamChatMessageComposer = ({
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
 
   const { openPopup, closePopup } = usePopupContext();
+  const { productCatalogueSettings } = useProductCatalogueSettings();
 
   const isHost = hostId === currentUserId;
   const isCoHost = coHostId === currentUserId;
 
-  const canManageProducts = isHost || (isCoHost && coHost?.canManageProductTags);
+  const canManageProducts =
+    productCatalogueSettings?.product.enabled &&
+    (isHost || (isCoHost && coHost?.canManageProductTags));
 
   const [livestreamPost, setLivestreamPost] = useState(
     isHost ? livestreamPostFromContext?.childrenPosts[0] : livestreamPostFromContext,

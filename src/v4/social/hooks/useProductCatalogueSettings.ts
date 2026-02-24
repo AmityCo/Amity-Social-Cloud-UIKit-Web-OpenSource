@@ -1,15 +1,23 @@
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useQuery } from '@tanstack/react-query';
 
-const STALE_TIME_5_MINUTES = 5 * 60 * 1000;
+const STALE_TIME_5_SEC = 5 * 1000;
 
-export default function useProductCatalogueSettings() {
+interface ProductCatalogueSettingsResult {
+  productCatalogueSettings: Amity.ProductCatalogueSetting | null | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetchProductCatalogueSettings: () => void;
+}
+
+export default function useProductCatalogueSettings(): ProductCatalogueSettingsResult {
   const { client } = useSDK();
 
   const {
     error,
     isLoading,
     data: productCatalogueSettings,
+    refetch: refetchProductCatalogueSettings,
   } = useQuery({
     queryKey: ['asc-uikit', 'ProductCatalogueSettings'],
     queryFn: async (): Promise<Amity.ProductCatalogueSetting | null> => {
@@ -17,8 +25,10 @@ export default function useProductCatalogueSettings() {
       return settings as Amity.ProductCatalogueSetting | null;
     },
     enabled: !!client,
-    staleTime: STALE_TIME_5_MINUTES,
+    staleTime: STALE_TIME_5_SEC,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 
-  return { productCatalogueSettings, isLoading, error };
+  return { productCatalogueSettings, isLoading, error, refetchProductCatalogueSettings };
 }

@@ -55,6 +55,7 @@ import {
 } from '~/v4/social/features/livestream/internal-components';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -73,6 +74,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   const { post: subscribedPost } = usePostSubscription(post?.childrenPosts[0]?.postId);
   const { room } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
+
+  const { productCatalogueSettings } = useProductCatalogueSettings();
 
   useEffect(() => {
     if (subscribedPost) {
@@ -461,6 +464,9 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     }
   }, [livestreamPost?.productTags, livestreamPost?.pinnedProductId]);
 
+  const canShowProductTags =
+    (livestreamPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
+
   return (
     <LivestreamDataProvider room={room} channel={channel} livestreamPost={livestreamPost}>
       <ModalOverlay
@@ -514,7 +520,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     isUserBanned={!!isUserBanned}
                     ref={videoRef}
                   />
-                  {isDesktop && !isLive && (livestreamPost?.productTags?.length ?? 0) > 0 && (
+                  {isDesktop && !isLive && canShowProductTags && (
                     <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
                       <TaggedProductsModal
                         key={`${livestreamPost?.productTags?.length}-${livestreamPost?.pinnedProductId || 'none'}`}
@@ -533,7 +539,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   )}
 
                   {/* Product tag button for mobile */}
-                  {!isDesktop && (livestreamPost?.productTags?.length ?? 0) > 0 && (
+                  {!isDesktop && canShowProductTags && (
                     <TaggedProductIcon
                       className={styles.liveStreamPlayer__productTagButton}
                       onPress={() => {
@@ -580,6 +586,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
               >
                 <LivestreamSetup
                   isCoHost={true}
+                  isEnabledProductTag={productCatalogueSettings?.product.enabled}
                   isGoLiveButtonDisabled={
                     deviceManagement.microphonePermission === 'denied' ||
                     deviceManagement.cameraPermission === 'denied' ||
