@@ -46,6 +46,7 @@ import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfi
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import { EventHostBadge } from '~/v4/social/elements';
 import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -164,6 +165,9 @@ export const PostContent = ({
   } = usePostReaction({ post });
   const { goToCommunityProfilePage } = useNavigation();
   const { socialReactions } = useCustomReaction();
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+
+  const canShowProductTags = productCatalogueSettings?.product.enabled;
 
   // State to force poll results view when poll is closed from menu
   const [forceShowPollResults, setForceShowPollResults] = useState(false);
@@ -582,7 +586,9 @@ export const PostContent = ({
               />
             ) : null}
           </Button>
-          <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
+          {canShowProductTags && (
+            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
+          )}
 
           <div className={styles.postContent__reactions_and_comments}>
             {post?.reactionsCount > 0 && (

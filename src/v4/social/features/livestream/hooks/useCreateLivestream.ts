@@ -12,8 +12,9 @@ import { useCreateLivestreamPost } from './useCreateLivestreamPost';
 import { useGetBroadcasterData } from './useGetBroadcasterData';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useRoom } from './useRoom';
-import { RoomRepository } from '@amityco/ts-sdk';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
 
 export type CreateLivestreamUiState = 'preview' | 'broadcast' | 'backStage';
 
@@ -31,6 +32,7 @@ export interface UseCreateLivestreamReturn {
   livestreamDescription: string;
   productTags: Amity.MediaProductTag[];
   pinnedProductId?: string;
+  isEnabledProductTag?: boolean;
 
   // Community data
   community: any;
@@ -100,6 +102,19 @@ export const useCreateLivestream = ({
   const [roomId, setRoomId] = useState<string | undefined>(event?.room?.roomId);
 
   const { room } = useRoom(roomId);
+
+  const { productCatalogueSettings, refetchProductCatalogueSettings } =
+    useProductCatalogueSettings();
+
+  const [isEnabledProductTag, setIsEnabledProductTag] = useState(
+    productCatalogueSettings?.product.enabled,
+  );
+
+  useEffect(() => {
+    if (productCatalogueSettings) {
+      setIsEnabledProductTag(productCatalogueSettings.product.enabled);
+    }
+  }, [productCatalogueSettings?.product.enabled]);
 
   const [livestreamPost, setLivestreamPost] = useState<Amity.Post | undefined>(
     event?.room?.post as Amity.Post,
@@ -226,40 +241,85 @@ export const useCreateLivestream = ({
     getBroadcasterData(room.roomId);
   };
 
+  const confirmGoLive = () => {
+    setProductTags([]);
+    setPinnedProductId(undefined);
+    return confirm({
+      onOk: async () => {
+        await createLivestream({ productTagsOverride: [], pinnedProductIdOverride: undefined });
+      },
+      onCancel: async () => {
+        await refetchProductCatalogueSettings();
+      },
+      type: 'confirm',
+      okText: 'Go live',
+      cancelText: 'Edit live',
+      title: 'Product tagging isn’t available',
+      pageId,
+      content: 'Any products you’ve tagged will be removed and won’t be shown to viewers.',
+    });
+  };
+
+  const createLivestream = (overrides?: {
+    productTagsOverride?: Amity.MediaProductTag[];
+    pinnedProductIdOverride?: string;
+  }) => {
+    const effectiveProductTags = overrides?.productTagsOverride ?? productTags;
+    const effectivePinnedProductId = overrides?.pinnedProductIdOverride ?? pinnedProductId;
+    return createLivestreamPost(
+      {
+        title: livestreamTitle,
+        description: livestreamDescription,
+        thumbnailFileId,
+        targetType,
+        targetId: targetType !== 'user' ? targetId : currentUserId!,
+        liveChatEnabled: targetType === 'community',
+        ...(effectiveProductTags.length > 0 && {
+          productTags: effectiveProductTags,
+          pinnedProductId: effectivePinnedProductId,
+        }),
+      },
+      {
+        onSuccess: (result) => {
+          const post = result.post;
+
+          if (post.data) {
+            const postData = post.data;
+            setLivestreamPost(postData);
+            const room = postData.childrenPosts[0]?.getRoomInfo();
+
+            if (room) {
+              getBroadcasterData(room.roomId);
+
+              if (targetType === 'community') getLiveChat(room);
+
+              setRoomId(room.roomId);
+            }
+          }
+        },
+
+        onError: (error) => {
+          if (error.message.includes(ERROR_CODE.DISABLED_PRODUCT_TAG) && productTags.length > 0) {
+            setIsEnabledProductTag(false);
+            confirmGoLive();
+          }
+        },
+      },
+    );
+  };
+
+  const checkAvailableProductTags = async () => {
+    await refetchProductCatalogueSettings();
+
+    if (productTags.length > 0 && productCatalogueSettings?.product.enabled === false) {
+      confirmGoLive();
+    } else {
+      createLivestream();
+    }
+  };
+
   const handleGoLive = () => {
-    isTargetEvent
-      ? goLiveOnEvent(event.room)
-      : createLivestreamPost(
-          {
-            title: livestreamTitle,
-            description: livestreamDescription,
-            thumbnailFileId,
-            targetType,
-            targetId: targetType !== 'user' ? targetId : currentUserId!,
-            liveChatEnabled: targetType === 'community',
-            productTags: productTags,
-            pinnedProductId: pinnedProductId,
-          },
-          {
-            onSuccess: (result) => {
-              const post = result.post;
-
-              if (post.data) {
-                const postData = post.data;
-                setLivestreamPost(postData);
-                const room = postData.childrenPosts[0]?.getRoomInfo();
-
-                if (room) {
-                  getBroadcasterData(room.roomId);
-
-                  if (targetType === 'community') getLiveChat(room);
-
-                  setRoomId(room.roomId);
-                }
-              }
-            },
-          },
-        );
+    isTargetEvent ? goLiveOnEvent(event.room) : checkAvailableProductTags();
   };
 
   return {
@@ -276,6 +336,7 @@ export const useCreateLivestream = ({
     livestreamDescription,
     productTags,
     pinnedProductId,
+    isEnabledProductTag,
 
     // Community data
     community,

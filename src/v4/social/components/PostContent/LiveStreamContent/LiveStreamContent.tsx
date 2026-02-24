@@ -24,6 +24,7 @@ import {
 } from '~/v4/social/features/livestream/hooks';
 import clsx from 'clsx';
 import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 type LiveStreamContentProps = {
   roomId?: string;
@@ -49,6 +50,8 @@ export function LiveStreamContent({
   const { room } = useRoom(roomId ?? posts?.[0]?.getRoomInfo()?.roomId);
   const { post: subscribedPost } = usePostSubscription(parentPost?.childrenPosts[0]?.postId);
 
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
     communityId: parentPost.targetType === 'community' ? parentPost?.targetId : null,
@@ -58,6 +61,9 @@ export function LiveStreamContent({
       communityId: community?.communityId as string,
     },
   });
+
+  const canShowProductTags =
+    (subscribedPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
 
   const myMembership = members.find((member) => member.userId === currentUserId);
   // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
@@ -106,7 +112,7 @@ export function LiveStreamContent({
           <div className={styles.liveStreamContent__statusBadge}>
             <LiveStreamRecordedBadge />
           </div>
-          {subscribedPost?.productTags && subscribedPost?.productTags.length > 0 && (
+          {canShowProductTags && (
             <TaggedProductIcon
               onPress={() => {
                 goToLiveStreamPlayerPage?.({

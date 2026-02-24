@@ -68,6 +68,7 @@ export function CreateLivestreamPage({
     setProductTags,
     pinnedProductId,
     setPinnedProductId,
+    isEnabledProductTag,
   } = useCreateLivestream({
     initialTargetId: initialTargetId ?? currentUserId!,
     initialTargetType,
@@ -117,12 +118,13 @@ export function CreateLivestreamPage({
               {uiState === 'preview' ? (
                 <LivestreamSetup
                   isTargetEvent={isTargetEvent}
+                  isPending={isCreating || isGettingLiveChat || isGettingBroadcasterData}
+                  isEnabledProductTag={isEnabledProductTag}
+                  isGoLiveButtonDisabled={isGoLiveButtonDisabled}
                   targetType={targetType}
                   livestreamTitle={livestreamTitle}
                   livestreamDescription={livestreamDescription}
                   readOnly={readOnly}
-                  isPending={isCreating || isGettingLiveChat || isGettingBroadcasterData}
-                  isGoLiveButtonDisabled={isGoLiveButtonDisabled}
                   pageId={pageId}
                   setLivestreamTitle={setLivestreamTitle}
                   setLivestreamDescription={setLivestreamDescription}
