@@ -48,7 +48,7 @@ export function LivestreamPinnedProduct({
   const product = productTag.product;
   if (!product) return null;
 
-  const unavailable = product.status === 'inactive' || product.isDeleted;
+  const unavailable = product.status === 'archived';
 
   const price = formatPrice(product.price, product.currency);
 

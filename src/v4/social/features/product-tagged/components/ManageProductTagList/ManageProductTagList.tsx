@@ -319,7 +319,6 @@ export function ManageProductTagList({
                         pageId={pageId}
                         componentId={componentId}
                         isDisabled={isPinning || isUnpinning}
-                        isHost={isHost}
                       />
                     ))}
                   </div>
@@ -347,7 +346,6 @@ export function ManageProductTagList({
                         pageId={pageId}
                         componentId={componentId}
                         isDisabled={isPinning || isUnpinning}
-                        isHost={isHost}
                       />
                     ))}
                   </div>

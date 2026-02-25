@@ -6,6 +6,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PAGE_ID, COMPONENT_ID } from '~/v4/constants/customization';
 import {
   ManageProductTag,
+  ProductTag,
   ProductTagNoTagsYet,
 } from '~/v4/social/features/product-tagged/elements';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -15,6 +16,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import CloseIcon from '~/v4/icons/Close';
 import { ActionButton } from '~/v4/core/components/ActionButton';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
+import { ProductTagListRenderModeEnum, LayoutVariantEnum } from '~/v4/social/types';
 
 type DrawerScreen = 'list' | 'selection';
 
@@ -174,21 +176,40 @@ export function TaggedProductsModal({
             className={styles.taggedProductsModal__list}
             key={productTags.map((p) => p.productId).join('-')}
           >
-            {productTags.map((productTag) => (
-              <ManageProductTag
-                key={productTag.productId}
-                sourceId={roomId as string}
-                sourceType={AnalyticsSourceTypeEnum.ROOM}
-                isHost={isHost}
-                renderMode="playback"
-                productTag={productTag}
-                onRemove={onRemove}
-                onTogglePin={isHost ? onTogglePin : undefined}
-                pageId={pageId}
-                componentId={componentId}
-                isDisabled={isPinning || isUnpinning}
-              />
-            ))}
+            {productTags.map((productTag) =>
+              isHost ? (
+                <ManageProductTag
+                  key={productTag.productId}
+                  sourceId={roomId as string}
+                  sourceType={AnalyticsSourceTypeEnum.ROOM}
+                  renderMode="playback"
+                  productTag={productTag}
+                  onRemove={onRemove}
+                  onTogglePin={onTogglePin}
+                  pageId={pageId}
+                  componentId={componentId}
+                  isDisabled={isPinning || isUnpinning}
+                />
+              ) : productTag.product ? (
+                <ProductTag
+                  key={productTag.productId}
+                  product={productTag.product}
+                  sourceId={roomId as string}
+                  sourceType={AnalyticsSourceTypeEnum.ROOM}
+                  renderMode={ProductTagListRenderModeEnum.LIVESTREAM}
+                  layout={LayoutVariantEnum.LIST}
+                  isPinned={productTag.product.productId === pinnedProductId && isHost}
+                  isShowView
+                  onClick={() => {
+                    if (productTag.product?.productUrl) {
+                      window.open(productTag.product.productUrl, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                  pageId={pageId}
+                  componentId={componentId}
+                />
+              ) : null,
+            )}
           </div>
         )}
       </div>

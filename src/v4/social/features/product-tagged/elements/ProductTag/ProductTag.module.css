@@ -22,6 +22,10 @@
   opacity: 1;
 }
 
+.productTag[data-mode='livestream'] {
+  align-items: stretch;
+}
+
 .productTag__information {
   display: flex;
   flex: 1;
@@ -34,6 +38,7 @@
 .productTag__information[data-mode='livestream'] {
   padding: 0.75rem;
   align-items: flex-start;
+  align-self: stretch;
 }
 
 /* Card layout: centered content below thumbnail */
@@ -53,8 +58,14 @@
 }
 
 .productTag__content[data-mode='livestream'] {
+  gap: 0.75rem;
   justify-content: space-between;
   height: 100%;
+  width: 100%;
+}
+
+.productTag__content[data-unavailable='true'] {
+  gap: 0;
 }
 
 /* Card layout: full width content */
@@ -88,6 +99,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+}
+
+.productTag__priceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .productTag__viewButton {
