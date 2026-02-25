@@ -111,7 +111,7 @@ export function ProductTagList({
               renderMode={renderMode}
               layout={layout}
               product={productTag.product}
-              isPinned={false}
+              isPinned={productTag.product?.productId === pinnedProductId}
               onClick={() => handleClickProductLink?.(productTag)}
               sourceId={sourceId}
               sourceType={

@@ -32,7 +32,7 @@ export function ProductTagSelectionItem({
 
   const imageUrl = product.thumbnailUrl;
   const productName = product.productName || product.productId;
-  const unavailable = product.status === 'inactive';
+  const unavailable = product.status === 'archived';
 
   return (
     <Checkbox

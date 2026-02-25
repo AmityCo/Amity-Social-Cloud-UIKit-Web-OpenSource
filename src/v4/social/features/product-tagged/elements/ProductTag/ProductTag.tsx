@@ -26,6 +26,8 @@ export interface ProductTagProps {
   sourceId: string;
   sourceType: Amity.AnalyticsSourceType;
   onClick?: () => void;
+  isShowView?: boolean;
+  shouldTrackAnalytics?: boolean;
 }
 
 export function ProductTag({
@@ -38,6 +40,8 @@ export function ProductTag({
   sourceId,
   sourceType,
   onClick,
+  isShowView: showViewButton = true,
+  shouldTrackAnalytics = true,
 }: ProductTagProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG;
   const { themeStyles, accessibilityId } = useAmityElement({
@@ -51,11 +55,19 @@ export function ProductTag({
   const { isVisible } = useVisibilitySensor({ threshold: 0.6, elementRef });
 
   useEffect(() => {
-    if (isVisible && !hasMarkedAsViewed && product?.analytics) {
+    if (isVisible && !hasMarkedAsViewed && shouldTrackAnalytics && product?.analytics) {
       product.analytics.markAsViewed(accessibilityId, sourceType, sourceId);
       setHasMarkedAsViewed(true);
     }
-  }, [isVisible, hasMarkedAsViewed, product, accessibilityId, sourceType, sourceId]);
+  }, [
+    isVisible,
+    hasMarkedAsViewed,
+    shouldTrackAnalytics,
+    product,
+    accessibilityId,
+    sourceType,
+    sourceId,
+  ]);
 
   // Card layout is not supported in livestream mode, fallback to list
   const effectiveLayout =
@@ -63,10 +75,12 @@ export function ProductTag({
       ? LayoutVariantEnum.LIST
       : layout;
 
+  const isLivestream = renderMode === ProductTagListRenderModeEnum.LIVESTREAM;
+
   const { info } = useConfirmContext();
   const { closePopup } = usePopupContext();
 
-  const unavailable = product.status === 'inactive' || product.isDeleted;
+  const unavailable = product.status === 'archived';
 
   const imageUrl = product.thumbnailUrl;
   const price = formatPrice(product.price, product.currency);
@@ -92,7 +106,9 @@ export function ProductTag({
     if (unavailable) {
       handleUnavailableClick();
     } else {
-      product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
+      if (shouldTrackAnalytics) {
+        product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
+      }
       onClick?.();
     }
   };
@@ -134,10 +150,11 @@ export function ProductTag({
           className={styles.productTag__content}
           data-mode={renderMode}
           data-layout={effectiveLayout}
+          data-unavailable={unavailable}
         >
           {unavailable && (
             <Typography.Caption as="p" className={styles.productTag__unavailableLabel}>
-              Unavailable
+              Unlisted
             </Typography.Caption>
           )}
           <Typography.BodyBold
@@ -147,23 +164,24 @@ export function ProductTag({
           >
             {product.productName || product.productId}
           </Typography.BodyBold>
-          {!unavailable && price && (
-            <Typography.Caption as="p" className={styles.productTag__price}>
-              {price}
-            </Typography.Caption>
+          {!unavailable && (price || (showViewButton && isLivestream)) && (
+            <div className={styles.productTag__priceRow}>
+              <Typography.Caption as="p" className={styles.productTag__price}>
+                {price}
+              </Typography.Caption>
+              {showViewButton && isLivestream && (
+                <Button
+                  variant="fill"
+                  color="primary"
+                  className={styles.productTag__viewButton}
+                  isDisabled={unavailable}
+                >
+                  <Typography.CaptionBold as="span">View</Typography.CaptionBold>
+                </Button>
+              )}
+            </div>
           )}
         </div>
-
-        {renderMode === ProductTagListRenderModeEnum.LIVESTREAM && (
-          <Button
-            variant="fill"
-            color="primary"
-            className={styles.productTag__viewButton}
-            isDisabled={unavailable}
-          >
-            <Typography.CaptionBold as="span">View</Typography.CaptionBold>
-          </Button>
-        )}
       </div>
     </div>
   );

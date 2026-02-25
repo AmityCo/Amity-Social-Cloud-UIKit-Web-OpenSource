@@ -91,12 +91,12 @@
 .productImageThumbnail__pinnedIcon {
   width: 0.75rem; /* 12px */
   height: 0.75rem; /* 12px */
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-base-white);
   flex-shrink: 0;
 }
 
 .productImageThumbnail__pinnedText {
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-white);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
