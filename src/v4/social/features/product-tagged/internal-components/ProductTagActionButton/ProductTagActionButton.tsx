@@ -19,7 +19,6 @@ export function ProductTagActionButton({
   pageId,
   productTags = [],
   className = '',
-  sourceId,
 }: ProductTagActionButtonProps) {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();

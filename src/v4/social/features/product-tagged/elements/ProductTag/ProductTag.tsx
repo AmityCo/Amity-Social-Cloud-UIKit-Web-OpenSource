@@ -23,8 +23,8 @@ export interface ProductTagProps {
   renderMode?: ProductTagListRenderMode;
   layout?: LayoutVariant;
   isPinned?: boolean;
-  sourceId: string;
-  sourceType: Amity.AnalyticsSourceType;
+  sourceId?: string;
+  sourceType?: Amity.AnalyticsSourceType;
   onClick?: () => void;
   isShowView?: boolean;
   shouldTrackAnalytics?: boolean;
@@ -55,7 +55,14 @@ export function ProductTag({
   const { isVisible } = useVisibilitySensor({ threshold: 0.6, elementRef });
 
   useEffect(() => {
-    if (isVisible && !hasMarkedAsViewed && shouldTrackAnalytics && product?.analytics) {
+    if (
+      isVisible &&
+      !hasMarkedAsViewed &&
+      shouldTrackAnalytics &&
+      product?.analytics &&
+      sourceType &&
+      sourceId
+    ) {
       product.analytics.markAsViewed(accessibilityId, sourceType, sourceId);
       setHasMarkedAsViewed(true);
     }
@@ -106,18 +113,10 @@ export function ProductTag({
     if (unavailable) {
       handleUnavailableClick();
     } else {
-      if (shouldTrackAnalytics) {
+      if (shouldTrackAnalytics && sourceId && sourceType) {
         product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
       }
       onClick?.();
-    }
-  };
-
-  const handleClick = (e: React.MouseEvent) => {
-    if (unavailable) {
-      e.preventDefault();
-      e.stopPropagation();
-      handleUnavailableClick();
     }
   };
 
