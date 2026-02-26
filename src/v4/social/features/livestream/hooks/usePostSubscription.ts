@@ -3,7 +3,7 @@ import usePost from '~/v4/core/hooks/objects/usePost';
 import { getPostTopic, subscribeTopic } from '@amityco/ts-sdk';
 
 export const usePostSubscription = (postId?: string) => {
-  const { post } = usePost(postId);
+  const { post, isLoading, refresh } = usePost(postId);
 
   useEffect(() => {
     if (post) {
@@ -12,5 +12,5 @@ export const usePostSubscription = (postId?: string) => {
     }
   }, [post]);
 
-  return { post };
+  return { post, isLoading, refresh };
 };

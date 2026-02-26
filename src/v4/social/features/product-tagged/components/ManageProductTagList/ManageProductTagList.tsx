@@ -73,6 +73,16 @@ export function ManageProductTagList({
     pinnedProductId,
   );
 
+  // Sync local state when the parent pushes updated product tags (e.g. external changes via subscription)
+  useEffect(() => {
+    setProductTags(initialProductTags || []);
+  }, [initialProductTags]);
+
+  // Sync local pinned state when the parent pushes an updated pinnedProductId
+  useEffect(() => {
+    setLocalPinnedProductId(pinnedProductId);
+  }, [pinnedProductId]);
+
   const { success, info } = useNotifications();
 
   const handleRemove = async (productTag: Amity.ProductTag) => {
