@@ -74,6 +74,7 @@
 .productTagSelectionHeader__closeIcon {
   width: 100%;
   height: 100%;
+  fill: var(--asc-color-base-shade3);
 }
 
 /* Mobile-specific: close icon styling */

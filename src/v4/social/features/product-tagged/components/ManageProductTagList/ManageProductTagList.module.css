@@ -35,6 +35,7 @@
 
 .manageProductTagList__closeButton {
   flex-shrink: 0;
+  fill: var(--asc-color-base-shade3);
 }
 
 .manageProductTagList__content {
@@ -131,4 +132,10 @@
   background-color: var(--asc-color-background-default);
   color: var(--asc-color-secondary-default) !important;
   padding: 0.63rem 1rem;
+}
+
+.manageProductTagList__addButton[data-isDisabled='true'] {
+  border-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-shade3) !important;
+  cursor: not-allowed;
 }

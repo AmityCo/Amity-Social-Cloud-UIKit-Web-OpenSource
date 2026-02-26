@@ -224,6 +224,8 @@ export function TaggedProductsModal({
               fullWidth
               onPress={openSelection}
               className={styles.taggedProductsModal__addButton}
+              data-isDisabled={totalCount === MAX_COUNT}
+              isDisabled={totalCount === MAX_COUNT}
             >
               <Typography.BodyBold>Add products</Typography.BodyBold>
             </Button>

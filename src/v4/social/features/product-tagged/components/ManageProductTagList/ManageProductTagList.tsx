@@ -289,7 +289,7 @@ export function ManageProductTagList({
           onPress={() => {
             onClose(productTags || [], localPinnedProductId || '');
           }}
-          className={styles.manageProductTagList__closeButton}
+          defaultClassName={styles.manageProductTagList__closeButton}
         />
       </div>
 
@@ -356,9 +356,11 @@ export function ManageProductTagList({
             <div className={styles.manageProductTagList__footer}>
               <Button
                 className={styles.manageProductTagList__addButton}
+                data-isDisabled={productTags?.length === maxCount}
                 onPress={handleAddProducts}
                 variant="text"
                 fullWidth
+                isDisabled={productTags?.length === maxCount}
               >
                 <Typography.BodyBold as="span">Add products</Typography.BodyBold>
               </Button>
