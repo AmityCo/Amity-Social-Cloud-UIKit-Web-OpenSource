@@ -20,12 +20,12 @@ import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 export interface ProductTagListProps {
   pageId?: string;
   productTags: Amity.ProductTag[];
-  displayMode: DisplayMode;
+  displayMode?: DisplayMode;
   onClose?: () => void;
   renderMode?: ProductTagListRenderMode;
   layout?: LayoutVariant;
   pinnedProductId?: string;
-  sourceId: string;
+  sourceId?: string;
 }
 
 export function ProductTagList({
