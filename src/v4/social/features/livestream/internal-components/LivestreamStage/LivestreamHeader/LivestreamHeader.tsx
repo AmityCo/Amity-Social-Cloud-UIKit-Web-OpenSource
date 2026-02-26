@@ -126,7 +126,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
         <>
           <div className={styles.livestreamHeader__liveDetail__detail}>
             <Button
-              variant="text"
+              variant="default"
               onPress={onClose}
               className={styles.livestreamHeader__closeButton}
             >
@@ -186,7 +186,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
               <Popover
                 trigger={({ openPopover }) => (
                   <IconButton
-                    variant="text"
+                    variant="default"
                     pageId={pageId}
                     defaultIcon={
                       <Kebub className={styles.livestreamHeader__headerRight__optionIcon} />
@@ -224,7 +224,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
         /* Player view when not live - simple close button */
         <div key="normal-header">
           <Button
-            variant="text"
+            variant="default"
             onPress={onClose}
             className={styles.livestreamHeader__closeButton}
             data-normal={uiState !== 'backStage'}
@@ -239,7 +239,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
         /* Creator view */
         <div className={styles.livestreamHeader__headerLeft}>
           <Button
-            variant="text"
+            variant="default"
             className={styles.livestreamHeader__closeButton}
             onPress={onClose}
             aria-label="Close"
@@ -285,7 +285,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
             <>
               <Button
                 className={styles.livestreamHeader__selectTarget__button}
-                variant="text"
+                variant="default"
                 onPress={onTargetSelection}
               >
                 <Typography.Body className={styles.livestreamHeader__text}>Live on</Typography.Body>
@@ -317,7 +317,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
               placement="bottom end"
               trigger={({ openPopover }) => (
                 <IconButton
-                  variant="text"
+                  variant="default"
                   pageId={pageId}
                   defaultIcon={
                     <Kebub className={styles.livestreamHeader__headerRight__optionIcon} />

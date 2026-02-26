@@ -540,9 +540,9 @@ export const ClipFeedPage = ({
                         post={post as Amity.Post}
                         isActive={actualIndex === activeIndex}
                         videoRefs={videoRefs}
-                        onClickVideo={(postId, e) => {
+                        onClickVideo={({ postId, event, seeMoreIsOpen }) => {
                           if (seeMoreIsOpen) setSeeMoreIsOpen(false);
-                          else handleVideoToggle(postId, e);
+                          else handleVideoToggle(postId, event);
                         }}
                         onNextVideo={handleNextVideo}
                         isDragging={isDragging}
@@ -669,7 +669,7 @@ export const ClipFeedPage = ({
                     post={post as Amity.Post}
                     isActive={true}
                     videoRefs={videoRefs}
-                    onClickVideo={handleVideoToggle}
+                    onClickVideo={({ postId, event }) => handleVideoToggle(postId, event)}
                     onNextVideo={handleNextVideo}
                     isDragging={isDragging}
                     onDragging={handleDragging}

@@ -29,7 +29,7 @@
 
 .liveStreamPlayer__player__wrapper {
   position: relative;
-  height: 100%;
+  height: 100dvh;
   width: 100dvw;
 }
 
@@ -105,6 +105,10 @@
   width: 100%;
 }
 
+.liveStreamPlayer__videoSection__wrapper {
+  height: 100%;
+}
+
 @media only screen and (width >= 48em) {
   .plyr__controls {
     position: absolute;
@@ -136,6 +140,7 @@
 
   .livestreamPlayer__modal[data-is-live='false'] {
     width: 100%;
+    height: 100%;
   }
 
   .liveStreamPlayer__rightSection__wrapper {
