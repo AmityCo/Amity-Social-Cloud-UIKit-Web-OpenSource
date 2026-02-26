@@ -7,4 +7,5 @@ export const liveStreamStatus: LiveStreamStatusObject = {
   live: 'live',
   ended: 'ended',
   recorded: 'recorded',
+  error: 'error',
 };

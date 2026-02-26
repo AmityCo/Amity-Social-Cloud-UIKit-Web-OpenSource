@@ -126,6 +126,20 @@ export function LiveStreamContent({
           )}
         </>
       )}
+
+      {room.status === liveStreamStatus.error && canShowProductTags && (
+        <TaggedProductIcon
+          onPress={() => {
+            goToLiveStreamPlayerPage?.({
+              post: parentPost,
+              goToDetailPage: goToPostDetail,
+            });
+          }}
+          className={styles.liveStreamContent__taggedProducts}
+          productTagAmount={subscribedPost?.productTags?.length || 0}
+        />
+      )}
+
       {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />
       )}

@@ -83,6 +83,7 @@ export function ProductTagSelectionHeader({
             pageId={pageId}
             componentId={componentId}
             className={styles.productTagSelectionHeader__closeButton}
+            defaultClassName={styles.productTagSelectionHeader__closeIcon}
             onPress={() => {
               mode === 'livestream' ? onClose?.() : onDone?.();
             }}

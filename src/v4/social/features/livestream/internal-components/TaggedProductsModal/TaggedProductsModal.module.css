@@ -86,6 +86,12 @@
   padding: 0.63rem 1rem;
 }
 
+.taggedProductsModal__addButton[data-isDisabled='true'] {
+  border-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-shade3) !important;
+  cursor: not-allowed;
+}
+
 .taggedProductsModal__closeButton {
   background-color: transparent;
 }
