@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo, useState } from 'react';
 import styles from './LivestreamPlayer.module.css';
 import {
   LivestreamOverlay,
@@ -10,18 +10,28 @@ import {
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
+import { VideoPlayer } from '~/v4/social/internal-components/VideoPlayer/VideoPlayer';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { DisplayModeEnum } from '~/v4/social/types';
+import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
+import { SharableModel } from '~/v4/utils/sharableLink';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 
 interface LivestreamPlayerProps {
   themeStyles?: React.CSSProperties;
   accessibilityId?: string;
   isLive: boolean;
   showWaitingApprovalBanner: boolean;
-  isDesktop: boolean;
   isEnded: boolean;
   isTerminated: boolean;
   isUserBanned: boolean;
   isLoading: boolean;
   isPoorConnection: boolean;
+  isRecorded?: boolean;
+  pageId?: string;
+  productTags: Amity.ProductTag[];
+  onClickProductTagBadge: () => void;
+  onClose?: () => void;
 }
 
 export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerProps>(
@@ -31,28 +41,75 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
       accessibilityId,
       isLive,
       showWaitingApprovalBanner,
-      isDesktop,
       isEnded,
       isTerminated,
       isUserBanned,
       isLoading,
       isPoorConnection,
+      isRecorded,
+      pageId,
+      productTags,
+      onClickProductTagBadge,
+      onClose,
     },
     ref,
   ) => {
-    const { room } = useLivestreamData();
+    const { isDesktop } = useResponsive();
+    const { room, livestreamPost } = useLivestreamData();
+    const { setDrawerData, removeDrawerData } = useDrawer();
+    const [isDragging, setIsDragging] = useState(false);
     const isHidden = isEnded || isTerminated || isUserBanned;
+    const recordedVideoUrl = useMemo(() => {
+      return room?.recordedPlaybackInfos?.[0]?.url;
+    }, [room?.recordedPlaybackInfos]);
+
+    const recordedThumbnailUrl = useMemo(() => {
+      return room?.recordedPlaybackInfos?.[0]?.thumbnailUrl;
+    }, [room?.recordedPlaybackInfos]);
 
     return (
       <>
-        <video
-          id={room?.roomId}
-          playsInline={true}
-          className={styles.liveStreamPlayer__video}
-          data-is-live={isLive}
-          data-is-hidden={isHidden}
-          ref={ref}
-        />
+        {isRecorded && recordedVideoUrl ? (
+          <VideoPlayer
+            displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
+            url={recordedVideoUrl}
+            thumbnailUrl={recordedThumbnailUrl}
+            useHls={!!recordedVideoUrl}
+            autoPlay={true}
+            pageId={pageId}
+            productTags={productTags}
+            postId={room?.post?.postId}
+            className={styles.liveStreamPlayer__video}
+            onClickProductTagBadge={onClickProductTagBadge}
+            isDragging={isDragging}
+            onDragging={(isDragging) => setIsDragging(isDragging)}
+            onClose={() => {
+              removeDrawerData();
+              onClose?.();
+            }}
+            onClickMenu={() =>
+              setDrawerData({
+                content: (
+                  <CopyLinkButton
+                    pageId={pageId}
+                    model={SharableModel.POST}
+                    referenceId={livestreamPost?.postId}
+                    onDone={removeDrawerData}
+                  />
+                ),
+              })
+            }
+          />
+        ) : (
+          <video
+            id={room?.roomId}
+            playsInline={true}
+            className={styles.liveStreamPlayer__video}
+            data-is-live={isLive}
+            data-is-hidden={isHidden}
+            ref={ref}
+          />
+        )}
         {showWaitingApprovalBanner && <LivestreamOverlay.WaitForApproval view="moderator" />}
         {isLoading && !isPoorConnection && isLive && !isEnded && !isUserBanned && (
           <LivestreamOverlay />

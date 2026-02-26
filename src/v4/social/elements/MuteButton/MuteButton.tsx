@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Button } from '~/v4/core/components/AriaButton';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
-import Muted from '~/v4/icons/MutedFill';
+import Muted from '~/v4/icons/MutedFilled';
 import UnMuted from '~/v4/icons/UnMuted';
 import styles from './MuteButton.module.css';
 

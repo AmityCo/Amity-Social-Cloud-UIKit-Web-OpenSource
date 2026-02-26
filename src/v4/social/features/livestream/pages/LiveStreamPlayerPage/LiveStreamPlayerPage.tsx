@@ -54,7 +54,6 @@ import {
   TaggedProductsModal,
 } from '~/v4/social/features/livestream/internal-components';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
-import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 export type LiveStreamPlayerPageProps = {
@@ -442,6 +441,14 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     handleRemove,
   ]);
 
+  const onClickProductTagBadge = () => {
+    isProductDrawerOpenRef.current = true;
+    setDrawerData({
+      content: getTaggedProductsModalContent(),
+      ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
+    });
+  };
+
   // Update drawer content when product tags change (only if product drawer is open)
   useEffect(() => {
     if (isProductDrawerOpenRef.current && livestreamPost) {
@@ -484,13 +491,15 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
           >
             {uiState === 'player' ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
-                <LivestreamHeader
-                  pageId={pageId}
-                  community={community}
-                  uiState="player"
-                  isLive={isLive && !isUserBanned}
-                  onClose={onClose}
-                />
+                {(isDesktop || (!isDesktop && room?.status !== 'recorded')) && (
+                  <LivestreamHeader
+                    pageId={pageId}
+                    community={community}
+                    uiState="player"
+                    isLive={isLive && !isUserBanned}
+                    onClose={onClose}
+                  />
+                )}
                 <div
                   data-is-live={isLive}
                   className={styles.liveStreamPlayer__videoSection__wrapper}
@@ -502,11 +511,19 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     showWaitingApprovalBanner={showWaitingApprovalBanner}
                     isLoading={isLoading}
                     isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
-                    isDesktop={isDesktop}
                     isEnded={isEnded}
                     isTerminated={!!isTerminated}
                     isUserBanned={!!isUserBanned}
+                    isRecorded={isRecorded}
+                    pageId={pageId}
                     ref={videoRef}
+                    productTags={
+                      !isDesktop && isRecorded && canShowProductTags
+                        ? livestreamPost?.productTags ?? []
+                        : []
+                    }
+                    onClickProductTagBadge={onClickProductTagBadge}
+                    onClose={onClose}
                   />
                   {isDesktop && !isLive && canShowProductTags && (
                     <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
@@ -524,21 +541,6 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                         onRemove={(tag) => handleRemove(tag)}
                       />
                     </div>
-                  )}
-
-                  {/* Product tag button for mobile */}
-                  {!isDesktop && canShowProductTags && (
-                    <TaggedProductIcon
-                      className={styles.liveStreamPlayer__productTagButton}
-                      onPress={() => {
-                        isProductDrawerOpenRef.current = true;
-                        setDrawerData({
-                          content: getTaggedProductsModalContent(),
-                          ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
-                        });
-                      }}
-                      productTagAmount={livestreamPost?.productTags?.length || 0}
-                    />
                   )}
                 </div>
               </div>

@@ -6,7 +6,7 @@ import { TagFilled } from '~/v4/icons/TagFilled';
 
 interface ProductTagBadgeProps {
   selectedProductTags: Amity.ProductTag[];
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export function ProductTagBadge({ selectedProductTags, onClick }: ProductTagBadgeProps) {

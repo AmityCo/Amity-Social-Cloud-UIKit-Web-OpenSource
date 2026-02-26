@@ -1,21 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './VideoProgressBar.module.css';
 import { Typography } from '~/v4/core/components';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged';
 
 interface VideoProgressBarProps {
   video: HTMLVideoElement | null;
   isVisible?: boolean;
-  showPreview?: boolean;
   isDragging: boolean;
+  showDurationOnDragOnly: boolean;
+  productTags?: Amity.ProductTag[];
   onDragging: (val: boolean) => void;
+  onClickProductTagBadge?: () => void;
 }
 
 export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
   video,
   isDragging,
-  onDragging,
+  productTags,
   isVisible = true,
-  showPreview = false,
+  showDurationOnDragOnly,
+  onDragging,
+  onClickProductTagBadge,
 }) => {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -313,12 +318,15 @@ export const VideoProgressBar: React.FC<VideoProgressBarProps> = ({
 
   return (
     <div className={styles.videoProgressContainer} tabIndex={0} onKeyDown={handleKeyDown}>
-      {isDragging && (
+      {productTags && productTags?.length > 0 && (
+        <div className={styles.productTagBadge}>
+          <ProductTagBadge selectedProductTags={productTags} onClick={onClickProductTagBadge} />
+        </div>
+      )}
+      {((showDurationOnDragOnly && isDragging) || !showDurationOnDragOnly) && (
         <div className={styles.timeDisplay}>
-          <Typography.Body className={styles.currentTime}>
-            {formatTime(currentTime)}
-          </Typography.Body>
-          <Typography.Body className={styles.duration}>{formatTime(duration)}</Typography.Body>
+          <Typography.Body>{formatTime(currentTime)}</Typography.Body>
+          <Typography.Body>{formatTime(duration)}</Typography.Body>
         </div>
       )}
 

@@ -36,6 +36,22 @@
   object-fit: contain;
 }
 
+.videoPlayerWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+.videoPlayerClickArea {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
 .nextButton {
   width: 2rem;
   height: 2rem;
@@ -91,7 +107,7 @@
 }
 
 .videoViewer__clearButton {
-  fill: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-default);
   width: 2rem;
   height: 2rem;
   cursor: pointer;
