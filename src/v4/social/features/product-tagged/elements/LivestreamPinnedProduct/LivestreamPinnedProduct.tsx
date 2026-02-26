@@ -118,7 +118,6 @@ export function LivestreamPinnedProduct({
           size="medium"
           className={styles.livestreamPinnedProduct__thumbnail}
         />
-        {unavailable && <div className={styles.livestreamPinnedProduct__unavailableOverlay} />}
       </div>
       <div className={styles.livestreamPinnedProduct__infoWrapper}>
         <Typography.CaptionBold
@@ -136,7 +135,7 @@ export function LivestreamPinnedProduct({
             onClick={handleLinkClick}
             style={{ cursor: unavailable ? 'default' : 'pointer' }}
           >
-            {unavailable ? 'Unavailable' : price}
+            {unavailable ? 'Unlisted' : price}
           </Typography.Caption>
           {isViewer ? (
             <div

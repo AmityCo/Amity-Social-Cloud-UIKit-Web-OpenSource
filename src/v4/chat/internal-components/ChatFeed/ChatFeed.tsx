@@ -14,7 +14,6 @@ import {
 } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import { usePostSubscription, useRoomSubscription } from '~/v4/social/features/livestream/hooks';
 import { LivestreamPinnedProduct } from '~/v4/social/features/product-tagged/elements/LivestreamPinnedProduct';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { useTaggingProduct } from '~/v4/social/hooks/useTaggingProduct';
@@ -64,24 +63,22 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const { unpinProduct, updateProductTags } = useTaggingProduct();
 
   // Livestream pinned product logic
-  const { room, livestreamPost: livestreamPostFromContext, hostId, coHostId } = useLivestreamData();
+  const { room, hostId, coHostId, subscribedChildPost: subscribedPost } = useLivestreamData();
 
-  const [livestreamPost, setLivestreamPost] = useState(
-    livestreamPostFromContext?.childrenPosts?.[0],
-  );
-  const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
   const pinnedProductId = subscribedPost?.pinnedProductId;
-  const [isShowPinnedProduct, setIsShowPinnedProduct] = useState(!!pinnedProductId);
+  const lastKnownPinnedTagRef = useRef<Amity.MediaProductTag | undefined>(undefined);
+  const [dismissedPinnedProductId, setDismissedPinnedProductId] = useState<string | undefined>(
+    undefined,
+  );
+
+  const isShowPinnedProduct = !!pinnedProductId && pinnedProductId !== dismissedPinnedProductId;
 
   useEffect(() => {
-    setIsShowPinnedProduct(!!pinnedProductId);
+    // When a new pinned product arrives, clear the dismissed state so it shows again
+    if (pinnedProductId && pinnedProductId !== dismissedPinnedProductId) {
+      setDismissedPinnedProductId(undefined);
+    }
   }, [pinnedProductId]);
-
-  useEffect(() => {
-    if (livestreamPost?.postId) return;
-    if (livestreamPostFromContext?.getRoomInfo()?.roomId && livestreamPostFromContext?.postId)
-      setLivestreamPost(livestreamPostFromContext);
-  }, [livestreamPostFromContext, subscribedPost?.productTags, pinnedProductId]);
 
   const { canCoHostManageProductTags } = useLivestreamModeration({
     room,
@@ -130,6 +127,27 @@ const ChatFeed: FC<ChatFeedProps> = ({
     return () => unsubTopic?.();
   }, [channel, isVisitorOrBot]);
 
+  const onUnpin = async () => {
+    await unpinProduct(subscribedPost?.postId || '');
+  };
+
+  const onRemove = async () => {
+    const updateProduct = subscribedPost?.productTags?.filter(
+      (tag) => tag.productId !== pinnedProductId,
+    );
+    try {
+      await updateProductTags({
+        postId: subscribedPost?.postId || '',
+        productTags: updateProduct || [],
+      });
+      success({ content: 'Product tag removed.' });
+    } catch (error) {
+      info({
+        content: 'Failed to remove product tag. Please try again.',
+      });
+    }
+  };
+
   const renderLoadingSkeleton = useCallback(() => {
     return (
       <div className={styles.chatFeed__skeleton__container}>
@@ -145,48 +163,41 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const isEmpty = !loading && messages?.length === 0;
 
   const renderPinnedProductOverlay = () => {
-    if (subscribedPost?.productTags && pinnedProductId && isShowPinnedProduct) {
-      const pinnedTag = subscribedPost.productTags?.find(
+    if (pinnedProductId && isShowPinnedProduct) {
+      const pinnedTag = subscribedPost?.productTags?.find(
         (tag) => tag.productId === pinnedProductId,
       );
-      const updateProduct = subscribedPost.productTags?.filter(
+      const updateProduct = subscribedPost?.productTags?.filter(
         (tag) => tag.productId !== pinnedProductId,
       );
-      if (!pinnedTag) return null;
+
+      // Keep last known tag so the component stays mounted during brief sync gaps
+      if (pinnedTag) {
+        lastKnownPinnedTagRef.current = pinnedTag;
+      }
+
+      const tagToRender = pinnedTag ?? lastKnownPinnedTagRef.current;
+      if (!tagToRender) return null;
 
       // User can manage if they're the host OR if they're the co-host with permission
       const canManage = isHost || (isCoHost && canCoHostManageProductTags);
 
       return (
         <LivestreamPinnedProduct
+          key={pinnedProductId}
           pageId={pageId}
           componentId={componentId}
-          productTag={pinnedTag}
+          productTag={tagToRender}
           isViewer={!canManage}
           sourceId={room?.roomId}
-          onClosePinnedProduct={() => setIsShowPinnedProduct(false)}
-          onUnpin={async () => {
-            await unpinProduct(livestreamPost?.postId || '');
-          }}
-          onRemove={async () => {
-            try {
-              await updateProductTags({
-                postId: livestreamPost?.postId || '',
-                productTags: updateProduct || [],
-              });
-              success({ content: 'Product tag removed.' });
-            } catch (error) {
-              info({
-                content: 'Failed to remove product tag. Please try again.',
-              });
-            }
-          }}
+          onClosePinnedProduct={() => setDismissedPinnedProductId(pinnedProductId)}
+          onUnpin={onUnpin}
+          onRemove={onRemove}
         />
       );
     }
     return null;
   };
-
   return (
     <div className={styles.chatFeed__container}>
       {liveChannelLoading || isEmpty || isVisitorOrBot ? (

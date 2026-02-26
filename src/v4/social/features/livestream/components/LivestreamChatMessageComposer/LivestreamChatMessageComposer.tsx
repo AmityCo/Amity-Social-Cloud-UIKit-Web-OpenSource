@@ -50,6 +50,87 @@ type AddLivestreamReactionParams = {
   roomId: string;
 };
 
+interface LiveManageProductTagListContentProps {
+  postId: string;
+  roomId: string;
+  pageId: string;
+  sourceType: AnalyticsSourceTypeEnum;
+  onClose: () => void;
+}
+
+function LiveManageProductTagListContent({
+  postId,
+  roomId,
+  pageId,
+  sourceType,
+  onClose,
+}: LiveManageProductTagListContentProps) {
+  const { post: subscribedPost, isLoading } = usePostSubscription(postId);
+  const pinnedProductId = subscribedPost?.pinnedProductId;
+  const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } =
+    useTaggingProduct();
+  const { success, info } = useNotifications();
+
+  if (isLoading || !subscribedPost) return null;
+
+  return (
+    <ManageProductTagList
+      pageId={pageId}
+      sourceType={sourceType}
+      sourceId={roomId}
+      renderMode="livestream"
+      productTags={subscribedPost?.productTags}
+      onClose={onClose}
+      pinnedProductId={pinnedProductId}
+      onRemove={async (productTag) => {
+        if (subscribedPost?.postId) {
+          const updatedTags = subscribedPost?.productTags?.filter(
+            (tag) => tag.productId !== productTag.productId,
+          );
+          try {
+            await updateProductTags({
+              postId: subscribedPost?.postId,
+              productTags: updatedTags || [],
+            });
+            success({ content: 'Product tag removed.' });
+          } catch (error) {
+            info({ content: 'Failed to remove product tag. Please try again.' });
+          }
+        }
+      }}
+      onUpdateProductTags={async (tags) => {
+        if (subscribedPost?.postId) {
+          try {
+            await updateProductTags({
+              postId: subscribedPost?.postId,
+              productTags: tags,
+            });
+            success({ content: 'Product tags added.' });
+          } catch (error) {
+            info({ content: 'Failed to add product tags. Please try again.' });
+          }
+        }
+      }}
+      onPinnedProductIdChange={async (productId) => {
+        if (subscribedPost?.postId) {
+          if (productId) {
+            if (productId !== pinnedProductId) {
+              await pinProduct({
+                postId: subscribedPost?.postId,
+                productId,
+              });
+            }
+          } else {
+            await unpinProduct(subscribedPost?.postId);
+          }
+        }
+      }}
+      isPinning={isPinning}
+      isUnpinning={isUnpinning}
+    />
+  );
+}
+
 export const LivestreamChatMessageComposer = ({
   pageId = '*',
   channelId,
@@ -65,10 +146,11 @@ export const LivestreamChatMessageComposer = ({
     coHost,
     invitationByMe,
     room,
-    livestreamPost: livestreamPostFromContext,
+    subscribedChildPost: subscribedPost,
+    refreshSubscribedChildPost,
   } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
-  const { success, info } = useNotifications();
+  const { info } = useNotifications();
 
   const componentId = 'livestream_chat_compose_bar';
   const editorRef = useRef<LexicalEditor | null>(null);
@@ -88,10 +170,6 @@ export const LivestreamChatMessageComposer = ({
     productCatalogueSettings?.product.enabled &&
     (isHost || (isCoHost && coHost?.canManageProductTags));
 
-  const [livestreamPost, setLivestreamPost] = useState(
-    isHost ? livestreamPostFromContext?.childrenPosts[0] : livestreamPostFromContext,
-  );
-  const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
   const pinnedProductId = subscribedPost?.pinnedProductId;
 
   const [error, setError] = useState<string | null>(null);
@@ -100,21 +178,7 @@ export const LivestreamChatMessageComposer = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isLoadingMembership, setIsLoadingMembership] = useState(true);
 
-  const [isShowPinnedProduct, setIsShowPinnedProduct] = useState(!!pinnedProductId);
-
   const hasProductTags = subscribedPost?.productTags && subscribedPost?.productTags.length > 0;
-
-  useEffect(() => {
-    setIsShowPinnedProduct(!!pinnedProductId);
-  }, [pinnedProductId]);
-
-  useEffect(() => {
-    if (livestreamPost?.postId) return;
-    if (room?.roomId && room.post) setLivestreamPost(room.post as Amity.Post);
-  }, [room, subscribedPost?.productTags, pinnedProductId]);
-
-  const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } =
-    useTaggingProduct();
 
   const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
@@ -379,76 +443,23 @@ export const LivestreamChatMessageComposer = ({
                   defaultIcon={<TagOutlined />}
                   isDisabled={disabled}
                   color="secondary"
-                  onPress={() =>
+                  onPress={() => {
+                    refreshSubscribedChildPost?.();
                     openPopup({
                       pageId,
                       id: 'manage_product_tagging_popup',
                       view: 'desktop',
-                      children: (
-                        <ManageProductTagList
+                      children: subscribedPost?.postId ? (
+                        <LiveManageProductTagListContent
+                          postId={subscribedPost.postId}
+                          roomId={room?.roomId as string}
                           pageId={pageId}
                           sourceType={AnalyticsSourceTypeEnum.ROOM}
-                          sourceId={room?.roomId as string}
-                          renderMode="livestream"
-                          productTags={subscribedPost?.productTags}
-                          onClose={() => {
-                            closePopup('manage_product_tagging_popup');
-                          }}
-                          pinnedProductId={pinnedProductId}
-                          onRemove={async (productTag) => {
-                            // Handle product removal - no success toast
-                            if (subscribedPost?.postId) {
-                              const updatedTags = subscribedPost?.productTags?.filter(
-                                (tag) => tag.productId !== productTag.productId,
-                              );
-                              try {
-                                await updateProductTags({
-                                  postId: subscribedPost?.postId,
-                                  productTags: updatedTags || [],
-                                });
-                                success({ content: 'Product tag removed.' });
-                              } catch (error) {
-                                info({
-                                  content: 'Failed to remove product tag. Please try again.',
-                                });
-                              }
-                            }
-                          }}
-                          onUpdateProductTags={async (tags) => {
-                            if (subscribedPost?.postId) {
-                              try {
-                                await updateProductTags({
-                                  postId: subscribedPost?.postId,
-                                  productTags: tags,
-                                });
-                                success({ content: 'Product tags added.' });
-                              } catch (error) {
-                                info({ content: 'Failed to add product tags. Please try again.' });
-                              }
-                            }
-                          }}
-                          onPinnedProductIdChange={async (productId) => {
-                            if (subscribedPost?.postId) {
-                              if (productId) {
-                                // Only pin if the product ID has changed
-                                if (productId !== pinnedProductId) {
-                                  await pinProduct({
-                                    postId: subscribedPost?.postId,
-                                    productId,
-                                  });
-                                }
-                              } else {
-                                // Unpin the product (when toggling pin off, not removing)
-                                await unpinProduct(subscribedPost?.postId);
-                              }
-                            }
-                          }}
-                          isPinning={isPinning}
-                          isUnpinning={isUnpinning}
+                          onClose={() => closePopup('manage_product_tagging_popup')}
                         />
-                      ),
-                    })
-                  }
+                      ) : null,
+                    });
+                  }}
                 />
               ) : (
                 hasProductTags &&
@@ -580,8 +591,7 @@ export const LivestreamChatMessageComposer = ({
     coHost?.userId,
     channel?.metadata?.mutedMembers,
     invitationByMe?.status,
-    subscribedPost?.productTags,
-    subscribedPost?.postId,
+    subscribedPost,
     pinnedProductId,
   ]);
 
