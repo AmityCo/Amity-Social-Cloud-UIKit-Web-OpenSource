@@ -7,7 +7,7 @@ import {
 import { LivestreamPreviewStage } from './LivestreamPreviewStage';
 import { StreamerStage } from './StreamerStage';
 import { useDeviceManagement } from '~/v4/core/hooks/useDeviceManagement';
-import { useLivestreamTimer, useLeaveRoom } from '~/v4/social/features/livestream/hooks';
+import { useLivestreamTimer, usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { LivestreamOverlay } from '~/v4/social/features/livestream/internal-components/LivestreamOverlay';
 import styles from './LivestreamStage.module.css';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
@@ -76,6 +76,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
   const [showCountdownOverlay, setShowCountdownOverlay] = useState(false);
   const [coHostLeaveHandler, setCoHostLeaveHandler] = useState<(() => void) | null>(null);
   const { room, channel, livestreamPost } = useLivestreamData();
+  const { post: subscribedParentPost } = usePostSubscription(livestreamPost?.postId);
   const { confirm } = useConfirmContext();
 
   // Countdown timer for the overlay (10 seconds only)
@@ -176,7 +177,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
           onCoHostLeaveRequest={(handler) => setCoHostLeaveHandler(() => handler)}
         />
       )}
-      {livestreamPost?.feedType === 'reviewing' && (
+      {subscribedParentPost?.feedType === 'reviewing' && (
         <LivestreamOverlay.WaitForApproval view="streamer" />
       )}
       {isStarting && <LivestreamOverlay.Starting />}

@@ -5,6 +5,7 @@ import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import styles from './LivestreamChat.module.css';
 import { COMPONENT_ID } from '~/v4/constants/customization';
+import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 
 export interface LivestreamChatProps {
   pageId: string;
@@ -25,13 +26,14 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
 }) => {
   // Get values from context
   const { channel, room, livestreamPost: post } = useLivestreamData();
+  const { post: subscribedParentPost } = usePostSubscription(post?.postId);
   const componentId = COMPONENT_ID.LIVESTREAM_CHAT;
 
   if (!channel || !post) {
     return null;
   }
 
-  const isPendingPost = post.feedType === 'reviewing';
+  const isPendingPost = subscribedParentPost?.feedType === 'reviewing';
 
   const disableComposer =
     isLoading || room?.status === liveStreamStatus.ended || disabled || isPendingPost;

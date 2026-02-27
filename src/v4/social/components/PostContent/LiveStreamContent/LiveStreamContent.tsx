@@ -86,6 +86,22 @@ export function LiveStreamContent({
   if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
     return <LiveStreamTerminatedThumbnail />;
 
+  const renderProductTags = () => {
+    if (!canShowProductTags) return null;
+    return (
+      <TaggedProductIcon
+        onPress={() => {
+          goToLiveStreamPlayerPage?.({
+            post: parentPost,
+            goToDetailPage: goToPostDetail,
+          });
+        }}
+        className={styles.liveStreamContent__taggedProducts}
+        productTagAmount={subscribedPost?.productTags?.length || 0}
+      />
+    );
+  };
+
   return (
     <Button
       className={clsx(styles.liveStreamContent, className)}
@@ -103,42 +119,23 @@ export function LiveStreamContent({
         </div>
       )}
       {room.status === liveStreamStatus.live && (
-        <div className={styles.liveStreamContent__statusBadge}>
-          <LiveStreamLiveBadge />
-        </div>
+        <>
+          <div className={styles.liveStreamContent__statusBadge}>
+            <LiveStreamLiveBadge />
+          </div>
+          {renderProductTags()}
+        </>
       )}
       {room.status === liveStreamStatus.recorded && (
         <>
           <div className={styles.liveStreamContent__statusBadge}>
             <LiveStreamRecordedBadge />
           </div>
-          {canShowProductTags && (
-            <TaggedProductIcon
-              onPress={() => {
-                goToLiveStreamPlayerPage?.({
-                  post: parentPost,
-                  goToDetailPage: goToPostDetail,
-                });
-              }}
-              className={styles.liveStreamContent__taggedProducts}
-              productTagAmount={subscribedPost?.productTags?.length || 0}
-            />
-          )}
+          {renderProductTags()}
         </>
       )}
 
-      {room.status === liveStreamStatus.error && canShowProductTags && (
-        <TaggedProductIcon
-          onPress={() => {
-            goToLiveStreamPlayerPage?.({
-              post: parentPost,
-              goToDetailPage: goToPostDetail,
-            });
-          }}
-          className={styles.liveStreamContent__taggedProducts}
-          productTagAmount={subscribedPost?.productTags?.length || 0}
-        />
-      )}
+      {room.status === liveStreamStatus.error && renderProductTags()}
 
       {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />

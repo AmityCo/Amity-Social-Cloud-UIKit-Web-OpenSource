@@ -19,6 +19,7 @@ import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { useTaggingProduct } from '~/v4/social/hooks/useTaggingProduct';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
+import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -63,8 +64,15 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const { unpinProduct, updateProductTags } = useTaggingProduct();
 
   // Livestream pinned product logic
-  const { room, hostId, coHostId, subscribedChildPost: subscribedPost } = useLivestreamData();
+  const {
+    room,
+    hostId,
+    coHostId,
+    subscribedChildPost: subscribedPost,
+    livestreamPost,
+  } = useLivestreamData();
 
+  const { post: subscribedParentPost } = usePostSubscription(livestreamPost?.postId);
   const pinnedProductId = subscribedPost?.pinnedProductId;
   const lastKnownPinnedTagRef = useRef<Amity.MediaProductTag | undefined>(undefined);
   const [dismissedPinnedProductId, setDismissedPinnedProductId] = useState<string | undefined>(
@@ -163,8 +171,9 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const isEmpty = !loading && messages?.length === 0;
 
   const renderPinnedProductOverlay = () => {
-    if (pinnedProductId && isShowPinnedProduct) {
-      const pinnedTag = subscribedPost?.productTags?.find(
+    if (subscribedParentPost?.feedType === 'reviewing') return null;
+    if (subscribedPost?.productTags && pinnedProductId && isShowPinnedProduct) {
+      const pinnedTag = subscribedPost.productTags?.find(
         (tag) => tag.productId === pinnedProductId,
       );
       const updateProduct = subscribedPost?.productTags?.filter(
