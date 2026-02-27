@@ -28,10 +28,10 @@ import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { TagOutlined } from '~/v4/icons/TagOutlined';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
-import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { ProductTagList } from '~/v4/social/features/product-tagged/components/ProductTagList';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { usePost } from '~/v4/social/hooks/posts/';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -65,7 +65,7 @@ function LiveManageProductTagListContent({
   sourceType,
   onClose,
 }: LiveManageProductTagListContentProps) {
-  const { post: subscribedPost, isLoading } = usePostSubscription(postId);
+  const { post: subscribedPost, isLoading } = usePost({ postId });
   const pinnedProductId = subscribedPost?.pinnedProductId;
   const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } =
     useTaggingProduct();
@@ -147,7 +147,6 @@ export const LivestreamChatMessageComposer = ({
     invitationByMe,
     room,
     subscribedChildPost: subscribedPost,
-    refreshSubscribedChildPost,
   } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { info } = useNotifications();
@@ -444,7 +443,6 @@ export const LivestreamChatMessageComposer = ({
                   isDisabled={disabled}
                   color="secondary"
                   onPress={() => {
-                    refreshSubscribedChildPost?.();
                     openPopup({
                       pageId,
                       id: 'manage_product_tagging_popup',

@@ -6,8 +6,6 @@ import { PAGE_ID, COMPONENT_ID, ELEMENT_ID } from '~/v4/constants/customization'
 import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/internal-components/ProductImageThumbnail/ProductImageThumbnail';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
 import { Button } from '~/v4/core/components/AriaButton';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import {
   ProductTagListRenderMode,
   ProductTagListRenderModeEnum,
@@ -84,40 +82,21 @@ export function ProductTag({
 
   const isLivestream = renderMode === ProductTagListRenderModeEnum.LIVESTREAM;
 
-  const { info } = useConfirmContext();
-  const { closePopup } = usePopupContext();
-
   const unavailable = product.status === 'archived';
 
   const imageUrl = product.thumbnailUrl;
   const price = formatPrice(product.price, product.currency);
 
-  const handleUnavailableClick = () => {
-    if (renderMode === ProductTagListRenderModeEnum.LIVESTREAM)
-      info({
-        title: "Product tagging isn't available",
-        content:
-          "You can no longer manage tagged products in this live stream. Any tagged products have been removed and won't be shown to viewers.",
-        okText: 'OK',
-        shownCancelButton: false,
-        onOk: () => {
-          closePopup();
-        },
-      });
-  };
-
   const handlePress = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (unavailable) {
-      handleUnavailableClick();
-    } else {
-      if (shouldTrackAnalytics && sourceId && sourceType) {
-        product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
-      }
-      onClick?.();
+    if (unavailable) return;
+
+    if (shouldTrackAnalytics && sourceType && sourceId) {
+      product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
     }
+    onClick?.();
   };
 
   return (
@@ -139,6 +118,7 @@ export function ProductTag({
         size="large"
         isPinned={isPinned}
         unavailable={unavailable}
+        overlayClassName={unavailable ? styles.productTag__thumbnailOverlay : undefined}
       />
       <div
         className={styles.productTag__information}
@@ -151,30 +131,29 @@ export function ProductTag({
           data-layout={effectiveLayout}
           data-unavailable={unavailable}
         >
-          {unavailable && (
-            <Typography.Caption as="p" className={styles.productTag__unavailableLabel}>
-              Unlisted
-            </Typography.Caption>
-          )}
-          <Typography.BodyBold
-            as="p"
-            className={styles.productTag__title}
-            data-unavailable={unavailable}
-          >
-            {product.productName || product.productId}
-          </Typography.BodyBold>
-          {!unavailable && (price || (showViewButton && isLivestream)) && (
-            <div className={styles.productTag__priceRow}>
-              <Typography.Caption as="p" className={styles.productTag__price}>
-                {price}
+          <div className={styles.productTag__textContent}>
+            {unavailable && (
+              <Typography.Caption as="p" className={styles.productTag__unavailableLabel}>
+                Unlisted
               </Typography.Caption>
+            )}
+            <Typography.BodyBold
+              as="p"
+              className={styles.productTag__title}
+              data-unavailable={unavailable}
+            >
+              {product.productName || product.productId}
+            </Typography.BodyBold>
+          </div>
+          {((price && !unavailable) || (showViewButton && isLivestream)) && (
+            <div className={styles.productTag__priceRow}>
+              {!unavailable && price && (
+                <Typography.Caption as="p" className={styles.productTag__price}>
+                  {price}
+                </Typography.Caption>
+              )}
               {showViewButton && isLivestream && (
-                <Button
-                  variant="fill"
-                  color="primary"
-                  className={styles.productTag__viewButton}
-                  isDisabled={unavailable}
-                >
+                <Button variant="fill" color="primary" className={styles.productTag__viewButton}>
                   <Typography.CaptionBold as="span">View</Typography.CaptionBold>
                 </Button>
               )}

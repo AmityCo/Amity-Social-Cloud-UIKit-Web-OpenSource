@@ -196,3 +196,7 @@
   height: 1.25rem;
   fill: var(--asc-color-base-shade2);
 }
+
+.livestreamSetup__tagProducts__text {
+  color: var(--asc-color-base-default);
+}

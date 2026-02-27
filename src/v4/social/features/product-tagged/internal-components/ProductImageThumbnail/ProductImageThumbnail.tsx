@@ -12,6 +12,7 @@ export interface ProductImageThumbnailProps {
   isPinned?: boolean;
   size?: 'large' | 'medium' | 'small' | 'tiny';
   className?: string;
+  overlayClassName?: string;
 }
 
 export function ProductImageThumbnail({
@@ -21,6 +22,7 @@ export function ProductImageThumbnail({
   isPinned = false,
   size = 'large',
   className = '',
+  overlayClassName,
 }: ProductImageThumbnailProps) {
   const [hasImageError, setHasImageError] = useState(false);
   const isEmptyState = !imageUrl || hasImageError;
@@ -45,7 +47,9 @@ export function ProductImageThumbnail({
       )}
       {unavailable && (
         <div className={styles.productImageThumbnail__overlay}>
-          <div className={styles.productImageThumbnail__overlayBackground} />
+          <div
+            className={clsx(styles.productImageThumbnail__overlayBackground, overlayClassName)}
+          />
         </div>
       )}
       {isPinned && (

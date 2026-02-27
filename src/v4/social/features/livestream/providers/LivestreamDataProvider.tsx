@@ -4,6 +4,7 @@ import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hoo
 import { useCoHostPermissionNotification } from '~/v4/social/features/livestream/hooks';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
+import { usePost } from '~/v4/social/hooks/posts/usePost';
 
 // Define the context type for only the data that needs to be passed to nested components
 interface LivestreamDataContextType {
@@ -59,8 +60,7 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   const hostChildPost =
     livestreamPost?.childrenPosts?.[0] ?? (room?.post as Amity.Post | undefined);
   const postId = isHost ? hostChildPost?.postId : livestreamPost?.postId;
-  const { post: subscribedChildPost, refresh: refreshSubscribedChildPost } =
-    usePostSubscription(postId);
+  const { post: subscribedChildPost } = usePostSubscription(postId);
 
   const [invitationByMe, setInvitationByMe] = useState<Amity.Invitation>();
 
@@ -87,7 +87,6 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
     channel,
     livestreamPost,
     subscribedChildPost,
-    refreshSubscribedChildPost,
     host,
     coHost,
     hostId,
