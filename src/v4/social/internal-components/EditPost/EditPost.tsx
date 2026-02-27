@@ -124,7 +124,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   });
 
   const { online } = useNetworkState();
-  const { success } = useNotifications();
+  const { success, info: infoNotification } = useNotifications();
 
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
@@ -200,9 +200,30 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setPostErrorText(undefined);
       },
       onSuccess: (response) => {
+        const updatedPost = response.data;
+
+        // Check for unavailable product tags in parent post
+        const hasUnavailableProducts = updatedPost.productTags?.some(
+          (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+        );
+
+        // Check for unavailable product tags in child posts
+        const childPostHasUnavailableProducts = updatedPost.childrenPosts?.some(
+          (childPost: Amity.Post) =>
+            childPost.productTags?.some(
+              (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+            ),
+        );
+
+        if (hasUnavailableProducts || childPostHasUnavailableProducts) {
+          infoNotification({
+            content: "Some products that you've tagged are no longer available.",
+          });
+        }
+
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
-        updateGlobalFeaturedPosts(response.data, isPostNeedsApproval);
+        updateGlobalFeaturedPosts(updatedPost, isPostNeedsApproval);
 
         if (isPostNeedsApproval) {
           success({

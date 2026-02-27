@@ -34,6 +34,7 @@ import { useMediaAttachmentVisible } from '~/v4/social/hooks/useMediaAttachmentV
 import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
 import { useMutation } from '@tanstack/react-query';
 import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import styles from './CreatePost.module.css';
 import { Typography } from '~/v4/core/components';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
@@ -64,6 +65,7 @@ export function CreatePost({
   const { user } = useUser({ userId: currentUserId });
   const { handleSubmit } = useForm();
   const { info } = useConfirmContext();
+  const notification = useNotifications();
   const { isDesktop } = useResponsive();
   const { confirm } = useConfirmContext();
   const { onBack, prevPage, prev2Page } = useNavigation();
@@ -153,6 +155,24 @@ export function CreatePost({
 
     onSuccess: (response) => {
       const post = response.data;
+
+      // Check for unavailable product tags in parent post
+      const hasUnavailableProducts = post.productTags?.some(
+        (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+      );
+
+      // Check for unavailable product tags in child posts
+      const childPostHasUnavailableProducts = post.childrenPosts?.some((childPost: Amity.Post) =>
+        childPost.productTags?.some(
+          (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+        ),
+      );
+
+      if (hasUnavailableProducts || childPostHasUnavailableProducts) {
+        notification.info({
+          content: "Some products that you've tagged are no longer available.",
+        });
+      }
 
       setVideoThumbnail({
         postId: post.postId,
