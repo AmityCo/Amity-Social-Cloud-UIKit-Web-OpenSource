@@ -267,7 +267,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     } else {
       video.pause();
     }
-  }, []);
+  }, [displayMode]);
 
   if (url == null) return null;
 

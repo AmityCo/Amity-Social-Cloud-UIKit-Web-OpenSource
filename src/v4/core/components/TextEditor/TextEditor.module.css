@@ -71,7 +71,7 @@
 }
 
 .textEditor__anchor {
-  z-index: 999;
+  z-index: 1500;
   left: 0 !important;
   width: 100dvw !important;
 }

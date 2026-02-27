@@ -1,5 +1,11 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { FileType, PostContentType, PostRepository, CommunityPostSettings } from '@amityco/ts-sdk';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import {
+  FileType,
+  PostContentType,
+  PostRepository,
+  CommunityPostSettings,
+  AmityAttachmentProductTags,
+} from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNetworkState } from 'react-use';
@@ -9,7 +15,8 @@ import {
   AmityPostComposerEditOptions,
   CreatePostParams,
 } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { PostTextField } from '~/v4/social/elements/PostTextField';
+import { TextEditor } from '~/v4/core/components/TextEditor';
+import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Notification } from '~/v4/core/components/Notification';
@@ -18,7 +25,7 @@ import { EditPostTitle } from '~/v4/social/elements/EditPostTitle';
 import usePostByIds from '~/v4/core/hooks/usePostByIds';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { Mentioned, Mentionees } from '~/v4/helpers/utils';
+import { Mentioned } from '~/v4/helpers/utils';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
@@ -46,6 +53,7 @@ import { useImage } from '~/v4/core/hooks/useImage';
 import { TextArea } from '~/v4/core/components/TextField';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -63,12 +71,20 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
   const { confirm, info } = useConfirmContext();
-  const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
-    useFilePostUpload(pageId);
+  const {
+    files,
+    progress,
+    isLoading,
+    removeFile,
+    handleFileChange,
+    handleAltTextChange,
+    handleProductTagsChange,
+  } = useFilePostUpload(pageId);
+
   const posts = usePostByIds(post?.children || []);
 
   // Add community and user permissions related hooks
-  const { currentUserId } = useSDK();
+  const { currentUserId, client } = useSDK();
   const { user } = useUser({ userId: currentUserId });
   const shouldCallCommunity = post?.targetType === 'community' && !!post?.targetId;
   const { community } = useCommunity({
@@ -119,6 +135,47 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [productTags, setProductTags] = useState<Amity.ProductTag[] | undefined>(post.productTags);
+
+  const allProductTags = useMemo(() => {
+    const productMap = new Map<string, Amity.TextProductTag | Amity.MediaProductTag>();
+
+    if (productTags) {
+      productTags.forEach((tag) => {
+        if (!productMap.has(tag.productId)) {
+          productMap.set(tag.productId, tag);
+        }
+      });
+    }
+
+    files.forEach((file) => {
+      if (file.productTags) {
+        file.productTags.forEach((tag) => {
+          if (!productMap.has(tag.productId)) {
+            productMap.set(tag.productId, tag);
+          }
+        });
+      }
+    });
+
+    postImages.forEach((post) => {
+      post.productTags.forEach((tag) => {
+        if (!productMap.has(tag.productId)) {
+          productMap.set(tag.productId, tag);
+        }
+      });
+    });
+
+    postVideos.forEach((post) => {
+      post.productTags.forEach((tag) => {
+        if (!productMap.has(tag.productId)) {
+          productMap.set(tag.productId, tag);
+        }
+      });
+    });
+
+    return Array.from(productMap.values());
+  }, [postImages, postVideos, productTags, files]);
 
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === currentUserId) != null;
@@ -212,36 +269,75 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     );
   }, []);
 
-  const performPostUpdate = () => {
+  const performPostUpdate = ({ removeTag }: { removeTag?: boolean } = {}) => {
     const attachments: { fileId: string; type: string }[] = [];
 
+    // Build attachment product tags
+    const attachmentProductTags = new AmityAttachmentProductTags();
+    let hasAttachmentProductTags = false;
+
     if (!isClipPost) {
-      // Handle existing post images
+      // Handle existing post images with their product tags
       const attachmentsImage = postImages.map((item: Amity.Post<'image'>) => {
+        const fileId = item?.data?.fileId as string;
+        if (!removeTag && item.productTags && item.productTags.length > 0) {
+          attachmentProductTags.set(
+            fileId,
+            item.productTags.map(({ productId }) => ({ productId })),
+          );
+          hasAttachmentProductTags = true;
+        }
         return {
-          fileId: item?.data?.fileId as string,
+          fileId,
           type: PostContentType.IMAGE,
         };
       });
 
-      // Handle existing post videos
+      // Handle existing post videos with their product tags
       const attachmentsVideo = postVideos.map((item: Amity.Post<'video'>) => {
-        return { fileId: item?.data?.videoFileId.original as string, type: PostContentType.VIDEO };
+        const fileId = item?.data?.videoFileId.original as string;
+        if (!removeTag && item.productTags && item.productTags.length > 0) {
+          attachmentProductTags.set(
+            fileId,
+            item.productTags.map(({ productId }) => ({ productId })),
+          );
+          hasAttachmentProductTags = true;
+        }
+        return { fileId, type: PostContentType.VIDEO };
       });
 
-      // Handle newly uploaded files
-      const newAttachments = files.map((file: FileItem) => ({
-        fileId: isAmityFile(file.file) ? file.file.fileId : file.id,
-        type: isAmityFile(file.file)
-          ? file.file.type
-          : file.file.type.startsWith('image/')
-            ? PostContentType.IMAGE
-            : PostContentType.VIDEO,
-      }));
+      // Handle newly uploaded files with their product tags
+      const newAttachments = files.map((file: FileItem) => {
+        const fileId = isAmityFile(file.file) ? file.file.fileId : file.id;
+        if (!removeTag && file.productTags && file.productTags.length > 0) {
+          attachmentProductTags.set(
+            fileId,
+            file.productTags.map(({ productId }) => ({ productId })),
+          );
+          hasAttachmentProductTags = true;
+        }
+        return {
+          fileId,
+          type: isAmityFile(file.file)
+            ? file.file.type
+            : file.file.type.startsWith('image/')
+              ? PostContentType.IMAGE
+              : PostContentType.VIDEO,
+        };
+      });
 
       // Combine all attachments
       attachments.push(...attachmentsImage, ...attachmentsVideo, ...newAttachments);
     }
+
+    const finalProductTags = removeTag
+      ? undefined
+      : productTags?.length
+        ? productTags.map((productTag) => {
+            const { product, ...rest } = productTag as Amity.TextProductTag;
+            return rest;
+          })
+        : undefined;
 
     if (textValue) {
       isClipPost
@@ -254,6 +350,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             links: textValue.links,
+            productTags: finalProductTags as Amity.TextProductTag[],
           })
         : mutateUpdatePostAsync({
             data: { text: textValue.text, title: title.trim() },
@@ -265,7 +362,60 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
             links: textValue.links,
+            productTags: finalProductTags as Amity.TextProductTag[],
+            attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
           });
+    }
+  };
+
+  const removeProductTag = () => {
+    setProductTags([]);
+    setPostImages((prev) => prev.map((post) => ({ ...post, productTags: [] })));
+    setPostVideos((prev) => prev.map((post) => ({ ...post, productTags: [] })));
+    files.forEach((file) => (file.productTags = []));
+  };
+
+  const validatePost = async () => {
+    const setting = await client?.getProductCatalogueSetting();
+    const hasProductTags =
+      files.some((file) => file.productTags && file.productTags.length > 0) ||
+      postImages.some((post) => post.productTags && post.productTags.length > 0) ||
+      postVideos.some((post) => post.productTags && post.productTags.length > 0) ||
+      (productTags && productTags.length > 0);
+
+    if (setting && !setting.product.enabled && hasProductTags) {
+      confirm({
+        pageId: pageId,
+        type: 'confirm',
+        title: "Product tagging isn't available",
+        content: 'Your post can still be published, but product tags will be removed.',
+        onOk: () => performPostUpdate({ removeTag: true }),
+        okText: 'Publish',
+        okButtonColor: 'primary',
+        cancelText: 'Review post',
+        onCancel: () => removeProductTag(),
+      });
+    } else {
+      proceedWithSave();
+    }
+  };
+
+  const proceedWithSave = () => {
+    // Check if post needs approval and show confirmation popup before API call
+    if (shouldCallCommunity && isPostNeedsApproval) {
+      confirm({
+        pageId,
+        title: 'Post will be sent for review',
+        content:
+          'Posting in this community requires approval. Your edited post will be published once approved by the community moderator.',
+        okText: 'OK',
+        cancelText: 'Cancel',
+        onOk: () => {
+          performPostUpdate();
+        },
+      });
+    } else {
+      performPostUpdate();
     }
   };
 
@@ -285,40 +435,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       return;
     }
 
-    // Check if post needs approval and show confirmation popup before API call
-
-    if (shouldCallCommunity && isPostNeedsApproval) {
-      confirm({
-        pageId,
-        title: 'Post will be sent for review',
-        content:
-          'Posting in this community requires approval. Your edited post will be published once approved by the community moderator.',
-        okText: 'OK',
-        cancelText: 'Cancel',
-        onOk: () => {
-          performPostUpdate();
-        },
-      });
-    } else {
-      performPostUpdate();
-    }
-  };
-
-  const onChange = (val: {
-    mentioned: Mentioned[];
-    mentionees: Mentionees;
-    hashtags: Amity.Hashtag[];
-    text: string;
-    links?: Amity.Link[];
-  }) => {
-    setTextValue((prev) => ({
-      ...prev,
-      mentioned: val.mentioned,
-      text: val.text,
-      mentionees: val.mentionees,
-      hashtagsMetadata: val.hashtags,
-      links: val.links,
-    }));
+    validatePost();
   };
 
   const onClickClose = () => {
@@ -372,13 +489,59 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const hasMediaChange = files.length > 0 || posts.length !== localPost.length;
 
+  // Check if product tags have changed
+  const hasProductTagsChange = useMemo(() => {
+    // Check text product tags
+    const originalTextTags = post.productTags || [];
+    const currentTextTags = productTags || [];
+    if (originalTextTags.length !== currentTextTags.length) return true;
+    const textTagsChanged = originalTextTags.some(
+      (tag, index) => tag.productId !== currentTextTags[index]?.productId,
+    );
+    if (textTagsChanged) return true;
+
+    // Check image product tags
+    const originalImagePosts = posts.filter((p) => p.dataType === 'image') as Amity.Post<'image'>[];
+    for (const originalPost of originalImagePosts) {
+      const currentPost = postImages.find((p) => p.postId === originalPost.postId);
+      if (!currentPost) continue;
+      const originalTags = originalPost.productTags || [];
+      const currentTags = currentPost.productTags || [];
+      if (originalTags.length !== currentTags.length) return true;
+      const tagsChanged = originalTags.some(
+        (tag, index) => tag.productId !== currentTags[index]?.productId,
+      );
+      if (tagsChanged) return true;
+    }
+
+    // Check video product tags
+    const originalVideoPosts = posts.filter((p) => p.dataType === 'video') as Amity.Post<'video'>[];
+    for (const originalPost of originalVideoPosts) {
+      const currentPost = postVideos.find((p) => p.postId === originalPost.postId);
+      if (!currentPost) continue;
+      const originalTags = originalPost.productTags || [];
+      const currentTags = currentPost.productTags || [];
+      if (originalTags.length !== currentTags.length) return true;
+      const tagsChanged = originalTags.some(
+        (tag, index) => tag.productId !== currentTags[index]?.productId,
+      );
+      if (tagsChanged) return true;
+    }
+
+    // Check new files with product tags
+    if (files.some((file) => file.productTags && file.productTags.length > 0)) return true;
+
+    return false;
+  }, [post.productTags, productTags, posts, postImages, postVideos, files]);
+
   const hasNoChanges =
     isTextPost(post) &&
     post.data?.text === textValue.text &&
     post.data?.title === title &&
     post.links?.[0]?.renderPreview === textValue.links?.[0]?.renderPreview &&
     post.links?.[0]?.url === textValue.links?.[0]?.url &&
-    !hasMediaChange;
+    !hasMediaChange &&
+    !hasProductTagsChange;
 
   const hasNoContent = !(
     textValue.text.trim().length > 0 ||
@@ -498,30 +661,47 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                 : setTitle(e.target.value);
             }}
           />
-          <PostTextField
-            pageId={pageId}
-            onChange={onChange}
-            componentId={isClipPost ? 'clipPost' : undefined}
-            className={styles.editPost__input}
-            placeholderClassName={styles.editPost__placeholder}
-            mentionContainer={isDesktop ? null : mentionRef.current}
-            mentionContainerClassName={styles.editPost__mentionContainer}
-            communityId={post.targetType === 'community' ? post.targetId : undefined}
-            attachmentAmount={totalMedia}
-            isClipPost={isClipPost}
-            dataValue={{
-              mentionees: post.mentionees,
-              data: { text: textValue.text },
-              metadata: {
-                mentioned: post.metadata?.mentioned || [],
-                hashtags: post.metadata?.hashtags || [],
-              },
-              links: textValue.links || [],
-            }}
-            onPreviewLinkChange={(showPreview, isLoading) => {
-              setIsPreviewLoading(isLoading || false);
-            }}
-          />
+          <div className={styles.editPost__textEditor}>
+            <TextEditor
+              pageId={pageId}
+              editorContentType="post"
+              communityId={post.targetType === 'community' ? post.targetId : undefined}
+              initialText={textValue.text}
+              initialMentions={post.metadata?.mentioned}
+              initialHashtags={post.metadata?.hashtags}
+              enableProductMention={true}
+              onTextChanged={(text) => {
+                setTextValue((prev) => ({ ...prev, text }));
+              }}
+              onProductMentionsChanged={(productTags) => setProductTags([...productTags])}
+              onMentionsChanged={(mentioned) => {
+                setTextValue((prev) => ({
+                  ...prev,
+                  mentioned,
+                  mentionees: [
+                    {
+                      type: 'user',
+                      userIds: mentioned.map((m) => m.userId).filter((id): id is string => !!id),
+                    },
+                  ],
+                }));
+              }}
+              onHashtagsChanged={(hashtags) => {
+                setTextValue((prev) => ({ ...prev, hashtagsMetadata: hashtags }));
+              }}
+              onUrlsDetected={(urls) => {
+                const links: Amity.Link[] = urls.map((url) => ({
+                  url: url.url,
+                  index: url.start,
+                  length: url.end - url.start,
+                  renderPreview: true,
+                }));
+                setTextValue((prev) => ({ ...prev, links }));
+              }}
+              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - (productTags?.length ?? 0)}
+              initialProductMentions={productTags as Amity.TextProductTag[]}
+            />
+          </div>
 
           <ImageThumbnail
             files={files}
@@ -531,6 +711,17 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             postImages={postImages as Amity.Post<'image'>[]}
             onAltTextChange={handleAltTextChange}
             onRemovePostImage={handleRemoveThumbnailImage}
+            onFileProductTagsChange={handleProductTagsChange}
+            onChildPostProductTagsChange={(postId, productTags) => {
+              setPostImages((prev) => {
+                const updatedPosts = prev.map((post) =>
+                  post.postId === postId ? { ...post, productTags: [...productTags] } : post,
+                );
+
+                return [...updatedPosts];
+              });
+            }}
+            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
           />
           <VideoThumbnail
             files={files}
@@ -539,6 +730,17 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             removeFile={removeFile}
             postVideos={postVideos as Amity.Post<'video'>[]}
             onRemovePostVideo={handleRemoveThumbnailVideo}
+            onFileProductTagsChange={handleProductTagsChange}
+            onChildPostProductTagsChange={(postId, productTags) => {
+              setPostVideos((prev) => {
+                const updatedPosts = prev.map((post) =>
+                  post.postId === postId ? { ...post, productTags: [...productTags] } : post,
+                );
+
+                return [...updatedPosts];
+              });
+            }}
+            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
           />
         </div>
         {/* TODO: Handle file type */}
@@ -551,6 +753,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               isVisibleCamera={isVisibleCamera}
               isVisibleImage={isVisibleImage}
               isVisibleVideo={isVisibleVideo}
+              productTags={allProductTags}
               onVideoFileChange={(files) =>
                 handleFileChange(files, FileType.VIDEO, localPost.length)
               }
@@ -681,6 +884,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           </div>
         )}
       </div>
+      {!isDesktop && allProductTags.length > 0 && (
+        <div
+          className={styles.editPost__productTagActionButton}
+          data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+        >
+          <ProductTagActionButton
+            pageId={pageId}
+            productTags={allProductTags}
+            className={styles.editPost__productTagActionButton__button}
+          />
+        </div>
+      )}
     </div>
   );
 }

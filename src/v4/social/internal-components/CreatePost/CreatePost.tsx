@@ -553,7 +553,7 @@ export function CreatePost({
             progress={progress}
             removeFile={removeFile}
             onAltTextChange={handleAltTextChange}
-            onProductTagsChange={handleProductTagsChange}
+            onFileProductTagsChange={handleProductTagsChange}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
           />
           <VideoThumbnail
@@ -561,7 +561,7 @@ export function CreatePost({
             pageId={pageId}
             progress={progress}
             removeFile={removeFile}
-            onProductTagsChange={handleProductTagsChange}
+            onFileProductTagsChange={handleProductTagsChange}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
           />
         </div>
