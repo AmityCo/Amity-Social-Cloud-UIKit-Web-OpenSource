@@ -8,32 +8,45 @@ type MediaType = 'image' | 'video';
 
 interface UseProductTagSelectionOptions<T extends MediaType> {
   pageId?: string;
-  onProductTagsChange?: (file: Amity.File<T>, tags: Amity.ProductTag[]) => void;
+  onFileProductTagsChange?: (file: Amity.File<T>, tags: Amity.ProductTag[]) => void;
+  onChildPostProductTagsChange?: (postId: string, tags: Amity.ProductTag[]) => void;
 }
 
 export const useProductTagSelection = <T extends MediaType = MediaType>({
   pageId,
-  onProductTagsChange,
+  onFileProductTagsChange,
+  onChildPostProductTagsChange,
 }: UseProductTagSelectionOptions<T>) => {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { success } = useNotifications();
 
-  const openProductTagSelection = (
-    file: Amity.File<T>,
-    initialProductTags?: Amity.ProductTag[],
-  ) => {
-    if (!onProductTagsChange) return;
-
+  const openProductTagSelection = ({
+    file,
+    postId,
+    initialProductTags,
+  }: {
+    file?: Amity.File<T>;
+    postId?: string;
+    initialProductTags?: Amity.ProductTag[];
+  }) => {
     const handleDone = (tags: Amity.ProductTag[]) => {
-      onProductTagsChange(file, tags);
+      file && onFileProductTagsChange?.(file, tags);
+      postId && onChildPostProductTagsChange?.(postId, tags);
+
       if (isDesktop) {
         closePopup('product-tag');
       } else {
         removeDrawerData();
       }
-      success({ content: 'Product tags have been added.' });
+
+      const hadInitialTags = initialProductTags && initialProductTags.length > 0;
+      success({
+        content: hadInitialTags
+          ? 'Product tags have been updated.'
+          : 'Product tags have been added.',
+      });
     };
 
     if (isDesktop) {

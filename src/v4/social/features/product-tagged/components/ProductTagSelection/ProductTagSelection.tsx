@@ -87,6 +87,25 @@ export function ProductTagSelection({
   const [showRightArrow, setShowRightArrow] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [localSelectedProduct, setLocalSelectedProduct] = useState<Amity.ProductTag[]>([]);
+  const initialProductTagsRef = useRef<Amity.ProductTag[]>(selectedProductTags || []);
+
+  // Check if product tags have changed from initial state (for post mode only)
+  const hasProductTagsChanged = useMemo(() => {
+    if (mode === 'livestream') return true; // Don't use this check for livestream
+
+    const initialIds = new Set(initialProductTagsRef.current.map((tag) => tag.productId));
+    const currentIds = new Set((selectedProductTags || []).map((tag) => tag.productId));
+
+    // Check if sizes are different
+    if (initialIds.size !== currentIds.size) return true;
+
+    // Check if all initial IDs exist in current
+    for (const id of initialIds) {
+      if (!currentIds.has(id)) return true;
+    }
+
+    return false;
+  }, [selectedProductTags, mode]);
 
   // Debounce search query
   useEffect(() => {
@@ -506,9 +525,7 @@ export function ProductTagSelection({
           <SubmitButton
             textButton={mode === 'livestream' ? 'Add products' : 'Done'}
             isDisabled={
-              mode === 'livestream'
-                ? localSelectedProduct.length === 0
-                : selectedProductTags?.length === 0
+              mode === 'livestream' ? localSelectedProduct.length === 0 : !hasProductTagsChanged
             }
             onPress={mode === 'livestream' ? handleSubmit : onDone}
           />
