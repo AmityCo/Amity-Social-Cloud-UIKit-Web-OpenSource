@@ -58,6 +58,7 @@ export function ManageProductTag({
         size="large"
         isPinned={isPinned}
         unavailable={unavailable}
+        overlayClassName={unavailable ? styles.manageProductTag__thumbnailOverlay : undefined}
       />
 
       <div className={styles.manageProductTag__info}>
@@ -93,6 +94,7 @@ export function ManageProductTag({
           {renderMode === 'livestream' && !unavailable && (
             <Button
               className={styles.manageProductTag__pinButton}
+              iconClassName={styles.manageProductTag__pinIcon}
               onPress={() => onTogglePin?.(productTag, !isPinned)}
               aria-label={isPinned ? 'Unpin product' : 'Pin product'}
               variant="outlined"
@@ -100,7 +102,7 @@ export function ManageProductTag({
               icon={<Pin />}
               isDisabled={isDisabled}
             >
-              <Typography.CaptionBold as="span">
+              <Typography.CaptionBold as="span" className={styles.manageProductTag__pinButtonText}>
                 {isPinned ? 'Unpin' : 'Pin'}
               </Typography.CaptionBold>
             </Button>

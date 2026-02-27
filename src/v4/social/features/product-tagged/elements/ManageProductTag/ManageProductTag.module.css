@@ -66,6 +66,18 @@
 
 .manageProductTag__pinButton {
   flex-shrink: 0;
-  border: 1px solid var(--asc-color-white);
   background-color: transparent;
+  border: 1px solid var(--asc-color-base-inverse);
+}
+
+.manageProductTag__thumbnailOverlay {
+  background-color: var(--asc-color-base-inverse);
+}
+
+.manageProductTag__pinButtonText {
+  color: var(--asc-color-base-inverse);
+}
+
+.manageProductTag__pinIcon {
+  color: var(--asc-color-base-inverse);
 }

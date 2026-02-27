@@ -388,7 +388,9 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                         <TagOutlined className={styles.livestreamSetup__tagProducts__icon} />
                       </div>
                       <Label>
-                        <Typography.TitleBold>Tag products</Typography.TitleBold>
+                        <Typography.TitleBold className={styles.livestreamSetup__tagProducts__text}>
+                          Tag products
+                        </Typography.TitleBold>
                       </Label>
                     </div>
                     <div className={styles.livestreamSetup__tagProducts__right}>
