@@ -544,6 +544,11 @@ export function ProductTagSelection({
                 : !hasProductTagsChanged) || !online
             }
             onPress={mode === 'livestream' ? handleSubmit : onDone}
+            className={
+              mode === 'livestream'
+                ? styles.productTagSelection__submitButton__livestream
+                : undefined
+            }
           />
         </div>
       )}

@@ -53,6 +53,7 @@ export function ProductTagSelectionItem({
             size="medium"
             unavailable={unavailable}
             className={styles.productTagSelectionItem__imageThumbnail}
+            thumbnailMode={product.thumbnailMode}
           />
           <div className={styles.productTagSelectionItem__content}>
             <div className={styles.productTagSelectionItem__contentText}>

@@ -49,6 +49,7 @@ export function ProductMentionItem({
         alt={product.productName}
         size="tiny"
         className={styles.productMentionItem__thumbnail}
+        thumbnailMode={product.thumbnailMode}
       />
       <div className={styles.productMentionItem__content}>
         <Typography.BodyBold className={styles.productMentionItem__name}>

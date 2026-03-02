@@ -144,8 +144,13 @@
   background-color: var(--asc-color-background-default);
   z-index: 10;
   flex-shrink: 0;
-  border-top: 0.0625rem solid var(--asc-color-base-shade4);
   transform: translateZ(0); /* Force GPU acceleration for iOS */
+}
+
+.productTagSelection__submitButton__livestream[data-isDisabled='true'] {
+  background-color: var(--asc-color-primary-default) !important;
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 
 @media only screen and (width >= 48em) {

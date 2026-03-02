@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { ImageIcon } from '~/v4/icons/Image';
+import { ImageFailedThumbnail } from '~/v4/icons/Image';
 import { Pin } from '~/v4/icons/Pin';
 import { Typography } from '~/v4/core/components';
 import styles from './ProductImageThumbnail.module.css';
@@ -13,6 +13,7 @@ export interface ProductImageThumbnailProps {
   size?: 'large' | 'medium' | 'small' | 'tiny';
   className?: string;
   overlayClassName?: string;
+  thumbnailMode?: 'fit' | 'fill';
 }
 
 export function ProductImageThumbnail({
@@ -23,6 +24,7 @@ export function ProductImageThumbnail({
   size = 'large',
   className = '',
   overlayClassName,
+  thumbnailMode = 'fill',
 }: ProductImageThumbnailProps) {
   const [hasImageError, setHasImageError] = useState(false);
   const isEmptyState = !imageUrl || hasImageError;
@@ -35,13 +37,16 @@ export function ProductImageThumbnail({
     <div className={clsx(styles.productImageThumbnail, className)} data-size={size}>
       {isEmptyState ? (
         <div className={styles.productImageThumbnail__emptyState}>
-          <ImageIcon className={styles.productImageThumbnail__icon} />
+          <ImageFailedThumbnail className={styles.productImageThumbnail__icon} />
         </div>
       ) : (
         <img
           src={imageUrl}
           alt={alt}
-          className={styles.productImageThumbnail__image}
+          className={clsx(styles.productImageThumbnail__image, {
+            [styles.productImageThumbnail__imageFit]: thumbnailMode === 'fit',
+            [styles.productImageThumbnail__imageFill]: thumbnailMode === 'fill',
+          })}
           onError={handleImageError}
         />
       )}

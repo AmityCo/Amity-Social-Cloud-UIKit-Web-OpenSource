@@ -56,6 +56,7 @@ export function ManageProductTag({
     <div className={styles.manageProductTag} style={themeStyles} data-test-id={accessibilityId}>
       <ProductImageThumbnail
         imageUrl={product.thumbnailUrl}
+        thumbnailMode={product.thumbnailMode}
         alt={product.productName || product.productId}
         size="large"
         isPinned={isPinned}
