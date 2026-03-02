@@ -384,7 +384,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
       if (livestreamPost?.postId) {
         try {
-          await updateProductTags({
+          const result = await updateProductTags({
             postId: livestreamPost?.postId,
             productTags: tags,
           });
@@ -392,10 +392,15 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
           // Update the ref with the new count after successful update
           previousProductTagsCountRef.current = newTagsCount;
 
-          // Only show success toast when adding products
-          if (!isRemoving) {
+          // Only show success toast when adding products and no unavailable products toast is shown
+          const hasUnavailableProducts = result?.data?.productTags?.some(
+            (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+          );
+          if (!isRemoving && !hasUnavailableProducts) {
             success({ content: 'Product tags added.' });
           }
+
+          return result?.data?.productTags as Amity.ProductTag[] | undefined;
         } catch (error) {
           info({
             content: isRemoving
