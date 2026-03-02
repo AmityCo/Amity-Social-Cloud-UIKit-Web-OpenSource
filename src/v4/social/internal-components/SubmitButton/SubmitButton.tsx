@@ -44,6 +44,7 @@ export const SubmitButton = ({
       data-testid={accessibilityId}
       style={themeStyles}
       className={clsx(styles.submitButton__button, className)}
+      data-isDisabled={isDisabled}
       isDisabled={isDisabled}
       type="button"
     >

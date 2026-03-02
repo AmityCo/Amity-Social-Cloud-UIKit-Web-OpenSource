@@ -114,6 +114,7 @@ export function ProductTag({
     >
       <ProductImageThumbnail
         imageUrl={imageUrl}
+        thumbnailMode={product.thumbnailMode}
         alt={product.productName || product.productId}
         size="large"
         isPinned={isPinned}

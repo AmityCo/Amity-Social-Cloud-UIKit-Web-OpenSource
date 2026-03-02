@@ -116,6 +116,7 @@ export function LivestreamPinnedProduct({
           alt={product.productName}
           unavailable={unavailable}
           size="medium"
+          thumbnailMode={product.thumbnailMode}
           className={styles.livestreamPinnedProduct__thumbnail}
         />
       </div>

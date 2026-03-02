@@ -22,4 +22,6 @@
   top: -0.5rem; /* -8px */
   left: 4rem; /* 64px */
   padding: unset;
+  width: 1.5rem;
+  height: 1.5rem;
 }

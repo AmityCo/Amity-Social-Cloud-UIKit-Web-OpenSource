@@ -37,7 +37,12 @@ export function ProductTagSelectedItem({
       style={themeStyles}
       data-test-id={accessibilityId}
     >
-      <ProductImageThumbnail imageUrl={imageUrl} alt={productName} size="medium" />
+      <ProductImageThumbnail
+        imageUrl={imageUrl}
+        alt={productName}
+        size="medium"
+        thumbnailMode={product?.thumbnailMode}
+      />
       <Typography.BodyBold as="p" className={styles.productTagSelectedItem__name}>
         {productName}
       </Typography.BodyBold>

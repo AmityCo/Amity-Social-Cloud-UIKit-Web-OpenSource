@@ -39,6 +39,14 @@
   object-position: center;
 }
 
+.productImageThumbnail__imageFit {
+  object-fit: contain;
+}
+
+.productImageThumbnail__imageFill {
+  object-fit: cover;
+}
+
 /* Empty state */
 .productImageThumbnail__emptyState {
   width: 100%;
