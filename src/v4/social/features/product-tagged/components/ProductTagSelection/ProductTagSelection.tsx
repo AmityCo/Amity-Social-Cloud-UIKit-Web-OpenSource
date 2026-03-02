@@ -14,6 +14,8 @@ import { useSearchProducts } from '~/v4/social/features/product-tagged/hooks';
 import styles from './ProductTagSelection.module.css';
 import { Divider, DividerType } from '~/v4/social/elements/Divider';
 import { Typography } from '~/v4/core/components';
+import { Notification } from '~/v4/core/components/Notification';
+import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { ProductSelectionItemSkeleton } from '~/v4/social/features/product-tagged/internal-components';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { DisplayModeEnum, DisplayMode } from '~/v4/social/types';
@@ -26,6 +28,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
+import { useNetworkState } from 'react-use';
 
 export type ProductTagSelectionMode = 'create' | 'edit' | 'livestream';
 
@@ -80,6 +83,7 @@ export function ProductTagSelection({
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const { online } = useNetworkState();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -372,6 +376,9 @@ export function ProductTagSelection({
       data-test-id={accessibilityId}
       data-display={displayMode}
     >
+      {!online && (
+        <Notification icon={<Spinner />} content="Waiting for network..." alignment="fixed" />
+      )}
       <ProductTagSelectionHeader
         mode={mode}
         displayMode={displayMode}
@@ -532,7 +539,9 @@ export function ProductTagSelection({
           <SubmitButton
             textButton={mode === 'livestream' ? 'Add products' : 'Done'}
             isDisabled={
-              mode === 'livestream' ? localSelectedProduct.length === 0 : !hasProductTagsChanged
+              (mode === 'livestream'
+                ? localSelectedProduct.length === 0
+                : !hasProductTagsChanged) || !online
             }
             onPress={mode === 'livestream' ? handleSubmit : onDone}
           />

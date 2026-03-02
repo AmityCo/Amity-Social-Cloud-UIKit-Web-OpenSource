@@ -10,6 +10,7 @@ import { Pin } from '~/v4/icons/Pin';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/internal-components/ProductImageThumbnail/ProductImageThumbnail';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
+import { useNetworkState } from 'react-use';
 
 export type RenderModeEnum = 'livestream' | 'playback';
 
@@ -47,6 +48,7 @@ export function ManageProductTag({
   const product = productTag.product;
   const unavailable = product?.status === 'archived';
   const price = product ? formatPrice(product.price, product.currency) : undefined;
+  const { online } = useNetworkState();
 
   if (!product) return null;
 
@@ -90,6 +92,7 @@ export function ManageProductTag({
             defaultIcon={<TrashIcon />}
             color="secondary"
             size="small"
+            isDisabled={isDisabled || !online}
           />
           {renderMode === 'livestream' && !unavailable && (
             <Button
@@ -100,7 +103,7 @@ export function ManageProductTag({
               variant="outlined"
               size="small"
               icon={<Pin />}
-              isDisabled={isDisabled}
+              isDisabled={isDisabled || !online}
             >
               <Typography.CaptionBold as="span" className={styles.manageProductTag__pinButtonText}>
                 {isPinned ? 'Unpin' : 'Pin'}
