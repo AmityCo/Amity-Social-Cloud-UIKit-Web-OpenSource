@@ -71,7 +71,7 @@
 }
 
 .manageProductTag__thumbnailOverlay {
-  background-color: var(--asc-color-base-inverse);
+  background-color: rgb(0 0 0 / 50%);
 }
 
 .manageProductTag__pinButtonText {

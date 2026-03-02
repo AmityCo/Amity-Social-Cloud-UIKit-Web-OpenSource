@@ -101,11 +101,18 @@ function LiveManageProductTagListContent({
       onUpdateProductTags={async (tags) => {
         if (subscribedPost?.postId) {
           try {
-            await updateProductTags({
+            const result = await updateProductTags({
               postId: subscribedPost?.postId,
               productTags: tags,
             });
-            success({ content: 'Product tags added.' });
+            const hasUnavailableProducts = result?.data?.productTags?.some(
+              (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+            );
+            if (!hasUnavailableProducts) {
+              success({ content: 'Product tags added.' });
+            }
+
+            return result?.data?.productTags as Amity.ProductTag[] | undefined;
           } catch (error) {
             info({ content: 'Failed to add product tags. Please try again.' });
           }

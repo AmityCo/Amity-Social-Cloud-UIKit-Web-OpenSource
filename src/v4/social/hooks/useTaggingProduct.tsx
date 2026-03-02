@@ -43,6 +43,17 @@ export const useTaggingProduct = () => {
     }) => {
       return await PostRepository.updateProductTags(postId, productTags);
     },
+    onSuccess: ({ data }) => {
+      const productTags = data?.productTags;
+
+      const hasUnavailableProducts = productTags?.some(
+        (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+      );
+
+      if (hasUnavailableProducts) {
+        info({ content: 'Some products that you’ve tagged are no longer available.' });
+      }
+    },
   });
 
   return {

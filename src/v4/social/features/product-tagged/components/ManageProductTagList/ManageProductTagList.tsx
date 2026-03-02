@@ -21,7 +21,9 @@ export interface ManageProductTagListProps {
   //to remove product
   productTags?: Amity.MediaProductTag[];
   onProductTagsChange?: (tags: Amity.ProductTag[]) => void;
-  onUpdateProductTags?: (tags: Amity.ProductTag[]) => void;
+  onUpdateProductTags?: (
+    tags: Amity.ProductTag[],
+  ) => Promise<Amity.ProductTag[] | undefined> | void;
   onRemove?: (productTag: Amity.ProductTag) => void;
   pageId?: string;
   onClose: (tags: Amity.ProductTag[], pinnedProductId: string) => void;

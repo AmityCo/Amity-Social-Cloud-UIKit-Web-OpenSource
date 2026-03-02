@@ -32,7 +32,9 @@ export type ProductTagSelectionMode = 'create' | 'edit' | 'livestream';
 export interface ProductTagSelectionProps {
   selectedProductTags?: Amity.ProductTag[];
   onTagChanges: (tags: Amity.ProductTag[]) => void;
-  onUpdateProductTags?: (tags: Amity.ProductTag[]) => void;
+  onUpdateProductTags?: (
+    tags: Amity.ProductTag[],
+  ) => Promise<Amity.ProductTag[] | undefined> | void;
   displayMode?: DisplayMode;
   mode?: ProductTagSelectionMode;
   onDone?: () => void;
@@ -256,8 +258,13 @@ export function ProductTagSelection({
 
     onTagChanges(mergedTags);
 
+    let tagsToShow = mergedTags;
     if (onUpdateProductTags) {
-      await onUpdateProductTags(mergedTags);
+      const updatedTags = await onUpdateProductTags(mergedTags);
+      if (updatedTags) {
+        tagsToShow = updatedTags;
+        onTagChanges(updatedTags);
+      }
     }
 
     setLocalSelectedProduct([]);
@@ -266,7 +273,7 @@ export function ProductTagSelection({
     const manageProductTagListContent = (close: () => void) => (
       <ManageProductTagList
         renderMode={renderMode}
-        productTags={mergedTags}
+        productTags={tagsToShow}
         pageId={pageId}
         pinnedProductId={pinnedProductId}
         onUpdateProductTags={onUpdateProductTags}
