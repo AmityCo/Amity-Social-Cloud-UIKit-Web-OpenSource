@@ -332,8 +332,12 @@ export const TextWithMention = ({
       // Distinguish product mentions from user mentions
       if ('productId' in child.data) {
         const productData = child.data as ProductMentionData;
-        const isUnavailable =
-          productData.product?.status === 'inactive' || productData.product?.isDeleted;
+        const isUnavailable = !productData.product || productData.product?.status === 'archived';
+
+        // Render as plain text if product is unavailable
+        if (isUnavailable) {
+          return <React.Fragment key={childIndex}>{child.text}</React.Fragment>;
+        }
 
         return (
           <span
@@ -343,14 +347,12 @@ export const TextWithMention = ({
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-
-              !isUnavailable &&
-                onProductTagClick?.({
-                  productTag: {
-                    productId: productData.productId,
-                    product: productData.product,
-                  },
-                });
+              onProductTagClick?.({
+                productTag: {
+                  productId: productData.productId,
+                  product: productData.product,
+                },
+              });
             }}
             onMouseUp={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
