@@ -81,3 +81,9 @@
 .manageProductTag__pinIcon {
   color: var(--asc-color-base-inverse);
 }
+
+.manageProductTag__removeButton:disabled,
+.manageProductTag__pinButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

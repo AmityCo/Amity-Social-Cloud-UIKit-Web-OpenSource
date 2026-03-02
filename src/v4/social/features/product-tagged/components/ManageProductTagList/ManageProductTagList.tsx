@@ -16,6 +16,9 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
+import { Notification } from '~/v4/core/components/Notification';
+import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { useNetworkState } from 'react-use';
 
 export interface ManageProductTagListProps {
   //to remove product
@@ -85,6 +88,7 @@ export function ManageProductTagList({
     setLocalPinnedProductId(pinnedProductId);
   }, [pinnedProductId]);
 
+  const { online } = useNetworkState();
   const { success, info } = useNotifications();
 
   const handleRemove = async (productTag: Amity.ProductTag) => {
@@ -286,6 +290,9 @@ export function ManageProductTagList({
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.manageProductTagList}>
+      {!online && (
+        <Notification icon={<Spinner />} content="Waiting for network..." alignment="fixed" />
+      )}
       <div className={styles.manageProductTagList__header}>
         <div className={styles.manageProductTagList__headerContent}>
           <Typography.TitleBold as="h2" className={styles.manageProductTagList__title}>
@@ -330,7 +337,7 @@ export function ManageProductTagList({
                         onTogglePin={handleTogglePin}
                         pageId={pageId}
                         componentId={componentId}
-                        isDisabled={isPinning || isUnpinning}
+                        isDisabled={isPinning || isUnpinning || !online}
                       />
                     ))}
                   </div>
@@ -357,7 +364,7 @@ export function ManageProductTagList({
                         sourceId={sourceId}
                         pageId={pageId}
                         componentId={componentId}
-                        isDisabled={isPinning || isUnpinning}
+                        isDisabled={isPinning || isUnpinning || !online}
                       />
                     ))}
                   </div>
@@ -368,11 +375,11 @@ export function ManageProductTagList({
             <div className={styles.manageProductTagList__footer}>
               <Button
                 className={styles.manageProductTagList__addButton}
-                data-isDisabled={productTags?.length === maxCount}
+                data-isDisabled={productTags?.length === maxCount || !online}
                 onPress={handleAddProducts}
                 variant="text"
                 fullWidth
-                isDisabled={productTags?.length === maxCount}
+                isDisabled={productTags?.length === maxCount || !online}
               >
                 <Typography.BodyBold as="span">Add products</Typography.BodyBold>
               </Button>

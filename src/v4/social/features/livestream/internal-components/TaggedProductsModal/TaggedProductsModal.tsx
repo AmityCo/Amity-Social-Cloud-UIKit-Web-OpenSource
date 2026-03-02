@@ -17,6 +17,7 @@ import CloseIcon from '~/v4/icons/Close';
 import { ActionButton } from '~/v4/core/components/ActionButton';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 import { ProductTagListRenderModeEnum, LayoutVariantEnum } from '~/v4/social/types';
+import { useNetworkState } from 'react-use';
 
 type DrawerScreen = 'list' | 'selection';
 
@@ -59,6 +60,8 @@ export function TaggedProductsModal({
 
   const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
+  const { online } = useNetworkState();
+
   const [screen, setScreen] = useState<DrawerScreen>('list');
 
   const totalCount = productTags.length;
@@ -188,7 +191,7 @@ export function TaggedProductsModal({
                   onTogglePin={onTogglePin}
                   pageId={pageId}
                   componentId={componentId}
-                  isDisabled={isPinning || isUnpinning}
+                  isDisabled={isPinning || isUnpinning || !online}
                 />
               ) : productTag.product ? (
                 <ProductTag
@@ -224,8 +227,8 @@ export function TaggedProductsModal({
               fullWidth
               onPress={openSelection}
               className={styles.taggedProductsModal__addButton}
-              data-isDisabled={totalCount === MAX_COUNT}
-              isDisabled={totalCount === MAX_COUNT}
+              data-isDisabled={totalCount === MAX_COUNT || !online}
+              isDisabled={totalCount === MAX_COUNT || !online}
             >
               <Typography.BodyBold>Add products</Typography.BodyBold>
             </Button>
