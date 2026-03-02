@@ -32,11 +32,11 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
 
   // Collect unique product tags from post and children posts
   const allProductTags = useMemo(() => {
-    const productMap = new Map<string, Amity.TextProductTag | Amity.MediaProductTag>();
+    const productMap = new Map<string, Amity.ProductTag>();
 
     if (post.productTags) {
-      post.productTags.forEach((tag) => {
-        if (!productMap.has(tag.productId)) {
+      post.productTags.forEach((tag: Amity.ProductTag) => {
+        if (!productMap.has(tag.productId) && !!tag.product) {
           productMap.set(tag.productId, tag);
         }
       });
@@ -45,8 +45,8 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
     if (post.childrenPosts) {
       post.childrenPosts.forEach((childPost) => {
         if (childPost.productTags) {
-          childPost.productTags.forEach((tag) => {
-            if (!productMap.has(tag.productId)) {
+          childPost.productTags.forEach((tag: Amity.ProductTag) => {
+            if (!productMap.has(tag.productId) && !!tag.product) {
               productMap.set(tag.productId, tag);
             }
           });
