@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Client } from '@amityco/ts-sdk';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
 import { EventDetailProps, EventSetupProps, LiveStreamPlayerPageProps } from '~/v4/social/features';
@@ -234,6 +235,7 @@ export interface PageBehavior {
     goToUserProfilePage?(context: { userId: string }): void;
     goToEventDetailPage?(context: EventDetailProps): void;
     goToLivestreamPlayerPage?(context: LiveStreamPlayerPageProps): void;
+    goToEditProfilePage?(): void;
   };
   AmityDraftClipPageBehavior?: {
     goToPostComposerPage?(context: {
@@ -924,6 +926,13 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage(context);
 
         goToLiveStreamPlayerPage?.(context);
+      },
+      goToEditProfilePage: () => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEditProfilePage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToEditProfilePage();
+        }
+        const currentUserId = Client.getCurrentUser()?.userId;
+        if (currentUserId) goToEditUserPage(currentUserId);
       },
     },
     AmityDraftClipPageBehavior: {
