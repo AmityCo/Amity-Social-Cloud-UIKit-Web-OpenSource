@@ -87,7 +87,7 @@
 .createLivestream__rightSection__wrapper {
   flex: 1;
   padding: 1.5rem;
-  height: 100%;
+  height: 100dvh;
 }
 
 .createLivestream__settingSection {
