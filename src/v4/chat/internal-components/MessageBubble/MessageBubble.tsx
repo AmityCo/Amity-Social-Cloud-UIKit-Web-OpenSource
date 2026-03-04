@@ -108,10 +108,8 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
         />
         {((coHost && isCoHostMessage) || !coHost) && (
           <LivestreamModerationOptions
-            displayName={message.creator?.displayName ?? coHost?.displayName}
             isHost={isHost}
             coHostId={invitedCoHost?.userId ?? coHost?.userId}
-            isModerator={isModerator}
             onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
             onCancelInvitation={handleCancelInvitation}
             onRemoveCoHost={handleRemoveCoHost}

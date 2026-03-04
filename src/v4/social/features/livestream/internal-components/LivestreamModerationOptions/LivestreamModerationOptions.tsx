@@ -5,6 +5,7 @@ import SignOut from '~/v4/icons/SignOut';
 import UserTimes from '~/v4/icons/UserTimes';
 import styles from './LivestreamModerationOptions.module.css';
 import { CoHostToggleProductPermission } from '~/v4/social/features/livestream/internal-components/CoHostToggleProductPermission';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 export interface LivestreamModerationOptionsProps {
   isHost?: boolean;
@@ -31,6 +32,8 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
   onClickOption,
   onCoHostPermissionChange,
 }) => {
+  const { confirm } = useConfirmContext();
+
   const handleInviteAsCoHost = () => {
     onInviteAsCoHost?.();
     onClickOption?.();
@@ -68,7 +71,24 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
         <div className={styles.livestreamModerationOptions__coHostOptions}>
           <CoHostToggleProductPermission
             isSelected={isSelectedCoHostPermission}
-            onChange={(canManageProductTags) => onCoHostPermissionChange?.(canManageProductTags)}
+            onChange={(canManageProductTags) => {
+              if (!canManageProductTags) {
+                confirm({
+                  title: 'Disable co-host product tags control?',
+                  content:
+                    'If you disable this, the co-host can’t add, remove, or pin products in this live stream.',
+
+                  cancelText: 'Cancel',
+                  okText: 'Disable',
+                  okButtonColor: 'alert',
+                  onOk: () => {
+                    onCoHostPermissionChange?.(canManageProductTags);
+                  },
+                });
+              } else {
+                onCoHostPermissionChange?.(canManageProductTags);
+              }
+            }}
           />
           <MenuOptionButton
             text="Remove from live"

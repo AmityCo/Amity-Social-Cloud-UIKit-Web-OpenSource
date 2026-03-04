@@ -90,6 +90,7 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
               <Kebub className={styles.participantHeader__optionButton__icon} />
             </Button>
           )}
+          className={styles.participantHeader__popoverWrapper}
         >
           {({ closePopover }: { closePopover: () => void }) => (
             <div className={styles.participantHeader__popover}>
@@ -103,7 +104,6 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
                 showMutedIcon={false}
               />
               <LivestreamModerationOptions
-                displayName={displayName}
                 coHostId={
                   hostId !== currentUser?.userId
                     ? currentUser?.userId
@@ -128,7 +128,6 @@ export const ParticipantHeader: React.FC<ParticipantHeaderProps> = ({
                 onClickOption={closePopover}
                 onRemoveCoHost={handleRemoveCoHost}
                 isHost={isHost && hostId === currentUser?.userId}
-                isModerator={isModerator && hostId === currentUser?.userId}
               />
             </div>
           )}

@@ -56,3 +56,7 @@
 .participantHeader__popover {
   padding: 0.5rem 0;
 }
+
+.participantHeader__popoverWrapper {
+  z-index: 999 !important;
+}
