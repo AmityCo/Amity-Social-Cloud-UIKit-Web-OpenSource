@@ -111,19 +111,19 @@ export const NotificationItem = ({
                 userData={item.users[0]}
                 className={styles.notificationItem__avatar}
               />
-              {item.trayItemCategory === 'user_profile_reset' ? (
-                <Typography.Body className={styles.notificationItem__text}>
-                  <Typography.BodyBold as="span">
-                    Your profile information was reset
-                  </Typography.BodyBold>
-                  {` because it didn’t meet our Community Guidelines. Please update your profile.`}
-                </Typography.Body>
-              ) : (
-                <Typography.Body className={styles.notificationItem__text}>
-                  {highlightedText(item.templatedText, item.text)}
-                </Typography.Body>
-              )}
             </>
+          )}
+          {item.trayItemCategory === 'user_profile_reset' ? (
+            <Typography.Body className={styles.notificationItem__text}>
+              <Typography.BodyBold as="span">
+                Your profile information was reset
+              </Typography.BodyBold>
+              {` because it didn’t meet our Community Guidelines. Please update your profile.`}
+            </Typography.Body>
+          ) : (
+            <Typography.Body className={styles.notificationItem__text}>
+              {highlightedText(item.templatedText, item.text)}
+            </Typography.Body>
           )}
         </div>
         <Timestamp pageId={pageId} timestamp={item.lastOccurredAt} />
