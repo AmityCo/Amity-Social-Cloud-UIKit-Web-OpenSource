@@ -58,6 +58,8 @@ export const NotificationItem = ({
       return AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage?.({
         roomId: item.targetId,
       });
+    } else if (item.actionType === 'user') {
+      return AmityNotificationTrayPageBehavior?.goToEditProfilePage?.();
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
         postId:
@@ -100,18 +102,29 @@ export const NotificationItem = ({
               }
             />
           ) : (
-            <UserAvatar
-              shouldRedirectToUserProfile={false}
-              onPressAvatar={onClickItem}
-              pageId={pageId}
-              componentId={componentId}
-              userData={item.users[0]}
-              className={styles.notificationItem__avatar}
-            />
+            <>
+              <UserAvatar
+                shouldRedirectToUserProfile={false}
+                onPressAvatar={onClickItem}
+                pageId={pageId}
+                componentId={componentId}
+                userData={item.users[0]}
+                className={styles.notificationItem__avatar}
+              />
+              {item.trayItemCategory === 'user_profile_reset' ? (
+                <Typography.Body className={styles.notificationItem__text}>
+                  <Typography.BodyBold as="span">
+                    Your profile information was reset
+                  </Typography.BodyBold>
+                  {` because it didn’t meet our Community Guidelines. Please update your profile.`}
+                </Typography.Body>
+              ) : (
+                <Typography.Body className={styles.notificationItem__text}>
+                  {highlightedText(item.templatedText, item.text)}
+                </Typography.Body>
+              )}
+            </>
           )}
-          <Typography.Body className={styles.notificationItem__text}>
-            {highlightedText(item.templatedText, item.text)}
-          </Typography.Body>
         </div>
         <Timestamp pageId={pageId} timestamp={item.lastOccurredAt} />
       </div>
