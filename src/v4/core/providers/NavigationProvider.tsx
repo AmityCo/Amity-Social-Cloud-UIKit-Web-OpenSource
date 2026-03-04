@@ -712,6 +712,7 @@ interface NavigationProviderProps {
   ) => void;
   activeRoute?: AmityRoute;
   onRouteChange?: (route: AmityRoute) => void;
+  onEmptyNavigationStack?: () => void;
 }
 
 const getDefaultRoute = (activeRoute?: AmityRoute): Page => {
@@ -764,6 +765,7 @@ export default function NavigationProvider({
   onEditUser,
   onMessageUser,
   onBack,
+  onEmptyNavigationStack,
 }: NavigationProviderProps) {
   const [pages, setPages] = useState<Page[]>([getDefaultRoute(activeRoute)]);
   const currentPage = useMemo(() => pages[pages.length - 1], [pages]);
@@ -800,8 +802,13 @@ export default function NavigationProvider({
 
       if (prevState.length > pagesToRemove) {
         return prevState.slice(0, -pagesToRemove);
+      } else {
+        if (onEmptyNavigationStack) {
+          onEmptyNavigationStack();
+          return prevState;
+        }
+        return [{ type: PageTypes.SocialHomePage, context: { communityId: undefined } }];
       }
-      return prevState;
     });
   };
 

@@ -80,6 +80,7 @@ const InternalComponent = ({
   onRouteChange,
   seoOptimizationEnabled = false,
   syncNetworkConfig = false,
+  onEmptyNavigationStack,
 }: AmityUIKitProviderProps) => {
   const { error } = useNotifications();
   const [client, setClient] = useState<Amity.Client | null>(null);
@@ -239,6 +240,7 @@ const InternalComponent = ({
                             <NavigationProvider
                               activeRoute={activeRoute}
                               onRouteChange={onRouteChange}
+                              onEmptyNavigationStack={onEmptyNavigationStack}
                             >
                               <PageBehaviorProvider pageBehavior={pageBehavior}>
                                 <SearchResultProvider>
@@ -325,6 +327,7 @@ interface AmityUIKitProviderProps {
   onRouteChange?: (route: AmityRoute) => void;
   seoOptimizationEnabled?: boolean;
   syncNetworkConfig?: boolean;
+  onEmptyNavigationStack?: () => void;
 }
 
 const queryClient = new QueryClient();
