@@ -7,7 +7,7 @@ interface ProductCatalogueSettingsResult {
   productCatalogueSettings: Amity.ProductCatalogueSetting | null | undefined;
   isLoading: boolean;
   error: Error | null;
-  refetchProductCatalogueSettings: () => void;
+  refetchProductCatalogueSettings: () => Promise<Amity.ProductCatalogueSetting | null | undefined>;
 }
 
 export default function useProductCatalogueSettings(): ProductCatalogueSettingsResult {
@@ -17,7 +17,7 @@ export default function useProductCatalogueSettings(): ProductCatalogueSettingsR
     error,
     isLoading,
     data: productCatalogueSettings,
-    refetch: refetchProductCatalogueSettings,
+    refetch: refetchQuery,
   } = useQuery({
     queryKey: ['asc-uikit', 'ProductCatalogueSettings'],
     queryFn: async (): Promise<Amity.ProductCatalogueSetting | null> => {
@@ -29,6 +29,11 @@ export default function useProductCatalogueSettings(): ProductCatalogueSettingsR
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
+
+  const refetchProductCatalogueSettings = async () => {
+    const result = await refetchQuery();
+    return result.data;
+  };
 
   return { productCatalogueSettings, isLoading, error, refetchProductCatalogueSettings };
 }
