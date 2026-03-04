@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.4 (2026-03-04)
+
+
+### Bug Fixes
+
+* add override onEmptyNavigationStack and default behavior when back to empty stack ([#1473](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1473)) ([90bb0f0](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/90bb0f0e4a77a828f38909496457de81d994b376))
+
 ## 4.15.0-beta.3 (2026-02-13)
 
 
