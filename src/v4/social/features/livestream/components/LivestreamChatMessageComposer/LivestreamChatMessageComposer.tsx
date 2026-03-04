@@ -32,6 +32,7 @@ import { ProductTagList } from '~/v4/social/features/product-tagged/components/P
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { usePost } from '~/v4/social/hooks/posts/';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -167,14 +168,14 @@ export const LivestreamChatMessageComposer = ({
   const { currentUserId } = useSDK();
 
   const { openPopup, closePopup } = usePopupContext();
-  const { productCatalogueSettings } = useProductCatalogueSettings();
+  const { info: warning } = useConfirmContext();
+  const { productCatalogueSettings, refetchProductCatalogueSettings } =
+    useProductCatalogueSettings();
 
   const isHost = hostId === currentUserId;
   const isCoHost = coHostId === currentUserId;
 
-  const canManageProducts =
-    productCatalogueSettings?.product.enabled &&
-    (isHost || (isCoHost && coHost?.canManageProductTags));
+  const isHostOrCoHostWithProductManagement = isHost || (isCoHost && coHost?.canManageProductTags);
 
   const pinnedProductId = subscribedPost?.pinnedProductId;
 
@@ -183,6 +184,7 @@ export const LivestreamChatMessageComposer = ({
   const [isSpacebar, setIsSpacebar] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoadingMembership, setIsLoadingMembership] = useState(true);
+  const [isProductTagButtonHidden, setIsProductTagButtonHidden] = useState(false);
 
   const hasProductTags = subscribedPost?.productTags && subscribedPost?.productTags.length > 0;
 
@@ -190,6 +192,12 @@ export const LivestreamChatMessageComposer = ({
     pageId,
     componentId,
   });
+
+  useEffect(() => {
+    if (productCatalogueSettings?.product.enabled) {
+      setIsProductTagButtonHidden(false);
+    }
+  }, [productCatalogueSettings?.product.enabled]);
 
   const canReact = ((!isHost && !isCoHost) || isPlayer) && (isEmpty || isMuted);
 
@@ -395,6 +403,19 @@ export const LivestreamChatMessageComposer = ({
     }, 50);
   };
 
+  const ensureCatalogueEnabledOrWarn = useCallback(async () => {
+    const latestSettings = await refetchProductCatalogueSettings();
+    if (!latestSettings?.product.enabled) {
+      setIsProductTagButtonHidden(true);
+      warning({
+        title: 'Product tagging isn’t available',
+        content: 'Any products you’ve tagged will be removed and won’t be shown to viewers.',
+      });
+      return false;
+    }
+    return true;
+  }, [refetchProductCatalogueSettings, warning]);
+
   const renderContent = useCallback(() => {
     if (isChannelLoading || isLoadingMembership) return null;
 
@@ -438,9 +459,9 @@ export const LivestreamChatMessageComposer = ({
           data-is-host={isHost && !isPlayer}
         >
           {/* Product tagging button */}
-          {!hasProductTags && !canManageProducts ? null : (
+          {!isProductTagButtonHidden && (hasProductTags || isHostOrCoHostWithProductManagement) && (
             <div className={styles.livestreamChatMessageComposer__productTaggingButton__wrapper}>
-              {canManageProducts ? (
+              {isHostOrCoHostWithProductManagement ? (
                 <ActionButton
                   pageId={pageId}
                   componentId={componentId}
@@ -449,7 +470,8 @@ export const LivestreamChatMessageComposer = ({
                   defaultIcon={<TagOutlined />}
                   isDisabled={disabled}
                   color="secondary"
-                  onPress={() => {
+                  onPress={async () => {
+                    if (!(await ensureCatalogueEnabledOrWarn())) return;
                     openPopup({
                       pageId,
                       id: 'manage_product_tagging_popup',
@@ -468,7 +490,8 @@ export const LivestreamChatMessageComposer = ({
                 />
               ) : (
                 hasProductTags &&
-                room && (
+                room &&
+                !isHost && (
                   <ActionButton
                     pageId={pageId}
                     componentId={componentId}
@@ -477,7 +500,8 @@ export const LivestreamChatMessageComposer = ({
                     defaultIcon={<TagOutlined />}
                     isDisabled={disabled}
                     color="secondary"
-                    onPress={() =>
+                    onPress={async () => {
+                      if (!(await ensureCatalogueEnabledOrWarn())) return;
                       openPopup({
                         pageId,
                         id: 'product_tag_list_popup',
@@ -495,12 +519,12 @@ export const LivestreamChatMessageComposer = ({
                             sourceId={room.roomId}
                           />
                         ),
-                      })
-                    }
+                      });
+                    }}
                   />
                 )
               )}
-              {hasProductTags && (
+              {hasProductTags && productCatalogueSettings?.product.enabled && (
                 <div className={styles.livestreamChatMessageComposer__productTaggingButton__badge}>
                   {subscribedPost?.productTags?.length}
                 </div>
@@ -598,6 +622,8 @@ export const LivestreamChatMessageComposer = ({
     invitationByMe?.status,
     subscribedPost,
     pinnedProductId,
+    isProductTagButtonHidden,
+    productCatalogueSettings?.product.enabled,
   ]);
 
   return (

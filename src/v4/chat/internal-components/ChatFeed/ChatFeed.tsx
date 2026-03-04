@@ -20,6 +20,7 @@ import { useTaggingProduct } from '~/v4/social/hooks/useTaggingProduct';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -91,6 +92,8 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const { canCoHostManageProductTags } = useLivestreamModeration({
     room,
   });
+
+  const { productCatalogueSettings } = useProductCatalogueSettings();
 
   const isHost = hostId === useSDK().currentUserId;
   const isCoHost = coHostId === useSDK().currentUserId;
@@ -171,7 +174,11 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const isEmpty = !loading && messages?.length === 0;
 
   const renderPinnedProductOverlay = () => {
-    if (subscribedParentPost?.feedType === 'reviewing') return null;
+    if (
+      subscribedParentPost?.feedType === 'reviewing' ||
+      !productCatalogueSettings?.product.enabled
+    )
+      return null;
     if (subscribedPost?.productTags && pinnedProductId && isShowPinnedProduct) {
       const pinnedTag = subscribedPost.productTags?.find(
         (tag) => tag.productId === pinnedProductId,
