@@ -21,6 +21,7 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
 import { MediaTabType } from '~/v4/social/constants/mediaTabs';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type ImageViewerProps = {
   pageId?: string;
@@ -46,6 +47,7 @@ export function ImageViewer({
   feedSources,
 }: ImageViewerProps) {
   const { isOwner } = usePostPermissions({ post });
+  const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
@@ -261,7 +263,7 @@ export function ImageViewer({
         </Button>
       )}
 
-      {imageFile && isOwner && (
+      {imageFile && isOwner && !isDesktop && (
         <AltTextBottomSheet file={imageFile} mode="edit" isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
     </div>
