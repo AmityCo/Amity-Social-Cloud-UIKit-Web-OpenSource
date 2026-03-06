@@ -39,6 +39,7 @@ interface PostMenuProps {
   onPostDeleted?: (post: Amity.Post) => void;
   onPollClosed?: () => void;
   isSearchPost?: boolean;
+  sharableLink?: string;
 }
 
 export const PostMenu = ({
@@ -51,6 +52,7 @@ export const PostMenu = ({
   onPostDeleted,
   onPollClosed,
   isSearchPost = false,
+  sharableLink,
 }: PostMenuProps) => {
   const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
@@ -118,6 +120,7 @@ export const PostMenu = ({
   }, [isOwner, poll]);
 
   const showCopyLinkButton = useMemo(() => {
+    if (!sharableLink) return false;
     if (post.targetType === 'user') return false;
     if (community?.isPublic && !community?.isJoined) return true;
     if (community?.isPublic && community?.isJoined) return false;
