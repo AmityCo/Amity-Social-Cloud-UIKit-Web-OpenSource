@@ -26,10 +26,12 @@ export const useProductTagSelection = <T extends MediaType = MediaType>({
     file,
     postId,
     initialProductTags,
+    remainingLimit,
   }: {
     file?: Amity.File<T>;
     postId?: string;
     initialProductTags?: Amity.ProductTag[];
+    remainingLimit?: number;
   }) => {
     const handleDone = (tags: Amity.ProductTag[]) => {
       file && onFileProductTagsChange?.(file, tags);
@@ -62,6 +64,7 @@ export const useProductTagSelection = <T extends MediaType = MediaType>({
             displayMode="desktop"
             onClose={() => closePopup(popupId)}
             onDone={handleDone}
+            remainingLimit={remainingLimit}
           />
         ),
       });
@@ -74,6 +77,7 @@ export const useProductTagSelection = <T extends MediaType = MediaType>({
             displayMode="mobile"
             onClose={() => removeDrawerData()}
             onDone={handleDone}
+            remainingLimit={remainingLimit}
           />
         ),
       });

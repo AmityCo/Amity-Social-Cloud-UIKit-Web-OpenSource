@@ -239,6 +239,23 @@ export function CreatePost({
     return Array.from(productMap.values());
   }, [files, productTags]);
 
+  const mediaOnlyProductCount = useMemo(() => {
+    const textProductIds = new Set(productTags?.map((tag) => tag.productId) ?? []);
+    const mediaOnlyProducts = new Set<string>();
+
+    files.forEach((file) => {
+      if (file.productTags) {
+        file.productTags.forEach((tag) => {
+          if (!textProductIds.has(tag.productId)) {
+            mediaOnlyProducts.add(tag.productId);
+          }
+        });
+      }
+    });
+
+    return mediaOnlyProducts.size;
+  }, [files, productTags]);
+
   async function onCreatePost({ removeTag }: { removeTag?: boolean } = {}) {
     if (textValue.text?.length > MAXIMUM_POST_CHARACTERS) {
       setPostErrorText('You have reached the maximum of 50,000 characters in a post.');
@@ -563,7 +580,9 @@ export function CreatePost({
                 }));
                 setTextValue((prev) => ({ ...prev, links }));
               }}
-              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - (productTags?.length ?? 0)}
+              // max = 20 - tags count in media feeds (if there are those tags in media tag)
+
+              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - mediaOnlyProductCount}
               initialProductMentions={productTags}
             />
           </div>
@@ -575,6 +594,7 @@ export function CreatePost({
             onAltTextChange={handleAltTextChange}
             onFileProductTagsChange={handleProductTagsChange}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
           />
           <VideoThumbnail
             files={files}
@@ -583,6 +603,7 @@ export function CreatePost({
             removeFile={removeFile}
             onFileProductTagsChange={handleProductTagsChange}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
           />
         </div>
         <div className={styles.createPost__attachment}>

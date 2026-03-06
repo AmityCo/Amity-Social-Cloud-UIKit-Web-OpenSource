@@ -33,6 +33,7 @@ type ImageThumbnailProps = {
   isImagePollPost?: boolean;
   ErrorImageMenuButton?: () => void;
   productTagsReachLimit?: boolean;
+  remainingLimit?: number;
 };
 
 export function ImageThumbnail({
@@ -49,6 +50,7 @@ export function ImageThumbnail({
   isImagePollPost = false,
   ErrorImageMenuButton,
   productTagsReachLimit = false,
+  remainingLimit,
 }: ImageThumbnailProps) {
   const hasNewImages = files.length > 0 && files.some((file) => isImageFile(file));
   const hasPostImages = postImages.length > 0;
@@ -75,6 +77,7 @@ export function ImageThumbnail({
           onRemovePostImage={onRemovePostImage || (() => {})}
           onChildPostProductTagsChange={onChildPostProductTagsChange}
           productTagsReachLimit={productTagsReachLimit}
+          remainingLimit={remainingLimit}
         />
       ))}
 
@@ -93,6 +96,7 @@ export function ImageThumbnail({
             onFileProductTagsChange={onFileProductTagsChange}
             isImagePollPost={isImagePollPost}
             ErrorImageMenuButton={ErrorImageMenuButton}
+            remainingLimit={remainingLimit}
             productTagsReachLimit={productTagsReachLimit}
           />
         ))}
@@ -107,6 +111,7 @@ type PostImageItemProps = {
   post: Amity.Post<'image'>;
   productTagsReachLimit?: boolean;
   onRemovePostImage: (fileId: string) => void;
+  remainingLimit?: number;
   onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
 };
 
@@ -116,6 +121,7 @@ function PostImageItem({
   totalImages,
   componentId,
   productTagsReachLimit,
+  remainingLimit,
   onRemovePostImage,
   onChildPostProductTagsChange,
 }: PostImageItemProps) {
@@ -126,7 +132,11 @@ function PostImageItem({
   });
 
   const handleProductTagClick = () => {
-    openProductTagSelection({ postId: post.postId, initialProductTags: post.productTags });
+    openProductTagSelection({
+      postId: post.postId,
+      initialProductTags: post.productTags,
+      remainingLimit,
+    });
   };
 
   if (!file || !post.postId) return null;
@@ -174,6 +184,7 @@ type FileImageItemProps = {
   isImagePollPost?: boolean;
   ErrorImageMenuButton?: () => void;
   productTagsReachLimit?: boolean;
+  remainingLimit?: number;
 };
 
 function FileImageItem({
@@ -186,6 +197,7 @@ function FileImageItem({
   onAltTextChange,
   onFileProductTagsChange,
   ErrorImageMenuButton,
+  remainingLimit,
   isImagePollPost = false,
   productTagsReachLimit = false,
 }: FileImageItemProps) {
@@ -198,7 +210,11 @@ function FileImageItem({
 
   const handleProductTagClick = () => {
     if (!isAmityFile(file.file)) return;
-    openProductTagSelection({ file: file.file, initialProductTags: file.productTags });
+    openProductTagSelection({
+      file: file.file,
+      initialProductTags: file.productTags,
+      remainingLimit,
+    });
   };
 
   return (

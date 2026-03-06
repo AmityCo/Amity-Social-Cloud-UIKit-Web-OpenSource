@@ -17,6 +17,7 @@ const PostVideoThumbnail = ({
   totalVideos,
   onChildPostProductTagsChange,
   productTagsReachLimit,
+  remainingLimit,
 }: {
   post: Amity.Post<'video'>;
   pageId: string;
@@ -25,6 +26,7 @@ const PostVideoThumbnail = ({
   totalVideos: number;
   onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
   productTagsReachLimit?: boolean;
+  remainingLimit?: number;
 }) => {
   const thumbnailUrl = useImage({ fileId: post.data?.thumbnailFileId });
   const { openProductTagSelection } = useProductTagSelection<'video'>({
@@ -33,7 +35,11 @@ const PostVideoThumbnail = ({
   });
 
   const handleProductTagClick = () => {
-    openProductTagSelection({ postId: post.postId, initialProductTags: post.productTags });
+    openProductTagSelection({
+      postId: post.postId,
+      initialProductTags: post.productTags,
+      remainingLimit,
+    });
   };
 
   if (!thumbnailUrl || !post.postId) return null;
@@ -78,6 +84,7 @@ interface VideoThumbnailProps {
   onFileProductTagsChange?: (file: Amity.File<'video'>, productTags: Amity.ProductTag[]) => void;
   onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
   productTagsReachLimit?: boolean;
+  remainingLimit?: number;
 }
 
 export const VideoThumbnail = ({
@@ -91,6 +98,7 @@ export const VideoThumbnail = ({
   onFileProductTagsChange,
   onChildPostProductTagsChange,
   productTagsReachLimit = false,
+  remainingLimit,
 }: VideoThumbnailProps) => {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
   const { openProductTagSelection } = useProductTagSelection<'video'>({
@@ -103,6 +111,7 @@ export const VideoThumbnail = ({
     openProductTagSelection({
       file: file.file as Amity.File<'video'>,
       initialProductTags: file.productTags,
+      remainingLimit,
     });
   };
 
@@ -141,6 +150,7 @@ export const VideoThumbnail = ({
           totalVideos={totalVideos}
           onChildPostProductTagsChange={onChildPostProductTagsChange}
           productTagsReachLimit={productTagsReachLimit}
+          remainingLimit={remainingLimit}
         />
       ))}
 

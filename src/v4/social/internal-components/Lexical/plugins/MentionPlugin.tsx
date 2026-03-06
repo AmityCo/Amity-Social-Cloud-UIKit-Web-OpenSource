@@ -118,6 +118,7 @@ export class MentionTypeaheadOption<T> extends MenuOption {
 
 function countMentions(type: 'user' | 'product' = 'user'): number {
   let count = 0;
+  const uniqueProductIds = new Set<string>();
   const root = $getRoot();
 
   function traverse(node: any) {
@@ -127,7 +128,7 @@ function countMentions(type: 'user' | 'product' = 'user'): number {
       if (type === 'user' && 'userId' in data && data.userId) {
         count++;
       } else if (type === 'product' && 'productId' in data && data.productId) {
-        count++;
+        uniqueProductIds.add(data.productId);
       }
     }
     if ($isElementNode(node)) {
@@ -139,7 +140,7 @@ function countMentions(type: 'user' | 'product' = 'user'): number {
   }
 
   traverse(root);
-  return count;
+  return type === 'product' ? uniqueProductIds.size : count;
 }
 
 export function MentionPlugin<
