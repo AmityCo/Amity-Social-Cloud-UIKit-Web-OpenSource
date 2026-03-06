@@ -55,6 +55,7 @@ import {
 } from '~/v4/social/features/livestream/internal-components';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -650,6 +651,9 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                                         isJoinedCommunity={!!community?.isJoined}
                                       />
                                     )}
+                                    <div className={styles.liveStreamPlayer__pinnedProduct}>
+                                      <PinnedProductOverlay pageId={pageId} />
+                                    </div>
                                   </div>
                                 </>
                               )}

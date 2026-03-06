@@ -6,6 +6,7 @@ import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import styles from './LivestreamChat.module.css';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
+import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
 
 export interface LivestreamChatProps {
   pageId: string;
@@ -41,13 +42,18 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
   return (
     <div className={styles.livestreamChat__container}>
       <div className={styles.livestreamChat__container__inner}>
-        <ChatFeed
-          pageId={pageId}
-          componentId={componentId}
-          channel={channel}
-          isJoinedCommunity={!!community?.isJoined}
-          isLoading={isLoading || isPoorConnection}
-        />
+        <div className={styles.livestreamChat__chatFeedWrapper}>
+          <ChatFeed
+            pageId={pageId}
+            componentId={componentId}
+            channel={channel}
+            isJoinedCommunity={!!community?.isJoined}
+            isLoading={isLoading || isPoorConnection}
+          />
+          <div className={styles.livestreamChat__chatFeedWrapper__pinnedProduct}>
+            <PinnedProductOverlay pageId={pageId} componentId={componentId} />
+          </div>
+        </div>
         <LivestreamChatMessageComposer
           pageId={pageId}
           channelId={channel.channelId}
