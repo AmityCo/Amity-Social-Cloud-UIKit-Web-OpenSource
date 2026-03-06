@@ -29,8 +29,9 @@
 
 .liveStreamPlayer__player__wrapper {
   position: relative;
-  height: 100dvh;
+  height: 100%;
   width: 100dvw;
+  min-height: 0;
 }
 
 .liveStreamPlayer__cameraSection__wrapper {
@@ -69,7 +70,7 @@
   background-color: transparent;
   width: 100%;
   height: 40%;
-  bottom: 0;
+  bottom: 4.5rem;
   display: flex;
   flex-direction: column;
   z-index: 10;
@@ -107,6 +108,10 @@
 
 .liveStreamPlayer__videoSection__wrapper {
   height: 100%;
+}
+
+.liveStreamPlayer__pinnedProduct {
+  padding: 0 1rem 0.5rem;
 }
 
 @media only screen and (width >= 48em) {
