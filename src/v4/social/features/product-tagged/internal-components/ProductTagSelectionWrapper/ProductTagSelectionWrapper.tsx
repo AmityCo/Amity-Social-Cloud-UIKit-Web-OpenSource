@@ -21,6 +21,7 @@ interface ProductTagSelectionWrapperProps {
   isFromManageTagList?: boolean;
   isShowSearchProduct?: boolean;
   isHost?: boolean;
+  remainingLimit?: number;
 }
 
 export function ProductTagSelectionWrapper({
@@ -41,6 +42,7 @@ export function ProductTagSelectionWrapper({
   isFromManageTagList,
   isShowSearchProduct = false,
   isHost = false,
+  remainingLimit,
 }: ProductTagSelectionWrapperProps) {
   // Merge and deduplicate initialProductTags with alreadyTaggedProducts
   const mergedTags = useMemo(
@@ -84,6 +86,7 @@ export function ProductTagSelectionWrapper({
       onUpdateProductTags={onUpdateProductTags}
       onRemoveProduct={onRemoveProduct}
       maxCount={maxCount}
+      remainingLimit={remainingLimit}
       pinnedProductId={pinnedProductId}
       onPinnedProductIdChange={onPinnedProductIdChange}
       isFromManageTagList={isFromManageTagList}

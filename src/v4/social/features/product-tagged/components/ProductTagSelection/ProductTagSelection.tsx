@@ -51,6 +51,7 @@ export interface ProductTagSelectionProps {
   isShowSearch?: boolean; // Only used for livestream mode to determine whether to show search or the "No products tagged yet" screen
   isHost?: boolean;
   onRemoveProduct?: (productTag: Amity.ProductTag) => void;
+  remainingLimit?: number; // The remaining number of products that can be selected
 }
 
 const DEBOUNCE_DELAY = 300;
@@ -73,6 +74,7 @@ export function ProductTagSelection({
   isShowSearch = false,
   isHost = false,
   onRemoveProduct,
+  remainingLimit,
 }: ProductTagSelectionProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_SELECTION;
   const { themeStyles, accessibilityId, config, isExcluded } = useAmityComponent({
@@ -475,6 +477,16 @@ export function ProductTagSelection({
                     const isSelected = selectedProductIds.has(product.productId);
 
                     const isDisabled = (() => {
+                      // Already selected items should not be disabled (they can be deselected)
+                      if (isSelected) return false;
+
+                      // If remainingLimit is provided, use it to determine if we can select more
+                      if (remainingLimit !== undefined) {
+                        // Total allowed = remainingLimit + initial selection count
+                        const totalAllowed = remainingLimit + initialProductTagsRef.current.length;
+                        return selectedProductIds.size >= totalAllowed;
+                      }
+
                       if (isFromManageTagList) {
                         // If product is in original selectedProductTags, disable it (can't modify from here)
                         if (
@@ -483,7 +495,7 @@ export function ProductTagSelection({
                           return true;
                         }
                         // For new selections, check against maxCount
-                        if (!isSelected && maxCount) {
+                        if (maxCount) {
                           return (
                             [...localSelectedProduct, ...(selectedProductTags || [])].length >=
                             maxCount
@@ -493,7 +505,7 @@ export function ProductTagSelection({
                       }
 
                       // Normal behavior when not from ManageTagList
-                      if (!isSelected && maxCount) {
+                      if (maxCount) {
                         const totalSelected =
                           mode === 'livestream'
                             ? [...localSelectedProduct, ...(selectedProductTags || [])].length
@@ -501,7 +513,7 @@ export function ProductTagSelection({
                         return totalSelected >= maxCount;
                       }
 
-                      return !isSelected && (selectedProductTags || []).length >= MAX_PRODUCTS;
+                      return (selectedProductTags || []).length >= MAX_PRODUCTS;
                     })();
 
                     return (

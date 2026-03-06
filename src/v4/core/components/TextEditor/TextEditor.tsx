@@ -71,15 +71,6 @@ export interface UrlHighlight {
   end: number;
 }
 
-// Product mention metadata (AmityTextProductTag)
-export interface AmityTextProductTag {
-  productId: string;
-  product?: Amity.Product;
-  text: string;
-  index: number;
-  length: number;
-}
-
 export interface TextEditorProps {
   // Required
   editorContentType: EditorContentType;
@@ -96,7 +87,7 @@ export interface TextEditorProps {
   urlHighlights?: UrlHighlight[];
   enableProductMention?: boolean;
   maxUniqueProductMentions?: number;
-  initialProductMentions?: AmityTextProductTag[];
+  initialProductMentions?: Amity.TextProductTag[];
   initialHashtags?: Amity.Hashtag[];
   suggestionDisplayMode?: SuggestionDisplayMode;
   suggestionMaxRows?: number;
@@ -135,7 +126,7 @@ export interface TextEditorHandle {
   getMentioned: () => Mentioned[];
   getMentionUserIds: () => string[];
   getText: () => string;
-  getProductMentions: () => AmityTextProductTag[];
+  getProductMentions: () => Amity.TextProductTag[];
   getUniqueProductIds: () => string[];
   getHashtags: () => Amity.Hashtag[];
   getHashtagTexts: () => string[];

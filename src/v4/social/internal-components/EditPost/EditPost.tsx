@@ -135,15 +135,17 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
-  const [productTags, setProductTags] = useState<Amity.ProductTag[] | undefined>(post.productTags);
+  const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>(
+    post.productTags as Amity.TextProductTag[],
+  );
 
   const allProductTags = useMemo(() => {
-    const productMap = new Map<string, Amity.TextProductTag | Amity.MediaProductTag>();
+    const productMap = new Map<string, Amity.ProductTag>();
 
     if (productTags) {
       productTags.forEach((tag) => {
-        if (!productMap.has(tag.productId)) {
-          productMap.set(tag.productId, tag);
+        if (tag.product?._id && !productMap.has(tag.product?._id)) {
+          productMap.set(tag.product?._id, tag);
         }
       });
     }
@@ -151,8 +153,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     files.forEach((file) => {
       if (file.productTags) {
         file.productTags.forEach((tag) => {
-          if (!productMap.has(tag.productId)) {
-            productMap.set(tag.productId, tag);
+          if (tag.product?._id && !productMap.has(tag.product?._id)) {
+            productMap.set(tag.product?._id, tag);
           }
         });
       }
@@ -160,22 +162,55 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
     postImages.forEach((post) => {
       post.productTags.forEach((tag) => {
-        if (!productMap.has(tag.productId)) {
-          productMap.set(tag.productId, tag);
+        if (tag.product?._id && !productMap.has(tag.product?._id)) {
+          productMap.set(tag.product?._id, tag);
         }
       });
     });
 
     postVideos.forEach((post) => {
       post.productTags.forEach((tag) => {
-        if (!productMap.has(tag.productId)) {
-          productMap.set(tag.productId, tag);
+        if (tag.product?._id && !productMap.has(tag.product?._id)) {
+          productMap.set(tag.product?._id, tag);
         }
       });
     });
 
     return Array.from(productMap.values());
   }, [postImages, postVideos, productTags, files]);
+
+  const mediaOnlyProductCount = useMemo(() => {
+    const textProductIds = new Set(productTags?.map((tag) => tag.product?._id) ?? []);
+    const mediaOnlyProducts = new Set<string>();
+
+    files.forEach((file) => {
+      if (file.productTags) {
+        file.productTags.forEach((tag) => {
+          if (tag.product?._id && !textProductIds.has(tag.product?._id)) {
+            mediaOnlyProducts.add(tag.product?._id);
+          }
+        });
+      }
+    });
+
+    postImages.forEach((post) => {
+      post.productTags?.forEach((tag) => {
+        if (tag.product && !textProductIds.has(tag.product._id)) {
+          mediaOnlyProducts.add(tag.product?._id);
+        }
+      });
+    });
+
+    postVideos.forEach((post) => {
+      post.productTags?.forEach((tag) => {
+        if (tag.product?._id && !textProductIds.has(tag.product?._id)) {
+          mediaOnlyProducts.add(tag.product?._id);
+        }
+      });
+    });
+
+    return mediaOnlyProducts.size;
+  }, [files, productTags, postImages, postVideos]);
 
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === currentUserId) != null;
@@ -355,7 +390,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       ? undefined
       : productTags?.length
         ? productTags.map((productTag) => {
-            const { product, ...rest } = productTag as Amity.TextProductTag;
+            const { product, ...rest } = productTag;
             return rest;
           })
         : undefined;
@@ -371,7 +406,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             links: textValue.links,
-            productTags: finalProductTags as Amity.TextProductTag[],
+            productTags: finalProductTags,
           })
         : mutateUpdatePostAsync({
             data: { text: textValue.text, title: title.trim() },
@@ -383,7 +418,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
             links: textValue.links,
-            productTags: finalProductTags as Amity.TextProductTag[],
+            productTags: finalProductTags,
             attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
           });
     }
@@ -517,7 +552,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     const currentTextTags = productTags || [];
     if (originalTextTags.length !== currentTextTags.length) return true;
     const textTagsChanged = originalTextTags.some(
-      (tag, index) => tag.productId !== currentTextTags[index]?.productId,
+      (tag, index) => tag.product?._id !== currentTextTags[index]?.product?._id,
     );
     if (textTagsChanged) return true;
 
@@ -530,7 +565,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       const currentTags = currentPost.productTags || [];
       if (originalTags.length !== currentTags.length) return true;
       const tagsChanged = originalTags.some(
-        (tag, index) => tag.productId !== currentTags[index]?.productId,
+        (tag, index) => tag.product?._id !== currentTags[index]?.product?._id,
       );
       if (tagsChanged) return true;
     }
@@ -544,7 +579,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       const currentTags = currentPost.productTags || [];
       if (originalTags.length !== currentTags.length) return true;
       const tagsChanged = originalTags.some(
-        (tag, index) => tag.productId !== currentTags[index]?.productId,
+        (tag, index) => tag.product?._id !== currentTags[index]?.product?._id,
       );
       if (tagsChanged) return true;
     }
@@ -719,7 +754,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                 }));
                 setTextValue((prev) => ({ ...prev, links }));
               }}
-              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - (productTags?.length ?? 0)}
+              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - mediaOnlyProductCount}
               initialProductMentions={productTags as Amity.TextProductTag[]}
             />
           </div>
@@ -743,6 +778,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               });
             }}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
           />
           <VideoThumbnail
             files={files}
@@ -762,6 +798,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               });
             }}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
           />
         </div>
         {/* TODO: Handle file type */}
