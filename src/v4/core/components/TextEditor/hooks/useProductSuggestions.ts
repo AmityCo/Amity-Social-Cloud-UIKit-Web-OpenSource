@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { SEARCH_PRODUCT_MINIMUM_CHARACTER } from '~/social/constants';
 import { useSearchProducts } from '~/v4/social/features/product-tagged/hooks';
 
 export interface ProductSuggestionData {
@@ -21,7 +22,7 @@ export const useProductSuggestions = (enabled: boolean = true) => {
     isDeleted: false,
     limit: 10,
     shouldCall: enabled,
-    minKeywordLength: 3,
+    minKeywordLength: SEARCH_PRODUCT_MINIMUM_CHARACTER,
   });
 
   const onQueryChange = (newQuery: string | null) => {

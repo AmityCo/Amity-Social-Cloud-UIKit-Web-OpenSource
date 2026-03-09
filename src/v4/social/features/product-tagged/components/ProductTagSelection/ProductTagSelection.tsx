@@ -29,6 +29,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
 import { useNetworkState } from 'react-use';
+import { NoResultLight } from '~/v4/icons/NoResultLight';
 
 export type ProductTagSelectionMode = 'create' | 'edit' | 'livestream';
 
@@ -464,9 +465,20 @@ export function ProductTagSelection({
             />
             <div className={styles.productTagSelection__results}>
               {showEmpty ? (
-                <ProductTagEmpty pageId={pageId} componentId={componentId} />
+                <ProductTagEmpty
+                  pageId={pageId}
+                  componentId={componentId}
+                  variant="bodyBold"
+                  iconSize="medium"
+                />
               ) : showNoResult ? (
-                <ProductTagNoResult pageId={pageId} componentId={componentId} />
+                <ProductTagNoResult
+                  pageId={pageId}
+                  componentId={componentId}
+                  iconSize="medium"
+                  variant="bodyBold"
+                  icon={<NoResultLight />}
+                />
               ) : (
                 <div
                   className={styles.productTagSelection__list}

@@ -49,6 +49,11 @@
   padding: 0.75rem;
 }
 
+.mentionList__noResult {
+  height: 100%;
+  padding: 2rem; /* 32px */
+}
+
 .emptyState {
   padding: 2rem 1rem;
   text-align: center;
