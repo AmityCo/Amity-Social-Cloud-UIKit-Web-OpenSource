@@ -12,10 +12,12 @@ import { MentionTypeaheadOption } from '~/v4/social/internal-components/Lexical/
 import styles from './MentionMenu.module.css';
 import { ProductTagEmpty, ProductTagNoResult } from '~/v4/social/features/product-tagged';
 import { ProductMentionItem } from './ProductMentionItem';
+import { NoResultFound } from '~/v4/social/internal-components/NoResultFound';
 import {
   UserListItemSkeleton,
   ProductMentionItemSkeleton,
 } from '~/v4/social/internal-components/Skeleton';
+import { SEARCH_PRODUCT_MINIMUM_CHARACTER } from '~/social/constants';
 
 export interface MentionMenuProps<T> {
   menuRenderRef: React.RefObject<HTMLElement>;
@@ -249,16 +251,22 @@ export function MentionMenu<T>({
           <div ref={containerRef} className={styles.mentionContainer}>
             <div className={styles.mentionContainer__inner} data-user-only={true}>
               <div className={styles.mentionList}>
-                {options.length > 0
-                  ? userMentionList
-                  : Array.from({ length: 3 }).map((_, index) => (
-                      <div
-                        key={`user-skeleton-${index}`}
-                        className={styles.mentionList__userMentionList__skeletonItem}
-                      >
-                        <UserListItemSkeleton key={index} />
-                      </div>
-                    ))}
+                {options.length > 0 ? (
+                  userMentionList
+                ) : !isLoadingUsers ? (
+                  <div className={styles.mentionList__noResult}>
+                    <NoResultFound />
+                  </div>
+                ) : (
+                  Array.from({ length: 3 }).map((_, index) => (
+                    <div
+                      key={`user-skeleton-${index}`}
+                      className={styles.mentionList__userMentionList__skeletonItem}
+                    >
+                      <UserListItemSkeleton key={index} />
+                    </div>
+                  ))
+                )}
               </div>
             </div>
             <Button
@@ -292,16 +300,22 @@ export function MentionMenu<T>({
                   accessibilityId: 'mention-menu-users-tab',
                   content: () => (
                     <div className={styles.mentionList}>
-                      {options.length > 0
-                        ? userMentionList
-                        : Array.from({ length: 3 }).map((_, index) => (
-                            <div
-                              key={`user-skeleton-${index}`}
-                              className={styles.mentionList__userMentionList__skeletonItem}
-                            >
-                              <UserListItemSkeleton key={index} />
-                            </div>
-                          ))}
+                      {options.length > 0 ? (
+                        userMentionList
+                      ) : !isLoadingUsers ? (
+                        <div className={styles.mentionList__noResult}>
+                          <NoResultFound />
+                        </div>
+                      ) : (
+                        Array.from({ length: 3 }).map((_, index) => (
+                          <div
+                            key={`user-skeleton-${index}`}
+                            className={styles.mentionList__userMentionList__skeletonItem}
+                          >
+                            <UserListItemSkeleton key={index} />
+                          </div>
+                        ))
+                      )}
                     </div>
                   ),
                 },
@@ -313,7 +327,7 @@ export function MentionMenu<T>({
                     const queryLength = queryString?.length || 0;
 
                     // Show empty state if query is too short
-                    if (queryLength < 3) {
+                    if (queryLength < SEARCH_PRODUCT_MINIMUM_CHARACTER) {
                       return (
                         <div className={styles.mentionList}>
                           <ProductTagEmpty />

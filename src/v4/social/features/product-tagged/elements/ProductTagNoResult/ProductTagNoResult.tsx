@@ -1,18 +1,23 @@
 import React from 'react';
-import { Typography } from '~/v4/core/components';
-import { NoResultIcon } from '~/v4/icons/NoResult';
 import styles from './ProductTagNoResult.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { PAGE_ID, COMPONENT_ID, ELEMENT_ID } from '~/v4/constants/customization';
+import { NoResultFound } from '~/v4/social/internal-components/NoResultFound';
 
 export interface ProductTagNoResultProps {
   pageId?: string;
   componentId?: string;
+  icon?: React.ReactElement;
+  variant?: 'body' | 'bodyBold';
+  iconSize?: 'small' | 'medium';
 }
 
 export function ProductTagNoResult({
   pageId = PAGE_ID.WILD_CARD,
   componentId = COMPONENT_ID.WILD_CARD,
+  icon,
+  variant,
+  iconSize,
 }: ProductTagNoResultProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG_NO_RESULT;
   const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
@@ -25,10 +30,7 @@ export function ProductTagNoResult({
 
   return (
     <div className={styles.productTagNoResult} style={themeStyles} data-test-id={accessibilityId}>
-      <NoResultIcon className={styles.productTagNoResult__icon} />
-      <Typography.BodyBold as="p" className={styles.productTagNoResult__text}>
-        {config.text ?? 'No results found'}
-      </Typography.BodyBold>
+      <NoResultFound text={config.text} icon={icon} variant={variant} iconSize={iconSize} />
     </div>
   );
 }

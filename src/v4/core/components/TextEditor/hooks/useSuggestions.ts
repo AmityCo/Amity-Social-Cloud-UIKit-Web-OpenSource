@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import type { EditorContentType } from '~/v4/core/components/TextEditor/TextEditor';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import { SEARCH_USER_MINIMUM_CHARACTER } from '~/social/constants';
 
 export interface SuggestionData {
   userId: string;
@@ -15,6 +16,17 @@ export const useSuggestions = (
   channelId?: string,
 ) => {
   const [queryString, setQueryString] = useState<string | null>(null);
+  const lastValidUserQueryRef = useRef<string>('');
+
+  // Only update user query when empty or >= 3 characters, retain last result for 1-2 chars
+  const effectiveUserQuery = useMemo(() => {
+    const query = queryString || '';
+    if (query.length === 0 || query.length >= SEARCH_USER_MINIMUM_CHARACTER) {
+      lastValidUserQueryRef.current = query;
+      return query;
+    }
+    return lastValidUserQueryRef.current;
+  }, [queryString]);
 
   const { community, isLoading: isCommunityLoading } = useCommunity({ communityId });
 
@@ -43,7 +55,7 @@ export const useSuggestions = (
     loadMore: loadMoreUser,
     isLoading: isLoadingUser,
   } = useUserQueryByDisplayName({
-    displayName: queryString || '',
+    displayName: effectiveUserQuery,
     limit: 10,
     enabled: !isSearchCommunityMembers,
   });
