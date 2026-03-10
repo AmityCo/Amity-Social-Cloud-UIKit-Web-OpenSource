@@ -1,7 +1,27 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { ProductTagSelection } from '~/v4/social/features/product-tagged/components/ProductTagSelection';
 import { ProductTagSelectionMode } from '~/v4/social/features/product-tagged/components/ProductTagSelection/ProductTagSelection';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+
+// Helper function to check if product tags have changed
+const hasProductTagsChanged = (
+  initial: Amity.ProductTag[],
+  current: Amity.ProductTag[],
+): boolean => {
+  if (initial.length !== current.length) return true;
+
+  const initialIds = new Set(initial.map((tag) => tag.productId));
+  const currentIds = new Set(current.map((tag) => tag.productId));
+
+  if (initialIds.size !== currentIds.size) return true;
+
+  for (const id of currentIds) {
+    if (!initialIds.has(id)) return true;
+  }
+
+  return false;
+};
 
 interface ProductTagSelectionWrapperProps {
   initialProductTags: Amity.ProductTag[];
@@ -44,6 +64,8 @@ export function ProductTagSelectionWrapper({
   isHost = false,
   remainingLimit,
 }: ProductTagSelectionWrapperProps) {
+  const { confirm } = useConfirmContext();
+
   // Merge and deduplicate initialProductTags with alreadyTaggedProducts
   const mergedTags = useMemo(
     () =>
@@ -70,6 +92,35 @@ export function ProductTagSelectionWrapper({
     onDone?.(currentProductTags);
   };
 
+  const handleClose = useCallback(
+    (selectedProducts: Amity.ProductTag[], hasChanges?: boolean) => {
+      // For livestream mode: compare mergedTags with selectedProducts (localSelectedProduct)
+      // For non-livestream mode: use hasChanges passed from ProductTagSelection
+      const hasUnsavedChanges =
+        mode === 'livestream'
+          ? hasProductTagsChanged(mergedTags, selectedProducts)
+          : hasChanges ?? false;
+
+      if (hasUnsavedChanges) {
+        confirm({
+          type: 'confirm',
+          title: 'Discard product tags',
+          content:
+            "You have tagged products that haven't been saved yet. If you leave now, your changes will be lost.",
+          okText: 'Discard',
+          cancelText: 'Keep editing',
+          okButtonColor: 'alert',
+          onOk: () => {
+            onClose(mergedTags, false);
+          },
+        });
+      } else {
+        onClose(selectedProducts, false);
+      }
+    },
+    [confirm, mergedTags, onClose, mode],
+  );
+
   return (
     <ProductTagSelection
       renderMode={renderMode}
@@ -77,7 +128,9 @@ export function ProductTagSelectionWrapper({
       pageId={pageId}
       displayMode={displayMode}
       mode={mode}
-      onClose={(selectedProducts) => onClose(selectedProducts ?? currentProductTags)}
+      onClose={(selectedProducts, hasChanges) =>
+        handleClose(selectedProducts ?? currentProductTags, hasChanges)
+      }
       onDone={handleDone}
       onTagChanges={(tags) => {
         setCurrentProductTags(tags);
