@@ -497,13 +497,6 @@ export function ProductTagSelection({
                       // Already selected items should not be disabled (they can be deselected)
                       if (isSelected) return false;
 
-                      // If remainingLimit is provided, use it to determine if we can select more
-                      if (remainingLimit !== undefined) {
-                        // Total allowed = remainingLimit + initial selection count
-                        const totalAllowed = remainingLimit + initialProductTagsRef.current.length;
-                        return selectedProductIds.size >= totalAllowed;
-                      }
-
                       if (isFromManageTagList) {
                         // If product is in original selectedProductTags, disable it (can't modify from here)
                         if (
@@ -522,15 +515,22 @@ export function ProductTagSelection({
                       }
 
                       // Normal behavior when not from ManageTagList
-                      if (maxCount) {
-                        const totalSelected =
-                          mode === 'livestream'
-                            ? [...localSelectedProduct, ...(selectedProductTags || [])].length
-                            : (selectedProductTags || []).length;
-                        return totalSelected >= maxCount;
-                      }
+                      // Calculate the effective limit considering both MAX_PRODUCTS and remainingLimit
+                      const effectiveLimit = (() => {
+                        if (remainingLimit !== undefined) {
+                          // Total allowed = remainingLimit + initial products (since they're already counted in quota)
+                          const totalAllowed =
+                            remainingLimit + initialProductTagsRef.current.length;
+                          return Math.min(MAX_PRODUCTS, totalAllowed);
+                        }
+                        return maxCount ?? MAX_PRODUCTS;
+                      })();
 
-                      return (selectedProductTags || []).length >= MAX_PRODUCTS;
+                      const totalSelected =
+                        mode === 'livestream'
+                          ? [...localSelectedProduct, ...(selectedProductTags || [])].length
+                          : (selectedProductTags || []).length;
+                      return totalSelected >= effectiveLimit;
                     })();
 
                     return (
