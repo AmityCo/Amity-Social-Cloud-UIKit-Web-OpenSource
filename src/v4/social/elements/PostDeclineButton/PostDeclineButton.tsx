@@ -40,7 +40,7 @@ export const PostDeclineButton = ({
         data-testid={accessibilityId}
         className={styles.postDeclineButton__text}
       >
-        {config?.text}
+        {config?.text ?? 'Decline'}
       </Typography.BodyBold>
     </Button>
   );

@@ -38,7 +38,7 @@ export const PostAcceptButton = ({
         data-testid={accessibilityId}
         className={styles.postAcceptButton__text}
       >
-        {config?.text}
+        {config?.text ?? 'Accept'}
       </Typography.BodyBold>
     </Button>
   );
