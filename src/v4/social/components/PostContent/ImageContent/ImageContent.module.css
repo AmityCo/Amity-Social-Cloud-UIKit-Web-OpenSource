@@ -8,7 +8,7 @@
 
 .imageContent[data-images-amount='1'] {
   aspect-ratio: 1;
-  grid-template: 'image1' / minmax(0, 1fr);
+  grid-template: 'image1' 1fr / minmax(0, 1fr);
 }
 
 .imageContent[data-images-amount='2'] {
@@ -45,6 +45,7 @@
 .imageContent__imgContainer {
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 }
 
 .imageContent__imgContainer:nth-child(1) {
