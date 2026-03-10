@@ -42,7 +42,7 @@ export interface ProductTagSelectionProps {
   displayMode?: DisplayMode;
   mode?: ProductTagSelectionMode;
   onDone?: () => void;
-  onClose?: (selectedProducts?: Amity.ProductTag[]) => void;
+  onClose?: (selectedProducts?: Amity.ProductTag[], hasChanges?: boolean) => void;
   pageId?: string;
   maxCount?: number;
   isFromManageTagList?: boolean;
@@ -393,7 +393,12 @@ export function ProductTagSelection({
               : maxCount
             : MAX_PRODUCTS
         }
-        onClose={() => onClose?.(localSelectedProduct)}
+        onClose={() =>
+          onClose?.(
+            localSelectedProduct,
+            mode === 'livestream' ? localSelectedProduct.length > 0 : hasProductTagsChanged,
+          )
+        }
         onDone={onDone}
         pageId={pageId}
         componentId={componentId}

@@ -19,7 +19,6 @@ import CameraMovie from '~/v4/icons/CameraMovie';
 import { TagOutlined } from '~/v4/icons/TagOutlined';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 
@@ -83,7 +82,6 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   const MAX_PRODUCTS = 20;
   const { uploadSingleImage, isUploading } = useImageUpload();
   const { openPopup, closePopup } = usePopupContext();
-  const { confirm } = useConfirmContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -166,33 +164,6 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
     return null;
   }, [localFile]);
 
-  const onCloseAddProductTag = useCallback(
-    (currentTags: Amity.ProductTag[], hasLocalChanges?: boolean) => {
-      // Check if there are unsaved changes based on hasLocalChanges parameter or currentTags
-
-      const hasUnsavedChanges = hasLocalChanges ?? currentTags.length > 0;
-
-      if (hasUnsavedChanges) {
-        confirm({
-          type: 'confirm',
-          title: 'Discard product selection?',
-          content:
-            "You have products selected that haven't been added yet. If you close now, your selection will be lost.",
-          okText: 'Discard',
-          cancelText: 'Keep editing',
-          okButtonColor: 'alert',
-          onOk: () => {
-            closePopup();
-          },
-        });
-      } else {
-        onProductTagsChange?.(currentTags);
-        closePopup();
-      }
-    },
-    [closePopup, confirm, productTags, onProductTagsChange],
-  );
-
   const handleOpenProductTagSelection = useCallback(() => {
     const popupId = 'product-tag-livestream';
     openPopup({
@@ -210,7 +181,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
           maxCount={MAX_PRODUCTS}
           pinnedProductId={pinnedProductId}
           onPinnedProductIdChange={onPinnedProductIdChange}
-          onClose={onCloseAddProductTag}
+          onClose={() => closePopup()}
           onDone={(tags) => {
             onProductTagsChange?.(tags);
             closePopup();
@@ -226,7 +197,6 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
     pinnedProductId,
     onProductTagsChange,
     onPinnedProductIdChange,
-    onCloseAddProductTag,
   ]);
 
   const handleOpenManageProductTags = useCallback(() => {
