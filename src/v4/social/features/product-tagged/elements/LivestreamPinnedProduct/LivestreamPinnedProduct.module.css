@@ -39,13 +39,6 @@
   z-index: 1;
 }
 
-.livestreamPinnedProduct__unavailableOverlay {
-  position: absolute;
-  inset: 0;
-  background: rgb(255 255 255 / 80%);
-  z-index: 5;
-}
-
 .livestreamPinnedProduct__title[data-unavailable='true'] {
   color: var(--asc-color-base-shade1);
 }

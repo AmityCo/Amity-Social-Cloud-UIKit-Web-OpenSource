@@ -102,6 +102,10 @@
   margin-bottom: 0.125rem;
 }
 
+.productTag__unavailableLabel[data-theme='light'] {
+  color: var(--asc-color-base-shade3);
+}
+
 .productTag__thumbnailOverlay {
   background-color: rgb(0 0 0 / 50%);
 }

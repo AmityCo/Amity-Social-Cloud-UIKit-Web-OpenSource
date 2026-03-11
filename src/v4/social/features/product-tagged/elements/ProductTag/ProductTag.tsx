@@ -13,6 +13,7 @@ import {
   LayoutVariantEnum,
 } from '~/v4/social/types';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
+import { useTheme } from '~/v4/core/providers/ThemeProvider';
 
 export interface ProductTagProps {
   product: Amity.Product;
@@ -51,6 +52,7 @@ export function ProductTag({
   const elementRef = useRef<HTMLDivElement>(null);
   const [hasMarkedAsViewed, setHasMarkedAsViewed] = useState(false);
   const { isVisible } = useVisibilitySensor({ threshold: 0.6, elementRef });
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     if (
@@ -119,7 +121,8 @@ export function ProductTag({
         size="large"
         isPinned={isPinned}
         unavailable={unavailable}
-        overlayClassName={unavailable ? styles.productTag__thumbnailOverlay : undefined}
+
+        // overlayClassName={unavailable ? styles.productTag__thumbnailOverlay : undefined}
       />
       <div
         className={styles.productTag__information}
@@ -134,7 +137,11 @@ export function ProductTag({
         >
           <div className={styles.productTag__textContent}>
             {unavailable && (
-              <Typography.Caption as="p" className={styles.productTag__unavailableLabel}>
+              <Typography.Caption
+                as="p"
+                className={styles.productTag__unavailableLabel}
+                data-theme={currentTheme}
+              >
                 Unlisted
               </Typography.Caption>
             )}
