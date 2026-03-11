@@ -30,6 +30,7 @@ export function ProductTagSelectedItem({
   const product = productTag.product;
   const imageUrl = product?.thumbnailUrl;
   const productName = product?.productName;
+  const unavailable = product?.status === 'archived';
 
   return (
     <div
@@ -42,10 +43,24 @@ export function ProductTagSelectedItem({
         alt={productName}
         size="medium"
         thumbnailMode={product?.thumbnailMode}
+        unavailable={unavailable}
       />
-      <Typography.BodyBold as="p" className={styles.productTagSelectedItem__name}>
-        {productName}
-      </Typography.BodyBold>
+
+      <div className={styles.productTagSelectedItem__textContent}>
+        {unavailable && (
+          <Typography.Caption as="p" className={styles.productTagSelectedItem__unavailableLabel}>
+            Unlisted
+          </Typography.Caption>
+        )}
+        <Typography.BodyBold
+          as="p"
+          className={styles.productTagSelectedItem__name}
+          data-unavailable={unavailable}
+        >
+          {productName}
+        </Typography.BodyBold>
+      </div>
+
       <ActionButton
         className={styles.productTagSelectedItem__removeButton}
         onPress={() => onClick?.(productTag)}
