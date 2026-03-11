@@ -25,3 +25,17 @@
   width: 1.5rem;
   height: 1.5rem;
 }
+
+.productTagSelectedItem__textContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.productTagSelectedItem__unavailableLabel {
+  color: var(--asc-color-base-shade1);
+}
+
+.productTagSelectedItem__name[data-unavailable='true'] {
+  color: var(--asc-color-base-shade4);
+}
