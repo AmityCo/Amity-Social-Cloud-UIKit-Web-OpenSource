@@ -86,6 +86,11 @@
   fill: currentcolor;
 }
 
+.tabIcon[data-variant='iconSmall'] {
+  width: 1rem;
+  height: 1rem;
+}
+
 .tabPanel {
   overflow: scroll;
   scrollbar-width: none;

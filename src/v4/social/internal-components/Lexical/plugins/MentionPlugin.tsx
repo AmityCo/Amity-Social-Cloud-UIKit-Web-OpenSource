@@ -211,7 +211,7 @@ export function MentionPlugin<
           if (currentMentionCount >= maxUniqueProductMentions) {
             info({
               title: 'Product tag limit reached',
-              content: `You can only tag up to ${DEFAULT_MAX_PRODUCTS} products per post.`,
+              content: `You can only tag product up to ${DEFAULT_MAX_PRODUCTS} tags per post.`,
             });
             closeMenu();
             return;
