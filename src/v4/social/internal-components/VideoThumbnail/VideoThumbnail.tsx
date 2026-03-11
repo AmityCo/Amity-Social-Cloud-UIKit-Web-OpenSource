@@ -18,6 +18,7 @@ const PostVideoThumbnail = ({
   onChildPostProductTagsChange,
   productTagsReachLimit,
   remainingLimit,
+  taggedProductIds,
 }: {
   post: Amity.Post<'video'>;
   pageId: string;
@@ -27,11 +28,13 @@ const PostVideoThumbnail = ({
   onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
   productTagsReachLimit?: boolean;
   remainingLimit?: number;
+  taggedProductIds?: string[];
 }) => {
   const thumbnailUrl = useImage({ fileId: post.data?.thumbnailFileId });
   const { openProductTagSelection } = useProductTagSelection<'video'>({
     pageId,
     onChildPostProductTagsChange,
+    taggedProductIds,
   });
 
   const handleProductTagClick = () => {
@@ -85,6 +88,7 @@ interface VideoThumbnailProps {
   onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
   productTagsReachLimit?: boolean;
   remainingLimit?: number;
+  taggedProductIds?: string[];
 }
 
 export const VideoThumbnail = ({
@@ -99,11 +103,13 @@ export const VideoThumbnail = ({
   onChildPostProductTagsChange,
   productTagsReachLimit = false,
   remainingLimit,
+  taggedProductIds,
 }: VideoThumbnailProps) => {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
   const { openProductTagSelection } = useProductTagSelection<'video'>({
     pageId,
     onFileProductTagsChange,
+    taggedProductIds,
   });
 
   const handleProductTagClick = (file: TFileItem) => {
@@ -151,6 +157,7 @@ export const VideoThumbnail = ({
           onChildPostProductTagsChange={onChildPostProductTagsChange}
           productTagsReachLimit={productTagsReachLimit}
           remainingLimit={remainingLimit}
+          taggedProductIds={taggedProductIds}
         />
       ))}
 

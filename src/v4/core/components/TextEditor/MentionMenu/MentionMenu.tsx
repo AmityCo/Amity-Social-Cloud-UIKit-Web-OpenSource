@@ -27,6 +27,7 @@ export interface MentionMenuProps<T> {
   isProductCatalogueEnabled?: boolean | null;
   queryString?: string | null;
   isLoadingProducts?: boolean;
+  taggedProductIds?: string[];
   selectedIndex: number | null;
   setHighlightedIndex: (index: number) => void;
   selectOptionAndCleanUp: (option: MentionTypeaheadOption<T>) => void;
@@ -106,6 +107,7 @@ function renderProductMentionList<T>({
   onSetIntersectionNode,
   pageId,
   componentId,
+  taggedProductIds = [],
 }: {
   options: MentionTypeaheadOption<T>[];
   selectedIndex: number | null;
@@ -115,6 +117,7 @@ function renderProductMentionList<T>({
   onSetIntersectionNode: (element: HTMLElement | null) => void;
   pageId: string;
   componentId: string;
+  taggedProductIds?: string[];
 }) {
   return options.map((option, i: number) => {
     const wrappedOption = {
@@ -127,12 +130,17 @@ function renderProductMentionList<T>({
       },
     };
 
+    const productId = (option.data as any)?.productId;
+    const isAlreadyTagged = productId ? taggedProductIds.includes(productId) : false;
+
     return (
       <ProductMentionItem
         pageId={pageId}
         componentId={componentId}
         isSelected={selectedIndex === i}
+        isAlreadyTagged={isAlreadyTagged}
         onClick={(product) => {
+          if (isAlreadyTagged) return;
           setHighlightedIndex(i);
           selectOptionAndCleanUp(option);
           if (onMentionSelected && option.data) {
@@ -156,6 +164,7 @@ export function MentionMenu<T>({
   isProductCatalogueEnabled,
   queryString = '',
   isLoadingProducts = false,
+  taggedProductIds = [],
   selectedIndex,
   setHighlightedIndex,
   selectOptionAndCleanUp,
@@ -215,6 +224,7 @@ export function MentionMenu<T>({
           },
           pageId,
           componentId,
+          taggedProductIds,
         })
       : null;
   // Intersection observer for users tab

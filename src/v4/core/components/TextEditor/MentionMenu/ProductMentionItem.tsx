@@ -14,6 +14,7 @@ export interface ProductMentionData {
 type ProductMentionItemProps = {
   pageId?: string;
   isSelected: boolean;
+  isAlreadyTagged?: boolean;
   onClick: (product: Amity.Product) => void;
   componentId?: string;
   onMouseEnter: () => void;
@@ -24,6 +25,7 @@ export function ProductMentionItem({
   option,
   onClick,
   isSelected,
+  isAlreadyTagged = false,
   onMouseEnter,
   pageId = '*',
   componentId = '*',
@@ -35,11 +37,13 @@ export function ProductMentionItem({
   return (
     <Button
       key={option.key}
-      onPress={() => onClick(product)}
+      onPress={() => !isAlreadyTagged && onClick(product)}
       ref={option.setRefElement}
       aria-selected={isSelected}
+      aria-disabled={isAlreadyTagged}
       onHoverStart={onMouseEnter}
       data-is-selected={isSelected}
+      data-is-already-tagged={isAlreadyTagged}
       className={styles.productMentionItem__item}
       data-testid={`${pageId}/${componentId}/product_mention_item`}
       variant="text"
@@ -52,9 +56,17 @@ export function ProductMentionItem({
         thumbnailMode={product.thumbnailMode}
       />
       <div className={styles.productMentionItem__content}>
-        <Typography.BodyBold className={styles.productMentionItem__name}>
+        <Typography.BodyBold
+          className={styles.productMentionItem__name}
+          data-is-already-tagged={isAlreadyTagged}
+        >
           {product.productName}
         </Typography.BodyBold>
+        {isAlreadyTagged && (
+          <Typography.Caption className={styles.productMentionItem__alreadyTagged}>
+            Already tagged
+          </Typography.Caption>
+        )}
       </div>
     </Button>
   );

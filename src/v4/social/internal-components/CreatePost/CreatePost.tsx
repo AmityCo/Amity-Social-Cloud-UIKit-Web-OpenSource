@@ -551,6 +551,7 @@ export function CreatePost({
               communityId={targetId}
               initialText={textValue.text}
               enableProductMention={true}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));
               }}
@@ -581,7 +582,6 @@ export function CreatePost({
                 setTextValue((prev) => ({ ...prev, links }));
               }}
               // max = 20 - tags count in media feeds (if there are those tags in media tag)
-
               maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - mediaOnlyProductCount}
               initialProductMentions={productTags}
             />
@@ -595,6 +595,7 @@ export function CreatePost({
             onFileProductTagsChange={handleProductTagsChange}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
             remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+            taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
           <VideoThumbnail
             files={files}
@@ -604,6 +605,7 @@ export function CreatePost({
             onFileProductTagsChange={handleProductTagsChange}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
             remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+            taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
         </div>
         <div className={styles.createPost__attachment}>

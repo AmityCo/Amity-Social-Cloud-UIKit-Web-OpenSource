@@ -13,6 +13,7 @@ export interface ProductTagSelectionItemProps {
   pageId?: string;
   componentId?: string;
   isDisabled: boolean;
+  isAlreadyTagged?: boolean;
 }
 
 export function ProductTagSelectionItem({
@@ -22,6 +23,7 @@ export function ProductTagSelectionItem({
   pageId = PAGE_ID.WILD_CARD,
   componentId = COMPONENT_ID.WILD_CARD,
   isDisabled,
+  isAlreadyTagged = false,
 }: ProductTagSelectionItemProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG_SELECTION;
   const { themeStyles, accessibilityId } = useAmityElement({
@@ -36,15 +38,16 @@ export function ProductTagSelectionItem({
 
   return (
     <Checkbox
-      isSelected={isSelected}
+      isSelected={isSelected || isAlreadyTagged}
       onChange={onChange}
-      isDisabled={isDisabled || unavailable}
+      isDisabled={isDisabled || unavailable || isAlreadyTagged}
       aria-label={`Select ${productName}`}
       className={styles.productTagSelectionItem}
       checkboxIconClassname={styles.productTagSelectionItem__checkboxIcon}
       style={themeStyles}
       data-test-id={accessibilityId}
       data-unavailable={unavailable}
+      data-already-tagged={isAlreadyTagged}
       label={
         <div className={styles.productTagSelectionItem__labelWrapper}>
           <ProductImageThumbnail
@@ -65,9 +68,21 @@ export function ProductTagSelectionItem({
                   Unavailable
                 </Typography.Caption>
               )}
-              <Typography.Body as="p" className={styles.productTagSelectionItem__name}>
+              <Typography.Body
+                as="p"
+                className={styles.productTagSelectionItem__name}
+                data-already-tagged={isAlreadyTagged}
+              >
                 {productName}
               </Typography.Body>
+              {isAlreadyTagged && (
+                <Typography.Caption
+                  as="p"
+                  className={styles.productTagSelectionItem__alreadyTaggedLabel}
+                >
+                  Already tagged
+                </Typography.Caption>
+              )}
             </div>
           </div>
         </div>

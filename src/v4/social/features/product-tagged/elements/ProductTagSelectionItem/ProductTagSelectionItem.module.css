@@ -52,6 +52,18 @@
   color: var(--asc-color-base-shade3);
 }
 
+.productTagSelectionItem[data-already-tagged='true'] {
+  cursor: not-allowed;
+}
+
+.productTagSelectionItem__name[data-already-tagged='true'] {
+  color: var(--asc-color-base-shade4);
+}
+
+.productTagSelectionItem__alreadyTaggedLabel {
+  color: var(--asc-color-base-shade1);
+}
+
 .productTagSelectionItem__checkbox {
   flex-shrink: 0;
 }

@@ -88,6 +88,7 @@ export interface TextEditorProps {
   enableProductMention?: boolean;
   maxUniqueProductMentions?: number;
   initialProductMentions?: Amity.TextProductTag[];
+  taggedProductIds?: string[];
   initialHashtags?: Amity.Hashtag[];
   suggestionDisplayMode?: SuggestionDisplayMode;
   suggestionMaxRows?: number;
@@ -148,6 +149,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       enableUrlDetection,
       enableProductMention = false,
       maxUniqueProductMentions = DEFAULT_MAX_PRODUCTS,
+      taggedProductIds = [],
       suggestionDisplayMode = 'inline',
       enableMention = true,
       maxCharacters,
@@ -219,8 +221,6 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       pageId,
       componentId,
     });
-
-    const { info } = useConfirmContext();
 
     // Get defaults for content type
     const defaults = CONTENT_TYPE_DEFAULTS[editorContentType];
@@ -585,6 +585,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
                     isProductCatalogueEnabled={isProductCatalogueEnabled}
                     queryString={productQueryString}
                     isLoadingProducts={isLoadingProducts}
+                    taggedProductIds={taggedProductIds}
                     selectedIndex={selectedIndex}
                     setHighlightedIndex={setHighlightedIndex}
                     selectOptionAndCleanUp={selectOptionAndCleanUp}
