@@ -29,7 +29,7 @@
 .editPost__formContent {
   max-height: auto;
   min-height: auto;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
 }
 
 .editPost__formContent .editPost__titleInput {
@@ -267,7 +267,7 @@
   .editPost__formContent {
     overflow-y: auto;
     max-height: 50vh;
-    min-height: 13rem;
+    min-height: 35vh;
     position: relative;
   }
 

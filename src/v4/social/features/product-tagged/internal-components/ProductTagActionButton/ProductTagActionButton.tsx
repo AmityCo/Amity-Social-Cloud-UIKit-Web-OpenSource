@@ -7,6 +7,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import styles from './ProductTagActionButton.module.css';
 import { Typography } from '~/v4/core/components';
 import clsx from 'clsx';
+import { TagLight } from '~/v4/icons/TagLight';
 
 interface ProductTagActionButtonProps {
   productTags?: Amity.ProductTag[];
@@ -31,7 +32,7 @@ export function ProductTagActionButton({
         pageId={pageId}
         className={clsx(styles.productTagActionButton__button, className)}
         size={isDesktop ? 'medium' : 'large'}
-        defaultIcon={<TagOutlined />}
+        defaultIcon={isDesktop ? <TagLight /> : <TagOutlined />}
         color="secondary"
         onPress={() => {
           if (isDesktop) {

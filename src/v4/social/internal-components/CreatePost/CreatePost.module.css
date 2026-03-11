@@ -263,7 +263,7 @@
   .createPost__formContent {
     overflow-y: auto;
     max-height: 50vh;
-    min-height: 13rem;
+    min-height: 35vh;
     position: relative;
     padding: 1rem 1.5rem;
   }

@@ -7,6 +7,7 @@ import { Button } from '~/v4/core/components/AriaButton';
 import { Tabs } from '~/v4/core/components/Tabs';
 import { TagOutlined } from '~/v4/icons/TagOutlined';
 import UserOutlined from '~/v4/icons/UserOutlined';
+import UserRegular from '~/v4/icons/UserRegular';
 import Close from '~/v4/icons/Close';
 import { MentionTypeaheadOption } from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
 import styles from './MentionMenu.module.css';
@@ -296,7 +297,7 @@ export function MentionMenu<T>({
               tabs={[
                 {
                   value: 'users',
-                  label: UserOutlined,
+                  label: UserRegular,
                   accessibilityId: 'mention-menu-users-tab',
                   content: () => (
                     <div className={styles.mentionList}>

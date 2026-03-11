@@ -44,7 +44,7 @@ export function ProductTagEmpty({
     <div className={styles.productTagEmpty} style={themeStyles} data-test-id={accessibilityId}>
       {iconElement}
       <TextComponent as="p" className={styles.productTagEmpty__text}>
-        {config.text ?? 'Start typing to search for products'}
+        {config.text ?? 'Start typing to search for products.'}
       </TextComponent>
     </div>
   );
