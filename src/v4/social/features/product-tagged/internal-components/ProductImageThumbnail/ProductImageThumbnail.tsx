@@ -4,6 +4,7 @@ import { ImageFailedThumbnail } from '~/v4/icons/Image';
 import { Pin } from '~/v4/icons/Pin';
 import { Typography } from '~/v4/core/components';
 import styles from './ProductImageThumbnail.module.css';
+import { useTheme } from '~/v4/core/providers/ThemeProvider';
 
 export interface ProductImageThumbnailProps {
   imageUrl?: string;
@@ -12,7 +13,7 @@ export interface ProductImageThumbnailProps {
   isPinned?: boolean;
   size?: 'large' | 'medium' | 'small' | 'tiny';
   className?: string;
-  overlayClassName?: string;
+  theme?: 'light' | 'dark';
   thumbnailMode?: 'fit' | 'fill';
 }
 
@@ -23,10 +24,11 @@ export function ProductImageThumbnail({
   isPinned = false,
   size = 'large',
   className = '',
-  overlayClassName,
   thumbnailMode = 'fill',
+  theme,
 }: ProductImageThumbnailProps) {
   const [hasImageError, setHasImageError] = useState(false);
+  const { currentTheme } = useTheme();
   const isEmptyState = !imageUrl || hasImageError;
 
   const handleImageError = () => {
@@ -53,7 +55,8 @@ export function ProductImageThumbnail({
       {unavailable && (
         <div className={styles.productImageThumbnail__overlay}>
           <div
-            className={clsx(styles.productImageThumbnail__overlayBackground, overlayClassName)}
+            className={clsx(styles.productImageThumbnail__overlayBackground)}
+            data-theme={theme ?? currentTheme}
           />
         </div>
       )}

@@ -118,6 +118,7 @@ export function LivestreamPinnedProduct({
           size="medium"
           thumbnailMode={product.thumbnailMode}
           className={styles.livestreamPinnedProduct__thumbnail}
+          theme="light"
         />
       </div>
       <div className={styles.livestreamPinnedProduct__infoWrapper}>
