@@ -34,6 +34,7 @@ type ImageThumbnailProps = {
   ErrorImageMenuButton?: () => void;
   productTagsReachLimit?: boolean;
   remainingLimit?: number;
+  taggedProductIds?: string[];
 };
 
 export function ImageThumbnail({
@@ -51,6 +52,7 @@ export function ImageThumbnail({
   ErrorImageMenuButton,
   productTagsReachLimit = false,
   remainingLimit,
+  taggedProductIds,
 }: ImageThumbnailProps) {
   const hasNewImages = files.length > 0 && files.some((file) => isImageFile(file));
   const hasPostImages = postImages.length > 0;
@@ -78,6 +80,7 @@ export function ImageThumbnail({
           onChildPostProductTagsChange={onChildPostProductTagsChange}
           productTagsReachLimit={productTagsReachLimit}
           remainingLimit={remainingLimit}
+          taggedProductIds={taggedProductIds}
         />
       ))}
 
@@ -98,6 +101,7 @@ export function ImageThumbnail({
             ErrorImageMenuButton={ErrorImageMenuButton}
             remainingLimit={remainingLimit}
             productTagsReachLimit={productTagsReachLimit}
+            taggedProductIds={taggedProductIds}
           />
         ))}
     </div>
@@ -113,6 +117,7 @@ type PostImageItemProps = {
   onRemovePostImage: (fileId: string) => void;
   remainingLimit?: number;
   onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
+  taggedProductIds?: string[];
 };
 
 function PostImageItem({
@@ -124,11 +129,13 @@ function PostImageItem({
   remainingLimit,
   onRemovePostImage,
   onChildPostProductTagsChange,
+  taggedProductIds,
 }: PostImageItemProps) {
   const file = post?.getImageInfo();
   const { openProductTagSelection } = useProductTagSelection<'image'>({
     pageId,
     onChildPostProductTagsChange,
+    taggedProductIds,
   });
 
   const handleProductTagClick = () => {
@@ -185,6 +192,7 @@ type FileImageItemProps = {
   ErrorImageMenuButton?: () => void;
   productTagsReachLimit?: boolean;
   remainingLimit?: number;
+  taggedProductIds?: string[];
 };
 
 function FileImageItem({
@@ -200,12 +208,14 @@ function FileImageItem({
   remainingLimit,
   isImagePollPost = false,
   productTagsReachLimit = false,
+  taggedProductIds,
 }: FileImageItemProps) {
   const isUploading = progress[file.id] && !isAmityFile(file.file);
   const hasError = file.errorText && !('fileId' in file);
   const { openProductTagSelection } = useProductTagSelection<'image'>({
     pageId,
     onFileProductTagsChange,
+    taggedProductIds,
   });
 
   const handleProductTagClick = () => {

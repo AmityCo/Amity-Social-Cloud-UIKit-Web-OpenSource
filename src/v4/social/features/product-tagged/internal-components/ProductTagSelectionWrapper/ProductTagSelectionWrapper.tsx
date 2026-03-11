@@ -42,6 +42,7 @@ interface ProductTagSelectionWrapperProps {
   isShowSearchProduct?: boolean;
   isHost?: boolean;
   remainingLimit?: number;
+  taggedProductIds?: string[];
 }
 
 export function ProductTagSelectionWrapper({
@@ -63,6 +64,7 @@ export function ProductTagSelectionWrapper({
   isShowSearchProduct = false,
   isHost = false,
   remainingLimit,
+  taggedProductIds = [],
 }: ProductTagSelectionWrapperProps) {
   const { confirm } = useConfirmContext();
 
@@ -145,6 +147,7 @@ export function ProductTagSelectionWrapper({
       isFromManageTagList={isFromManageTagList}
       isShowSearch={isShowSearchProduct}
       isHost={isHost}
+      taggedProductIds={taggedProductIds}
     />
   );
 }

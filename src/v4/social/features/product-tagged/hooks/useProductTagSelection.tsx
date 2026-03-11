@@ -10,12 +10,14 @@ interface UseProductTagSelectionOptions<T extends MediaType> {
   pageId?: string;
   onFileProductTagsChange?: (file: Amity.File<T>, tags: Amity.ProductTag[]) => void;
   onChildPostProductTagsChange?: (postId: string, tags: Amity.ProductTag[]) => void;
+  taggedProductIds?: string[];
 }
 
 export const useProductTagSelection = <T extends MediaType = MediaType>({
   pageId,
   onFileProductTagsChange,
   onChildPostProductTagsChange,
+  taggedProductIds = [],
 }: UseProductTagSelectionOptions<T>) => {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
@@ -65,6 +67,7 @@ export const useProductTagSelection = <T extends MediaType = MediaType>({
             onClose={() => closePopup(popupId)}
             onDone={handleDone}
             remainingLimit={remainingLimit}
+            taggedProductIds={taggedProductIds}
           />
         ),
       });
@@ -78,6 +81,7 @@ export const useProductTagSelection = <T extends MediaType = MediaType>({
             onClose={() => removeDrawerData()}
             onDone={handleDone}
             remainingLimit={remainingLimit}
+            taggedProductIds={taggedProductIds}
           />
         ),
       });

@@ -53,6 +53,7 @@ export interface ProductTagSelectionProps {
   isHost?: boolean;
   onRemoveProduct?: (productTag: Amity.ProductTag) => void;
   remainingLimit?: number; // The remaining number of products that can be selected
+  taggedProductIds?: string[]; // Product IDs that are already tagged elsewhere
 }
 
 const DEBOUNCE_DELAY = 300;
@@ -76,6 +77,7 @@ export function ProductTagSelection({
   isHost = false,
   onRemoveProduct,
   remainingLimit,
+  taggedProductIds = [],
 }: ProductTagSelectionProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_SELECTION;
   const { themeStyles, accessibilityId, config, isExcluded } = useAmityComponent({
@@ -533,6 +535,10 @@ export function ProductTagSelection({
                       return totalSelected >= effectiveLimit;
                     })();
 
+                    // Check if the product is already tagged elsewhere (not in this selection)
+                    const isAlreadyTagged =
+                      taggedProductIds.includes(product.productId) && !isSelected;
+
                     return (
                       <ProductTagSelectionItem
                         key={product.productId}
@@ -542,6 +548,7 @@ export function ProductTagSelection({
                         pageId={pageId}
                         componentId={componentId}
                         isDisabled={isDisabled}
+                        isAlreadyTagged={isAlreadyTagged}
                       />
                     );
                   })}

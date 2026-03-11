@@ -726,6 +726,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialMentions={post.metadata?.mentioned}
               initialHashtags={post.metadata?.hashtags}
               enableProductMention={true}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));
               }}
@@ -779,6 +780,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             }}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
             remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+            taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
           <VideoThumbnail
             files={files}
@@ -799,6 +801,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             }}
             productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
             remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+            taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
         </div>
         {/* TODO: Handle file type */}
