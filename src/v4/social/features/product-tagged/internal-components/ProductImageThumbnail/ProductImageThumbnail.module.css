@@ -22,11 +22,6 @@
 }
 
 .productImageThumbnail[data-size='small'] {
-  width: 3.75rem; /* 60px */
-  height: 3.75rem; /* 60px */
-}
-
-.productImageThumbnail[data-size='tiny'] {
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -60,7 +55,12 @@
 .productImageThumbnail__icon {
   width: 2.25rem;
   height: 2.25rem;
-  color: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-shade3);
+}
+
+.productImageThumbnail__icon[data-size='small'] {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 /* Unavailable overlay */

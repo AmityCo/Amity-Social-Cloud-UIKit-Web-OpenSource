@@ -51,7 +51,7 @@ export function ProductMentionItem({
       <ProductImageThumbnail
         imageUrl={product.thumbnailUrl}
         alt={product.productName}
-        size="tiny"
+        size="small"
         className={styles.productMentionItem__thumbnail}
         thumbnailMode={product.thumbnailMode}
       />
