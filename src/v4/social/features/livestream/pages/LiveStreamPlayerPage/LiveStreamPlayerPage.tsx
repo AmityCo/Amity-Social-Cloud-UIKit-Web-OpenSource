@@ -72,6 +72,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const previousProductTagsCountRef = useRef(post?.childrenPosts[0]?.productTags?.length || 0);
   const isProductDrawerOpenRef = useRef(false);
 
+  // Track initial room status for isEnded/isRecorded logic
+  const initialRoomStatusRef = useRef<string | null>(null);
+  const wasEverLiveRef = useRef(false);
+
   const { post: subscribedPost } = usePostSubscription(post?.childrenPosts[0]?.postId);
   const { room } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
 
@@ -172,8 +176,26 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const { openPopup, closePopup } = usePopupContext();
 
   const isLive = room?.status === liveStreamStatus.live;
-  const isEnded = room?.status === liveStreamStatus.ended;
-  const isRecorded = room?.status === liveStreamStatus.recorded;
+
+  // Track initial room status and if room was ever live
+  useEffect(() => {
+    if (room?.status && initialRoomStatusRef.current === null) {
+      initialRoomStatusRef.current = room.status;
+    }
+    if (room?.status === liveStreamStatus.live) {
+      wasEverLiveRef.current = true;
+    }
+  }, [room?.status]);
+
+  // isEnded: true only if room was initially 'live' and status changed to 'ended' or 'recorded'
+  const isEnded =
+    wasEverLiveRef.current &&
+    (room?.status === liveStreamStatus.ended || room?.status === liveStreamStatus.recorded);
+
+  // isRecorded: true only if the initial status was 'recorded' (not from status change)
+  const isRecorded =
+    initialRoomStatusRef.current === liveStreamStatus.recorded &&
+    room?.status === liveStreamStatus.recorded;
 
   const isTerminated =
     room?.moderation?.terminateLabels && room?.moderation?.terminateLabels?.length > 0;
