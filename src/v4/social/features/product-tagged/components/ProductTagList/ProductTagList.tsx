@@ -82,7 +82,7 @@ export function ProductTagList({
         <div className={styles.productTagList__title}>
           <Typography.TitleBold
             as="p"
-            data-mode={renderMode}
+            data-display={displayMode}
             className={styles.productTagListHeader__text}
           >
             {headerText}
