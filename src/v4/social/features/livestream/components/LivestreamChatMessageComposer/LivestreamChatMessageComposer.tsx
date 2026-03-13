@@ -23,6 +23,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import AddUser from '~/v4/icons/AddUser';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { InviteCoHostList } from '~/v4/social/features/livestream/internal-components/InviteCoHostList';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { TagOutlined } from '~/v4/icons/TagOutlined';
@@ -168,6 +169,7 @@ export const LivestreamChatMessageComposer = ({
   const { currentUserId } = useSDK();
 
   const { openPopup, closePopup } = usePopupContext();
+  const { setDrawerData, removeDrawerData } = useDrawer();
   const { info: warning } = useConfirmContext();
   const { productCatalogueSettings, refetchProductCatalogueSettings } =
     useProductCatalogueSettings();
@@ -472,20 +474,34 @@ export const LivestreamChatMessageComposer = ({
                   color="secondary"
                   onPress={async () => {
                     if (!(await ensureCatalogueEnabledOrWarn())) return;
-                    openPopup({
-                      pageId,
-                      id: 'manage_product_tagging_popup',
-                      view: 'desktop',
-                      children: subscribedPost?.postId ? (
-                        <LiveManageProductTagListContent
-                          postId={subscribedPost.postId}
-                          roomId={room?.roomId as string}
-                          pageId={pageId}
-                          sourceType={AnalyticsSourceTypeEnum.ROOM}
-                          onClose={() => closePopup('manage_product_tagging_popup')}
-                        />
-                      ) : null,
-                    });
+                    if (isDesktop) {
+                      openPopup({
+                        pageId,
+                        id: 'manage_product_tagging_popup',
+                        view: 'desktop',
+                        children: subscribedPost?.postId ? (
+                          <LiveManageProductTagListContent
+                            postId={subscribedPost.postId}
+                            roomId={room?.roomId as string}
+                            pageId={pageId}
+                            sourceType={AnalyticsSourceTypeEnum.ROOM}
+                            onClose={() => closePopup('manage_product_tagging_popup')}
+                          />
+                        ) : null,
+                      });
+                    } else {
+                      setDrawerData({
+                        content: subscribedPost?.postId ? (
+                          <LiveManageProductTagListContent
+                            postId={subscribedPost.postId}
+                            roomId={room?.roomId as string}
+                            pageId={pageId}
+                            sourceType={AnalyticsSourceTypeEnum.ROOM}
+                            onClose={removeDrawerData}
+                          />
+                        ) : null,
+                      });
+                    }
                   }}
                 />
               ) : (
@@ -502,24 +518,40 @@ export const LivestreamChatMessageComposer = ({
                     color="secondary"
                     onPress={async () => {
                       if (!(await ensureCatalogueEnabledOrWarn())) return;
-                      openPopup({
-                        pageId,
-                        id: 'product_tag_list_popup',
-                        view: 'desktop',
-                        children: (
-                          <ProductTagList
-                            renderMode="livestream"
-                            pageId={pageId}
-                            displayMode="desktop"
-                            onClose={() => {
-                              closePopup('product_tag_list_popup');
-                            }}
-                            productTags={subscribedPost?.productTags as Amity.ProductTag[]}
-                            pinnedProductId={pinnedProductId}
-                            sourceId={room.roomId}
-                          />
-                        ),
-                      });
+                      if (isDesktop) {
+                        openPopup({
+                          pageId,
+                          id: 'product_tag_list_popup',
+                          view: 'desktop',
+                          children: (
+                            <ProductTagList
+                              renderMode="livestream"
+                              pageId={pageId}
+                              displayMode="desktop"
+                              onClose={() => {
+                                closePopup('product_tag_list_popup');
+                              }}
+                              productTags={subscribedPost?.productTags as Amity.ProductTag[]}
+                              pinnedProductId={pinnedProductId}
+                              sourceId={room.roomId}
+                            />
+                          ),
+                        });
+                      } else {
+                        setDrawerData({
+                          content: (
+                            <ProductTagList
+                              renderMode="livestream"
+                              pageId={pageId}
+                              displayMode="mobile"
+                              onClose={removeDrawerData}
+                              productTags={subscribedPost?.productTags as Amity.ProductTag[]}
+                              pinnedProductId={pinnedProductId}
+                              sourceId={room.roomId}
+                            />
+                          ),
+                        });
+                      }
                     }}
                   />
                 )
@@ -542,28 +574,42 @@ export const LivestreamChatMessageComposer = ({
               defaultIcon={<AddUser />}
               isDisabled={disabled}
               color="secondary"
-              onPress={() =>
-                openPopup({
-                  pageId,
-                  view: 'desktop',
-                  header: (
-                    <Typography.Headline
-                      className={styles.livestreamChatMessageComposer__inviteCoHost__header}
-                    >
-                      Invite co-host
-                    </Typography.Headline>
-                  ),
-                  children: (
-                    <InviteCoHostList
-                      pageId={pageId}
-                      room={room}
-                      onAction={closePopup}
-                      coHost={coHost}
-                      invitation={invitationByMe}
-                    />
-                  ),
-                })
-              }
+              onPress={() => {
+                if (isDesktop) {
+                  openPopup({
+                    pageId,
+                    view: 'desktop',
+                    header: (
+                      <Typography.Headline
+                        className={styles.livestreamChatMessageComposer__inviteCoHost__header}
+                      >
+                        Invite co-host
+                      </Typography.Headline>
+                    ),
+                    children: (
+                      <InviteCoHostList
+                        pageId={pageId}
+                        room={room}
+                        onAction={closePopup}
+                        coHost={coHost}
+                        invitation={invitationByMe}
+                      />
+                    ),
+                  });
+                } else {
+                  setDrawerData({
+                    content: (
+                      <InviteCoHostList
+                        pageId={pageId}
+                        room={room}
+                        onAction={removeDrawerData}
+                        coHost={coHost}
+                        invitation={invitationByMe}
+                      />
+                    ),
+                  });
+                }
+              }}
             />
           )}
           <div className={styles.livestreamChatMessageComposer__messageComposer__wrapper}>

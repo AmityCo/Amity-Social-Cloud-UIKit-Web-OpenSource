@@ -32,7 +32,7 @@
   white-space: nowrap;
 }
 
-.productTagListHeader__text[data-mode='livestream'] {
+.productTagListHeader__text[data-display='desktop'] {
   text-align: left;
 }
 
