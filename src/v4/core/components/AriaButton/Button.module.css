@@ -173,6 +173,10 @@
   border-radius: 0.5rem;
 }
 
+.icon {
+  flex-shrink: 0;
+}
+
 .fill.small .icon,
 .outlined.small .icon {
   width: 1.25rem;

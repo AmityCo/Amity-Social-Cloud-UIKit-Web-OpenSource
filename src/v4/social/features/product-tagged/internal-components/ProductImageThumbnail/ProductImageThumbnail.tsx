@@ -11,7 +11,7 @@ export interface ProductImageThumbnailProps {
   alt?: string;
   unavailable?: boolean;
   isPinned?: boolean;
-  size?: 'large' | 'medium' | 'small' | 'tiny';
+  size?: 'large' | 'medium' | 'small';
   className?: string;
   theme?: 'light' | 'dark';
   thumbnailMode?: 'fit' | 'fill';
@@ -39,7 +39,7 @@ export function ProductImageThumbnail({
     <div className={clsx(styles.productImageThumbnail, className)} data-size={size}>
       {isEmptyState ? (
         <div className={styles.productImageThumbnail__emptyState}>
-          <ImageFailedThumbnail className={styles.productImageThumbnail__icon} />
+          <ImageFailedThumbnail className={styles.productImageThumbnail__icon} data-size={size} />
         </div>
       ) : (
         <img
