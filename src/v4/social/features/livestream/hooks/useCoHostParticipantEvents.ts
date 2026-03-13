@@ -21,13 +21,18 @@ export function useCoHostParticipantEvents({
   useEffect(() => {
     const unsubscriber: Amity.Unsubscriber[] = [];
     if (room?.status === 'live') {
+      const coHostInternalId = getRoomParticipant(room, 'coHost')?.userInternalId;
       if (mode === 'host') {
         // Host subscribes to participantLeft + participantStageJoined
         // to distinguish "left the live stream" vs "left the stage (backstage)"
         unsubscriber.push(
           RoomRepository.onRoomParticipantLeft(({ actorInternalId }) => {
             const coHostInternalId = getRoomParticipant(room, 'coHost')?.userInternalId;
-            if (coHostInternalId !== actorInternalId) return;
+            if (
+              coHostInternalId !== actorInternalId ||
+              currentUser?.userInternalId === actorInternalId
+            )
+              return;
             if (coHostJoinedRef.current)
               success({
                 content: 'Co-host left the live stream.',
@@ -55,7 +60,11 @@ export function useCoHostParticipantEvents({
         unsubscriber.push(
           RoomRepository.onRoomParticipantStageLeft(({ actorInternalId }) => {
             // If the current user is the co-host who's leaving, don't show toast
-            if (currentUser?.userInternalId === actorInternalId) return;
+            if (
+              coHostInternalId !== actorInternalId ||
+              currentUser?.userInternalId === actorInternalId
+            )
+              return;
 
             success({
               content: 'Co-host left the live stream.',
