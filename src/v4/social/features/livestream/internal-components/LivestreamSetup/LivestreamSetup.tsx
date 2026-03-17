@@ -16,9 +16,8 @@ import clsx from 'clsx';
 import useImageUpload from '~/v4/social/hooks/useImageUpload';
 import { LoadingSpinner } from '~/v4/social/features/livestream/internal-components/LivestreamOverlay/LivestreamOverlay';
 import CameraMovie from '~/v4/icons/CameraMovie';
-import { TagOutlined } from '~/v4/icons/TagOutlined';
-import ChevronRight from '~/v4/icons/ChevronRight';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
 import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 
@@ -343,38 +342,15 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                 )}
 
                 {isEnabledProductTag && targetType !== 'user' && (
-                  <Button
-                    variant="default"
-                    className={styles.livestreamSetup__tagProducts__button}
+                  <TagProductsButton
+                    productTagCount={productTags.length}
+                    isPending={isPending}
                     onPress={
                       productTags.length > 0
                         ? handleOpenManageProductTags
                         : handleOpenProductTagSelection
                     }
-                    isDisabled={isPending}
-                  >
-                    <div className={styles.livestreamSetup__tagProducts__left}>
-                      <div className={styles.livestreamSetup__tagProducts__icon__border}>
-                        <TagOutlined className={styles.livestreamSetup__tagProducts__icon} />
-                      </div>
-                      <Label>
-                        <Typography.TitleBold className={styles.livestreamSetup__tagProducts__text}>
-                          Tag products
-                        </Typography.TitleBold>
-                      </Label>
-                    </div>
-                    <div className={styles.livestreamSetup__tagProducts__right}>
-                      <div className={styles.livestreamSetup__tagProducts__count}>
-                        <Typography.Caption
-                          className={styles.livestreamSetup__tagProducts__countText}
-                        >
-                          {productTags.length}
-                        </Typography.Caption>
-                      </div>
-
-                      <ChevronRight className={styles.livestreamSetup__tagProducts__chevron} />
-                    </div>
-                  </Button>
+                  />
                 )}
               </form>
             </div>

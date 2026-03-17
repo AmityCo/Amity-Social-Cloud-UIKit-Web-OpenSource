@@ -16,6 +16,7 @@ import { DisplayModeEnum } from '~/v4/social/types';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
 
 interface LivestreamPlayerProps {
   themeStyles?: React.CSSProperties;
@@ -32,6 +33,7 @@ interface LivestreamPlayerProps {
   productTags: Amity.ProductTag[];
   onClickProductTagBadge: () => void;
   onClose?: () => void;
+  canShowProductTags?: boolean;
 }
 
 export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerProps>(
@@ -51,6 +53,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
       productTags,
       onClickProductTagBadge,
       onClose,
+      canShowProductTags = false,
     },
     ref,
   ) => {
@@ -90,12 +93,20 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
             onClickMenu={() =>
               setDrawerData({
                 content: (
-                  <CopyLinkButton
-                    pageId={pageId}
-                    model={SharableModel.POST}
-                    referenceId={livestreamPost?.postId}
-                    onDone={removeDrawerData}
-                  />
+                  <>
+                    <CopyLinkButton
+                      pageId={pageId}
+                      model={SharableModel.POST}
+                      referenceId={livestreamPost?.postId}
+                      onDone={removeDrawerData}
+                    />
+                    {canShowProductTags && (
+                      <TagProductsButton
+                        productTagCount={livestreamPost?.productTags?.length || 0}
+                        onPress={onClickProductTagBadge}
+                      />
+                    )}
+                  </>
                 ),
               })
             }
