@@ -496,9 +496,6 @@ export function ProductTagSelection({
                     const isSelected = selectedProductIds.has(product.productId);
 
                     const isDisabled = (() => {
-                      // Already selected items should not be disabled (they can be deselected)
-                      if (isSelected) return false;
-
                       if (isFromManageTagList) {
                         // If product is in original selectedProductTags, disable it (can't modify from here)
                         if (
@@ -506,6 +503,10 @@ export function ProductTagSelection({
                         ) {
                           return true;
                         }
+
+                        // Locally selected items can be deselected
+                        if (isSelected) return false;
+
                         // For new selections, check against maxCount
                         if (maxCount) {
                           return (
@@ -515,6 +516,9 @@ export function ProductTagSelection({
                         }
                         return false;
                       }
+
+                      // Already selected items should not be disabled (they can be deselected)
+                      if (isSelected) return false;
 
                       // Normal behavior when not from ManageTagList
                       // Calculate the effective limit considering both MAX_PRODUCTS and remainingLimit

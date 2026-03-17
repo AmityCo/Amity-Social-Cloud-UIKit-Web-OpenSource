@@ -58,7 +58,7 @@
 
 .checkbox[data-selected] .checkbox__icon svg {
   stroke-dashoffset: 44;
-  stroke: var(--asc-color-background-default);
+  stroke: var(--asc-color-white);
 }
 
 .checkbox[data-selected][data-pressed] .checkbox__icon {
