@@ -77,3 +77,13 @@
   display: grid;
   grid-template-columns: 5rem auto;
 }
+
+.productTagSelectionItem[data-selected][data-disabled] .productTagSelectionItem__checkboxIcon {
+  background: var(--asc-color-primary-default);
+  border-color: var(--asc-color-primary-default);
+  opacity: 0.3;
+}
+
+.productTagSelectionItem[data-selected][data-disabled] .productTagSelectionItem__checkboxIcon svg {
+  stroke: var(--asc-color-background-default);
+}

@@ -8,9 +8,20 @@ export type CheckboxProps = $CheckboxProps & {
   checkboxIconClassname?: string;
 };
 
-export function Checkbox({ label, className, checkboxIconClassname, ...props }: CheckboxProps) {
+export function Checkbox({
+  label,
+  className,
+  checkboxIconClassname,
+  isDisabled,
+  ...props
+}: CheckboxProps) {
   return (
-    <$Checkbox {...props} className={clsx(styles.checkbox, className)}>
+    <$Checkbox
+      {...props}
+      isDisabled={isDisabled}
+      data-disabled={isDisabled || undefined}
+      className={clsx(styles.checkbox, className)}
+    >
       <div
         data-testid="checkbox-icon"
         className={clsx(styles.checkbox__icon, checkboxIconClassname)}
