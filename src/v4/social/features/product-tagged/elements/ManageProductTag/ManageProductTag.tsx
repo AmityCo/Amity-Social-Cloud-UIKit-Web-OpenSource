@@ -61,7 +61,6 @@ export function ManageProductTag({
         size="large"
         isPinned={isPinned}
         unavailable={unavailable}
-        overlayClassName={unavailable ? styles.manageProductTag__thumbnailOverlay : undefined}
       />
 
       <div className={styles.manageProductTag__info}>

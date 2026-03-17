@@ -295,12 +295,12 @@ export function ProductTagSelection({
           if (onPinnedProductIdChange) {
             onPinnedProductIdChange(updatedPinnedId);
           }
-
-          if (!isDesktop && onUpdateProductTags) {
-            onUpdateProductTags(updatedTags);
-          }
           setLocalSelectedProduct([]);
-          closePopup();
+          if (isDesktop) {
+            closePopup();
+          } else {
+            removeDrawerData();
+          }
         }}
         isHost={isHost}
         sourceId=""

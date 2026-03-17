@@ -295,6 +295,7 @@ export function ManageProductTagList({
       )}
       <div className={styles.manageProductTagList__header}>
         <div className={styles.manageProductTagList__headerContent}>
+          {!isDesktop && <div className={styles.manageProductTagList__emptySpace} />}
           <Typography.TitleBold as="h2" className={styles.manageProductTagList__title}>
             Tagged products
           </Typography.TitleBold>

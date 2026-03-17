@@ -538,6 +538,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     uiState="player"
                     isLive={isLive && !isUserBanned}
                     onClose={onClose}
+                    productTags={livestreamPost?.productTags || []}
+                    isHost={isHost}
+                    onUpdateProductTags={handleUpdateProductTags}
+                    canShowProductTags={productCatalogueSettings?.product.enabled}
                   />
                 )}
                 <div
@@ -564,6 +568,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     }
                     onClickProductTagBadge={onClickProductTagBadge}
                     onClose={onClose}
+                    canShowProductTags={productCatalogueSettings?.product.enabled}
                   />
                   {isDesktop && !isLive && canShowProductTags && (
                     <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
