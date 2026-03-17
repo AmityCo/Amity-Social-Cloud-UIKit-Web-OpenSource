@@ -89,10 +89,7 @@ export function ProductTag({
   const imageUrl = product.thumbnailUrl;
   const price = formatPrice(product.price, product.currency);
 
-  const handlePress = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const handlePress = () => {
     if (unavailable) return;
 
     if (shouldTrackAnalytics && sourceType && sourceId) {
@@ -121,8 +118,6 @@ export function ProductTag({
         size="large"
         isPinned={isPinned}
         unavailable={unavailable}
-
-        // overlayClassName={unavailable ? styles.productTag__thumbnailOverlay : undefined}
       />
       <div
         className={styles.productTag__information}
@@ -161,7 +156,12 @@ export function ProductTag({
                 </Typography.Caption>
               )}
               {showViewButton && isLivestream && (
-                <Button variant="fill" color="primary" className={styles.productTag__viewButton}>
+                <Button
+                  onPress={handlePress}
+                  variant="fill"
+                  color="primary"
+                  className={styles.productTag__viewButton}
+                >
                   <Typography.CaptionBold as="span">View</Typography.CaptionBold>
                 </Button>
               )}
