@@ -35,7 +35,7 @@
 .tagProductsButton__icon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-base-default);
+  color: var(--asc-color-base-default);
 }
 
 .tagProductsButton__count {

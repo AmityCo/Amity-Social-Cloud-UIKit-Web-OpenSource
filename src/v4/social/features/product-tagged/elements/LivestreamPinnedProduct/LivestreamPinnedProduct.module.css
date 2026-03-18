@@ -48,7 +48,7 @@
   flex-direction: column;
   flex: 1 0 0;
   min-width: 0;
-  height: 100%;
+  height: 3.5rem;
   justify-content: space-between;
 }
 
@@ -61,13 +61,13 @@
 
 .livestreamPinnedProduct__bottomRow {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
   width: 100%;
   justify-content: flex-end;
 }
 
 .livestreamPinnedProduct__price {
+  padding: 0.37rem 0;
   color: var(--asc-color-secondary-shade2);
   flex: 1 0 0;
   min-width: 0;
@@ -85,7 +85,7 @@
   gap: 0.25rem;
   height: 1.75rem;
   padding: 0.375rem 0.75rem 0.375rem 0.5rem;
-  border: 1px solid var(--asc-color-secondary-shade3);
+  border: 1px solid var(--asc-color-secondary-shade2);
   border-radius: 0.375rem;
   background: none;
   cursor: pointer;
@@ -104,7 +104,7 @@
 }
 
 .livestreamPinnedProduct__unpinText {
-  color: var(--asc-color-base-shade4);
+  color: var(--asc-color-secondary-shade4);
   text-decoration: none;
 }
 

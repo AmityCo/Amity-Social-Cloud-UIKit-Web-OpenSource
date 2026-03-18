@@ -6,11 +6,11 @@ import styles from './ManageProductTag.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { PAGE_ID, COMPONENT_ID, ELEMENT_ID } from '~/v4/constants/customization';
 import { TrashIcon } from '~/v4/icons/Trash';
-import { Pin } from '~/v4/icons/Pin';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/internal-components/ProductImageThumbnail/ProductImageThumbnail';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
 import { useNetworkState } from 'react-use';
+import { PinStraight } from '~/v4/icons/PinStraight';
 
 export type RenderModeEnum = 'livestream' | 'playback';
 
@@ -56,7 +56,7 @@ export function ManageProductTag({
 
   const isLinkable = !unavailable && !!productUrl;
 
-  const productContent = (
+  const linkContent = (
     <>
       <ProductImageThumbnail
         imageUrl={product.thumbnailUrl}
@@ -89,31 +89,6 @@ export function ManageProductTag({
               {price}
             </Typography.Caption>
           )}
-          <ActionButton
-            className={styles.manageProductTag__removeButton}
-            onPress={() => onRemove?.(productTag)}
-            aria-label="Remove product tag"
-            defaultIcon={<TrashIcon />}
-            color="secondary"
-            size="small"
-            isDisabled={isDisabled || !online}
-          />
-          {renderMode === 'livestream' && !unavailable && (
-            <Button
-              className={styles.manageProductTag__pinButton}
-              iconClassName={styles.manageProductTag__pinIcon}
-              onPress={() => onTogglePin?.(productTag, !isPinned)}
-              aria-label={isPinned ? 'Unpin product' : 'Pin product'}
-              variant="outlined"
-              size="small"
-              icon={<Pin />}
-              isDisabled={isDisabled || !online}
-            >
-              <Typography.CaptionBold as="span" className={styles.manageProductTag__pinButtonText}>
-                {isPinned ? 'Unpin' : 'Pin'}
-              </Typography.CaptionBold>
-            </Button>
-          )}
         </div>
       </div>
     </>
@@ -128,11 +103,38 @@ export function ManageProductTag({
           rel="noopener noreferrer"
           className={styles.manageProductTag__link}
         >
-          {productContent}
+          {linkContent}
         </a>
       ) : (
-        productContent
+        linkContent
       )}
+      <div className={styles.manageProductTag__actions}>
+        <ActionButton
+          className={styles.manageProductTag__removeButton}
+          onPress={() => onRemove?.(productTag)}
+          aria-label="Remove product tag"
+          defaultIcon={<TrashIcon />}
+          color="secondary"
+          size="small"
+          isDisabled={isDisabled || !online}
+        />
+        {renderMode === 'livestream' && !unavailable && (
+          <Button
+            className={styles.manageProductTag__pinButton}
+            iconClassName={styles.manageProductTag__pinIcon}
+            onPress={() => onTogglePin?.(productTag, !isPinned)}
+            aria-label={isPinned ? 'Unpin product' : 'Pin product'}
+            variant="outlined"
+            size="small"
+            icon={<PinStraight />}
+            isDisabled={isDisabled || !online}
+          >
+            <Typography.CaptionBold as="span" className={styles.manageProductTag__pinButtonText}>
+              {isPinned ? 'Unpin' : 'Pin'}
+            </Typography.CaptionBold>
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

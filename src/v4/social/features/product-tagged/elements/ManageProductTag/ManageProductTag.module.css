@@ -64,6 +64,14 @@
   white-space: nowrap;
 }
 
+.manageProductTag__actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 0.75rem 0.75rem 0;
+  flex-shrink: 0;
+}
+
 .manageProductTag__removeButton {
   flex-shrink: 0;
   border-radius: 0.375rem;

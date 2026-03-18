@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { ImageFailedThumbnail } from '~/v4/icons/Image';
-import { Pin } from '~/v4/icons/Pin';
+import { PinStraightFilled } from '~/v4/icons/PinStraightFilled';
 import { Typography } from '~/v4/core/components';
 import styles from './ProductImageThumbnail.module.css';
 import { useTheme } from '~/v4/core/providers/ThemeProvider';
@@ -62,7 +62,7 @@ export function ProductImageThumbnail({
       )}
       {isPinned && (
         <div className={styles.productImageThumbnail__pinnedBanner}>
-          <Pin className={styles.productImageThumbnail__pinnedIcon} />
+          <PinStraightFilled className={styles.productImageThumbnail__pinnedIcon} />
           <Typography.CaptionBold as="span" className={styles.productImageThumbnail__pinnedText}>
             Pinned
           </Typography.CaptionBold>
