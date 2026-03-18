@@ -8,6 +8,7 @@ import {
   useCreateLivestream,
   useReadOnlySetting,
   useCoHostParticipantEvents,
+  usePostSubscription,
 } from '~/v4/social/features/livestream/hooks';
 import { LivestreamStage } from '~/v4/social/features/livestream/internal-components/LivestreamStage';
 import { LivestreamSetup } from '~/v4/social/features/livestream/internal-components/LivestreamSetup';
@@ -81,6 +82,7 @@ export function CreateLivestreamPage({
   const { readOnly, setReadOnly } = useReadOnlySetting({ room, channel });
   const isShowLivestreamChat = channel && livestreamPost && community && room;
   const notificationAlignment = isShowLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
+  const { post: childPost } = usePostSubscription(livestreamPost?.childrenPosts[0]?.postId);
 
   useCoHostParticipantEvents({ room, notificationAlignment, mode: 'host' });
 
@@ -89,6 +91,7 @@ export function CreateLivestreamPage({
       room={room}
       channel={channel}
       parentPost={livestreamPost}
+      livestreamPost={childPost as Amity.Post<'room'>}
       notificationAlignment={notificationAlignment}
     >
       <ModalOverlay className={styles.createLivestream__overlay} style={themeStyles} isOpen={true}>

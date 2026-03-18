@@ -170,7 +170,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
       getBroadcasterData(room.roomId);
       // Step 2 & 3 happen automatically via useEffect and props
     }
-  }, [room?.roomId, getBroadcasterData]);
+  }, [room?.roomId]);
 
   const isUserBanned = myMembership?.isBanned;
 

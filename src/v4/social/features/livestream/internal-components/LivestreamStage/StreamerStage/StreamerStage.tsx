@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState, useCallback } from 'react';
+import React, { FC, useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import {
   isTrackReference,
   LiveKitRoom,
@@ -63,6 +63,12 @@ const Stage = ({
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
   const { buttonProps } = useDisconnectButton({});
+
+  // Store buttonProps.onClick in a ref to avoid dependency issues
+  const disconnectRef = useRef(buttonProps.onClick);
+  useEffect(() => {
+    disconnectRef.current = buttonProps.onClick;
+  });
 
   // LiveKit device management (inside room context)
   const { localParticipant } = useLocalParticipant();
@@ -210,11 +216,11 @@ const Stage = ({
     onDeviceSelect: handleLiveKitDeviceSelect,
   };
 
-  const handleLeaveAsCoHost = () => {
-    buttonProps.onClick();
+  const handleLeaveAsCoHost = useCallback(() => {
+    disconnectRef.current();
     // Co-host leave any stage, change ui back to player
     onLeaveStreamStage?.();
-  };
+  }, [onLeaveStreamStage]);
 
   const onCoHostLeaveLiveKitRoom = useCallback(() => {
     confirm({
@@ -230,20 +236,21 @@ const Stage = ({
     });
   }, [confirm, handleLeaveAsCoHost]);
 
-  // Expose the leave handler to parent via callback
+  // Expose the leave handler to parent via callback - create stable reference
+  const leaveRoomHandler = useCallback(() => {
+    disconnectRef.current();
+  }, []);
+
   useEffect(() => {
     if (hostId !== currentUserId && onCoHostLeaveRequest) {
-      onCoHostLeaveRequest(() => {
-        // only for leaving the state
-        buttonProps.onClick();
-      });
+      onCoHostLeaveRequest(leaveRoomHandler);
     }
-  }, [hostId, currentUserId, onCoHostLeaveRequest, onCoHostLeaveLiveKitRoom]);
+  }, [hostId, currentUserId, onCoHostLeaveRequest, leaveRoomHandler]);
 
-  const onLeaveByKickoutByHost = () => {
-    buttonProps.onClick();
+  const onLeaveByKickoutByHost = useCallback(() => {
+    disconnectRef.current();
     onLeaveByKickout?.();
-  };
+  }, [onLeaveByKickout]);
 
   const allTracks = useTracks([
     {
@@ -296,7 +303,7 @@ const Stage = ({
       setIsLeaving(true);
       onLeaveByKickoutByHost();
     }
-  }, [coHost, tracks?.length, currentUserId, hostId, isLeaving]);
+  }, [coHost, tracks?.length, currentUserId, hostId, isLeaving, onLeaveByKickoutByHost]);
 
   return (
     <>
@@ -418,9 +425,18 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   const { audioDeviceId, audioEnabled, videoDeviceId, videoEnabled } =
     deviceManagement.currentDevices;
 
-  const handleDisconnect = () => {
+  const handleDisconnect = useCallback(() => {
     setConnected(false);
-  };
+  }, []);
+
+  const handleConnected = useCallback(() => {
+    console.log('connected');
+    setConnected(true);
+  }, []);
+
+  const handleError = useCallback((e: any) => {
+    console.error('LiveKitRoom Error:', e);
+  }, []);
 
   return (
     <div className={styles.streamerStage}>
@@ -429,15 +445,11 @@ export const StreamerStage: FC<StreamerStageProps> = ({
         token={broadcasterData.coHostToken}
         serverUrl={broadcasterData.coHostUrl}
         connect={true}
-        onConnected={() => {
-          setConnected(true);
-        }}
+        onConnected={handleConnected}
         onDisconnected={handleDisconnect}
         audio={audioEnabled ? (audioDeviceId ? { deviceId: audioDeviceId } : true) : false}
         video={videoEnabled ? (videoDeviceId ? { deviceId: videoDeviceId } : true) : false}
-        onError={(e: any) => {
-          console.error('LiveKitRoom Error:', e);
-        }}
+        onError={handleError}
         className={styles.streamerStage__roomContainer}
       >
         <RoomAudioRenderer />
