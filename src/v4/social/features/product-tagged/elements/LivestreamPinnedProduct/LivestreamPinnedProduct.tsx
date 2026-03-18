@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
 import clsx from 'clsx';
 import { Button } from '~/v4/core/components/AriaButton';
-import { Pin } from '~/v4/icons/Pin';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { ELEMENT_ID } from '~/v4/constants/customization';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -11,6 +10,7 @@ import styles from './LivestreamPinnedProduct.module.css';
 import Trash from '~/v4/social/icons/trash';
 import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/internal-components/ProductImageThumbnail';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
+import { PinStraight } from '~/v4/icons/PinStraight';
 
 interface LivestreamPinnedProductProps {
   pageId?: string;
@@ -186,7 +186,7 @@ export function LivestreamPinnedProduct({
               aria-label="Unpin product tag"
               variant="outlined"
               size="small"
-              icon={<Pin />}
+              icon={<PinStraight />}
               iconClassName={styles.livestreamPinnedProduct__unpinIcon}
             >
               <Typography.CaptionBold
