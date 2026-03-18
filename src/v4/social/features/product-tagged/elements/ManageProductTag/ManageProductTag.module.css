@@ -6,6 +6,13 @@
   flex-shrink: 0;
 }
 
+.manageProductTag__link {
+  display: contents;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 .manageProductTag__info {
   display: flex;
   flex-direction: column;
