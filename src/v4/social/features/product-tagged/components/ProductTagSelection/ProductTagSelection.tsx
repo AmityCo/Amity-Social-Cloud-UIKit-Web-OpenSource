@@ -98,6 +98,7 @@ export function ProductTagSelection({
   const [showRightArrow, setShowRightArrow] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [localSelectedProduct, setLocalSelectedProduct] = useState<Amity.ProductTag[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const initialProductTagsRef = useRef<Amity.ProductTag[]>(selectedProductTags || []);
 
   // Check if product tags have changed from initial state (for post mode only)
@@ -259,68 +260,74 @@ export function ProductTagSelection({
   }, []);
 
   const handleSubmit = useCallback(async () => {
+    if (isSubmitting) return;
     if (localSelectedProduct.length === 0) return;
 
-    // Merge and deduplicate selectedProductTags and localSelectedProduct
-    const allTags = [...(selectedProductTags || []), ...localSelectedProduct];
-    const mergedTags = Array.from(new Map(allTags.map((tag) => [tag.productId, tag])).values());
+    setIsSubmitting(true);
+    try {
+      // Merge and deduplicate selectedProductTags and localSelectedProduct
+      const allTags = [...(selectedProductTags || []), ...localSelectedProduct];
+      const mergedTags = Array.from(new Map(allTags.map((tag) => [tag.productId, tag])).values());
 
-    onTagChanges(mergedTags);
+      onTagChanges(mergedTags);
 
-    let tagsToShow = mergedTags;
-    if (onUpdateProductTags) {
-      const updatedTags = await onUpdateProductTags(mergedTags);
-      if (updatedTags) {
-        tagsToShow = updatedTags;
-        onTagChanges(updatedTags);
+      let tagsToShow = mergedTags;
+      if (onUpdateProductTags) {
+        const updatedTags = await onUpdateProductTags(mergedTags);
+        if (updatedTags) {
+          tagsToShow = updatedTags;
+          onTagChanges(updatedTags);
+        }
       }
-    }
 
-    setLocalSelectedProduct([]);
-    setSearchQuery('');
+      setLocalSelectedProduct([]);
+      setSearchQuery('');
 
-    const manageProductTagListContent = (close: () => void) => (
-      <ManageProductTagList
-        renderMode={renderMode}
-        productTags={tagsToShow}
-        pageId={pageId}
-        pinnedProductId={pinnedProductId}
-        onUpdateProductTags={onUpdateProductTags}
-        onProductTagsChange={(updatedTags) => {
-          onTagChanges(updatedTags);
-        }}
-        onPinnedProductIdChange={onPinnedProductIdChange}
-        onClose={(updatedTags, updatedPinnedId) => {
-          onTagChanges(updatedTags);
-          if (onPinnedProductIdChange) {
-            onPinnedProductIdChange(updatedPinnedId);
-          }
-          setLocalSelectedProduct([]);
-          if (isDesktop) {
-            closePopup();
-          } else {
-            removeDrawerData();
-          }
-        }}
-        isHost={isHost}
-        sourceId=""
-      />
-    );
+      const manageProductTagListContent = (close: () => void) => (
+        <ManageProductTagList
+          renderMode={renderMode}
+          productTags={tagsToShow}
+          pageId={pageId}
+          pinnedProductId={pinnedProductId}
+          onUpdateProductTags={onUpdateProductTags}
+          onProductTagsChange={(updatedTags) => {
+            onTagChanges(updatedTags);
+          }}
+          onPinnedProductIdChange={onPinnedProductIdChange}
+          onClose={(updatedTags, updatedPinnedId) => {
+            onTagChanges(updatedTags);
+            if (onPinnedProductIdChange) {
+              onPinnedProductIdChange(updatedPinnedId);
+            }
+            setLocalSelectedProduct([]);
+            if (isDesktop) {
+              closePopup();
+            } else {
+              removeDrawerData();
+            }
+          }}
+          isHost={isHost}
+          sourceId=""
+        />
+      );
 
-    if (isDesktop) {
-      openPopup({
-        id: 'tagged-product-popup',
-        pageId,
-        componentId: COMPONENT_ID.PRODUCT_TAG_SELECTION,
-        isDismissable: true,
-        view: 'desktop',
-        children: ({ close }) => manageProductTagListContent(close),
-      });
-    } else {
-      setDrawerData({
-        content: manageProductTagListContent(() => removeDrawerData()),
-        ariaLabel: 'Tagged products',
-      });
+      if (isDesktop) {
+        openPopup({
+          id: 'tagged-product-popup',
+          pageId,
+          componentId: COMPONENT_ID.PRODUCT_TAG_SELECTION,
+          isDismissable: true,
+          view: 'desktop',
+          children: ({ close }) => manageProductTagListContent(close),
+        });
+      } else {
+        setDrawerData({
+          content: manageProductTagListContent(() => removeDrawerData()),
+          ariaLabel: 'Tagged products',
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   }, [
     selectedProductTags,
@@ -580,7 +587,7 @@ export function ProductTagSelection({
             textButton={mode === 'livestream' ? 'Add products' : 'Done'}
             isDisabled={
               (mode === 'livestream'
-                ? localSelectedProduct.length === 0
+                ? localSelectedProduct.length === 0 || isSubmitting
                 : !hasProductTagsChanged) || !online
             }
             onPress={mode === 'livestream' ? handleSubmit : onDone}
