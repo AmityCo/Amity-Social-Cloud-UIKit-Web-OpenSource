@@ -11,9 +11,8 @@ interface LivestreamDataContextType {
   room?: Amity.Room | null;
   channel?: Amity.Channel<'live'> | null;
   invitation?: Amity.Invitation;
+  parentPost?: Amity.Post | null;
   livestreamPost?: Amity.Post | null;
-  subscribedChildPost?: Amity.Post | null;
-  refreshSubscribedChildPost?: () => void;
   // Computed values from room for convenience
   hostId?: string;
   coHostId?: string;
@@ -36,7 +35,8 @@ interface LivestreamDataProviderProps {
   children: ReactNode;
   room?: Amity.Room | null;
   channel?: Amity.Channel<'live'> | null;
-  livestreamPost?: Amity.Post | null;
+  parentPost?: Amity.Post | null;
+  livestreamPost?: Amity.Post<'room'> | null;
   notificationAlignment?: NotificationAlignment;
 }
 
@@ -44,6 +44,7 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   children,
   room,
   channel,
+  parentPost,
   livestreamPost,
   notificationAlignment,
 }) => {
@@ -59,8 +60,6 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
 
   const hostChildPost =
     livestreamPost?.childrenPosts?.[0] ?? (room?.post as Amity.Post | undefined);
-  const postId = isHost ? hostChildPost?.postId : livestreamPost?.postId;
-  const { post: subscribedChildPost } = usePostSubscription(postId);
 
   const [invitationByMe, setInvitationByMe] = useState<Amity.Invitation>();
 
@@ -85,8 +84,8 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   const contextValue: LivestreamDataContextType = {
     room,
     channel,
+    parentPost,
     livestreamPost,
-    subscribedChildPost,
     host,
     coHost,
     hostId,

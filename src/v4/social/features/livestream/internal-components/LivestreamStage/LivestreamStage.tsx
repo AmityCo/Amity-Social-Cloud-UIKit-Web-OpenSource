@@ -75,8 +75,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
   // Internal countdown state - moved to parent for overlay management
   const [showCountdownOverlay, setShowCountdownOverlay] = useState(false);
   const [coHostLeaveHandler, setCoHostLeaveHandler] = useState<(() => void) | null>(null);
-  const { room, channel, livestreamPost } = useLivestreamData();
-  const { post: subscribedParentPost } = usePostSubscription(livestreamPost?.postId);
+  const { room, channel, parentPost } = useLivestreamData();
   const { confirm } = useConfirmContext();
 
   // Countdown timer for the overlay (10 seconds only)
@@ -177,7 +176,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
           onCoHostLeaveRequest={(handler) => setCoHostLeaveHandler(() => handler)}
         />
       )}
-      {subscribedParentPost?.feedType === 'reviewing' && (
+      {room && parentPost?.feedType === 'reviewing' && (
         <LivestreamOverlay.WaitForApproval view="streamer" />
       )}
       {isStarting && <LivestreamOverlay.Starting />}

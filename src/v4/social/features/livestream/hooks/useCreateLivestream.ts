@@ -15,6 +15,7 @@ import { useRoom } from './useRoom';
 
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
+import { usePostSubscription } from './usePostSubscription';
 
 export type CreateLivestreamUiState = 'preview' | 'broadcast' | 'backStage';
 
@@ -39,7 +40,7 @@ export interface UseCreateLivestreamReturn {
 
   // Livestream data
   room?: Amity.Room | null;
-  livestreamPost?: Amity.Post;
+  livestreamPost?: Amity.Post | null;
   channel?: Amity.Channel<'live'>;
   broadcasterData?: Amity.BroadcasterData;
 
@@ -116,9 +117,10 @@ export const useCreateLivestream = ({
     }
   }, [productCatalogueSettings?.product.enabled]);
 
-  const [livestreamPost, setLivestreamPost] = useState<Amity.Post | undefined>(
-    event?.room?.post as Amity.Post,
+  const { post: livestreamPost } = usePostSubscription(
+    event?.room?.post?.postId ?? room?.post?.postId,
   );
+
   const [channel, setChannel] = useState<Amity.Channel<'live'>>();
 
   const { community } = useCommunity({
@@ -285,7 +287,6 @@ export const useCreateLivestream = ({
 
           if (post.data) {
             const postData = post.data;
-            setLivestreamPost(postData);
             const room = postData.childrenPosts[0]?.getRoomInfo();
 
             if (room) {
