@@ -505,6 +505,9 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const hasTaggedProductsToDisplay =
     canShowProductTags && (livestreamPost?.productTags?.length ?? 0) > 0;
 
+  const isPendingPost =
+    parentPost?.feedType === 'reviewing' || subscribedPost?.feedType === 'reviewing';
+
   return (
     <LivestreamDataProvider
       room={room}
@@ -656,6 +659,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                         community={community}
                         isLoading={isChannelLoading}
                         isPlayer={uiState === 'player'}
+                        isPendingPost={parentPost?.feedType === 'reviewing'}
                       />
                     ) : (
                       <>
@@ -686,9 +690,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                                         isJoinedCommunity={!!community?.isJoined}
                                       />
                                     )}
-                                    <div className={styles.liveStreamPlayer__pinnedProduct}>
-                                      <PinnedProductOverlay pageId={pageId} />
-                                    </div>
+                                    {!isPendingPost && (
+                                      <div className={styles.liveStreamPlayer__pinnedProduct}>
+                                        <PinnedProductOverlay pageId={pageId} />
+                                      </div>
+                                    )}
                                   </div>
                                 </>
                               )}

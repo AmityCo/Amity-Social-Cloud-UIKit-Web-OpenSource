@@ -54,7 +54,6 @@ export const PendingPostContent = ({
   const { isDesktop } = useResponsive();
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
-  const canShowProductTags = productCatalogueSettings?.product.enabled;
 
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
@@ -73,6 +72,9 @@ export const PendingPostContent = ({
       return initialPost;
     }
   }, [initialPost, postData]);
+
+  const canShowProductTags =
+    productCatalogueSettings?.product.enabled && post?.childrenPosts[0]?.dataType !== 'room';
 
   const handleApprovePost = async (postId: string) => {
     if (postId == null) return;
