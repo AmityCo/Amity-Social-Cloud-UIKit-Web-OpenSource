@@ -670,6 +670,13 @@ export const LivestreamChatMessageComposer = ({
     pinnedProductId,
     isProductTagButtonHidden,
     productCatalogueSettings?.product.enabled,
+    isHostOrCoHostWithProductManagement,
+    isHost,
+    isCoHost,
+    isPlayer,
+    room,
+    hasProductTags,
+    canReact,
   ]);
 
   return (

@@ -56,10 +56,6 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   const coHostId = coHost?.userId;
 
   const { currentUserId } = useSDK();
-  const isHost = hostId === currentUserId;
-
-  const hostChildPost =
-    livestreamPost?.childrenPosts?.[0] ?? (room?.post as Amity.Post | undefined);
 
   const [invitationByMe, setInvitationByMe] = useState<Amity.Invitation>();
 
