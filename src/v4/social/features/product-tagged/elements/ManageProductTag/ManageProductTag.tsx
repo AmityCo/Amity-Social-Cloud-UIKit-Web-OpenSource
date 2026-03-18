@@ -50,10 +50,14 @@ export function ManageProductTag({
   const price = product ? formatPrice(product.price, product.currency) : undefined;
   const { online } = useNetworkState();
 
+  const productUrl = product?.productUrl;
+
   if (!product) return null;
 
-  return (
-    <div className={styles.manageProductTag} style={themeStyles} data-test-id={accessibilityId}>
+  const isLinkable = !unavailable && !!productUrl;
+
+  const productContent = (
+    <>
       <ProductImageThumbnail
         imageUrl={product.thumbnailUrl}
         thumbnailMode={product.thumbnailMode}
@@ -112,6 +116,23 @@ export function ManageProductTag({
           )}
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <div className={styles.manageProductTag} style={themeStyles} data-test-id={accessibilityId}>
+      {isLinkable ? (
+        <a
+          href={productUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.manageProductTag__link}
+        >
+          {productContent}
+        </a>
+      ) : (
+        productContent
+      )}
     </div>
   );
 }
