@@ -318,61 +318,84 @@ export function ManageProductTagList({
       <div className={styles.manageProductTagList__content}>
         {productTags?.length === 0 ? null : (
           <>
-            {pinnedProducts.length > 0 && (
-              <div className={styles.manageProductTagList__pinnedSection}>
-                <div className={styles.manageProductTagList__sectionTitle}>
-                  <Typography.TitleBold as="h3">Pinned product</Typography.TitleBold>
-                </div>
-
-                <div className={styles.manageProductTagList__pinnedContent}>
-                  <div className={styles.manageProductTagList__pinnedList}>
-                    {pinnedProducts.map((productTag) => (
-                      <ManageProductTag
-                        sourceType={sourceType}
-                        sourceId={sourceId as string}
-                        key={productTag.productId}
-                        renderMode={renderMode}
-                        productTag={productTag}
-                        isPinned={true}
-                        onRemove={handleRemove}
-                        onTogglePin={handleTogglePin}
-                        pageId={pageId}
-                        componentId={componentId}
-                        isDisabled={isPinning || isUnpinning || !online}
-                      />
-                    ))}
-                  </div>
+            {renderMode === 'playback' ? (
+              <div className={styles.manageProductTagList__scrollableContent}>
+                <div className={styles.manageProductTagList__list}>
+                  {productTags?.map((productTag) => (
+                    <ManageProductTag
+                      key={productTag.productId}
+                      renderMode={renderMode}
+                      productTag={productTag}
+                      isPinned={false}
+                      onRemove={handleRemove}
+                      onTogglePin={handleTogglePin}
+                      sourceType={sourceType}
+                      sourceId={sourceId}
+                      pageId={pageId}
+                      componentId={componentId}
+                      isDisabled={!online}
+                    />
+                  ))}
                 </div>
               </div>
-            )}
+            ) : (
+              <>
+                {pinnedProducts.length > 0 && (
+                  <div className={styles.manageProductTagList__pinnedSection}>
+                    <div className={styles.manageProductTagList__sectionTitle}>
+                      <Typography.TitleBold as="h3">Pinned product</Typography.TitleBold>
+                    </div>
 
-            {otherProducts.length > 0 && (
-              <div className={styles.manageProductTagList__otherSection}>
-                <div className={styles.manageProductTagList__sectionTitle}>
-                  <Typography.TitleBold as="h3">Other products</Typography.TitleBold>
-                </div>
-                <div className={styles.manageProductTagList__scrollableContent}>
-                  <div className={styles.manageProductTagList__list}>
-                    {otherProducts.map((productTag) => (
-                      <ManageProductTag
-                        key={productTag.productId}
-                        renderMode={renderMode}
-                        productTag={productTag}
-                        isPinned={false}
-                        onRemove={handleRemove}
-                        onTogglePin={handleTogglePin}
-                        sourceType={sourceType}
-                        sourceId={sourceId}
-                        pageId={pageId}
-                        componentId={componentId}
-                        isDisabled={isPinning || isUnpinning || !online}
-                      />
-                    ))}
+                    <div className={styles.manageProductTagList__pinnedContent}>
+                      <div className={styles.manageProductTagList__pinnedList}>
+                        {pinnedProducts.map((productTag) => (
+                          <ManageProductTag
+                            sourceType={sourceType}
+                            sourceId={sourceId as string}
+                            key={productTag.productId}
+                            renderMode={renderMode}
+                            productTag={productTag}
+                            isPinned={true}
+                            onRemove={handleRemove}
+                            onTogglePin={handleTogglePin}
+                            pageId={pageId}
+                            componentId={componentId}
+                            isDisabled={isPinning || isUnpinning || !online}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )}
+                )}
 
+                {otherProducts.length > 0 && (
+                  <div className={styles.manageProductTagList__otherSection}>
+                    <div className={styles.manageProductTagList__sectionTitle}>
+                      <Typography.TitleBold as="h3">Other products</Typography.TitleBold>
+                    </div>
+                    <div className={styles.manageProductTagList__scrollableContent}>
+                      <div className={styles.manageProductTagList__list}>
+                        {otherProducts.map((productTag) => (
+                          <ManageProductTag
+                            key={productTag.productId}
+                            renderMode={renderMode}
+                            productTag={productTag}
+                            isPinned={false}
+                            onRemove={handleRemove}
+                            onTogglePin={handleTogglePin}
+                            sourceType={sourceType}
+                            sourceId={sourceId}
+                            pageId={pageId}
+                            componentId={componentId}
+                            isDisabled={isPinning || isUnpinning || !online}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
             <div className={styles.manageProductTagList__footer}>
               <Button
                 className={styles.manageProductTagList__addButton}
