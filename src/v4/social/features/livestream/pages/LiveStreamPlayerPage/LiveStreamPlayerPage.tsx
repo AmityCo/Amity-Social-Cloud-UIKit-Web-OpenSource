@@ -488,8 +488,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     }
   }, [subscribedPost?.productTags, subscribedPost?.pinnedProductId]);
 
-  const canShowProductTags =
-    (subscribedPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
+  const canShowProductTags = productCatalogueSettings?.product.enabled && !isEnded && !isTerminated;
+
+  const hasTaggedProductsToDisplay =
+    canShowProductTags && (livestreamPost?.productTags?.length ?? 0) > 0;
 
   return (
     <LivestreamDataProvider
@@ -535,7 +537,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     productTags={livestreamPost?.productTags || []}
                     isHost={isHost}
                     onUpdateProductTags={handleUpdateProductTags}
-                    canShowProductTags={productCatalogueSettings?.product.enabled}
+                    canShowProductTags={canShowProductTags}
                   />
                 )}
                 <div
@@ -556,15 +558,15 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                     pageId={pageId}
                     ref={videoRef}
                     productTags={
-                      !isDesktop && isRecorded && canShowProductTags
+                      !isDesktop && isRecorded && hasTaggedProductsToDisplay
                         ? livestreamPost?.productTags ?? []
                         : []
                     }
                     onClickProductTagBadge={onClickProductTagBadge}
                     onClose={onClose}
-                    canShowProductTags={productCatalogueSettings?.product.enabled}
+                    canShowProductTags={canShowProductTags}
                   />
-                  {isDesktop && !isLive && canShowProductTags && (
+                  {isDesktop && !isLive && hasTaggedProductsToDisplay && (
                     <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
                       <TaggedProductsModal
                         key={`${subscribedPost?.productTags?.length}-${subscribedPost?.pinnedProductId || 'none'}`}
