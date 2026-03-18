@@ -664,6 +664,7 @@ export const LivestreamChatMessageComposer = ({
     channel?.attachedTo?.postId,
     channel?.attachedTo?.roomId,
     coHost?.userId,
+    coHost?.canManageProductTags,
     channel?.metadata?.mutedMembers,
     invitationByMe?.status,
     subscribedPost,
