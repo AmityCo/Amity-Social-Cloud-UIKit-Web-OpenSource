@@ -131,6 +131,7 @@
 
 .productTag__viewButton {
   flex-shrink: 0;
+  margin-left: auto;
   padding: 0.375rem 0.5rem !important;
   max-width: 4rem;
   width: 100%;

@@ -15,6 +15,7 @@ export interface LivestreamChatProps {
   isLoading?: boolean;
   disabled?: boolean;
   isPlayer?: boolean;
+  isPendingPost?: boolean;
 }
 
 export const LivestreamChat: React.FC<LivestreamChatProps> = ({
@@ -24,6 +25,7 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
   isLoading = false,
   disabled = false,
   isPlayer = false,
+  isPendingPost = false,
 }) => {
   // Get values from context
   const { channel, room, parentPost: post } = useLivestreamData();
@@ -33,10 +35,9 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
     return null;
   }
 
-  const isPendingPost = post?.feedType === 'reviewing';
-
+  const isPending = isPendingPost || post?.feedType === 'reviewing';
   const disableComposer =
-    isLoading || room?.status === liveStreamStatus.ended || disabled || isPendingPost;
+    isLoading || room?.status === liveStreamStatus.ended || disabled || isPending;
 
   return (
     <div className={styles.livestreamChat__container}>
@@ -49,16 +50,18 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
             isJoinedCommunity={!!community?.isJoined}
             isLoading={isLoading || isPoorConnection}
           />
-          <div className={styles.livestreamChat__chatFeedWrapper__pinnedProduct}>
-            <PinnedProductOverlay pageId={pageId} componentId={componentId} />
-          </div>
+          {!isPending && (
+            <div className={styles.livestreamChat__chatFeedWrapper__pinnedProduct}>
+              <PinnedProductOverlay pageId={pageId} componentId={componentId} />
+            </div>
+          )}
         </div>
         <LivestreamChatMessageComposer
           pageId={pageId}
           channelId={channel.channelId}
           disabled={disableComposer}
           community={community}
-          isPendingPost={isPendingPost}
+          isPendingPost={isPending}
           isPlayer={isPlayer}
         />
       </div>
