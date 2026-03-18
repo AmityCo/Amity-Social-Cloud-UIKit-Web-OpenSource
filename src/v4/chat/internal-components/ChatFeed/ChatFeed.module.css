@@ -87,6 +87,7 @@
 
   .chatFeed__emptyText {
     color: var(--asc-color-secondary-shade2);
+    text-align: center;
   }
 
   .chatFeed__container {

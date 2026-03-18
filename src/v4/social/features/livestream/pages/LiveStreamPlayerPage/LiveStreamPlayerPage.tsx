@@ -77,6 +77,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const wasEverLiveRef = useRef(false);
 
   const { post: subscribedPost } = usePostSubscription(post?.childrenPosts[0]?.postId);
+  const { post: parentPost } = usePostSubscription(post?.postId);
   const { room } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
@@ -209,7 +210,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isTerminated &&
     !isUserBanned;
 
-  const showWaitingApprovalBanner = isLive && isDesktop && subscribedPost?.feedType === 'reviewing';
+  const showWaitingApprovalBanner = isLive && isDesktop && parentPost?.feedType === 'reviewing';
 
   const notificationAlignment = showLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
   useCoHostParticipantEvents({ room, notificationAlignment, mode: 'viewer' });
@@ -459,8 +460,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     return (
       <TaggedProductsModal
         pageId={pageId}
-        productTags={livestreamPost?.productTags || []}
-        pinnedProductId={livestreamPost?.pinnedProductId}
+        productTags={subscribedPost?.productTags || []}
+        pinnedProductId={subscribedPost?.pinnedProductId}
         isHost={isHost}
         onClose={() => {
           isProductDrawerOpenRef.current = false;
@@ -473,8 +474,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     );
   }, [
     pageId,
-    livestreamPost?.productTags,
-    livestreamPost?.pinnedProductId,
+    subscribedPost?.productTags,
+    subscribedPost?.pinnedProductId,
     isHost,
     removeDrawerData,
     handleUpdateProductTags,
@@ -491,19 +492,24 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   // Update drawer content when product tags change (only if product drawer is open)
   useEffect(() => {
-    if (isProductDrawerOpenRef.current && livestreamPost) {
+    if (isProductDrawerOpenRef.current && subscribedPost) {
       setDrawerData({
         content: getTaggedProductsModalContent(),
         ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
       });
     }
-  }, [livestreamPost?.productTags, livestreamPost?.pinnedProductId]);
+  }, [subscribedPost?.productTags, subscribedPost?.pinnedProductId]);
 
   const canShowProductTags =
-    (livestreamPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
+    (subscribedPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
 
   return (
-    <LivestreamDataProvider room={room} channel={channel} livestreamPost={livestreamPost}>
+    <LivestreamDataProvider
+      room={room}
+      channel={channel}
+      parentPost={parentPost}
+      livestreamPost={subscribedPost as Amity.Post<'room'>}
+    >
       <ModalOverlay
         isOpen={(!!room && !isUserBanned) || isDesktop}
         className={styles.liveStreamPlayer__overlay}
@@ -573,11 +579,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   {isDesktop && !isLive && canShowProductTags && (
                     <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
                       <TaggedProductsModal
-                        key={`${livestreamPost?.productTags?.length}-${livestreamPost?.pinnedProductId || 'none'}`}
+                        key={`${subscribedPost?.productTags?.length}-${subscribedPost?.pinnedProductId || 'none'}`}
                         roomId={roomId || room?.roomId}
                         pageId={pageId}
-                        productTags={livestreamPost?.productTags || []}
-                        pinnedProductId={livestreamPost?.pinnedProductId}
+                        productTags={subscribedPost?.productTags || []}
+                        pinnedProductId={subscribedPost?.pinnedProductId}
                         isHost={isHost}
                         onClose={() => {
                           isProductDrawerOpenRef.current = false;
@@ -693,7 +699,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                             channelId={channel.channelId}
                             disabled={room?.status === liveStreamStatus.ended || isPoorConnection}
                             community={community}
-                            isPendingPost={subscribedPost?.feedType === 'reviewing'}
+                            isPendingPost={parentPost?.feedType === 'reviewing'}
                             isPlayer={uiState === 'player'}
                           />
                         )}

@@ -155,7 +155,7 @@ export const LivestreamChatMessageComposer = ({
     coHost,
     invitationByMe,
     room,
-    subscribedChildPost: subscribedPost,
+    livestreamPost: subscribedPost,
   } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { info } = useNotifications();

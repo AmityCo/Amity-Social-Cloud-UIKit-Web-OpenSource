@@ -26,15 +26,14 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
   isPlayer = false,
 }) => {
   // Get values from context
-  const { channel, room, livestreamPost: post } = useLivestreamData();
-  const { post: subscribedParentPost } = usePostSubscription(post?.postId);
+  const { channel, room, parentPost: post } = useLivestreamData();
   const componentId = COMPONENT_ID.LIVESTREAM_CHAT;
 
   if (!channel || !post) {
     return null;
   }
 
-  const isPendingPost = subscribedParentPost?.feedType === 'reviewing';
+  const isPendingPost = post?.feedType === 'reviewing';
 
   const disableComposer =
     isLoading || room?.status === liveStreamStatus.ended || disabled || isPendingPost;

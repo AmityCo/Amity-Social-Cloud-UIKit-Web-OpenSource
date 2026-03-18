@@ -9,6 +9,7 @@ import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -47,6 +48,8 @@ const ChatFeed: FC<ChatFeedProps> = ({
     },
     joined && !isVisitorOrBot && !!liveChannel,
   );
+
+  const { parentPost } = useLivestreamData();
 
   const handlePopoverStateChange = (isOpen: boolean) => {
     setCurrentMessages(isOpen ? messages ?? [] : []);
@@ -102,6 +105,8 @@ const ChatFeed: FC<ChatFeedProps> = ({
 
   const isEmpty = !loading && messages?.length === 0;
 
+  const isPendingPost = parentPost?.feedType === 'reviewing';
+
   return (
     <div className={styles.chatFeed__container}>
       {liveChannelLoading || isEmpty || isVisitorOrBot ? (
@@ -112,7 +117,9 @@ const ChatFeed: FC<ChatFeedProps> = ({
               No messages yet
             </Typography.TitleBold>
             <Typography.Caption className={styles.chatFeed__emptyText}>
-              Be the first to start conversation.
+              {isPendingPost
+                ? 'Users can start messaging once the post has been approved.'
+                : 'Be the first to start conversation.'}
             </Typography.Caption>
           </div>
         </>

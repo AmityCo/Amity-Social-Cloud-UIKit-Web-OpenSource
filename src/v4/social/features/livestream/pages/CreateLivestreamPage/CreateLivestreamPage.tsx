@@ -88,7 +88,7 @@ export function CreateLivestreamPage({
     <LivestreamDataProvider
       room={room}
       channel={channel}
-      livestreamPost={livestreamPost}
+      parentPost={livestreamPost}
       notificationAlignment={notificationAlignment}
     >
       <ModalOverlay className={styles.createLivestream__overlay} style={themeStyles} isOpen={true}>

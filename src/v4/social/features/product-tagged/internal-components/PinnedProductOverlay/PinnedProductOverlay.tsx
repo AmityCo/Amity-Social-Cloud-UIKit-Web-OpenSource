@@ -22,18 +22,13 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
   const { unpinProduct, updateProductTags } = useTaggingProduct();
   const { productCatalogueSettings } = useProductCatalogueSettings();
 
-  const {
-    room,
-    hostId,
-    coHostId,
-    subscribedChildPost: subscribedPost,
-    livestreamPost,
-  } = useLivestreamData();
+  const { room, hostId, coHostId, livestreamPost } = useLivestreamData();
 
   const { post: subscribedParentPost } = usePostSubscription(livestreamPost?.postId);
   const { canCoHostManageProductTags } = useLivestreamModeration({ room });
 
-  const pinnedProductId = subscribedPost?.pinnedProductId;
+  const pinnedProductId = livestreamPost?.pinnedProductId;
+
   const lastKnownPinnedTagRef = useRef<Amity.MediaProductTag | undefined>(undefined);
   const [dismissedPinnedProductId, setDismissedPinnedProductId] = useState<string | undefined>(
     undefined,
@@ -51,16 +46,16 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
   }, [pinnedProductId]);
 
   const onUnpin = async () => {
-    await unpinProduct(subscribedPost?.postId || '');
+    await unpinProduct(livestreamPost?.postId || '');
   };
 
   const onRemove = async () => {
-    const updateProduct = subscribedPost?.productTags?.filter(
+    const updateProduct = livestreamPost?.productTags?.filter(
       (tag) => tag.productId !== pinnedProductId,
     );
     try {
       await updateProductTags({
-        postId: subscribedPost?.postId || '',
+        postId: livestreamPost?.postId || '',
         productTags: updateProduct || [],
       });
       success({ content: 'Product tag removed.' });
@@ -79,11 +74,11 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
     return null;
   }
 
-  if (!subscribedPost?.productTags || !pinnedProductId || !isShowPinnedProduct) {
+  if (!livestreamPost?.productTags || !pinnedProductId || !isShowPinnedProduct) {
     return null;
   }
 
-  const pinnedTag = subscribedPost.productTags?.find((tag) => tag.productId === pinnedProductId);
+  const pinnedTag = livestreamPost.productTags?.find((tag) => tag.productId === pinnedProductId);
 
   // Keep last known tag so the component stays mounted during brief sync gaps
   if (pinnedTag) {
