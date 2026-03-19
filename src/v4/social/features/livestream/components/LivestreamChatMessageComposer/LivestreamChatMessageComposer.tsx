@@ -187,6 +187,7 @@ export const LivestreamChatMessageComposer = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isLoadingMembership, setIsLoadingMembership] = useState(true);
   const [isProductTagButtonHidden, setIsProductTagButtonHidden] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const hasProductTags = subscribedPost?.productTags && subscribedPost?.productTags.length > 0;
 
@@ -278,8 +279,20 @@ export const LivestreamChatMessageComposer = ({
     // ✅ Use capture phase to handle before child components
     container.addEventListener('touchstart', handleContainerTouch, true);
 
+    const handleFocusIn = () => setIsFocused(true);
+    const handleFocusOut = (e: FocusEvent) => {
+      if (!container.contains(e.relatedTarget as Node)) {
+        setIsFocused(false);
+      }
+    };
+
+    container.addEventListener('focusin', handleFocusIn);
+    container.addEventListener('focusout', handleFocusOut);
+
     return () => {
       container.removeEventListener('touchstart', handleContainerTouch, true);
+      container.removeEventListener('focusin', handleFocusIn);
+      container.removeEventListener('focusout', handleFocusOut);
     };
   }, [containerRef.current]);
 
@@ -645,6 +658,12 @@ export const LivestreamChatMessageComposer = ({
                 size="large"
                 defaultIcon={<ArrowTop />}
                 isDisabled={disabled}
+                color={!disabled && isFocused ? 'primary' : 'secondary'}
+                iconClassName={
+                  disabled || !isFocused
+                    ? styles.livestreamChatMessageComposer__sendButton__inactiveIcon
+                    : undefined
+                }
               />
             )}
           </div>
@@ -678,6 +697,7 @@ export const LivestreamChatMessageComposer = ({
     room,
     hasProductTags,
     canReact,
+    isFocused,
   ]);
 
   return (
