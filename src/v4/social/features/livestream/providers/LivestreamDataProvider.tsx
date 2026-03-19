@@ -2,9 +2,7 @@ import React, { createContext, useContext, ReactNode, useState, useEffect } from
 import useSDK from '~/core/hooks/useSDK';
 import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
 import { useCoHostPermissionNotification } from '~/v4/social/features/livestream/hooks';
-import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
-import { usePost } from '~/v4/social/hooks/posts/usePost';
 
 // Define the context type for only the data that needs to be passed to nested components
 interface LivestreamDataContextType {
@@ -12,7 +10,8 @@ interface LivestreamDataContextType {
   channel?: Amity.Channel<'live'> | null;
   invitation?: Amity.Invitation;
   parentPost?: Amity.Post | null;
-  livestreamPost?: Amity.Post | null;
+  livestreamPost?: Amity.Post<'room'> | null;
+  setLivestreamPost?: React.Dispatch<React.SetStateAction<Amity.Post<'room'> | null>>;
   // Computed values from room for convenience
   hostId?: string;
   coHostId?: string;
@@ -52,6 +51,14 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   const host = room?.participants.find((participant) => participant.type === 'host');
   const coHost = room?.participants.find((participant) => participant.type === 'coHost');
 
+  const [livestreamChildPost, setLivestreamChildPost] = useState<Amity.Post<'room'> | null>(
+    livestreamPost || null,
+  );
+
+  useEffect(() => {
+    setLivestreamChildPost(livestreamPost ?? null);
+  }, [livestreamPost]);
+
   const hostId = host?.userId;
   const coHostId = coHost?.userId;
 
@@ -81,7 +88,8 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
     room,
     channel,
     parentPost,
-    livestreamPost,
+    livestreamPost: livestreamChildPost,
+    setLivestreamPost: setLivestreamChildPost,
     host,
     coHost,
     hostId,

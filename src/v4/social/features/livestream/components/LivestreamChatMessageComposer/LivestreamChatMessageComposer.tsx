@@ -58,6 +58,7 @@ interface LiveManageProductTagListContentProps {
   pageId: string;
   sourceType: AnalyticsSourceTypeEnum;
   onClose: () => void;
+  onPostUpdate?: (post: Amity.Post<'room'>) => void;
 }
 
 function LiveManageProductTagListContent({
@@ -66,8 +67,15 @@ function LiveManageProductTagListContent({
   pageId,
   sourceType,
   onClose,
+  onPostUpdate,
 }: LiveManageProductTagListContentProps) {
   const { post: subscribedPost, isLoading } = usePost({ postId });
+
+  useEffect(() => {
+    if (subscribedPost && subscribedPost.dataType === 'room') {
+      onPostUpdate?.(subscribedPost as Amity.Post<'room'>);
+    }
+  }, [subscribedPost, onPostUpdate]);
   const pinnedProductId = subscribedPost?.pinnedProductId;
   const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } =
     useTaggingProduct();
@@ -156,6 +164,7 @@ export const LivestreamChatMessageComposer = ({
     invitationByMe,
     room,
     livestreamPost: subscribedPost,
+    setLivestreamPost,
   } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { info } = useNotifications();
@@ -499,6 +508,7 @@ export const LivestreamChatMessageComposer = ({
                             pageId={pageId}
                             sourceType={AnalyticsSourceTypeEnum.ROOM}
                             onClose={() => closePopup('manage_product_tagging_popup')}
+                            onPostUpdate={setLivestreamPost}
                           />
                         ) : null,
                       });
@@ -511,6 +521,7 @@ export const LivestreamChatMessageComposer = ({
                             pageId={pageId}
                             sourceType={AnalyticsSourceTypeEnum.ROOM}
                             onClose={removeDrawerData}
+                            onPostUpdate={setLivestreamPost}
                           />
                         ) : null,
                       });
