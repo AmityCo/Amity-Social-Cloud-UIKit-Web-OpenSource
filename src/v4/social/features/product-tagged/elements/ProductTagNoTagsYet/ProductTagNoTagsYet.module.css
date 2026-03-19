@@ -12,7 +12,7 @@
 .productTagNoTagsYet__icon {
   width: 3rem;
   height: 3rem;
-  fill: var(--asc-color-secondary-shade3);
+  color: var(--asc-color-secondary-shade3);
   margin-bottom: 0.5rem;
 }
 

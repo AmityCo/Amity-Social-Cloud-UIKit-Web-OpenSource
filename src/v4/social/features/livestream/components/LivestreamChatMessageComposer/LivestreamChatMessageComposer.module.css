@@ -103,6 +103,11 @@
   flex-shrink: 0;
 }
 
+.livestreamChatMessageComposer__sendButton__inactiveIcon {
+  color: var(--asc-color-base-shade3) !important;
+  fill: var(--asc-color-base-shade3) !important;
+}
+
 .livestreamChatMessageComposer__notification__refPosition {
   position: relative;
   width: 100%;

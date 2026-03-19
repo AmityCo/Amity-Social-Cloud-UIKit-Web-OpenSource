@@ -41,7 +41,7 @@ export function ProductTagSelectionHeader({
     mode === 'livestream'
       ? isShowNoProductsTagYet
         ? 'Tagged products'
-        : 'Add Products'
+        : 'Add products'
       : mode === 'create'
         ? config.create_mode_title || 'Tag products'
         : config.edit_mode_title || 'Edit tags';
