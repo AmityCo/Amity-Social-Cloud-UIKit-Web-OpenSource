@@ -255,6 +255,7 @@ export const useCreateLivestream = ({
       },
       type: 'confirm',
       okText: 'Go live',
+      okButtonColor: 'primary',
       cancelText: 'Edit live',
       title: 'Product tagging isn’t available',
       pageId,
