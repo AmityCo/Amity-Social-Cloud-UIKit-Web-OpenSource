@@ -123,8 +123,7 @@ export function TaggedProductsModal({
         isShowSearchProduct
         isFromManageTagList
         isHost={isHost}
-        onDone={(tags) => {
-          onUpdateProductTags?.(tags);
+        onDone={() => {
           setScreen('list');
         }}
         onClose={() => setScreen('list')}

@@ -58,6 +58,7 @@ interface LiveManageProductTagListContentProps {
   pageId: string;
   sourceType: AnalyticsSourceTypeEnum;
   onClose: () => void;
+  onProductCatalogueDisabled?: () => void;
   onPostUpdate?: (post: Amity.Post<'room'>) => void;
 }
 
@@ -67,6 +68,7 @@ function LiveManageProductTagListContent({
   pageId,
   sourceType,
   onClose,
+  onProductCatalogueDisabled,
   onPostUpdate,
 }: LiveManageProductTagListContentProps) {
   const { post: subscribedPost, isLoading } = usePost({ postId });
@@ -77,9 +79,28 @@ function LiveManageProductTagListContent({
     }
   }, [subscribedPost, onPostUpdate]);
   const pinnedProductId = subscribedPost?.pinnedProductId;
-  const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } =
-    useTaggingProduct();
-  const { success, info } = useNotifications();
+
+  const handleProductCatalogueDisabledWithClose = useCallback(() => {
+    onClose();
+    onProductCatalogueDisabled?.();
+  }, [onClose, onProductCatalogueDisabled]);
+
+  const { pinProduct, unpinProduct, isPinning, isUnpinning, updateProductTags } = useTaggingProduct(
+    { onProductCatalogueDisabled: handleProductCatalogueDisabledWithClose },
+  );
+  const { success } = useNotifications();
+
+  // Track the last confirmed server tag IDs independently of subscribedPost,
+  // which can be stale right after an add/remove API call.
+  const lastKnownTagIdsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (subscribedPost?.productTags) {
+      lastKnownTagIdsRef.current = new Set(
+        subscribedPost.productTags.map((t: Amity.ProductTag) => t.productId),
+      );
+    }
+  }, [subscribedPost?.productTags]);
 
   if (isLoading || !subscribedPost) return null;
 
@@ -101,30 +122,43 @@ function LiveManageProductTagListContent({
             await updateProductTags({
               postId: subscribedPost?.postId,
               productTags: updatedTags || [],
+              action: 'remove',
             });
             success({ content: 'Product tag removed.' });
           } catch (error) {
-            info({ content: 'Failed to remove product tag. Please try again.' });
+            return subscribedPost?.productTags as Amity.ProductTag[] | undefined;
           }
         }
       }}
       onUpdateProductTags={async (tags) => {
         if (subscribedPost?.postId) {
+          const hasNewTags = tags.some(
+            (t: Amity.ProductTag) => !lastKnownTagIdsRef.current.has(t.productId),
+          );
           try {
             const result = await updateProductTags({
               postId: subscribedPost?.postId,
               productTags: tags,
+              action: 'add',
             });
+
+            // Update the ref immediately with confirmed server state
+            if (result?.data?.productTags) {
+              lastKnownTagIdsRef.current = new Set(
+                result.data.productTags.map((t: Amity.ProductTag) => t.productId),
+              );
+            }
+
             const hasUnavailableProducts = result?.data?.productTags?.some(
               (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
             );
-            if (!hasUnavailableProducts) {
+            if (!hasUnavailableProducts && hasNewTags) {
               success({ content: 'Product tags added.' });
             }
 
             return result?.data?.productTags as Amity.ProductTag[] | undefined;
           } catch (error) {
-            info({ content: 'Failed to add product tags. Please try again.' });
+            return subscribedPost?.productTags as Amity.ProductTag[] | undefined;
           }
         }
       }}
@@ -138,7 +172,13 @@ function LiveManageProductTagListContent({
               });
             }
           } else {
-            await unpinProduct(subscribedPost?.postId);
+            // Only call unpinProduct for explicit unpin actions, not when the pinned product was removed
+            const pinnedProductStillExists = subscribedPost?.productTags?.some(
+              (tag) => tag.productId === pinnedProductId,
+            );
+            if (pinnedProductStillExists) {
+              await unpinProduct(subscribedPost?.postId);
+            }
           }
         }
       }}
@@ -206,10 +246,16 @@ export const LivestreamChatMessageComposer = ({
   });
 
   useEffect(() => {
-    if (productCatalogueSettings?.product.enabled) {
-      setIsProductTagButtonHidden(false);
-    }
+    if (productCatalogueSettings == null) return;
+    setIsProductTagButtonHidden(!productCatalogueSettings.product.enabled);
   }, [productCatalogueSettings?.product.enabled]);
+
+  const handleProductCatalogueDisabled = useCallback(() => {
+    setIsProductTagButtonHidden(true);
+    closePopup('manage_product_tagging_popup');
+    closePopup('product_tag_list_popup');
+    removeDrawerData();
+  }, [closePopup, removeDrawerData]);
 
   const canReact = ((!isHost && !isCoHost) || isPlayer) && (isEmpty || isMuted);
 
@@ -432,8 +478,8 @@ export const LivestreamChatMessageComposer = ({
     if (!latestSettings?.product.enabled) {
       setIsProductTagButtonHidden(true);
       warning({
-        title: 'Product tagging isn’t available',
-        content: 'Any products you’ve tagged will be removed and won’t be shown to viewers.',
+        title: `Product tagging isn't available`,
+        content: `Any products you've tagged will be removed and won't be shown to viewers.`,
       });
       return false;
     }
@@ -508,6 +554,7 @@ export const LivestreamChatMessageComposer = ({
                             pageId={pageId}
                             sourceType={AnalyticsSourceTypeEnum.ROOM}
                             onClose={() => closePopup('manage_product_tagging_popup')}
+                            onProductCatalogueDisabled={handleProductCatalogueDisabled}
                             onPostUpdate={setLivestreamPost}
                           />
                         ) : null,
@@ -521,6 +568,7 @@ export const LivestreamChatMessageComposer = ({
                             pageId={pageId}
                             sourceType={AnalyticsSourceTypeEnum.ROOM}
                             onClose={removeDrawerData}
+                            onProductCatalogueDisabled={handleProductCatalogueDisabled}
                             onPostUpdate={setLivestreamPost}
                           />
                         ) : null,
@@ -580,11 +628,15 @@ export const LivestreamChatMessageComposer = ({
                   />
                 )
               )}
-              {hasProductTags && productCatalogueSettings?.product.enabled && (
-                <div className={styles.livestreamChatMessageComposer__productTaggingButton__badge}>
-                  {subscribedPost?.productTags?.length}
-                </div>
-              )}
+              {hasProductTags &&
+                productCatalogueSettings?.product.enabled &&
+                !isProductTagButtonHidden && (
+                  <div
+                    className={styles.livestreamChatMessageComposer__productTaggingButton__badge}
+                  >
+                    {subscribedPost?.productTags?.length}
+                  </div>
+                )}
             </div>
           )}
 
@@ -709,6 +761,7 @@ export const LivestreamChatMessageComposer = ({
     hasProductTags,
     canReact,
     isFocused,
+    handleProductCatalogueDisabled,
   ]);
 
   return (
