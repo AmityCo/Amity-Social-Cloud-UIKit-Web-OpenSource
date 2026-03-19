@@ -399,6 +399,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
           const result = await updateProductTags({
             postId: livestreamPost?.postId,
             productTags: tags,
+            action: isRemoving ? 'remove' : 'add',
           });
 
           // Update the ref with the new count after successful update
@@ -408,17 +409,13 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
           const hasUnavailableProducts = result?.data?.productTags?.some(
             (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
           );
-          if (!isRemoving && !hasUnavailableProducts) {
+          if (newTagsCount > previousTagsCount && !hasUnavailableProducts) {
             success({ content: 'Product tags added.' });
           }
 
           return result?.data?.productTags as Amity.ProductTag[] | undefined;
         } catch (error) {
-          info({
-            content: isRemoving
-              ? 'Failed to remove product tags. Please try again.'
-              : 'Failed to add product tags. Please try again.',
-          });
+          //
         }
       }
     },
@@ -435,10 +432,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         await updateProductTags({
           postId: livestreamPost?.postId,
           productTags: updatedTags || [],
+          action: 'remove',
         });
         success({ content: 'Product tag removed.' });
       } catch (error) {
-        info({ content: 'Failed to remove product tag. Please try again.' });
+        //
       }
     },
     [livestreamPost?.postId, livestreamPost?.productTags, updateProductTags, success, info],

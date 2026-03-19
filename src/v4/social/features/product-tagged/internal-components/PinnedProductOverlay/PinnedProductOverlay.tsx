@@ -50,13 +50,14 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
   };
 
   const onRemove = async () => {
-    const updateProduct = livestreamPost?.productTags?.filter(
+    const updatedTags = livestreamPost?.productTags?.filter(
       (tag) => tag.productId !== pinnedProductId,
     );
     try {
       await updateProductTags({
         postId: livestreamPost?.postId || '',
-        productTags: updateProduct || [],
+        productTags: updatedTags || [],
+        action: 'remove',
       });
       success({ content: 'Product tag removed.' });
     } catch (error) {
