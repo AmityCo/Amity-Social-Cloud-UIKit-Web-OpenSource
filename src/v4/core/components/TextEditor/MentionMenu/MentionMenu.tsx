@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import ReactDOM from 'react-dom';
-import type { MenuOption } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import { UserMentionItem } from './UserMentionItem';
 import { Button } from '~/v4/core/components/AriaButton';
-import { Tabs } from '~/v4/core/components/Tabs';
 import { TagOutlined } from '~/v4/icons/TagOutlined';
-import UserOutlined from '~/v4/icons/UserOutlined';
 import UserRegular from '~/v4/icons/UserRegular';
 import Close from '~/v4/icons/Close';
 import { MentionTypeaheadOption } from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
@@ -19,6 +16,7 @@ import {
   ProductMentionItemSkeleton,
 } from '~/v4/social/internal-components/Skeleton';
 import { SEARCH_PRODUCT_MINIMUM_CHARACTER } from '~/social/constants';
+import { MentionMenuTabs } from './MentionMenuTabs';
 
 export interface MentionMenuProps<T> {
   menuRenderRef: React.RefObject<HTMLElement>;
@@ -296,7 +294,7 @@ export function MentionMenu<T>({
     ? ReactDOM.createPortal(
         <div ref={containerRef} className={styles.mentionContainer}>
           <div className={styles.mentionContainer__inner}>
-            <Tabs
+            <MentionMenuTabs
               variant="iconSmall"
               value={activeTab}
               onChange={(key) => setActiveTab(key as 'users' | 'products')}
