@@ -1,4 +1,5 @@
 import React from 'react';
+import { PressEvent } from 'react-aria-components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Typography } from '~/v4/core/components';
 import { TagFilled } from '~/v4/icons/TagFilled';
@@ -7,7 +8,7 @@ import clsx from 'clsx';
 
 type TaggedProductIconProps = {
   productTagAmount: number;
-  onPress?: () => void;
+  onPress?: (e: PressEvent) => void;
   className?: string;
   iconClassName?: string;
   textClassName?: string;

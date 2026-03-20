@@ -79,6 +79,9 @@ export function ProductTagList({
   return (
     <div className={styles.productTagList} data-testid={accessibilityId} data-display={displayMode}>
       <div className={styles.productTagList__header} data-display={displayMode}>
+        {renderMode === ProductTagListRenderModeEnum.LIVESTREAM && (
+          <div className={styles.productTagList__liveStream__spacing} />
+        )}
         <div className={styles.productTagList__title}>
           <Typography.TitleBold
             as="p"
@@ -88,7 +91,8 @@ export function ProductTagList({
             {headerText}
           </Typography.TitleBold>
         </div>
-        {displayMode === DisplayModeEnum.DESKTOP && (
+        {(displayMode === DisplayModeEnum.DESKTOP ||
+          renderMode === ProductTagListRenderModeEnum.LIVESTREAM) && (
           <CloseButton
             pageId={pageId}
             componentId={componentId}
@@ -97,7 +101,8 @@ export function ProductTagList({
           />
         )}
       </div>
-      {displayMode === DisplayModeEnum.DESKTOP && (
+      {(displayMode === DisplayModeEnum.DESKTOP ||
+        renderMode === ProductTagListRenderModeEnum.LIVESTREAM) && (
         <Divider type={DividerType.FULL_WIDTH} className={styles.productTagList__divider} />
       )}
       <div
