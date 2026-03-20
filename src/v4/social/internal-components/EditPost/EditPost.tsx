@@ -237,20 +237,38 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       onSuccess: (response) => {
         const updatedPost = response.data;
 
-        // Check for unavailable product tags in parent post
-        const hasUnavailableProducts = updatedPost.productTags?.some(
-          (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
-        );
+        // Calculate expected product tags count (what we sent)
+        const expectedTextProductTagsCount = productTags?.length || 0;
+        const expectedMediaProductTagsCount =
+          postImages.reduce((sum, post) => sum + (post.productTags?.length || 0), 0) +
+          postVideos.reduce((sum, post) => sum + (post.productTags?.length || 0), 0) +
+          files.reduce((sum, file) => sum + (file.productTags?.length || 0), 0);
 
-        // Check for unavailable product tags in child posts
-        const childPostHasUnavailableProducts = updatedPost.childrenPosts?.some(
-          (childPost: Amity.Post) =>
+        // Calculate actual product tags count (what we received back)
+        const actualTextProductTagsCount = updatedPost.productTags?.length || 0;
+        const actualMediaProductTagsCount =
+          updatedPost.childrenPosts?.reduce(
+            (sum: number, childPost: Amity.Post) => sum + (childPost.productTags?.length || 0),
+            0,
+          ) || 0;
+
+        // Check for deleted products (length mismatch)
+        const hasDeletedProducts =
+          actualTextProductTagsCount !== expectedTextProductTagsCount ||
+          actualMediaProductTagsCount !== expectedMediaProductTagsCount;
+
+        // Check for archived products
+        const hasArchivedProducts =
+          updatedPost.productTags?.some(
+            (tag: Amity.ProductTag) => tag.product?.status === 'archived',
+          ) ||
+          updatedPost.childrenPosts?.some((childPost: Amity.Post) =>
             childPost.productTags?.some(
-              (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+              (tag: Amity.ProductTag) => tag.product?.status === 'archived',
             ),
-        );
+          );
 
-        if (hasUnavailableProducts || childPostHasUnavailableProducts) {
+        if (hasDeletedProducts || hasArchivedProducts) {
           infoNotification({
             content: "Some products that you've tagged are no longer available.",
           });
