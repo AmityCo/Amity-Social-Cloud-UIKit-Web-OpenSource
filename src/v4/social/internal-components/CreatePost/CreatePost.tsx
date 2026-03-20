@@ -156,19 +156,36 @@ export function CreatePost({
     onSuccess: (response) => {
       const post = response.data;
 
-      // Check for unavailable product tags in parent post
-      const hasUnavailableProducts = post.productTags?.some(
-        (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+      // Calculate expected product tags count (what we sent)
+      const expectedTextProductTagsCount = productTags?.length || 0;
+      const expectedMediaProductTagsCount = files.reduce(
+        (sum, file) => sum + (file.productTags?.length || 0),
+        0,
       );
 
-      // Check for unavailable product tags in child posts
-      const childPostHasUnavailableProducts = post.childrenPosts?.some((childPost: Amity.Post) =>
-        childPost.productTags?.some(
-          (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
-        ),
-      );
+      // Calculate actual product tags count (what we received back)
+      const actualTextProductTagsCount = post.productTags?.length || 0;
+      const actualMediaProductTagsCount =
+        post.childrenPosts?.reduce(
+          (sum: number, childPost: Amity.Post) => sum + (childPost.productTags?.length || 0),
+          0,
+        ) || 0;
 
-      if (hasUnavailableProducts || childPostHasUnavailableProducts) {
+      // Check for deleted products (length mismatch)
+      const hasDeletedProducts =
+        actualTextProductTagsCount !== expectedTextProductTagsCount ||
+        actualMediaProductTagsCount !== expectedMediaProductTagsCount;
+
+      // Check for archived products
+      const hasArchivedProducts =
+        post.productTags?.some((tag: Amity.ProductTag) => tag.product?.status === 'archived') ||
+        post.childrenPosts?.some((childPost: Amity.Post) =>
+          childPost.productTags?.some(
+            (tag: Amity.ProductTag) => tag.product?.status === 'archived',
+          ),
+        );
+
+      if (hasDeletedProducts || hasArchivedProducts) {
         notification.info({
           content: "Some products that you've tagged are no longer available.",
         });
