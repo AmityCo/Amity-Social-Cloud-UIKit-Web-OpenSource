@@ -5,5 +5,4 @@ export type {
   EditorContentType,
   SuggestionDisplayMode,
   UrlHighlight,
-  AmityTextProductTag,
 } from './TextEditor';

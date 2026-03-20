@@ -329,6 +329,7 @@ export const ELEMENT_ID = {
   CREATE_NEW_CLIP_BUTTON: 'create_new_clip_button',
   OPTION_BUTTON: 'option_button',
   PRODUCT_TAG: 'product_tag',
+  PRODUCT_TAGGING_BUTTON: 'product_tagging_button',
   PRODUCT_TAG_SELECTION_HEADER: 'product_tag_selection_header',
   PRODUCT_TAG_SELECTED_ITEM: 'product_tag_selected_item',
   PRODUCT_TAG_SELECTION_SEARCH_BAR: 'product_tag_selection_search_bar',
