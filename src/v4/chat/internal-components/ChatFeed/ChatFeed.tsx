@@ -35,11 +35,6 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const { isVisitorOrBot } = useSDK();
-  const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
-    channelId: channel.channelId,
-  });
-
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
       subChannelId: channel.channelId,
