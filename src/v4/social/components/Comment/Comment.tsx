@@ -355,8 +355,7 @@ export const Comment = ({
               {isHost ? (
                 <EventHostBadge withLabel />
               ) : (
-                isModeratorUser &&
-                !isBrandUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
+                isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
               )}
 
               <TextWithMention

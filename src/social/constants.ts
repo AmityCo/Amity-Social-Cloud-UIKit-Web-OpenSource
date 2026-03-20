@@ -82,3 +82,6 @@ export const ERROR_RESPONSE = Object.freeze({
   NOT_INCLUDE_WHITELIST_LINK: 'Data contains a link that is not in the whitelist',
   CONTAIN_BLOCKLISTED_WORD: 'Your text contains a blocklisted word.',
 });
+
+export const SEARCH_PRODUCT_MINIMUM_CHARACTER = 2;
+export const SEARCH_USER_MINIMUM_CHARACTER = 3;

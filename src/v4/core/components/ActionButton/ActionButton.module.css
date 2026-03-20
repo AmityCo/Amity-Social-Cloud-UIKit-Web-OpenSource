@@ -7,6 +7,7 @@
   justify-content: center;
   transition: background-color 0.3s ease;
   border-radius: var(--asc-border-radius-xxl);
+  height: max-content;
 }
 
 /* Sizes */
@@ -15,7 +16,7 @@
 }
 
 .small {
-  padding: 0.13rem;
+  padding: 0.125rem;
 }
 
 .medium {
@@ -28,6 +29,7 @@
 
 /* Icon Sizing */
 .icon {
+  padding: 0;
   background: transparent;
   display: inline-block;
 }

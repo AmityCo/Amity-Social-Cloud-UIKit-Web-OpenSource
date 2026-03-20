@@ -119,7 +119,6 @@
   background-color: var(--asc-color-base-default);
   border-radius: 50%;
   padding: 0.125rem;
-  margin-top: 1.25rem;
 }
 
 .livestreamHeader__closeButton__icon {
@@ -179,4 +178,27 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.livestreamHeader__header__recorded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.livestreamHeader__header__recorded[data-has-product='true'] {
+  width: 100%;
+}
+
+.livestreamHeader__header__tagProducts {
+  width: 18rem;
+  padding: 1rem;
+}
+
+@media (width >= 48em) {
+  .livestreamHeader__header__recorded[data-has-product='true'] {
+    max-width: calc(100vw - 26.5rem);
+    width: 100%;
+  }
 }

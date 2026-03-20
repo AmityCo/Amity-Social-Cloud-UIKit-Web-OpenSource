@@ -1,0 +1,28 @@
+.noResultFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* 8px */
+  padding: 2rem; /* 32px */
+  text-align: center;
+  height: 100%;
+}
+
+.noResultFound__icon {
+  fill: var(--asc-color-base-shade4);
+}
+
+.noResultFound__icon[data-size='small'] {
+  width: 2rem; /* 32px */
+  height: 2rem; /* 32px */
+}
+
+.noResultFound__icon[data-size='medium'] {
+  width: 3rem; /* 48px */
+  height: 3rem; /* 48px */
+}
+
+.noResultFound__text {
+  color: var(--asc-color-base-shade3);
+}

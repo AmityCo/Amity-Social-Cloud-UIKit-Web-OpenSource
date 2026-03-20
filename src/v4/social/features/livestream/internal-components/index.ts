@@ -16,3 +16,6 @@ export * from './LivestreamSetup';
 export * from './LivestreamStage';
 export * from './ReadOnlyToggle';
 export * from './WatchingCountBadge';
+export * from './CoHostToggleProductPermission';
+export * from './UserModerationHeader';
+export * from './TaggedProductsModal';

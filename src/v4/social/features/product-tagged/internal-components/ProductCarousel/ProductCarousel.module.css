@@ -1,0 +1,87 @@
+.productCarousel {
+  width: 100%;
+  text-align: left;
+}
+
+.productCarousel__headerText {
+  color: var(--asc-color-base-shade1);
+}
+
+.productCarousel__wrapper {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  justify-content: center;
+  position: relative;
+}
+
+.productCarousel__items {
+  display: flex;
+  gap: 0.625rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  width: 100%;
+  align-items: center;
+}
+
+.productCarousel__items::-webkit-scrollbar {
+  display: none;
+}
+
+.productCarousel__moreButton {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+}
+
+.productCarousel__moreButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.productCarousel__navButton_left,
+.productCarousel__navButton_right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--asc-color-white);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.productCarousel__navButton_left {
+  left: 0;
+}
+
+.productCarousel__navButton_right {
+  right: 0;
+}
+
+.productCarousel__navButton_left:hover,
+.productCarousel__navButton_right:hover {
+  background-color: var(--asc-color-base-shade4);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+}
+
+.productCarousel__navButton_left:active,
+.productCarousel__navButton_right:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.productCarousel__navButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}

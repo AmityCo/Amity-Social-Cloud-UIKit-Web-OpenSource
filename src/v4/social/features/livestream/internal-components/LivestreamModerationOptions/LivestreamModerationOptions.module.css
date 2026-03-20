@@ -24,3 +24,7 @@
 .livestreamModerationOptions__header__text {
   color: var(--asc-color-white);
 }
+
+.livestreamModerationOptions__coHostOptions {
+  padding-bottom: 0.5rem;
+}

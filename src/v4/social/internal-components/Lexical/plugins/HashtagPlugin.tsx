@@ -60,6 +60,7 @@ function countHashtags(): number {
 function $transformHashtagsInSelection(
   checkAndUpdateWarningState: (count: number) => boolean,
   showHashtagLimitWarning: () => void,
+  maxHashtags: number,
 ): void {
   const selection = $getSelection();
   if (!$isRangeSelection(selection)) return;
@@ -111,7 +112,7 @@ function $transformHashtagsInSelection(
           const currentHashtagCount = countHashtags();
 
           // Check if we can add another hashtag or if we should show warning
-          if (currentHashtagCount < MAX_HASHTAGS) {
+          if (currentHashtagCount < maxHashtags) {
             const limitedHashtagText =
               fullHashtagText.length > MAX_HASHTAG_LENGTH + 1 // +1 to account for '#'
                 ? fullHashtagText.slice(0, MAX_HASHTAG_LENGTH + 1) // +1 to account for '#'
@@ -175,7 +176,11 @@ function $transformHashtagsInSelection(
   }
 }
 
-export function HashtagPlugin(): null {
+export interface HashtagPluginProps {
+  maxHashtags?: number;
+}
+
+export function HashtagPlugin({ maxHashtags = MAX_HASHTAGS }: HashtagPluginProps = {}): null {
   const [editor] = useLexicalComposerContext();
   const isTransformingRef = useRef(false);
   const hasShownLimitWarningRef = useRef(false);
@@ -185,7 +190,7 @@ export function HashtagPlugin(): null {
   // Helper function to check if we should show the warning and update the warning state
   const checkAndUpdateWarningState = (currentCount: number): boolean => {
     // If we go below the limit, reset the warning flag
-    if (currentCount < MAX_HASHTAGS) {
+    if (currentCount < maxHashtags) {
       hasShownLimitWarningRef.current = false;
     }
 
@@ -193,14 +198,14 @@ export function HashtagPlugin(): null {
     lastHashtagCountRef.current = currentCount;
 
     // Return whether we should show the warning
-    return currentCount >= MAX_HASHTAGS && !hasShownLimitWarningRef.current;
+    return currentCount >= maxHashtags && !hasShownLimitWarningRef.current;
   };
 
   const showHashtagLimitWarning = (): void => {
     hasShownLimitWarningRef.current = true;
     info({
       title: 'Hashtag limit reached',
-      content: `You can only add hashtag up to ${MAX_HASHTAGS} hashtags per post.`,
+      content: `You can only add hashtag up to ${maxHashtags} hashtags per post.`,
     });
   };
 
@@ -213,7 +218,11 @@ export function HashtagPlugin(): null {
           if (!isTransformingRef.current) {
             isTransformingRef.current = true;
             try {
-              $transformHashtagsInSelection(checkAndUpdateWarningState, showHashtagLimitWarning);
+              $transformHashtagsInSelection(
+                checkAndUpdateWarningState,
+                showHashtagLimitWarning,
+                maxHashtags,
+              );
             } finally {
               isTransformingRef.current = false;
             }
@@ -253,7 +262,7 @@ export function HashtagPlugin(): null {
           // Check if we should show the warning and update the state
           if (
             checkAndUpdateWarningState(currentHashtagCount) &&
-            currentHashtagCount > MAX_HASHTAGS
+            currentHashtagCount > maxHashtags
           ) {
             showHashtagLimitWarning();
             editor.update(() => {
@@ -438,11 +447,11 @@ export function HashtagPlugin(): null {
               currentHashtagCount + nodes.filter((node) => $isHashtagNode(node)).length;
 
             const shouldShowHashtagLimitWarning =
-              actualHashtagCount === MAX_HASHTAGS &&
+              actualHashtagCount === maxHashtags &&
               !hasShownWarningThisTransform &&
               checkAndUpdateWarningState(actualHashtagCount);
 
-            if (actualHashtagCount >= MAX_HASHTAGS) {
+            if (actualHashtagCount >= maxHashtags) {
               // Check if we should show the warning for this attempt to exceed the limit
               if (shouldShowHashtagLimitWarning) {
                 hasShownWarningThisTransform = true;

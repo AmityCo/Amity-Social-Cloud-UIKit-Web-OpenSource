@@ -5,6 +5,8 @@ import { formatAltText } from '~/v4/social/utils';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
 import styles from './ImageContent.module.css';
 
 type ImageContentProps = {
@@ -12,6 +14,7 @@ type ImageContentProps = {
   elementId?: string;
   componentId?: string;
   posts: Amity.Post<'image'>[];
+  parentPostId: string;
   onImageClick: (imageIndex: number) => void;
 };
 
@@ -20,6 +23,7 @@ export const ImageContent = ({
   pageId = '*',
   elementId = '*',
   componentId = '*',
+  parentPostId,
   onImageClick,
 }: ImageContentProps) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
@@ -46,6 +50,7 @@ export const ImageContent = ({
           totalCount={posts.length}
           onImageClick={() => onImageClick(index)}
           isLastImage={index === first4Images.length - 1}
+          parentPostId={parentPostId}
         />
       ))}
     </div>
@@ -60,6 +65,7 @@ type ImageProps = {
   componentId?: string;
   isLastImage: boolean;
   imageLeftCount: number;
+  parentPostId: string;
   onImageClick: () => void;
 };
 
@@ -72,12 +78,24 @@ function Image({
   onImageClick,
   imageLeftCount,
   componentId = '*',
+  parentPostId,
 }: ImageProps) {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'image',
+    sourceId: parentPostId,
+  });
 
   const file = imagePost?.getImageInfo();
 
   if (!imagePost) return null;
+
+  const handleShowProductTags = () => {
+    if (imagePost.productTags) {
+      showProductTagList(imagePost.productTags);
+    }
+  };
 
   return (
     <Button
@@ -113,6 +131,14 @@ function Image({
         <Typography.Headline className={styles.imageContent__imgCover}>
           + {imageLeftCount + 1}
         </Typography.Headline>
+      )}
+      {imagePost.productTags && imagePost.productTags.length > 0 && (
+        <div className={styles.imageContent__productTagButton}>
+          <ProductTagBadge
+            selectedProductTags={imagePost.productTags}
+            onClick={handleShowProductTags}
+          />
+        </div>
       )}
     </Button>
   );

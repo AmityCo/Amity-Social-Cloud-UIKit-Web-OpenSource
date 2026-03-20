@@ -23,6 +23,8 @@ import { useNetworkState } from 'react-use';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { ProductCarousel } from '~/v4/social/features/product-tagged';
 
 type PendingPostContentProps = {
   pageId?: string;
@@ -51,6 +53,8 @@ export const PendingPostContent = ({
   const { openPopup, closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
 
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
@@ -68,6 +72,9 @@ export const PendingPostContent = ({
       return initialPost;
     }
   }, [initialPost, postData]);
+
+  const canShowProductTags =
+    productCatalogueSettings?.product.enabled && post?.childrenPosts[0]?.dataType !== 'room';
 
   const handleApprovePost = async (postId: string) => {
     if (postId == null) return;
@@ -240,6 +247,9 @@ export const PendingPostContent = ({
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentionees}
             post={post}
+            productTags={post?.productTags?.filter(
+              (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
+            )}
           />
           {post.children.length > 0 && (
             <ChildrenPostContent
@@ -250,6 +260,9 @@ export const PendingPostContent = ({
               onVideoClick={openVideoViewer}
               onClipClick={() => {}}
             />
+          )}
+          {canShowProductTags && (
+            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           )}
         </div>
         {canReviewCommunityPosts && (

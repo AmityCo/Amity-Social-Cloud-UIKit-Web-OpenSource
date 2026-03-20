@@ -5,7 +5,7 @@
 
 .liveStreamPlayer__video {
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   display: block;
   object-fit: cover;
   position: relative;
@@ -15,7 +15,7 @@
 
 .liveStreamPlayer__video[data-orientation='portrait'] {
   width: 100vw;
-  height: calc(100dvh - 3.5rem);
+  height: 100dvh;
   object-fit: cover;
 }
 
@@ -67,7 +67,8 @@
 
   .liveStreamPlayer__video[data-orientation='portrait'] {
     width: 100%;
-    height: 75vh;
+    height: 100vh;
+    object-fit: contain;
   }
 
   .liveStreamPlayer__video[data-is-live='true'] {

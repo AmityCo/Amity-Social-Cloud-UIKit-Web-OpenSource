@@ -60,7 +60,7 @@
 .videoViewer__closeButton {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-base-shade4);
+  fill: var(--asc-color-base-default);
 }
 
 .videoViewer__closeButton__img {

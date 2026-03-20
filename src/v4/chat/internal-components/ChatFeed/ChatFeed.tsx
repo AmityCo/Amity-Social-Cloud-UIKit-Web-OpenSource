@@ -8,24 +8,37 @@ import { Typography } from '~/v4/core/components';
 import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
   isJoinedCommunity?: boolean;
   isLoading?: boolean;
+  pageId?: string;
+  componentId?: string;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) => {
+const ChatFeed: FC<ChatFeedProps> = ({
+  channel,
+  isJoinedCommunity,
+  isLoading,
+  pageId,
+  componentId,
+}) => {
   const [joined, setJoined] = useState<boolean>(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { isVisitorOrBot } = useSDK();
+  const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
+    channelId: channel.channelId,
+  });
+
   const { isVisitorOrBot } = useSDK();
   const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
     channelId: channel.channelId,
@@ -39,6 +52,8 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
     },
     joined && !isVisitorOrBot && !!liveChannel,
   );
+
+  const { parentPost } = useLivestreamData();
 
   const handlePopoverStateChange = (isOpen: boolean) => {
     setCurrentMessages(isOpen ? messages ?? [] : []);
@@ -94,18 +109,24 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
 
   const isEmpty = !loading && messages?.length === 0;
 
+  const isPendingPost = parentPost?.feedType === 'reviewing';
+
   return (
     <div className={styles.chatFeed__container}>
       {liveChannelLoading || isEmpty || isVisitorOrBot ? (
-        <div className={styles.chatFeed__empty__container}>
-          <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
-          <Typography.TitleBold className={styles.chatFeed__emptyText}>
-            No messages yet
-          </Typography.TitleBold>
-          <Typography.Caption className={styles.chatFeed__emptyText}>
-            Be the first to start conversation.
-          </Typography.Caption>
-        </div>
+        <>
+          <div className={styles.chatFeed__empty__container}>
+            <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
+            <Typography.TitleBold className={styles.chatFeed__emptyText}>
+              No messages yet
+            </Typography.TitleBold>
+            <Typography.Caption className={styles.chatFeed__emptyText}>
+              {isPendingPost
+                ? 'Users can start messaging once the post has been approved.'
+                : 'Be the first to start conversation.'}
+            </Typography.Caption>
+          </div>
+        </>
       ) : (
         <div
           ref={containerRef}
@@ -113,32 +134,35 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) 
           data-disable-scroll={`${isPopoverOpen}`}
           className={styles.chatFeed__messageList__container}
         >
-          {(loading || isLoading) && renderLoadingSkeleton()}
-          <InfiniteScroll
-            inverse={true}
-            scrollThreshold={0.5}
-            hasMore={hasMore || false}
-            dataLength={messages?.length || 0}
-            next={() => !isPopoverOpen && loadMore?.()}
-            scrollableTarget={'chatFeedScrollableContainer'}
-            style={{ display: 'flex', flexDirection: 'column-reverse' }}
-            loader={loading && !messages ? renderLoadingSkeleton() : null}
-          >
-            <div className={styles.chatFeed__messageList__inner}>
-              {(isPopoverOpen ? currentMessages : messages)?.map((message) => {
-                if (!isAmityTextMessage(message)) return null;
-                return (
-                  <MessageBubble
-                    key={message.messageId}
-                    message={message}
-                    channel={liveChannel}
-                    handlePopoverStateChange={handlePopoverStateChange}
-                    isJoinedCommunity={isJoinedCommunity}
-                  />
-                );
-              })}
-            </div>
-          </InfiniteScroll>
+          {loading || isLoading ? (
+            renderLoadingSkeleton()
+          ) : (
+            <InfiniteScroll
+              inverse={true}
+              scrollThreshold={0.5}
+              hasMore={hasMore || false}
+              dataLength={messages?.length || 0}
+              next={() => !isPopoverOpen && loadMore?.()}
+              scrollableTarget={'chatFeedScrollableContainer'}
+              style={{ display: 'flex', flexDirection: 'column-reverse' }}
+              loader={loading && !messages ? renderLoadingSkeleton() : null}
+            >
+              <div className={styles.chatFeed__messageList__inner}>
+                {(isPopoverOpen ? currentMessages : messages)?.map((message) => {
+                  if (!isAmityTextMessage(message)) return null;
+                  return (
+                    <MessageBubble
+                      key={message.messageId}
+                      message={message}
+                      channel={liveChannel}
+                      handlePopoverStateChange={handlePopoverStateChange}
+                      isJoinedCommunity={isJoinedCommunity}
+                    />
+                  );
+                })}
+              </div>
+            </InfiniteScroll>
+          )}
         </div>
       )}
     </div>

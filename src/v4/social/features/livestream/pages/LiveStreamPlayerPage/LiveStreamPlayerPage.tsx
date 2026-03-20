@@ -7,6 +7,7 @@ import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useDrawer, useDrawerData } from '~/v4/core/providers/DrawerProvider';
 import {
   getCommunityTopic,
   subscribeTopic,
@@ -34,6 +35,7 @@ import {
   useGetBroadcasterData,
   useSyncWatchingHeartbeat,
   useRoomWatchTracking,
+  useCoHostParticipantEvents,
 } from '~/v4/social/features/livestream/hooks';
 import { LivestreamChat } from '~/v4/social/features/livestream/internal-components/LivestreamChat';
 import { LivestreamSetup } from '~/v4/social/features/livestream/internal-components/LivestreamSetup';
@@ -47,7 +49,13 @@ import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { LivestreamUiState } from '~/v4/social/features/livestream/internal-components/LivestreamStage/LivestreamStage';
 import { useLeaveRoom } from '~/v4/social/features/livestream/hooks/useLeaveRoom';
-import { LivestreamOverlay } from '~/v4/social/features/livestream/internal-components';
+import {
+  LivestreamOverlay,
+  TaggedProductsModal,
+} from '~/v4/social/features/livestream/internal-components';
+import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -59,16 +67,27 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const pageId = PAGE_ID.LIVESTREAM_PLAYER_PAGE;
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const [livestreamPost, setLivestreamPost] = useState(post);
+  const [livestreamPost, setLivestreamPost] = useState(post?.childrenPosts[0]);
   const coHostEndSessionRef = useRef(false);
+  const previousProductTagsCountRef = useRef(post?.childrenPosts[0]?.productTags?.length || 0);
+  const isProductDrawerOpenRef = useRef(false);
 
-  const { post: subscribedPost } = usePostSubscription(livestreamPost?.postId);
-  const { room } = useRoom(subscribedPost?.childrenPosts?.[0]?.getRoomInfo()?.roomId ?? roomId);
+  // Track initial room status for isEnded/isRecorded logic
+  const initialRoomStatusRef = useRef<string | null>(null);
+  const wasEverLiveRef = useRef(false);
+
+  const { post: subscribedPost } = usePostSubscription(post?.childrenPosts[0]?.postId);
+  const { post: parentPost } = usePostSubscription(post?.postId);
+  const { room } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
+
+  const { productCatalogueSettings } = useProductCatalogueSettings();
 
   useEffect(() => {
-    if (room?.roomId && livestreamPost?.postId) return;
-    if (room?.roomId && room.post) setLivestreamPost(room.post as Amity.Post);
-  }, [room]);
+    if (subscribedPost) {
+      setLivestreamPost(subscribedPost);
+      previousProductTagsCountRef.current = subscribedPost?.productTags?.length || 0;
+    }
+  }, [subscribedPost]);
 
   const { success, info } = useNotifications();
   const { leaveRoom, isPending: isLeaving } = useLeaveRoom({
@@ -91,6 +110,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const [shouldRequestDevicePermissions, setShouldRequestDevicePermissions] = useState(false);
 
   const { currentUserId } = useSDK();
+  const { setDrawerData, removeDrawerData } = useDrawer();
   const { keyboardOffset } = useKeyboardVisibility();
   const { isDesktop } = useResponsive();
 
@@ -137,6 +157,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     },
   });
 
+  const { updateProductTags } = useTaggingProduct();
+
   const myMembership = members.find((member) => member.userId === currentUserId);
 
   const onClose = useCallback(() => setStreamPlayer(null), []);
@@ -148,15 +170,33 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
       getBroadcasterData(room.roomId);
       // Step 2 & 3 happen automatically via useEffect and props
     }
-  }, [room?.roomId, getBroadcasterData]);
+  }, [room?.roomId]);
 
   const isUserBanned = myMembership?.isBanned;
 
   const { openPopup, closePopup } = usePopupContext();
 
   const isLive = room?.status === liveStreamStatus.live;
-  const isEnded = room?.status === liveStreamStatus.ended;
-  const isRecorded = room?.status === liveStreamStatus.recorded;
+
+  // Track initial room status and if room was ever live
+  useEffect(() => {
+    if (room?.status && initialRoomStatusRef.current === null) {
+      initialRoomStatusRef.current = room.status;
+    }
+    if (room?.status === liveStreamStatus.live) {
+      wasEverLiveRef.current = true;
+    }
+  }, [room?.status]);
+
+  // isEnded: true only if room was initially 'live' and status changed to 'ended' or 'recorded'
+  const isEnded =
+    wasEverLiveRef.current &&
+    (room?.status === liveStreamStatus.ended || room?.status === liveStreamStatus.recorded);
+
+  // isRecorded: true only if the initial status was 'recorded' (not from status change)
+  const isRecorded =
+    initialRoomStatusRef.current === liveStreamStatus.recorded &&
+    room?.status === liveStreamStatus.recorded;
 
   const isTerminated =
     room?.moderation?.terminateLabels && room?.moderation?.terminateLabels?.length > 0;
@@ -170,7 +210,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     !isTerminated &&
     !isUserBanned;
 
-  const showWaitingApprovalBanner = isLive && isDesktop && subscribedPost?.feedType === 'reviewing';
+  const showWaitingApprovalBanner = isLive && isDesktop && parentPost?.feedType === 'reviewing';
+
+  const notificationAlignment = showLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
+  useCoHostParticipantEvents({ room, notificationAlignment, mode: 'viewer' });
 
   const { invitations, setInvitations } = useObserveRoomAndInvitation({ room });
 
@@ -181,6 +224,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   // Determine if current user is a viewer (not host or co-host)
   const isViewer = !!room && !!currentUserId && uiState === 'player';
+
+  const isHost = room?.createdBy === currentUserId;
 
   // Track watch minutes for viewers
   useRoomWatchTracking({
@@ -343,8 +388,119 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     };
   }, [chatContainerRef.current]);
 
+  const handleUpdateProductTags = useCallback(
+    async (tags: Amity.ProductTag[]) => {
+      const previousTagsCount = previousProductTagsCountRef.current;
+      const newTagsCount = tags.length;
+      const isRemoving = newTagsCount < previousTagsCount;
+
+      if (livestreamPost?.postId) {
+        try {
+          const result = await updateProductTags({
+            postId: livestreamPost?.postId,
+            productTags: tags,
+            action: isRemoving ? 'remove' : 'add',
+          });
+
+          // Update the ref with the new count after successful update
+          previousProductTagsCountRef.current = newTagsCount;
+
+          // Only show success toast when adding products and no unavailable products toast is shown
+          const hasUnavailableProducts = result?.data?.productTags?.some(
+            (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
+          );
+          if (newTagsCount > previousTagsCount && !hasUnavailableProducts) {
+            success({ content: 'Product tags added.' });
+          }
+
+          return result?.data?.productTags as Amity.ProductTag[] | undefined;
+        } catch (error) {
+          //
+        }
+      }
+    },
+    [livestreamPost?.postId, updateProductTags, success, info],
+  );
+
+  const handleRemove = useCallback(
+    async (productTag: Amity.ProductTag) => {
+      if (!livestreamPost?.postId) return;
+      const updatedTags = livestreamPost?.productTags?.filter(
+        (tag) => tag.productId !== productTag.productId,
+      );
+      try {
+        await updateProductTags({
+          postId: livestreamPost?.postId,
+          productTags: updatedTags || [],
+          action: 'remove',
+        });
+        success({ content: 'Product tag removed.' });
+      } catch (error) {
+        //
+      }
+    },
+    [livestreamPost?.postId, livestreamPost?.productTags, updateProductTags, success, info],
+  );
+
+  const getTaggedProductsModalContent = useCallback(() => {
+    return (
+      <TaggedProductsModal
+        pageId={pageId}
+        productTags={subscribedPost?.productTags || []}
+        pinnedProductId={subscribedPost?.pinnedProductId}
+        isHost={isHost}
+        onClose={() => {
+          isProductDrawerOpenRef.current = false;
+          removeDrawerData();
+        }}
+        onUpdateProductTags={handleUpdateProductTags}
+        onRemove={handleRemove}
+        roomId={roomId || room?.roomId}
+      />
+    );
+  }, [
+    pageId,
+    subscribedPost?.productTags,
+    subscribedPost?.pinnedProductId,
+    isHost,
+    removeDrawerData,
+    handleUpdateProductTags,
+    handleRemove,
+  ]);
+
+  const onClickProductTagBadge = () => {
+    isProductDrawerOpenRef.current = true;
+    setDrawerData({
+      content: getTaggedProductsModalContent(),
+      ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
+    });
+  };
+
+  // Update drawer content when product tags change (only if product drawer is open)
+  useEffect(() => {
+    if (isProductDrawerOpenRef.current && subscribedPost) {
+      setDrawerData({
+        content: getTaggedProductsModalContent(),
+        ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
+      });
+    }
+  }, [subscribedPost?.productTags, subscribedPost?.pinnedProductId]);
+
+  const canShowProductTags = productCatalogueSettings?.product.enabled && !isEnded && !isTerminated;
+
+  const hasTaggedProductsToDisplay =
+    canShowProductTags && (livestreamPost?.productTags?.length ?? 0) > 0;
+
+  const isPendingPost =
+    parentPost?.feedType === 'reviewing' || subscribedPost?.feedType === 'reviewing';
+
   return (
-    <LivestreamDataProvider room={room} channel={channel} livestreamPost={post}>
+    <LivestreamDataProvider
+      room={room}
+      channel={channel}
+      parentPost={parentPost}
+      livestreamPost={subscribedPost as Amity.Post<'room'>}
+    >
       <ModalOverlay
         isOpen={(!!room && !isUserBanned) || isDesktop}
         className={styles.liveStreamPlayer__overlay}
@@ -368,29 +524,67 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-is-live={isLive}
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
+            aria-label={uiState === 'backStage' ? 'Livestream backstage' : 'Livestream player'}
           >
             {uiState === 'player' ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
-                <LivestreamHeader
-                  pageId={pageId}
-                  community={community}
-                  uiState="player"
-                  isLive={isLive && !isUserBanned}
-                  onClose={onClose}
-                />
-                <LivestreamPlayer
-                  themeStyles={themeStyles}
-                  accessibilityId={accessibilityId}
-                  isLive={isLive && !isTerminated}
-                  showWaitingApprovalBanner={showWaitingApprovalBanner}
-                  isLoading={isLoading}
-                  isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
-                  isDesktop={isDesktop}
-                  isEnded={isEnded}
-                  isTerminated={!!isTerminated}
-                  isUserBanned={!!isUserBanned}
-                  ref={videoRef}
-                />
+                {(isDesktop || (!isDesktop && room?.status !== 'recorded')) && (
+                  <LivestreamHeader
+                    pageId={pageId}
+                    community={community}
+                    uiState="player"
+                    isLive={isLive && !isUserBanned}
+                    onClose={onClose}
+                    productTags={livestreamPost?.productTags || []}
+                    isHost={isHost}
+                    onUpdateProductTags={handleUpdateProductTags}
+                    canShowProductTags={canShowProductTags}
+                  />
+                )}
+                <div
+                  data-is-live={isLive}
+                  className={styles.liveStreamPlayer__videoSection__wrapper}
+                >
+                  <LivestreamPlayer
+                    themeStyles={themeStyles}
+                    accessibilityId={accessibilityId}
+                    isLive={isLive && !isTerminated}
+                    showWaitingApprovalBanner={showWaitingApprovalBanner}
+                    isLoading={isLoading}
+                    isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
+                    isEnded={isEnded}
+                    isTerminated={!!isTerminated}
+                    isUserBanned={!!isUserBanned}
+                    isRecorded={isRecorded}
+                    pageId={pageId}
+                    ref={videoRef}
+                    productTags={
+                      !isDesktop && isRecorded && hasTaggedProductsToDisplay
+                        ? livestreamPost?.productTags ?? []
+                        : []
+                    }
+                    onClickProductTagBadge={onClickProductTagBadge}
+                    onClose={onClose}
+                    canShowProductTags={canShowProductTags}
+                  />
+                  {isDesktop && !isLive && hasTaggedProductsToDisplay && (
+                    <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
+                      <TaggedProductsModal
+                        key={`${subscribedPost?.productTags?.length}-${subscribedPost?.pinnedProductId || 'none'}`}
+                        roomId={roomId || room?.roomId}
+                        pageId={pageId}
+                        productTags={subscribedPost?.productTags || []}
+                        pinnedProductId={subscribedPost?.pinnedProductId}
+                        isHost={isHost}
+                        onClose={() => {
+                          isProductDrawerOpenRef.current = false;
+                        }}
+                        onUpdateProductTags={(tags) => handleUpdateProductTags(tags)}
+                        onRemove={(tag) => handleRemove(tag)}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <div key="backstage-view" className={styles.liveStreamPlayer__cameraSection__wrapper}>
@@ -424,6 +618,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
               >
                 <LivestreamSetup
                   isCoHost={true}
+                  isEnabledProductTag={productCatalogueSettings?.product.enabled}
                   isGoLiveButtonDisabled={
                     deviceManagement.microphonePermission === 'denied' ||
                     deviceManagement.cameraPermission === 'denied' ||
@@ -450,6 +645,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                         community={community}
                         isLoading={isChannelLoading}
                         isPlayer={uiState === 'player'}
+                        isPendingPost={parentPost?.feedType === 'reviewing'}
                       />
                     ) : (
                       <>
@@ -475,9 +671,15 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                                   >
                                     {channel && (
                                       <ChatFeed
+                                        pageId={pageId}
                                         channel={channel}
                                         isJoinedCommunity={!!community?.isJoined}
                                       />
+                                    )}
+                                    {!isPendingPost && (
+                                      <div className={styles.liveStreamPlayer__pinnedProduct}>
+                                        <PinnedProductOverlay pageId={pageId} />
+                                      </div>
                                     )}
                                   </div>
                                 </>
@@ -491,7 +693,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                             channelId={channel.channelId}
                             disabled={room?.status === liveStreamStatus.ended || isPoorConnection}
                             community={community}
-                            isPendingPost={subscribedPost?.feedType === 'reviewing'}
+                            isPendingPost={parentPost?.feedType === 'reviewing'}
                             isPlayer={uiState === 'player'}
                           />
                         )}

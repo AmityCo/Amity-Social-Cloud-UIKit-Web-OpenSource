@@ -240,6 +240,7 @@ const InternalComponent = ({
                             <NavigationProvider
                               activeRoute={activeRoute}
                               onRouteChange={onRouteChange}
+                              onEmptyNavigationStack={onEmptyNavigationStack}
                             >
                               <PageBehaviorProvider pageBehavior={pageBehavior}>
                                 <SearchResultProvider>

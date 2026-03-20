@@ -29,6 +29,11 @@
 .editPost__formContent {
   max-height: auto;
   min-height: auto;
+  padding: 1rem 1.5rem;
+}
+
+.editPost__textEditor {
+  margin-bottom: 0.5rem;
 }
 
 .editPost__formContent .editPost__titleInput {
@@ -37,7 +42,6 @@
   outline: none;
   font-size: 1rem;
   font-weight: 600;
-  padding: 1rem 1rem 0;
 }
 
 .editPost__formContent .editPost__titleInput::placeholder {
@@ -263,7 +267,7 @@
   .editPost__formContent {
     overflow-y: auto;
     max-height: 50vh;
-    min-height: 13rem;
+    min-height: 35vh;
     position: relative;
   }
 
@@ -277,10 +281,6 @@
 
   .editPost__formContent .editPost__titleInput {
     padding: 1rem 1.5rem 0;
-  }
-
-  .editPost__input {
-    padding: 1rem 1.5rem;
   }
 
   .editPost__mentionContainer {
@@ -327,4 +327,18 @@
   .editPost__attachmentDrawer {
     display: none;
   }
+}
+
+.editPost__productTagActionButton {
+  position: absolute;
+  bottom: 12.75rem;
+  right: 1.25rem;
+}
+
+.editPost__productTagActionButton[data-from-media='true'] {
+  bottom: 6.75rem;
+}
+
+.editPost__productTagActionButton__button {
+  box-shadow: var(--asc-box-shadow-04);
 }

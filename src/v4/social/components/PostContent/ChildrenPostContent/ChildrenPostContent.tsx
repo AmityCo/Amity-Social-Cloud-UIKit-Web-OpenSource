@@ -53,12 +53,14 @@ export const ChildrenPostContent = ({
         componentId={componentId}
         posts={post.childrenPosts as Amity.Post<'image'>[]}
         onImageClick={onImageClick}
+        parentPostId={post.postId}
       />
       <VideoContent
         pageId={pageId}
         componentId={componentId}
         posts={post.childrenPosts as Amity.Post<'video'>[]}
         onVideoClick={onVideoClick}
+        parentPostId={post.postId}
       />
       <LiveStreamContent
         posts={post.childrenPosts as Amity.Post<'room'>[]}

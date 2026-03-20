@@ -1,0 +1,89 @@
+.productTagSelectionHeader {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.productTagSelectionHeader__content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem; /* 12px */
+  padding: 1.25rem 1.25rem 1rem 1.5rem; /* 20px 20px 16px 24px */
+}
+
+/* Mobile-specific styles */
+.productTagSelectionHeader[data-display='mobile'] .productTagSelectionHeader__content {
+  align-items: center;
+  padding: 0.75rem 1rem; /* 12px 16px */
+  gap: 0.5rem; /* 8px */
+}
+
+.productTagSelectionHeader[data-display='mobile']
+  .productTagSelectionHeader__content[data-mode='livestream'] {
+  align-items: center;
+  padding: 0.75rem 0;
+  gap: 0.5rem;
+}
+
+.productTagSelectionHeader__titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Mobile-specific: center title section */
+.productTagSelectionHeader[data-display='mobile'] .productTagSelectionHeader__titleSection {
+  text-align: center;
+  align-items: center;
+}
+
+.productTagSelectionHeader__title {
+  color: var(--asc-color-base-default);
+}
+
+.productTagSelectionHeader__counter {
+  color: var(--asc-color-base-shade2);
+}
+
+.productTagSelectionHeader__closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem; /* 24px */
+  height: 1.5rem; /* 24px */
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--asc-color-base-shade3);
+  transition: color 0.2s ease;
+}
+
+.productTagSelectionHeader__closeButton:hover {
+  color: var(--asc-color-base-default);
+}
+
+.productTagSelectionHeader__closeButton:active {
+  color: var(--asc-color-base-shade2);
+}
+
+.productTagSelectionHeader__closeIcon {
+  width: 100%;
+  height: 100%;
+  fill: var(--asc-color-base-default);
+}
+
+/* Mobile-specific: close icon styling */
+.productTagSelectionHeader[data-display='mobile'] .productTagSelectionHeader__closeIcon {
+  color: var(--asc-color-base-default);
+}
+
+@media only screen and (width >= 48em) {
+  .productTagSelectionHeader__closeIcon {
+    color: var(--asc-color-base-shade3);
+  }
+}

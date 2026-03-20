@@ -12,8 +12,10 @@ import { useCreateLivestreamPost } from './useCreateLivestreamPost';
 import { useGetBroadcasterData } from './useGetBroadcasterData';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useRoom } from './useRoom';
-import { RoomRepository } from '@amityco/ts-sdk';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
+import { usePostSubscription } from './usePostSubscription';
 
 export type CreateLivestreamUiState = 'preview' | 'broadcast' | 'backStage';
 
@@ -29,13 +31,16 @@ export interface UseCreateLivestreamReturn {
   thumbnailFileId?: string;
   livestreamTitle: string;
   livestreamDescription: string;
+  productTags: Amity.MediaProductTag[];
+  pinnedProductId?: string;
+  isEnabledProductTag?: boolean;
 
   // Community data
   community: any;
 
   // Livestream data
   room?: Amity.Room | null;
-  livestreamPost?: Amity.Post;
+  livestreamPost?: Amity.Post | null;
   channel?: Amity.Channel<'live'>;
   broadcasterData?: Amity.BroadcasterData;
 
@@ -54,6 +59,8 @@ export interface UseCreateLivestreamReturn {
   setLivestreamDescription: React.Dispatch<React.SetStateAction<string>>;
   setUiState: React.Dispatch<React.SetStateAction<CreateLivestreamUiState>>;
   setThumbnailFileId: React.Dispatch<React.SetStateAction<string>>;
+  setProductTags: React.Dispatch<React.SetStateAction<Amity.MediaProductTag[]>>;
+  setPinnedProductId: React.Dispatch<React.SetStateAction<string | undefined>>;
   stopRoom: () => void;
   handleTargetSelection: () => void;
   handleStopRoom: (roomId: string) => void;
@@ -91,13 +98,29 @@ export const useCreateLivestream = ({
   const [livestreamTitle, setLivestreamTitle] = useState('');
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
+  const [productTags, setProductTags] = useState<Amity.MediaProductTag[]>([]);
+  const [pinnedProductId, setPinnedProductId] = useState<string | undefined>(undefined);
   const [roomId, setRoomId] = useState<string | undefined>(event?.room?.roomId);
 
   const { room } = useRoom(roomId);
 
-  const [livestreamPost, setLivestreamPost] = useState<Amity.Post | undefined>(
-    event?.room?.post as Amity.Post,
+  const { productCatalogueSettings, refetchProductCatalogueSettings } =
+    useProductCatalogueSettings();
+
+  const [isEnabledProductTag, setIsEnabledProductTag] = useState(
+    productCatalogueSettings?.product.enabled,
   );
+
+  useEffect(() => {
+    if (productCatalogueSettings) {
+      setIsEnabledProductTag(productCatalogueSettings.product.enabled);
+    }
+  }, [productCatalogueSettings?.product.enabled]);
+
+  const { post: livestreamPost } = usePostSubscription(
+    event?.room?.post?.postId ?? room?.post?.postId,
+  );
+
   const [channel, setChannel] = useState<Amity.Channel<'live'>>();
 
   const { community } = useCommunity({
@@ -158,7 +181,12 @@ export const useCreateLivestream = ({
         pageId,
         content: 'If you end your live stream, it will also end for all your viewers.',
       });
-    } else if (livestreamTitle.length > 0 || livestreamDescription.length > 0 || thumbnailFileId) {
+    } else if (
+      livestreamTitle.length > 0 ||
+      livestreamDescription.length > 0 ||
+      thumbnailFileId ||
+      productTags.length > 0
+    ) {
       confirm({
         onOk: onBack,
         type: 'confirm',
@@ -176,6 +204,7 @@ export const useCreateLivestream = ({
     livestreamTitle.length,
     livestreamDescription.length,
     thumbnailFileId,
+    productTags.length,
     confirm,
     uiState,
     room?.roomId,
@@ -214,38 +243,85 @@ export const useCreateLivestream = ({
     getBroadcasterData(room.roomId);
   };
 
+  const confirmGoLive = () => {
+    setProductTags([]);
+    setPinnedProductId(undefined);
+    return confirm({
+      onOk: async () => {
+        await createLivestream({ productTagsOverride: [], pinnedProductIdOverride: undefined });
+      },
+      onCancel: async () => {
+        await refetchProductCatalogueSettings();
+      },
+      type: 'confirm',
+      okText: 'Go live',
+      okButtonColor: 'primary',
+      cancelText: 'Edit live',
+      title: 'Product tagging isn’t available',
+      pageId,
+      content: 'Any products you’ve tagged will be removed and won’t be shown to viewers.',
+    });
+  };
+
+  const createLivestream = (overrides?: {
+    productTagsOverride?: Amity.MediaProductTag[];
+    pinnedProductIdOverride?: string;
+  }) => {
+    const effectiveProductTags = overrides?.productTagsOverride ?? productTags;
+    const effectivePinnedProductId = overrides?.pinnedProductIdOverride ?? pinnedProductId;
+    return createLivestreamPost(
+      {
+        title: livestreamTitle,
+        description: livestreamDescription,
+        thumbnailFileId,
+        targetType,
+        targetId: targetType !== 'user' ? targetId : currentUserId!,
+        liveChatEnabled: targetType === 'community',
+        ...(effectiveProductTags.length > 0 && {
+          productTags: effectiveProductTags,
+          pinnedProductId: effectivePinnedProductId,
+        }),
+      },
+      {
+        onSuccess: (result) => {
+          const post = result.post;
+
+          if (post.data) {
+            const postData = post.data;
+            const room = postData.childrenPosts[0]?.getRoomInfo();
+
+            if (room) {
+              getBroadcasterData(room.roomId);
+
+              if (targetType === 'community') getLiveChat(room);
+
+              setRoomId(room.roomId);
+            }
+          }
+        },
+
+        onError: (error) => {
+          if (error.message.includes(ERROR_CODE.DISABLED_PRODUCT_TAG) && productTags.length > 0) {
+            setIsEnabledProductTag(false);
+            confirmGoLive();
+          }
+        },
+      },
+    );
+  };
+
+  const checkAvailableProductTags = async () => {
+    await refetchProductCatalogueSettings();
+
+    if (productTags.length > 0 && productCatalogueSettings?.product.enabled === false) {
+      confirmGoLive();
+    } else {
+      createLivestream();
+    }
+  };
+
   const handleGoLive = () => {
-    isTargetEvent
-      ? goLiveOnEvent(event.room)
-      : createLivestreamPost(
-          {
-            title: livestreamTitle,
-            description: livestreamDescription,
-            thumbnailFileId,
-            targetType,
-            targetId: targetType !== 'user' ? targetId : currentUserId!,
-            liveChatEnabled: targetType === 'community',
-          },
-          {
-            onSuccess: (result) => {
-              const post = result.post;
-
-              if (post.data) {
-                const postData = post.data;
-                setLivestreamPost(postData);
-                const room = postData.childrenPosts[0]?.getRoomInfo();
-
-                if (room) {
-                  getBroadcasterData(room.roomId);
-
-                  if (targetType === 'community') getLiveChat(room);
-
-                  setRoomId(room.roomId);
-                }
-              }
-            },
-          },
-        );
+    isTargetEvent ? goLiveOnEvent(event.room) : checkAvailableProductTags();
   };
 
   return {
@@ -260,6 +336,9 @@ export const useCreateLivestream = ({
     thumbnailFileId,
     livestreamTitle,
     livestreamDescription,
+    productTags,
+    pinnedProductId,
+    isEnabledProductTag,
 
     // Community data
     community,
@@ -284,6 +363,8 @@ export const useCreateLivestream = ({
     setLivestreamTitle,
     setLivestreamDescription,
     setThumbnailFileId,
+    setProductTags,
+    setPinnedProductId,
     setUiState,
 
     stopRoom,

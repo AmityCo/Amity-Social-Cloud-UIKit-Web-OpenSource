@@ -1,7 +1,7 @@
-import { InvitationStatusEnum } from '@amityco/ts-sdk';
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import useSDK from '~/core/hooks/useSDK';
 import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
+import { useCoHostPermissionNotification } from '~/v4/social/features/livestream/hooks';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 // Define the context type for only the data that needs to be passed to nested components
@@ -9,7 +9,9 @@ interface LivestreamDataContextType {
   room?: Amity.Room | null;
   channel?: Amity.Channel<'live'> | null;
   invitation?: Amity.Invitation;
-  livestreamPost?: Amity.Post | null;
+  parentPost?: Amity.Post | null;
+  livestreamPost?: Amity.Post<'room'> | null;
+  setLivestreamPost?: React.Dispatch<React.SetStateAction<Amity.Post<'room'> | null>>;
   // Computed values from room for convenience
   hostId?: string;
   coHostId?: string;
@@ -32,7 +34,8 @@ interface LivestreamDataProviderProps {
   children: ReactNode;
   room?: Amity.Room | null;
   channel?: Amity.Channel<'live'> | null;
-  livestreamPost?: Amity.Post | null;
+  parentPost?: Amity.Post | null;
+  livestreamPost?: Amity.Post<'room'> | null;
   notificationAlignment?: NotificationAlignment;
 }
 
@@ -40,6 +43,7 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   children,
   room,
   channel,
+  parentPost,
   livestreamPost,
   notificationAlignment,
 }) => {
@@ -47,13 +51,28 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   const host = room?.participants.find((participant) => participant.type === 'host');
   const coHost = room?.participants.find((participant) => participant.type === 'coHost');
 
+  const [livestreamChildPost, setLivestreamChildPost] = useState<Amity.Post<'room'> | null>(
+    livestreamPost || null,
+  );
+
+  useEffect(() => {
+    setLivestreamChildPost(livestreamPost ?? null);
+  }, [livestreamPost]);
+
   const hostId = host?.userId;
   const coHostId = coHost?.userId;
+
+  const { currentUserId } = useSDK();
 
   const [invitationByMe, setInvitationByMe] = useState<Amity.Invitation>();
 
   const { invitations } = useObserveRoomAndInvitation({ room });
-  const { currentUserId } = useSDK();
+
+  // Monitor co-host permission changes and show toast notification
+  useCoHostPermissionNotification({
+    room,
+    notificationAlignment: notificationAlignment ?? 'fullscreen',
+  });
 
   useEffect(() => {
     if (invitations && invitations.length > 0) {
@@ -68,7 +87,9 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
   const contextValue: LivestreamDataContextType = {
     room,
     channel,
-    livestreamPost,
+    parentPost,
+    livestreamPost: livestreamChildPost,
+    setLivestreamPost: setLivestreamChildPost,
     host,
     coHost,
     hostId,

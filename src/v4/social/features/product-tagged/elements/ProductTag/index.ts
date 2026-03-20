@@ -1,0 +1,1 @@
+export { ProductTag } from './ProductTag';
