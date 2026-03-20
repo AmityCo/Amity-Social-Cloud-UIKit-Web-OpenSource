@@ -25,6 +25,7 @@ import {
 import clsx from 'clsx';
 import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 
 type LiveStreamContentProps = {
   roomId?: string;
@@ -51,6 +52,10 @@ export function LiveStreamContent({
   const { post: subscribedPost } = usePostSubscription(parentPost?.childrenPosts[0]?.postId);
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
+  const { showProductTagList } = useShowProductTagList({
+    mode: 'livestream',
+    sourceId: roomId ?? room?.roomId ?? '',
+  });
 
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
@@ -89,16 +94,16 @@ export function LiveStreamContent({
   const renderProductTags = () => {
     if (!canShowProductTags) return null;
     return (
-      <TaggedProductIcon
-        onPress={() => {
-          goToLiveStreamPlayerPage?.({
-            post: parentPost,
-            goToDetailPage: goToPostDetail,
-          });
-        }}
-        className={styles.liveStreamContent__taggedProducts}
-        productTagAmount={subscribedPost?.productTags?.length || 0}
-      />
+      // Intercept the native click so it doesn't bubble to the parent Button and trigger navigation
+      <div role="presentation" onClick={(e) => e.stopPropagation()}>
+        <TaggedProductIcon
+          onPress={() => {
+            showProductTagList(subscribedPost?.productTags as Amity.ProductTag[]);
+          }}
+          className={styles.liveStreamContent__taggedProducts}
+          productTagAmount={subscribedPost?.productTags?.length || 0}
+        />
+      </div>
     );
   };
 

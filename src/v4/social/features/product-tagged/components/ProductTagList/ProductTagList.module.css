@@ -41,6 +41,11 @@
   text-align: left;
 }
 
+.productTagList__liveStream__spacing {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .productTagList__closeButton {
   width: 1.5rem; /* 24px */
   height: 1.5rem; /* 24px */
@@ -48,7 +53,7 @@
 }
 
 .productTagList__closeButton svg {
-  fill: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-default);
 }
 
 .productTagList__content {
@@ -83,4 +88,14 @@
 
 .productTagList__divider {
   width: 100%;
+}
+
+@media (width >= 48rem) {
+  .productTagList__closeButton svg {
+    fill: var(--asc-color-base-shade3);
+  }
+
+  .productTagList__liveStream__spacing {
+    display: none;
+  }
 }
