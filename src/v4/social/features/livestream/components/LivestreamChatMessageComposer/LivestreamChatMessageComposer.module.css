@@ -79,24 +79,6 @@
   gap: 0.25rem;
 }
 
-.livestreamChatMessageComposer__productTaggingButton__badge {
-  position: absolute;
-  top: -0.25rem;
-  right: -0.25rem;
-  background-color: var(--asc-color-alert-default);
-  color: var(--asc-color-white);
-  border-radius: 50%;
-  min-width: 1rem;
-  height: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--asc-text-font-size-xs);
-  font-weight: var(--asc-font-weight-bold);
-  padding: 0 0.25rem;
-  box-sizing: border-box;
-}
-
 .livestreamChatMessageComposer__sendButton__container {
   width: 2.5rem; /* 40px */
   height: 2.5rem; /* 40px */

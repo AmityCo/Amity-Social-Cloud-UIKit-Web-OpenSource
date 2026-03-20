@@ -26,8 +26,8 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { InviteCoHostList } from '~/v4/social/features/livestream/internal-components/InviteCoHostList';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import { TagOutlined } from '~/v4/icons/TagOutlined';
 import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
+import { ProductTaggingButton } from '~/v4/social/features/product-tagged/elements';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { ProductTagList } from '~/v4/social/features/product-tagged/components/ProductTagList';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
@@ -532,14 +532,15 @@ export const LivestreamChatMessageComposer = ({
           {!isProductTagButtonHidden && (hasProductTags || isHostOrCoHostWithProductManagement) && (
             <div className={styles.livestreamChatMessageComposer__productTaggingButton__wrapper}>
               {isHostOrCoHostWithProductManagement ? (
-                <ActionButton
+                <ProductTaggingButton
                   pageId={pageId}
                   componentId={componentId}
-                  elementId={'product_tagging_button'}
-                  size="large"
-                  defaultIcon={<TagOutlined />}
                   isDisabled={disabled}
-                  color="secondary"
+                  badgeCount={
+                    productCatalogueSettings?.product.enabled
+                      ? subscribedPost?.productTags?.length
+                      : undefined
+                  }
                   onPress={async () => {
                     if (!(await ensureCatalogueEnabledOrWarn())) return;
                     if (isDesktop) {
@@ -580,14 +581,15 @@ export const LivestreamChatMessageComposer = ({
                 hasProductTags &&
                 room &&
                 !isHost && (
-                  <ActionButton
+                  <ProductTaggingButton
                     pageId={pageId}
                     componentId={componentId}
-                    elementId={'product_tagging_button'}
-                    size="large"
-                    defaultIcon={<TagOutlined />}
                     isDisabled={disabled}
-                    color="secondary"
+                    badgeCount={
+                      productCatalogueSettings?.product.enabled
+                        ? subscribedPost?.productTags?.length
+                        : undefined
+                    }
                     onPress={async () => {
                       if (!(await ensureCatalogueEnabledOrWarn())) return;
                       if (isDesktop) {
@@ -628,15 +630,6 @@ export const LivestreamChatMessageComposer = ({
                   />
                 )
               )}
-              {hasProductTags &&
-                productCatalogueSettings?.product.enabled &&
-                !isProductTagButtonHidden && (
-                  <div
-                    className={styles.livestreamChatMessageComposer__productTaggingButton__badge}
-                  >
-                    {subscribedPost?.productTags?.length}
-                  </div>
-                )}
             </div>
           )}
 
