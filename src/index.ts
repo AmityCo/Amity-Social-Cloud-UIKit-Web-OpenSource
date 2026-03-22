@@ -149,3 +149,7 @@ export { MyEvents as AmityMyEventFeedComponent } from './v4/social/features/even
 export { EventInfo as AmityEventInfoComponent } from './v4/social/features/events';
 
 export { LivestreamChatMessageComposer as AmityLivestreamChatMessageComposerComponent } from '~/v4/social/features/livestream';
+
+export { AppContainer as AmityAppContainer } from '~/v4/core/components/AppContainer';
+export { TopBar as AmityTopBar } from '~/v4/core/components/TopBar';
+export { AppNavBar as AmityAppNavBar } from '~/v4/core/components/AppNavBar';

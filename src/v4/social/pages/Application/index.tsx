@@ -56,12 +56,15 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
+import { TopBar } from '~/v4/core/components/TopBar';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
   const [open, setOpen] = useState(false);
-  const { page, goToSocialHomePage } = useNavigation();
+  const { page, goToSocialHomePage, onClickUser } = useNavigation();
   const { liveStreamPlayer } = useLayoutContext();
+  const { currentUserId } = useSDK();
   const toggleOpen = () => setOpen((open) => !open);
 
   useEffect(() => {
@@ -75,160 +78,178 @@ const Application = () => {
     }
   }, [isDesktop]);
 
+  const handleClickUserProfile = () => {
+    if (currentUserId) {
+      onClickUser(currentUserId);
+    }
+  };
+
   return (
     <div className={styles.applicationContainer}>
-      <MainLayout aside={<CommunitySideBar />}>
-        {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
-        {page.type === PageTypes.SocialGlobalSearchPage && !isDesktop && <SocialGlobalSearchPage />}
-        {page.type === PageTypes.PostDetailPage &&
-          (() => {
-            const { postId, ...rest } = page.context || {};
-            // change only postId to be id and pass the rest context fields as props
-            return <PostDetailPage id={postId} {...rest} />;
-          })()}
-        {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
-        {page.type === PageTypes.CommunityProfilePage && (
-          <CommunityTabProvider>
-            <CommunityProfilePage communityId={page.context.communityId} page={page.context.page} />
-          </CommunityTabProvider>
-        )}
-        {page.type === PageTypes.ViewStoryPage && (
-          <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
-        )}
-        {page.type === PageTypes.DraftPage && (
-          <AmityDraftStoryPage
-            targetId={page.context?.targetId}
-            targetType={page.context?.targetType}
-            mediaType={page.context?.mediaType}
-          />
-        )}
-        {page.type === PageTypes.PostComposerPage && (
-          <PostComposerPage
-            mode={page.context?.mode as any}
-            targetId={page.context?.targetId}
-            targetType={page.context?.targetType}
-            community={page.context?.community}
-            post={page.context?.post}
-            isClipPost={page.context?.isClipPost}
-            targetName={page.context?.targetName}
-          />
-        )}
-        {page.type === PageTypes.SelectPostTargetPage && (
-          <SelectPostTargetPage isClipPost={page.context?.isClipPost} />
-        )}
-        {page.type === PageTypes.MyCommunitiesSearchPage && <MyCommunitiesSearchPage />}
-        {page.type === PageTypes.AllCategoriesPage && <AllCategoriesPage />}
-        {page.type === PageTypes.CommunitiesByCategoryPage && (
-          <CommunitiesByCategoryPage categoryId={page.context.categoryId} />
-        )}
-        {page.type === PageTypes.UserProfilePage && (
-          <UserProfilePage userId={page.context.userId} />
-        )}
-        {page.type === PageTypes.CommunitySetupPage && (
-          <CommunitySetupPage mode={page.context?.mode} community={page.context?.community} />
-        )}
-        {page.type === PageTypes.CommunityAddCategoryPage && (
-          <CommunityAddCategoryPage category={page.context.categories} />
-        )}
-        {page.type === PageTypes.CommunityAddMemberPage && (
-          <CommunityAddMemberPage
-            member={page.context?.members}
-            communityId={page.context?.communityId}
-            onAddedAction={page.context?.onAddedAction}
-          />
-        )}
-        {page.type === PageTypes.CommunityInviteMemberPage && (
-          <CommunityInviteMemberPage
-            onSubmit={page.context?.onSubmit}
-            communityId={page.context?.communityId}
-          />
-        )}
-        {page.type === PageTypes.CommunitySettingPage && (
-          <CommunitySettingPage community={page.context.community} />
-        )}
-        {page.type === PageTypes.CommunityPostPermissionPage && (
-          <CommunityPostPermissionPage community={page.context.community} />
-        )}
-        {page.type === PageTypes.CommunityStorySettingPage && (
-          <CommunityStorySettingPage community={page.context.community} />
-        )}
-        {page.type === PageTypes.PendingPostsPage && (
-          <PendingPostsPage communityId={page.context.communityId} />
-        )}
-        {page.type === PageTypes.CommunityMembershipPage && (
-          <CommunityMembershipPage community={page.context.community} />
-        )}
-        {page.type === PageTypes.CommunityPendingInvitationPage && (
-          <CommunityPendingInvitationPage community={page.context.community} />
-        )}
-        {page.type === PageTypes.EditUserProfilePage && (
-          <EditUserProfilePage userId={page.context.userId} />
-        )}
-        {page.type === PageTypes.UserRelationshipPage && (
-          <UserRelationshipPage
-            userId={page.context.userId}
-            selectedTab={page.context.selectedTab}
-          />
-        )}
-        {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
-        {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
-        {page.type === PageTypes.CreateLivestreamPage && <CreateLivestreamPage {...page.context} />}
-        {page.type === PageTypes.LivestreamTargetSelectionPage && <LivestreamTargetSelectionPage />}
-        {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
-        {page.type === PageTypes.LivestreamUnsupportedPage && <LivestreamUnsupportedPage />}
-        {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
-        {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
-        {page.type === PageTypes.PendingRequestPage && (
-          <PendingRequestPage community={page.context.community} />
-        )}
+      <TopBar onClickUserProfile={handleClickUserProfile} />
+      <div className={styles.applicationContent}>
+        <MainLayout aside={<CommunitySideBar />}>
+          {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
+          {page.type === PageTypes.SocialGlobalSearchPage && !isDesktop && (
+            <SocialGlobalSearchPage />
+          )}
+          {page.type === PageTypes.PostDetailPage &&
+            (() => {
+              const { postId, ...rest } = page.context || {};
+              // change only postId to be id and pass the rest context fields as props
+              return <PostDetailPage id={postId} {...rest} />;
+            })()}
+          {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
+          {page.type === PageTypes.CommunityProfilePage && (
+            <CommunityTabProvider>
+              <CommunityProfilePage
+                communityId={page.context.communityId}
+                page={page.context.page}
+              />
+            </CommunityTabProvider>
+          )}
+          {page.type === PageTypes.ViewStoryPage && (
+            <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
+          )}
+          {page.type === PageTypes.DraftPage && (
+            <AmityDraftStoryPage
+              targetId={page.context?.targetId}
+              targetType={page.context?.targetType}
+              mediaType={page.context?.mediaType}
+            />
+          )}
+          {page.type === PageTypes.PostComposerPage && (
+            <PostComposerPage
+              mode={page.context?.mode as any}
+              targetId={page.context?.targetId}
+              targetType={page.context?.targetType}
+              community={page.context?.community}
+              post={page.context?.post}
+              isClipPost={page.context?.isClipPost}
+              targetName={page.context?.targetName}
+            />
+          )}
+          {page.type === PageTypes.SelectPostTargetPage && (
+            <SelectPostTargetPage isClipPost={page.context?.isClipPost} />
+          )}
+          {page.type === PageTypes.MyCommunitiesSearchPage && <MyCommunitiesSearchPage />}
+          {page.type === PageTypes.AllCategoriesPage && <AllCategoriesPage />}
+          {page.type === PageTypes.CommunitiesByCategoryPage && (
+            <CommunitiesByCategoryPage categoryId={page.context.categoryId} />
+          )}
+          {page.type === PageTypes.UserProfilePage && (
+            <UserProfilePage userId={page.context.userId} />
+          )}
+          {page.type === PageTypes.CommunitySetupPage && (
+            <CommunitySetupPage mode={page.context?.mode} community={page.context?.community} />
+          )}
+          {page.type === PageTypes.CommunityAddCategoryPage && (
+            <CommunityAddCategoryPage category={page.context.categories} />
+          )}
+          {page.type === PageTypes.CommunityAddMemberPage && (
+            <CommunityAddMemberPage
+              member={page.context?.members}
+              communityId={page.context?.communityId}
+              onAddedAction={page.context?.onAddedAction}
+            />
+          )}
+          {page.type === PageTypes.CommunityInviteMemberPage && (
+            <CommunityInviteMemberPage
+              onSubmit={page.context?.onSubmit}
+              communityId={page.context?.communityId}
+            />
+          )}
+          {page.type === PageTypes.CommunitySettingPage && (
+            <CommunitySettingPage community={page.context.community} />
+          )}
+          {page.type === PageTypes.CommunityPostPermissionPage && (
+            <CommunityPostPermissionPage community={page.context.community} />
+          )}
+          {page.type === PageTypes.CommunityStorySettingPage && (
+            <CommunityStorySettingPage community={page.context.community} />
+          )}
+          {page.type === PageTypes.PendingPostsPage && (
+            <PendingPostsPage communityId={page.context.communityId} />
+          )}
+          {page.type === PageTypes.CommunityMembershipPage && (
+            <CommunityMembershipPage community={page.context.community} />
+          )}
+          {page.type === PageTypes.CommunityPendingInvitationPage && (
+            <CommunityPendingInvitationPage community={page.context.community} />
+          )}
+          {page.type === PageTypes.EditUserProfilePage && (
+            <EditUserProfilePage userId={page.context.userId} />
+          )}
+          {page.type === PageTypes.UserRelationshipPage && (
+            <UserRelationshipPage
+              userId={page.context.userId}
+              selectedTab={page.context.selectedTab}
+            />
+          )}
+          {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
+          {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
+          {page.type === PageTypes.CreateLivestreamPage && (
+            <CreateLivestreamPage {...page.context} />
+          )}
+          {page.type === PageTypes.LivestreamTargetSelectionPage && (
+            <LivestreamTargetSelectionPage />
+          )}
+          {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
+          {page.type === PageTypes.LivestreamUnsupportedPage && <LivestreamUnsupportedPage />}
+          {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
+          {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
+          {page.type === PageTypes.PendingRequestPage && (
+            <PendingRequestPage community={page.context.community} />
+          )}
 
-        {/* modal as page */}
-        {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
+          {/* modal as page */}
+          {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
 
-        {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
-        {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}
-        {page.type === PageTypes.UpcomingEventsPage && <UpcomingEventsPage {...page.context} />}
-        {page.type === PageTypes.PastEventsPage && <PastEventsPage />}
-        {page.type === PageTypes.EventDetailPage && <EventDetailPage {...page.context} />}
-        {page.type === PageTypes.EventAttendeesPage && <EventAttendeesPage {...page.context} />}
+          {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
+          {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}
+          {page.type === PageTypes.UpcomingEventsPage && <UpcomingEventsPage {...page.context} />}
+          {page.type === PageTypes.PastEventsPage && <PastEventsPage />}
+          {page.type === PageTypes.EventDetailPage && <EventDetailPage {...page.context} />}
+          {page.type === PageTypes.EventAttendeesPage && <EventAttendeesPage {...page.context} />}
 
-        {/* V3 */}
-        {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeed
-            communityId={page.context.communityId}
-            isNewCommunity={page.context.isNewCommunity}
-            isOpen={open}
-            toggleOpen={toggleOpen}
-          />
-        )}
-        {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.context.communityId} tab={page.context.tab} />
-        )}
-        {page.type === PageTypes.PollTargetSelectionPage && <PollTargetSelectionPage />}
-        {page.type === PageTypes.PollPostComposerPage && (
-          <PollPostComposerPage
-            targetId={page.context.targetId}
-            targetType={page.context.targetType}
-            pollType={page.context.pollType}
-          />
-        )}
-        {page.type === PageTypes.DraftClipPage && (
-          <DraftClipPage
-            targetId={page.context.targetId}
-            targetType={page.context.targetType}
-            community={page.context.community}
-          />
-        )}
-        {page.type === PageTypes.ClipFeedPage && (
-          <ClipFeedPage
-            currentPostId={page.context.currentPostId}
-            postIndex={page.context.postIndex}
-            targetType={page.context.targetType}
-            targetId={page.context.targetId}
-          />
-        )}
-        {/*End of V3 */}
-      </MainLayout>
+          {/* V3 */}
+          {page.type === PageTypes.CommunityFeed && (
+            <CommunityFeed
+              communityId={page.context.communityId}
+              isNewCommunity={page.context.isNewCommunity}
+              isOpen={open}
+              toggleOpen={toggleOpen}
+            />
+          )}
+          {page.type === PageTypes.CommunityEdit && (
+            <CommunityEditPage communityId={page.context.communityId} tab={page.context.tab} />
+          )}
+          {page.type === PageTypes.PollTargetSelectionPage && <PollTargetSelectionPage />}
+          {page.type === PageTypes.PollPostComposerPage && (
+            <PollPostComposerPage
+              targetId={page.context.targetId}
+              targetType={page.context.targetType}
+              pollType={page.context.pollType}
+            />
+          )}
+          {page.type === PageTypes.DraftClipPage && (
+            <DraftClipPage
+              targetId={page.context.targetId}
+              targetType={page.context.targetType}
+              community={page.context.community}
+            />
+          )}
+          {page.type === PageTypes.ClipFeedPage && (
+            <ClipFeedPage
+              currentPostId={page.context.currentPostId}
+              postIndex={page.context.postIndex}
+              targetType={page.context.targetType}
+              targetId={page.context.targetId}
+            />
+          )}
+          {/*End of V3 */}
+        </MainLayout>
+      </div>
     </div>
   );
 };
