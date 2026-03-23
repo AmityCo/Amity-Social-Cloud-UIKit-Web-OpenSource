@@ -63,6 +63,7 @@ export function ProductTag({
       sourceType &&
       sourceId
     ) {
+      if (accessibilityId.includes('pending_posts_page')) return;
       product.analytics.markAsViewed(accessibilityId, sourceType, sourceId);
       setHasMarkedAsViewed(true);
     }
@@ -92,7 +93,12 @@ export function ProductTag({
   const handlePress = () => {
     if (unavailable) return;
 
-    if (shouldTrackAnalytics && sourceType && sourceId) {
+    if (
+      shouldTrackAnalytics &&
+      sourceType &&
+      sourceId &&
+      !accessibilityId.includes('pending_posts_page')
+    ) {
       product?.analytics.markAsClicked(accessibilityId, sourceType, sourceId);
     }
     onClick?.();
