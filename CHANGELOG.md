@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.6 (2026-03-23)
+
+
+### Bug Fixes
+
+* PDT-1821 - product analytic location ([#1537](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1537)) ([c4c4052](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c4c4052b129ad31e94f7db0d2489de295b04ebba))
+
 ## 4.15.0-beta.5 (2026-03-20)
 
 ## 4.15.0-beta.4 (2026-03-04)
