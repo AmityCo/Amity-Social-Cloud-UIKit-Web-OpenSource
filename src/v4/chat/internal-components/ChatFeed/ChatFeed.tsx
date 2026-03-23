@@ -34,10 +34,6 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { isVisitorOrBot } = useSDK();
-  const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
-    channelId: channel.channelId,
-  });
 
   const { isVisitorOrBot } = useSDK();
   const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
