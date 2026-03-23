@@ -103,6 +103,7 @@ const PostReplyComment = ({
     text: string;
     mentionees: Amity.UserMention[];
     metadata: Record<string, unknown>;
+    links: Amity.Link[];
   } | null>(null);
   // Whether the L2 reply list is expanded (only relevant for L1 bubbles, i.e. isL2=false)
   const [showL2Replies, setShowL2Replies] = useState(false);
