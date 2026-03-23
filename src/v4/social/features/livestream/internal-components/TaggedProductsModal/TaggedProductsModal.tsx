@@ -52,7 +52,7 @@ export function TaggedProductsModal({
   onUpdateProductTags,
   onPinnedProductIdChange,
 }: TaggedProductsModalProps) {
-  const componentId = COMPONENT_ID.MANAGE_PRODUCT_TAG_LIST;
+  const componentId = isHost ? COMPONENT_ID.MANAGE_PRODUCT_TAG_LIST : COMPONENT_ID.PRODUCT_TAG_LIST;
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,
