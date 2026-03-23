@@ -17,6 +17,7 @@ import { HashtagPlugin } from '~/v4/social/internal-components/Lexical/plugins/H
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { LinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkPlugin';
 import { AutoLinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/AutoLinkPlugin';
+import { FloatingLinkEditorPlugin } from '~/v4/social/internal-components/Lexical/plugins/FloatingLinkEditorPlugin';
 import {
   editorToText,
   getEditorConfig,
@@ -36,6 +37,7 @@ import styles from './PostTextField.module.css';
 import { LinkPreview } from '~/v4/social/components/PostContent/LinkPreview';
 import { CloseButton } from '~/v4/social/elements/CloseButton';
 import { DEBOUNCE_PREVIEW_LINK } from '~/v4/social/constants/post';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 interface PostTextFieldProps {
   pageId?: string;
@@ -49,6 +51,7 @@ interface PostTextFieldProps {
   placeholder?: string;
   isValidInput?: string | boolean;
   isClipPost?: boolean;
+  isPollPost?: boolean;
   dataValue: {
     data: { text: string };
     metadata?: {
@@ -162,6 +165,7 @@ export const PostTextField = ({
   mentionContainerClassName,
   placeholder,
   isClipPost = false,
+  isPollPost = false,
   isValidInput: dataInputAttributes,
   attachmentAmount = 0,
   onPreviewLinkChange,
@@ -170,6 +174,7 @@ export const PostTextField = ({
   const [intersectionNode, setIntersectionNode] = useState<HTMLElement | null>(null);
   const [hiddenPreviewUrl, setHiddenPreviewUrl] = useState<string | null>(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const { isDesktop } = useResponsive();
 
   const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
 
@@ -177,7 +182,8 @@ export const PostTextField = ({
     const links = dataValue?.links;
 
     if (links && links.length > 0) {
-      return links[0].url;
+      const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+      return firstLinkWithPreview?.url ?? null;
     }
     return null;
   }, [dataValue?.links]);
@@ -186,16 +192,18 @@ export const PostTextField = ({
     const links = dataValue?.links;
 
     if (links && links.length > 0) {
-      return links[0].renderPreview !== false; // Default to true if not specified
+      const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+      return !!firstLinkWithPreview;
     }
     return true;
   }, [dataValue?.links]);
 
-  // Initialize debouncedFirstUrl with the initial firstUrl value only if renderPreview is not false
+  // Initialize debouncedFirstUrl with the first link that has renderPreview: true
   const [debouncedFirstUrl, setDebouncedFirstUrl] = useState<string | null>(() => {
     const links = dataValue?.links;
-    if (links && links.length > 0 && links[0].renderPreview !== false) {
-      return links[0].url;
+    if (links && links.length > 0) {
+      const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+      return firstLinkWithPreview?.url ?? null;
     }
     return null;
   });
@@ -234,7 +242,8 @@ export const PostTextField = ({
     !attachmentAmount &&
     debouncedFirstUrl !== hiddenPreviewUrl &&
     firstLinkRenderPreview &&
-    !isClipPost;
+    !isClipPost &&
+    !isPollPost;
 
   const handleClosePreview = () => {
     if (debouncedFirstUrl) {
@@ -317,27 +326,15 @@ export const PostTextField = ({
                   }
                   return true;
                 })
-                .map((link, index) => {
-                  // Find the corresponding link in dataValue.links by URL to preserve renderPreview
-                  const originalLink = dataValue?.links?.find((l) => l.url === link.url);
-
-                  // For the first link, determine renderPreview value
-                  if (index === 0) {
-                    // If the link was hidden by user, set renderPreview to false
-                    if (link.url === hiddenPreviewUrl) {
-                      return { ...link, renderPreview: false };
-                    }
-                    // If there's an original link with renderPreview explicitly set to false, keep it false
-                    if (originalLink?.renderPreview === false) {
-                      return { ...link, renderPreview: false };
-                    }
-
-                    return { ...link, renderPreview: true };
+                .map((link) => {
+                  // First check if user manually hid this link
+                  if (link.url === hiddenPreviewUrl) {
+                    return { ...link, renderPreview: false };
                   }
-                  return {
-                    ...link,
-                    renderPreview: originalLink?.renderPreview ?? link.renderPreview,
-                  };
+
+                  // Trust the value from editorToText, which already correctly determines renderPreview
+                  // based on whether the link text matches the URL
+                  return { ...link };
                 });
             } else if (debouncedFirstUrl && debouncedFirstUrl !== hiddenPreviewUrl) {
               // Keep link data when link was removed but still in debounce period
@@ -361,6 +358,7 @@ export const PostTextField = ({
         <AutoFocusPlugin />
         <LinkPlugin />
         <AutoLinkPlugin />
+        <FloatingLinkEditorPlugin enabled={isDesktop} />
         <HashtagPlugin />
         <MentionPlugin<MentionData, MentionNode<MentionData>>
           suggestions={suggestions}

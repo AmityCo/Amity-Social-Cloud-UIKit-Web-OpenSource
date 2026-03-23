@@ -255,6 +255,7 @@ const PostReplyComment = ({
         text: (savedData.data as { text?: string })?.text ?? '',
         mentionees: (savedData.mentionees as Amity.UserMention[]) ?? [],
         metadata: savedData.metadata ?? {},
+        links: savedData.links ?? [],
       });
     },
   });
@@ -290,6 +291,7 @@ const PostReplyComment = ({
                   },
                   mentionees: (localCommentData?.mentionees ?? comment.mentionees) as Mentionees,
                   metadata: localCommentData?.metadata ?? comment.metadata ?? {},
+                  links: localCommentData?.links ?? comment.links ?? [],
                 }}
                 onChange={(value) => {
                   setCommentData({
@@ -300,6 +302,7 @@ const PostReplyComment = ({
                     metadata: {
                       mentioned: value.mentioned,
                     },
+                    links: value.links || [],
                   });
                 }}
               />
@@ -322,6 +325,12 @@ const PostReplyComment = ({
                 )}
                 componentId="edit_comment_component"
                 onPress={handleSaveComment}
+                isDisabled={
+                  !commentData?.data.text ||
+                  (commentData?.data.text === (comment.data as Amity.ContentDataText).text &&
+                    JSON.stringify(commentData?.links || []) ===
+                      JSON.stringify(comment.links || []))
+                }
               />
             </div>
           </div>
@@ -367,6 +376,7 @@ const PostReplyComment = ({
                     (localCommentData?.mentionees ?? comment.mentionees) as Amity.UserMention[]
                   }
                   metadata={localCommentData?.metadata ?? comment.metadata}
+                  links={localCommentData?.links ?? comment.links}
                   testId={`${pageId}/${componentId}/reply-comment-text`}
                 />
                 <CommentReactionDisplay

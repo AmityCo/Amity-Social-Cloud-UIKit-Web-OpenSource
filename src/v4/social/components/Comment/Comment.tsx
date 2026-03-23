@@ -381,6 +381,7 @@ export const Comment = ({
                   },
                   mentionees: comment.mentionees as Mentionees,
                   metadata: comment.metadata || {},
+                  links: comment.links || [],
                 }}
                 onChange={(value) => {
                   setCommentData({
@@ -391,6 +392,7 @@ export const Comment = ({
                     metadata: {
                       mentioned: value.mentioned,
                     },
+                    links: value.links || [],
                   });
                 }}
                 maxLines={5}
@@ -417,7 +419,9 @@ export const Comment = ({
                 onPress={handleSaveComment}
                 isDisabled={
                   !commentData?.data.text ||
-                  commentData?.data.text === (comment.data as Amity.ContentDataText).text
+                  (commentData?.data.text === (comment.data as Amity.ContentDataText).text &&
+                    JSON.stringify(commentData?.links || []) ===
+                      JSON.stringify(comment.links || []))
                 }
               />
             </div>
@@ -476,6 +480,7 @@ export const Comment = ({
                 pageId={pageId}
                 componentId={componentId}
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
+                links={comment.links}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
                 maxLines={maxLines}

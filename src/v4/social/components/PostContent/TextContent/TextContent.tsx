@@ -52,10 +52,11 @@ export const TextContent = ({
       PostContentType.ROOM,
     ].includes(childPost?.dataType);
 
-  const canPreviewShown =
-    post?.links?.[0]?.renderPreview && !isHasMedia && isValidUrl(post?.links?.[0]?.url);
-
   const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
+
+  const firstLinkWithPreview = post?.links?.find((link) => link.renderPreview);
+  const canPreviewShown =
+    firstLinkWithPreview && !isHasMedia && isValidUrl(firstLinkWithPreview.url);
 
   return (
     <>
@@ -102,6 +103,7 @@ export const TextContent = ({
               mentionees={mentionees}
               metadata={{ mentioned, hashtagged }}
               hashtags={hashtags}
+              links={post?.links}
               productTags={productTags}
               keyword={keyword}
               isSearchPost={isSearchPost}
@@ -111,11 +113,7 @@ export const TextContent = ({
         </>
       )}
       {canPreviewShown && (
-        <LinkPreview
-          pageId={pageId}
-          componentId={componentId}
-          url={post?.links?.[0]?.url as string}
-        />
+        <LinkPreview pageId={pageId} componentId={componentId} url={firstLinkWithPreview.url} />
       )}
     </>
   );

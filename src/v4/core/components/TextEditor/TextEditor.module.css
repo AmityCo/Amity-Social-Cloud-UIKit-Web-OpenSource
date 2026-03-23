@@ -32,7 +32,7 @@
 
 .textEditor__link {
   color: var(--asc-color-primary-default);
-  text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
 }
 

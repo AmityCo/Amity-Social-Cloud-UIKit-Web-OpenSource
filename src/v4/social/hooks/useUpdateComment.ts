@@ -38,6 +38,7 @@ export const useUpdateComment = ({
         data: commentData.data,
         mentionees: commentData.mentionees as Amity.UserMention[],
         metadata: commentData.metadata,
+        links: commentData.links || [],
       });
     } catch (error) {
       if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {

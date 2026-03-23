@@ -1,5 +1,5 @@
 import { UserRepository } from '@amityco/ts-sdk';
-import { useLiveCollectionV4 } from '~/v4/core/hooks//useLiveCollectionV4';
+import { useLiveCollectionV4 } from '~/v4/core/hooks/useLiveCollectionV4';
 
 type FollowStatusInput = Amity.QueryFollowers['status'];
 

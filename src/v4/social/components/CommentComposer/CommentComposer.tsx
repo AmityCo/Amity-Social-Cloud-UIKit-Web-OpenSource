@@ -39,6 +39,7 @@ export type CreateCommentParams = {
   };
   mentionees: Mentionees;
   metadata: Metadata;
+  links?: Amity.Link[];
 };
 
 interface CommentComposerProps {
@@ -95,6 +96,7 @@ export const CommentComposer = ({
         ],
       },
       mentionees: [{ type: 'user' as const, userIds: [replyTo.userId || ''] }],
+      links: [],
     };
   }, [replyTo?.commentId, mentionDisplayName, replyTo?.userId]);
   const { isDesktop } = useResponsive();
@@ -134,6 +136,7 @@ export const CommentComposer = ({
       },
     ],
     metadata: {},
+    links: [],
   });
 
   const { mutateAsync, isPending } = useMutation({
@@ -146,8 +149,10 @@ export const CommentComposer = ({
         referenceId: replyTo ? replyTo.referenceId : referenceId,
         referenceType,
         parentId,
-        ...params,
+        data: params.data,
+        metadata: params.metadata,
         mentionees: params.mentionees as Amity.UserMention[],
+        links: params.links || [],
       });
       return { created, parentId };
     },
@@ -198,6 +203,7 @@ export const CommentComposer = ({
         data: { text: '' },
         mentionees: [],
         metadata: {},
+        links: [],
       });
       editorRef.current?.clearEditorState();
       onCancelReply();
@@ -272,7 +278,7 @@ export const CommentComposer = ({
             key={replyTo?.commentId ?? 'no-reply'}
             ref={editorRef}
             mentionContainer={mentionContainerRef?.current}
-            onChange={({ text, mentioned, mentionees }) => {
+            onChange={({ text, mentioned, mentionees, links }) => {
               setTextValue({
                 data: {
                   text: text,
@@ -281,6 +287,7 @@ export const CommentComposer = ({
                 metadata: {
                   mentioned: mentioned,
                 },
+                links: links || [],
               });
             }}
             onFocus={() => {

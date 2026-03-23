@@ -566,6 +566,7 @@ export function CreatePost({
               pageId={pageId}
               editorContentType="post"
               communityId={targetId}
+              enableFloatingLink={isDesktop}
               initialText={textValue.text}
               enableProductMention={true}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
@@ -593,8 +594,7 @@ export function CreatePost({
                   url: url.url,
                   index: url.start,
                   length: url.end - url.start,
-                  // TODO: check if this field is required from FE
-                  renderPreview: true,
+                  renderPreview: url.renderPreview,
                 }));
                 setTextValue((prev) => ({ ...prev, links }));
               }}
