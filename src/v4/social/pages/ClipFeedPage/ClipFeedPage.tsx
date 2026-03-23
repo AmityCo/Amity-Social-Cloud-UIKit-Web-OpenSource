@@ -571,54 +571,6 @@ export const ClipFeedPage = ({
                               })
                             }
                           />
-                          <ClipHeader
-                            pageId={pageId}
-                            targetId={post.targetId}
-                            targetType={post.targetType}
-                          />
-                          {isShowInteractionMenu ? (
-                            <CreateNewClipButton
-                              onClick={() =>
-                                AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
-                                  isClipPost: true,
-                                })
-                              }
-                            />
-                          ) : (
-                            <div />
-                          )}
-                        </div>
-                        {!isClipFailed && (
-                          <ClipFeedMenu
-                            postId={post.parentPostId}
-                            childPost={post as Amity.Post<'video' | 'clip'>}
-                            isShowInteractionMenu={isShowInteractionMenu}
-                            isDragging={isDragging}
-                            handleMuteToggle={handleMuteToggle}
-                            isLocalMuted={isLocalMuted}
-                            onClickMenuButton={() => handleMenuClick(post.parentPostId)}
-                          />
-                        )}
-                        <ClipCaption
-                          postId={post.parentPostId}
-                          creator={post.creator}
-                          isDragging={isDragging}
-                          onClickSeeMoreButton={() => handleMenuClick(post.parentPostId)}
-                          onClickUser={() =>
-                            AmityClipFeedPageBehavior?.goToUserProfilePage?.({
-                              userId: post.creator?.userId as string,
-                            })
-                          }
-                          isLoading={isLoadingVideo}
-                        />
-                        {isShowInteractionMenu ? (
-                          <CreateNewClipButton
-                            onClick={() =>
-                              AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
-                                isClipPost: true,
-                              })
-                            }
-                          />
                         ) : (
                           <div />
                         )}

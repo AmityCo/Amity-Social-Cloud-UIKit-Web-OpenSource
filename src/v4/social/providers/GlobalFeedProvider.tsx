@@ -91,63 +91,6 @@ const useGlobalFeed = () => {
     fetch();
   };
 
-  const fetch = useCallback(() => {
-    const unsubscriber = FeedRepository.getGlobalFeed(
-      {
-        limit,
-      },
-      ({ data, loading, error, hasNextPage, onNextPage }) => {
-        setIsLoading(loading);
-
-        if (data && !loading) {
-          setHasNextPage(!!hasNextPage);
-          onNextPageRef.current = onNextPage;
-          setItems(
-            data.filter(
-              (post) =>
-                post.structureType !== PostStructureType.AUDIO &&
-                post.structureType !== PostStructureType.FILE &&
-                post.structureType !== PostStructureType.MIXED,
-            ),
-          );
-        }
-        if (error) {
-          console.error('error', error);
-        }
-      },
-    );
-
-    unsubscriberRef.current = unsubscriber;
-    return unsubscriber;
-  }, []);
-
-  useEffect(() => {
-    const unsubscriber = fetch();
-
-    return () => {
-      unsubscriber();
-    };
-  }, [fetch]);
-
-  const refetch = async () => {
-    // Cleanup current subscription
-    if (unsubscriberRef.current) {
-      unsubscriberRef.current();
-    }
-
-    // Reset state
-    setItems([]);
-    setHasNextPage(false);
-    onNextPageRef.current = undefined;
-    reset();
-
-    // Small delay to ensure cleanup
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    // Setup new subscription
-    fetch();
-  };
-
   const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
     setScrollPosition(target.scrollTop);

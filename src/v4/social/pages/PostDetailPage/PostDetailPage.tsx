@@ -182,14 +182,6 @@ export function PostDetailPage({
 
   if (!post) return null;
 
-  const { community } = useCommunity({
-    communityId: post?.targetType === 'community' ? post.targetId : null,
-  });
-
-  const { community } = useCommunity({
-    communityId: post?.targetType === 'community' ? post.targetId : null,
-  });
-
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
       <div className={styles.postDetailPage__topBar}>

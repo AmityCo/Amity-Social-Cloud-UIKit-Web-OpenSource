@@ -380,15 +380,6 @@ export const PollPostComposerPage = ({
     setImageOptions(updatedImageOptions);
   };
 
-  const updateImageOption = (index: number, value: string) => {
-    const updatedImageOptions = imageOptions.map((option, i) => {
-      const trimValue =
-        value.length > MAX_OPTION_LENGTH ? value.slice(0, MAX_OPTION_LENGTH) : value;
-      return i === index ? { ...option, data: trimValue } : option;
-    });
-    setImageOptions(updatedImageOptions);
-  };
-
   const deleteOption = (index: number) => {
     const updatedOptions = options.filter((_, i) => i !== index);
     setOptions(updatedOptions);
@@ -431,117 +422,6 @@ export const PollPostComposerPage = ({
     imageOptions.length < 2 ||
     imageOptions.filter((option) => !!option.fileId).length < 2 ||
     imageOptions.some((option) => option.data.length > MAX_OPTION_LENGTH);
-
-  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    setCurrentUploadImageIndex(index);
-    if (e.target.files && e.target.files.length > 0) {
-      handleFileChange([e.target.files[0]], FileType.IMAGE);
-    }
-  };
-  const triggerFileInput = (index: number) => {
-    const fileInput = document.getElementById(`upload-${index}`) as HTMLInputElement;
-    fileInput.click();
-  };
-
-  useEffect(() => {
-    const currentImageOptions = [...imageOptions];
-    if (
-      files?.length > 0 &&
-      files[files.length - 1]?.id &&
-      typeof currentUploadImageIndex === 'number'
-    ) {
-      currentImageOptions[currentUploadImageIndex].id = files[files.length - 1]?.id;
-      currentImageOptions[currentUploadImageIndex].indexOfFiles = files.length - 1;
-    }
-    if (
-      files?.length > 0 &&
-      (files[files.length - 1]?.file as Amity.File).fileId &&
-      typeof currentUploadImageIndex === 'number'
-    ) {
-      currentImageOptions[currentUploadImageIndex].fileId = (
-        files[files.length - 1]?.file as Amity.File
-      ).fileId;
-      setImageOptions(currentImageOptions);
-    }
-  }, [progress, files]);
-
-  const errorImageMenu = useCallback(
-    ({
-      fileIndex,
-      closeMenu,
-      fileId,
-    }: {
-      fileIndex: number;
-      closeMenu: () => void;
-      fileId: string;
-    }) => {
-      return (
-        <div className={styles.pollPostComposer__errorImageOption__container}>
-          <Button
-            className={styles.pollPostComposer__errorImageOption__item}
-            onPress={() => {
-              closeMenu();
-              if (fileId) {
-                retryUpload(fileId);
-              }
-            }}
-          >
-            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
-              Retry
-            </Typography.Body>
-          </Button>
-          <Button
-            className={styles.pollPostComposer__errorImageOption__item}
-            onPress={() => {
-              closeMenu();
-              triggerFileInput(fileIndex);
-            }}
-          >
-            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
-              Upload new image
-            </Typography.Body>
-          </Button>
-        </div>
-      );
-    },
-    [styles, retryUpload, imageOptions],
-  );
-
-  const ErrorImageMenuButton = ({ fileIndex, fileId }: { fileIndex: number; fileId: string }) => {
-    return (
-      <Popover
-        placement="bottom"
-        containerClassName={styles.pollPostComposer__errorImageOption__popOver__container}
-        trigger={({ openPopover, isOpen, isDesktop, closePopover }) => {
-          setIsPopoverOpen(isOpen);
-          return (
-            <AriaButton
-              className={styles.pollPostComposer__errorImageOption__popOver__triggerButton}
-              variant="text"
-              onPress={() => {
-                isDesktop
-                  ? openPopover()
-                  : setDrawerData({
-                      content: errorImageMenu({
-                        fileIndex,
-                        closeMenu: () => {
-                          closePopover();
-                          removeDrawerData();
-                        },
-                        fileId,
-                      }),
-                    });
-              }}
-            />
-          );
-        }}
-      >
-        {({ closePopover }) => (
-          <>{errorImageMenu({ fileIndex, closeMenu: closePopover, fileId })}</>
-        )}
-      </Popover>
-    );
-  };
 
   const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     setCurrentUploadImageIndex(index);

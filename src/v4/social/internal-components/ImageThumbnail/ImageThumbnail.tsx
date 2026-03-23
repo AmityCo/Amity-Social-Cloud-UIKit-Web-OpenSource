@@ -42,7 +42,6 @@ export function ImageThumbnail({
   files,
   progress,
   removeFile,
-  pageId = '*',
   postImages = [],
   componentId = '*',
   onRemovePostImage,
