@@ -1,5 +1,18 @@
 import { useEffect } from 'react';
 
+function getScrollParent(element: HTMLElement): HTMLElement | null {
+  let parent = element.parentElement;
+  while (parent) {
+    const style = getComputedStyle(parent);
+    const overflowY = style.overflowY;
+    if (overflowY === 'scroll' || overflowY === 'auto') {
+      return parent;
+    }
+    parent = parent.parentElement;
+  }
+  return null;
+}
+
 const useIntersectionObserver = ({
   node,
   onIntersect,
@@ -14,9 +27,19 @@ const useIntersectionObserver = ({
   useEffect(() => {
     if (node == null) return;
 
+    const resolvedOptions = options ?? {};
+
+    // If no root is specified, find the nearest scrollable ancestor
+    if (!resolvedOptions.root) {
+      const scrollParent = getScrollParent(node);
+      if (scrollParent) {
+        resolvedOptions.root = scrollParent;
+      }
+    }
+
     const observer = new IntersectionObserver(
       (entries) => entries[0]?.isIntersecting && onIntersect(),
-      options,
+      resolvedOptions,
     );
     observer.observe(node);
 
