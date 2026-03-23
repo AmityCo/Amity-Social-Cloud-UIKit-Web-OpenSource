@@ -45,6 +45,8 @@ import { isEqual } from 'lodash';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import { EventHostBadge } from '~/v4/social/elements';
+import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -163,6 +165,10 @@ export const PostContent = ({
   } = usePostReaction({ post });
   const { goToCommunityProfilePage } = useNavigation();
   const { socialReactions } = useCustomReaction();
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+
+  const canShowProductTags =
+    productCatalogueSettings?.product.enabled && !(post?.childrenPosts?.[0]?.dataType === 'room');
 
   // State to force poll results view when poll is closed from menu
   const [forceShowPollResults, setForceShowPollResults] = useState(false);
@@ -469,7 +475,7 @@ export const PostContent = ({
               category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
               <PinBadge pageId={pageId} componentId={componentId} />
             )}
-            {style === AmityPostContentComponentStyle.FEED && sharableLink && (
+            {style === AmityPostContentComponentStyle.FEED && (
               <Popover
                 containerClassName={styles.postContent__bar__actionButton}
                 trigger={{
@@ -499,6 +505,7 @@ export const PostContent = ({
                             closePopover();
                             removeDrawerData();
                           }}
+                          sharableLink={sharableLink}
                         />
                       ),
                     }),
@@ -526,6 +533,7 @@ export const PostContent = ({
                       closePopover();
                       removeDrawerData();
                     }}
+                    sharableLink={sharableLink}
                   />
                 )}
               </Popover>
@@ -549,6 +557,9 @@ export const PostContent = ({
               mentionees={post?.mentionees}
               hashtagged={post?.metadata?.hashtags}
               hashtags={post?.hashtags}
+              productTags={post?.productTags?.filter(
+                (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
+              )}
               post={post}
               keyword={keyword}
               isSearchPost={isSearchPost}
@@ -578,6 +589,9 @@ export const PostContent = ({
               />
             ) : null}
           </Button>
+          {canShowProductTags && (
+            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
+          )}
 
           <div className={styles.postContent__reactions_and_comments}>
             {post?.reactionsCount > 0 && (

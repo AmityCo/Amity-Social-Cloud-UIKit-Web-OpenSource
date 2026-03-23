@@ -8,19 +8,35 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { UnavailableMediaViewer } from '~/v4/social/internal-components/UnavailableMediaViewer';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 
 const ImageItem = ({
   fileId,
   postIndex,
+  parentPostId,
+  productTags = [],
+  pageId,
   onClickImageItem,
 }: {
   fileId: string;
   postIndex: number;
+  parentPostId: string;
+  productTags?: Amity.ProductTag[];
+  pageId?: string;
   onClickImageItem: (postIndex: number) => void;
 }) => {
   const image = useImage({ fileId, imageSize: 'medium' });
-
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'image',
+    sourceId: parentPostId,
+  });
+
+  const handleProductTagClick = () => {
+    showProductTagList(productTags);
+  };
 
   return image && !isBrokenImg ? (
     <Button
@@ -33,6 +49,11 @@ const ImageItem = ({
         alt={`${fileId}`}
         onError={() => setIsBrokenImg(true)}
       />
+      {productTags.length > 0 && (
+        <div className={styles.imageGallery__productTagBadge}>
+          <ProductTagBadge selectedProductTags={productTags} onClick={handleProductTagClick} />
+        </div>
+      )}
     </Button>
   ) : (
     <Button
@@ -40,6 +61,11 @@ const ImageItem = ({
       onPress={() => onClickImageItem(postIndex)}
     >
       <div className={styles.imageGallery__brokenImg} />
+      {productTags.length > 0 && (
+        <div className={styles.imageGallery__productTagBadge}>
+          <ProductTagBadge selectedProductTags={productTags} onClick={handleProductTagClick} />
+        </div>
+      )}
     </Button>
   );
 };
@@ -134,7 +160,10 @@ export const ImageGallery = ({
         <ImageItem
           key={post?.data?.fileId}
           fileId={post?.data?.fileId as string}
+          parentPostId={post?.parentPostId}
           postIndex={index}
+          productTags={post?.productTags}
+          pageId={pageId}
           onClickImageItem={onClickImageItem}
         />
       ))}

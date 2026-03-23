@@ -18,6 +18,7 @@ type TextContentProps = {
   mentionees?: Mentionees;
   hashtagged?: Amity.Hashtag[];
   hashtags?: string[];
+  productTags?: Amity.TextProductTag[];
   keyword?: string;
   isSearchPost?: boolean;
   isOpenSeeMore?: boolean;
@@ -33,6 +34,7 @@ export const TextContent = ({
   mentionees = [],
   hashtagged,
   hashtags = [],
+  productTags,
   keyword,
   isSearchPost = false,
   isOpenSeeMore = false,
@@ -65,6 +67,7 @@ export const TextContent = ({
             mentionees={mentionees}
             metadata={{ mentioned, hashtagged }}
             hashtags={hashtags}
+            productTags={productTags}
             componentId={componentId}
             data={{ text: stream?.title ?? '' }}
           />
@@ -74,6 +77,7 @@ export const TextContent = ({
               mentionees={mentionees}
               metadata={{ mentioned, hashtagged }}
               hashtags={hashtags}
+              productTags={productTags}
               componentId={componentId}
               data={{ text: stream.description }}
             />
@@ -98,6 +102,7 @@ export const TextContent = ({
               mentionees={mentionees}
               metadata={{ mentioned, hashtagged }}
               hashtags={hashtags}
+              productTags={productTags}
               keyword={keyword}
               isSearchPost={isSearchPost}
               seeMoreIsOpen={isOpenSeeMore}

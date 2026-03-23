@@ -5,6 +5,7 @@ interface DrawerData {
   snapPoints?: (string | number)[];
   activeSnapPoint?: string | number;
   onSnapPointChange?: (snapPoint: string | number | null) => void;
+  ariaLabel?: string;
 }
 
 interface DrawerContextProps {

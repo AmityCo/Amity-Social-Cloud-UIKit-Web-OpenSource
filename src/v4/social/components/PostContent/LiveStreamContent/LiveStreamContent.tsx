@@ -17,8 +17,15 @@ import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetail
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
-import { useRoomSubscription, useRoom } from '~/v4/social/features/livestream/hooks';
+import {
+  usePostSubscription,
+  useRoomSubscription,
+  useRoom,
+} from '~/v4/social/features/livestream/hooks';
 import clsx from 'clsx';
+import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 
 type LiveStreamContentProps = {
   roomId?: string;
@@ -42,15 +49,26 @@ export function LiveStreamContent({
 }: LiveStreamContentProps) {
   const { goToLiveStreamPlayerPage } = useNavigation();
   const { room } = useRoom(roomId ?? posts?.[0]?.getRoomInfo()?.roomId);
+  const { post: subscribedPost } = usePostSubscription(parentPost?.childrenPosts[0]?.postId);
+
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+  const { showProductTagList } = useShowProductTagList({
+    mode: 'livestream',
+    sourceId: roomId ?? room?.roomId ?? '',
+  });
+
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
-    communityId: parentPost?.targetId,
+    communityId: parentPost.targetType === 'community' ? parentPost?.targetId : null,
   });
   const { members } = useCommunityMembersCollection({
     queryParams: {
       communityId: community?.communityId as string,
     },
   });
+
+  const canShowProductTags =
+    (subscribedPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
 
   const myMembership = members.find((member) => member.userId === currentUserId);
   // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
@@ -73,6 +91,22 @@ export function LiveStreamContent({
   if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
     return <LiveStreamTerminatedThumbnail />;
 
+  const renderProductTags = () => {
+    if (!canShowProductTags) return null;
+    return (
+      // Intercept the native click so it doesn't bubble to the parent Button and trigger navigation
+      <div role="presentation" onClick={(e) => e.stopPropagation()}>
+        <TaggedProductIcon
+          onPress={() => {
+            showProductTagList(subscribedPost?.productTags as Amity.ProductTag[]);
+          }}
+          className={styles.liveStreamContent__taggedProducts}
+          productTagAmount={subscribedPost?.productTags?.length || 0}
+        />
+      </div>
+    );
+  };
+
   return (
     <Button
       className={clsx(styles.liveStreamContent, className)}
@@ -90,15 +124,24 @@ export function LiveStreamContent({
         </div>
       )}
       {room.status === liveStreamStatus.live && (
-        <div className={styles.liveStreamContent__statusBadge}>
-          <LiveStreamLiveBadge />
-        </div>
+        <>
+          <div className={styles.liveStreamContent__statusBadge}>
+            <LiveStreamLiveBadge />
+          </div>
+          {renderProductTags()}
+        </>
       )}
       {room.status === liveStreamStatus.recorded && (
-        <div className={styles.liveStreamContent__statusBadge}>
-          <LiveStreamRecordedBadge />
-        </div>
+        <>
+          <div className={styles.liveStreamContent__statusBadge}>
+            <LiveStreamRecordedBadge />
+          </div>
+          {renderProductTags()}
+        </>
       )}
+
+      {room.status === liveStreamStatus.error && renderProductTags()}
+
       {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />
       )}

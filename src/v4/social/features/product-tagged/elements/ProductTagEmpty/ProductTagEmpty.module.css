@@ -1,0 +1,28 @@
+.productTagEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* 8px */
+  padding: 2rem; /* 32px */
+  text-align: center;
+  height: 100%;
+}
+
+.productTagEmpty__icon {
+  color: var(--asc-color-base-shade4);
+}
+
+.productTagEmpty__icon[data-size='small'] {
+  width: 2rem; /* 32px */
+  height: 2rem; /* 32px */
+}
+
+.productTagEmpty__icon[data-size='medium'] {
+  width: 3rem; /* 48px */
+  height: 3rem; /* 48px */
+}
+
+.productTagEmpty__text {
+  color: var(--asc-color-base-shade3);
+}

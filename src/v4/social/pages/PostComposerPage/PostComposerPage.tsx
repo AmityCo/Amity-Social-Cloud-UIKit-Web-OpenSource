@@ -60,9 +60,11 @@ export type CreatePostParams = {
   mentionees: Mentionees;
   hashtagsMetadata?: Amity.Hashtag[];
   hashtags?: string[];
+  productTags?: Amity.TextProductTag[];
   attachments?: {
     fileId: string;
     type: string;
+    productTags?: Amity.MediaProductTag[];
   }[];
   links?: Amity.Link[];
 };

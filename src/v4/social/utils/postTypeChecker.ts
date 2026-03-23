@@ -28,3 +28,7 @@ export const isVideoPost = (post?: Amity.Post | null): post is Amity.Post<'video
 export const isPollPost = (post?: Amity.Post | null): post is Amity.Post<'poll'> => {
   return !!(post && post.data && typeof post.data !== 'string' && 'pollId' in post.data);
 };
+
+export const isClipPost = (post?: Amity.Post | null): post is Amity.Post<'clip'> => {
+  return !!(post && post.data && typeof post.data !== 'string' && post.dataType === 'clip');
+};

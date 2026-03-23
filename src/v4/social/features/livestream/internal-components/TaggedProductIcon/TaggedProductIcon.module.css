@@ -1,0 +1,28 @@
+.taggedProductIcon__productTagButton {
+  padding: 0.12rem 0.5rem 0.12rem 0.25rem;
+  border-radius: 7.5rem;
+  background-color: var(--asc-color-background-transparent-black);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.12rem;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--asc-box-shadow-04);
+  transition: transform 0.2s ease;
+}
+
+.taggedProductIcon__productTagButton:active {
+  transform: scale(0.95);
+}
+
+.taggedProductIcon__productTagButton__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-white);
+}
+
+.taggedProductIcon__productTagButton__text {
+  color: var(--asc-color-white);
+}

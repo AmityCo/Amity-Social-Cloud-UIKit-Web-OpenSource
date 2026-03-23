@@ -1,0 +1,89 @@
+.productTagSelectionItem {
+  display: flex;
+  align-items: center;
+  background-color: var(--asc-color-background-default);
+  cursor: pointer;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 0.75rem;
+  gap: 0.5rem;
+}
+
+.productTagSelectionItem[data-unavailable='true'] {
+  cursor: not-allowed;
+}
+
+.productTagSelectionItem__imageThumbnail {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.productTagSelectionItem__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 0.125rem; /* 2px */
+  padding: 0.75rem;
+  justify-content: space-between;
+}
+
+.productTagSelectionItem__contentText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem; /* 2px */
+  justify-content: center;
+}
+
+.productTagSelectionItem__unavailableLabel {
+  color: var(--asc-color-base-shade2);
+}
+
+.productTagSelectionItem__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: var(--asc-color-base-default);
+}
+
+.productTagSelectionItem[data-unavailable='true'] .productTagSelectionItem__name {
+  color: var(--asc-color-base-shade3);
+}
+
+.productTagSelectionItem[data-already-tagged='true'] {
+  cursor: not-allowed;
+}
+
+.productTagSelectionItem__name[data-already-tagged='true'] {
+  color: var(--asc-color-base-shade4);
+}
+
+.productTagSelectionItem__alreadyTaggedLabel {
+  color: var(--asc-color-base-shade1);
+}
+
+.productTagSelectionItem__checkbox {
+  flex-shrink: 0;
+}
+
+.productTagSelectionItem__checkboxIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.productTagSelectionItem__labelWrapper {
+  display: grid;
+  grid-template-columns: 5rem auto;
+}
+
+.productTagSelectionItem[data-selected][data-disabled] .productTagSelectionItem__checkboxIcon {
+  background: var(--asc-color-primary-default);
+  border-color: var(--asc-color-primary-default);
+  opacity: 0.3;
+}
+
+.productTagSelectionItem[data-selected][data-disabled] .productTagSelectionItem__checkboxIcon svg {
+  stroke: var(--asc-color-background-default);
+}

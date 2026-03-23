@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styles from './LivestreamHeader.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -9,6 +9,8 @@ import { LivestreamHeaderMenu } from '~/v4/social/features/livestream/internal-c
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { IconButton } from '~/v4/core/components/IconButton';
 import Kebub from '~/v4/icons/Kebub';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
 import {
   useLivestreamTimer,
   useWatchingCount,
@@ -29,6 +31,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { SharableModel } from '~/v4/utils/sharableLink';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { PAGE_ID } from '~/v4/constants/customization';
+import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
 
 export interface LivestreamHeaderProps {
   pageId: string;
@@ -47,6 +50,11 @@ export interface LivestreamHeaderProps {
   event?: Amity.Event;
   // Player-specific props
   isLive?: boolean;
+  productTags?: Amity.ProductTag[];
+  isHost?: boolean;
+  onUpdateProductTags?: (tags: Amity.ProductTag[]) => void;
+  canShowProductTags?: boolean;
+  onTagProductsButtonPress?: () => void;
 }
 
 export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
@@ -65,15 +73,50 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
   setShowCountdownOverlay,
   event,
   isLive = false,
+  productTags = [],
+  isHost = false,
+  onUpdateProductTags,
+  canShowProductTags = false,
+  onTagProductsButtonPress,
 }) => {
   // Constants for livestream limits
   const { room, hostId, livestreamPost, coHostId } = useLivestreamData();
   const { currentUserId } = useSDK();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { isDesktop } = useResponsive();
+  const { openPopup } = usePopupContext();
 
   const isPlayer = pageId === PAGE_ID.LIVESTREAM_PLAYER_PAGE;
 
+  const MAX_PRODUCT_TAG_COUNT = 20;
+
+  const openSelection = useCallback(() => {
+    if (isDesktop) {
+      openPopup({
+        id: 'product-tag-selection-modal',
+        pageId,
+        view: 'desktop',
+        ariaLabel: 'Product Tag Selection Modal',
+        children: ({ close }) => (
+          <ProductTagSelectionWrapper
+            renderMode="playback"
+            initialProductTags={[]}
+            alreadyTaggedProducts={productTags}
+            pageId={pageId}
+            displayMode="desktop"
+            mode="livestream"
+            maxCount={MAX_PRODUCT_TAG_COUNT}
+            isShowSearchProduct={productTags.length > 0}
+            isFromManageTagList
+            isHost={isHost}
+            onUpdateProductTags={onUpdateProductTags}
+            onClose={close}
+          />
+        ),
+      });
+      return;
+    }
+  }, [isDesktop, openPopup, pageId, productTags, isHost, onUpdateProductTags]);
   const LIVESTREAM_LIMIT_HOURS = 4;
   const COUNTDOWN_SECONDS = 10; // Last 10 seconds
   const LIVESTREAM_LIMIT_SECONDS = LIVESTREAM_LIMIT_HOURS * 60 * 60; // 4 hours = 14400 seconds
@@ -126,7 +169,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
         <>
           <div className={styles.livestreamHeader__liveDetail__detail}>
             <Button
-              variant="text"
+              variant="default"
               onPress={onClose}
               className={styles.livestreamHeader__closeButton}
             >
@@ -186,7 +229,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
               <Popover
                 trigger={({ openPopover }) => (
                   <IconButton
-                    variant="text"
+                    variant="default"
                     pageId={pageId}
                     defaultIcon={
                       <Kebub className={styles.livestreamHeader__headerRight__optionIcon} />
@@ -222,9 +265,13 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
         </>
       ) : isPlayer && !isLive ? (
         /* Player view when not live - simple close button */
-        <div key="normal-header">
+        <div
+          key="normal-header"
+          data-has-product={livestreamPost?.productTags && livestreamPost?.productTags?.length > 0}
+          className={styles.livestreamHeader__header__recorded}
+        >
           <Button
-            variant="text"
+            variant="default"
             onPress={onClose}
             className={styles.livestreamHeader__closeButton}
             data-normal={uiState !== 'backStage'}
@@ -234,12 +281,37 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
               data-normal={uiState !== 'backStage'}
             />
           </Button>
+          {canShowProductTags && (
+            <Popover
+              trigger={({ openPopover }) => (
+                <IconButton
+                  variant="default"
+                  pageId={pageId}
+                  defaultIcon={
+                    <Kebub className={styles.livestreamHeader__headerRight__optionIcon} />
+                  }
+                  onPress={() => isDesktop && openPopover()}
+                />
+              )}
+            >
+              {({ closePopover }) => (
+                <TagProductsButton
+                  className={styles.livestreamHeader__header__tagProducts}
+                  productTagCount={productTags.length}
+                  onPress={() => {
+                    closePopover();
+                    (onTagProductsButtonPress ?? openSelection)();
+                  }}
+                />
+              )}
+            </Popover>
+          )}
         </div>
       ) : (
         /* Creator view */
         <div className={styles.livestreamHeader__headerLeft}>
           <Button
-            variant="text"
+            variant="default"
             className={styles.livestreamHeader__closeButton}
             onPress={onClose}
             aria-label="Close"
@@ -285,7 +357,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
             <>
               <Button
                 className={styles.livestreamHeader__selectTarget__button}
-                variant="text"
+                variant="default"
                 onPress={onTargetSelection}
               >
                 <Typography.Body className={styles.livestreamHeader__text}>Live on</Typography.Body>
@@ -317,7 +389,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
               placement="bottom end"
               trigger={({ openPopover }) => (
                 <IconButton
-                  variant="text"
+                  variant="default"
                   pageId={pageId}
                   defaultIcon={
                     <Kebub className={styles.livestreamHeader__headerRight__optionIcon} />

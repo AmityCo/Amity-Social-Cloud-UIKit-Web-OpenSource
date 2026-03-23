@@ -9,8 +9,11 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
+import { MenuButton } from '~/v4/social/elements';
 import { MediaMenu } from '~/v4/social/internal-components/MediaMenu';
 import { AltTextBottomSheet } from '~/v4/social/internal-components/ImageThumbnail/ImageThumbnail';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 import styles from './ImageViewer.module.css';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
@@ -18,6 +21,7 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
 import { MediaTabType } from '~/v4/social/constants/mediaTabs';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type ImageViewerProps = {
   pageId?: string;
@@ -43,19 +47,30 @@ export function ImageViewer({
   feedSources,
 }: ImageViewerProps) {
   const { isOwner } = usePostPermissions({ post });
+  const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
   const { goToPostDetailPage } = useNavigation();
   const { setLinkToPost } = useLayoutContext();
 
-  const imageFile =
-    post.children.length > 0
-      ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
-      : post?.getImageInfo();
+  const isChildPost = post.children.length > 0;
+
+  const imageFile = isChildPost
+    ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
+    : post?.getImageInfo();
+
+  const productTags = isChildPost
+    ? post.childrenPosts[selectedImageIndex]?.productTags
+    : post.productTags;
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'image',
+    sourceId: post.postId,
+  });
 
   const next = () => {
     if (hasNext) setSelectedImageIndex((prev) => prev + 1);
@@ -123,38 +138,43 @@ export function ImageViewer({
         />
         {(isFromGallery || isOwner) && (
           <Popover
-            trigger={{
-              pageId,
-              className: styles.imageViewer__menuButton,
-              iconClassName: styles.imageViewer__menuButton__icon,
-              onClick: () => {
-                setDrawerData({
-                  content: (
-                    <MediaMenu
-                      pageId={pageId}
-                      file={imageFile}
-                      onViewPostPress={
-                        isFromGallery
-                          ? () => {
-                              onClose();
-                              removeDrawerData();
-                              redirectToPostDetailPage();
+            trigger={({ openPopover, isDesktop }) => (
+              <MenuButton
+                pageId={pageId}
+                className={styles.imageViewer__menuButton}
+                variant="filled"
+                iconClassName={styles.imageViewer__menuButton__icon}
+                onClick={() => {
+                  isDesktop
+                    ? openPopover()
+                    : setDrawerData({
+                        content: (
+                          <MediaMenu
+                            pageId={pageId}
+                            file={imageFile}
+                            onViewPostPress={
+                              isFromGallery
+                                ? () => {
+                                    onClose();
+                                    removeDrawerData();
+                                    redirectToPostDetailPage();
+                                  }
+                                : undefined
                             }
-                          : undefined
-                      }
-                      onEditAltTextPress={
-                        isOwner
-                          ? () => {
-                              setIsOpen(true);
-                              removeDrawerData();
+                            onEditAltTextPress={
+                              isOwner
+                                ? () => {
+                                    setIsOpen(true);
+                                    removeDrawerData();
+                                  }
+                                : undefined
                             }
-                          : undefined
-                      }
-                    />
-                  ),
-                });
-              },
-            }}
+                          />
+                        ),
+                      });
+                }}
+              />
+            )}
           >
             {({ closePopover }) => {
               return (
@@ -201,7 +221,7 @@ export function ImageViewer({
         </Button>
       )}
 
-      <div aria-live="assertive">
+      <div aria-live="assertive" className={styles.imageViewer__imageContainer}>
         {imageFile && !isBrokenImg ? (
           <img
             onTouchEnd={handleTouchEnd}
@@ -223,6 +243,14 @@ export function ImageViewer({
             className={styles.imageViewer__itemContainer}
           />
         )}
+        {productTags && productTags.length > 0 && (
+          <div className={styles.imageViewer__productTagBadge}>
+            <ProductTagBadge
+              selectedProductTags={productTags}
+              onClick={() => showProductTagList(productTags)}
+            />
+          </div>
+        )}
       </div>
 
       {hasNext && (
@@ -235,7 +263,7 @@ export function ImageViewer({
         </Button>
       )}
 
-      {imageFile && isOwner && (
+      {imageFile && isOwner && !isDesktop && (
         <AltTextBottomSheet file={imageFile} mode="edit" isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
     </div>

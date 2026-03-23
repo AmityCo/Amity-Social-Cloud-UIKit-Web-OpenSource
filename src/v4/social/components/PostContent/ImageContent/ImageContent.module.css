@@ -8,7 +8,7 @@
 
 .imageContent[data-images-amount='1'] {
   aspect-ratio: 1;
-  grid-template: 'image1' / minmax(0, 1fr);
+  grid-template: 'image1' 1fr / minmax(0, 1fr);
 }
 
 .imageContent[data-images-amount='2'] {
@@ -44,6 +44,8 @@
 
 .imageContent__imgContainer {
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 .imageContent__imgContainer:nth-child(1) {
@@ -60,7 +62,12 @@
 
 .imageContent__imgContainer:nth-child(4) {
   grid-area: image4;
-  position: relative;
+}
+
+.imageContent__productTagButton {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
 }
 
 .imageContent__imgCover {

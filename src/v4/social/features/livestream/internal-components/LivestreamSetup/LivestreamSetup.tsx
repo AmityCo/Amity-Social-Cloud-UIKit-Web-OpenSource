@@ -16,6 +16,10 @@ import clsx from 'clsx';
 import useImageUpload from '~/v4/social/hooks/useImageUpload';
 import { LoadingSpinner } from '~/v4/social/features/livestream/internal-components/LivestreamOverlay/LivestreamOverlay';
 import CameraMovie from '~/v4/icons/CameraMovie';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
+import { ProductTagSelectionWrapper } from '~/v4/social/features/product-tagged/internal-components/ProductTagSelectionWrapper';
+import { ManageProductTagList } from '~/v4/social/features/product-tagged/components/ManageProductTagList';
 
 export interface LivestreamSetupProps {
   // Target and UI state
@@ -27,6 +31,7 @@ export interface LivestreamSetupProps {
   livestreamTitle?: string;
   livestreamDescription?: string;
   readOnly?: boolean;
+  isEnabledProductTag?: boolean;
 
   // File upload state
   isPending: boolean;
@@ -43,6 +48,13 @@ export interface LivestreamSetupProps {
   setReadOnly?: (readOnly: boolean) => void;
   onGoLive: () => void;
   onThumbnailFileIdChanged?: (fileId?: string) => void;
+
+  // Product tags
+  productTags?: Amity.MediaProductTag[];
+  onProductTagsChange?: (tags: Amity.MediaProductTag[]) => void;
+
+  pinnedProductId?: string;
+  onPinnedProductIdChange?: (pinnedProductId: string | undefined) => void;
 }
 
 export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
@@ -53,6 +65,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   readOnly,
   isPending = false,
   isGoLiveButtonDisabled,
+  isEnabledProductTag,
   pageId,
   isCoHost,
   setLivestreamTitle,
@@ -60,8 +73,14 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   setReadOnly,
   onThumbnailFileIdChanged,
   onGoLive,
+  productTags = [],
+  onProductTagsChange,
+  pinnedProductId,
+  onPinnedProductIdChange,
 }) => {
+  const MAX_PRODUCTS = 20;
   const { uploadSingleImage, isUploading } = useImageUpload();
+  const { openPopup, closePopup } = usePopupContext();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -143,6 +162,78 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
     }
     return null;
   }, [localFile]);
+
+  const handleOpenProductTagSelection = useCallback(() => {
+    const popupId = 'product-tag-livestream';
+    openPopup({
+      id: popupId,
+      pageId,
+      view: 'desktop',
+      children: ({ close }) => (
+        <ProductTagSelectionWrapper
+          renderMode="livestream"
+          initialProductTags={productTags}
+          onProductTagsChange={onProductTagsChange}
+          pageId={pageId}
+          displayMode="desktop"
+          mode="livestream"
+          maxCount={MAX_PRODUCTS}
+          pinnedProductId={pinnedProductId}
+          onPinnedProductIdChange={onPinnedProductIdChange}
+          onClose={() => closePopup()}
+          onDone={(tags) => {
+            onProductTagsChange?.(tags);
+            closePopup();
+          }}
+        />
+      ),
+    });
+  }, [
+    openPopup,
+    closePopup,
+    pageId,
+    productTags,
+    pinnedProductId,
+    onProductTagsChange,
+    onPinnedProductIdChange,
+  ]);
+
+  const handleOpenManageProductTags = useCallback(() => {
+    const popupId = 'manage-product-tags';
+    openPopup({
+      id: popupId,
+      pageId,
+      view: 'desktop',
+      children: ({ close }) => (
+        <ManageProductTagList
+          pageId={pageId}
+          renderMode="livestream"
+          productTags={productTags}
+          onProductTagsChange={onProductTagsChange}
+          onPinnedProductIdChange={onPinnedProductIdChange}
+          maxCount={MAX_PRODUCTS}
+          pinnedProductId={pinnedProductId}
+          onClose={(updatedTags, updatedPinnedId) => {
+            onProductTagsChange?.(updatedTags);
+            if (onPinnedProductIdChange) {
+              onPinnedProductIdChange(updatedPinnedId);
+            }
+            closePopup();
+          }}
+          sourceId=""
+        />
+      ),
+    });
+  }, [
+    openPopup,
+    closePopup,
+    pageId,
+    productTags,
+    pinnedProductId,
+    onProductTagsChange,
+    onPinnedProductIdChange,
+    isEnabledProductTag,
+  ]);
 
   return (
     <>
@@ -248,6 +339,18 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                       className={styles.livestreamSetup__readOnly}
                     />
                   </div>
+                )}
+
+                {isEnabledProductTag && targetType !== 'user' && (
+                  <TagProductsButton
+                    productTagCount={productTags.length}
+                    isPending={isPending}
+                    onPress={
+                      productTags.length > 0
+                        ? handleOpenManageProductTags
+                        : handleOpenProductTagSelection
+                    }
+                  />
                 )}
               </form>
             </div>

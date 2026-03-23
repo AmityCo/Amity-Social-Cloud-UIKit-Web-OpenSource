@@ -4,8 +4,10 @@ import { CloseIcon, ExclamationCircle, Play } from '~/icons';
 import { Button } from '~/v4/core/natives/Button';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner';
 import { isAmityFile } from '~/v4/utils/checkFileType';
-import styles from './VideoThumbnail.module.css';
 import { useImage } from '~/v4/core/hooks/useImage';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge';
+import { useProductTagSelection } from '~/v4/social/features/product-tagged/hooks';
+import styles from './VideoThumbnail.module.css';
 
 const PostVideoThumbnail = ({
   post,
@@ -13,23 +15,40 @@ const PostVideoThumbnail = ({
   componentId,
   onRemovePostVideo,
   totalVideos,
+  onChildPostProductTagsChange,
+  productTagsReachLimit,
+  remainingLimit,
+  taggedProductIds,
 }: {
   post: Amity.Post<'video'>;
   pageId: string;
   componentId: string;
   onRemovePostVideo?: (fileId: string) => void;
   totalVideos: number;
+  onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
+  productTagsReachLimit?: boolean;
+  remainingLimit?: number;
+  taggedProductIds?: string[];
 }) => {
   const thumbnailUrl = useImage({ fileId: post.data?.thumbnailFileId });
+  const { openProductTagSelection } = useProductTagSelection<'video'>({
+    pageId,
+    onChildPostProductTagsChange,
+    taggedProductIds,
+  });
 
-  if (!thumbnailUrl) return null;
+  const handleProductTagClick = () => {
+    openProductTagSelection({
+      postId: post.postId,
+      initialProductTags: post.productTags,
+      remainingLimit,
+    });
+  };
+
+  if (!thumbnailUrl || !post.postId) return null;
 
   return (
-    <div
-      key={`post-${post.data?.videoFileId?.original}`}
-      data-video-height={String(totalVideos > 2)}
-      className={styles.thumbnail__wrapper}
-    >
+    <div key={`post-${post.data?.videoFileId?.original}`} className={styles.thumbnail__wrapper}>
       <img src={thumbnailUrl} className={styles.thumbnail} alt="video thumbnail uploaded" />
       <Button
         data-testid={`${pageId}/${componentId}/remove_thumbnail`}
@@ -44,6 +63,15 @@ const PostVideoThumbnail = ({
       <div className={styles.playIcon}>
         <Play />
       </div>
+      {onChildPostProductTagsChange &&
+        ((post.productTags ?? [])?.length !== 0 || !productTagsReachLimit) && (
+          <div className={styles.thumbnail__productTagBadge}>
+            <ProductTagBadge
+              selectedProductTags={post.productTags ?? []}
+              onClick={handleProductTagClick}
+            />
+          </div>
+        )}
     </div>
   );
 };
@@ -56,6 +84,11 @@ interface VideoThumbnailProps {
   removeFile: (file: File | Amity.File, index?: number) => void;
   postVideos?: Amity.Post<'video'>[];
   onRemovePostVideo?: (fileId: string) => void;
+  onFileProductTagsChange?: (file: Amity.File<'video'>, productTags: Amity.ProductTag[]) => void;
+  onChildPostProductTagsChange?: (postId: string, productTags: Amity.ProductTag[]) => void;
+  productTagsReachLimit?: boolean;
+  remainingLimit?: number;
+  taggedProductIds?: string[];
 }
 
 export const VideoThumbnail = ({
@@ -66,8 +99,27 @@ export const VideoThumbnail = ({
   files,
   postVideos = [],
   onRemovePostVideo,
+  onFileProductTagsChange,
+  onChildPostProductTagsChange,
+  productTagsReachLimit = false,
+  remainingLimit,
+  taggedProductIds,
 }: VideoThumbnailProps) => {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const { openProductTagSelection } = useProductTagSelection<'video'>({
+    pageId,
+    onFileProductTagsChange,
+    taggedProductIds,
+  });
+
+  const handleProductTagClick = (file: TFileItem) => {
+    if (!isAmityFile(file.file)) return;
+    openProductTagSelection({
+      file: file.file as Amity.File<'video'>,
+      initialProductTags: file.productTags,
+      remainingLimit,
+    });
+  };
 
   const isVideoFile = (file: TFileItem) => {
     if (isAmityFile(file.file)) {
@@ -102,6 +154,10 @@ export const VideoThumbnail = ({
           componentId={componentId}
           onRemovePostVideo={onRemovePostVideo}
           totalVideos={totalVideos}
+          onChildPostProductTagsChange={onChildPostProductTagsChange}
+          productTagsReachLimit={productTagsReachLimit}
+          remainingLimit={remainingLimit}
+          taggedProductIds={taggedProductIds}
         />
       ))}
 
@@ -109,11 +165,7 @@ export const VideoThumbnail = ({
       {files
         ?.filter((file) => isVideoFile(file))
         .map((file) => (
-          <div
-            key={`file-${file.id}`}
-            data-video-height={String(totalVideos > 2)}
-            className={styles.thumbnail__wrapper}
-          >
+          <div key={`file-${file.id}`} className={styles.thumbnail__wrapper}>
             {progress[file.id] && !isAmityFile(file.file) ? (
               <>
                 <img src={file.thumbnailVideo} className={styles.thumbnail} alt="thumbnail-video" />
@@ -175,6 +227,16 @@ export const VideoThumbnail = ({
                 <div className={styles.playIcon}>
                   <Play />
                 </div>
+                {onFileProductTagsChange &&
+                  ((file.productTags ?? [])?.length !== 0 || !productTagsReachLimit) &&
+                  isAmityFile(file.file) && (
+                    <div className={styles.thumbnail__productTagBadge}>
+                      <ProductTagBadge
+                        selectedProductTags={file.productTags ?? []}
+                        onClick={() => handleProductTagClick(file)}
+                      />
+                    </div>
+                  )}
               </>
             )}
           </div>

@@ -1,19 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styles from './CreateLivestream.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { useDeviceManagement } from '~/v4/core/hooks/useDeviceManagement';
-import { useCreateLivestream, useReadOnlySetting } from '~/v4/social/features/livestream/hooks';
+import {
+  useCreateLivestream,
+  useReadOnlySetting,
+  useCoHostParticipantEvents,
+  usePostSubscription,
+} from '~/v4/social/features/livestream/hooks';
 import { LivestreamStage } from '~/v4/social/features/livestream/internal-components/LivestreamStage';
 import { LivestreamSetup } from '~/v4/social/features/livestream/internal-components/LivestreamSetup';
 import { LivestreamDataProvider } from '~/v4/social/features/livestream/providers';
 import { LivestreamChat } from '~/v4/social/features/livestream/internal-components/LivestreamChat';
 import { useForceDarkTheme } from '~/v4/core/hooks/useForceDarkTheme';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { RoomRepository } from '@amityco/ts-sdk';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
 
 export type CreateLivestreamPageProps = {
   targetType: 'community' | 'user';
@@ -28,7 +30,6 @@ export function CreateLivestreamPage({
 }: CreateLivestreamPageProps) {
   const pageId = PAGE_ID.CREATE_LIVESTREAM_PAGE;
   const { currentUserId } = useSDK();
-  const { success } = useNotifications();
   const { themeStyles } = useAmityPage({
     pageId,
   });
@@ -64,6 +65,11 @@ export function CreateLivestreamPage({
     setLivestreamTitle,
     setLivestreamDescription,
     setThumbnailFileId,
+    productTags,
+    setProductTags,
+    pinnedProductId,
+    setPinnedProductId,
+    isEnabledProductTag,
   } = useCreateLivestream({
     initialTargetId: initialTargetId ?? currentUserId!,
     initialTargetType,
@@ -73,48 +79,19 @@ export function CreateLivestreamPage({
     event,
   });
 
-  const coHostJoinedRef = useRef<boolean>(false);
   const { readOnly, setReadOnly } = useReadOnlySetting({ room, channel });
   const isShowLivestreamChat = channel && livestreamPost && community && room;
   const notificationAlignment = isShowLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
+  const { post: childPost } = usePostSubscription(livestreamPost?.childrenPosts[0]?.postId);
 
-  useEffect(() => {
-    const unsubscriber: Amity.Unsubscriber[] = [];
-    if (room?.status === 'live') {
-      unsubscriber.push(
-        RoomRepository.onRoomParticipantLeft(({ actorInternalId }) => {
-          const coHostInternalId = getRoomParticipant(room, 'coHost')?.userInternalId;
-          if (coHostInternalId !== actorInternalId) return;
-          if (coHostJoinedRef.current)
-            success({
-              content: 'Co-host left the live stream.',
-              alignment: notificationAlignment,
-            });
-          else
-            success({
-              content: 'Co-host left the stage.',
-              alignment: notificationAlignment,
-            });
-
-          coHostJoinedRef.current = false;
-        }),
-      );
-
-      unsubscriber.push(
-        RoomRepository.onRoomParticipantStageJoined(({ room }) => {
-          if (getRoomParticipant(room, 'coHost')) coHostJoinedRef.current = true;
-        }),
-      );
-    }
-
-    return () => unsubscriber.forEach((fn) => fn());
-  }, [room]);
+  useCoHostParticipantEvents({ room, notificationAlignment, mode: 'host' });
 
   return (
     <LivestreamDataProvider
       room={room}
       channel={channel}
-      livestreamPost={livestreamPost}
+      parentPost={livestreamPost}
+      livestreamPost={childPost as Amity.Post<'room'>}
       notificationAlignment={notificationAlignment}
     >
       <ModalOverlay className={styles.createLivestream__overlay} style={themeStyles} isOpen={true}>
@@ -144,18 +121,23 @@ export function CreateLivestreamPage({
               {uiState === 'preview' ? (
                 <LivestreamSetup
                   isTargetEvent={isTargetEvent}
+                  isPending={isCreating || isGettingLiveChat || isGettingBroadcasterData}
+                  isEnabledProductTag={isEnabledProductTag}
+                  isGoLiveButtonDisabled={isGoLiveButtonDisabled}
                   targetType={targetType}
                   livestreamTitle={livestreamTitle}
                   livestreamDescription={livestreamDescription}
                   readOnly={readOnly}
-                  isPending={isCreating || isGettingLiveChat || isGettingBroadcasterData}
-                  isGoLiveButtonDisabled={isGoLiveButtonDisabled}
                   pageId={pageId}
                   setLivestreamTitle={setLivestreamTitle}
                   setLivestreamDescription={setLivestreamDescription}
                   setReadOnly={setReadOnly}
                   onGoLive={handleGoLive}
                   onThumbnailFileIdChanged={(fileId) => setThumbnailFileId(fileId ?? '')}
+                  productTags={productTags}
+                  onProductTagsChange={setProductTags}
+                  pinnedProductId={pinnedProductId}
+                  onPinnedProductIdChange={setPinnedProductId}
                 />
               ) : (
                 <>

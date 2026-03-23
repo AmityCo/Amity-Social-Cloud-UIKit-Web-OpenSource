@@ -15,25 +15,25 @@
 .videoContent[data-videos-amount='2'] {
   aspect-ratio: 1;
   grid-template:
-    'video1 video2' 50%
-    'video1 video2' 50%
-    / 50% 50%;
+    'video1 video2'
+    'video1 video2'
+    /1fr 1fr;
 }
 
 .videoContent[data-videos-amount='3'] {
   aspect-ratio: 1;
   grid-template:
-    'video1 video1 video1 video1' 60%
-    'video2 video2 video3 video3' 40%
-    / 25% 25% 25% 25%;
+    'video1 video1 video1 video1' 3fr
+    'video2 video2 video3 video3' 2fr
+    / 1fr 1fr 1fr 1fr;
 }
 
 .videoContent[data-videos-amount='4'] {
   aspect-ratio: 1;
   grid-template:
-    'video1 video1 video1 video1 video1 video1' 66%
-    'video2 video2 video3 video3 video4 video4' 33%
-    / minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+    'video1 video1 video1 video1 video1 video1' 2fr
+    'video2 video2 video3 video3 video4 video4' 1fr
+    / 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .videoContent__video {
@@ -90,6 +90,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.videoContent__productTagButton {
+  position: absolute;
+  bottom: 0.8125rem;
+  right: 0.75rem;
 }
 
 .videoContent__playButtonCover {

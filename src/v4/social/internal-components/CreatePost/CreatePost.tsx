@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AmityAttachmentProductTags, CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
 import { FileType } from '@amityco/ts-sdk';
 import { useForm } from 'react-hook-form';
 import { useNetworkState } from 'react-use';
@@ -12,7 +12,7 @@ import {
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CreateNewPostButton } from '~/v4/social/elements/CreateNewPostButton';
-import { PostTextField } from '~/v4/social/elements/PostTextField';
+import { TextEditor } from '~/v4/core/components/TextEditor';
 import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
 import ReactDOM from 'react-dom';
@@ -22,7 +22,6 @@ import { MediaAttachment } from '~/v4/social/components/MediaAttachment';
 import { DetailedMediaAttachment } from '~/v4/social/components/DetailedMediaAttachment';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Notification } from '~/v4/core/components/Notification';
-import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
@@ -35,6 +34,7 @@ import { useMediaAttachmentVisible } from '~/v4/social/hooks/useMediaAttachmentV
 import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
 import { useMutation } from '@tanstack/react-query';
 import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import styles from './CreatePost.module.css';
 import { Typography } from '~/v4/core/components';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
@@ -45,6 +45,8 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { TextArea } from '~/v4/core/components/TextField';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
+import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
+import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
 
 export function CreatePost({
   community,
@@ -59,10 +61,11 @@ export function CreatePost({
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const drawerContentRef = useRef<HTMLDivElement>(null);
 
-  const { currentUserId } = useSDK();
+  const { currentUserId, client } = useSDK();
   const { user } = useUser({ userId: currentUserId });
   const { handleSubmit } = useForm();
   const { info } = useConfirmContext();
+  const notification = useNotifications();
   const { isDesktop } = useResponsive();
   const { confirm } = useConfirmContext();
   const { onBack, prevPage, prev2Page } = useNavigation();
@@ -74,8 +77,15 @@ export function CreatePost({
   const { setVideoThumbnail, setCanBeDiscarded } = useLayoutContext();
 
   const { online } = useNetworkState();
-  const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
-    useFilePostUpload(pageId);
+  const {
+    files,
+    progress,
+    isLoading,
+    removeFile,
+    handleFileChange,
+    handleAltTextChange,
+    handleProductTagsChange,
+  } = useFilePostUpload(pageId);
 
   const {
     file: clipFile,
@@ -93,6 +103,7 @@ export function CreatePost({
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
   const [title, setTitle] = useState<string>('');
+  const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>();
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
@@ -145,6 +156,41 @@ export function CreatePost({
     onSuccess: (response) => {
       const post = response.data;
 
+      // Calculate expected product tags count (what we sent)
+      const expectedTextProductTagsCount = productTags?.length || 0;
+      const expectedMediaProductTagsCount = files.reduce(
+        (sum, file) => sum + (file.productTags?.length || 0),
+        0,
+      );
+
+      // Calculate actual product tags count (what we received back)
+      const actualTextProductTagsCount = post.productTags?.length || 0;
+      const actualMediaProductTagsCount =
+        post.childrenPosts?.reduce(
+          (sum: number, childPost: Amity.Post) => sum + (childPost.productTags?.length || 0),
+          0,
+        ) || 0;
+
+      // Check for deleted products (length mismatch)
+      const hasDeletedProducts =
+        actualTextProductTagsCount !== expectedTextProductTagsCount ||
+        actualMediaProductTagsCount !== expectedMediaProductTagsCount;
+
+      // Check for archived products
+      const hasArchivedProducts =
+        post.productTags?.some((tag: Amity.ProductTag) => tag.product?.status === 'archived') ||
+        post.childrenPosts?.some((childPost: Amity.Post) =>
+          childPost.productTags?.some(
+            (tag: Amity.ProductTag) => tag.product?.status === 'archived',
+          ),
+        );
+
+      if (hasDeletedProducts || hasArchivedProducts) {
+        notification.info({
+          content: "Some products that you've tagged are no longer available.",
+        });
+      }
+
       setVideoThumbnail({
         postId: post.postId,
         videos: files
@@ -187,7 +233,47 @@ export function CreatePost({
     },
   });
 
-  async function onCreatePost() {
+  const allProductTags = useMemo(() => {
+    const productMap = new Map<string, Amity.TextProductTag | Amity.MediaProductTag>();
+
+    if (productTags) {
+      productTags.forEach((tag) => {
+        if (!productMap.has(tag.productId)) {
+          productMap.set(tag.productId, tag);
+        }
+      });
+    }
+    files.forEach((file) => {
+      if (file.productTags) {
+        file.productTags.forEach((tag) => {
+          if (!productMap.has(tag.productId)) {
+            productMap.set(tag.productId, tag);
+          }
+        });
+      }
+    });
+
+    return Array.from(productMap.values());
+  }, [files, productTags]);
+
+  const mediaOnlyProductCount = useMemo(() => {
+    const textProductIds = new Set(productTags?.map((tag) => tag.productId) ?? []);
+    const mediaOnlyProducts = new Set<string>();
+
+    files.forEach((file) => {
+      if (file.productTags) {
+        file.productTags.forEach((tag) => {
+          if (!textProductIds.has(tag.productId)) {
+            mediaOnlyProducts.add(tag.productId);
+          }
+        });
+      }
+    });
+
+    return mediaOnlyProducts.size;
+  }, [files, productTags]);
+
+  async function onCreatePost({ removeTag }: { removeTag?: boolean } = {}) {
     if (textValue.text?.length > MAXIMUM_POST_CHARACTERS) {
       setPostErrorText('You have reached the maximum of 50,000 characters in a post.');
       return;
@@ -203,7 +289,13 @@ export function CreatePost({
       return;
     }
 
-    const attachments = isClipPost
+    let attachments: Array<{
+      fileId: string;
+      type: string;
+      productTags?: Amity.MediaProductTag[];
+      displayMode?: string;
+      isMuted?: boolean;
+    }> = isClipPost
       ? [
           {
             fileId: clipFile && isAmityFile(clipFile) ? clipFile.fileId : '',
@@ -212,12 +304,26 @@ export function CreatePost({
             isMuted: isMuted,
           },
         ]
-      : files.map(({ file }) => ({
+      : files.map(({ file, productTags }) => ({
           fileId: (file as Amity.File).fileId,
           type: file.type,
+          productTags: productTags?.map(({ productId }) => ({ productId })),
         }));
 
-    const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
+    const attachmentProductTags = new AmityAttachmentProductTags();
+    let hasAttachmentProductTags = false;
+
+    attachments = attachments.map((attachment) => {
+      const { productTags, ...rest } = attachment;
+      if (productTags && productTags?.length > 0) {
+        attachmentProductTags.set(rest.fileId, productTags);
+        hasAttachmentProductTags = true;
+      }
+
+      return rest;
+    });
+
+    let createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
       targetId: targetId!,
       targetType,
       data: { title: title.trim(), text: textValue.text },
@@ -228,8 +334,51 @@ export function CreatePost({
       links: textValue.links,
     };
 
+    if (!removeTag) {
+      const finalProductTags = productTags?.length
+        ? productTags.map((productTag) => {
+            const { product, ...rest } = productTag;
+            return rest;
+          })
+        : undefined;
+
+      createPostParams = {
+        ...createPostParams,
+        productTags: finalProductTags,
+        attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
+      };
+    }
+
     createPost(createPostParams);
   }
+
+  const removeProductTag = () => {
+    setProductTags([]);
+    files.forEach((file) => (file.productTags = []));
+  };
+
+  const validatePost = async () => {
+    const setting = await client?.getProductCatalogueSetting();
+    const hasProductTags =
+      textValue.attachments?.some(
+        (attachment) => attachment.productTags && attachment.productTags?.length > 0,
+      ) ||
+      (productTags && productTags?.length > 0);
+
+    if (setting && !setting.product.enabled && hasProductTags) {
+      confirm({
+        pageId: pageId,
+        type: 'confirm',
+        title: 'Product tagging isn’t available',
+        content: 'Your post can still be published, but product tags will be removed.',
+        onOk: () => onCreatePost({ removeTag: true }),
+        okText: 'Publish',
+        okButtonColor: 'primary',
+        cancelText: 'Review post',
+        onCancel: () => removeProductTag(),
+      });
+    } else onCreatePost();
+  };
 
   const handlePostSuccess = () => {
     setClipFile(null);
@@ -244,25 +393,6 @@ export function CreatePost({
     } else {
       setPostErrorText('Failed to create post. Please try again.');
     }
-  };
-
-  //TODO : Make the function works the issues is can't remove extra mention from DOM
-
-  const onChange = (val: {
-    mentioned: Mentioned[];
-    mentionees: Mentionees;
-    hashtags: Amity.Hashtag[];
-    text: string;
-    links?: Amity.Link[];
-  }) => {
-    setTextValue((prev) => ({
-      ...prev,
-      mentioned: val.mentioned,
-      text: val.text,
-      mentionees: val.mentionees,
-      hashtagsMetadata: val.hashtags,
-      links: val.links,
-    }));
   };
 
   const onClickClose = () => {
@@ -395,7 +525,7 @@ export function CreatePost({
       {isDesktop && notifications}
       <form
         className={styles.createPost__form}
-        onSubmit={handleSubmit(onCreatePost)}
+        onSubmit={handleSubmit(validatePost)}
         data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
       >
         <div className={styles.createPost__topBar}>
@@ -431,33 +561,68 @@ export function CreatePost({
             className={styles.createPost__titleInput}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
           />
-          <PostTextField
-            pageId={pageId}
-            componentId={isClipPost ? 'clipPost' : undefined}
-            onChange={onChange}
-            communityId={targetId}
-            className={styles.createPost__input}
-            dataValue={{ data: { text: textValue.text }, links: textValue.links }}
-            mentionContainer={isDesktop ? null : mentionRef.current}
-            mentionContainerClassName={styles.createPost__mentionContainer}
-            attachmentAmount={files.length}
-            onPreviewLinkChange={(showPreview, isLoading) => {
-              setIsPreviewLoading(isLoading || false);
-            }}
-            isClipPost={isClipPost}
-          />
+          <div className={styles.createPost__textEditor}>
+            <TextEditor
+              pageId={pageId}
+              editorContentType="post"
+              communityId={targetId}
+              initialText={textValue.text}
+              enableProductMention={true}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
+              onTextChanged={(text) => {
+                setTextValue((prev) => ({ ...prev, text }));
+              }}
+              onProductMentionsChanged={(productTags) => setProductTags([...productTags])}
+              onMentionsChanged={(mentioned) => {
+                setTextValue((prev) => ({
+                  ...prev,
+                  mentioned,
+                  mentionees: [
+                    {
+                      type: 'user',
+                      userIds: mentioned.map((m) => m.userId).filter((id): id is string => !!id),
+                    },
+                  ],
+                }));
+              }}
+              onHashtagsChanged={(hashtags) => {
+                setTextValue((prev) => ({ ...prev, hashtagsMetadata: hashtags }));
+              }}
+              onUrlsDetected={(urls) => {
+                const links: Amity.Link[] = urls.map((url) => ({
+                  url: url.url,
+                  index: url.start,
+                  length: url.end - url.start,
+                  // TODO: check if this field is required from FE
+                  renderPreview: true,
+                }));
+                setTextValue((prev) => ({ ...prev, links }));
+              }}
+              // max = 20 - tags count in media feeds (if there are those tags in media tag)
+              maxUniqueProductMentions={DEFAULT_MAX_PRODUCTS - mediaOnlyProductCount}
+              initialProductMentions={productTags}
+            />
+          </div>
           <ImageThumbnail
             files={files}
             pageId={pageId}
             progress={progress}
             removeFile={removeFile}
             onAltTextChange={handleAltTextChange}
+            onFileProductTagsChange={handleProductTagsChange}
+            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+            taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
           <VideoThumbnail
             files={files}
             pageId={pageId}
             progress={progress}
             removeFile={removeFile}
+            onFileProductTagsChange={handleProductTagsChange}
+            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+            taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
         </div>
         <div className={styles.createPost__attachment}>
@@ -467,6 +632,7 @@ export function CreatePost({
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
             totalMedia={files.length}
+            productTags={allProductTags}
             onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
             onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
           />
@@ -502,6 +668,10 @@ export function CreatePost({
                     HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
                   ]}
                   setActiveSnapPoint={(newSnapPoint) => {
+                    if (newSnapPoint === null) {
+                      handleSnapChange(HEIGHT_MEDIA_ATTACHMENT_MENU);
+                    }
+
                     typeof newSnapPoint === 'string' && handleSnapChange(newSnapPoint);
                   }}
                 >
@@ -529,6 +699,7 @@ export function CreatePost({
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
                             totalMedia={files.length}
+                            productTags={allProductTags}
                             onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
                             onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
                           />
@@ -550,6 +721,18 @@ export function CreatePost({
           {renderPosting()}
           {renderError()}
         </>
+      )}
+      {!isDesktop && allProductTags.length > 0 && (
+        <div
+          className={styles.createPost__productTagActionButton}
+          data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+        >
+          <ProductTagActionButton
+            pageId={pageId}
+            productTags={allProductTags}
+            className={styles.createPost__productTagActionButton__button}
+          />
+        </div>
       )}
     </div>
   );

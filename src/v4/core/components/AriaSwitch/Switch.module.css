@@ -53,7 +53,7 @@
 
 .switch[data-selected] .switch__indicator::before {
   transform: translateX(86%);
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-white);
 }
 
 .switch[data-selected][data-pressed] .switch__indicator {

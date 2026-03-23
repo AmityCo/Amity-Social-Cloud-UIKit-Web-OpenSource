@@ -36,4 +36,9 @@
   .mediaAttachment__swipeDown {
     display: none;
   }
+
+  .mediaAttachment__actionButton_wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
 }

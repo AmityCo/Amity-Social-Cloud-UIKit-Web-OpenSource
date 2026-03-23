@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Muted = (props: React.SVGProps<SVGSVGElement>) => (
+const MutedFilled = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="100%"
     height="100%"
@@ -16,4 +16,4 @@ const Muted = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default Muted;
+export default MutedFilled;

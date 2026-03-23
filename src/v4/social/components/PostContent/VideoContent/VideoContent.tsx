@@ -6,6 +6,8 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './VideoContent.module.css';
 import VideoControl from '~/v4/icons/VideoControl';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
 
 const VideoThumbnail = ({
   videoPostData,
@@ -62,6 +64,7 @@ const Video = ({
   pageId = '*',
   videoLeftCount,
   componentId = '*',
+  parentPostId,
 }: {
   videoPost?: Amity.Post<'video'>;
   pageId?: string;
@@ -69,9 +72,22 @@ const Video = ({
   isLastVideo: boolean;
   componentId?: string;
   videoLeftCount: number;
+  parentPostId: string;
   onVideoClick: () => void;
 }) => {
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'video',
+    sourceId: parentPostId,
+  });
+
   if (!videoPost) return null;
+
+  const handleShowProductTags = () => {
+    if (videoPost.productTags) {
+      showProductTagList(videoPost.productTags);
+    }
+  };
 
   return (
     <Button
@@ -100,6 +116,14 @@ const Video = ({
           </div>
         </div>
       ) : null}
+      {videoPost.productTags && videoPost.productTags.length > 0 && (
+        <div className={styles.videoContent__productTagButton}>
+          <ProductTagBadge
+            selectedProductTags={videoPost.productTags}
+            onClick={handleShowProductTags}
+          />
+        </div>
+      )}
     </Button>
   );
 };
@@ -109,6 +133,7 @@ type VideoContentProps = {
   elementId?: string;
   componentId?: string;
   posts: Amity.Post<'video'>[];
+  parentPostId: string;
   onVideoClick: (index: number) => void;
 };
 
@@ -118,6 +143,7 @@ export const VideoContent = ({
   pageId = '*',
   elementId = '*',
   componentId = '*',
+  parentPostId,
 }: VideoContentProps) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
@@ -143,6 +169,7 @@ export const VideoContent = ({
             postAmount={posts.length}
             onVideoClick={() => onVideoClick(index)}
             isLastVideo={index === first4Videos.length - 1}
+            parentPostId={parentPostId}
           />
         ))}
       </div>

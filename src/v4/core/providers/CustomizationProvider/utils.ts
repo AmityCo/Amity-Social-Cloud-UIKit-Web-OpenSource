@@ -1337,6 +1337,26 @@ export const defaultConfig: DefaultConfig = {
     '*/*/brand_badge': {
       image: 'value',
     },
+    '*/product_tag_list/*': {},
+    '*/product_tag_list/product_tag': {},
+    '*/product_tag_selection/*': {
+      background_color: '',
+    },
+    '*/product_tag_selection/product_tag_selection_header': {
+      create_mode_title: 'Tag products',
+      edit_mode_title: 'Edit tags',
+      done_button_text: 'Done',
+    },
+    '*/product_tag_selection/product_tag_selection_search_bar': {
+      placeholder: 'Search products',
+    },
+    '*/product_tag_selection/product_tag_selection_item': {},
+    '*/product_tag_selection/product_tag_empty': {
+      text: 'Start typing to search for products',
+    },
+    '*/product_tag_selection/product_tag_no_result': {
+      text: 'No results found',
+    },
   },
 };
 

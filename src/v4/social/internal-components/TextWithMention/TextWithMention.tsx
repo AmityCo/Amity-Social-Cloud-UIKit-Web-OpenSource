@@ -14,6 +14,7 @@ import {
   $isSerializedAutoLinkNode,
   $isSerializedHashtagNode,
 } from '~/v4/social/internal-components/Lexical/utils';
+import { ProductMentionData } from '~/v4/core/components/TextEditor/TextEditor';
 import { Typography } from '~/v4/core/components';
 import { isEmoji } from '~/v4/social/utils/isEmoji';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -39,7 +40,9 @@ interface TextWithMentionProps {
   textClassName?: string;
   linkClassName?: string;
   mentionClassName?: string;
+  productTagClassName?: string;
   hashtagClassName?: string;
+  productTags?: Amity.TextProductTag[];
   keyword?: string;
   isSearchPost?: boolean;
   seeLessSupport?: boolean;
@@ -62,15 +65,17 @@ export const TextWithMention = ({
   textClassName,
   linkClassName,
   mentionClassName,
+  productTagClassName,
   seeLessClassName,
   hashtagClassName,
+  productTags,
   keyword = '',
   seeMoreIsOpen = false,
   isSearchPost = false,
   seeLessSupport = false,
   testId,
 }: TextWithMentionProps) => {
-  const { goToUserProfilePage, goToSocialGlobalSearchPage } = useNavigation();
+  const { goToUserProfilePage, goToSocialGlobalSearchPage, onProductTagClick } = useNavigation();
   const [isExpanded, setIsExpanded] = useState(seeMoreIsOpen);
   const { isDesktop } = useResponsive();
   const { openSearchResultModal, setSearchValue } = useSearchResultContext();
@@ -101,8 +106,15 @@ export const TextWithMention = ({
 
   const editorState = useMemo(() => {
     const extractedLinks = links ?? extractLinks(data.text);
-    return textToEditorState({ data, mentionees, hashtags, metadata, links: extractedLinks });
-  }, [data, mentionees, hashtags, metadata, links, extractLinks]);
+    return textToEditorState({
+      data,
+      mentionees,
+      hashtags,
+      metadata,
+      links: extractedLinks,
+      productTags,
+    });
+  }, [data, mentionees, hashtags, metadata, links, extractLinks, productTags]);
 
   const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -316,7 +328,45 @@ export const TextWithMention = ({
   );
 
   const convertSerializedToText = (child: SerializedLexicalNode, childIndex: number) => {
-    if ($isSerializedMentionNode<MentionData>(child)) {
+    if ($isSerializedMentionNode<MentionData | ProductMentionData>(child)) {
+      // Distinguish product mentions from user mentions
+      if ('productId' in child.data) {
+        const productData = child.data as ProductMentionData;
+        const isUnavailable = !productData.product || productData.product?.status === 'archived';
+
+        // Render as plain text if product is unavailable
+        if (isUnavailable) {
+          return <React.Fragment key={childIndex}>{child.text}</React.Fragment>;
+        }
+
+        return (
+          <span
+            key={uuidv4()}
+            data-testid={`${pageId}/${componentId}/product_tag`}
+            className={clsx(styles.textWithMention__productTag, productTagClassName)}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onProductTagClick?.({
+                productTag: {
+                  productId: productData.productId,
+                  product: productData.product,
+                },
+              });
+            }}
+            onMouseUp={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerUp={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+          >
+            {child.text}
+          </span>
+        );
+      }
+
+      // User mention
       return (
         <span
           key={uuidv4()}
@@ -325,7 +375,7 @@ export const TextWithMention = ({
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            goToUserProfilePage(child.data.userId);
+            goToUserProfilePage((child.data as MentionData).userId);
           }}
           onMouseUp={(e) => e.stopPropagation()}
           onTouchEnd={(e) => e.stopPropagation()}
@@ -385,7 +435,8 @@ export const TextWithMention = ({
       const linkText = $isSerializedTextNode(child.children[0])
         ? child.children[0]?.text
         : child.url;
-      const linkUrl = child.url;
+      const linkUrl =
+        child.url && !/^https?:\/\//i.test(child.url) ? `https://${child.url}` : child.url;
 
       // Skip rendering if link has no text or invalid URL
       if (!linkText || !linkUrl) {
@@ -396,7 +447,7 @@ export const TextWithMention = ({
         <a
           target="_blank"
           key={child.url}
-          href={child.url}
+          href={linkUrl}
           rel="noopener noreferrer"
           onMouseUp={(e) => e.stopPropagation()}
           onTouchEnd={(e) => e.stopPropagation()}

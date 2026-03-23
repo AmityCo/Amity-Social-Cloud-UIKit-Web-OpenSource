@@ -25,6 +25,7 @@ export function Popup() {
           keepPrevious = true,
           isDismissable = true,
           disabledAnimation = false,
+          ariaLabel = 'Popup',
           ...props
         } = popup;
         const close = () => closePopup(props.id);
@@ -39,16 +40,18 @@ export function Popup() {
             isOpen={keepPrevious || isLastPopup}
             className={clsx(styles.overlay, overlayClassName)}
             data-view={keepPrevious && !isLastPopup ? 'none' : view}
+            aria-label={ariaLabel}
             onOpenChange={(open) => (!open && onClose ? onClose({ close }) : close())}
           >
             <Modal
               style={style}
               aria-modal="true"
+              aria-label={ariaLabel}
               data-media={!!media}
               data-animation={!disabledAnimation}
               className={clsx(styles.popup, className)}
             >
-              <Dialog className={styles.dialog}>
+              <Dialog aria-label={ariaLabel} className={styles.dialog}>
                 {({ close }) => {
                   return (
                     <Fragment>
@@ -66,6 +69,7 @@ export function Popup() {
               role="dialog"
               key={props.id}
               aria-modal="true"
+              aria-label={ariaLabel}
               data-animation={!disabledAnimation}
               className={clsx(styles.overlay, overlayClassName)}
               data-view={keepPrevious && !isLastPopup ? 'none' : view}
@@ -74,6 +78,7 @@ export function Popup() {
                 data-media={!!media}
                 data-animation={!disabledAnimation}
                 className={clsx(styles.popup, styles.dialog, className)}
+                aria-label={ariaLabel}
               >
                 {({ close }) => {
                   return (

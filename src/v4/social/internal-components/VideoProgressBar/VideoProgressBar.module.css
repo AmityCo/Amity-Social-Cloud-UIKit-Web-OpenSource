@@ -96,3 +96,9 @@
 .videoProgressContainer:focus {
   outline: none;
 }
+
+.productTagBadge {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
+}

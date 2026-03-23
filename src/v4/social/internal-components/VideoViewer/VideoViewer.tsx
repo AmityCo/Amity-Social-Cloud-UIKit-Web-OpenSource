@@ -1,15 +1,19 @@
-import useFile from '~/core/hooks/useFile';
 import { useKeyPressEvent } from 'react-use';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import useSwiper from '~/v4/social/hooks/useSwiper';
-import { VideoFileStatus } from '~/social/constants';
 import usePostByIds from '~/social/hooks/usePostByIds';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ClearButton } from '~/v4/social/elements/ClearButton/ClearButton';
-import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import styles from './VideoViewer.module.css';
+import { isClipPost, isVideoPost } from '~/v4/social/utils/postTypeChecker';
+import { VideoPlayer as CustomVideoPlayer } from '~/v4/social/internal-components/VideoPlayer/VideoPlayer';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { DisplayModeEnum } from '~/v4/social/types';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 
 type VideoViewerProps = {
   onClose(): void;
@@ -29,6 +33,8 @@ export function VideoViewer({
   initialVideoIndex,
 }: VideoViewerProps) {
   useKeyPressEvent('Escape', onClose);
+  const { isDesktop } = useResponsive();
+  const { removeDrawerData } = useDrawer();
 
   const posts = usePostByIds(post?.children || []);
   const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
@@ -47,17 +53,24 @@ export function VideoViewer({
   const hasNext = selectedVideoIndex < videoPosts.length - 1;
   const hasPrev = selectedVideoIndex > 0;
 
+  const handleClose = useCallback(() => {
+    removeDrawerData();
+    onClose();
+  }, [onClose, removeDrawerData]);
+
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.videoViewer__modal}>
-      <span className={styles.videoViewer__close}>
-        <ClearButton
-          pageId={pageId}
-          onPress={onClose}
-          componentId={componentId}
-          defaultClassName={styles.videoViewer__closeButton}
-          imgClassName={styles.videoViewer__closeButton__img}
-        />
-      </span>
+      {isDesktop && (
+        <span className={styles.videoViewer__close}>
+          <ClearButton
+            pageId={pageId}
+            onPress={onClose}
+            componentId={componentId}
+            defaultClassName={styles.videoViewer__closeButton}
+            imgClassName={styles.videoViewer__closeButton__img}
+          />
+        </span>
+      )}
       {videoPosts.length > 1 && (
         <Typography.TitleBold className={styles.videoViewer__count}>
           {selectedVideoIndex + 1} / {videoPosts.length}
@@ -68,7 +81,13 @@ export function VideoViewer({
           <ChevronRight className={styles.videoViewer__prevButton} />
         </Button>
       )}
-      <VideoPlayer videoPost={videoPost as Amity.Post<'video' | 'clip'>} next={next} prev={prev} />
+      <VideoPlayer
+        pageId={pageId}
+        videoPost={videoPost as Amity.Post<'video' | 'clip'>}
+        next={next}
+        prev={prev}
+        onClose={handleClose}
+      />
       {hasNext && (
         <Button className={styles.videoViewer__next} onPress={next}>
           <ChevronRight className={styles.videoViewer__nextButton} />
@@ -80,26 +99,30 @@ export function VideoViewer({
 
 const VideoPlayer = memo(
   ({
+    pageId,
     videoPost,
     prev,
     next,
+    onClose,
   }: {
+    pageId?: string;
     videoPost?: Amity.Post<'video' | 'clip'>;
     prev: () => void;
     next: () => void;
+    onClose: () => void;
   }) => {
+    const { isDesktop } = useResponsive();
+    const [isDragging, setIsDragging] = useState(false);
     const videoFileId = useMemo(() => {
-      if (videoPost?.dataType === 'clip') {
-        return (videoPost?.data as Amity.ContentDataClip)?.fileId;
-      }
-
-      return (
-        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.high ||
-        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.medium ||
-        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.low ||
-        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.original ||
-        undefined
-      );
+      if (isClipPost(videoPost)) return videoPost?.data?.fileId;
+      if (isVideoPost(videoPost))
+        return (
+          videoPost?.data?.videoFileId?.high ||
+          videoPost?.data?.videoFileId?.medium ||
+          videoPost?.data?.videoFileId?.low ||
+          videoPost?.data?.videoFileId?.original
+        );
+      return undefined;
     }, [videoPost]);
 
     const { handleTouchEnd, handleTouchMove, handleTouchStart } = useSwiper({
@@ -108,61 +131,25 @@ const VideoPlayer = memo(
       threshold: 100,
     });
 
-    const file: Amity.File<'video' | 'clip'> | undefined =
-      useFile<Amity.File<'video' | 'clip'>>(videoFileId);
+    const { showProductTagList } = useShowProductTagList({
+      pageId,
+      mode: 'post',
+      sourceId: videoPost?.parentPostId || '',
+    });
 
-    const posterUrl = useFile(videoPost?.data?.thumbnailFileId);
-
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    /*
-     * It's possible that certain video formats uploaded by the user are not
-     * playable by the browser. So it's best to use the transcoded video file
-     * which is an mp4 format to play video.
-     *
-     * Note: the below logic needs to be smarter based on users bandwidth and also
-     * should be switchable by the user, which would require a ui update
-     */
-    const url = useMemo(() => {
-      if (file == null) return null;
-      if ((file as Amity.File<'video' | 'clip'>).status === VideoFileStatus.Transcoded) {
-        const { videoUrl } = file as Amity.File<'video' | 'clip'>;
-
-        return (
-          videoUrl?.['1080p'] ||
-          videoUrl?.['720p'] ||
-          videoUrl?.['480p'] ||
-          videoUrl?.['360p'] ||
-          videoUrl?.original ||
-          file.fileUrl
-        );
-      }
-      return file.fileUrl;
-    }, [file]);
-
-    /*
-  The video initially doesn't change because in essence you're only modifying the <source> element
-  and React understands that <video> should remain unchanged,
-  so it does not update it on the DOM and doesn't trigger a new load event for that source.
-  A new load event should be triggered for <video>.
-
-  ref: https://stackoverflow.com/a/47382850
-  */
-    useEffect(() => {
-      videoRef.current?.load();
-    }, [url]);
-
-    if (url == null) return null;
+    const handleProductTagClick = useCallback(() => {
+      showProductTagList(videoPost?.productTags ?? []);
+    }, [videoPost?.productTags, showProductTagList]);
 
     return (
-      <video
-        controls
-        autoPlay
-        ref={videoRef}
-        controlsList="nodownload"
+      <CustomVideoPlayer
+        displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
+        autoPlay={true}
         onTouchEnd={handleTouchEnd}
-        poster={posterUrl?.fileUrl}
         onTouchMove={handleTouchMove}
+        fileId={videoFileId}
+        thumbnailFileId={videoPost?.data?.thumbnailFileId ?? ''}
+        productTags={videoPost?.productTags}
         onTouchStart={handleTouchStart}
         onVolumeChange={(e) => {
           if (
@@ -173,13 +160,11 @@ const VideoPlayer = memo(
           }
         }}
         className={styles.videoViewer__fullImage}
-      >
-        <source src={url} type="video/mp4" />
-        <p>
-          Your browser does not support this format of video. Please try again later once the server
-          transcodes the video into an playable format(mp4).
-        </p>
-      </video>
+        onClickProductTagBadge={handleProductTagClick}
+        isDragging={isDragging}
+        onDragging={(isDragging) => setIsDragging(isDragging)}
+        onClose={onClose}
+      />
     );
   },
 );

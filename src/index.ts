@@ -149,3 +149,9 @@ export { MyEvents as AmityMyEventFeedComponent } from './v4/social/features/even
 export { EventInfo as AmityEventInfoComponent } from './v4/social/features/events';
 
 export { LivestreamChatMessageComposer as AmityLivestreamChatMessageComposerComponent } from '~/v4/social/features/livestream';
+
+export {
+  ManageProductTagList as AmityManageProductTagListComponent,
+  ProductTagList as AmityProductTagListComponent,
+  ProductTagSelection as AmityProductTagSelectionComponent,
+} from '~/v4/social/features/product-tagged';

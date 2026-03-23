@@ -12,16 +12,24 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { UnavailableMediaViewer } from '~/v4/social/internal-components/UnavailableMediaViewer';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 
 const VideoItem = ({
   videoFileId,
   thumbnailFileId,
   postIndex,
+  postId,
+  productTags = [],
+  pageId,
   onClickVideoItem,
 }: {
   videoFileId: string;
   thumbnailFileId: string;
   postIndex: number;
+  postId: string;
+  productTags?: Amity.ProductTag[];
+  pageId?: string;
   onClickVideoItem: (postIndex: number) => void;
 }) => {
   const [isBrokenImg, setIsBrokenImg] = useState(false);
@@ -29,6 +37,16 @@ const VideoItem = ({
   const image = useImage({ fileId: thumbnailFileId, imageSize: 'medium' });
 
   const file = useFile<'video'>(videoFileId);
+
+  const { showProductTagList } = useShowProductTagList({
+    pageId,
+    mode: 'video',
+    sourceId: postId,
+  });
+
+  const handleProductTagClick = () => {
+    showProductTagList(productTags);
+  };
 
   if (!image || !file)
     return (
@@ -47,6 +65,11 @@ const VideoItem = ({
       onPress={() => onClickVideoItem(postIndex)}
     >
       <div className={styles.videoGallery__brokenImg} />
+      {productTags.length > 0 && (
+        <div className={styles.videoGallery__productTagBadge}>
+          <ProductTagBadge selectedProductTags={productTags} onClick={handleProductTagClick} />
+        </div>
+      )}
     </Button>
   ) : (
     <Button
@@ -63,6 +86,11 @@ const VideoItem = ({
       <Typography.Caption className={styles.videoGallery__duration}>
         {formatDuration((file?.attributes.metadata?.video as any).duration)}
       </Typography.Caption>
+      {productTags.length > 0 && (
+        <div className={styles.videoGallery__productTagBadge}>
+          <ProductTagBadge selectedProductTags={productTags} onClick={handleProductTagClick} />
+        </div>
+      )}
     </Button>
   );
 };
@@ -157,6 +185,9 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
           videoFileId={post?.data?.videoFileId?.original ?? ''}
           thumbnailFileId={post?.data?.thumbnailFileId ?? ''}
           postIndex={index}
+          postId={post?.postId}
+          productTags={post?.productTags}
+          pageId={pageId}
           onClickVideoItem={onClickVideoItem}
         />
       ))}
