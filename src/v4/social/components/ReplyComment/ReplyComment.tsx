@@ -240,7 +240,7 @@ const PostReplyComment = ({
       pageId,
       componentId,
       title: 'Delete reply',
-      content: 'This reply will be permanently removed.',
+      content: 'This reply will be permanently deleted.',
       cancelText: 'Cancel',
       okText: 'Delete',
       onOk: deleteComment,

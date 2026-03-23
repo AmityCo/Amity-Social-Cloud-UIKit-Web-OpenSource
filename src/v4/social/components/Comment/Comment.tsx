@@ -211,7 +211,7 @@ export const Comment = ({
       pageId,
       componentId,
       title: 'Delete comment',
-      content: 'This comment will be permanently removed.',
+      content: 'This comment will be permanently deleted.',
       cancelText: 'Cancel',
       okText: 'Delete',
       onOk: deleteComment,
