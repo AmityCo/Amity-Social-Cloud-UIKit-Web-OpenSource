@@ -33,6 +33,14 @@ export const NotificationItem = ({
 
   const communityActionTypes = ['poll', 'post', 'join_request'];
 
+  const renderCommentId = (item: Amity.NotificationTrayItem) => {
+    const { parentId, latestCommentId, actionReferenceId, trayItemCategory } = item;
+    if (trayItemCategory === 'reaction_on_post') return undefined;
+    if (parentId === null) return actionReferenceId;
+
+    return latestCommentId;
+  };
+
   const onClickItem = () => {
     onClose?.();
     notificationTray.markItemsSeen([
@@ -58,6 +66,8 @@ export const NotificationItem = ({
       return AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage?.({
         roomId: item.targetId,
       });
+    } else if (item.actionType === 'user') {
+      return AmityNotificationTrayPageBehavior?.goToEditProfilePage?.();
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
         postId:
@@ -66,11 +76,9 @@ export const NotificationItem = ({
           item.trayItemCategory === 'mention_in_poll'
             ? item.actionReferenceId!
             : item.referenceId!,
-        commentId:
-          item.trayItemCategory === 'reaction_on_post'
-            ? undefined
-            : item.actionReferenceId || undefined,
-        parentId: item.parentId || undefined,
+        commentId: renderCommentId(item),
+        parentId: item.parentId ?? undefined,
+        rootId: item.rootId,
         hideTarget: item.targetType === 'user' ? true : false,
       });
     }
@@ -100,14 +108,16 @@ export const NotificationItem = ({
               }
             />
           ) : (
-            <UserAvatar
-              shouldRedirectToUserProfile={false}
-              onPressAvatar={onClickItem}
-              pageId={pageId}
-              componentId={componentId}
-              userData={item.users[0]}
-              className={styles.notificationItem__avatar}
-            />
+            <>
+              <UserAvatar
+                shouldRedirectToUserProfile={false}
+                onPressAvatar={onClickItem}
+                pageId={pageId}
+                componentId={componentId}
+                userData={item.users[0]}
+                className={styles.notificationItem__avatar}
+              />
+            </>
           )}
           <Typography.Body className={styles.notificationItem__text}>
             {highlightedText(item.templatedText, item.text)}

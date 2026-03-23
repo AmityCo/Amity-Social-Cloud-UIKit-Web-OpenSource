@@ -28,15 +28,29 @@ export const CommentTray = ({
   const { isDesktop } = useResponsive();
   const { isVisitorOrBot } = useSDK();
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
+  const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
 
-  const onCancelReply = useCallback(() => setReplyTo(undefined), []);
+  const onCancelReply = useCallback(() => {
+    setReplyTo(undefined);
+    setReplyParentIdOverride(undefined);
+  }, []);
 
   const onClickReply = useCallback(
-    (comment: Amity.Comment) =>
-      setReplyTo((prevComment) =>
-        prevComment?.commentId === comment?.commentId ? undefined : comment,
-      ),
+    ({
+      comment,
+      parentIdOverride,
+    }: {
+      comment: Amity.Comment;
+      parentIdOverride?: string;
+      l0AncestorId?: string;
+    }) =>
+      setReplyTo((prevComment) => {
+        setReplyParentIdOverride(
+          prevComment?.commentId === comment?.commentId ? undefined : parentIdOverride,
+        );
+        return prevComment?.commentId === comment?.commentId ? undefined : comment;
+      }),
     [],
   );
 
@@ -60,6 +74,7 @@ export const CommentTray = ({
           onCancelReply={onCancelReply}
           referenceType={referenceType}
           replyTo={replyTo}
+          parentIdOverride={replyParentIdOverride}
           shouldAllowCreation={shouldAllowCreation}
           containerClassName={styles.commentTrayContainer__commentComposer}
           community={community}

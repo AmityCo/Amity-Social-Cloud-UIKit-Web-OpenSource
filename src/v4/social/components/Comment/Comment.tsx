@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -27,22 +27,28 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNetworkState } from 'react-use';
-import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { Button } from '~/v4/core/components/AriaButton';
 import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
+import { useDeleteComment } from '~/v4/social/hooks/useDeleteComment';
 import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import styles from './Comment.module.css';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
 import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 interface CommentProps {
   pageId?: string;
   componentId?: string;
   comment: Amity.Comment;
   community?: Amity.Community | null;
-  onClickReply: (comment: Amity.Comment) => void;
+  onClickReply: (params: {
+    comment: Amity.Comment;
+    parentIdOverride?: string;
+    l0AncestorId?: string;
+  }) => void;
   // If should not allow Interaction, it will hide timestamp also
   shouldAllowInteraction?: boolean;
   // Hide only interaction button
@@ -57,6 +63,10 @@ interface CommentProps {
   onClickShowReply?: () => void;
   testId?: string;
   isHost?: boolean;
+  renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
+  /** Original parentId from the notification — the direct parent of the target comment.
+   *  For L1 notifications this equals the L0 ID; for L2 it equals the L1 ID. */
+  parantId?: string;
 }
 
 export const Comment = ({
@@ -74,6 +84,8 @@ export const Comment = ({
   maxLines,
   testId,
   isHost,
+  renderReplyComment,
+  parantId,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -92,6 +104,8 @@ export const Comment = ({
   const [isEditing, setIsEditing] = useState(false);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const isHighlightedComment = highlightedCommentId === comment.commentId && !parentId;
   const [commentData, setCommentData] = useState<CreateCommentParams>();
   const [highlightedReplyComment, setHighlightedReplyComment] = useState<Amity.Comment | undefined>(
     undefined,
@@ -121,7 +135,48 @@ export const Comment = ({
 
   const replyAmount = comment.childrenNumber;
 
-  if (isExcluded) return null;
+  // Pending L1 comments captured before ReplyCommentList is even mounted (first reply case).
+  const [pendingL1Comments, setPendingL1Comments] = useState<Amity.Comment[]>([]);
+
+  // Auto-expand the reply thread when the user creates the very first L1 reply under this
+  // L0 comment. At that point ReplyCommentList is not yet mounted (showThread is false),
+  // so we listen here and set hasClickLoadMore → true to mount & show the list immediately.
+  // We also stash the comment so ReplyCommentList can show it instantly as a pending item.
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ parentId: string; comment: Amity.Comment }>).detail;
+      if (detail.parentId === comment.commentId) {
+        setHasClickLoadMore(true);
+        setPendingL1Comments((prev) =>
+          prev.some((p) => p.commentId === detail.comment.commentId)
+            ? prev
+            : [detail.comment, ...prev],
+        );
+      }
+    };
+    document.addEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+    return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+  }, [comment.commentId]);
+
+  // Bounce the L0 comment bubble when it is the direct notification target.
+  useEffect(() => {
+    if (!isHighlightedComment) return;
+    const handleScrollComplete = (e: CustomEvent) => {
+      if (e.detail.commentId === comment.commentId) {
+        setIsHighlighted(true);
+        setTimeout(() => setIsHighlighted(false), 1000);
+      }
+    };
+    document.addEventListener(
+      EVENT_LISTENER.SCROLL_COMPLETE,
+      handleScrollComplete as EventListener,
+    );
+    return () =>
+      document.removeEventListener(
+        EVENT_LISTENER.SCROLL_COMPLETE,
+        handleScrollComplete as EventListener,
+      );
+  }, [isHighlightedComment, comment.commentId]);
 
   useEffect(() => {
     highlightedCommentId &&
@@ -131,8 +186,12 @@ export const Comment = ({
       });
   }, [highlightedCommentId, parentId]);
 
-  const deleteComment = async () =>
-    comment.commentId && CommentRepository.deleteComment(comment.commentId);
+  if (isExcluded) return null;
+
+  const { handleDeleteComment: deleteComment } = useDeleteComment({
+    commentId: comment.commentId,
+    parentId: comment.parentId ?? undefined,
+  });
 
   const handleEditComment = () => {
     toggleBottomSheet();
@@ -143,7 +202,7 @@ export const Comment = ({
     toggleBottomSheet();
     if (!online) {
       notification.info({
-        content: 'Oops, something went wrong',
+        content: 'No internet connection.',
         alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
       });
       return;
@@ -184,60 +243,69 @@ export const Comment = ({
     });
   };
 
-  const handleReplyClick = (comment: Amity.Comment) => {
+  const handleReplyClick = ({
+    comment,
+    parentIdOverride,
+    l0AncestorId,
+  }: {
+    comment: Amity.Comment;
+    parentIdOverride?: string;
+    l0AncestorId?: string;
+  }) => {
     if (community)
       return handleCommunityProfileBehavior({
-        defaultBehavior: () => onClickReply(comment),
+        defaultBehavior: () => onClickReply({ comment, parentIdOverride, l0AncestorId }),
         allowNonMember: false,
         isJoined: community?.isJoined,
       });
 
     handleUserProfileBehavior({
-      defaultBehavior: () => onClickReply(comment),
+      defaultBehavior: () => onClickReply({ comment, parentIdOverride, l0AncestorId }),
       allowNonFollower: true,
     });
   };
 
-  const handleSaveComment = useCallback(async () => {
-    if (!online) {
-      notification.info({
-        content: 'Oops, something went wrong',
-        alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
-      });
-      return;
-    }
-    if (!commentData || !comment.commentId) return;
-
-    await CommentRepository.updateComment(comment.commentId, {
-      data: commentData.data,
-      mentionees: commentData.mentionees as Amity.UserMention[],
-      metadata: commentData.metadata,
-    }).catch((error) => {
-      if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-        notification.info({
-          content: 'Your comment contains inappropriate word. Please review and delete it.',
-        });
-      } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-        notification.info({
-          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
-        });
-      } else {
-        notification.info({
-          content: 'Oops, something went wrong',
-        });
-      }
-    });
-
-    setIsEditing(false);
-  }, [commentData]);
+  const { handleSaveComment } = useUpdateComment({
+    commentId: comment.commentId,
+    commentData,
+    setIsEditing,
+  });
 
   const isHighlightedReply = parentId === comment.commentId;
 
-  const isHighlightedComment = highlightedCommentId === comment.commentId && !parentId;
+  const isL2Target =
+    isHighlightedReply &&
+    !!highlightedReplyComment &&
+    highlightedReplyComment.parentId !== comment.commentId;
+
+  // Prefer synchronous detection when parantId is present; fall back to the
+  // async highlightedReplyComment path for cases without a notification context.
+  // parantId === comment.commentId → L1 target; parantId !== comment.commentId → L2 target.
+  const effectiveIsL2Target = parantId ? parantId !== comment.commentId : isL2Target;
+
+  // L1 ID to pass as showReplyCommentAt — tells the L1 ReplyCommentList to auto-expand
+  // the matching L1 bubble's L2 sub-list. Suppressed when the L2 target is deleted so the
+  // L1 bubble doesn't show a thread line pointing to no visible replies.
+  const effectiveShowReplyCommentAt =
+    effectiveIsL2Target && !highlightedReplyComment?.isDeleted
+      ? parantId ?? highlightedReplyComment?.parentId
+      : undefined;
+
+  // When arriving from an L2 notification and the L0 ancestor is deleted, auto-expand
+  // the reply list so the pinned L1 (and its L2 target) are immediately visible without
+  // requiring the user to manually tap "View replies".
+  useEffect(() => {
+    if (comment.isDeleted && effectiveIsL2Target && replyAmount > 0) {
+      setHasClickLoadMore(true);
+    }
+  }, [comment.isDeleted, effectiveIsL2Target, replyAmount]);
+
+  const replyComposer = renderReplyComment?.(comment);
 
   const isShowViewMoreReplies =
     replyAmount > 0 &&
     !hasClickLoadMore &&
+    !replyComposer &&
     (!isHighlightedReply || (isHighlightedComment && !hasClickLoadMore));
 
   const isShowReplyList =
@@ -245,17 +313,59 @@ export const Comment = ({
     (isHighlightedReply && replyAmount > 0) ||
     highlightedReplyComment?.isDeleted;
 
+  const showThread = isShowReplyList || !!showReply || !!replyComposer;
+
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
       {comment.isDeleted ? (
         <div
+          className={styles.postComment__deleteComment}
           data-testid={`${pageId}/${componentId}/comment-deleted-tag`}
-          className={styles.postComment__deleteComment_container}
         >
-          <MinusCircleIcon className={styles.postComment__deleteComment_icon} />
-          <Typography.Body className={styles.postComment__deleteComment_text}>
-            This comment has been deleted
-          </Typography.Body>
+          <div className={styles.postComment__deleteComment_avatarSlot}>
+            <MinusCircleIcon className={styles.postComment__deleteComment_icon} />
+          </div>
+          <div className={styles.postComment__details}>
+            <Typography.Body className={styles.postComment__deleteComment_text}>
+              This comment has been deleted
+            </Typography.Body>
+            {replyAmount > 0 && !hasClickLoadMore && (
+              <Button
+                variant="default"
+                data-testid={`${pageId}/${componentId}/view_reply_button`}
+                className={styles.postComment__viewReply_button}
+                onPress={() => setHasClickLoadMore(true)}
+              >
+                <ReplyComment className={styles.postComment__viewReply_icon} />
+                <Typography.CaptionBold className={styles.postComment__viewReply_text}>
+                  View {replyAmount} {replyAmount > 1 ? 'replies' : 'reply'}
+                </Typography.CaptionBold>
+              </Button>
+            )}
+            {hasClickLoadMore && replyAmount > 0 && (
+              <ReplyCommentList
+                pageId={pageId}
+                componentId={componentId}
+                community={community ?? undefined}
+                referenceId={comment.referenceId}
+                referenceType={comment.referenceType}
+                parentId={comment.commentId}
+                l0AncestorId={comment.commentId}
+                onClickReply={handleReplyClick}
+                highlightedCommentId={
+                  effectiveIsL2Target
+                    ? parantId // pin the L1 comment at the top
+                    : isHighlightedReply
+                      ? highlightedCommentId
+                      : undefined
+                }
+                showReplyCommentAt={effectiveShowReplyCommentAt}
+                highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
+                renderInlineComposer={replyComposer ? () => replyComposer : undefined}
+                initialPendingComments={pendingL1Comments}
+              />
+            )}
+          </div>
         </div>
       ) : isEditing ? (
         <div className={styles.postComment__edit}>
@@ -314,7 +424,10 @@ export const Comment = ({
           </div>
         </div>
       ) : (
-        <div className={styles.postComment} data-testid={testId}>
+        <div
+          className={clsx(styles.postComment, isHighlighted && styles.postComment__bounce)}
+          data-testid={testId}
+        >
           <UserAvatar
             pageId={pageId}
             componentId={componentId}
@@ -420,7 +533,7 @@ export const Comment = ({
                   <Button
                     data-testid={`${pageId}/${componentId}/reply_button`}
                     variant="default"
-                    onPress={() => handleReplyClick(comment)}
+                    onPress={() => handleReplyClick({ comment })}
                     className={styles.postComment__secondRow__replyButton}
                   >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
@@ -475,7 +588,7 @@ export const Comment = ({
               </Button>
             )}
 
-            {(isShowReplyList || showReply) && (
+            {showThread && (
               <ReplyCommentList
                 pageId={pageId}
                 componentId={componentId}
@@ -483,7 +596,19 @@ export const Comment = ({
                 referenceId={comment.referenceId}
                 referenceType={comment.referenceType}
                 parentId={comment.commentId}
-                highlightedCommentId={isHighlightedReply ? highlightedCommentId : undefined}
+                l0AncestorId={comment.commentId}
+                onClickReply={handleReplyClick}
+                highlightedCommentId={
+                  effectiveIsL2Target
+                    ? parantId // pin the L1 comment at the top
+                    : isHighlightedReply
+                      ? highlightedCommentId
+                      : undefined
+                }
+                showReplyCommentAt={effectiveShowReplyCommentAt}
+                highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
+                renderInlineComposer={replyComposer ? () => replyComposer : undefined}
+                initialPendingComments={pendingL1Comments}
               />
             )}
           </div>

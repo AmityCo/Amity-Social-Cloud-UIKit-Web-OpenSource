@@ -3,8 +3,31 @@ import { Typography } from '~/v4/core/components';
 
 type Part = { type: 'text' | 'dynamic'; value: string };
 
+const HIGHLIGHT_EXACT_MATCHES = ['Your profile information was reset'];
+
 export function highlightedText(templateText: string, text: string) {
   const pattern = /\{\{\s*(\w+):\s*([^}]+)\s*\}\}/g;
+
+  // Check for exact match highlights when no {{ }} patterns exist
+  if (!pattern.test(templateText)) {
+    for (const phrase of HIGHLIGHT_EXACT_MATCHES) {
+      const index = text.indexOf(phrase);
+      if (index !== -1) {
+        const before = text.slice(0, index);
+        const after = text.slice(index + phrase.length);
+        return [
+          before,
+          <Typography.BodyBold as="span" key={index}>
+            {phrase}
+          </Typography.BodyBold>,
+          after,
+        ].filter(Boolean);
+      }
+    }
+    return [text];
+  }
+  pattern.lastIndex = 0;
+
   const parts: Part[] = [];
 
   let lastIndex = 0;

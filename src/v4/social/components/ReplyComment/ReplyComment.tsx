@@ -1,6 +1,6 @@
 import { CommentRepository } from '@amityco/ts-sdk';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BottomSheet, Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -21,15 +21,20 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
 import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
 import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
 import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionDisplay';
+import { useDeleteComment } from '~/v4/social/hooks/useDeleteComment';
 import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
+import { Button } from '~/v4/core/components/AriaButton';
 import styles from './ReplyComment.module.css';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { useNetworkState } from 'react-use';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 type ReplyCommentProps = {
   pageId?: string;
@@ -37,6 +42,27 @@ type ReplyCommentProps = {
   comment: Amity.Comment;
   isHighlightDeleted?: boolean;
   testId?: string;
+  isL2?: boolean;
+
+  l0AncestorId?: string;
+  /** Called when the user taps the Reply button.
+   *  @param comment          - The bubble that was tapped (for @mention pre-fill).
+   *  @param parentIdOverride - Set only for L2 bubbles: the L1 comment ID to use as
+   *                            parentId in the create-comment API call.
+   *  @param l0AncestorId     - The L0 comment ID for desktop compose placement. */
+  onClickReply?: (params: {
+    comment: Amity.Comment;
+    parentIdOverride?: string;
+    l0AncestorId?: string;
+  }) => void;
+  /* Render prop for the L2 nested reply list. */
+  renderL2ReplyList?: (props: {
+    showL2Replies: boolean;
+    pendingL2Comments: Amity.Comment[];
+    hideL2Replies: () => void;
+  }) => React.ReactNode;
+  showReply?: boolean;
+  isHighlighted?: boolean;
 };
 
 const PostReplyComment = ({
@@ -45,6 +71,12 @@ const PostReplyComment = ({
   comment,
   isHighlightDeleted = false,
   testId,
+  isL2 = false,
+  l0AncestorId,
+  onClickReply,
+  renderL2ReplyList,
+  showReply = false,
+  isHighlighted = false,
 }: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
@@ -55,6 +87,8 @@ const PostReplyComment = ({
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const notification = useNotifications();
+  const { online } = useNetworkState();
+  const { page } = useNavigation();
 
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityComponent({
@@ -65,6 +99,41 @@ const PostReplyComment = ({
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+  const [localCommentData, setLocalCommentData] = useState<{
+    text: string;
+    mentionees: Amity.UserMention[];
+    metadata: Record<string, unknown>;
+  } | null>(null);
+  // Whether the L2 reply list is expanded (only relevant for L1 bubbles, i.e. isL2=false)
+  const [showL2Replies, setShowL2Replies] = useState(false);
+  // Set to true once the L2 list confirms it has no replies (all deleted).
+  const [confirmedNoReplies, setConfirmedNoReplies] = useState(false);
+  // Pending L2 comments captured before the L2 ReplyCommentList is mounted (first reply case).
+  const [pendingL2Comments, setPendingL2Comments] = useState<Amity.Comment[]>([]);
+
+  const replyChildrenCount = comment.childrenNumber ?? 0;
+
+  useEffect(() => {
+    if (!isL2) setShowL2Replies(showReply);
+  }, [showReply, isL2]);
+
+  // Auto-expand the L2 reply list when the first L2 reply is created under this L1 comment.
+  // ReplyCommentList may not be mounted yet, so listen here, expand, and stash the comment.
+  useEffect(() => {
+    if (isL2) return; // this is already an L2 bubble — no L3 nesting
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ parentId: string; comment: Amity.Comment }>).detail;
+      if (detail.parentId !== comment.commentId) return;
+      setShowL2Replies(true);
+      setPendingL2Comments((prev) =>
+        prev.some((p) => p.commentId === detail.comment.commentId)
+          ? prev
+          : [detail.comment, ...prev],
+      );
+    };
+    document.addEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+    return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+  }, [comment.commentId, isL2]);
 
   const { isModerator: isModeratorUser } = useCommunityPostPermission({
     community,
@@ -115,12 +184,41 @@ const PostReplyComment = ({
     onReactionClick: handleReactionClick,
   });
 
+  const handleReplyClick = () => {
+    if (!onClickReply) return;
+    const handleReply = () => {
+      if (isL2) {
+        // L2 bubble → resolve L1 as parent for the API call.
+        // parentIdOverride = comment.parentId (the L1 comment's ID).
+        onClickReply({ comment, parentIdOverride: comment.parentId ?? undefined, l0AncestorId });
+      } else {
+        // L1 bubble → new reply becomes L2 under this L1.
+        // parentIdOverride is undefined; CommentComposer will use replyTo.commentId.
+        onClickReply({ comment, parentIdOverride: undefined, l0AncestorId });
+      }
+    };
+
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: handleReply,
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    handleUserProfileBehavior({
+      defaultBehavior: handleReply,
+      allowNonFollower: true,
+    });
+  };
+
   const isBrandUser = comment.creator?.isBrand ?? false;
 
   const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
 
-  const deleteComment = async () =>
-    comment.commentId && CommentRepository.deleteComment(comment.commentId);
+  const { handleDeleteComment: deleteComment } = useDeleteComment({
+    commentId: comment.commentId,
+    parentId: comment.parentId ?? undefined,
+  });
 
   const handleEditComment = () => {
     toggleBottomSheet();
@@ -129,6 +227,14 @@ const PostReplyComment = ({
 
   const handleDeleteComment = () => {
     toggleBottomSheet();
+    if (!online) {
+      notification.info({
+        content: 'No internet connection.',
+        alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
+      });
+
+      return;
+    }
     confirm({
       pageId,
       componentId,
@@ -140,31 +246,18 @@ const PostReplyComment = ({
     });
   };
 
-  const handleSaveComment = useCallback(async () => {
-    if (!commentData || !comment.commentId) return;
-
-    await CommentRepository.updateComment(comment.commentId, {
-      data: commentData.data,
-      mentionees: commentData.mentionees as Amity.UserMention[],
-      metadata: commentData.metadata,
-    }).catch((error) => {
-      if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-        notification.info({
-          content: 'Your comment contains inappropriate word. Please review and delete it.',
-        });
-      } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-        notification.info({
-          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
-        });
-      } else {
-        notification.info({
-          content: 'Oops, something went wrong',
-        });
-      }
-    });
-
-    setIsEditing(false);
-  }, [commentData]);
+  const { handleSaveComment } = useUpdateComment({
+    commentId: comment.commentId,
+    commentData,
+    setIsEditing,
+    onSuccess: (savedData) => {
+      setLocalCommentData({
+        text: (savedData.data as { text?: string })?.text ?? '',
+        mentionees: (savedData.mentionees as Amity.UserMention[]) ?? [],
+        metadata: savedData.metadata ?? {},
+      });
+    },
+  });
 
   if (isExcluded) return null;
 
@@ -193,10 +286,10 @@ const PostReplyComment = ({
                 mentionContainerClassName={styles.postReplyComment__mentionContainer}
                 value={{
                   data: {
-                    text: (comment.data as Amity.ContentDataText).text,
+                    text: localCommentData?.text ?? (comment.data as Amity.ContentDataText).text,
                   },
-                  mentionees: comment.mentionees as Mentionees,
-                  metadata: comment.metadata || {},
+                  mentionees: (localCommentData?.mentionees ?? comment.mentionees) as Mentionees,
+                  metadata: localCommentData?.metadata ?? comment.metadata ?? {},
                 }}
                 onChange={(value) => {
                   setCommentData({
@@ -237,100 +330,156 @@ const PostReplyComment = ({
         <div className={styles.postReplyComment} style={themeStyles} data-testid={testId}>
           <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postReplyComment__details}>
+            {/* l1Content: scopes the trunk ::before to L1 height only */}
             <div
-              data-has-reaction={reactionsCount > 0}
-              className={styles.postReplyComment__content}
+              className={styles.postReplyComment__l1Content}
+              data-show-l2={!isL2 && showL2Replies ? 'true' : 'false'}
+              data-show-view-replies={
+                !isL2 && replyChildrenCount > 0 && !showL2Replies && !confirmedNoReplies
+                  ? 'true'
+                  : 'false'
+              }
             >
-              <div className={styles.postReplyComment__userInfo}>
-                <Typography.BodyBold
-                  data-testid={`${pageId}/${componentId}/username`}
-                  className={styles.postReplyComment__content__username}
-                >
-                  {comment.creator?.displayName}
-                </Typography.BodyBold>
-                {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
-              </div>
-              {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
-              <TextWithMention
-                pageId={pageId}
-                componentId={componentId}
-                data={{ text: (comment.data as Amity.ContentDataText).text }}
-                mentionees={comment.mentionees as Amity.UserMention[]}
-                metadata={comment.metadata}
-                testId={`${pageId}/${componentId}/reply-comment-text`}
-              />
-              <CommentReactionDisplay
-                pageId={pageId}
-                componentId={componentId}
-                comment={comment}
-                reactionsCount={reactionsCount}
-                position="replyComment"
-                onReactionPress={() => {
-                  const reactionList = (
-                    <ReactionList
-                      pageId={pageId}
-                      referenceType="comment"
-                      referenceId={comment.commentId}
-                      customReferenceType="reply"
-                    />
-                  );
-                  isDesktop
-                    ? openPopup({ view: 'desktop', children: reactionList })
-                    : setDrawerData({
-                        content: reactionList,
-                        snapPoints: [0.7, 1],
-                        activeSnapPoint: 0.7,
-                      });
-                }}
-              />
-            </div>
-            <div className={styles.postReplyComment__secondRow}>
-              <div className={styles.postReplyComment__secondRow__leftPane}>
-                <Typography.Caption className={styles.postReplyComment__secondRow__timestamp}>
-                  <Timestamp
-                    pageId={pageId}
-                    componentId={componentId}
-                    timestamp={comment.createdAt}
-                  />
-                  <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
-                    {comment.createdAt !== comment.editedAt && ' (edited)'}
-                  </span>
-                </Typography.Caption>
-                <ReactionButton
+              <div
+                data-has-reaction={reactionsCount > 0}
+                className={clsx(
+                  styles.postReplyComment__content,
+                  isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
+                )}
+              >
+                <div className={styles.postReplyComment__userInfo}>
+                  <Typography.BodyBold
+                    data-testid={`${pageId}/${componentId}/username`}
+                    className={styles.postReplyComment__content__username}
+                  >
+                    {comment.creator?.displayName}
+                  </Typography.BodyBold>
+                  {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
+                </div>
+                {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
+                <TextWithMention
                   pageId={pageId}
                   componentId={componentId}
-                  myReaction={reactionByMe}
-                  onReactionClick={handleReactionClick}
-                  buttonClassName={styles.postReplyComment__secondRow__like}
-                  isCommentReaction
-                  referenceType="comment"
-                  community={community}
-                />
-                <Popover
-                  trigger={{
-                    pageId,
-                    componentId,
-                    onClick: () => setBottomSheetOpen(true),
-                    className: styles.postReplyComment__secondRow__actionButton,
-                    iconClassName: styles.postReplyComment__secondRow__actionButton__icon,
+                  data={{
+                    text: localCommentData?.text ?? (comment.data as Amity.ContentDataText).text,
                   }}
-                >
-                  {({ closePopover }) => (
-                    <CommentOptions
+                  mentionees={
+                    (localCommentData?.mentionees ?? comment.mentionees) as Amity.UserMention[]
+                  }
+                  metadata={localCommentData?.metadata ?? comment.metadata}
+                  testId={`${pageId}/${componentId}/reply-comment-text`}
+                />
+                <CommentReactionDisplay
+                  pageId={pageId}
+                  componentId={componentId}
+                  comment={comment}
+                  reactionsCount={reactionsCount}
+                  position="replyComment"
+                  onReactionPress={() => {
+                    const reactionList = (
+                      <ReactionList
+                        pageId={pageId}
+                        referenceType="comment"
+                        referenceId={comment.commentId}
+                        customReferenceType="reply"
+                      />
+                    );
+                    isDesktop
+                      ? openPopup({ view: 'desktop', children: reactionList })
+                      : setDrawerData({
+                          content: reactionList,
+                          snapPoints: [0.7, 1],
+                          activeSnapPoint: 0.7,
+                        });
+                  }}
+                />
+              </div>
+              <div className={styles.postReplyComment__secondRow}>
+                <div className={styles.postReplyComment__secondRow__leftPane}>
+                  <Typography.Caption className={styles.postReplyComment__secondRow__timestamp}>
+                    <Timestamp
                       pageId={pageId}
                       componentId={componentId}
-                      comment={comment}
-                      onCloseMenu={closePopover}
-                      handleEditComment={handleEditComment}
-                      handleDeleteComment={() => {
-                        closePopover();
-                        handleDeleteComment();
-                      }}
+                      timestamp={comment.createdAt}
                     />
+                    <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                      {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
+                        ' (edited)'}
+                    </span>
+                  </Typography.Caption>
+                  <ReactionButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    myReaction={reactionByMe}
+                    onReactionClick={handleReactionClick}
+                    buttonClassName={styles.postReplyComment__secondRow__like}
+                    isCommentReaction
+                    referenceType="comment"
+                    community={community}
+                  />
+                  {onClickReply && (
+                    <Button
+                      data-testid={`${pageId}/${componentId}/reply_button`}
+                      variant="default"
+                      onPress={handleReplyClick}
+                      className={styles.postReplyComment__secondRow__replyButton}
+                    >
+                      <Typography.CaptionBold className={styles.postReplyComment__secondRow__reply}>
+                        Reply
+                      </Typography.CaptionBold>
+                    </Button>
                   )}
-                </Popover>
+                  <Popover
+                    trigger={{
+                      pageId,
+                      componentId,
+                      onClick: () => setBottomSheetOpen(true),
+                      className: styles.postReplyComment__secondRow__actionButton,
+                      iconClassName: styles.postReplyComment__secondRow__actionButton__icon,
+                    }}
+                  >
+                    {({ closePopover }) => (
+                      <CommentOptions
+                        pageId={pageId}
+                        componentId={componentId}
+                        comment={comment}
+                        onCloseMenu={closePopover}
+                        handleEditComment={handleEditComment}
+                        handleDeleteComment={() => {
+                          closePopover();
+                          handleDeleteComment();
+                        }}
+                      />
+                    )}
+                  </Popover>
+                </div>
               </div>
+
+              {/* "View N replies" toggle — only shown on L1 bubbles (isL2=false) */}
+              {!isL2 && replyChildrenCount > 0 && !showL2Replies && !confirmedNoReplies && (
+                <Button
+                  variant="default"
+                  data-testid={`${pageId}/${componentId}/view_l2_reply_button`}
+                  className={styles.postReplyComment__viewReply_button}
+                  onPress={() => setShowL2Replies(true)}
+                >
+                  <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
+                    View {replyChildrenCount} {replyChildrenCount > 1 ? 'replies' : 'reply'}
+                  </Typography.CaptionBold>
+                </Button>
+              )}
             </div>
+
+            {/* L2 reply list: sibling of l1Content so trunk ::before stops at L1 height */}
+            {!isL2 &&
+              renderL2ReplyList?.({
+                showL2Replies,
+                pendingL2Comments,
+                hideL2Replies: () => {
+                  setShowL2Replies(false);
+                  setConfirmedNoReplies(true);
+                },
+              })}
           </div>
         </div>
       )}

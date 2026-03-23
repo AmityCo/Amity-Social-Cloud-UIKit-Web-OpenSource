@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -20,6 +20,7 @@ import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
 import usePost from '~/v4/core/hooks/objects/usePost';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 const LockSvg = () => {
   return (
@@ -45,6 +46,7 @@ interface CommentComposerProps {
   referenceId: string;
   referenceType: Amity.CommentReferenceType;
   replyTo?: Amity.Comment;
+  parentIdOverride?: string;
   onCancelReply: () => void;
   shouldAllowCreation?: boolean;
   community?: Amity.Community | null;
@@ -58,6 +60,7 @@ export const CommentComposer = ({
   referenceId,
   referenceType,
   replyTo,
+  parentIdOverride,
   onCancelReply,
   shouldAllowCreation = true,
   community,
@@ -67,6 +70,33 @@ export const CommentComposer = ({
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const isStoryPage = pageId === 'story_page';
+
+  // Pre-fill the editor with an @mention of the reply target only when replying to a nested
+  // comment (i.e. one that already has a parentId). Replies to top-level (L0) comments do not
+  // pre-fill a mention; self-replies are also excluded.
+  const shouldPreFillMention =
+    replyTo !== undefined && replyTo.userId !== userId && !!replyTo.parentId;
+  const mentionDisplayName = shouldPreFillMention ? replyTo?.creator?.displayName ?? null : null;
+
+  const initialCommentValue = useMemo<CreateCommentParams | undefined>(() => {
+    if (!mentionDisplayName || !replyTo) return undefined;
+    const text = `@${mentionDisplayName} `;
+    return {
+      data: { text },
+      metadata: {
+        mentioned: [
+          {
+            index: 0,
+            length: mentionDisplayName.length,
+            displayName: mentionDisplayName,
+            userId: replyTo.userId || '',
+            type: 'user',
+          },
+        ],
+      },
+      mentionees: [{ type: 'user' as const, userIds: [replyTo.userId || ''] }],
+    };
+  }, [replyTo?.commentId, mentionDisplayName, replyTo?.userId]);
   const { isDesktop } = useResponsive();
   const notification = useNotifications();
   const { online } = useNetworkState();
@@ -78,11 +108,18 @@ export const CommentComposer = ({
 
   const { post } = usePost(referenceId);
 
+  // When replyTo changes, pre-seed textValue so the Post button is immediately enabled.
   useEffect(() => {
+    if (initialCommentValue) {
+      setTextValue(initialCommentValue);
+    } else {
+      setTextValue({ data: { text: '' }, mentionees: [], metadata: {} });
+    }
+    // Focus the editor whenever a reply target is set.
     if (replyTo && editorRef.current) {
       editorRef.current?.focus();
     }
-  }, [replyTo]);
+  }, [replyTo?.commentId]);
 
   const [composerHeight, setComposerHeight] = useState(0);
 
@@ -101,36 +138,62 @@ export const CommentComposer = ({
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ params }: { params: CreateCommentParams }) => {
-      const parentId = replyTo ? replyTo.commentId : undefined;
+      // For L1 reply: parentIdOverride is undefined → use replyTo.commentId (the L1 id)
+      // For L2 reply: parentIdOverride = L1 ancestor id → use it so the new comment is always L2
+      const parentId = replyTo ? parentIdOverride ?? replyTo.commentId : undefined;
 
-      await CommentRepository.createComment({
+      const created = await CommentRepository.createComment({
         referenceId: replyTo ? replyTo.referenceId : referenceId,
         referenceType,
         parentId,
         ...params,
         mentionees: params.mentionees as Amity.UserMention[],
       });
+      return { created, parentId };
     },
     onError: (error) => {
       if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-        notification.info({
+        return notification.info({
           content: 'Your comment contains inappropriate word. Please review and delete it.',
         });
       } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-        notification.info({
+        return notification.info({
           content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
         });
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_POST) && post?.dataType === 'clip') {
-        notification.info({
+        return notification.info({
           content: 'This clip is no longer available.',
         });
+      } else if (error.message.includes(ERROR_RESPONSE.DELETED_COMMENT)) {
+        return notification.info({
+          content: 'This reply is no longer available.',
+        });
       } else {
-        notification.info({
+        return notification.info({
           content: 'Oops, something went wrong',
         });
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Notify ReplyCommentList so it can prepend the new comment optimistically
+      // before the live collection catches up.
+      if (data?.parentId && data?.created) {
+        document.dispatchEvent(
+          new CustomEvent(EVENT_LISTENER.REPLY_CREATED, {
+            detail: { parentId: data.parentId, comment: data.created.data as Amity.Comment },
+          }),
+        );
+      } else if (!data?.parentId && data?.created) {
+        // Notify CommentList so it can prepend the new L0 comment optimistically.
+        document.dispatchEvent(
+          new CustomEvent(EVENT_LISTENER.L0_COMMENT_CREATED, {
+            detail: {
+              referenceId: data.created.data.referenceId,
+              comment: data.created.data as Amity.Comment,
+            },
+          }),
+        );
+      }
       setTextValue({
         data: { text: '' },
         mentionees: [],
@@ -152,7 +215,11 @@ export const CommentComposer = ({
 
   return (
     <div
-      className={clsx(styles.commentComposer, commentComposerClassName)}
+      className={clsx(
+        styles.commentComposer,
+        isDesktop && replyTo && styles['commentComposer--desktopReply'],
+        commentComposerClassName,
+      )}
       data-testid={`${pageId}/${componentId}/comment_composer`}
     >
       {!online && isPending && page.type == PageTypes.ViewStoryPage && (
@@ -180,7 +247,7 @@ export const CommentComposer = ({
             >
               <span>Replying to </span>
               <span className={styles.commentComposer__replyContainer__username}>
-                {replyTo?.userId}
+                {replyTo?.creator?.displayName ?? replyTo?.userId}
               </span>
             </div>
             <Close
@@ -200,6 +267,9 @@ export const CommentComposer = ({
           data-testid={`${pageId}/${componentId}/comment_composer`}
         >
           <CommentInput
+            // Re-mount editor whenever the reply target changes so the initial
+            // @mention value is correctly applied from the start.
+            key={replyTo?.commentId ?? 'no-reply'}
             ref={editorRef}
             mentionContainer={mentionContainerRef?.current}
             onChange={({ text, mentioned, mentionees }) => {
@@ -223,7 +293,7 @@ export const CommentComposer = ({
             }}
             targetType={referenceType}
             targetId={referenceId}
-            value={textValue}
+            value={initialCommentValue}
             placehoder={
               replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
             }
@@ -237,9 +307,10 @@ export const CommentComposer = ({
           isDisabled={!textValue?.data?.text || isPending}
           className={styles.commentComposer__button}
           onPressStart={() => {
-            if (!online && page.type !== PageTypes.ViewStoryPage) {
+            if (!online) {
               notification.info({
-                content: 'Oops, something went wrong',
+                content: 'No internet connection.',
+                alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
               });
               return;
             }

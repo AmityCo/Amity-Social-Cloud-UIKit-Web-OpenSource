@@ -7,6 +7,7 @@ type useCommentsParams = {
   referenceId?: string | null;
   referenceType: Amity.CommentReferenceType;
   limit?: number;
+  sortBy?: 'lastCreated' | 'firstCreated';
   shouldCall?: boolean;
   includeDeleted?: boolean;
 };
@@ -16,6 +17,7 @@ export default function useCommentsCollection({
   referenceId,
   referenceType,
   limit = 10,
+  sortBy,
   shouldCall = true,
   includeDeleted = false,
 }: useCommentsParams) {
@@ -26,6 +28,7 @@ export default function useCommentsCollection({
       referenceId: referenceId as string,
       referenceType,
       limit,
+      sortBy,
       includeDeleted,
     },
     shouldCall: !!referenceId && !!referenceType && shouldCall,
@@ -42,6 +45,7 @@ export function useCommentsCollectionWithAds({
   referenceId,
   referenceType,
   limit = 10,
+  sortBy,
   shouldCall = true,
   includeDeleted = false,
 }: useCommentsParams) {
@@ -52,6 +56,7 @@ export function useCommentsCollectionWithAds({
       referenceId: referenceId as string,
       referenceType,
       limit,
+      sortBy,
       includeDeleted,
     },
     shouldCall: shouldCall && !!referenceId && !!referenceType,

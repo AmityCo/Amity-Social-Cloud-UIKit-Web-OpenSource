@@ -14,12 +14,17 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
 import Redo from '~/v4/icons/Redo';
 import clsx from 'clsx';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 type CommentListProps = {
   referenceId: string;
   referenceType: Amity.CommentReferenceType;
   pageId?: string;
-  onClickReply: (comment: Amity.Comment) => void;
+  onClickReply: (params: {
+    comment: Amity.Comment;
+    parentIdOverride?: string;
+    l0AncestorId?: string;
+  }) => void;
   limit?: number;
   includeDeleted?: boolean;
   community?: Amity.Community | null;
@@ -28,6 +33,10 @@ type CommentListProps = {
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
   highlightedCommentId?: string;
   parentId?: string;
+  /** Direct parent of the target comment from the notification (L1 ID for L2 notifications).
+   *  Forwarded to the pinned highlighted Comment so it can synchronously determine it is
+   *  an L2 target and pin the correct L1 reply at the top immediately. */
+  parantId?: string;
   commentListClassName?: string;
   showReplyCommentAt?: string;
   eventCreatorId?: Amity.Event['userId'];
@@ -50,6 +59,7 @@ export const CommentList = ({
   renderReplyComment,
   highlightedCommentId,
   parentId,
+  parantId,
   commentListClassName,
   showReplyCommentAt,
   eventCreatorId,
@@ -68,6 +78,7 @@ export const CommentList = ({
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
+  const [pendingL0Comments, setPendingL0Comments] = useState<Amity.Comment[]>([]);
 
   const { items, refresh, loadMore, hasMore, isLoading } = usePaginator({
     fetcher: CommentRepository.getComments,
@@ -83,6 +94,30 @@ export const CommentList = ({
     shouldCall: true,
   });
 
+  // Keep pending IDs pinned at top even after they land in the live collection
+  const pendingL0CommentIds = new Set(pendingL0Comments.map((c) => c.commentId));
+  // For each pending comment, prefer the live server version once it arrives (richer data)
+  const visiblePendingL0 = pendingL0Comments.map((c) => {
+    const serverVersion = items.find(
+      (item) => !isAmityAd(item) && (item as Amity.Comment).commentId === c.commentId,
+    ) as Amity.Comment | undefined;
+    return serverVersion ?? c;
+  });
+
+  // Prune pending comments once they've landed in the server collection so the
+  // array doesn't grow indefinitely and they stop being pinned at the top.
+  useEffect(() => {
+    if (pendingL0Comments.length === 0) return;
+    if (highlightedCommentId) return;
+    const serverIds = new Set(
+      items.filter((item) => !isAmityAd(item)).map((item) => (item as Amity.Comment).commentId),
+    );
+    const stillPending = pendingL0Comments.filter((c) => !serverIds.has(c.commentId));
+    if (stillPending.length !== pendingL0Comments.length) {
+      setPendingL0Comments(stillPending);
+    }
+  }, [items, highlightedCommentId]);
+
   // Find highlighted comment from items if highlightedCommentId is provided
   const highlightedComment = highlightedCommentId
     ? (items.find(
@@ -92,12 +127,13 @@ export const CommentList = ({
       ) as Amity.Comment | undefined)
     : undefined;
 
-  // Filter out highlighted comment from items to avoid duplication
+  // Filter out highlighted comment and pending L0 comments from items to avoid duplication
   const filteredItems = items.filter(
     (item) =>
       isAmityAd(item) ||
-      !highlightedCommentId ||
-      (item as Amity.Comment).commentId !== (parentId ? parentId : highlightedCommentId),
+      ((!highlightedCommentId ||
+        (item as Amity.Comment).commentId !== (parentId ? parentId : highlightedCommentId)) &&
+        !pendingL0CommentIds.has((item as Amity.Comment).commentId)),
   );
 
   useIntersectionObserver({
@@ -115,6 +151,20 @@ export const CommentList = ({
   useEffect(() => {
     refresh();
   }, []);
+
+  // Listen for newly created L0 comments and prepend them optimistically.
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<{ referenceId: string; comment: Amity.Comment }>).detail;
+      if (detail.referenceId !== referenceId) return;
+      setPendingL0Comments((prev) => {
+        if (prev.some((p) => p.commentId === detail.comment.commentId)) return prev;
+        return [detail.comment, ...prev];
+      });
+    };
+    document.addEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
+    return () => document.removeEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
+  }, [referenceId]);
 
   // Effect to scroll to highlighted comment with animation
   useEffect(() => {
@@ -135,12 +185,15 @@ export const CommentList = ({
       };
 
       // Add event listener for the custom scroll complete event
-      document.addEventListener('comment-scroll-complete', handleScrollComplete as EventListener);
+      document.addEventListener(
+        EVENT_LISTENER.SCROLL_COMPLETE,
+        handleScrollComplete as EventListener,
+      );
 
       // Clean up the event listener when component unmounts
       return () => {
         document.removeEventListener(
-          'comment-scroll-complete',
+          EVENT_LISTENER.SCROLL_COMPLETE,
           handleScrollComplete as EventListener,
         );
       };
@@ -156,7 +209,7 @@ export const CommentList = ({
     );
   }
 
-  if (!isLoading && items.length === 0) {
+  if (!isLoading && items.length === 0 && visiblePendingL0.length === 0) {
     return (
       <div className={styles.noCommentsContainer}>
         <Typography.Body>No comments yet</Typography.Body>
@@ -171,6 +224,23 @@ export const CommentList = ({
       ref={containerRef}
       data-testid={accessibilityId}
     >
+      {/* Optimistic pending L0 comments — prepended at top before the live collection catches up */}
+      {visiblePendingL0.map((comment, index) => (
+        <div key={`pending-l0-${comment.commentId}`}>
+          <Comment
+            pageId={pageId}
+            comment={comment}
+            isHost={eventCreatorId === comment.userId}
+            onClickReply={(params) => onClickReply?.(params)}
+            componentId={componentId}
+            community={community}
+            shouldAllowInteraction={shouldAllowInteraction}
+            testId={`pending-comment-${index}`}
+            renderReplyComment={renderReplyComment}
+          />
+        </div>
+      ))}
+
       {/* Render highlighted comment at the top if it exists */}
       {highlightedComment && (
         <div
@@ -181,16 +251,17 @@ export const CommentList = ({
             pageId={pageId}
             comment={highlightedComment}
             isHost={eventCreatorId === highlightedComment.userId}
-            onClickReply={(comment) => onClickReply?.(comment)}
+            onClickReply={(params) => onClickReply?.(params)}
             componentId={componentId}
             community={community}
             shouldAllowInteraction={shouldAllowInteraction}
             highlightedCommentId={highlightedCommentId}
             parentId={parentId}
+            parantId={parantId}
             showReply={highlightedComment.commentId === showReplyCommentAt}
             testId={`comment-highlighted`}
+            renderReplyComment={renderReplyComment}
           />
-          {renderReplyComment?.(highlightedComment)}
         </div>
       )}
 
@@ -204,14 +275,14 @@ export const CommentList = ({
               pageId={pageId}
               isHost={eventCreatorId === item.userId}
               comment={item as Amity.Comment}
-              onClickReply={(comment) => onClickReply?.(comment)}
+              onClickReply={(params) => onClickReply?.(params)}
               componentId={componentId}
               community={community}
               shouldAllowInteraction={shouldAllowInteraction}
               showReply={item.commentId === showReplyCommentAt}
               testId={`comment-${index}`}
+              renderReplyComment={renderReplyComment}
             />
-            {renderReplyComment?.(item as Amity.Comment)}
           </div>
         );
       })}
@@ -237,7 +308,7 @@ export const CommentList = ({
         )}
 
       {isLoading && (
-        <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={3} />
+        <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={1} />
       )}
 
       {(!isDesktop || (isDesktop && expanded)) && (
