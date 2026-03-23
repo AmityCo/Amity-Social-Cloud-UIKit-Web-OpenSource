@@ -39,6 +39,11 @@ const ChatFeed: FC<ChatFeedProps> = ({
     channelId: channel.channelId,
   });
 
+  const { isVisitorOrBot } = useSDK();
+  const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
+    channelId: channel.channelId,
+  });
+
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
       subChannelId: channel.channelId,

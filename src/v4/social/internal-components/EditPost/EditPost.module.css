@@ -32,10 +32,6 @@
   padding: 1rem 1.5rem;
 }
 
-.editPost__textEditor {
-  margin-bottom: 0.5rem;
-}
-
 .editPost__formContent .editPost__titleInput {
   width: 100%;
   border: none;
@@ -47,6 +43,10 @@
 .editPost__formContent .editPost__titleInput::placeholder {
   font-size: 1rem;
   font-weight: 600;
+}
+
+.editPost__textEditor {
+  margin-bottom: 0.5rem;
 }
 
 .editPost__input {
@@ -279,8 +279,8 @@
     background-color: var(--asc-color-background-default);
   }
 
-  .editPost__formContent .editPost__titleInput {
-    padding: 1rem 1.5rem 0;
+  .editPost__input {
+    padding: 1rem 1.5rem;
   }
 
   .editPost__mentionContainer {
