@@ -41,12 +41,12 @@
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "7.16.1-6ed8fdc.0",
+    "@amityco/ts-sdk": "7.16.1-7a22905.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "7.16.1-6ed8fdc.0",
+    "@amityco/ts-sdk": "7.16.1-7a22905.0",
     "@eslint/js": "^9.4.0",
     "@octokit/core": "^6.1.4",
     "@storybook/addon-a11y": "^7.6.7",

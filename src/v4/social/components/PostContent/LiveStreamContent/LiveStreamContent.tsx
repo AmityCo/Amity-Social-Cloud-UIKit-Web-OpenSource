@@ -74,6 +74,11 @@ export function LiveStreamContent({
   // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
   const isUserBanned = false;
 
+  const resolution =
+    room?.status === 'live' || room?.status === 'ended'
+      ? room?.liveResolution
+      : room?.recordedResolution;
+
   useRoomSubscription({ room });
 
   if (!roomId && !posts) return null;
@@ -86,7 +91,8 @@ export function LiveStreamContent({
 
   if (room.isDeleted) return <LiveStreamIdleThumbnail />;
 
-  if (room.status === liveStreamStatus.ended) return <LiveStreamEndThumbnail />;
+  if (room.status === liveStreamStatus.ended)
+    return <LiveStreamEndThumbnail resolution={resolution} />;
 
   if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
     return <LiveStreamTerminatedThumbnail />;
@@ -117,7 +123,14 @@ export function LiveStreamContent({
         }
       }}
     >
-      <LiveStreamThumbnail fileId={room.thumbnailFileId} alt={room.title} />
+      <LiveStreamThumbnail
+        fileId={room.thumbnailFileId}
+        alt={room.title}
+        status={room.status}
+        liveThumbnailUrl={room.liveThumbnailUrl}
+        recordedThumbnailUrl={room.recordedPlaybackInfos?.[0]?.thumbnailUrl}
+        resolution={resolution}
+      />
       {room.status === liveStreamStatus.idle && (
         <div className={styles.liveStreamContent__statusBadge}>
           <LiveStreamUpcomingBadge />
