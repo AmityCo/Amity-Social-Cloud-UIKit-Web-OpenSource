@@ -28,6 +28,7 @@ import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSe
 import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 
 type LiveStreamContentProps = {
+  pageId?: string;
   roomId?: string;
   className?: string;
   parentPost: Amity.Post;
@@ -41,6 +42,7 @@ type LiveStreamContentProps = {
 };
 
 export function LiveStreamContent({
+  pageId = '*',
   parentPost,
   posts,
   roomId,
@@ -53,6 +55,7 @@ export function LiveStreamContent({
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
   const { showProductTagList } = useShowProductTagList({
+    pageId,
     mode: 'livestream',
     sourceId: roomId ?? room?.roomId ?? '',
   });

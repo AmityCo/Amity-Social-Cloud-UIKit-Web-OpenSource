@@ -119,6 +119,8 @@ export function ProductTagList({
               isPinned={productTag.product?.productId === pinnedProductId}
               onClick={() => handleClickProductLink?.(productTag)}
               sourceId={sourceId}
+              pageId={pageId}
+              componentId={componentId}
               sourceType={
                 renderMode === ProductTagListRenderModeEnum.LIVESTREAM
                   ? AnalyticsSourceTypeEnum.ROOM

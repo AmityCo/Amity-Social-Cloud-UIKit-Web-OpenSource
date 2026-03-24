@@ -63,6 +63,7 @@ export const ChildrenPostContent = ({
         parentPostId={post.postId}
       />
       <LiveStreamContent
+        pageId={pageId}
         posts={post.childrenPosts as Amity.Post<'room'>[]}
         goToPostDetail={goToPostDetail}
         parentPost={post}
