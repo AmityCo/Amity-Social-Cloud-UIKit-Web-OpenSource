@@ -44,6 +44,7 @@ interface ReplyCommentProps {
    *  parent.  Used to condition thread-line masking for pending-only L2 lists. */
   hasViewRepliesBelow?: boolean;
   onEmpty?: () => void;
+  onHighlightedDeleted?: () => void;
 }
 
 export const ReplyCommentList = ({
@@ -65,6 +66,7 @@ export const ReplyCommentList = ({
   shouldFetch = true,
   hasViewRepliesBelow = false,
   onEmpty,
+  onHighlightedDeleted,
 }: ReplyCommentProps) => {
   // L2 notification: start collapsed — show only the pinned target, rest behind "View more replies".
   // L2 normal: start expanded (no highlight target).
@@ -78,7 +80,6 @@ export const ReplyCommentList = ({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const highlightedCommentRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const notification = useNotifications();
 
   const { comments, hasMore, isLoading, loadMore } = useCommentsCollection({
     referenceId,
@@ -90,6 +91,8 @@ export const ReplyCommentList = ({
     includeDeleted: false,
   });
 
+  const notification = useNotifications();
+
   const effectiveHighlightedCommentId = highlightedCommentId;
 
   // For L2 notification targets: fetch the target independently so it is always pinned at
@@ -98,12 +101,25 @@ export const ReplyCommentList = ({
   const [notificationTargetComment, setNotificationTargetComment] = useState<Amity.Comment | null>(
     null,
   );
+  // Ref to avoid stale closure in the async CommentRepository callback.
+  const onHighlightedDeletedRef = useRef(onHighlightedDeleted);
+  onHighlightedDeletedRef.current = onHighlightedDeleted;
+
   useEffect(() => {
     if (!isL2List || !highlightedCommentId) return;
     let unsubscribe: (() => void) | undefined;
     unsubscribe = CommentRepository.getComment(highlightedCommentId, (resp) => {
-      if (!resp.loading && resp.data) {
-        setNotificationTargetComment(resp.data as Amity.Comment);
+      if (!resp.loading) {
+        if (resp.data) {
+          const comment = resp.data as Amity.Comment;
+          setNotificationTargetComment(comment);
+          if (comment.isDeleted) {
+            onHighlightedDeletedRef.current?.();
+          }
+        } else {
+          // Comment not found — treat as deleted.
+          onHighlightedDeletedRef.current?.();
+        }
         unsubscribe?.();
         unsubscribe = undefined;
       }
@@ -127,9 +143,15 @@ export const ReplyCommentList = ({
 
   const highlightedCommentDeleted = highlightedComment.filter((comment) => comment.isDeleted);
 
+  // Notify parent when the L2 notification target turns out to be deleted.
+  useEffect(() => {
+    if (highlightedCommentDeleted.length > 0) {
+      onHighlightedDeletedRef.current?.();
+    }
+  }, [highlightedCommentDeleted.length]);
+
   // Tracks the latest comments array without closure staleness.
   const commentsRef = useRef(comments);
-
   // Active only when fetching. When shouldFetch transitions false→true the effect re-arms it.
   const pendingEmptyCheckRef = useRef(shouldFetch);
 
@@ -246,11 +268,18 @@ export const ReplyCommentList = ({
 
   // L1: register SCROLL_COMPLETE listener immediately on mount so it never misses the event,
   // regardless of whether comments have loaded yet.
+  const hasBouncedRef = useRef(false);
+
+  useEffect(() => {
+    hasBouncedRef.current = false;
+  }, [effectiveHighlightedCommentId]);
+
   useEffect(() => {
     if (isL2List || !parentId || !effectiveHighlightedCommentId) return;
 
     const handleScrollComplete = (e: CustomEvent) => {
-      if (e.detail.commentId === effectiveHighlightedCommentId) {
+      if (e.detail.commentId === effectiveHighlightedCommentId && !hasBouncedRef.current) {
+        hasBouncedRef.current = true;
         setIsHighlighted(true);
         timerRef.current = setTimeout(() => {
           setIsHighlighted(false);
@@ -272,6 +301,33 @@ export const ReplyCommentList = ({
       }
     };
   }, [isL2List, effectiveHighlightedCommentId, parentId]);
+
+  // L1 fallback: trigger bounce directly once the highlighted comment loads.
+  // Handles the case where SCROLL_COMPLETE was already dispatched before this list mounted
+  // (e.g. L0 parent was deleted and the reply list auto-expanded late).
+  // Skip when highlightedL2CommentId is set — the L1 is only pinned for context, not the target.
+  useEffect(() => {
+    if (
+      isL2List ||
+      !parentId ||
+      !effectiveHighlightedCommentId ||
+      highlightedComment.length === 0 ||
+      highlightedL2CommentId
+    )
+      return;
+
+    const fallback = setTimeout(() => {
+      if (!hasBouncedRef.current) {
+        hasBouncedRef.current = true;
+        setIsHighlighted(true);
+        timerRef.current = setTimeout(() => {
+          setIsHighlighted(false);
+        }, 3000);
+      }
+    }, 800);
+
+    return () => clearTimeout(fallback);
+  }, [isL2List, parentId, effectiveHighlightedCommentId, highlightedComment.length]);
 
   return (
     <div
@@ -298,7 +354,13 @@ export const ReplyCommentList = ({
             showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
             renderL2ReplyList={
               !isL2List
-                ? ({ showL2Replies, pendingL2Comments, hideL2Replies, hasViewRepliesBelow }) =>
+                ? ({
+                    showL2Replies,
+                    pendingL2Comments,
+                    hideL2Replies,
+                    onHighlightedDeleted: onHL2Deleted,
+                    hasViewRepliesBelow,
+                  }) =>
                     showL2Replies || pendingL2Comments.length > 0 ? (
                       <ReplyCommentList
                         pageId={pageId}
@@ -319,6 +381,7 @@ export const ReplyCommentList = ({
                         shouldFetch={showL2Replies}
                         hasViewRepliesBelow={hasViewRepliesBelow}
                         onEmpty={hideL2Replies}
+                        onHighlightedDeleted={onHL2Deleted}
                       />
                     ) : null
                 : undefined
@@ -373,7 +436,13 @@ export const ReplyCommentList = ({
               showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
               renderL2ReplyList={
                 !isL2List
-                  ? ({ showL2Replies, pendingL2Comments, hideL2Replies, hasViewRepliesBelow }) =>
+                  ? ({
+                      showL2Replies,
+                      pendingL2Comments,
+                      hideL2Replies,
+                      onHighlightedDeleted: onHL2Deleted,
+                      hasViewRepliesBelow,
+                    }) =>
                       showL2Replies || pendingL2Comments.length > 0 ? (
                         <ReplyCommentList
                           pageId={pageId}
@@ -395,6 +464,7 @@ export const ReplyCommentList = ({
                           shouldFetch={showL2Replies}
                           hasViewRepliesBelow={hasViewRepliesBelow}
                           onEmpty={hideL2Replies}
+                          onHighlightedDeleted={onHL2Deleted}
                         />
                       ) : null
                   : undefined
@@ -422,7 +492,13 @@ export const ReplyCommentList = ({
               showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
               renderL2ReplyList={
                 !isL2List
-                  ? ({ showL2Replies, pendingL2Comments, hideL2Replies, hasViewRepliesBelow }) =>
+                  ? ({
+                      showL2Replies,
+                      pendingL2Comments,
+                      hideL2Replies,
+                      onHighlightedDeleted: onHL2Deleted,
+                      hasViewRepliesBelow,
+                    }) =>
                       showL2Replies || pendingL2Comments.length > 0 ? (
                         <ReplyCommentList
                           pageId={pageId}
@@ -444,6 +520,7 @@ export const ReplyCommentList = ({
                           shouldFetch={showL2Replies}
                           hasViewRepliesBelow={hasViewRepliesBelow}
                           onEmpty={hideL2Replies}
+                          onHighlightedDeleted={onHL2Deleted}
                         />
                       ) : null
                   : undefined

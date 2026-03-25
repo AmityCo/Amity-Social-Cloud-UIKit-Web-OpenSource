@@ -166,12 +166,24 @@ export const CommentList = ({
     return () => document.removeEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
   }, [referenceId]);
 
+  // Track whether the L0 bounce has already fired to avoid double-bouncing.
+  const hasL0BouncedRef = useRef(false);
+
+  useEffect(() => {
+    hasL0BouncedRef.current = false;
+  }, [highlightedCommentId]);
+
   // Effect to scroll to highlighted comment with animation
   useEffect(() => {
     if (!parentId && highlightedComment && highlightedCommentRef.current) {
       // Create event listener for the scroll complete event
       const handleScrollComplete = (e: CustomEvent) => {
-        if (e.detail.commentId === highlightedComment.commentId && !showReplyCommentAt) {
+        if (
+          e.detail.commentId === highlightedComment.commentId &&
+          !showReplyCommentAt &&
+          !hasL0BouncedRef.current
+        ) {
+          hasL0BouncedRef.current = true;
           // Only start the bounce animation after the scroll is complete
           setIsHighlighted(true);
 
@@ -199,6 +211,23 @@ export const CommentList = ({
       };
     }
   }, [highlightedComment, highlightedCommentId, parentId, showReplyCommentAt]);
+
+  // L0 fallback: trigger bounce directly once the highlighted comment renders.
+  // Handles the case where SCROLL_COMPLETE was already dispatched before the comment
+  // data loaded and the listener was registered.
+  useEffect(() => {
+    if (!parentId && highlightedComment && highlightedCommentRef.current && !showReplyCommentAt) {
+      const fallback = setTimeout(() => {
+        if (!hasL0BouncedRef.current) {
+          hasL0BouncedRef.current = true;
+          setIsHighlighted(true);
+          setTimeout(() => setIsHighlighted(false), 1000);
+        }
+      }, 1200);
+
+      return () => clearTimeout(fallback);
+    }
+  }, [parentId, highlightedComment, showReplyCommentAt]);
 
   if (!online) {
     return (

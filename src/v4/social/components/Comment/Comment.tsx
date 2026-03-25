@@ -159,10 +159,17 @@ export const Comment = ({
   }, [comment.commentId]);
 
   // Bounce the L0 comment bubble when it is the direct notification target.
+  const hasL0CommentBouncedRef = useRef(false);
+
+  useEffect(() => {
+    hasL0CommentBouncedRef.current = false;
+  }, [highlightedCommentId]);
+
   useEffect(() => {
     if (!isHighlightedComment) return;
     const handleScrollComplete = (e: CustomEvent) => {
-      if (e.detail.commentId === comment.commentId) {
+      if (e.detail.commentId === comment.commentId && !hasL0CommentBouncedRef.current) {
+        hasL0CommentBouncedRef.current = true;
         setIsHighlighted(true);
         setTimeout(() => setIsHighlighted(false), 1000);
       }
@@ -176,6 +183,20 @@ export const Comment = ({
         EVENT_LISTENER.SCROLL_COMPLETE,
         handleScrollComplete as EventListener,
       );
+  }, [isHighlightedComment, comment.commentId]);
+
+  // L0 fallback: trigger bounce if SCROLL_COMPLETE was already dispatched before
+  // this Comment mounted (e.g. comment data loaded after the scroll completed).
+  useEffect(() => {
+    if (!isHighlightedComment) return;
+    const fallback = setTimeout(() => {
+      if (!hasL0CommentBouncedRef.current) {
+        hasL0CommentBouncedRef.current = true;
+        setIsHighlighted(true);
+        setTimeout(() => setIsHighlighted(false), 1000);
+      }
+    }, 3000);
+    return () => clearTimeout(fallback);
   }, [isHighlightedComment, comment.commentId]);
 
   useEffect(() => {
@@ -291,14 +312,14 @@ export const Comment = ({
       ? parantId ?? highlightedReplyComment?.parentId
       : undefined;
 
-  // When arriving from an L2 notification and the L0 ancestor is deleted, auto-expand
+  // When arriving from an L1/L2 notification and the L0 ancestor is deleted, auto-expand
   // the reply list so the pinned L1 (and its L2 target) are immediately visible without
   // requiring the user to manually tap "View replies".
   useEffect(() => {
-    if (comment.isDeleted && effectiveIsL2Target && replyAmount > 0) {
+    if (comment.isDeleted && (effectiveIsL2Target || isHighlightedReply) && replyAmount > 0) {
       setHasClickLoadMore(true);
     }
-  }, [comment.isDeleted, effectiveIsL2Target, replyAmount]);
+  }, [comment.isDeleted, effectiveIsL2Target, isHighlightedReply, replyAmount]);
 
   const replyComposer = renderReplyComment?.(comment);
 

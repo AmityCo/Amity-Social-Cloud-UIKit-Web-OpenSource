@@ -60,6 +60,7 @@ type ReplyCommentProps = {
     showL2Replies: boolean;
     pendingL2Comments: Amity.Comment[];
     hideL2Replies: () => void;
+    onHighlightedDeleted?: () => void;
     hasViewRepliesBelow?: boolean;
   }) => React.ReactNode;
   showReply?: boolean;
@@ -112,6 +113,8 @@ const PostReplyComment = ({
   const [confirmedNoReplies, setConfirmedNoReplies] = useState(false);
   // Pending L2 comments captured before the L2 ReplyCommentList is mounted (first reply case).
   const [pendingL2Comments, setPendingL2Comments] = useState<Amity.Comment[]>([]);
+  // Whether the highlighted L2 notification target is deleted (hides the trunk line).
+  const [isHighlightedL2Deleted, setIsHighlightedL2Deleted] = useState(false);
 
   const replyChildrenCount = comment.childrenNumber ?? 0;
 
@@ -119,8 +122,8 @@ const PostReplyComment = ({
     if (!isL2) setShowL2Replies(showReply);
   }, [showReply, isL2]);
 
-  // Stash the new L2 comment so it appears above the collapsed "View x replies" button
-  // without auto-expanding the full list.
+  // Stash the new L2 comment as a pending comment so it is visible above the collapsed
+  // "View x replies" button without auto-expanding the list.
   useEffect(() => {
     if (isL2) return; // this is already an L2 bubble — no L3 nesting
     const handler = (e: Event) => {
@@ -343,7 +346,7 @@ const PostReplyComment = ({
             {/* l1Content: scopes the trunk ::before to L1 height only */}
             <div
               className={styles.postReplyComment__l1Content}
-              data-show-l2={!isL2 && showL2Replies ? 'true' : 'false'}
+              data-show-l2={!isL2 && showL2Replies && !isHighlightedL2Deleted ? 'true' : 'false'}
               data-has-pending-l2={
                 !isL2 && !showL2Replies && pendingL2Comments.length > 0 ? 'true' : 'false'
               }
@@ -483,6 +486,7 @@ const PostReplyComment = ({
                     setShowL2Replies(false);
                     setConfirmedNoReplies(true);
                   },
+                  onHighlightedDeleted: () => setIsHighlightedL2Deleted(true),
                   hasViewRepliesBelow:
                     replyChildrenCount > 0 &&
                     replyChildrenCount - pendingL2Comments.length > 0 &&
@@ -521,6 +525,7 @@ const PostReplyComment = ({
                   setShowL2Replies(false);
                   setConfirmedNoReplies(true);
                 },
+                onHighlightedDeleted: () => setIsHighlightedL2Deleted(true),
               })}
           </div>
         </div>
