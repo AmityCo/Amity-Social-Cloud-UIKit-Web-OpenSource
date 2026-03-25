@@ -70,8 +70,7 @@ export function LiveStreamContent({
     },
   });
 
-  const canShowProductTags =
-    (subscribedPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
+  const canShowProductTags = (subscribedPost?.productTags?.length ?? 0) > 0;
 
   const myMembership = members.find((member) => member.userId === currentUserId);
   // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
