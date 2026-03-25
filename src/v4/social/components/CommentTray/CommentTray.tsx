@@ -13,6 +13,7 @@ type CommentTrayProps = {
   shouldAllowCreation?: boolean;
   shouldAllowInteraction?: boolean;
   referenceType: Amity.CommentReferenceType;
+  commentCount?: number;
 };
 
 export const CommentTray = ({
@@ -22,6 +23,7 @@ export const CommentTray = ({
   shouldAllowCreation = true,
   shouldAllowInteraction = true,
   community = {} as Amity.Community,
+  commentCount,
 }: CommentTrayProps) => {
   const componentId = 'comment_tray_component';
 
@@ -65,6 +67,7 @@ export const CommentTray = ({
           onClickReply={onClickReply}
           referenceType={referenceType}
           shouldAllowInteraction={shouldAllowInteraction}
+          commentCount={commentCount}
         />
       </div>
       {shouldAllowInteraction && !isVisitorOrBot && community.isJoined && (
@@ -76,8 +79,8 @@ export const CommentTray = ({
           replyTo={replyTo}
           parentIdOverride={replyParentIdOverride}
           shouldAllowCreation={shouldAllowCreation}
-          containerClassName={styles.commentTrayContainer__commentComposer}
           community={community}
+          commentComposerClassName={styles.commentTrayContainer__commentComposer}
         />
       )}
     </div>

@@ -230,6 +230,7 @@ export const renderer: CustomRenderer = ({
       referenceType="story"
       community={community as Amity.Community}
       shouldAllowCreation={community?.allowCommentInStory}
+      commentCount={commentsCount}
     />
   );
 
@@ -297,7 +298,9 @@ export const renderer: CustomRenderer = ({
         duration={5000}
         currentIndex={currentIndex}
         storiesCount={storiesCount}
-        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet || isConfirmDialogOpen}
+        isPaused={
+          isPaused || isOpenBottomSheet || isOpenCommentSheet || isConfirmDialogOpen || false
+        }
         onComplete={handleProgressComplete}
       />
       <Header

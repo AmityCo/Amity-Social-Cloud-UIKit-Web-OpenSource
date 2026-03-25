@@ -265,6 +265,7 @@ export const renderer: CustomRenderer = ({
       referenceType="story"
       community={community as Amity.Community}
       shouldAllowCreation={community?.allowCommentInStory}
+      commentCount={commentsCount}
     />
   );
 

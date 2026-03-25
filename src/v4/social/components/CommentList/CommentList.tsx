@@ -138,9 +138,6 @@ export const CommentList = ({
 
   useIntersectionObserver({
     node: intersectionNode,
-    options: {
-      threshold: 0.8,
-    },
     onIntersect: () => {
       if (hasMore && isLoading === false) {
         loadMore();
@@ -340,7 +337,7 @@ export const CommentList = ({
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={1} />
       )}
 
-      {(!isDesktop || (isDesktop && expanded)) && (
+      {(!isDesktop || (isDesktop && expanded)) && !isLoading && (
         <div
           ref={(node) => setIntersectionNode(node)}
           className={styles.commentList__container_intersection}
