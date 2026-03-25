@@ -110,15 +110,14 @@ export const CommentComposer = ({
 
   const { post } = usePost(referenceId);
 
-  // When replyTo changes, pre-seed textValue so the Post button is immediately enabled.
+  const [editorKey, setEditorKey] = useState('no-reply');
+
   useEffect(() => {
-    if (initialCommentValue) {
-      setTextValue(initialCommentValue);
-    } else {
-      setTextValue({ data: { text: '' }, mentionees: [], metadata: {} });
-    }
-    // Focus the editor whenever a reply target is set.
-    if (replyTo && editorRef.current) {
+    if (replyTo) {
+      setEditorKey(replyTo.commentId);
+      if (initialCommentValue) {
+        setTextValue(initialCommentValue);
+      }
       editorRef.current?.focus();
     }
   }, [replyTo?.commentId]);
@@ -273,9 +272,9 @@ export const CommentComposer = ({
           data-testid={`${pageId}/${componentId}/comment_composer`}
         >
           <CommentInput
-            // Re-mount editor whenever the reply target changes so the initial
-            // @mention value is correctly applied from the start.
-            key={replyTo?.commentId ?? 'no-reply'}
+            // Re-mount editor only when a new reply target is set (not on cancel)
+            // so the initial @mention value is correctly applied from the start.
+            key={editorKey}
             ref={editorRef}
             mentionContainer={mentionContainerRef?.current}
             onChange={({ text, mentioned, mentionees, links }) => {
