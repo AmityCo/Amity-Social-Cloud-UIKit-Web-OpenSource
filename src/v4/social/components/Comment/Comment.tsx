@@ -342,29 +342,6 @@ export const Comment = ({
                 </Typography.CaptionBold>
               </Button>
             )}
-            {hasClickLoadMore && replyAmount > 0 && (
-              <ReplyCommentList
-                pageId={pageId}
-                componentId={componentId}
-                community={community ?? undefined}
-                referenceId={comment.referenceId}
-                referenceType={comment.referenceType}
-                parentId={comment.commentId}
-                l0AncestorId={comment.commentId}
-                onClickReply={handleReplyClick}
-                highlightedCommentId={
-                  effectiveIsL2Target
-                    ? parantId // pin the L1 comment at the top
-                    : isHighlightedReply
-                      ? highlightedCommentId
-                      : undefined
-                }
-                showReplyCommentAt={effectiveShowReplyCommentAt}
-                highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
-                renderInlineComposer={replyComposer ? () => replyComposer : undefined}
-                initialPendingComments={pendingL1Comments}
-              />
-            )}
           </div>
         </div>
       ) : isEditing ? (
@@ -592,31 +569,28 @@ export const Comment = ({
                 </Typography.CaptionBold>
               </Button>
             )}
-
-            {showThread && (
-              <ReplyCommentList
-                pageId={pageId}
-                componentId={componentId}
-                community={community ?? undefined}
-                referenceId={comment.referenceId}
-                referenceType={comment.referenceType}
-                parentId={comment.commentId}
-                l0AncestorId={comment.commentId}
-                onClickReply={handleReplyClick}
-                highlightedCommentId={
-                  effectiveIsL2Target
-                    ? parantId // pin the L1 comment at the top
-                    : isHighlightedReply
-                      ? highlightedCommentId
-                      : undefined
-                }
-                showReplyCommentAt={effectiveShowReplyCommentAt}
-                highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
-                renderInlineComposer={replyComposer ? () => replyComposer : undefined}
-                initialPendingComments={pendingL1Comments}
-              />
-            )}
           </div>
+        </div>
+      )}
+      {(comment.isDeleted ? hasClickLoadMore && replyAmount > 0 : !isEditing && showThread) && (
+        <div className={styles.postComment__replyListWrapper}>
+          <ReplyCommentList
+            pageId={pageId}
+            componentId={componentId}
+            community={community ?? undefined}
+            referenceId={comment.referenceId}
+            referenceType={comment.referenceType}
+            parentId={comment.commentId}
+            l0AncestorId={comment.commentId}
+            onClickReply={handleReplyClick}
+            highlightedCommentId={
+              effectiveIsL2Target ? parantId : isHighlightedReply ? highlightedCommentId : undefined
+            }
+            showReplyCommentAt={effectiveShowReplyCommentAt}
+            highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
+            renderInlineComposer={replyComposer ? () => replyComposer : undefined}
+            initialPendingComments={pendingL1Comments}
+          />
         </div>
       )}
       {!isDesktop && !hideOptionButton && (

@@ -171,6 +171,10 @@
   color: var(--asc-color-base-shade1);
 }
 
+.postComment__replyListWrapper {
+  padding-left: 2.5rem;
+}
+
 .postComment__edit {
   display: flex;
   gap: 0.5rem;

@@ -121,6 +121,8 @@ export const ReplyCommentList = ({
   const commentsRef = useRef(comments);
   // Set to true from the start so the initial collection load is also checked.
   const pendingEmptyCheckRef = useRef(true);
+  // Tracks whether the collection has completed its first load.
+  const hasInitiallyLoadedRef = useRef(false);
   useEffect(() => {
     hasMoreRef.current = hasMore;
   }, [hasMore]);
@@ -135,6 +137,7 @@ export const ReplyCommentList = ({
   // when the user triggered the load and the result contains no replies.
   useEffect(() => {
     if (!isLoading) {
+      hasInitiallyLoadedRef.current = true;
       setIsLoadingMore(false);
       if (pendingEmptyCheckRef.current) {
         pendingEmptyCheckRef.current = false;
@@ -145,6 +148,16 @@ export const ReplyCommentList = ({
       }
     }
   }, [isLoading]);
+
+  // Collapse the thread when the live SDK collection becomes empty after a deletion.
+  // This covers the case where the deleted comment was already synced to the server
+  // collection and is removed asynchronously by the SDK after the delete call.
+  useEffect(() => {
+    if (!hasInitiallyLoadedRef.current) return;
+    if (comments.length === 0 && pendingComments.length === 0) {
+      onEmpty?.();
+    }
+  }, [comments.length, pendingComments.length]);
 
   const handleClickLoadMore = () => {
     pendingEmptyCheckRef.current = true;

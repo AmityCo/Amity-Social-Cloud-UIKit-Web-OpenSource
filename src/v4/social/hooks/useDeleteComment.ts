@@ -4,6 +4,7 @@ import { useNetworkState } from 'react-use';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 interface UseDeleteCommentParams {
   commentId: string | undefined;
@@ -39,7 +40,7 @@ export const useDeleteComment = ({ commentId, parentId, onSuccess }: UseDeleteCo
     onSuccess: () => {
       if (commentId) {
         document.dispatchEvent(
-          new CustomEvent('comment-deleted', { detail: { commentId, parentId } }),
+          new CustomEvent(EVENT_LISTENER.COMMENT_DELETED, { detail: { commentId, parentId } }),
         );
       }
       onSuccess?.();
