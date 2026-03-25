@@ -315,6 +315,14 @@ export const Comment = ({
 
   const showThread = isShowReplyList || !!showReply || !!replyComposer;
 
+  // Once the L1 thread is visible, persist the expanded state so it doesn't collapse
+  // when the reply composer closes after creating an L2 comment.
+  useEffect(() => {
+    if (showThread) {
+      setHasClickLoadMore(true);
+    }
+  }, [showThread]);
+
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
       {comment.isDeleted ? (

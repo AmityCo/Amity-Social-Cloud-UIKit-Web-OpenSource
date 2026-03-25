@@ -34,6 +34,24 @@
   z-index: 0;
 }
 
+/* Trunk for pending L2 inside l1Content — extends to container bottom.
+   When \"View x replies\" button follows, the line continues to it.
+   When no button follows, the ReplyCommentList masks the line below the last item's elbow. */
+.postReplyComment__l1Content[data-has-pending-l2='true']::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 2.5rem;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--asc-color-base-shade4);
+  z-index: 0;
+}
+
+.postReplyComment__l1Content[data-has-pending-l2='true'][data-show-view-replies='true']::before {
+  bottom: 1.5rem;
+}
+
 /* └ line from avatar centre down to the "View x replies" button */
 .postReplyComment__l1Content[data-show-view-replies='true']::after {
   content: '';

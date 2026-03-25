@@ -2,6 +2,20 @@
   gap: 0.5rem;
   display: grid;
   margin-top: 1rem;
+  position: relative;
+}
+
+/* Vertical trunk for pending-only L2 lists rendered inside l1Content.
+   Bridges upward through the list's margin into the L1 content area. */
+.replyCommentList[data-is-l2='true'][data-pending-only='true']::after {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: -1rem;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--asc-color-base-shade4);
+  z-index: 0;
 }
 
 .replyCommentList__item {
@@ -44,6 +58,21 @@
 .replyCommentList[data-is-l2='true']
   .replyCommentList__item:has(+ .replyCommentList__viewReplyItem)::before {
   display: none;
+}
+
+/* Mask the trunk below the last L2 item's connector elbow — only when
+   there is no "View x replies" button following the list.
+   When the button IS present, the parent l1Content handles a continuous line. */
+.replyCommentList[data-is-l2='true'][data-pending-only='true'][data-has-view-replies='false']
+  .replyCommentList__item:last-child::before {
+  content: '';
+  position: absolute;
+  left: calc(-1.5rem - 2px);
+  top: 0.875rem;
+  bottom: 0;
+  width: 6px;
+  background-color: var(--asc-color-background-default);
+  z-index: 1;
 }
 
 .postReplyCommentList__viewReply_button {

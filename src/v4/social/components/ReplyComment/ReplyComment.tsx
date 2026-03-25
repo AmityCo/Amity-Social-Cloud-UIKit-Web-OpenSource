@@ -60,6 +60,7 @@ type ReplyCommentProps = {
     showL2Replies: boolean;
     pendingL2Comments: Amity.Comment[];
     hideL2Replies: () => void;
+    hasViewRepliesBelow?: boolean;
   }) => React.ReactNode;
   showReply?: boolean;
   isHighlighted?: boolean;
@@ -118,14 +119,13 @@ const PostReplyComment = ({
     if (!isL2) setShowL2Replies(showReply);
   }, [showReply, isL2]);
 
-  // Auto-expand the L2 reply list when the first L2 reply is created under this L1 comment.
-  // ReplyCommentList may not be mounted yet, so listen here, expand, and stash the comment.
+  // Stash the new L2 comment so it appears above the collapsed "View x replies" button
+  // without auto-expanding the full list.
   useEffect(() => {
     if (isL2) return; // this is already an L2 bubble — no L3 nesting
     const handler = (e: Event) => {
       const detail = (e as CustomEvent<{ parentId: string; comment: Amity.Comment }>).detail;
       if (detail.parentId !== comment.commentId) return;
-      setShowL2Replies(true);
       setPendingL2Comments((prev) =>
         prev.some((p) => p.commentId === detail.comment.commentId)
           ? prev
@@ -344,8 +344,15 @@ const PostReplyComment = ({
             <div
               className={styles.postReplyComment__l1Content}
               data-show-l2={!isL2 && showL2Replies ? 'true' : 'false'}
+              data-has-pending-l2={
+                !isL2 && !showL2Replies && pendingL2Comments.length > 0 ? 'true' : 'false'
+              }
               data-show-view-replies={
-                !isL2 && replyChildrenCount > 0 && !showL2Replies && !confirmedNoReplies
+                !isL2 &&
+                replyChildrenCount > 0 &&
+                replyChildrenCount - pendingL2Comments.length > 0 &&
+                !showL2Replies &&
+                !confirmedNoReplies
                   ? 'true'
                   : 'false'
               }
@@ -466,23 +473,47 @@ const PostReplyComment = ({
                 </div>
               </div>
 
+              {/* Pending L2 comments — visible above "View x replies" */}
+              {!isL2 &&
+                !showL2Replies &&
+                renderL2ReplyList?.({
+                  showL2Replies: false,
+                  pendingL2Comments,
+                  hideL2Replies: () => {
+                    setShowL2Replies(false);
+                    setConfirmedNoReplies(true);
+                  },
+                  hasViewRepliesBelow:
+                    replyChildrenCount > 0 &&
+                    replyChildrenCount - pendingL2Comments.length > 0 &&
+                    !confirmedNoReplies,
+                })}
+
               {/* "View N replies" toggle — only shown on L1 bubbles (isL2=false) */}
-              {!isL2 && replyChildrenCount > 0 && !showL2Replies && !confirmedNoReplies && (
-                <Button
-                  variant="default"
-                  data-testid={`${pageId}/${componentId}/view_l2_reply_button`}
-                  className={styles.postReplyComment__viewReply_button}
-                  onPress={() => setShowL2Replies(true)}
-                >
-                  <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
-                    View {replyChildrenCount} {replyChildrenCount > 1 ? 'replies' : 'reply'}
-                  </Typography.CaptionBold>
-                </Button>
-              )}
+              {!isL2 &&
+                replyChildrenCount > 0 &&
+                replyChildrenCount - pendingL2Comments.length > 0 &&
+                !showL2Replies &&
+                !confirmedNoReplies && (
+                  <Button
+                    variant="default"
+                    data-testid={`${pageId}/${componentId}/view_l2_reply_button`}
+                    className={styles.postReplyComment__viewReply_button}
+                    onPress={() => setShowL2Replies(true)}
+                  >
+                    <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
+                      {(() => {
+                        const count = Math.max(0, replyChildrenCount - pendingL2Comments.length);
+                        return `View ${count} ${count > 1 ? 'replies' : 'reply'}`;
+                      })()}
+                    </Typography.CaptionBold>
+                  </Button>
+                )}
             </div>
 
-            {/* L2 reply list: sibling of l1Content so trunk ::before stops at L1 height */}
+            {/* L2 reply list (full, expanded): sibling of l1Content so trunk ::before stops at L1 height */}
             {!isL2 &&
+              showL2Replies &&
               renderL2ReplyList?.({
                 showL2Replies,
                 pendingL2Comments,

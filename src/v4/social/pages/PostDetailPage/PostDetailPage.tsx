@@ -84,7 +84,8 @@ export function PostDetailPage({
 
   const hasShownReplyNotificationRef = useRef(false);
 
-  const { AmityPostDetailPageBehavior } = usePageBehavior();
+  const COMMENT_LIST_LIMIT = 20;
+
   const { isDesktop } = useResponsive();
   const { onBack, prevPage } = useNavigation();
   const notification = useNotifications();
@@ -336,7 +337,7 @@ export function PostDetailPage({
               referenceType="post"
               onClickReply={handleReplyClick}
               community={community}
-              limit={20}
+              limit={COMMENT_LIST_LIMIT}
               commentCount={post.commentsCount}
               highlightedCommentId={commentId}
               parentId={effectiveParentId}

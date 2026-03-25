@@ -1,3 +1,4 @@
+import { CommentRepository } from '@amityco/ts-sdk';
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography } from '~/v4/core/components';
 import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
@@ -35,6 +36,13 @@ interface ReplyCommentProps {
   highlightedL2CommentId?: string;
   /** When true the L2 list sorts lastCreated and highlights the first (latest) comment. */
   highlightLatestL2?: boolean;
+  /** When false, only initialPendingComments are rendered and the server collection is not
+   *  fetched. Used to show newly created replies above a still-collapsed "View x replies"
+   *  button. Defaults to true. */
+  shouldFetch?: boolean;
+  /** When true, a "View x replies" button is rendered below this list by the
+   *  parent.  Used to condition thread-line masking for pending-only L2 lists. */
+  hasViewRepliesBelow?: boolean;
   onEmpty?: () => void;
 }
 
@@ -54,21 +62,20 @@ export const ReplyCommentList = ({
   showReplyCommentAt,
   highlightedL2CommentId,
   highlightLatestL2 = false,
+  shouldFetch = true,
+  hasViewRepliesBelow = false,
   onEmpty,
 }: ReplyCommentProps) => {
+  // L2 notification: start collapsed — show only the pinned target, rest behind "View more replies".
+  // L2 normal: start expanded (no highlight target).
+  // L1 notification (highlightedCommentId or highlightLatestL2): start collapsed.
+  // L1 normal: start expanded.
   const [showFilteredComments, setShowFilteredComments] = useState(
-    !highlightedCommentId && !highlightLatestL2,
+    isL2List ? !highlightedCommentId : !highlightedCommentId && !highlightLatestL2,
   );
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [pendingComments, setPendingComments] = useState<Amity.Comment[]>(initialPendingComments);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  // After user expands the L2 list, switch to firstCreated order
-  const [hasExpandedAll, setHasExpandedAll] = useState(false);
-  // Captures the full latest comment object so it stays pinned at top after expansion
-  // (the latest comment won't appear in the first page of a firstCreated-sorted collection)
-  const [pinnedLatestComment, setPinnedLatestComment] = useState<Amity.Comment | undefined>(
-    undefined,
-  );
   const highlightedCommentRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const notification = useNotifications();
@@ -78,32 +85,37 @@ export const ReplyCommentList = ({
     referenceType: referenceType as Amity.CommentReferenceType,
     parentId,
     limit: 5,
-    sortBy: isL2List
-      ? hasExpandedAll
-        ? 'firstCreated'
-        : 'lastCreated' // initial: lastCreated so recent target appears in first page
-      : 'lastCreated',
-    shouldCall: true,
+    sortBy: isL2List ? 'firstCreated' : 'lastCreated',
+    shouldCall: shouldFetch,
     includeDeleted: false,
   });
 
-  // When no specific L2 comment ID is provided, dynamically target the first (latest) comment.
-  // After expansion: use the captured full object so the pinned slot never depends on the
-  // re-fetched (firstCreated) collection containing the newest comment.
-  const effectiveHighlightedCommentId =
-    isL2List && highlightLatestL2
-      ? hasExpandedAll
-        ? pinnedLatestComment?.commentId
-        : comments.length > 0
-          ? comments[0].commentId
-          : undefined
-      : highlightedCommentId;
+  const effectiveHighlightedCommentId = highlightedCommentId;
 
-  // When expanded, derive highlightedComment from the captured pinned object so the slot
-  // always has data regardless of sort order or page position.
+  // For L2 notification targets: fetch the target independently so it is always pinned at
+  // the top regardless of its position in the firstCreated-sorted collection. Uses the same
+  // direct CommentRepository pattern as PostDetailPage — no extra hook needed.
+  const [notificationTargetComment, setNotificationTargetComment] = useState<Amity.Comment | null>(
+    null,
+  );
+  useEffect(() => {
+    if (!isL2List || !highlightedCommentId) return;
+    let unsubscribe: (() => void) | undefined;
+    unsubscribe = CommentRepository.getComment(highlightedCommentId, (resp) => {
+      if (!resp.loading && resp.data) {
+        setNotificationTargetComment(resp.data as Amity.Comment);
+        unsubscribe?.();
+        unsubscribe = undefined;
+      }
+    });
+    return () => unsubscribe?.();
+  }, [isL2List, highlightedCommentId]);
+
   const highlightedComment: Amity.Comment[] =
-    hasExpandedAll && pinnedLatestComment
-      ? [pinnedLatestComment]
+    isL2List && highlightedCommentId
+      ? notificationTargetComment
+        ? [notificationTargetComment]
+        : []
       : comments.filter((comment) => effectiveHighlightedCommentId === comment.commentId);
 
   const filteredComments = comments.filter(
@@ -115,23 +127,22 @@ export const ReplyCommentList = ({
 
   const highlightedCommentDeleted = highlightedComment.filter((comment) => comment.isDeleted);
 
-  const hasMoreRef = useRef(hasMore);
-  const loadMoreRef = useRef(loadMore);
   // Tracks the latest comments array without closure staleness.
   const commentsRef = useRef(comments);
-  // Set to true from the start so the initial collection load is also checked.
-  const pendingEmptyCheckRef = useRef(true);
+
+  // Active only when fetching. When shouldFetch transitions false→true the effect re-arms it.
+  const pendingEmptyCheckRef = useRef(shouldFetch);
+
   // Tracks whether the collection has completed its first load.
   const hasInitiallyLoadedRef = useRef(false);
-  useEffect(() => {
-    hasMoreRef.current = hasMore;
-  }, [hasMore]);
-  useEffect(() => {
-    loadMoreRef.current = loadMore;
-  }, [loadMore]);
+
   useEffect(() => {
     commentsRef.current = comments;
   }, [comments]);
+
+  useEffect(() => {
+    if (shouldFetch) pendingEmptyCheckRef.current = true;
+  }, [shouldFetch]);
 
   // Reset isLoadingMore once the collection finishes loading; also fire the empty-check
   // when the user triggered the load and the result contains no replies.
@@ -142,7 +153,9 @@ export const ReplyCommentList = ({
       if (pendingEmptyCheckRef.current) {
         pendingEmptyCheckRef.current = false;
         if (commentsRef.current.length === 0) {
-          notification.info({ content: 'This reply is no longer available.' });
+          if (effectiveHighlightedCommentId) {
+            notification.info({ content: 'This reply is no longer available.' });
+          }
           onEmpty?.();
         }
       }
@@ -161,32 +174,15 @@ export const ReplyCommentList = ({
 
   const handleClickLoadMore = () => {
     pendingEmptyCheckRef.current = true;
-    if (highlightLatestL2 && !hasExpandedAll) {
-      // Capture the full comment object before switching sort order so the pinned slot
-      // always has data regardless of what the re-fetched collection returns.
-      if (comments.length > 0) {
-        setPinnedLatestComment(comments[0] as Amity.Comment);
-      }
-      // Switch from lastCreated → firstCreated; the collection will re-fetch automatically.
-      setHasExpandedAll(true);
+    if (effectiveHighlightedCommentId && !showFilteredComments) {
+      // First expand: just reveal the already-fetched page of comments.
+      // The "View more replies" button will remain visible if hasMore is true,
+      // and subsequent clicks will each fetch the next 5.
       setShowFilteredComments(true);
-    } else if (effectiveHighlightedCommentId && !showFilteredComments) {
-      // Capture the specific target before switching sort so it stays pinned at top.
-      if (highlightedComment[0]) {
-        setPinnedLatestComment(highlightedComment[0] as Amity.Comment);
-      }
-      setHasExpandedAll(true); // switch to firstCreated
-      setShowFilteredComments(true);
-      if (hasMore) {
-        setIsLoadingMore(true);
-        loadMore();
-      }
     } else {
       setIsLoadingMore(true);
       loadMore();
     }
-
-    setPendingComments([]);
   };
 
   const pendingCommentIds = new Set(pendingComments.map((p) => p.commentId));
@@ -206,12 +202,8 @@ export const ReplyCommentList = ({
         // Prepend so newest-created appears at the top of the visible list.
         return [detail.comment, ...prev];
       });
-      // Auto-expand the reply list so the new comment is immediately visible
-      // alongside any existing replies (equivalent to the user tapping "View more replies").
-      setShowFilteredComments(true);
-      if (hasMoreRef.current) {
-        loadMoreRef.current();
-      }
+      // The new comment is shown via the pending slot above the list — do not
+      // auto-expand or load more so that any collapsed "View more replies" state is preserved.
     };
     document.addEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
     return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
@@ -282,19 +274,13 @@ export const ReplyCommentList = ({
   }, [isL2List, effectiveHighlightedCommentId, parentId]);
 
   return (
-    <div className={styles.replyCommentList} data-is-l2={isL2List ? 'true' : 'false'}>
-      {/* Skeleton at top only for initial load or new-comment loading, not for load-more */}
-      {isLoading &&
-        !isLoadingMore &&
-        (isL2List ? (
-          <div key="skeleton-top" className={styles.replyCommentList__item}>
-            <CommentSkeleton numberOfSkeletons={1} />
-          </div>
-        ) : (
-          <CommentSkeleton numberOfSkeletons={1} />
-        ))}
-
-      {/* Optimistic pending comments — prepended at top, disappear once live collection catches up */}
+    <div
+      className={styles.replyCommentList}
+      data-is-l2={isL2List ? 'true' : 'false'}
+      data-pending-only={isL2List && !shouldFetch ? 'true' : 'false'}
+      data-has-view-replies={isL2List && !shouldFetch && hasViewRepliesBelow ? 'true' : 'false'}
+    >
+      {/* Optimistic pending comments — always at top, disappear once live collection catches up */}
       {visiblePending.map((comment, index) => (
         <div
           key={`pending-${comment.commentId}`}
@@ -312,8 +298,8 @@ export const ReplyCommentList = ({
             showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
             renderL2ReplyList={
               !isL2List
-                ? ({ showL2Replies, pendingL2Comments, hideL2Replies }) =>
-                    showL2Replies ? (
+                ? ({ showL2Replies, pendingL2Comments, hideL2Replies, hasViewRepliesBelow }) =>
+                    showL2Replies || pendingL2Comments.length > 0 ? (
                       <ReplyCommentList
                         pageId={pageId}
                         community={community}
@@ -330,6 +316,8 @@ export const ReplyCommentList = ({
                             ? highlightedL2CommentId
                             : undefined
                         }
+                        shouldFetch={showL2Replies}
+                        hasViewRepliesBelow={hasViewRepliesBelow}
                         onEmpty={hideL2Replies}
                       />
                     ) : null
@@ -338,6 +326,18 @@ export const ReplyCommentList = ({
           />
         </div>
       ))}
+
+      {/* Skeleton after pending items — shows below newly created comments while server loads */}
+      {isLoading &&
+        shouldFetch &&
+        !isLoadingMore &&
+        (isL2List ? (
+          <div key="skeleton-top" className={styles.replyCommentList__item}>
+            <CommentSkeleton numberOfSkeletons={1} />
+          </div>
+        ) : (
+          <CommentSkeleton numberOfSkeletons={1} />
+        ))}
 
       {/* Display highlighted comment at the top. Always kept pinned when a notification
           target is present (highlightedCommentId set) so the L1 parent of an L2 notification
@@ -373,8 +373,8 @@ export const ReplyCommentList = ({
               showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
               renderL2ReplyList={
                 !isL2List
-                  ? ({ showL2Replies, pendingL2Comments, hideL2Replies }) =>
-                      showL2Replies ? (
+                  ? ({ showL2Replies, pendingL2Comments, hideL2Replies, hasViewRepliesBelow }) =>
+                      showL2Replies || pendingL2Comments.length > 0 ? (
                         <ReplyCommentList
                           pageId={pageId}
                           community={community}
@@ -392,6 +392,8 @@ export const ReplyCommentList = ({
                               ? highlightedL2CommentId
                               : undefined
                           }
+                          shouldFetch={showL2Replies}
+                          hasViewRepliesBelow={hasViewRepliesBelow}
                           onEmpty={hideL2Replies}
                         />
                       ) : null
@@ -420,8 +422,8 @@ export const ReplyCommentList = ({
               showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
               renderL2ReplyList={
                 !isL2List
-                  ? ({ showL2Replies, pendingL2Comments, hideL2Replies }) =>
-                      showL2Replies ? (
+                  ? ({ showL2Replies, pendingL2Comments, hideL2Replies, hasViewRepliesBelow }) =>
+                      showL2Replies || pendingL2Comments.length > 0 ? (
                         <ReplyCommentList
                           pageId={pageId}
                           community={community}
@@ -439,6 +441,8 @@ export const ReplyCommentList = ({
                               ? highlightedL2CommentId
                               : undefined
                           }
+                          shouldFetch={showL2Replies}
+                          hasViewRepliesBelow={hasViewRepliesBelow}
                           onEmpty={hideL2Replies}
                         />
                       ) : null
@@ -481,6 +485,7 @@ export const ReplyCommentList = ({
 
       {/* Skeleton below the button while loading more replies */}
       {isLoading &&
+        shouldFetch &&
         isLoadingMore &&
         (isL2List ? (
           <div key="skeleton-bottom" className={styles.replyCommentList__item}>
