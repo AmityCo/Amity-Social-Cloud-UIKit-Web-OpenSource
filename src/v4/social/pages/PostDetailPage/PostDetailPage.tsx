@@ -124,6 +124,7 @@ export function PostDetailPage({
     const isL2Notification = !!rootId && !!parentId && parentId !== rootId;
 
     const checkDeleted = (id: string): (() => void) | undefined => {
+      if (community && !community?.isPublic && !community?.isJoined) return;
       let unsubscribe: (() => void) | undefined;
       unsubscribe = CommentRepository.getComment(id, (resp) => {
         if (!resp.loading) {
