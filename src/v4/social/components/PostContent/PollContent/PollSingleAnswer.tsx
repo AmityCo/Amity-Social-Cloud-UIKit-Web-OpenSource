@@ -47,7 +47,7 @@ export const PollSingleAnswer: FC<PollSingleAnswerProps> = ({
         value: answer.id,
         label: isImagePoll ? (
           <ImagePollAnswer
-            fileId={answer.fileId}
+            imageFile={answer.image}
             label={answer.data}
             isOwner={isOwner}
             isDisabled={disabled}

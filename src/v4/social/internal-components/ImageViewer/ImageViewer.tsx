@@ -54,13 +54,13 @@ export function ImageViewer({
   const { goToPostDetailPage } = useNavigation();
   const { setLinkToPost } = useLayoutContext();
 
-  const isChildPost = post.children.length > 0;
+  const isParentPost = post.children.length > 0;
 
-  const imageFile = isChildPost
+  const imageFile = isParentPost
     ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
     : post?.getImageInfo();
 
-  const productTags = isChildPost
+  const productTags = isParentPost
     ? post.childrenPosts[selectedImageIndex]?.productTags
     : post.productTags;
 
@@ -80,8 +80,8 @@ export function ImageViewer({
     if (hasPrev) setSelectedImageIndex((prev) => prev - 1);
   };
 
-  const hasNext = selectedImageIndex < post?.children.length - 1;
-  const hasPrev = selectedImageIndex > 0;
+  const hasNext = isParentPost && selectedImageIndex < post?.children.length - 1;
+  const hasPrev = isParentPost && selectedImageIndex > 0;
 
   const { handleTouchEnd, handleTouchMove, handleTouchStart } = useSwiper({ next, prev });
 

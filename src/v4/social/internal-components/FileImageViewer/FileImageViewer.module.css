@@ -45,27 +45,27 @@
   display: flex;
 }
 
-.singleImageViewer__clearButton {
+.fileImageViewer__clearButton {
   fill: var(--asc-color-base-shade4);
   width: 2rem;
   height: 2rem;
   cursor: pointer;
 }
 
-.singleImageViewer__clearButton__img {
+.fileImageViewer__clearButton__img {
   width: 2rem;
   height: 2rem;
   cursor: pointer;
 }
 
-.singleImageViewer__brokenImage {
+.fileImageViewer__brokenImage {
   max-height: 30.1875rem;
   height: 100%;
   width: 100%;
   background-color: var(--asc-color-base-shade4);
 }
 
-.singleImageViewer__optionWrapper {
+.fileImageViewer__optionWrapper {
   width: 100%;
   padding: 1rem;
   display: flex;
@@ -75,19 +75,19 @@
   left: 0;
 }
 
-.singleImageViewer__menuButton,
-.singleImageViewer__menuButton:hover {
+.fileImageViewer__menuButton,
+.fileImageViewer__menuButton:hover {
   background-color: transparent;
 }
 
-.singleImageViewer__menuButton__icon {
+.fileImageViewer__menuButton__icon {
   width: 1.25rem;
   height: 1.25rem;
   fill: var(--asc-color-background-default);
 }
 
 @media only screen and (width >= 48em) {
-  .singleImageViewer__brokenImage {
+  .fileImageViewer__brokenImage {
     max-width: 37.5rem;
     max-height: 37.5rem;
     width: 100%;
