@@ -111,8 +111,6 @@ export function LiveStreamThumbnail({
     !userUploadedThumbnailUrl && status === 'recorded' ? recordedThumbnailUrl : null,
   );
 
-  const aspectRatio = getLivestreamAspectRatioString(resolution);
-
   // Priority: user uploaded > live thumbnail > recorded thumbnail > default
   const thumbnailSrc = hasError
     ? liveStreamDefaultThumbnail
@@ -120,6 +118,10 @@ export function LiveStreamThumbnail({
       authenticatedLiveThumbnail ||
       authenticatedRecordedThumbnail ||
       liveStreamDefaultThumbnail;
+
+  // Use 16:9 ratio (undefined) when showing default thumbnail, otherwise use dynamic resolution
+  const isDefaultThumbnail = thumbnailSrc === liveStreamDefaultThumbnail;
+  const aspectRatio = isDefaultThumbnail ? undefined : getLivestreamAspectRatioString(resolution);
 
   // Reset error state when thumbnail source changes
   useEffect(() => {

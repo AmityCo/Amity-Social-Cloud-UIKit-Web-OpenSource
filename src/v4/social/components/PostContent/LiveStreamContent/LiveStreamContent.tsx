@@ -74,8 +74,11 @@ export function LiveStreamContent({
   // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
   const isUserBanned = false;
 
-  const resolution =
-    room?.status === 'live' || room?.status === 'ended' || room?.status === 'terminated'
+  // If thumbnailFileId exists, use default 16:9 aspect ratio (undefined resolution)
+  // Otherwise, use dynamic resolution based on status
+  const resolution = room?.thumbnailFileId
+    ? undefined
+    : room?.status === 'live' || room?.status === 'ended' || room?.status === 'terminated'
       ? room?.liveResolution
       : room?.recordedResolution;
 
