@@ -118,7 +118,7 @@ export const ClipFeedMenu = ({
         <CommentButton
           pageId={pageId}
           componentId={componentId}
-          commentsCount={post?.commentsCount || 0}
+          commentsCount={post?.commentsCount}
           buttonClassName={styles.clipFeedMenu__commentButton}
           commentsCountClassName={styles.clipFeedMenu__commentsCount}
           defaultIconClassName={styles.clipFeedMenu__commentIcon}
