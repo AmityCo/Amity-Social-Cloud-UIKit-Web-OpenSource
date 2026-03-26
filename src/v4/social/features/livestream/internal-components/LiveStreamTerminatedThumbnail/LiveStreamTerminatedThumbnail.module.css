@@ -5,13 +5,13 @@
   margin: 0 -1rem;
   text-align: center;
   align-items: center;
-  aspect-ratio: 16 / 9;
   flex-direction: column;
   justify-content: center;
   object-position: center;
   width: calc(100% + 2rem);
   color: var(--asc-color-white);
   background-color: var(--asc-color-black);
+  padding: 0 3.5rem;
 }
 
 .liveStreamTerminatedThumbnail[data-view='full-screen'] {

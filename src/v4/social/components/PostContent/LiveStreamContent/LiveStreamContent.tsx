@@ -75,7 +75,7 @@ export function LiveStreamContent({
   const isUserBanned = false;
 
   const resolution =
-    room?.status === 'live' || room?.status === 'ended'
+    room?.status === 'live' || room?.status === 'ended' || room?.status === 'terminated'
       ? room?.liveResolution
       : room?.recordedResolution;
 
@@ -95,7 +95,7 @@ export function LiveStreamContent({
     return <LiveStreamEndThumbnail resolution={resolution} />;
 
   if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
-    return <LiveStreamTerminatedThumbnail />;
+    return <LiveStreamTerminatedThumbnail resolution={resolution} />;
 
   const renderProductTags = () => {
     if (!canShowProductTags) return null;

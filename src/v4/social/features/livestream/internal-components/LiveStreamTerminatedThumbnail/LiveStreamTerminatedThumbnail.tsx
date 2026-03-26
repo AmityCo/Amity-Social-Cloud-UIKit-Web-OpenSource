@@ -1,19 +1,32 @@
 import clsx from 'clsx';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
+import {
+  getLivestreamAspectRatioString,
+  LivestreamResolution,
+} from '~/v4/social/features/livestream/utils/getLivestreamAspectRatio';
 import styles from './LiveStreamTerminatedThumbnail.module.css';
 
 type LiveStreamTerminatedThumbnailProps = {
   className?: string;
   view?: 'post' | 'full-screen';
+  /** Resolution data for dynamic aspect ratio (from room.liveResolution) */
+  resolution?: LivestreamResolution;
 };
 
 export function LiveStreamTerminatedThumbnail({
   view = 'post',
   className,
+  resolution,
 }: LiveStreamTerminatedThumbnailProps) {
+  const aspectRatio = view === 'post' ? getLivestreamAspectRatioString(resolution) : undefined;
+
   return (
-    <div className={clsx(className, styles.liveStreamTerminatedThumbnail)} data-view={view}>
+    <div
+      className={clsx(className, styles.liveStreamTerminatedThumbnail)}
+      data-view={view}
+      style={aspectRatio ? { aspectRatio } : undefined}
+    >
       <Typography.TitleBold>The live stream has been terminated.</Typography.TitleBold>
       <Typography.Caption>
         It looks like the live stream you're watching goes against our content moderation
