@@ -506,10 +506,15 @@ const PostReplyComment = ({
                     onPress={() => setShowL2Replies(true)}
                   >
                     <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
-                      {(() => {
-                        const count = Math.max(0, replyChildrenCount - pendingL2Comments.length);
-                        return `View ${count} ${count > 1 ? 'replies' : 'reply'}`;
-                      })()}
+                      {pendingL2Comments.length > 0
+                        ? 'View more replies'
+                        : (() => {
+                            const count = Math.max(
+                              0,
+                              replyChildrenCount - pendingL2Comments.length,
+                            );
+                            return `View ${count} ${count > 1 ? 'replies' : 'reply'}`;
+                          })()}
                     </Typography.CaptionBold>
                   </Button>
                 )}
