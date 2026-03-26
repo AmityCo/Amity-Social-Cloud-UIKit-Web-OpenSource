@@ -56,6 +56,7 @@ import { PasteLimitPlugin } from '~/v4/social/internal-components/Lexical/plugin
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { FloatingLinkEditorPlugin } from '~/v4/social/internal-components/Lexical/plugins/FloatingLinkEditorPlugin';
+import { LinkValidationPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkValidationPlugin';
 
 // Content type enum
 export type EditorContentType = 'post' | 'comment' | 'message';
@@ -551,6 +552,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
               <FloatingLinkEditorPlugin enabled={enableFloatingLink} />
               <LinkPlugin />
               <AutoLinkPlugin />
+              <LinkValidationPlugin />
             </>
           )}
           {finalEnableHashtag && <HashtagPlugin maxHashtags={maxHashtags} />}

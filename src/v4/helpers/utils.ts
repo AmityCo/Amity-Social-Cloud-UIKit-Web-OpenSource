@@ -1,6 +1,7 @@
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import isEmpty from 'lodash/isEmpty';
 import ReactDOMServer from 'react-dom/server';
+import { URL_REGEX } from '~/v4/social/constants/post';
 
 export type Mentioned = {
   userId?: string;
@@ -227,14 +228,15 @@ export function sanitizeUrl(url: string): string {
   return url;
 }
 
-// Source: https://stackoverflow.com/a/8234912/2013580
-const urlRegExp = new RegExp(
-  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/,
-);
 export function validateUrl(url: string): boolean {
+  if (!url) return false;
   // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
   // Maybe show a dialog where they user can type the URL before inserting it.
-  return url === 'https://' || urlRegExp.test(url);
+  if (url === 'https://') return true;
+  // Use the same URL_REGEX as AutoLinkPlugin for consistency between typing and pasting.
+  // Must match the entire string (not just a substring) to reject invalid URLs like "http://example.com/path(1".
+  const fullMatchRegex = new RegExp(`^${URL_REGEX.source}$`);
+  return fullMatchRegex.test(url);
 }
 
 function fixSvgCaseIssues(svg: string): string {

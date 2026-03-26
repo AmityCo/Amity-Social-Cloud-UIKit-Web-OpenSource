@@ -64,10 +64,9 @@ export function CreatePost({
   const { currentUserId, client } = useSDK();
   const { user } = useUser({ userId: currentUserId });
   const { handleSubmit } = useForm();
-  const { info } = useConfirmContext();
+  const { info, confirm } = useConfirmContext();
   const notification = useNotifications();
   const { isDesktop } = useResponsive();
-  const { confirm } = useConfirmContext();
   const { onBack, prevPage, prev2Page } = useNavigation();
   const { AmityPostComposerPageBehavior } = usePageBehavior();
   const { themeStyles } = useAmityPage({ pageId });

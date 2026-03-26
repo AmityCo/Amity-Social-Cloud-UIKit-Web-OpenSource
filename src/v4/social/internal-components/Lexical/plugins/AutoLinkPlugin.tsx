@@ -3,6 +3,7 @@ import { URL_REGEX } from '~/v4/social/constants/post';
 
 const MATCHERS = [
   (text: string) => {
+    URL_REGEX.lastIndex = 0;
     const match = URL_REGEX.exec(text);
     if (!match) return null;
 

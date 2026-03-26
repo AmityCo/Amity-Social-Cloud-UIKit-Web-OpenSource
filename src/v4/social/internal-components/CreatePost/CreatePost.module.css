@@ -170,7 +170,7 @@
 .createPost_notificationIcon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-background-default);
+  color: var(--asc-color-background-default);
 }
 
 .createPost__attachmentDrawer__contentContainer {
