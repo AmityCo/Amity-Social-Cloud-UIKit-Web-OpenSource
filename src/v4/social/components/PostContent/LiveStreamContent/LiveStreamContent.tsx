@@ -52,8 +52,6 @@ export function LiveStreamContent({
   const { goToLiveStreamPlayerPage } = useNavigation();
   const { room } = useRoom(roomId ?? posts?.[0]?.getRoomInfo()?.roomId);
   const { post: subscribedPost } = usePostSubscription(parentPost?.childrenPosts[0]?.postId);
-
-  const { productCatalogueSettings } = useProductCatalogueSettings();
   const { showProductTagList } = useShowProductTagList({
     pageId,
     mode: 'livestream',
@@ -91,7 +89,7 @@ export function LiveStreamContent({
 
   if (isUserBanned) return <LiveStreamBanThumbnail />;
 
-  if (room.isDeleted) return <LiveStreamIdleThumbnail />;
+  if (room.isDeleted || room.status === liveStreamStatus.error) return <LiveStreamIdleThumbnail />;
 
   if (room.status === liveStreamStatus.ended)
     return <LiveStreamEndThumbnail resolution={resolution} />;
@@ -154,9 +152,6 @@ export function LiveStreamContent({
           {renderProductTags()}
         </>
       )}
-
-      {room.status === liveStreamStatus.error && renderProductTags()}
-
       {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />
       )}
