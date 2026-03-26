@@ -16,7 +16,7 @@ export const useSyncWatchingHeartbeat = ({
     return () => {
       if (roomId) RoomPresenceRepository.stopHeartbeat(roomId);
     };
-  }, [roomId]);
+  }, [roomId, enabled]);
 
   return null;
 };

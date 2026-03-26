@@ -219,7 +219,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   useSyncWatchingHeartbeat({
     roomId: room?.roomId,
-    enabled: room?.status !== 'recorded' && room?.status !== 'ended',
+    enabled: room?.status !== 'recorded' && room?.status !== 'ended' && uiState === 'player',
   });
 
   // Determine if current user is a viewer (not host or co-host)
