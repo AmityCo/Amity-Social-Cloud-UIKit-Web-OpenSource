@@ -14,6 +14,7 @@ type MediaMenuProps = {
   onEditAltTextPress?: () => void;
   file?: Amity.File<'image'>;
   onViewPostPress?: () => void;
+  onAltTextChange?: (file: Amity.File<'image'>, altText: string) => void;
 };
 
 export function MediaMenu({
@@ -22,6 +23,7 @@ export function MediaMenu({
   onViewPostPress,
   componentId = '*',
   onEditAltTextPress,
+  onAltTextChange,
 }: MediaMenuProps) {
   const { openPopup } = usePopupContext();
 
@@ -50,7 +52,10 @@ export function MediaMenu({
                 children: ({ close }) => {
                   return (
                     <AltTextConfig
-                      result={() => close()}
+                      result={(text: string) => {
+                        onAltTextChange?.(file, text);
+                        close();
+                      }}
                       mode={{
                         type: 'edit',
                         altText: file.altText || '',

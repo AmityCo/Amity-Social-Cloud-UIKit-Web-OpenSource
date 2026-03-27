@@ -6,7 +6,6 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
-import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { Typography } from '~/v4/core/components';
@@ -16,7 +15,6 @@ import { EditPostTitle } from '~/v4/social/elements/EditPostTitle';
 import FlagIcon from '~/v4/icons/Flag';
 import { TrashIcon } from '~/v4/icons/Trash';
 import styles from './PostMenu.module.css';
-import { CreatePost } from '~/v4/icons/CreatePost';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
 import UnFlag from '~/v4/icons/UnFlag';
 import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason/ContentReportReason';
@@ -112,7 +110,7 @@ export const PostMenu = ({
         };
       }
     }
-  }, [isCommunityModerator, isOwner, client, post, isSearchPost]);
+  }, [isCommunityModerator, isOwner, client, post, isSearchPost, community?.isJoined]);
 
   const showClosePollButton = useMemo(() => {
     if (poll && poll.status === 'open' && isOwner) return true;

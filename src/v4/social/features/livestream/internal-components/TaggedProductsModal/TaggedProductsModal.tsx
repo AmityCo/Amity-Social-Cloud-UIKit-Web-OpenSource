@@ -36,6 +36,7 @@ export interface TaggedProductsModalProps {
   isUnpinning?: boolean;
   onUpdateProductTags?: (tags: Amity.ProductTag[]) => void;
   onPinnedProductIdChange?: (pinnedProductId: string | undefined) => void;
+  canShowAddProducts?: boolean;
 }
 
 export function TaggedProductsModal({
@@ -51,6 +52,7 @@ export function TaggedProductsModal({
   isUnpinning = false,
   onUpdateProductTags,
   onPinnedProductIdChange,
+  canShowAddProducts = true,
 }: TaggedProductsModalProps) {
   const componentId = isHost ? COMPONENT_ID.MANAGE_PRODUCT_TAG_LIST : COMPONENT_ID.PRODUCT_TAG_LIST;
   const { accessibilityId, themeStyles } = useAmityComponent({
@@ -217,7 +219,7 @@ export function TaggedProductsModal({
       </div>
 
       {/* Footer - Only show "Add products" button for hosts */}
-      {isHost && totalCount > 0 && (
+      {isHost && totalCount > 0 && canShowAddProducts && (
         <>
           <Divider type={DividerType.FULL_WIDTH} />
           <div className={styles.taggedProductsModal__footer}>

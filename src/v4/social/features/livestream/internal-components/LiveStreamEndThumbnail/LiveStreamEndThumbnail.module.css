@@ -1,11 +1,9 @@
 .liveStreamEndThumbnail[data-view='post'] {
   gap: 0.25rem;
-  height: 100%;
   display: flex;
   margin: 0 -1rem;
   text-align: center;
   align-items: center;
-  aspect-ratio: 16 / 9;
   flex-direction: column;
   justify-content: center;
   object-position: center;

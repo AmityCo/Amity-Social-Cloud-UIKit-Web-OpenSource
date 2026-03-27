@@ -1,5 +1,11 @@
 export const isTextPost = (post?: Amity.Post | null): post is Amity.Post<'text'> => {
-  if (post && post.data && typeof post.data !== 'string' && 'text' in post.data) return true;
+  if (
+    post &&
+    post.data &&
+    typeof post.data !== 'string' &&
+    ('text' in post.data || 'title' in post.data)
+  )
+    return true;
   return false;
 };
 

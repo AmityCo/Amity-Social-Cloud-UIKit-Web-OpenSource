@@ -563,6 +563,25 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const hasMediaChange = files.length > 0 || posts.length !== localPost.length;
 
+  const hasLinkChanges = () => {
+    const originalLinks = post.links || [];
+    const currentLinks = textValue.links || [];
+
+    if (originalLinks.length !== currentLinks.length) {
+      return true;
+    }
+
+    return originalLinks.some((originalLink, index) => {
+      const currentLink = currentLinks[index];
+      return (
+        originalLink.url !== currentLink?.url ||
+        originalLink.renderPreview !== currentLink?.renderPreview ||
+        originalLink.index !== currentLink?.index ||
+        originalLink.length !== currentLink?.length
+      );
+    });
+  };
+
   // Check if product tags have changed
   const hasProductTagsChange = useMemo(() => {
     // Check text product tags
@@ -612,8 +631,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     isTextPost(post) &&
     post.data?.text === textValue.text &&
     post.data?.title === title &&
-    post.links?.[0]?.renderPreview === textValue.links?.[0]?.renderPreview &&
-    post.links?.[0]?.url === textValue.links?.[0]?.url &&
+    !hasLinkChanges() &&
     !hasMediaChange &&
     !hasProductTagsChange;
 
@@ -739,6 +757,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             <TextEditor
               pageId={pageId}
               editorContentType="post"
+              initialLinks={post.links}
+              enableFloatingLink={isDesktop}
               communityId={post.targetType === 'community' ? post.targetId : undefined}
               initialText={textValue.text}
               initialMentions={post.metadata?.mentioned}
@@ -769,7 +789,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                   url: url.url,
                   index: url.start,
                   length: url.end - url.start,
-                  renderPreview: true,
+                  renderPreview: url.renderPreview,
                 }));
                 setTextValue((prev) => ({ ...prev, links }));
               }}

@@ -265,6 +265,7 @@ export const renderer: CustomRenderer = ({
       referenceType="story"
       community={community as Amity.Community}
       shouldAllowCreation={community?.allowCommentInStory}
+      commentCount={commentsCount}
     />
   );
 
@@ -313,7 +314,7 @@ export const renderer: CustomRenderer = ({
     } else {
       openCommentSheet();
     }
-  }, [action]);
+  }, [isDesktop, storyId, pageId, community, commentsCount, action]);
 
   const onClickMenuButton = useCallback((openPopover) => {
     if (isDesktop) {

@@ -109,7 +109,7 @@ export const CommentOptions = ({
   const options = [
     canEdit
       ? {
-          name: 'Edit comment',
+          name: isReplyComment ? 'Edit reply' : 'Edit comment',
           action: handleEditComment,
           icon: <CreatePost className={styles.commentOptions__actionButton__icon} />,
           accessibilityId: 'edit_comment',
@@ -137,7 +137,7 @@ export const CommentOptions = ({
       : null,
     canDelete
       ? {
-          name: 'Delete comment',
+          name: isReplyComment ? 'Delete reply' : 'Delete comment',
           action: handleDeleteComment,
           icon: <TrashIcon className={styles.commentOptions__deleteButton__icon} />,
           accessibilityId: 'delete_comment',

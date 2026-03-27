@@ -26,12 +26,14 @@ import {
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { AutoLinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/AutoLinkPlugin';
 import { LinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkPlugin';
+import { FloatingLinkEditorPlugin } from '~/v4/social/internal-components/Lexical/plugins/FloatingLinkEditorPlugin';
 import { MentionPlugin } from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { MentionItem } from '~/v4/social/internal-components/Lexical/MentionItem';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 interface CommentInputProps {
   pageId?: string;
@@ -47,7 +49,12 @@ interface CommentInputProps {
   mentionContainerClassName?: string;
   shouldAutoFocus?: boolean;
   onFocus?: () => void;
-  onChange: (data: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => void;
+  onChange: (data: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    text: string;
+    links?: Amity.Link[];
+  }) => void;
 }
 
 export interface CommentInputRef {
@@ -156,6 +163,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
   ) => {
     const [intersectionNode, setIntersectionNode] = useState<HTMLElement | null>(null);
     const elementId = 'comment_input';
+    const { isDesktop } = useResponsive();
     const { themeStyles, uiReference, config, accessibilityId } = useAmityElement({
       pageId,
       componentId,
@@ -255,6 +263,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
           {shouldAutoFocus && <AutoFocusPlugin />}
           <LinkPlugin />
           <AutoLinkPlugin />
+          <FloatingLinkEditorPlugin enabled={isDesktop} />
           <EditorRefPlugin editorRef={editorRef} />
           <MentionPlugin<MentionData, MentionNode<MentionData>>
             suggestions={suggestions}

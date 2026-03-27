@@ -16,6 +16,7 @@ import { SerializedMentionNode } from './nodes/MentionNode';
 import { hashtagRegex, hashtagTextRegex } from '~/v4/social/utils/hashtagRegex';
 import { SerializedHashtagNode } from './nodes/HashtagNode';
 import { URL_REGEX } from '~/v4/social/constants/post';
+import { RangeSelection, ElementNode, TextNode } from 'lexical';
 import { ProductMentionData } from '~/v4/core/components/TextEditor/TextEditor';
 
 export interface EditorStateJson extends SerializedLexicalNode {
@@ -417,14 +418,22 @@ export function editorStateToText(editorState: SerializedEditorState) {
             .map((c) => c.text)
             .join('');
 
-          // Validate link against URL_REGEX pattern
+          // For embedded links, use the url property from the node
+          // For auto links, the linkText itself is the URL
+          const url = $isSerializedLinkNode(child) ? child.url : linkText;
+
           const urlRegex = new RegExp(URL_REGEX);
-          if (urlRegex.test(linkText)) {
+          if (url && urlRegex.test(url)) {
+            // Determine renderPreview based on whether text matches URL:
+            // - If linkText equals URL: it's an auto-detected link → renderPreview = true
+            // - If linkText is different from URL: it's an embedded link → renderPreview = false
+            const renderPreview = linkText === url;
+
             links.push({
               index: runningIndex,
               length: linkText.length,
-              url: linkText,
-              renderPreview: true,
+              url,
+              renderPreview,
             });
           }
 
@@ -533,3 +542,87 @@ export const getEditorConfig = ({
   nodes,
   editorState,
 });
+
+function $isAtNodeEnd(point: { offset: number; getNode: () => any }): boolean {
+  const node = point.getNode();
+  if (node.getTextContentSize) {
+    return point.offset === node.getTextContentSize();
+  }
+  return false;
+}
+
+export function getSelectedNode(selection: RangeSelection): TextNode | ElementNode {
+  const anchor = selection.anchor;
+  const focus = selection.focus;
+  const anchorNode = selection.anchor.getNode();
+  const focusNode = selection.focus.getNode();
+  if (anchorNode === focusNode) {
+    return anchorNode;
+  }
+  const isBackward = selection.isBackward();
+  if (isBackward) {
+    return $isAtNodeEnd(focus) ? anchorNode : focusNode;
+  } else {
+    return $isAtNodeEnd(anchor) ? anchorNode : focusNode;
+  }
+}
+
+const VERTICAL_GAP = 4;
+const HORIZONTAL_OFFSET = 21; // 1rem padding from parent container
+
+export function setFloatingElemPositionForLinkEditor(
+  targetRect: DOMRect | null,
+  floatingElem: HTMLElement,
+  containerElement?: HTMLElement | null,
+): void {
+  if (targetRect === null) {
+    floatingElem.style.opacity = '0';
+    floatingElem.style.transform = 'translate(-10000px, -10000px)';
+    return;
+  }
+
+  const floatingElemRect = floatingElem.getBoundingClientRect();
+
+  // Get container bounds (either specified container or viewport)
+  let containerRect: DOMRect;
+  if (containerElement) {
+    containerRect = containerElement.getBoundingClientRect();
+  } else {
+    containerRect = {
+      top: 0,
+      left: 0,
+      right: window.innerWidth,
+      bottom: window.innerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect;
+  }
+
+  // Always position above the selection
+  let top = targetRect.top - floatingElemRect.height - VERTICAL_GAP;
+
+  // Calculate horizontal position - try to center with the selection
+  let left = targetRect.left + targetRect.width / 2 - floatingElemRect.width / 2;
+
+  // Ensure it stays within container bounds
+  // First check right edge - if it would overflow, align to the right edge of container
+  if (left + floatingElemRect.width > containerRect.right - HORIZONTAL_OFFSET) {
+    left = containerRect.right - floatingElemRect.width - HORIZONTAL_OFFSET;
+  }
+
+  // Then check left edge - if it would go off the left, align to the left edge
+  if (left < containerRect.left + HORIZONTAL_OFFSET) {
+    left = containerRect.left + HORIZONTAL_OFFSET;
+  }
+
+  // Ensure it stays within container bottom bound
+  if (top + floatingElemRect.height > containerRect.bottom) {
+    top = containerRect.bottom - floatingElemRect.height - VERTICAL_GAP;
+  }
+
+  floatingElem.style.opacity = '1';
+  floatingElem.style.transform = `translate(${left}px, ${top}px)`;
+}

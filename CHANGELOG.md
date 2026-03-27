@@ -2,7 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## 4.10.0 (2025-07-11)
+## 4.15.0-beta.7 (2026-03-27)
+
+## 4.15.0-beta.7 (2026-03-27)
 
 ### Bug Fixes
 
@@ -20,7 +22,15 @@ All notable changes to this project will be documented in this file. See [standa
 
 - ASC-29944 - use theme configuration for all value ([#1065](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1065)) ([0442b92](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/0442b92fad976ceff6bceb2242f05e8c02c1f961))
 
-## 4.8.0 (2025-05-09)
+## 4.15.0-beta.5 (2026-03-20)
+
+## 4.15.0-beta.4 (2026-03-04)
+
+### Bug Fixes
+
+- add override onEmptyNavigationStack and default behavior when back to empty stack ([#1473](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1473)) ([90bb0f0](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/90bb0f0e4a77a828f38909496457de81d994b376))
+
+## 4.15.0-beta.3 (2026-02-13)
 
 ### Features
 
@@ -40,7 +50,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 - pnpm lock ([124bc9c](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/124bc9ca503a3f9b53f56788db5da09888204e29))
 
-* ASC-0000 - release as patch flag ([#1018](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1018)) ([57b98de](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/57b98de22c93f62dab19491d2d9b30a48f9b606e))
+- ASC-0000 - release as patch flag ([#1018](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1018)) ([57b98de](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/57b98de22c93f62dab19491d2d9b30a48f9b606e))
 
 ### 4.4.1 (2025-03-31)
 

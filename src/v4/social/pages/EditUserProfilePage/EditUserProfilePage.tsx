@@ -97,10 +97,16 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
         if (
           error.message === 'Amity SDK (400301): Only administrator can update user display name.'
         ) {
-          notification.error({ content: 'Only administrator can update user display name.' });
+          notification.info({ content: 'Only administrator can update user display name.' });
           return;
         }
-        notification.error({ content: 'Failed to save your profile. Please try again.' });
+        if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+          notification.info({
+            content: "Your profile wasn't updated as it contains an inappropriate word.",
+          });
+          return;
+        }
+        notification.info({ content: 'Failed to save your profile. Please try again.' });
       },
     });
 

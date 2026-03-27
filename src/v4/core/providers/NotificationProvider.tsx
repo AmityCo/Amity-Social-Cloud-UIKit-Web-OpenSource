@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 import CheckCircle from '~/v4/icons/CheckCircle';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
@@ -19,18 +19,21 @@ type NotificationInput = Notification & {
   alignment?: NotificationAlignment;
 };
 
+type NotificationFunction = {
+  remove: (id: Notification['id']) => void;
+  success: (data: Omit<NotificationInput, 'icon'>) => void;
+  info: (data: Omit<NotificationInput, 'icon'>) => void;
+  error: (data: Omit<NotificationInput, 'icon'>) => void;
+  show: (data: Omit<NotificationInput, 'icon'>) => void;
+  loading: (data: Omit<NotificationInput, 'icon'>) => void;
+};
+
 interface NotificationContextProps {
   notifications: Notification[];
-  notificationFunction: {
-    remove: (id: Notification['id']) => void;
-    success: (data: Omit<NotificationInput, 'icon'>) => void;
-    info: (data: Omit<NotificationInput, 'icon'>) => void;
-    error: (data: Omit<NotificationInput, 'icon'>) => void;
-    show: (data: Omit<NotificationInput, 'icon'>) => void;
-    loading: (data: Omit<NotificationInput, 'icon'>) => void;
-  };
+  notificationFunction: NotificationFunction;
 }
 
+// Keep the combined context exported for backward compatibility
 export const NotificationContext = createContext<NotificationContextProps>({
   notifications: [],
   notificationFunction: {
@@ -43,18 +46,39 @@ export const NotificationContext = createContext<NotificationContextProps>({
   },
 });
 
+const defaultNotificationFunction: NotificationFunction = {
+  remove: () => {},
+  success: () => {},
+  info: () => {},
+  error: () => {},
+  show: () => {},
+  loading: () => {},
+};
+
+// Separate context for notification data (only consumed by NotificationsContainer)
+const NotificationDataContext = createContext<Notification[]>([]);
+
+// Separate context for notification functions (consumed by all other components).
+// This context value is stable and does not change when notifications are added/removed,
+// preventing unnecessary re-renders of consumers like GlobalFeedStory.
+const NotificationFunctionContext = createContext<NotificationFunction>(
+  defaultNotificationFunction,
+);
+
 const DEFAULT_NOTIFICATION_DURATION = 3000;
 
 export const NotificationProvider: React.FC = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const removeNotification = (id: Notification['id']) =>
-    setNotifications &&
-    setNotifications((prevNotifications) =>
-      prevNotifications.filter((notification) => notification.id !== id),
-    );
+  const removeNotification = useCallback(
+    (id: Notification['id']) =>
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter((notification) => notification.id !== id),
+      ),
+    [],
+  );
 
-  const addNotifications = (data: NotificationInput) => {
+  const addNotifications = useCallback((data: NotificationInput) => {
     const id = Date.now();
     setNotifications((prevNotifications) => [
       ...prevNotifications,
@@ -65,55 +89,55 @@ export const NotificationProvider: React.FC = ({ children }) => {
     ]);
 
     setTimeout(() => {
-      removeNotification(id);
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
     }, data?.duration || DEFAULT_NOTIFICATION_DURATION);
-  };
+  }, []);
+
+  const notificationFunction = useMemo<NotificationFunction>(
+    () => ({
+      remove: removeNotification,
+      success: (data: Omit<NotificationInput, 'icon'>) =>
+        addNotifications({
+          ...data,
+          icon: <CheckCircle className={styles.icon} />,
+          alignment: data.alignment,
+        }),
+      info: (data: Omit<NotificationInput, 'icon'>) =>
+        addNotifications({
+          ...data,
+          icon: <ExclamationCircle className={styles.icon} />,
+          alignment: data.alignment,
+        }),
+      error: (data: Omit<NotificationInput, 'icon'>) =>
+        addNotifications({
+          ...data,
+          icon: <Remove className={styles.icon} />,
+          alignment: data.alignment,
+        }),
+      loading: (data: Omit<NotificationInput, 'icon'>) =>
+        addNotifications({
+          ...data,
+          icon: <Spinner className={styles.icon} />,
+          alignment: data.alignment,
+        }),
+      show: (data: Omit<NotificationInput, 'icon'>) => addNotifications(data),
+    }),
+    [removeNotification, addNotifications],
+  );
 
   return (
-    <NotificationContext.Provider
-      value={{
-        notifications,
-        notificationFunction: {
-          remove: removeNotification,
-          success: (data: Omit<NotificationInput, 'icon'>) =>
-            addNotifications({
-              ...data,
-              icon: <CheckCircle className={styles.icon} />,
-              alignment: data.alignment,
-            }),
-          info: (data: Omit<NotificationInput, 'icon'>) =>
-            addNotifications({
-              ...data,
-              icon: <ExclamationCircle className={styles.icon} />,
-              alignment: data.alignment,
-            }),
-          error: (data: Omit<NotificationInput, 'icon'>) =>
-            addNotifications({
-              ...data,
-              icon: <Remove className={styles.icon} />,
-              alignment: data.alignment,
-            }),
-          loading: (data: Omit<NotificationInput, 'icon'>) =>
-            addNotifications({
-              ...data,
-              icon: <Spinner className={styles.icon} />,
-              alignment: data.alignment,
-            }),
-          show: (data: Omit<NotificationInput, 'icon'>) => addNotifications(data),
-        },
-      }}
-    >
-      {children}
-    </NotificationContext.Provider>
+    <NotificationDataContext.Provider value={notifications}>
+      <NotificationFunctionContext.Provider value={notificationFunction}>
+        {children}
+      </NotificationFunctionContext.Provider>
+    </NotificationDataContext.Provider>
   );
 };
 
 export const useNotificationData = () => {
-  const { notifications } = useContext(NotificationContext);
-  return notifications;
+  return useContext(NotificationDataContext);
 };
 
 export const useNotifications = () => {
-  const { notificationFunction } = useContext(NotificationContext);
-  return notificationFunction;
+  return useContext(NotificationFunctionContext);
 };

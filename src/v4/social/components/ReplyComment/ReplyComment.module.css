@@ -14,7 +14,57 @@
 .postReplyComment__details {
   display: flex;
   flex-direction: column;
+}
+
+.postReplyComment__l1Content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   gap: 0.25rem;
+}
+
+.postReplyComment__l1Content[data-show-l2='true']::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 2.5rem;
+  bottom: -1rem;
+  width: 2px;
+  background-color: var(--asc-color-base-shade4);
+  z-index: 0;
+}
+
+/* Trunk for pending L2 inside l1Content — extends to container bottom.
+   When \"View x replies\" button follows, the line continues to it.
+   When no button follows, the ReplyCommentList masks the line below the last item's elbow. */
+.postReplyComment__l1Content[data-has-pending-l2='true']::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 2.5rem;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--asc-color-base-shade4);
+  z-index: 0;
+}
+
+.postReplyComment__l1Content[data-has-pending-l2='true'][data-show-view-replies='true']::before {
+  bottom: 1.5rem;
+}
+
+/* └ line from avatar centre down to the "View x replies" button */
+.postReplyComment__l1Content[data-show-view-replies='true']::after {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 2.5rem;
+  bottom: 0.75rem;
+  width: 1.25rem;
+  border-left: 2px solid var(--asc-color-base-shade4);
+  border-bottom: 2px solid var(--asc-color-base-shade4);
+  border-radius: 0 0 0 0.5rem;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .postReplyComment__content {
@@ -28,6 +78,21 @@
   border-radius: 0 0.75rem 0.75rem;
   padding: 0.75rem;
   max-width: max-content;
+}
+
+.postReplyComment__contentHighlighted {
+  animation: highlight-reply 3s ease forwards;
+}
+
+@keyframes highlight-reply {
+  0%,
+  70% {
+    background-color: var(--asc-color-primary-shade2);
+  }
+
+  100% {
+    background-color: var(--asc-color-base-shade4);
+  }
 }
 
 .postReplyComment__content[data-has-reaction='true'] {
@@ -78,6 +143,15 @@
   color: var(--asc-color-base-shade2);
 }
 
+.postReplyComment__secondRow__replyButton {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
 .postReplyComment__secondRow__actionButton {
   width: 1.25rem;
   height: 1.25rem;
@@ -90,24 +164,16 @@
 
 .postReplyComment__viewReply_button {
   display: flex;
-  padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
+  padding: 0.25rem 0;
   cursor: pointer;
-  align-items: flex-start;
-  gap: 0.25rem;
-  background: var(--asc-color-background-default);
-  border: 1px solid var(--asc-color-base-shade4);
-  border-radius: 0.25rem;
+  align-items: center;
+  background: none;
+  border: none;
   width: max-content;
 }
 
-.postReplyComment__viewReply_icon {
-  color: var(--asc-color-secondary-shade1);
-  width: 1rem;
-  height: 1rem;
-}
-
 .postReplyComment__viewReply_text {
-  color: var(--asc-color-secondary-shade1);
+  color: var(--asc-color-base-shade1);
 }
 
 .postReplyComment__actionButton {

@@ -125,6 +125,7 @@ type Page =
         category?: AmityPostCategory;
         commentId?: string;
         parentId?: string;
+        rootId?: string;
         posts?: Amity.Post<'clip' | 'video'>[];
         selectedReplyComment?: Amity.Comment;
         showReplyCommentAt?: string;
@@ -575,9 +576,18 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
-    goToPostDetailPage: ({ postId, hideTarget, category, commentId, parentId, posts, keyword }) =>
+    goToPostDetailPage: ({
+      postId,
+      hideTarget,
+      category,
+      commentId,
+      parentId,
+      posts,
+      keyword,
+      rootId,
+    }) =>
       console.log(
-        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId} ${posts} ${keyword})`,
+        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId} ${posts} ${keyword} ${rootId})`,
       ),
     goToCommunityProfilePage: (communityId, page) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId} ${page})`),

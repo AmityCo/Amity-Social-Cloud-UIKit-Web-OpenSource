@@ -64,10 +64,9 @@ export function CreatePost({
   const { currentUserId, client } = useSDK();
   const { user } = useUser({ userId: currentUserId });
   const { handleSubmit } = useForm();
-  const { info } = useConfirmContext();
+  const { info, confirm } = useConfirmContext();
   const notification = useNotifications();
   const { isDesktop } = useResponsive();
-  const { confirm } = useConfirmContext();
   const { onBack, prevPage, prev2Page } = useNavigation();
   const { AmityPostComposerPageBehavior } = usePageBehavior();
   const { themeStyles } = useAmityPage({ pageId });
@@ -566,6 +565,7 @@ export function CreatePost({
               pageId={pageId}
               editorContentType="post"
               communityId={targetId}
+              enableFloatingLink={isDesktop}
               initialText={textValue.text}
               enableProductMention={true}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
@@ -593,8 +593,7 @@ export function CreatePost({
                   url: url.url,
                   index: url.start,
                   length: url.end - url.start,
-                  // TODO: check if this field is required from FE
-                  renderPreview: true,
+                  renderPreview: url.renderPreview,
                 }));
                 setTextValue((prev) => ({ ...prev, links }));
               }}

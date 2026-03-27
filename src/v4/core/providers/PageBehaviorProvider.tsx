@@ -12,6 +12,7 @@ import { type GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface PageBehavior {
   AmityStoryViewPageBehavior?: {
@@ -234,6 +235,7 @@ export interface PageBehavior {
     goToUserProfilePage?(context: { userId: string }): void;
     goToEventDetailPage?(context: EventDetailProps): void;
     goToLivestreamPlayerPage?(context: LiveStreamPlayerPageProps): void;
+    goToEditProfilePage?(): void;
   };
   AmityDraftClipPageBehavior?: {
     goToPostComposerPage?(context: {
@@ -314,6 +316,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
   children,
   pageBehavior = {},
 }) => {
+  const { currentUserId } = useSDK();
   const {
     page,
     onBack,
@@ -927,6 +930,13 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage(context);
 
         goToLiveStreamPlayerPage?.(context);
+      },
+      goToEditProfilePage: () => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEditProfilePage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToEditProfilePage();
+        }
+
+        if (currentUserId) goToEditUserPage(currentUserId);
       },
     },
     AmityDraftClipPageBehavior: {

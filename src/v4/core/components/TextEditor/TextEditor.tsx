@@ -55,6 +55,8 @@ import { COMPONENT_ID } from '~/v4/constants/customization';
 import { PasteLimitPlugin } from '~/v4/social/internal-components/Lexical/plugins/PasteLimitPlugin';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
+import { FloatingLinkEditorPlugin } from '~/v4/social/internal-components/Lexical/plugins/FloatingLinkEditorPlugin';
+import { LinkValidationPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkValidationPlugin';
 
 // Content type enum
 export type EditorContentType = 'post' | 'comment' | 'message';
@@ -69,6 +71,7 @@ export interface UrlHighlight {
   url: string;
   start: number;
   end: number;
+  renderPreview: boolean; // Can be a boolean or the UrlHighlight itself for more complex handling
 }
 
 export interface TextEditorProps {
@@ -102,6 +105,8 @@ export interface TextEditorProps {
   autoFocus?: boolean;
   initialText?: string;
   initialMentions?: Mentioned[];
+  enableFloatingLink?: boolean;
+  initialLinks?: Amity.Link[];
 
   // Callbacks
   onTextChanged?: (text: string) => void;
@@ -174,6 +179,8 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       className,
       placeholderClassName,
       displayMode,
+      enableFloatingLink,
+      initialLinks,
     },
     ref,
   ) => {
@@ -191,7 +198,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       mentioned: initialMentions || [],
       mentionees: [],
       hashtags: initialHashtags || [],
-      links: [],
+      links: initialLinks || [],
     });
 
     const prevHashtagCountsRef = useRef<Map<string, number>>(new Map());
@@ -312,6 +319,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
               mentioned: initialMentions,
               hashtags: initialHashtags,
             },
+            links: initialLinks || [],
             mentionees: [],
             productTags: initialProductMentions,
           }),
@@ -447,6 +455,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
               url: link.url,
               start: link.index ?? 0,
               end: (link.index ?? 0) + (link.length ?? 0),
+              renderPreview: link.renderPreview ?? false,
             })) || []
           : [];
       },
@@ -528,6 +537,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
                   url: link.url,
                   start: link.index ?? 0,
                   end: (link.index ?? 0) + (link.length ?? 0),
+                  renderPreview: link.renderPreview,
                 }));
                 onUrlsDetected?.(urls);
               }
@@ -539,8 +549,10 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
           {autoFocus && <AutoFocusPlugin />}
           {finalEnableUrlDetection && (
             <>
+              <FloatingLinkEditorPlugin enabled={enableFloatingLink} />
               <LinkPlugin />
               <AutoLinkPlugin />
+              <LinkValidationPlugin />
             </>
           )}
           {finalEnableHashtag && <HashtagPlugin maxHashtags={maxHashtags} />}

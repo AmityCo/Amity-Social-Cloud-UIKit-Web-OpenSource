@@ -12,6 +12,7 @@ import styles from './UserAvatar.module.css';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { useMemo } from 'react';
 import { FileRepository } from '@amityco/ts-sdk';
+import UserFilled from '~/v4/icons/UserFilled';
 
 type UserAvatarProps = {
   pageId?: string;
@@ -21,6 +22,7 @@ type UserAvatarProps = {
   isShowModeratorBadge?: boolean;
   imageContainerClassName?: string;
   textPlaceholderClassName?: string;
+  defaultAvatarIconClassName?: string;
   shouldRedirectToUserProfile?: boolean;
   onPressAvatar?: () => void;
   userData?: Amity.User;
@@ -34,6 +36,7 @@ export function UserAvatar({
   imageContainerClassName,
   isShowModeratorBadge = false,
   textPlaceholderClassName = '',
+  defaultAvatarIconClassName = '',
   shouldRedirectToUserProfile = false,
   onPressAvatar,
   userData,
@@ -55,6 +58,17 @@ export function UserAvatar({
   const displayName =
     userData?.displayName || userData?.userId || user?.displayName || user?.userId || '';
   const firstChar = displayName?.trim().charAt(0).toUpperCase();
+
+  if (!userId && !userData) {
+    return (
+      <div
+        data-testid={`${accessibilityId}-default`}
+        className={clsx(styles.userAvatar__placeholder, className)}
+      >
+        <UserFilled className={clsx(styles.userAvatar__defaultIcon, defaultAvatarIconClassName)} />
+      </div>
+    );
+  }
 
   if (isLoading && !userData)
     return <div className={clsx(styles.userAvatar__skeleton, className)} />;
