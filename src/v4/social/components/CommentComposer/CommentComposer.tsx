@@ -169,8 +169,11 @@ export const CommentComposer = ({
           content: 'This clip is no longer available.',
         });
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_COMMENT)) {
+        const isL0Comment = replyTo && !replyTo.parentId;
         return notification.info({
-          content: 'This reply is no longer available.',
+          content: isL0Comment
+            ? 'This comment is no longer available.'
+            : 'This reply is no longer available.',
         });
       } else {
         return notification.info({

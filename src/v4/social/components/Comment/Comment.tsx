@@ -334,7 +334,7 @@ export const Comment = ({
     (!isHighlightedReply || (isHighlightedComment && !hasClickLoadMore));
 
   const isShowReplyList =
-    (hasClickLoadMore && replyAmount > 0 && !parentId) ||
+    (hasClickLoadMore && !parentId) ||
     (isHighlightedReply && replyAmount > 0) ||
     highlightedReplyComment?.isDeleted;
 
@@ -605,7 +605,7 @@ export const Comment = ({
           </div>
         </div>
       )}
-      {(comment.isDeleted ? hasClickLoadMore && replyAmount > 0 : !isEditing && showThread) && (
+      {(comment.isDeleted ? hasClickLoadMore : !isEditing && showThread) && (
         <div className={styles.postComment__replyListWrapper}>
           <ReplyCommentList
             pageId={pageId}
@@ -624,6 +624,7 @@ export const Comment = ({
             renderInlineComposer={replyComposer ? () => replyComposer : undefined}
             inlineComposerAfterCommentId={replyTargetCommentId}
             initialPendingComments={pendingL1Comments}
+            onEmpty={() => setHasClickLoadMore(false)}
           />
         </div>
       )}

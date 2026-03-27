@@ -123,7 +123,7 @@ export function PostDetailPage({
 
     const isL2Notification = !!rootId && !!parentId && parentId !== rootId;
 
-    const checkDeleted = (id: string): (() => void) | undefined => {
+    const checkDeleted = (id: string, message: string): (() => void) | undefined => {
       if (community && !community?.isPublic && !community?.isJoined) return;
       let unsubscribe: (() => void) | undefined;
       unsubscribe = CommentRepository.getComment(id, (resp) => {
@@ -134,7 +134,7 @@ export function PostDetailPage({
           if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
             hasShownReplyNotificationRef.current = true;
             notification.info({
-              content: 'This reply is no longer available.',
+              content: message,
               alignment: 'withSidebar',
             });
           }
@@ -143,8 +143,15 @@ export function PostDetailPage({
       return () => unsubscribe?.();
     };
 
-    const cleanupComment = checkDeleted(commentId);
-    const cleanupParent = isL2Notification ? checkDeleted(parentId) : undefined;
+    const isL0Comment = !parentId;
+    const commentMessage = isL0Comment
+      ? 'This comment is no longer available.'
+      : 'This reply is no longer available.';
+
+    const cleanupComment = checkDeleted(commentId, commentMessage);
+    const cleanupParent = isL2Notification
+      ? checkDeleted(parentId, 'This reply is no longer available.')
+      : undefined;
 
     return () => {
       cleanupComment?.();
