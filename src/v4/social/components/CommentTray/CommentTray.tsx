@@ -4,6 +4,7 @@ import { CommentList } from '~/v4/social/components/CommentList';
 import { CommentComposer } from '~/v4/social/components/CommentComposer';
 import styles from './CommentTray.module.css';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type CommentTrayProps = {
   pageId?: string;
@@ -26,6 +27,7 @@ export const CommentTray = ({
 }: CommentTrayProps) => {
   const componentId = 'comment_tray_component';
 
+  const { isDesktop } = useResponsive();
   const { isVisitorOrBot } = useSDK();
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
   const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
@@ -74,9 +76,10 @@ export const CommentTray = ({
           shouldAllowInteraction={shouldAllowInteraction}
           commentCount={commentCount}
           replyTargetCommentId={
-            replyL0AncestorId ? replyParentIdOverride ?? replyTo?.commentId : undefined
+            isDesktop && replyL0AncestorId ? replyParentIdOverride ?? replyTo?.commentId : undefined
           }
           renderReplyComment={(comment) => {
+            if (!isDesktop) return undefined;
             const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
             if (replyTo && comment.commentId === effectiveL0Id && canShowComposer) {
               const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
@@ -98,12 +101,14 @@ export const CommentTray = ({
           }}
         />
       </div>
-      {canShowComposer && !replyTo && (
+      {canShowComposer && (!replyTo || !isDesktop) && (
         <CommentComposer
           pageId={pageId}
           referenceId={referenceId}
           onCancelReply={onCancelReply}
           referenceType={referenceType}
+          replyTo={isDesktop ? undefined : replyTo}
+          parentIdOverride={isDesktop ? undefined : replyParentIdOverride}
           shouldAllowCreation={shouldAllowCreation}
           community={community}
           commentComposerClassName={styles.commentTrayContainer__commentComposer}

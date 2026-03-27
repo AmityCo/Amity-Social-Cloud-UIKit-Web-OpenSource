@@ -114,3 +114,29 @@
   width: 1.5rem;
   height: 1.25rem;
 }
+
+.commentComposer__inlineError {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--asc-spacing-m1) var(--asc-spacing-s1);
+  pointer-events: none;
+}
+
+.commentComposer__inlineErrorNotification {
+  width: 100%;
+  pointer-events: auto;
+  animation-duration: 0.3s;
+  animation-name: inline-error-appear;
+}
+
+@keyframes inline-error-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

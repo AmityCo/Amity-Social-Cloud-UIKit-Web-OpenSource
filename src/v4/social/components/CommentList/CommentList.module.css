@@ -26,9 +26,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
   gap: 1rem;
   color: var(--asc-color-base-shade2);
+  height: 60vh;
 }
 
 .noCommentsContainer__icon {

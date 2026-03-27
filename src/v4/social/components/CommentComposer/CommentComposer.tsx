@@ -54,6 +54,7 @@ interface CommentComposerProps {
   containerClassName?: string;
   commentComposerClassName?: string;
   isFromCommentClick?: boolean;
+  externalError?: string | null;
 }
 
 export const CommentComposer = ({
@@ -68,6 +69,7 @@ export const CommentComposer = ({
   containerClassName,
   commentComposerClassName,
   isFromCommentClick = false,
+  externalError,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const isStoryPage = pageId === 'story_page';
@@ -111,6 +113,20 @@ export const CommentComposer = ({
   const { post } = usePost(referenceId);
 
   const [editorKey, setEditorKey] = useState('no-reply');
+  const [inlineError, setInlineError] = useState<string | null>(null);
+  const inlineErrorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showInlineError = (message: string) => {
+    if (inlineErrorTimerRef.current) clearTimeout(inlineErrorTimerRef.current);
+    setInlineError(message);
+    inlineErrorTimerRef.current = setTimeout(() => setInlineError(null), 3000);
+  };
+
+  useEffect(() => {
+    if (externalError && !isDesktop) {
+      showInlineError(externalError);
+    }
+  }, [externalError]);
 
   useEffect(() => {
     if (replyTo) {
@@ -156,29 +172,25 @@ export const CommentComposer = ({
       return { created, parentId };
     },
     onError: (error) => {
+      let message = 'Oops, something went wrong';
       if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-        return notification.info({
-          content: 'Your comment contains inappropriate word. Please review and delete it.',
-        });
+        message = 'Your comment contains inappropriate word. Please review and delete it.';
       } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-        return notification.info({
-          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
-        });
+        message =
+          'Your comment contains a link that\u2019s not allowed. Please review and delete it.';
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_POST) && post?.dataType === 'clip') {
-        return notification.info({
-          content: 'This clip is no longer available.',
-        });
+        message = 'This clip is no longer available.';
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_COMMENT)) {
         const isL0Comment = replyTo && !replyTo.parentId;
-        return notification.info({
-          content: isL0Comment
-            ? 'This comment is no longer available.'
-            : 'This reply is no longer available.',
-        });
+        message = isL0Comment
+          ? 'This comment is no longer available.'
+          : 'This reply is no longer available.';
+      }
+
+      if (!isDesktop) {
+        showInlineError(message);
       } else {
-        return notification.info({
-          content: 'Oops, something went wrong',
-        });
+        notification.info({ content: message });
       }
     },
     onSuccess: (data) => {
@@ -239,6 +251,15 @@ export const CommentComposer = ({
         />
       )}
       <div className={styles.commentComposer__top}>
+        {!isDesktop && inlineError && (
+          <div className={styles.commentComposer__inlineError}>
+            <Notification
+              icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}
+              content={inlineError}
+              className={styles.commentComposer__inlineErrorNotification}
+            />
+          </div>
+        )}
         <div className={styles.commentComposer__mentionContainer} ref={mentionContainerRef} />
         {replyTo && (!isDesktop || isStoryPage) && (
           <div
@@ -317,10 +338,14 @@ export const CommentComposer = ({
           className={styles.commentComposer__button}
           onPressStart={() => {
             if (!online) {
-              notification.info({
-                content: 'No internet connection.',
-                alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
-              });
+              if (!isDesktop) {
+                showInlineError('No internet connection.');
+              } else {
+                notification.info({
+                  content: 'No internet connection.',
+                  alignment: 'withSidebar',
+                });
+              }
               return;
             }
             mutateAsync({ params: textValue });

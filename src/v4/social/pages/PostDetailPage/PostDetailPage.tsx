@@ -69,6 +69,7 @@ export function PostDetailPage({
   const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
   const [replyL0AncestorId, setReplyL0AncestorId] = useState<string | undefined>(undefined);
   const [failedToShow, setFailedToShow] = useState(false);
+  const [deletedReplyError, setDeletedReplyError] = useState<string | null>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
   const hasScrolledRef = useRef(false);
 
@@ -133,10 +134,14 @@ export function PostDetailPage({
           const target = resp.data as Amity.Comment | null;
           if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
             hasShownReplyNotificationRef.current = true;
-            notification.info({
-              content: message,
-              alignment: 'withSidebar',
-            });
+            if (!isDesktop) {
+              setDeletedReplyError('This reply is no longer available.');
+            } else {
+              notification.info({
+                content: message,
+                alignment: 'withSidebar',
+              });
+            }
           }
         }
       });
@@ -402,6 +407,7 @@ export function PostDetailPage({
           isFromCommentClick={isFromCommentClick}
           replyTo={replyComment}
           parentIdOverride={replyParentIdOverride}
+          externalError={deletedReplyError}
         />
       )}
     </div>
