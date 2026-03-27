@@ -35,7 +35,7 @@ interface CommentButtonProps {
 export function CommentButton({
   pageId = '*',
   componentId = '*',
-  commentsCount,
+  commentsCount = 0,
   buttonClassName,
   defaultIconClassName,
   imgIconClassName,
@@ -61,7 +61,7 @@ export function CommentButton({
               data-testid={`${pageId}/${componentId}/comment_count`}
               className={clsx(styles.commentButton__text, commentsCountClassName)}
             >
-              {config.text}
+              {commentsCount}
             </Typography.BodyBold>
           </div>
         )}

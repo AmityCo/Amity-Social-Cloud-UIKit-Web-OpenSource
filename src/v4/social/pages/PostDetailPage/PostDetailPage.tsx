@@ -21,14 +21,17 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
-import { PostStructureType } from '@amityco/ts-sdk';
+import { CommentRepository, PostStructureType } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 export interface PostDetailPageProps {
   id: string;
   hideTarget?: boolean;
   category?: AmityPostCategory;
   commentId?: string;
+  rootId?: string;
   parentId?: string;
   posts?: Amity.Post<'clip' | 'video'>[];
   selectedReplyComment?: Amity.Comment;
@@ -47,6 +50,7 @@ export function PostDetailPage({
   hideTarget,
   category,
   commentId,
+  rootId,
   parentId,
   posts = [],
   selectedReplyComment,
@@ -61,13 +65,30 @@ export function PostDetailPage({
   const { isVisitorOrBot } = useSDK();
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
+  const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
+  const [replyL0AncestorId, setReplyL0AncestorId] = useState<string | undefined>(undefined);
   const [failedToShow, setFailedToShow] = useState(false);
+  const [deletedReplyError, setDeletedReplyError] = useState<string | null>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
-  const hasScrolledRef = useRef(false); // Track if we've already scrolled to this commentId
+  const hasScrolledRef = useRef(false);
 
-  const { AmityPostDetailPageBehavior } = usePageBehavior();
+  // Compute synchronously so CommentList gets the correct parentId on the very first render,
+  // before the scroll/bounce timers fire.
+  const effectiveParentId = !commentId
+    ? undefined
+    : !parentId
+      ? undefined // lv0: top-level comment
+      : rootId && parentId !== rootId
+        ? rootId // lv2: reply-to-reply — anchor to L0
+        : parentId; // lv1 (or fallback when no rootId): direct reply to L0
+
+  const hasShownReplyNotificationRef = useRef(false);
+
+  const COMMENT_LIST_LIMIT = 20;
+
   const { isDesktop } = useResponsive();
   const { onBack, prevPage } = useNavigation();
+  const notification = useNotifications();
   const { themeStyles } = useAmityPage({ pageId });
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -82,27 +103,74 @@ export function PostDetailPage({
 
   useEffect(() => {
     refresh();
-    // This refresh will not work for desktop because the postId is not available yet when the page is mounted
   }, []);
 
   useEffect(() => {
     if (post?.postId !== id) {
-      // When postId is undefined because the post is deleted, we need to refresh the page to get the latest data
       refresh();
     }
   }, []);
 
-  // Add this useEffect to handle scrolling to comment when commentId is provided
   useEffect(() => {
     hasScrolledRef.current = false;
+    hasShownReplyNotificationRef.current = false;
+  }, [commentId]);
 
+  // Show a toast when the targeted reply (or its L1 parent for L2 notifications) no longer exists.
+  // Always checks commentId; for L2 notifications also checks parentId (the L1 parent).
+  useEffect(() => {
+    if (!commentId) return;
+
+    const isL2Notification = !!rootId && !!parentId && parentId !== rootId;
+
+    const checkDeleted = (id: string, message: string): (() => void) | undefined => {
+      if (community && !community?.isPublic && !community?.isJoined) return;
+      let unsubscribe: (() => void) | undefined;
+      unsubscribe = CommentRepository.getComment(id, (resp) => {
+        if (!resp.loading) {
+          unsubscribe?.();
+          unsubscribe = undefined;
+          const target = resp.data as Amity.Comment | null;
+          if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
+            hasShownReplyNotificationRef.current = true;
+            if (!isDesktop) {
+              setDeletedReplyError('This reply is no longer available.');
+            } else {
+              notification.info({
+                content: message,
+                alignment: 'withSidebar',
+              });
+            }
+          }
+        }
+      });
+      return () => unsubscribe?.();
+    };
+
+    const isL0Comment = !parentId;
+    const commentMessage = isL0Comment
+      ? 'This comment is no longer available.'
+      : 'This reply is no longer available.';
+
+    const cleanupComment = checkDeleted(commentId, commentMessage);
+    const cleanupParent = isL2Notification
+      ? checkDeleted(parentId, 'This reply is no longer available.')
+      : undefined;
+
+    return () => {
+      cleanupComment?.();
+      cleanupParent?.();
+    };
+  }, [commentId, parentId, rootId]);
+
+  useEffect(() => {
     // Only scroll if we haven't already and the comment list is available
     if (commentId && commentListRef.current && !hasScrolledRef.current) {
       // Mark that we're processing this scroll
       hasScrolledRef.current = true;
 
       // Create a custom event to signal when scrolling is complete
-      const scrollCompleteEvent = new CustomEvent('comment-scroll-complete', {
+      const scrollCompleteEvent = new CustomEvent(EVENT_LISTENER.SCROLL_COMPLETE, {
         bubbles: true,
         detail: { commentId },
       });
@@ -149,10 +217,21 @@ export function PostDetailPage({
   }, [prevPage?.type, onBack]);
 
   const handleReplyClick = useCallback(
-    (comment: Amity.Comment) =>
+    ({
+      comment,
+      parentIdOverride,
+      l0AncestorId,
+    }: {
+      comment: Amity.Comment;
+      parentIdOverride?: string;
+      l0AncestorId?: string;
+    }) => {
       setReplyComment((prevComment) =>
         prevComment?.commentId === comment?.commentId ? undefined : comment,
-      ),
+      );
+      setReplyParentIdOverride(parentIdOverride);
+      setReplyL0AncestorId(l0AncestorId);
+    },
     [],
   );
 
@@ -249,7 +328,11 @@ export function PostDetailPage({
             pageId={pageId}
             referenceId={post.postId}
             referenceType={'post'}
-            onCancelReply={() => setReplyComment(undefined)}
+            onCancelReply={() => {
+              setReplyComment(undefined);
+              setReplyParentIdOverride(undefined);
+              setReplyL0AncestorId(undefined);
+            }}
             community={community}
             containerClassName={
               post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
@@ -257,52 +340,73 @@ export function PostDetailPage({
             isFromCommentClick={isFromCommentClick}
           />
         )}
-        {post?.commentsCount > 0 && (
-          <div ref={commentListRef} className={styles.postDetailPage__comments}>
-            {post && (
-              <CommentList
-                pageId={pageId}
-                eventCreatorId={eventCreatorId}
-                referenceId={post.postId}
-                referenceType="post"
-                onClickReply={handleReplyClick}
-                community={community}
-                commentCount={post.commentsCount}
-                highlightedCommentId={commentId}
-                parentId={parentId}
-                showReplyCommentAt={showReplyCommentAt}
-                renderReplyComment={(comment) => {
-                  if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
-                    return (
+        <div ref={commentListRef} className={styles.postDetailPage__comments}>
+          {post && (
+            <CommentList
+              pageId={pageId}
+              eventCreatorId={eventCreatorId}
+              referenceId={post.postId}
+              referenceType="post"
+              onClickReply={handleReplyClick}
+              community={community}
+              limit={COMMENT_LIST_LIMIT}
+              commentCount={post.commentsCount}
+              highlightedCommentId={commentId}
+              parentId={effectiveParentId}
+              parantId={parentId}
+              showReplyCommentAt={showReplyCommentAt}
+              replyTargetCommentId={
+                replyL0AncestorId ? replyParentIdOverride ?? replyComment?.commentId : undefined
+              }
+              renderReplyComment={(comment) => {
+                // For desktop: the inline compose bar is placed under the L0 comment that anchors the reply.
+                // - When replying to L0 directly: effectiveL0Id = replyComment.commentId (= the L0 id itself)
+                // - When replying to L1 or L2: replyL0AncestorId is set to the L0 id by handleReplyClick
+                const effectiveL0Id = replyL0AncestorId ?? replyComment?.commentId;
+                if (replyComment && comment.commentId === effectiveL0Id && isDesktop) {
+                  const composerMarginLeft = replyComment.parentId ? '2.5rem' : '0';
+                  return (
+                    <div style={{ marginLeft: composerMarginLeft }}>
                       <CommentComposer
                         pageId={pageId}
                         referenceId={post.postId}
                         referenceType={'post'}
                         replyTo={replyComment}
-                        onCancelReply={() => setReplyComment(undefined)}
+                        parentIdOverride={replyParentIdOverride}
+                        onCancelReply={() => {
+                          setReplyComment(undefined);
+                          setReplyParentIdOverride(undefined);
+                          setReplyL0AncestorId(undefined);
+                        }}
                         community={community}
                         isFromCommentClick={isFromCommentClick}
                       />
-                    );
-                  }
-                }}
-              />
-            )}
-          </div>
-        )}
+                    </div>
+                  );
+                }
+              }}
+            />
+          )}
+        </div>
       </div>
       {!isDesktop && canSeeCommentComposer && (
         <CommentComposer
           pageId={pageId}
           referenceId={post.postId}
           referenceType={'post'}
-          onCancelReply={() => setReplyComment(undefined)}
+          onCancelReply={() => {
+            setReplyComment(undefined);
+            setReplyParentIdOverride(undefined);
+            setReplyL0AncestorId(undefined);
+          }}
           community={community}
           containerClassName={
             post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
           }
           isFromCommentClick={isFromCommentClick}
           replyTo={replyComment}
+          parentIdOverride={replyParentIdOverride}
+          externalError={deletedReplyError}
         />
       )}
     </div>

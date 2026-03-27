@@ -435,19 +435,21 @@ export const TextWithMention = ({
       const linkText = $isSerializedTextNode(child.children[0])
         ? child.children[0]?.text
         : child.url;
-      const linkUrl =
-        child.url && !/^https?:\/\//i.test(child.url) ? `https://${child.url}` : child.url;
+      const linkUrl = child.url;
 
       // Skip rendering if link has no text or invalid URL
       if (!linkText || !linkUrl) {
         return null;
       }
 
+      // Add https:// if URL doesn't have a protocol
+      const href = /^(https?|ftp|mailto):/.test(linkUrl) ? linkUrl : `https://${linkUrl}`;
+
       return (
         <a
           target="_blank"
           key={child.url}
-          href={linkUrl}
+          href={href}
           rel="noopener noreferrer"
           onMouseUp={(e) => e.stopPropagation()}
           onTouchEnd={(e) => e.stopPropagation()}

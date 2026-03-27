@@ -154,6 +154,15 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
     else return invitation;
   }, [invitation?.status, invitation?.user?.userId]);
 
+  // Filter out pending invitation user and co-host from watching users
+  const filteredWatchingUsers = useMemo(() => {
+    return watchingUsers.filter((user) => {
+      const isPendingUser = pendingInvitation?.user?.userId === user.userId;
+      const isCoHostUser = coHost?.userId === user.userId;
+      return !isPendingUser && !isCoHostUser;
+    });
+  }, [watchingUsers, pendingInvitation?.user?.userId, coHost?.userId]);
+
   if (isLoading)
     return (
       <div className={styles.inviteCoHostList__skeletonWrapper}>
@@ -205,22 +214,24 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
         </>
       )}
 
-      {renderHeader("Who's watching")}
-      {watchingUsers.map((user) => (
-        <WatchingUserItem
-          key={user.userId}
-          user={user}
-          pageId={pageId}
-          componentId={componentId}
-          onInviteUser={() => onCreateInvitation(user.userId)}
-          onCancelInvite={() => onCancelInvitation(pendingInvitation?.invitationId)}
-          isLoading={isPendingCreateInvitation || isPendingCancelInvitation}
-          isInvited={user.userId === pendingInvitation?.user?.userId}
-          hasPendingInvitation={!!pendingInvitation}
-          hasCoHost={!!coHost}
-          isCoHost={coHost?.userId === user.userId}
-        />
-      ))}
+      {filteredWatchingUsers.length > 0 && (
+        <>
+          {renderHeader("Who's watching")}
+          {filteredWatchingUsers.map((user) => (
+            <WatchingUserItem
+              key={user.userId}
+              user={user}
+              pageId={pageId}
+              componentId={componentId}
+              onInviteUser={() => onCreateInvitation(user.userId)}
+              onCancelInvite={() => onCancelInvitation(pendingInvitation?.invitationId)}
+              isLoading={isPendingCreateInvitation || isPendingCancelInvitation}
+              hasPendingInvitation={!!pendingInvitation}
+              hasCoHost={!!coHost}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

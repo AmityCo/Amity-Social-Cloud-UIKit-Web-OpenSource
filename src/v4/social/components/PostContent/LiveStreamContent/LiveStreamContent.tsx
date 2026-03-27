@@ -24,8 +24,8 @@ import {
 } from '~/v4/social/features/livestream/hooks';
 import clsx from 'clsx';
 import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
-import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
+import { LivestreamTooShortThumbnail } from '~/v4/social/features/livestream/internal-components/LivestreamTooShortThumbnail';
 
 type LiveStreamContentProps = {
   pageId?: string;
@@ -52,8 +52,6 @@ export function LiveStreamContent({
   const { goToLiveStreamPlayerPage } = useNavigation();
   const { room } = useRoom(roomId ?? posts?.[0]?.getRoomInfo()?.roomId);
   const { post: subscribedPost } = usePostSubscription(parentPost?.childrenPosts[0]?.postId);
-
-  const { productCatalogueSettings } = useProductCatalogueSettings();
   const { showProductTagList } = useShowProductTagList({
     pageId,
     mode: 'livestream',
@@ -62,7 +60,7 @@ export function LiveStreamContent({
 
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
-    communityId: parentPost.targetType === 'community' ? parentPost?.targetId : null,
+    communityId: parentPost?.targetType === 'community' ? parentPost?.targetId : null,
   });
   const { members } = useCommunityMembersCollection({
     queryParams: {
@@ -70,12 +68,19 @@ export function LiveStreamContent({
     },
   });
 
-  const canShowProductTags =
-    (subscribedPost?.productTags?.length ?? 0) > 0 && productCatalogueSettings?.product.enabled;
+  const canShowProductTags = (subscribedPost?.productTags?.length ?? 0) > 0;
 
   const myMembership = members.find((member) => member.userId === currentUserId);
   // const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
   const isUserBanned = false;
+
+  // If thumbnailFileId exists, use default 16:9 aspect ratio (undefined resolution)
+  // Otherwise, use dynamic resolution based on status
+  const resolution = room?.thumbnailFileId
+    ? undefined
+    : room?.status === 'live' || room?.status === 'ended' || room?.status === 'terminated'
+      ? room?.liveResolution
+      : room?.recordedResolution;
 
   useRoomSubscription({ room });
 
@@ -89,10 +94,13 @@ export function LiveStreamContent({
 
   if (room.isDeleted) return <LiveStreamIdleThumbnail />;
 
-  if (room.status === liveStreamStatus.ended) return <LiveStreamEndThumbnail />;
+  if (room.status === liveStreamStatus.error) return <LivestreamTooShortThumbnail />;
+
+  if (room.status === liveStreamStatus.ended)
+    return <LiveStreamEndThumbnail resolution={resolution} />;
 
   if (room.moderation?.terminateLabels && room.moderation?.terminateLabels.length > 0)
-    return <LiveStreamTerminatedThumbnail />;
+    return <LiveStreamTerminatedThumbnail resolution={resolution} />;
 
   const renderProductTags = () => {
     if (!canShowProductTags) return null;
@@ -120,7 +128,14 @@ export function LiveStreamContent({
         }
       }}
     >
-      <LiveStreamThumbnail fileId={room.thumbnailFileId} alt={room.title} />
+      <LiveStreamThumbnail
+        fileId={room.thumbnailFileId}
+        alt={room.title}
+        status={room.status}
+        liveThumbnailUrl={room.liveThumbnailUrl}
+        recordedThumbnailUrl={room.recordedPlaybackInfos?.[0]?.thumbnailUrl}
+        resolution={resolution}
+      />
       {room.status === liveStreamStatus.idle && (
         <div className={styles.liveStreamContent__statusBadge}>
           <LiveStreamUpcomingBadge />
@@ -142,9 +157,6 @@ export function LiveStreamContent({
           {renderProductTags()}
         </>
       )}
-
-      {room.status === liveStreamStatus.error && renderProductTags()}
-
       {room.status !== liveStreamStatus.idle && (
         <VideoControl className={styles.liveStreamContent__playButton} />
       )}

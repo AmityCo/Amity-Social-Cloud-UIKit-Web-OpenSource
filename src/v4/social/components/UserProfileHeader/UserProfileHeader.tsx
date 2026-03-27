@@ -21,7 +21,7 @@ import useUserFollow from '~/v4/social/hooks/useUserFollow';
 import UserTimes from '~/v4/icons/UserTimes';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import useUserBlock from '~/v4/social/hooks/useUserBlock';
-import { SingleImageViewer } from '~/v4/social/internal-components/SingleImageViewer';
+import { FileImageViewer } from '~/v4/social/internal-components/FileImageViewer';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
@@ -314,10 +314,9 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         />
       )}
 
-      {isImageViewerOpen && user.avatar?.fileId && (
-        <SingleImageViewer
-          fileId={user.avatar.fileId}
-          fileUrl={user.avatar?.fileUrl || ''}
+      {isImageViewerOpen && user.avatar && (
+        <FileImageViewer
+          file={user.avatar}
           onClose={() => setIsImageViewerOpen(false)}
           pageId={pageId}
           componentId={componentId}

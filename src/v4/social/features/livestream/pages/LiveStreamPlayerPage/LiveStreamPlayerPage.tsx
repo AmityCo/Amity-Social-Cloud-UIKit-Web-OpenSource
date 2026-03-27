@@ -219,7 +219,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   useSyncWatchingHeartbeat({
     roomId: room?.roomId,
-    enabled: room?.status !== 'recorded' && room?.status !== 'ended',
+    enabled: room?.status !== 'recorded' && room?.status !== 'ended' && uiState === 'player',
   });
 
   // Determine if current user is a viewer (not host or co-host)
@@ -456,6 +456,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         onUpdateProductTags={handleUpdateProductTags}
         onRemove={handleRemove}
         roomId={roomId || room?.roomId}
+        canShowAddProducts={canShowProductTags}
       />
     );
   }, [
@@ -488,8 +489,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   const canShowProductTags = productCatalogueSettings?.product.enabled && !isEnded && !isTerminated;
 
-  const hasTaggedProductsToDisplay =
-    canShowProductTags && (livestreamPost?.productTags?.length ?? 0) > 0;
+  const hasTaggedProductsToDisplay = (livestreamPost?.productTags?.length ?? 0) > 0;
 
   const isPendingPost =
     parentPost?.feedType === 'reviewing' || subscribedPost?.feedType === 'reviewing';
@@ -581,6 +581,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                         }}
                         onUpdateProductTags={(tags) => handleUpdateProductTags(tags)}
                         onRemove={(tag) => handleRemove(tag)}
+                        canShowAddProducts={canShowProductTags}
                       />
                     </div>
                   )}

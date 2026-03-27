@@ -163,12 +163,10 @@ export const PostContent = ({
     setReactionByMe,
     reactionsCount,
   } = usePostReaction({ post });
-  const { goToCommunityProfilePage } = useNavigation();
-  const { socialReactions } = useCustomReaction();
-  const { productCatalogueSettings } = useProductCatalogueSettings();
 
-  const canShowProductTags =
-    productCatalogueSettings?.product.enabled && !(post?.childrenPosts?.[0]?.dataType === 'room');
+  const { socialReactions } = useCustomReaction();
+
+  const canShowProductTags = !(post?.childrenPosts?.[0]?.dataType === 'room');
 
   // State to force poll results view when poll is closed from menu
   const [forceShowPollResults, setForceShowPollResults] = useState(false);

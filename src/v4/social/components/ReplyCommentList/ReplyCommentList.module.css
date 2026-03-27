@@ -2,19 +2,89 @@
   gap: 0.5rem;
   display: grid;
   margin-top: 1rem;
+  position: relative;
+}
+
+/* Vertical trunk for pending-only L2 lists rendered inside l1Content.
+   Bridges upward through the list's margin into the L1 content area. */
+.replyCommentList[data-is-l2='true'][data-pending-only='true']::after {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: -1rem;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--asc-color-base-shade4);
+  z-index: 0;
+}
+
+.replyCommentList__item {
+  position: relative;
+}
+
+.replyCommentList[data-is-l2='true'] .replyCommentList__item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: -0.5rem;
+  left: -1.5rem;
+  width: 2px;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.replyCommentList[data-is-l2='true'] .replyCommentList__item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -1.5rem;
+  width: 1.25rem;
+  height: 0.875rem;
+  border-left: 2px solid var(--asc-color-base-shade4);
+  border-bottom: 2px solid var(--asc-color-base-shade4);
+  border-bottom-left-radius: 0.5rem;
+}
+
+.replyCommentList[data-is-l2='true'] .replyCommentList__item[data-is-deleted='true']::after,
+.replyCommentList[data-is-l2='true'] .replyCommentList__item[data-is-deleted='true']::before {
+  display: none;
+}
+
+/* View more replies wrapper: suppress both the vertical line and the curve */
+.replyCommentList[data-is-l2='true'] .replyCommentList__viewReplyItem::before,
+.replyCommentList[data-is-l2='true'] .replyCommentList__viewReplyItem::after {
+  display: none;
+}
+
+/* Last real comment before "View more replies": suppress its downward connector line */
+.replyCommentList[data-is-l2='true']
+  .replyCommentList__item:has(+ .replyCommentList__viewReplyItem)::before {
+  display: none;
+}
+
+/* Mask the trunk below the last L2 item's connector elbow — only when
+   there is no "View x replies" button following the list.
+   When the button IS present, the parent l1Content handles a continuous line. */
+.replyCommentList[data-is-l2='true'][data-pending-only='true'][data-has-view-replies='false']
+  .replyCommentList__item:last-child::before {
+  content: '';
+  position: absolute;
+  left: calc(-1.5rem - 2px);
+  top: 0.875rem;
+  bottom: 0;
+  width: 6px;
+  background-color: var(--asc-color-background-default);
+  z-index: 1;
 }
 
 .postReplyCommentList__viewReply_button {
   display: flex;
-  padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
+  padding: 0.25rem;
   cursor: pointer;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.25rem;
   background: var(--asc-color-background-default);
-  border: 1px solid var(--asc-color-base-shade4);
-  border-radius: 0.25rem;
   width: max-content;
-  margin-left: 2.5rem;
+  margin-left: 0;
 }
 
 .postReplyCommentList__viewReply_button[data-isdeleted-highlight='true'] {
@@ -22,13 +92,13 @@
 }
 
 .postReplyCommentList__viewReply_icon {
-  color: var(--asc-color-secondary-shade1);
-  width: 1rem;
-  height: 1rem;
+  fill: var(--asc-color-base-shade1);
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .postReplyCommentList__viewReply_text {
-  color: var(--asc-color-secondary-shade1);
+  color: var(--asc-color-base-shade1);
 }
 
 .replyCommentList__highlightedComment {
@@ -37,6 +107,17 @@
 
 .replyCommentList__bounceAnimation {
   animation: bounce 1s ease;
+}
+
+@keyframes highlight-reply {
+  0%,
+  70% {
+    background-color: var(--asc-color-primary-shade2);
+  }
+
+  100% {
+    background-color: var(--asc-color-base-shade4);
+  }
 }
 
 @keyframes bounce {

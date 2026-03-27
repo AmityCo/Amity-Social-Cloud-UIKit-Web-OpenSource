@@ -89,6 +89,7 @@ export type CreatePollPostParams = {
   mentioned: Mentioned[];
   mentionees: Mentionees;
   hashtags: Amity.Hashtag[];
+  links?: Amity.Link[];
 };
 
 export const PollPostComposerPage = ({
@@ -161,6 +162,7 @@ export const PollPostComposerPage = ({
         userIds: [''],
       },
     ],
+    links: [],
   });
 
   const answerType = isMultiple ? 'multiple' : 'single';
@@ -274,6 +276,7 @@ export const PollPostComposerPage = ({
       mentionees: textValue.mentionees as Amity.UserMention[],
       hashtags: textValue.hashtags.map((hashtag) => hashtag.text),
       attachments: [],
+      links: textValue.links || [],
     };
 
     return createPost(createPostParams);
@@ -341,6 +344,7 @@ export const PollPostComposerPage = ({
     mentionees: Mentionees;
     hashtags: Amity.Hashtag[];
     text: string;
+    links?: Amity.Link[];
   }) =>
     setTextValue((prev) => ({
       ...prev,
@@ -348,6 +352,7 @@ export const PollPostComposerPage = ({
       text: val.text,
       mentionees: val.mentionees,
       hashtags: val.hashtags,
+      links: val.links || [],
     }));
 
   const addOption = () => {
@@ -602,7 +607,7 @@ export const PollPostComposerPage = ({
             isValidInput={textValue.text.length <= MAX_POLL_QUESTION_LENGTH}
             pageId={pageId}
             communityId={targetId}
-            dataValue={{ data: { text: textValue.text } }}
+            dataValue={{ data: { text: textValue.text }, links: textValue.links }}
             mentionContainer={mentionRef.current}
             onChange={onChange}
             className={styles.pollPostComposerPage__pollQuestion__input}
@@ -610,6 +615,7 @@ export const PollPostComposerPage = ({
             placeholder="What's your poll question?"
             attachmentAmount={0}
             isClipPost={false}
+            isPollPost
           />
           {textValue.text.length > MAX_POLL_QUESTION_LENGTH && (
             <div className={styles.pollPostComposerPage__pollQuestion__validationWrap}>

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
-import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components/AriaButton';
 import { CommentInput, CommentInputRef } from './CommentInput';
@@ -20,6 +19,8 @@ import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
 import usePost from '~/v4/core/hooks/objects/usePost';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { PAGE_ID } from '~/v4/constants/customization';
 
 const LockSvg = () => {
   return (
@@ -38,6 +39,7 @@ export type CreateCommentParams = {
   };
   mentionees: Mentionees;
   metadata: Metadata;
+  links?: Amity.Link[];
 };
 
 interface CommentComposerProps {
@@ -45,12 +47,14 @@ interface CommentComposerProps {
   referenceId: string;
   referenceType: Amity.CommentReferenceType;
   replyTo?: Amity.Comment;
+  parentIdOverride?: string;
   onCancelReply: () => void;
   shouldAllowCreation?: boolean;
   community?: Amity.Community | null;
   containerClassName?: string;
   commentComposerClassName?: string;
   isFromCommentClick?: boolean;
+  externalError?: string | null;
 }
 
 export const CommentComposer = ({
@@ -58,15 +62,45 @@ export const CommentComposer = ({
   referenceId,
   referenceType,
   replyTo,
+  parentIdOverride,
   onCancelReply,
   shouldAllowCreation = true,
   community,
   containerClassName,
   commentComposerClassName,
   isFromCommentClick = false,
+  externalError,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
-  const isStoryPage = pageId === 'story_page';
+  const isStoryPage = pageId === PAGE_ID.STORY_PAGE;
+
+  // Pre-fill the editor with an @mention of the reply target only when replying to a nested
+  // comment (i.e. one that already has a parentId). Replies to top-level (L0) comments do not
+  // pre-fill a mention; self-replies are also excluded.
+  const shouldPreFillMention =
+    replyTo !== undefined && replyTo.userId !== userId && !!replyTo.parentId;
+  const mentionDisplayName = shouldPreFillMention ? replyTo?.creator?.displayName ?? null : null;
+
+  const initialCommentValue = useMemo<CreateCommentParams | undefined>(() => {
+    if (!mentionDisplayName || !replyTo) return undefined;
+    const text = `@${mentionDisplayName} `;
+    return {
+      data: { text },
+      metadata: {
+        mentioned: [
+          {
+            index: 0,
+            length: mentionDisplayName.length,
+            displayName: mentionDisplayName,
+            userId: replyTo.userId || '',
+            type: 'user',
+          },
+        ],
+      },
+      mentionees: [{ type: 'user' as const, userIds: [replyTo.userId || ''] }],
+      links: [],
+    };
+  }, [replyTo?.commentId, mentionDisplayName, replyTo?.userId]);
   const { isDesktop } = useResponsive();
   const notification = useNotifications();
   const { online } = useNetworkState();
@@ -78,11 +112,30 @@ export const CommentComposer = ({
 
   const { post } = usePost(referenceId);
 
+  const [editorKey, setEditorKey] = useState('no-reply');
+  const [inlineError, setInlineError] = useState<string | null>(null);
+  const inlineErrorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showInlineError = (message: string) => {
+    if (inlineErrorTimerRef.current) clearTimeout(inlineErrorTimerRef.current);
+    setInlineError(message);
+    inlineErrorTimerRef.current = setTimeout(() => setInlineError(null), 3000);
+  };
+
   useEffect(() => {
-    if (replyTo && editorRef.current) {
-      editorRef.current?.focus();
+    if (externalError && !isDesktop) {
+      showInlineError(externalError);
     }
-  }, [replyTo]);
+  }, [externalError]);
+
+  useEffect(() => {
+    if (replyTo) {
+      setEditorKey(replyTo.commentId);
+      if (initialCommentValue) {
+        setTextValue(initialCommentValue);
+      }
+    }
+  }, [replyTo?.commentId]);
 
   const [composerHeight, setComposerHeight] = useState(0);
 
@@ -97,44 +150,73 @@ export const CommentComposer = ({
       },
     ],
     metadata: {},
+    links: [],
   });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ params }: { params: CreateCommentParams }) => {
-      const parentId = replyTo ? replyTo.commentId : undefined;
+      // For L1 reply: parentIdOverride is undefined → use replyTo.commentId (the L1 id)
+      // For L2 reply: parentIdOverride = L1 ancestor id → use it so the new comment is always L2
+      const parentId = replyTo ? parentIdOverride ?? replyTo.commentId : undefined;
 
-      await CommentRepository.createComment({
+      const created = await CommentRepository.createComment({
         referenceId: replyTo ? replyTo.referenceId : referenceId,
         referenceType,
         parentId,
-        ...params,
+        data: params.data,
+        metadata: params.metadata,
         mentionees: params.mentionees as Amity.UserMention[],
+        links: params.links || [],
       });
+      return { created, parentId };
     },
     onError: (error) => {
+      let message = 'Oops, something went wrong';
       if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-        notification.info({
-          content: 'Your comment contains inappropriate word. Please review and delete it.',
-        });
+        message = 'Your comment contains inappropriate word. Please review and delete it.';
       } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-        notification.info({
-          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
-        });
+        message =
+          'Your comment contains a link that\u2019s not allowed. Please review and delete it.';
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_POST) && post?.dataType === 'clip') {
-        notification.info({
-          content: 'This clip is no longer available.',
-        });
+        message = 'This clip is no longer available.';
+      } else if (error.message.includes(ERROR_RESPONSE.DELETED_COMMENT)) {
+        const isL0Comment = replyTo && !replyTo.parentId;
+        message = isL0Comment
+          ? 'This comment is no longer available.'
+          : 'This reply is no longer available.';
+      }
+
+      if (!isDesktop) {
+        showInlineError(message);
       } else {
-        notification.info({
-          content: 'Oops, something went wrong',
-        });
+        notification.info({ content: message });
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Notify ReplyCommentList so it can prepend the new comment optimistically
+      // before the live collection catches up.
+      if (data?.parentId && data?.created) {
+        document.dispatchEvent(
+          new CustomEvent(EVENT_LISTENER.REPLY_CREATED, {
+            detail: { parentId: data.parentId, comment: data.created.data as Amity.Comment },
+          }),
+        );
+      } else if (!data?.parentId && data?.created) {
+        // Notify CommentList so it can prepend the new L0 comment optimistically.
+        document.dispatchEvent(
+          new CustomEvent(EVENT_LISTENER.L0_COMMENT_CREATED, {
+            detail: {
+              referenceId: data.created.data.referenceId,
+              comment: data.created.data as Amity.Comment,
+            },
+          }),
+        );
+      }
       setTextValue({
         data: { text: '' },
         mentionees: [],
         metadata: {},
+        links: [],
       });
       editorRef.current?.clearEditorState();
       onCancelReply();
@@ -152,7 +234,11 @@ export const CommentComposer = ({
 
   return (
     <div
-      className={clsx(styles.commentComposer, commentComposerClassName)}
+      className={clsx(
+        styles.commentComposer,
+        isDesktop && replyTo && styles['commentComposer--desktopReply'],
+        commentComposerClassName,
+      )}
       data-testid={`${pageId}/${componentId}/comment_composer`}
     >
       {!online && isPending && page.type == PageTypes.ViewStoryPage && (
@@ -164,6 +250,15 @@ export const CommentComposer = ({
         />
       )}
       <div className={styles.commentComposer__top}>
+        {!isDesktop && inlineError && (
+          <div className={styles.commentComposer__inlineError}>
+            <Notification
+              icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}
+              content={inlineError}
+              className={styles.commentComposer__inlineErrorNotification}
+            />
+          </div>
+        )}
         <div className={styles.commentComposer__mentionContainer} ref={mentionContainerRef} />
         {replyTo && (!isDesktop || isStoryPage) && (
           <div
@@ -180,7 +275,7 @@ export const CommentComposer = ({
             >
               <span>Replying to </span>
               <span className={styles.commentComposer__replyContainer__username}>
-                {replyTo?.userId}
+                {replyTo?.creator?.displayName ?? replyTo?.userId}
               </span>
             </div>
             <Close
@@ -200,9 +295,12 @@ export const CommentComposer = ({
           data-testid={`${pageId}/${componentId}/comment_composer`}
         >
           <CommentInput
+            // Re-mount editor only when a new reply target is set (not on cancel)
+            // so the initial @mention value is correctly applied from the start.
+            key={editorKey}
             ref={editorRef}
             mentionContainer={mentionContainerRef?.current}
-            onChange={({ text, mentioned, mentionees }) => {
+            onChange={({ text, mentioned, mentionees, links }) => {
               setTextValue({
                 data: {
                   text: text,
@@ -211,6 +309,7 @@ export const CommentComposer = ({
                 metadata: {
                   mentioned: mentioned,
                 },
+                links: links || [],
               });
             }}
             onFocus={() => {
@@ -223,12 +322,14 @@ export const CommentComposer = ({
             }}
             targetType={referenceType}
             targetId={referenceId}
-            value={textValue}
+            value={initialCommentValue}
             placehoder={
               replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
             }
             communityId={community?.communityId}
-            shouldAutoFocus={isFromCommentClick}
+            shouldAutoFocus={
+              (isFromCommentClick || !!replyTo) && (!replyTo || editorKey === replyTo.commentId)
+            }
           />
         </div>
         <Button
@@ -237,10 +338,15 @@ export const CommentComposer = ({
           isDisabled={!textValue?.data?.text || isPending}
           className={styles.commentComposer__button}
           onPressStart={() => {
-            if (!online && page.type !== PageTypes.ViewStoryPage) {
-              notification.info({
-                content: 'Oops, something went wrong',
-              });
+            if (!online) {
+              if (!isDesktop) {
+                showInlineError('No internet connection.');
+              } else {
+                notification.info({
+                  content: 'No internet connection.',
+                  alignment: 'withSidebar',
+                });
+              }
               return;
             }
             mutateAsync({ params: textValue });

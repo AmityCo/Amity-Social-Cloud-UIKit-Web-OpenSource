@@ -17,13 +17,14 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { InvitationSection } from '~/v4/social/components';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import styles from './NotificationTrayPage.module.css';
+import { PAGE_ID } from '~/v4/constants/customization';
 
 interface NotificationTrayPageProps {
   onClose?: () => void;
 }
 
 export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => {
-  const pageId = 'notification_tray_page';
+  const pageId = PAGE_ID.NOTIFICATION_TRAY_PAGE;
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const { invitationNotificationTray } = useLayoutContext();

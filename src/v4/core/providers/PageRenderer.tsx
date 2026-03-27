@@ -86,6 +86,7 @@ const PageRenderer = ({ children }: PageRendererProps) => {
           parentId={page.context?.parentId}
           posts={page.context?.posts}
           keyword={page.context?.keyword}
+          rootId={page.context?.rootId}
         />
       );
     case PageTypes.StoryTargetSelectionPage:

@@ -10,7 +10,9 @@
 
 .imageViewer__fullImage {
   max-width: 100%;
-  max-height: 100%;
+
+  /* set max-height equal to popup's max-height to avoid cutting off the image */
+  max-height: 80vh;
   object-fit: cover;
   display: block;
 }
@@ -118,7 +120,6 @@
 @media only screen and (width >= 48em) {
   .imageViewer__fullImage {
     max-width: 37.5rem;
-    max-height: 37.5rem;
   }
 
   .imageViewer__itemContainer {

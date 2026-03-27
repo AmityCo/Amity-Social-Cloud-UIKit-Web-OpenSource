@@ -13,12 +13,16 @@ type CommentDrawerProps = {
 export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerProps) => {
   const { isVisitorOrBot } = useSDK();
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
+  const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
 
   const handleReplyClick = useCallback(
-    (comment: Amity.Comment) =>
-      setReplyComment((prevComment) =>
-        prevComment?.commentId === comment?.commentId ? undefined : comment,
-      ),
+    ({ comment, parentIdOverride }: { comment: Amity.Comment; parentIdOverride?: string }) =>
+      setReplyComment((prevComment) => {
+        setReplyParentIdOverride(
+          prevComment?.commentId === comment?.commentId ? undefined : parentIdOverride,
+        );
+        return prevComment?.commentId === comment?.commentId ? undefined : comment;
+      }),
     [],
   );
 
@@ -47,7 +51,11 @@ export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerPr
           referenceId={post.postId}
           referenceType={'post'}
           replyTo={replyComment}
-          onCancelReply={() => setReplyComment(undefined)}
+          parentIdOverride={replyParentIdOverride}
+          onCancelReply={() => {
+            setReplyComment(undefined);
+            setReplyParentIdOverride(undefined);
+          }}
           community={community}
           commentComposerClassName={styles.clipFeedMenu__commentComposer}
         />
