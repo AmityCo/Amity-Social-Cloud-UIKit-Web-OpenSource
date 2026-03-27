@@ -134,7 +134,6 @@ export const CommentComposer = ({
       if (initialCommentValue) {
         setTextValue(initialCommentValue);
       }
-      editorRef.current?.focus();
     }
   }, [replyTo?.commentId]);
 
@@ -328,7 +327,9 @@ export const CommentComposer = ({
               replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
             }
             communityId={community?.communityId}
-            shouldAutoFocus={isFromCommentClick}
+            shouldAutoFocus={
+              (isFromCommentClick || !!replyTo) && (!replyTo || editorKey === replyTo.commentId)
+            }
           />
         </div>
         <Button
