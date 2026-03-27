@@ -24,8 +24,8 @@ import {
 } from '~/v4/social/features/livestream/hooks';
 import clsx from 'clsx';
 import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
-import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
+import { LivestreamTooShortThumbnail } from '~/v4/social/features/livestream/internal-components/LivestreamTooShortThumbnail';
 
 type LiveStreamContentProps = {
   pageId?: string;
@@ -92,7 +92,9 @@ export function LiveStreamContent({
 
   if (isUserBanned) return <LiveStreamBanThumbnail />;
 
-  if (room.isDeleted || room.status === liveStreamStatus.error) return <LiveStreamIdleThumbnail />;
+  if (room.isDeleted) return <LiveStreamIdleThumbnail />;
+
+  if (room.status === liveStreamStatus.error) return <LivestreamTooShortThumbnail />;
 
   if (room.status === liveStreamStatus.ended)
     return <LiveStreamEndThumbnail resolution={resolution} />;
