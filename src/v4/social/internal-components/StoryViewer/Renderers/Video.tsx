@@ -314,7 +314,7 @@ export const renderer: CustomRenderer = ({
     } else {
       openCommentSheet();
     }
-  }, [action]);
+  }, [isDesktop, storyId, pageId, community, commentsCount, action]);
 
   const onClickMenuButton = useCallback((openPopover) => {
     if (isDesktop) {
