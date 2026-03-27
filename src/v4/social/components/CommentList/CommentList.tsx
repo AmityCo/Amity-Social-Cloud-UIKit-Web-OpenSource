@@ -31,6 +31,9 @@ type CommentListProps = {
   shouldAllowInteraction?: boolean;
   commentCount?: number;
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
+  /** The L1 comment ID being replied to — passed through to Comment/ReplyCommentList
+   *  so the inline composer appears after the specific L1 instead of at the bottom. */
+  replyTargetCommentId?: string;
   highlightedCommentId?: string;
   parentId?: string;
   /** Direct parent of the target comment from the notification (L1 ID for L2 notifications).
@@ -57,6 +60,7 @@ export const CommentList = ({
   shouldAllowInteraction = true,
   commentCount = 0,
   renderReplyComment,
+  replyTargetCommentId,
   highlightedCommentId,
   parentId,
   parantId,
@@ -263,6 +267,7 @@ export const CommentList = ({
             shouldAllowInteraction={shouldAllowInteraction}
             testId={`pending-comment-${index}`}
             renderReplyComment={renderReplyComment}
+            replyTargetCommentId={replyTargetCommentId}
           />
         </div>
       ))}
@@ -287,6 +292,7 @@ export const CommentList = ({
             showReply={highlightedComment.commentId === showReplyCommentAt}
             testId={`comment-highlighted`}
             renderReplyComment={renderReplyComment}
+            replyTargetCommentId={replyTargetCommentId}
           />
         </div>
       )}
@@ -308,6 +314,7 @@ export const CommentList = ({
               showReply={item.commentId === showReplyCommentAt}
               testId={`comment-${index}`}
               renderReplyComment={renderReplyComment}
+              replyTargetCommentId={replyTargetCommentId}
             />
           </div>
         );

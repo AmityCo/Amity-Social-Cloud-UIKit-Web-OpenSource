@@ -344,6 +344,9 @@ export function PostDetailPage({
               parentId={effectiveParentId}
               parantId={parentId}
               showReplyCommentAt={showReplyCommentAt}
+              replyTargetCommentId={
+                replyL0AncestorId ? replyParentIdOverride ?? replyComment?.commentId : undefined
+              }
               renderReplyComment={(comment) => {
                 // For desktop: the inline compose bar is placed under the L0 comment that anchors the reply.
                 // - When replying to L0 directly: effectiveL0Id = replyComment.commentId (= the L0 id itself)

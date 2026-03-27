@@ -3,7 +3,6 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CommentList } from '~/v4/social/components/CommentList';
 import { CommentComposer } from '~/v4/social/components/CommentComposer';
 import styles from './CommentTray.module.css';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 type CommentTrayProps = {
@@ -27,34 +26,40 @@ export const CommentTray = ({
 }: CommentTrayProps) => {
   const componentId = 'comment_tray_component';
 
-  const { isDesktop } = useResponsive();
   const { isVisitorOrBot } = useSDK();
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
   const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
+  const [replyL0AncestorId, setReplyL0AncestorId] = useState<string | undefined>(undefined);
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
 
   const onCancelReply = useCallback(() => {
     setReplyTo(undefined);
     setReplyParentIdOverride(undefined);
+    setReplyL0AncestorId(undefined);
   }, []);
 
   const onClickReply = useCallback(
     ({
       comment,
       parentIdOverride,
+      l0AncestorId,
     }: {
       comment: Amity.Comment;
       parentIdOverride?: string;
       l0AncestorId?: string;
-    }) =>
+    }) => {
       setReplyTo((prevComment) => {
         setReplyParentIdOverride(
           prevComment?.commentId === comment?.commentId ? undefined : parentIdOverride,
         );
         return prevComment?.commentId === comment?.commentId ? undefined : comment;
-      }),
+      });
+      setReplyL0AncestorId(l0AncestorId);
+    },
     [],
   );
+
+  const canShowComposer = shouldAllowInteraction && !isVisitorOrBot && community.isJoined;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.commentTrayContainer}>
@@ -68,16 +73,37 @@ export const CommentTray = ({
           referenceType={referenceType}
           shouldAllowInteraction={shouldAllowInteraction}
           commentCount={commentCount}
+          replyTargetCommentId={
+            replyL0AncestorId ? replyParentIdOverride ?? replyTo?.commentId : undefined
+          }
+          renderReplyComment={(comment) => {
+            const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
+            if (replyTo && comment.commentId === effectiveL0Id && canShowComposer) {
+              const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
+              return (
+                <div style={{ marginLeft: composerMarginLeft }}>
+                  <CommentComposer
+                    pageId={pageId}
+                    referenceId={referenceId}
+                    referenceType={referenceType}
+                    replyTo={replyTo}
+                    parentIdOverride={replyParentIdOverride}
+                    onCancelReply={onCancelReply}
+                    shouldAllowCreation={shouldAllowCreation}
+                    community={community}
+                  />
+                </div>
+              );
+            }
+          }}
         />
       </div>
-      {shouldAllowInteraction && !isVisitorOrBot && community.isJoined && (
+      {canShowComposer && !replyTo && (
         <CommentComposer
           pageId={pageId}
           referenceId={referenceId}
           onCancelReply={onCancelReply}
           referenceType={referenceType}
-          replyTo={replyTo}
-          parentIdOverride={replyParentIdOverride}
           shouldAllowCreation={shouldAllowCreation}
           community={community}
           commentComposerClassName={styles.commentTrayContainer__commentComposer}

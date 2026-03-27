@@ -25,9 +25,11 @@ interface ReplyCommentProps {
     l0AncestorId?: string;
   }) => void;
   isL2List?: boolean;
-  /** Optional render prop for an inline compose bar rendered at the bottom of the thread
-   *  container, keeping it inside the thread-line visual. */
+  /** Optional render prop for an inline compose bar rendered inside the thread container. */
   renderInlineComposer?: () => React.ReactNode;
+  /** When set, renderInlineComposer is placed directly after the comment in this list whose
+   *  commentId matches this value instead of at the bottom of the list. */
+  inlineComposerAfterCommentId?: string;
   /** Comments to show immediately at the top before the live collection loads.
    *  Used when the list was not yet mounted at the time the comment was created
    *  (e.g. the very first reply under an L0 comment). */
@@ -59,6 +61,7 @@ export const ReplyCommentList = ({
   onClickReply,
   isL2List = false,
   renderInlineComposer,
+  inlineComposerAfterCommentId,
   initialPendingComments = [],
   showReplyCommentAt,
   highlightedL2CommentId,
@@ -338,56 +341,58 @@ export const ReplyCommentList = ({
     >
       {/* Optimistic pending comments — always at top, disappear once live collection catches up */}
       {visiblePending.map((comment, index) => (
-        <div
-          key={`pending-${comment.commentId}`}
-          className={styles.replyCommentList__item}
-          data-is-deleted={comment.isDeleted ? 'true' : 'false'}
-        >
-          <ReplyComment
-            pageId={pageId}
-            community={community}
-            comment={comment}
-            testId={`pending-reply-comment-${index}`}
-            isL2={isL2List}
-            l0AncestorId={l0AncestorId}
-            onClickReply={onClickReply}
-            showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
-            renderL2ReplyList={
-              !isL2List
-                ? ({
-                    showL2Replies,
-                    pendingL2Comments,
-                    hideL2Replies,
-                    onHighlightedDeleted: onHL2Deleted,
-                    hasViewRepliesBelow,
-                  }) =>
-                    showL2Replies || pendingL2Comments.length > 0 ? (
-                      <ReplyCommentList
-                        pageId={pageId}
-                        community={community}
-                        referenceId={comment.referenceId}
-                        referenceType={comment.referenceType}
-                        parentId={comment.commentId}
-                        l0AncestorId={l0AncestorId}
-                        onClickReply={onClickReply}
-                        isL2List
-                        initialPendingComments={pendingL2Comments}
-                        highlightLatestL2={highlightLatestL2}
-                        highlightedCommentId={
-                          showReplyCommentAt && comment.commentId === showReplyCommentAt
-                            ? highlightedL2CommentId
-                            : undefined
-                        }
-                        shouldFetch={showL2Replies}
-                        hasViewRepliesBelow={hasViewRepliesBelow}
-                        onEmpty={hideL2Replies}
-                        onHighlightedDeleted={onHL2Deleted}
-                      />
-                    ) : null
-                : undefined
-            }
-          />
-        </div>
+        <React.Fragment key={`pending-${comment.commentId}`}>
+          <div
+            className={styles.replyCommentList__item}
+            data-is-deleted={comment.isDeleted ? 'true' : 'false'}
+          >
+            <ReplyComment
+              pageId={pageId}
+              community={community}
+              comment={comment}
+              testId={`pending-reply-comment-${index}`}
+              isL2={isL2List}
+              l0AncestorId={l0AncestorId}
+              onClickReply={onClickReply}
+              showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
+              renderL2ReplyList={
+                !isL2List
+                  ? ({
+                      showL2Replies,
+                      pendingL2Comments,
+                      hideL2Replies,
+                      onHighlightedDeleted: onHL2Deleted,
+                      hasViewRepliesBelow,
+                    }) =>
+                      showL2Replies || pendingL2Comments.length > 0 ? (
+                        <ReplyCommentList
+                          pageId={pageId}
+                          community={community}
+                          referenceId={comment.referenceId}
+                          referenceType={comment.referenceType}
+                          parentId={comment.commentId}
+                          l0AncestorId={l0AncestorId}
+                          onClickReply={onClickReply}
+                          isL2List
+                          initialPendingComments={pendingL2Comments}
+                          highlightLatestL2={highlightLatestL2}
+                          highlightedCommentId={
+                            showReplyCommentAt && comment.commentId === showReplyCommentAt
+                              ? highlightedL2CommentId
+                              : undefined
+                          }
+                          shouldFetch={showL2Replies}
+                          hasViewRepliesBelow={hasViewRepliesBelow}
+                          onEmpty={hideL2Replies}
+                          onHighlightedDeleted={onHL2Deleted}
+                        />
+                      ) : null
+                  : undefined
+              }
+            />
+          </div>
+          {inlineComposerAfterCommentId === comment.commentId && renderInlineComposer?.()}
+        </React.Fragment>
       ))}
 
       {/* Skeleton after pending items — shows below newly created comments while server loads */}
@@ -408,125 +413,129 @@ export const ReplyCommentList = ({
       {highlightedComment.length > 0 &&
         (!showFilteredComments || isL2List || !!highlightedCommentId) &&
         highlightedComment.map((comment) => (
-          <div
-            key={comment.commentId}
-            ref={highlightedCommentRef}
-            className={clsx(
-              styles.replyCommentList__item,
-              styles.replyCommentList__highlightedComment,
-              isHighlighted &&
-                !isL2List &&
-                !highlightLatestL2 &&
-                styles.replyCommentList__bounceAnimation,
-            )}
-            data-testid="highlighted-comment"
-            data-is-deleted={comment.isDeleted ? 'true' : 'false'}
-          >
-            <ReplyComment
-              pageId={pageId}
-              community={community}
-              comment={comment as Amity.Comment}
-              isHighlightDeleted={
-                highlightedComment.length > 0 && showFilteredComments ? false : true
-              }
-              isL2={isL2List}
-              l0AncestorId={l0AncestorId}
-              onClickReply={onClickReply}
-              isHighlighted={isHighlighted && isL2List}
-              showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
-              renderL2ReplyList={
-                !isL2List
-                  ? ({
-                      showL2Replies,
-                      pendingL2Comments,
-                      hideL2Replies,
-                      onHighlightedDeleted: onHL2Deleted,
-                      hasViewRepliesBelow,
-                    }) =>
-                      showL2Replies || pendingL2Comments.length > 0 ? (
-                        <ReplyCommentList
-                          pageId={pageId}
-                          community={community}
-                          referenceId={(comment as Amity.Comment).referenceId}
-                          referenceType={(comment as Amity.Comment).referenceType}
-                          parentId={(comment as Amity.Comment).commentId}
-                          l0AncestorId={l0AncestorId}
-                          onClickReply={onClickReply}
-                          isL2List
-                          initialPendingComments={pendingL2Comments}
-                          highlightLatestL2={highlightLatestL2}
-                          highlightedCommentId={
-                            showReplyCommentAt &&
-                            (comment as Amity.Comment).commentId === showReplyCommentAt
-                              ? highlightedL2CommentId
-                              : undefined
-                          }
-                          shouldFetch={showL2Replies}
-                          hasViewRepliesBelow={hasViewRepliesBelow}
-                          onEmpty={hideL2Replies}
-                          onHighlightedDeleted={onHL2Deleted}
-                        />
-                      ) : null
-                  : undefined
-              }
-            />
-          </div>
+          <React.Fragment key={comment.commentId}>
+            <div
+              ref={highlightedCommentRef}
+              className={clsx(
+                styles.replyCommentList__item,
+                styles.replyCommentList__highlightedComment,
+                isHighlighted &&
+                  !isL2List &&
+                  !highlightLatestL2 &&
+                  styles.replyCommentList__bounceAnimation,
+              )}
+              data-testid="highlighted-comment"
+              data-is-deleted={comment.isDeleted ? 'true' : 'false'}
+            >
+              <ReplyComment
+                pageId={pageId}
+                community={community}
+                comment={comment as Amity.Comment}
+                isHighlightDeleted={
+                  highlightedComment.length > 0 && showFilteredComments ? false : true
+                }
+                isL2={isL2List}
+                l0AncestorId={l0AncestorId}
+                onClickReply={onClickReply}
+                isHighlighted={isHighlighted && isL2List}
+                showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
+                renderL2ReplyList={
+                  !isL2List
+                    ? ({
+                        showL2Replies,
+                        pendingL2Comments,
+                        hideL2Replies,
+                        onHighlightedDeleted: onHL2Deleted,
+                        hasViewRepliesBelow,
+                      }) =>
+                        showL2Replies || pendingL2Comments.length > 0 ? (
+                          <ReplyCommentList
+                            pageId={pageId}
+                            community={community}
+                            referenceId={(comment as Amity.Comment).referenceId}
+                            referenceType={(comment as Amity.Comment).referenceType}
+                            parentId={(comment as Amity.Comment).commentId}
+                            l0AncestorId={l0AncestorId}
+                            onClickReply={onClickReply}
+                            isL2List
+                            initialPendingComments={pendingL2Comments}
+                            highlightLatestL2={highlightLatestL2}
+                            highlightedCommentId={
+                              showReplyCommentAt &&
+                              (comment as Amity.Comment).commentId === showReplyCommentAt
+                                ? highlightedL2CommentId
+                                : undefined
+                            }
+                            shouldFetch={showL2Replies}
+                            hasViewRepliesBelow={hasViewRepliesBelow}
+                            onEmpty={hideL2Replies}
+                            onHighlightedDeleted={onHL2Deleted}
+                          />
+                        ) : null
+                    : undefined
+                }
+              />
+            </div>
+            {inlineComposerAfterCommentId === comment.commentId && renderInlineComposer?.()}
+          </React.Fragment>
         ))}
 
       {/* Display other comments only if showFilteredComments is true */}
       {(showFilteredComments || !!showReplyCommentAt) &&
         filteredServerComments.map((comment, index) => (
-          <div
-            key={comment.commentId}
-            className={styles.replyCommentList__item}
-            data-is-deleted={comment.isDeleted ? 'true' : 'false'}
-          >
-            <ReplyComment
-              pageId={pageId}
-              community={community}
-              comment={comment as Amity.Comment}
-              testId={`reply-comment-${index}`}
-              isL2={isL2List}
-              l0AncestorId={l0AncestorId}
-              onClickReply={onClickReply}
-              showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
-              renderL2ReplyList={
-                !isL2List
-                  ? ({
-                      showL2Replies,
-                      pendingL2Comments,
-                      hideL2Replies,
-                      onHighlightedDeleted: onHL2Deleted,
-                      hasViewRepliesBelow,
-                    }) =>
-                      showL2Replies || pendingL2Comments.length > 0 ? (
-                        <ReplyCommentList
-                          pageId={pageId}
-                          community={community}
-                          referenceId={(comment as Amity.Comment).referenceId}
-                          referenceType={(comment as Amity.Comment).referenceType}
-                          parentId={(comment as Amity.Comment).commentId}
-                          l0AncestorId={l0AncestorId}
-                          onClickReply={onClickReply}
-                          isL2List
-                          initialPendingComments={pendingL2Comments}
-                          highlightLatestL2={highlightLatestL2}
-                          highlightedCommentId={
-                            showReplyCommentAt &&
-                            (comment as Amity.Comment).commentId === showReplyCommentAt
-                              ? highlightedL2CommentId
-                              : undefined
-                          }
-                          shouldFetch={showL2Replies}
-                          hasViewRepliesBelow={hasViewRepliesBelow}
-                          onEmpty={hideL2Replies}
-                          onHighlightedDeleted={onHL2Deleted}
-                        />
-                      ) : null
-                  : undefined
-              }
-            />
-          </div>
+          <React.Fragment key={comment.commentId}>
+            <div
+              className={styles.replyCommentList__item}
+              data-is-deleted={comment.isDeleted ? 'true' : 'false'}
+            >
+              <ReplyComment
+                pageId={pageId}
+                community={community}
+                comment={comment as Amity.Comment}
+                testId={`reply-comment-${index}`}
+                isL2={isL2List}
+                l0AncestorId={l0AncestorId}
+                onClickReply={onClickReply}
+                showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
+                renderL2ReplyList={
+                  !isL2List
+                    ? ({
+                        showL2Replies,
+                        pendingL2Comments,
+                        hideL2Replies,
+                        onHighlightedDeleted: onHL2Deleted,
+                        hasViewRepliesBelow,
+                      }) =>
+                        showL2Replies || pendingL2Comments.length > 0 ? (
+                          <ReplyCommentList
+                            pageId={pageId}
+                            community={community}
+                            referenceId={(comment as Amity.Comment).referenceId}
+                            referenceType={(comment as Amity.Comment).referenceType}
+                            parentId={(comment as Amity.Comment).commentId}
+                            l0AncestorId={l0AncestorId}
+                            onClickReply={onClickReply}
+                            isL2List
+                            initialPendingComments={pendingL2Comments}
+                            highlightLatestL2={highlightLatestL2}
+                            highlightedCommentId={
+                              showReplyCommentAt &&
+                              (comment as Amity.Comment).commentId === showReplyCommentAt
+                                ? highlightedL2CommentId
+                                : undefined
+                            }
+                            shouldFetch={showL2Replies}
+                            hasViewRepliesBelow={hasViewRepliesBelow}
+                            onEmpty={hideL2Replies}
+                            onHighlightedDeleted={onHL2Deleted}
+                          />
+                        ) : null
+                    : undefined
+                }
+              />
+            </div>
+            {inlineComposerAfterCommentId === comment.commentId && renderInlineComposer?.()}
+          </React.Fragment>
         ))}
 
       {/* Show "View more replies" when there are more pages to fetch, OR when loaded sibling
@@ -571,7 +580,12 @@ export const ReplyCommentList = ({
         ) : (
           <CommentSkeleton numberOfSkeletons={1} />
         ))}
-      {renderInlineComposer?.()}
+      {(!inlineComposerAfterCommentId ||
+        (inlineComposerAfterCommentId &&
+          !filteredServerComments.some(
+            (comment) => comment.commentId === inlineComposerAfterCommentId,
+          ))) &&
+        renderInlineComposer?.()}
     </div>
   );
 };

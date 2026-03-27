@@ -64,6 +64,9 @@ interface CommentProps {
   testId?: string;
   isHost?: boolean;
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
+  /** The L1 comment ID currently being replied to — used to position the inline
+   *  composer directly after that specific L1 in the ReplyCommentList. */
+  replyTargetCommentId?: string;
   /** Original parentId from the notification — the direct parent of the target comment.
    *  For L1 notifications this equals the L0 ID; for L2 it equals the L1 ID. */
   parantId?: string;
@@ -85,6 +88,7 @@ export const Comment = ({
   testId,
   isHost,
   renderReplyComment,
+  replyTargetCommentId,
   parantId,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
@@ -618,6 +622,7 @@ export const Comment = ({
             showReplyCommentAt={effectiveShowReplyCommentAt}
             highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
             renderInlineComposer={replyComposer ? () => replyComposer : undefined}
+            inlineComposerAfterCommentId={replyTargetCommentId}
             initialPendingComments={pendingL1Comments}
           />
         </div>
