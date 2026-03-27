@@ -584,6 +584,10 @@ export const ReplyCommentList = ({
         (inlineComposerAfterCommentId &&
           !filteredServerComments.some(
             (comment) => comment.commentId === inlineComposerAfterCommentId,
+          ) &&
+          !visiblePending.some((comment) => comment.commentId === inlineComposerAfterCommentId) &&
+          !highlightedComment.some(
+            (comment) => comment.commentId === inlineComposerAfterCommentId,
           ))) &&
         renderInlineComposer?.()}
     </div>
