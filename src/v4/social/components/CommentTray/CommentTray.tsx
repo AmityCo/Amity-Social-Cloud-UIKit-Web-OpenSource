@@ -5,6 +5,7 @@ import { CommentComposer } from '~/v4/social/components/CommentComposer';
 import styles from './CommentTray.module.css';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { PAGE_ID } from '~/v4/constants/customization';
 
 type CommentTrayProps = {
   pageId?: string;
@@ -28,6 +29,7 @@ export const CommentTray = ({
   const componentId = 'comment_tray_component';
 
   const { isDesktop } = useResponsive();
+  const isStoryPage = pageId === PAGE_ID.STORY_PAGE;
   const { isVisitorOrBot } = useSDK();
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
   const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
@@ -79,7 +81,7 @@ export const CommentTray = ({
             isDesktop && replyL0AncestorId ? replyParentIdOverride ?? replyTo?.commentId : undefined
           }
           renderReplyComment={(comment) => {
-            if (!isDesktop) return undefined;
+            if (!isDesktop || isStoryPage) return undefined;
             const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
             if (replyTo && comment.commentId === effectiveL0Id && canShowComposer) {
               const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
@@ -101,14 +103,14 @@ export const CommentTray = ({
           }}
         />
       </div>
-      {canShowComposer && (!replyTo || !isDesktop) && (
+      {canShowComposer && (!replyTo || !isDesktop || isStoryPage) && (
         <CommentComposer
           pageId={pageId}
           referenceId={referenceId}
           onCancelReply={onCancelReply}
           referenceType={referenceType}
-          replyTo={isDesktop ? undefined : replyTo}
-          parentIdOverride={isDesktop ? undefined : replyParentIdOverride}
+          replyTo={isDesktop && !isStoryPage ? undefined : replyTo}
+          parentIdOverride={isDesktop && !isStoryPage ? undefined : replyParentIdOverride}
           shouldAllowCreation={shouldAllowCreation}
           community={community}
           commentComposerClassName={styles.commentTrayContainer__commentComposer}

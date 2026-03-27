@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
-import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components/AriaButton';
 import { CommentInput, CommentInputRef } from './CommentInput';
@@ -21,6 +20,7 @@ import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { PAGE_ID } from '~/v4/constants/customization';
 
 const LockSvg = () => {
   return (
@@ -72,7 +72,7 @@ export const CommentComposer = ({
   externalError,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
-  const isStoryPage = pageId === 'story_page';
+  const isStoryPage = pageId === PAGE_ID.STORY_PAGE;
 
   // Pre-fill the editor with an @mention of the reply target only when replying to a nested
   // comment (i.e. one that already has a parentId). Replies to top-level (L0) comments do not
