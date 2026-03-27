@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 4.15.0-beta.7 (2026-03-27)
 
+## 4.15.0-beta.7 (2026-03-27)
+
 ### Bug Fixes
 
 - update sdk version ([b9c4c37](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/b9c4c37c34bab9fd90dcebbd0cca75ce8551763d))
