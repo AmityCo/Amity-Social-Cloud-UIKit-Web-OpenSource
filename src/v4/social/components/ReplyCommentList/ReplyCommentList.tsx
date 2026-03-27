@@ -88,7 +88,7 @@ export const ReplyCommentList = ({
     referenceId,
     referenceType: referenceType as Amity.CommentReferenceType,
     parentId,
-    limit: 5,
+    pageSize: 5,
     sortBy: isL2List ? 'firstCreated' : 'lastCreated',
     shouldCall: shouldFetch,
     includeDeleted: false,

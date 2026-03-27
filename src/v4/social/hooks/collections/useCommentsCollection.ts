@@ -6,20 +6,20 @@ type useCommentsParams = {
   parentId?: string | null;
   referenceId?: string | null;
   referenceType: Amity.CommentReferenceType;
-  limit?: number;
   sortBy?: 'lastCreated' | 'firstCreated';
   shouldCall?: boolean;
   includeDeleted?: boolean;
+  pageSize?: number;
 };
 
 export default function useCommentsCollection({
   parentId,
   referenceId,
   referenceType,
-  limit = 10,
   sortBy,
   shouldCall = true,
   includeDeleted = false,
+  pageSize = 10,
 }: useCommentsParams) {
   const { items, ...rest } = useLiveCollection({
     fetcher: CommentRepository.getComments,
@@ -27,9 +27,9 @@ export default function useCommentsCollection({
       parentId,
       referenceId: referenceId as string,
       referenceType,
-      limit,
       sortBy,
       includeDeleted,
+      pageSize,
     },
     shouldCall: !!referenceId && !!referenceType && shouldCall,
   });
@@ -44,10 +44,10 @@ export function useCommentsCollectionWithAds({
   parentId,
   referenceId,
   referenceType,
-  limit = 10,
   sortBy,
   shouldCall = true,
   includeDeleted = false,
+  pageSize = 10,
 }: useCommentsParams) {
   const { items, ...rest } = usePaginator({
     fetcher: CommentRepository.getComments,
@@ -55,13 +55,13 @@ export function useCommentsCollectionWithAds({
       parentId,
       referenceId: referenceId as string,
       referenceType,
-      limit,
       sortBy,
       includeDeleted,
+      pageSize,
     },
     shouldCall: shouldCall && !!referenceId && !!referenceType,
     getItemId: (item) => item.commentId,
-    pageSize: limit,
+    pageSize,
     placement: 'comment' as Amity.AdPlacement,
   });
 
