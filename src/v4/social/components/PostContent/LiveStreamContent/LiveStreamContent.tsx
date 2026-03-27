@@ -60,7 +60,7 @@ export function LiveStreamContent({
 
   const { currentUserId } = useSDK();
   const { community } = useCommunity({
-    communityId: parentPost.targetType === 'community' ? parentPost?.targetId : null,
+    communityId: parentPost?.targetType === 'community' ? parentPost?.targetId : null,
   });
   const { members } = useCommunityMembersCollection({
     queryParams: {

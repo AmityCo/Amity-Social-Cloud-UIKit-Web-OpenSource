@@ -27,9 +27,9 @@ export function EventDescription({ event }: EventDescriptionProps) {
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
   const canSetupLiveStream =
-    event.status === AmityEventStatus.Scheduled &&
-    event.userId === currentUserId &&
-    isWithin15Minutes;
+    (isWithin15Minutes || event.status === AmityEventStatus.Live) &&
+    event.room?.status === 'idle' &&
+    event.userId === currentUserId;
 
   return (
     <div className={styles.eventDescription}>
