@@ -18,6 +18,9 @@
   border-radius: 50%;
   background-color: var(--asc-color-primary-shade2);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .userAvatar__placeholder__text {
@@ -31,6 +34,12 @@
 
   /* Typograhy.Title is now Typograhpy.TitleBold, need to be fixed  */
   font-weight: 400;
+}
+
+.userAvatar__defaultIcon {
+  width: 0.733rem;
+  height: 0.8rem;
+  fill: var(--asc-color-white);
 }
 
 .userAvatar__container {

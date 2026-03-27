@@ -114,7 +114,7 @@ export const NotificationItem = ({
                 onPressAvatar={onClickItem}
                 pageId={pageId}
                 componentId={componentId}
-                userData={item.users[0]}
+                userData={item.actionType === 'user' ? undefined : item.users[0]}
                 className={styles.notificationItem__avatar}
               />
             </>
