@@ -294,12 +294,13 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
           ) : (
             <Popover
               placement="end top"
-              containerClassName={styles.messageBubble__optionIcon}
+              containerClassName={styles.messageBubble__displayNamePopover}
               onOpen={() => handlePopoverStateChange?.(true)}
               onClose={() => handlePopoverStateChange?.(false)}
               trigger={({ closePopover, isDesktop, openPopover }) => (
                 <Button
                   variant="default"
+                  className={styles.messageBubble__triggerButton}
                   onPress={() => {
                     if (!room) return;
                     if (isDesktop) {

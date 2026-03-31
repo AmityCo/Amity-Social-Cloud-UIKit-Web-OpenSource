@@ -11,10 +11,17 @@
   align-items: center;
   gap: 0.5rem;
   justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0 1rem;
 }
 
 .userModerationHeader__displayName {
   color: var(--asc-color-base-default);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .userModerationHeader__mutedIcon {

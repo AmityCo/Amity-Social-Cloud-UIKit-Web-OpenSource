@@ -2,8 +2,8 @@ import React from 'react';
 import styles from './CoHostBadge.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
-import { LivestreamOutlined } from '~/v4/icons/LivestreamOutlined';
 import { Typography } from '~/v4/core/components';
+import { PersonOutline } from '~/v4/icons/PersonOutline';
 
 interface CoHostBadgeProps {
   pageId?: string;
@@ -28,7 +28,7 @@ export function CoHostBadge({ pageId = '*', componentId = '*', className }: CoHo
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      <LivestreamOutlined className={styles.coHostBadge__icon} />
+      <PersonOutline className={styles.coHostBadge__icon} />
       <Typography.CaptionSmall className={styles.coHostBadge__text}>
         {config.text ?? 'Co-Host'}
       </Typography.CaptionSmall>
