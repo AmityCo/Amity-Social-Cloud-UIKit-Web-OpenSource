@@ -34,6 +34,8 @@
   outline: none;
   font-size: 1rem;
   color: var(--asc-color-base-default);
+  width: 100%;
+  min-width: 0;
 }
 
 .topSearchBar__searchIcon {
