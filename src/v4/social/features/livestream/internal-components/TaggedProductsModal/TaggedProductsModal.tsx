@@ -18,6 +18,7 @@ import { ActionButton } from '~/v4/core/components/ActionButton';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 import { ProductTagListRenderModeEnum, LayoutVariantEnum } from '~/v4/social/types';
 import { useNetworkState } from 'react-use';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 type DrawerScreen = 'list' | 'selection';
 
@@ -60,6 +61,7 @@ export function TaggedProductsModal({
     componentId,
   });
 
+  const { AmityGlobalBehavior } = usePageBehavior();
   const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
   const { online } = useNetworkState();
@@ -205,8 +207,10 @@ export function TaggedProductsModal({
                   isPinned={productTag.product.productId === pinnedProductId && isHost}
                   isShowView
                   onClick={() => {
-                    if (productTag.product?.productUrl) {
-                      window.open(productTag.product.productUrl, '_blank', 'noopener,noreferrer');
+                    if (productTag.product) {
+                      AmityGlobalBehavior?.onLivestreamProductTagClick?.({
+                        product: productTag.product,
+                      });
                     }
                   }}
                   pageId={pageId}

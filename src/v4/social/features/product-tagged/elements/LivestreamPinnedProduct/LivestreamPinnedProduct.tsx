@@ -22,6 +22,7 @@ interface LivestreamPinnedProductProps {
   isViewer?: boolean;
   onClosePinnedProduct?: () => void;
   sourceId?: string;
+  onProductLinkClick?: (productTag: Amity.MediaProductTag) => void;
 }
 
 export function LivestreamPinnedProduct({
@@ -34,6 +35,7 @@ export function LivestreamPinnedProduct({
   isViewer = true,
   sourceId = '',
   onClosePinnedProduct,
+  onProductLinkClick,
 }: LivestreamPinnedProductProps) {
   const elementId = ELEMENT_ID.LIVESTREAM_PINNED_PRODUCT;
 
@@ -59,7 +61,7 @@ export function LivestreamPinnedProduct({
   const handleLinkClick = (e: React.MouseEvent) => {
     isViewer && markAsClicked();
     if (!unavailable && product.productUrl) {
-      window.open(product.productUrl, '_blank', 'noopener,noreferrer');
+      onProductLinkClick?.(productTag);
     }
   };
 
@@ -154,7 +156,7 @@ export function LivestreamPinnedProduct({
                 isDisabled={unavailable}
                 onPress={() => {
                   markAsClicked();
-                  window.open(product.productUrl, '_blank', 'noopener,noreferrer');
+                  onProductLinkClick?.(productTag);
                 }}
               >
                 <Typography.CaptionBold

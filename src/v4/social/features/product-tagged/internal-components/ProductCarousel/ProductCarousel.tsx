@@ -19,7 +19,7 @@ export interface ProductCarouselProps {
 }
 
 export function ProductCarousel({ pageId = '*', componentId = '*', post }: ProductCarouselProps) {
-  const { AmityProducTagtListComponentBehavior } = usePageBehavior();
+  const { AmityGlobalBehavior } = usePageBehavior();
   const { showProductTagList } = useShowProductTagList({
     pageId,
     mode: 'post',
@@ -91,11 +91,10 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
 
   const handleProductTagClick = useCallback(
     (productTag: Amity.ProductTag) => {
-      if (AmityProducTagtListComponentBehavior?.onProductTagClick) {
-        AmityProducTagtListComponentBehavior.onProductTagClick({ productTag });
-      }
+      if (!productTag.product) return;
+      AmityGlobalBehavior?.onPostProductTagClick?.({ product: productTag.product });
     },
-    [AmityProducTagtListComponentBehavior, accessibilityId],
+    [AmityGlobalBehavior],
   );
 
   const handleViewAllProducts = useCallback(() => {

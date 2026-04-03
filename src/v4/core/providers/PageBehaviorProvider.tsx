@@ -256,37 +256,39 @@ export interface PageBehavior {
     handleVisitorUserAction?(context: { alignment: NotificationAlignment }): void;
     handleNonMemberAction?(context: { alignment: NotificationAlignment }): void;
     handleNonFollowerAction?(context: { alignment: NotificationAlignment }): void;
+    onPostProductTagClick?(context: { product: Amity.Product }): void;
+    onLivestreamProductTagClick?(context: { product: Amity.Product }): void;
   };
-  AmityEventTargetSelectionPageBehavior: {
+  AmityEventTargetSelectionPageBehavior?: {
     goToEventSetupPage?(context: EventSetupProps): void;
   };
 
-  AmityMyCommunitiesComponentBehavior: {
+  AmityMyCommunitiesComponentBehavior?: {
     goToCommunitySetupPage?(context: { mode: AmityCommunitySetupPageMode }): void;
   };
 
-  AmityExploreEventFeedComponentBehavior: {
+  AmityExploreEventFeedComponentBehavior?: {
     goToUpcomingEventsPage?(context: UpcomingEventsPageProps): void;
   };
 
-  AmityMyEventFeedComponentBehavior: {
+  AmityMyEventFeedComponentBehavior?: {
     goToUpcomingEventsPage?(context: UpcomingEventsPageProps): void;
     goToPastEventsPage?(): void;
   };
 
-  AmityEventDetailPageBehavior: {
-    goToCommunityProfilePage(context: { communityId: string }): void;
-    goToPostDetailPage(context: GoToPostDetailPageParams): void;
-    goToEventSetupPage(context: EventSetupProps): void;
+  AmityEventDetailPageBehavior?: {
+    goToCommunityProfilePage?(context: { communityId: string }): void;
+    goToPostDetailPage?(context: GoToPostDetailPageParams): void;
+    goToEventSetupPage?(context: EventSetupProps): void;
     goToCreateLivestreamPage?(context: CreateLivestreamPageProps): void;
-    goToPostComposerPage(context: {
+    goToPostComposerPage?(context: {
       mode: Mode.CREATE;
       targetName?: string;
       targetId: string | null;
       targetType: 'community' | 'user';
       community?: Amity.Community;
     }): void;
-    goToPollPostComposerPage(context: {
+    goToPollPostComposerPage?(context: {
       targetId: string | null;
       targetType: 'community' | 'user';
       pollType?: 'text' | 'image';
@@ -294,14 +296,11 @@ export interface PageBehavior {
     goToEventAttendeesPage?(context: { event: Amity.Event }): void;
     goToUserProfilePage?(context: { userId: string }): void;
   };
-  AmityEventSetupPageBehavior: {
-    goToEventDetailPage: (context: EventDetailProps) => void;
+  AmityEventSetupPageBehavior?: {
+    goToEventDetailPage?(context: EventDetailProps): void;
   };
-  AmityEventAttendeesPageBehavior: {
+  AmityEventAttendeesPageBehavior?: {
     goToUserProfilePage?(context: { userId: string }): void;
-  };
-  AmityProducTagtListComponentBehavior: {
-    onProductTagClick?(context: { productTag: Amity.ProductTag }): void;
   };
 }
 
@@ -364,7 +363,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToCreateLivestreamPage,
     goToEventDetailPage,
     goToLiveStreamPlayerPage,
-    onProductTagClick,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -999,6 +997,20 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         handleNonFollowerAction(context);
       },
+      onPostProductTagClick: (context: { product: Amity.Product }) => {
+        if (pageBehavior?.AmityGlobalBehavior?.onPostProductTagClick) {
+          return pageBehavior.AmityGlobalBehavior.onPostProductTagClick(context);
+        }
+        context.product?.productUrl &&
+          window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
+      },
+      onLivestreamProductTagClick: (context: { product: Amity.Product }) => {
+        if (pageBehavior?.AmityGlobalBehavior?.onLivestreamProductTagClick) {
+          return pageBehavior.AmityGlobalBehavior.onLivestreamProductTagClick(context);
+        }
+        context.product?.productUrl &&
+          window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
+      },
     },
     AmityMyCommunitiesComponentBehavior: {
       goToCommunitySetupPage: (context: { mode: AmityCommunitySetupPageMode }) => {
@@ -1113,14 +1125,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventAttendeesPageBehavior.goToUserProfilePage(context);
         }
         goToUserProfilePage(context.userId);
-      },
-    },
-    AmityProducTagtListComponentBehavior: {
-      onProductTagClick: (context: { productTag: Amity.ProductTag }) => {
-        if (pageBehavior?.AmityProducTagtListComponentBehavior?.onProductTagClick) {
-          return pageBehavior.AmityProducTagtListComponentBehavior.onProductTagClick(context);
-        }
-        onProductTagClick?.({ productTag: context.productTag });
       },
     },
   };
