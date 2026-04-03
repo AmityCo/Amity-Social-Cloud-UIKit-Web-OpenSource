@@ -5,6 +5,7 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { SerializedLexicalNode, SerializedParagraphNode } from 'lexical';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
   MentionData,
   textToEditorState,
@@ -75,7 +76,8 @@ export const TextWithMention = ({
   seeLessSupport = false,
   testId,
 }: TextWithMentionProps) => {
-  const { goToUserProfilePage, goToSocialGlobalSearchPage, onProductTagClick } = useNavigation();
+  const { goToUserProfilePage, goToSocialGlobalSearchPage } = useNavigation();
+  const { AmityGlobalBehavior } = usePageBehavior();
   const [isExpanded, setIsExpanded] = useState(seeMoreIsOpen);
   const { isDesktop } = useResponsive();
   const { openSearchResultModal, setSearchValue } = useSearchResultContext();
@@ -347,12 +349,11 @@ export const TextWithMention = ({
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              onProductTagClick?.({
-                productTag: {
-                  productId: productData.productId,
+              if (productData.product) {
+                AmityGlobalBehavior?.onPostProductTagClick?.({
                   product: productData.product,
-                },
-              });
+                });
+              }
             }}
             onMouseUp={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}

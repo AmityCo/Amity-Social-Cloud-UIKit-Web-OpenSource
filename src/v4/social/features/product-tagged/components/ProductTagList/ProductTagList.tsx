@@ -39,7 +39,7 @@ export function ProductTagList({
   sourceId,
 }: ProductTagListProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_LIST;
-  const { AmityProducTagtListComponentBehavior } = usePageBehavior();
+  const { AmityGlobalBehavior } = usePageBehavior();
   const { config, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
@@ -50,8 +50,11 @@ export function ProductTagList({
   }
 
   const handleClickProductLink = (productTag: Amity.ProductTag) => {
-    if (AmityProducTagtListComponentBehavior?.onProductTagClick)
-      return AmityProducTagtListComponentBehavior?.onProductTagClick({ productTag });
+    if (!productTag.product) return;
+    if (renderMode === ProductTagListRenderModeEnum.LIVESTREAM) {
+      return AmityGlobalBehavior?.onLivestreamProductTagClick?.({ product: productTag.product });
+    }
+    return AmityGlobalBehavior?.onPostProductTagClick?.({ product: productTag.product });
   };
 
   const sortedProductTags = React.useMemo(() => {
