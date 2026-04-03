@@ -55,7 +55,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
               variant="outlined"
               color="secondary"
               onPress={() =>
-                AmityExploreEventFeedComponentBehavior.goToUpcomingEventsPage?.({
+                AmityExploreEventFeedComponentBehavior?.goToUpcomingEventsPage?.({
                   fromExplore: true,
                 })
               }

@@ -11,6 +11,7 @@ import { ProductImageThumbnail } from '~/v4/social/features/product-tagged/inter
 import { formatPrice } from '~/v4/social/utils/formatPrice';
 import { useNetworkState } from 'react-use';
 import { PinStraight } from '~/v4/icons/PinStraight';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 export type RenderModeEnum = 'livestream' | 'playback';
 
@@ -44,17 +45,21 @@ export function ManageProductTag({
     componentId,
     elementId,
   });
+  const { AmityGlobalBehavior } = usePageBehavior();
 
   const product = productTag.product;
   const unavailable = product?.status === 'archived';
   const price = product ? formatPrice(product.price, product.currency) : undefined;
   const { online } = useNetworkState();
 
-  const productUrl = product?.productUrl;
-
   if (!product) return null;
 
-  const isLinkable = !unavailable && !!productUrl;
+  const isLinkable = !unavailable && !!product.productUrl;
+
+  const handlePress = () => {
+    if (!isLinkable) return;
+    AmityGlobalBehavior?.onLivestreamProductTagClick?.({ product });
+  };
 
   const linkContent = (
     <>
@@ -96,18 +101,15 @@ export function ManageProductTag({
 
   return (
     <div className={styles.manageProductTag} style={themeStyles} data-test-id={accessibilityId}>
-      {isLinkable ? (
-        <a
-          href={productUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.manageProductTag__link}
-        >
-          {linkContent}
-        </a>
-      ) : (
-        linkContent
-      )}
+      <div
+        role="button"
+        tabIndex={isLinkable ? 0 : -1}
+        className={styles.manageProductTag__link}
+        onClick={handlePress}
+        data-linkable={isLinkable}
+      >
+        {linkContent}
+      </div>
       <div className={styles.manageProductTag__actions}>
         <ActionButton
           className={styles.manageProductTag__removeButton}

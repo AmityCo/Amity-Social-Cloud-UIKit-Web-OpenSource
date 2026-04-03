@@ -184,7 +184,7 @@ export function useEventSetup(props: EventSetupProps) {
       onSettled: () => remove('create-event-loading'),
       onSuccess: ({ data }) => {
         success({ content: 'Successfully created event.' });
-        AmityEventSetupPageBehavior.goToEventDetailPage({
+        AmityEventSetupPageBehavior?.goToEventDetailPage?.({
           eventId: data.eventId,
           pop: isDesktop ? 2 : 3,
         });

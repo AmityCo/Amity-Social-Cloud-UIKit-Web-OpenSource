@@ -59,7 +59,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
       Icon: CreatePost,
       onPress: () => {
         removeDrawerData();
-        AmityEventDetailPageBehavior.goToPostComposerPage({
+        AmityEventDetailPageBehavior?.goToPostComposerPage?.({
           mode: Mode.CREATE,
           targetName: event.title,
           targetType: 'community',
@@ -91,7 +91,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
       Icon: LivestreamFill,
       onPress: () => {
         removeDrawerData();
-        AmityEventDetailPageBehavior.goToCreateLivestreamPage?.({
+        AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
           targetType: 'community',
           targetId: event.discussionCommunityId!,
         });
