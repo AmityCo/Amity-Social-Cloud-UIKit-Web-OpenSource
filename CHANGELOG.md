@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.8 (2026-04-03)
+
+
+### Features
+
+* PDT-2097 - override product tag behavior ([#1579](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1579)) ([27ecb48](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/27ecb48390ba3be0ce5015e993c314fdcf9e6dd7))
+
 ## 4.15.0-beta.7 (2026-03-27)
 
 ## 4.15.0-beta.6 (2026-03-23)
