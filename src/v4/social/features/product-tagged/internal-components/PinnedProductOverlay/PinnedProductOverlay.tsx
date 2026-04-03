@@ -7,6 +7,7 @@ import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { useTaggingProduct } from '~/v4/social/hooks/useTaggingProduct';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { LivestreamPinnedProduct } from '~/v4/social/features/product-tagged/elements/LivestreamPinnedProduct';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 export interface PinnedProductOverlayProps {
   pageId?: string;
@@ -21,6 +22,7 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
   const { success, info } = useNotifications();
   const { unpinProduct, updateProductTags } = useTaggingProduct();
   const { productCatalogueSettings } = useProductCatalogueSettings();
+  const { AmityGlobalBehavior } = usePageBehavior();
 
   const { room, hostId, coHostId, livestreamPost } = useLivestreamData();
 
@@ -103,6 +105,13 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
       onClosePinnedProduct={() => setDismissedPinnedProductId(pinnedProductId)}
       onUnpin={onUnpin}
       onRemove={onRemove}
+      onProductLinkClick={(productTag) => {
+        if (productTag.product) {
+          AmityGlobalBehavior?.onLivestreamProductTagClick?.({
+            product: productTag.product as Amity.Product,
+          });
+        }
+      }}
     />
   );
 };

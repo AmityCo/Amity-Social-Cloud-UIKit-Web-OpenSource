@@ -45,7 +45,9 @@ export function EventDescription({ event }: EventDescriptionProps) {
           variant="text"
           className={styles.eventDescription__communityButton}
           onPress={() =>
-            AmityEventDetailPageBehavior?.goToCommunityProfilePage({ communityId: event.originId })
+            AmityEventDetailPageBehavior?.goToCommunityProfilePage?.({
+              communityId: event.originId,
+            })
           }
         >
           <Typography.BodyBold as="span" className={styles.eventDescription__name}>
@@ -129,7 +131,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
           aria-label="Click to go host profile"
           className={styles.eventDescription__row}
           onPress={() => {
-            AmityEventDetailPageBehavior.goToUserProfilePage?.({ userId: event.userId });
+            AmityEventDetailPageBehavior?.goToUserProfilePage?.({ userId: event.userId });
           }}
         >
           <div>
