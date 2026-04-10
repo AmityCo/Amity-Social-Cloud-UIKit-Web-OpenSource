@@ -3,14 +3,14 @@
 .inviteCoHostList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   padding: 1rem;
 }
 
 .inviteCoHostList__skeletonWrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   padding: 1rem;
 }
 
@@ -36,7 +36,7 @@
 /* WatchingUserList */
 
 .inviteCoHostList__sectionHeader {
-  padding: 1.25rem 1rem 0.5rem;
+  padding: 0.25rem 0 0.5rem;
 }
 
 /* WatchingUserItem Styles */
@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 0;
 }
 
 .watchingUserItem__userInfo {
@@ -52,6 +52,7 @@
   align-items: center;
   gap: 0.75rem;
   flex: 1;
+  min-width: 0;
 }
 
 .watchingUserItem__avatar {
@@ -66,6 +67,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+  padding-right: 1rem;
 }
 
 @media (width >= 48em) {

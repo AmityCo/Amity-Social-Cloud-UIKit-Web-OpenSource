@@ -1,11 +1,11 @@
 import React, { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 import CheckCircle from '~/v4/icons/CheckCircle';
-import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import Remove from '~/v4/icons/Remove';
 import styles from './NotificationProvider.module.css';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
+import Info from '~/v4/icons/Info';
 
 interface Notification {
   id?: number | string;
@@ -105,7 +105,7 @@ export const NotificationProvider: React.FC = ({ children }) => {
       info: (data: Omit<NotificationInput, 'icon'>) =>
         addNotifications({
           ...data,
-          icon: <ExclamationCircle className={styles.icon} />,
+          icon: <Info className={styles.icon} />,
           alignment: data.alignment,
         }),
       error: (data: Omit<NotificationInput, 'icon'>) =>

@@ -226,9 +226,7 @@ export const PollContent: FC<PollContentProps> = ({
       <div className={styles.pollContent__pollDetail__container}>
         <div className={styles.pollContent__pollDetail}>
           <Typography.CaptionBold>{voteCount}</Typography.CaptionBold>
-          <Typography.CaptionBold>
-            vote{`${voteCount && voteCount > 1 ? 's' : ''}`}
-          </Typography.CaptionBold>
+          <Typography.CaptionBold>vote{`${voteCount !== 1 ? 's' : ''}`}</Typography.CaptionBold>
           <Typography.CaptionBold>•</Typography.CaptionBold>
           {!isPollEnded && typeof poll.closedIn === 'number' ? (
             <>

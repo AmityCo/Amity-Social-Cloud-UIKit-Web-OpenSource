@@ -1,0 +1,5 @@
+.inviteButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed !important;
+  background-color: var(--asc-color-primary-default) !important;
+}

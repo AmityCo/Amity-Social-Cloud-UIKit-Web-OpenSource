@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Button, ButtonProps } from '~/v4/core/components/AriaButton';
+import styles from './InviteButton.module.css';
 
 type InviteButtonProps = ButtonProps & {
   pageId?: string;
@@ -18,6 +19,7 @@ export function InviteButton({ pageId = '*', componentId = '*', ...props }: Invi
       variant="fill"
       color="primary"
       data-testid={accessibilityId}
+      className={styles.inviteButton}
       {...props}
     >
       {config.text ?? 'Invite'}

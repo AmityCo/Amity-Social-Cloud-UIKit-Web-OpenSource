@@ -8,28 +8,37 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.25rem;
+  min-width: 0;
 }
 
 .messageBubble__displayName__container {
   gap: 0.25rem;
   display: flex;
+  flex: 1;
   align-items: center;
+  justify-content: flex-start;
   min-width: 0;
   overflow: hidden;
 }
 
 .messageBubble__displayName {
   color: var(--asc-color-secondary-default);
-  max-width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  flex-shrink: 1;
+  flex: 1;
   min-width: 0;
 }
 
 .messageBubble__optionIcon {
   fill: var(--asc-color-white);
+}
+
+.messageBubble__displayNamePopover {
+  fill: var(--asc-color-white);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .messageBubble__deletedMessageText__container {
@@ -67,6 +76,7 @@
 }
 
 .messageBubble__optionsButton__container {
+  max-width: 20rem;
   padding: 0.5rem 0;
 }
 
@@ -102,8 +112,20 @@
   fill: var(--asc-color-white);
 }
 
+.messageBubble__triggerButton {
+  min-width: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
 .messageBubble__button__displayName {
   color: var(--asc-color-secondary-default);
+  text-align: left;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .messageBubble__button__displayName:hover {

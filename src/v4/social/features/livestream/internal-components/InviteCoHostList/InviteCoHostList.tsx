@@ -154,13 +154,19 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
     else return invitation;
   }, [invitation?.status, invitation?.user?.userId]);
 
-  // Filter out pending invitation user and co-host from watching users
+  // Filter out pending invitation user and co-host from watching users, sorted alphabetically by display name
   const filteredWatchingUsers = useMemo(() => {
-    return watchingUsers.filter((user) => {
-      const isPendingUser = pendingInvitation?.user?.userId === user.userId;
-      const isCoHostUser = coHost?.userId === user.userId;
-      return !isPendingUser && !isCoHostUser;
-    });
+    return watchingUsers
+      .filter((user) => {
+        const isPendingUser = pendingInvitation?.user?.userId === user.userId;
+        const isCoHostUser = coHost?.userId === user.userId;
+        return !isPendingUser && !isCoHostUser;
+      })
+      .sort((a, b) => {
+        const nameA = (a.displayName || a.userId).toLowerCase();
+        const nameB = (b.displayName || b.userId).toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
   }, [watchingUsers, pendingInvitation?.user?.userId, coHost?.userId]);
 
   if (isLoading)

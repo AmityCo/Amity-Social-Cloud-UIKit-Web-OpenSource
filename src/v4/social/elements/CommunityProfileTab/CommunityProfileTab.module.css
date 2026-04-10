@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  z-index: 10;
+  z-index: 100;
   position: sticky;
   top: 5.375rem;
   border-bottom: 1px solid var(--asc-color-base-shade4);
