@@ -68,6 +68,7 @@
 @media (width >= 48em) {
   .pollTargetSelectionPage {
     width: 30rem;
+    height: 75dvh;
     overflow-y: auto;
     border-radius: 0.75rem;
     padding: 0 1.5rem;

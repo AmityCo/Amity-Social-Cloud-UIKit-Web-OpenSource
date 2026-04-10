@@ -171,7 +171,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
   };
 
   const handleVisitorClick = () => {
-    error({
+    info({
       content: 'Create an account or sign in to continue.',
     });
   };
