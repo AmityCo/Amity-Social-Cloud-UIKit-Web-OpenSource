@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Badge from '~/v4/icons/Badge';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
