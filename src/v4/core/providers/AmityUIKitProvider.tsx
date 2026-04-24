@@ -58,6 +58,7 @@ import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { Client, UserTypeEnum } from '@amityco/ts-sdk';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
+import { UserCacheProvider } from '~/v4/core/providers/UserCacheProvider';
 
 const InternalComponent = ({
   apiKey,
@@ -227,46 +228,48 @@ const InternalComponent = ({
             <FeedScrollProvider>
               <SDKContextV3.Provider value={sdkContextValue}>
                 <SDKContext.Provider value={sdkContextValue}>
-                  <SDKConnectorProviderV3>
-                    <SDKConnectorProvider>
-                      <ConfigProvider
-                        config={{
-                          socialCommunityCreationButtonVisible:
-                            socialCommunityCreationButtonVisible || true,
-                        }}
-                      >
-                        <PostRendererProvider config={postRendererConfig}>
-                          <LayoutProvider>
-                            <NavigationProvider
-                              activeRoute={activeRoute}
-                              onRouteChange={onRouteChange}
-                              onEmptyNavigationStack={onEmptyNavigationStack}
-                            >
-                              <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                <SearchResultProvider>
-                                  <StoryProvider>
-                                    <ClipProvider>
-                                      <CommunitySetupProvider>
-                                        <DrawerProvider>
-                                          <GlobalFeedProvider>
-                                            <PopupProvider>
-                                              <Popup />
-                                              {children}
-                                            </PopupProvider>
-                                          </GlobalFeedProvider>
-                                          <DrawerContainer />
-                                        </DrawerProvider>
-                                      </CommunitySetupProvider>
-                                    </ClipProvider>
-                                  </StoryProvider>
-                                </SearchResultProvider>
-                              </PageBehaviorProvider>
-                            </NavigationProvider>
-                          </LayoutProvider>
-                        </PostRendererProvider>
-                      </ConfigProvider>
-                    </SDKConnectorProvider>
-                  </SDKConnectorProviderV3>
+                  <UserCacheProvider>
+                    <SDKConnectorProviderV3>
+                      <SDKConnectorProvider>
+                        <ConfigProvider
+                          config={{
+                            socialCommunityCreationButtonVisible:
+                              socialCommunityCreationButtonVisible || true,
+                          }}
+                        >
+                          <PostRendererProvider config={postRendererConfig}>
+                            <LayoutProvider>
+                              <NavigationProvider
+                                activeRoute={activeRoute}
+                                onRouteChange={onRouteChange}
+                                onEmptyNavigationStack={onEmptyNavigationStack}
+                              >
+                                <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                  <SearchResultProvider>
+                                    <StoryProvider>
+                                      <ClipProvider>
+                                        <CommunitySetupProvider>
+                                          <DrawerProvider>
+                                            <GlobalFeedProvider>
+                                              <PopupProvider>
+                                                <Popup />
+                                                {children}
+                                              </PopupProvider>
+                                            </GlobalFeedProvider>
+                                            <DrawerContainer />
+                                          </DrawerProvider>
+                                        </CommunitySetupProvider>
+                                      </ClipProvider>
+                                    </StoryProvider>
+                                  </SearchResultProvider>
+                                </PageBehaviorProvider>
+                              </NavigationProvider>
+                            </LayoutProvider>
+                          </PostRendererProvider>
+                        </ConfigProvider>
+                      </SDKConnectorProvider>
+                    </SDKConnectorProviderV3>
+                  </UserCacheProvider>
                 </SDKContext.Provider>
               </SDKContextV3.Provider>
             </FeedScrollProvider>

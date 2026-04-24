@@ -18,7 +18,7 @@ interface PostTitleProps {
 }
 export const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) => {
   const shouldCallCommunity = useMemo(() => post?.targetType === 'community', [post?.targetType]);
-  const shouldCallUser = useMemo(
+  const isSameTargetUser = useMemo(
     () => post?.targetType === 'user' && post?.postedUserId !== post?.targetId,
     [post?.targetType, post?.postedUserId, post?.targetId],
   );
@@ -30,13 +30,13 @@ export const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitlePr
 
   const { user: targetUser } = useUser({
     userId: post?.targetId,
-    shouldCall: shouldCallUser,
+    shouldCall: isSameTargetUser,
   });
 
   const { goToCommunityProfilePage, onClickUser } = useNavigation();
 
   const showTargetCommunity = targetCommunity && !hideTarget;
-  const showTargetUser = targetUser && !hideTarget;
+  const showTargetUser = !isSameTargetUser && targetUser && !hideTarget;
   const showBrandBadge = post?.creator?.isBrand;
   const showPrivateBadge = targetCommunity?.isPublic === false;
   const showOfficialBadge = targetCommunity?.isOfficial === true;
