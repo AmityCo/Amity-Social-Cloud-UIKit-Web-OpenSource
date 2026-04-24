@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.15.0-beta.10 (2026-04-24)
+
 ## 4.15.0-beta.9 (2026-04-10)
 
 
