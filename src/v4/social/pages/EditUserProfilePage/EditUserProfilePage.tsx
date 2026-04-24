@@ -43,7 +43,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
 
   useEffect(() => {
     user?.displayName && setDisplayName(user.displayName);
-    user?.description && setDescription(user.description);
+    setDescription(user?.description ?? '');
   }, [user?.displayName, user?.description]);
 
   const uploadImage = async (image: File) => {
