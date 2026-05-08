@@ -1,4 +1,5 @@
 import { ChannelRepository } from '@amityco/ts-sdk';
+import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -65,10 +66,10 @@ export const useChatModeration = () => {
   const promoteToModerator = (payload: UpdateChannelPayload) => {
     info({
       type: 'info',
-      okText: 'Promote',
-      cancelText: 'Cancel',
+      okText: resolveString('amity_social_button_promote'),
+      cancelText: resolveString('amity_social_button_cancel'),
       shownCancelButton: true,
-      title: 'Moderator promotion',
+      title: resolveString('amity_social_modal_dialog_title_moderator_promotion'),
       onOk: () =>
         moderateChat(payload, {
           onSuccess: () => {
@@ -76,26 +77,28 @@ export const useChatModeration = () => {
               channelId: payload.channelId,
               userIds: [payload.creatorId],
             });
-            notification.success({ content: 'User promoted.', alignment: 'live-chat' });
+            notification.success({
+              content: resolveString('amity_social_toast_snackbar_user_promoted'),
+              alignment: 'live-chat',
+            });
           },
           onError: () => {
             notification.info({
-              content: 'Failed to promote user. Please try again.',
+              content: resolveString('amity_social_toast_user_promoted_failed'),
               alignment: 'live-chat',
             });
           },
         }),
-      content:
-        'Are you sure you want to promote this member to moderator? They will gain access to all moderator permissions in this live stream.',
+      content: resolveString('amity_social_modal_dialog_promote_moderator_description'),
     });
   };
 
   const demoteFromModerator = (payload: UpdateChannelPayload) => {
     confirm({
       type: 'confirm',
-      okText: 'Demote',
-      cancelText: 'Cancel',
-      title: 'Moderator demotion',
+      okText: resolveString('amity_social_button_demote'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      title: resolveString('amity_social_modal_dialog_title_moderator_demotion'),
       onOk: () =>
         moderateChat(payload, {
           onSuccess: () => {
@@ -103,63 +106,70 @@ export const useChatModeration = () => {
               channelId: payload.channelId,
               userIds: [payload.creatorId],
             });
-            notification.success({ content: 'User demoted.', alignment: 'live-chat' });
+            notification.success({
+              content: resolveString('amity_social_label_user_demoted'),
+              alignment: 'live-chat',
+            });
           },
           onError: () => {
             notification.info({
-              content: 'Failed to demote user. Please try again.',
+              content: resolveString('amity_social_toast_user_demoted_failed'),
               alignment: 'live-chat',
             });
           },
         }),
-      content:
-        'Are you sure you want to demote this moderator? They will lose access to all moderator permissions in this live stream.',
+      content: resolveString('amity_social_modal_dialog_demote_moderator_description'),
     });
   };
 
   const muteUser = (payload: UpdateChannelPayload) => {
     confirm({
       type: 'confirm',
-      okText: 'Mute',
-      cancelText: 'Cancel',
-      title: 'Confirm mute',
+      okText: resolveString('amity_social_button_mute'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      title: resolveString('amity_social_modal_dialog_title_confirm_mute'),
       onOk: () =>
         moderateChat(payload, {
           onSuccess: () => {
-            notification.success({ content: 'User muted.', alignment: 'live-chat' });
+            notification.success({
+              content: resolveString('amity_social_button_user_muted'),
+              alignment: 'live-chat',
+            });
           },
           onError: () => {
             notification.info({
-              content: 'Failed to mute user. Please try again.',
+              content: resolveString('amity_social_toast_user_muted_failed'),
               alignment: 'live-chat',
             });
           },
         }),
-      content:
-        'Are you sure you want to mute this user? They will no longer be able to send messages.',
+      content: resolveString('amity_social_modal_dialog_mute_user_description'),
     });
   };
 
   const unmuteUser = (payload: UpdateChannelPayload) => {
     info({
       type: 'info',
-      okText: 'Unmute',
-      cancelText: 'Cancel',
-      title: 'Confirm unmute',
+      okText: resolveString('amity_social_button_unmute'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      title: resolveString('amity_social_modal_dialog_title_confirm_unmute'),
       shownCancelButton: true,
       onOk: () =>
         moderateChat(payload, {
           onSuccess: () => {
-            notification.success({ content: 'User unmuted.', alignment: 'live-chat' });
+            notification.success({
+              content: resolveString('amity_social_button_user_unmuted'),
+              alignment: 'live-chat',
+            });
           },
           onError: () => {
             notification.info({
-              content: 'Failed to unmute user. Please try again.',
+              content: resolveString('amity_social_toast_user_unmuted_failed'),
               alignment: 'live-chat',
             });
           },
         }),
-      content: 'Are you sure you want to unmute this user? They can now send messages.',
+      content: resolveString('amity_social_modal_dialog_unmute_user_description'),
     });
   };
 

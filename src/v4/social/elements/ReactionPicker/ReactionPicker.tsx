@@ -25,7 +25,7 @@ export const ReactionPicker = ({
   position = 'above',
   hoveredReaction,
 }: ReactionPickerProps) => {
-  const { socialReactions: config } = useCustomReaction();
+  const { socialReactions: config, getReactionLabel } = useCustomReaction();
 
   const onClickReaction = (reactionName: AmityReactionType['name']) => {
     onReactionClick(reactionName);
@@ -66,7 +66,7 @@ export const ReactionPicker = ({
                 testId={`${pageId}/${componentId}/reaction-picker-label-${index}`}
                 className={styles.reactionButton__text}
               >
-                {reaction.name}
+                {getReactionLabel(reaction.name)}
               </Typography.Caption>
               <img
                 data-active={myReaction === reaction.name}

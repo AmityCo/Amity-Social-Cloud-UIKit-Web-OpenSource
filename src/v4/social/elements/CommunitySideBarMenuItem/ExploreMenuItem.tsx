@@ -17,11 +17,12 @@ export function ExploreMenuItem({ pageId = '*', componentId = '*' }: ExploreMenu
 
   const { onChangePage, page } = useNavigation();
   const { activeTab, setActiveTab } = useLayoutContext();
-  const { accessibilityId, config, isExcluded, defaultConfig, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, isExcluded, defaultConfig, uiReference, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -42,7 +43,7 @@ export function ExploreMenuItem({ pageId = '*', componentId = '*' }: ExploreMenu
         />
       )}
     >
-      {config.text}
+      {resolveText('amity_social_explore_community_button')}
     </CommunitySideBarMenuItem>
   );
 }

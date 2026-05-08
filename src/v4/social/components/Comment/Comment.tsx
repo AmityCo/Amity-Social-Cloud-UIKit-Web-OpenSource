@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -115,6 +116,15 @@ export const Comment = ({
     undefined,
   );
   const notification = useNotifications();
+  const deleteCommentTitleText = useString('amity_social_button_delete_comment_title');
+  const deleteCommentWarningText = useString('amity_social_button_delete_comment_warning_message');
+  const cancelCommentText = useString('amity_social_button_cancel');
+  const deleteCommentOkText = useString('amity_common_button_delete');
+  const commentDeletedText = useString('amity_social_button_comment_deleted_message');
+  const editedSuffixText = useString('amity_social_button_edited_suffix');
+  const replyButtonText = useString('amity_social_button_reply');
+  const viewRepliesText = useString('amity_social_label_view_replies');
+  const viewReplyText = useString('amity_social_label_view_reply');
   const { online } = useNetworkState();
   const { page } = useNavigation();
 
@@ -159,6 +169,7 @@ export const Comment = ({
       }
     };
     document.addEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+
     return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
   }, [comment.commentId]);
 
@@ -227,7 +238,7 @@ export const Comment = ({
     toggleBottomSheet();
     if (!online) {
       notification.info({
-        content: 'No internet connection.',
+        content: resolveString('amity_social_label_no_internet_connection'),
         alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
       });
       return;
@@ -235,10 +246,10 @@ export const Comment = ({
     confirm({
       pageId,
       componentId,
-      title: 'Delete comment',
-      content: 'This comment will be permanently deleted.',
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      title: deleteCommentTitleText,
+      content: deleteCommentWarningText,
+      cancelText: cancelCommentText,
+      okText: deleteCommentOkText,
       onOk: deleteComment,
     });
   };
@@ -360,7 +371,7 @@ export const Comment = ({
           </div>
           <div className={styles.postComment__details}>
             <Typography.Body className={styles.postComment__deleteComment_text}>
-              This comment has been deleted
+              {commentDeletedText}
             </Typography.Body>
             {replyAmount > 0 && !hasClickLoadMore && (
               <Button
@@ -371,7 +382,9 @@ export const Comment = ({
               >
                 <ReplyComment className={styles.postComment__viewReply_icon} />
                 <Typography.CaptionBold className={styles.postComment__viewReply_text}>
-                  View {replyAmount} {replyAmount > 1 ? 'replies' : 'reply'}
+                  {replyAmount > 1
+                    ? viewRepliesText.replace('%d', String(replyAmount))
+                    : viewReplyText.replace('%d', String(replyAmount))}
                 </Typography.CaptionBold>
               </Button>
             )}
@@ -532,7 +545,7 @@ export const Comment = ({
                       timestamp={comment.createdAt}
                     />
                     <span data-testid={`${pageId}/${componentId}/comment_edited_text`}>
-                      {comment.createdAt !== comment.editedAt && ' (edited)'}
+                      {comment.createdAt !== comment.editedAt && ` ${editedSuffixText}`}
                     </span>
                   </Typography.Caption>
                   <ReactionButton
@@ -552,7 +565,7 @@ export const Comment = ({
                     className={styles.postComment__secondRow__replyButton}
                   >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
-                      Reply
+                      {replyButtonText}
                     </Typography.CaptionBold>
                   </Button>
                   <Popover
@@ -598,7 +611,9 @@ export const Comment = ({
               >
                 <ReplyComment className={styles.postComment__viewReply_icon} />
                 <Typography.CaptionBold className={styles.postComment__viewReply_text}>
-                  View {replyAmount} {replyAmount > 1 ? 'replies' : 'reply'}
+                  {replyAmount > 1
+                    ? viewRepliesText.replace('%d', String(replyAmount))
+                    : viewReplyText.replace('%d', String(replyAmount))}
                 </Typography.CaptionBold>
               </Button>
             )}

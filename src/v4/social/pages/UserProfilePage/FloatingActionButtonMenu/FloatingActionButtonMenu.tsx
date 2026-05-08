@@ -1,4 +1,5 @@
 import React, { FC, ReactNode, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './FloatingActionButtonMenu.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
@@ -44,14 +45,14 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
   }[] = [
     {
       id: 'post',
-      label: 'Post',
+      label: useString('amity_social_label_community_post_label'),
       icon: <CreatePost className={styles.floatingActionButtonMenu__icon} />,
       onPress: () =>
         goToPostComposerPage({ mode: Mode.CREATE, targetId: null, targetType: 'user' }),
     },
     {
       id: 'poll',
-      label: 'Poll',
+      label: useString('amity_social_button_poll'),
       icon: <CreatePoll className={styles.floatingActionButtonMenu__icon} />,
       onPress: () => {
         setDrawerData({
@@ -94,7 +95,7 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
         <Button className={styles.floatingActionButtonMenu__button}>
           <CreateClip className={styles.floatingActionButtonMenu__icon} />
           <Typography.BodyBold className={styles.floatingActionButtonMenu__label}>
-            Clip
+            {useString('amity_social_button_clip')}
           </Typography.BodyBold>
         </Button>
       </FileTrigger>

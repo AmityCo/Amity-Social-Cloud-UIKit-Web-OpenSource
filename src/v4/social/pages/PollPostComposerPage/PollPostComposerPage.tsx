@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './PollPostComposerPage.module.css';
 import { FileTrigger, Form, Input, Label, TextArea, TextField } from 'react-aria-components';
 import { Button as AriaButton } from '~/v4/core/components/AriaButton';
@@ -75,13 +76,6 @@ type ImageOption = {
   id: string;
   indexOfFiles: number | undefined;
 };
-const timeDuration = [
-  { value: 1, label: '1 day' },
-  { value: 3, label: '3 days' },
-  { value: 7, label: '7 days' },
-  { value: 14, label: '14 days' },
-  { value: 30, label: '30 days' },
-];
 
 export type CreatePollPostParams = {
   pollId: string;
@@ -103,6 +97,14 @@ export const PollPostComposerPage = ({
     pageId,
   });
   const { onBack, prevPage } = useNavigation();
+
+  const timeDuration = [
+    { value: 1, label: useString('amity_social_button_poll_duration_1_day') },
+    { value: 3, label: useString('amity_social_button_poll_duration_3_days') },
+    { value: 7, label: useString('amity_social_button_poll_duration_7_days') },
+    { value: 14, label: useString('amity_social_button_poll_duration_14_days') },
+    { value: 30, label: useString('amity_social_button_poll_duration_30_days') },
+  ];
   const { community } = useCommunity({ communityId: targetId });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const notification = useNotifications();
@@ -173,7 +175,7 @@ export const PollPostComposerPage = ({
 
   const formatEndDate =
     selectedDate &&
-    new Intl.DateTimeFormat('en-GB', {
+    new Intl.DateTimeFormat(typeof navigator !== 'undefined' ? navigator.language : 'en', {
       day: 'numeric',
       month: 'short',
     }).format(selectedDate.toDate(getLocalTimeZone()));
@@ -227,10 +229,9 @@ export const PollPostComposerPage = ({
       ) {
         info({
           pageId,
-          title: 'Posts sent for review',
-          content:
-            'Your post has been submitted to pending list. It will be review by community moderator.',
-          okText: 'OK',
+          title: resolveString('amity_social_button_post_composer_create_buttons_sent_for_review'),
+          content: resolveString('amity_social_modal_dialog_post_pending_approval'),
+          okText: resolveString('amity_social_button_ok'),
         });
       }
     } catch (error: unknown) {
@@ -238,7 +239,7 @@ export const PollPostComposerPage = ({
       setIsError(true);
       if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
-          content: "Your post wasn't posted as it contains an inappropriate word.",
+          content: resolveString('amity_social_error_post_create_ban_word_error'),
           alignment: 'fullscreen',
         });
       }
@@ -257,9 +258,9 @@ export const PollPostComposerPage = ({
     if (data.text?.length && data.text.length > MAXIMUM_POST_CHARACTERS) {
       info({
         pageId,
-        title: 'Unable to post',
-        content: 'You have reached maximum 50,000 characters in a post.',
-        okText: 'Done',
+        title: resolveString('amity_social_unable_to_post'),
+        content: resolveString('amity_social_error_post_text_exceed_error_message'),
+        okText: resolveString('amity_social_button_done'),
       });
       return;
     }
@@ -285,7 +286,7 @@ export const PollPostComposerPage = ({
   const validateAndSubmit: SubmitHandler<FormValues> = async (data) => {
     if (!online) {
       notification.info({
-        content: 'Failed to create post. Please try again.',
+        content: resolveString('amity_social_toast_post_create_generic_error_message'),
         alignment: 'fixed',
       });
       return;
@@ -316,7 +317,7 @@ export const PollPostComposerPage = ({
       setIsCreating(false);
       if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
-          content: "Your post wasn't posted as it contains an inappropriate word.",
+          content: resolveString('amity_social_error_post_create_ban_word_error'),
           alignment: 'fullscreen',
         });
       }
@@ -329,13 +330,13 @@ export const PollPostComposerPage = ({
     confirm({
       pageId: pageId,
       type: 'confirm',
-      title: 'Discard this post?',
-      content: 'The post will be permanently discarded. It cannot be undone.',
+      title: resolveString('amity_social_modal_dialog_title_discard_post'),
+      content: resolveString('amity_social_modal_dialog_discard_post'),
       onOk: () => {
         prevPage?.type == PageTypes.PollTargetSelectionPage ? onBack(-2) : onBack();
       },
-      okText: 'Discard',
-      cancelText: 'Keep editing',
+      okText: resolveString('amity_social_button_discard'),
+      cancelText: resolveString('amity_social_button_keep_editing'),
     });
   };
 
@@ -483,7 +484,7 @@ export const PollPostComposerPage = ({
             }}
           >
             <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
-              Retry
+              {useString('amity_social_button_retry')}
             </Typography.Body>
           </Button>
           <Button
@@ -494,7 +495,7 @@ export const PollPostComposerPage = ({
             }}
           >
             <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
-              Upload new image
+              {useString('amity_social_label_upload_new_image')}
             </Typography.Body>
           </Button>
         </div>
@@ -567,7 +568,7 @@ export const PollPostComposerPage = ({
               pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
             }
           >
-            Post
+            {useString('amity_social_label_community_post_label')}
           </AriaButton>
         </div>
         <TextField name="title" className={styles.pollPostComposerPage__pollQuestion}>
@@ -579,13 +580,14 @@ export const PollPostComposerPage = ({
             componentId={COMPONENT_ID.WILD_CARD}
             pageId={PAGE_ID.POLL_POST_COMPOSER_PAGE}
             className={styles.pollPostComposerPage__postTitle__label}
+            textKey="amity_social_label_poll_post_title"
           />
           <$TextArea
             data-testid="poll-post-composer-page-title-input"
             name="title"
             value={title}
             maxLength={MAX_POST_TITLE_LENGTH}
-            placeholder="Give your poll a headline"
+            placeholder={useString('amity_social_placeholder_hint_poll_headline')}
             className={styles.pollPostComposerPage__postTitle__input}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
             onChange={(e) => {
@@ -612,7 +614,7 @@ export const PollPostComposerPage = ({
             onChange={onChange}
             className={styles.pollPostComposerPage__pollQuestion__input}
             placeholderClassName={styles.pollPostComposerPage__pollQuestion__placeholder}
-            placeholder="What's your poll question?"
+            placeholder={useString('amity_social_button_poll_question')}
             attachmentAmount={0}
             isClipPost={false}
             isPollPost
@@ -622,7 +624,10 @@ export const PollPostComposerPage = ({
               <Typography.Caption
                 className={styles.pollPostComposerPage__pollQuestion__validationText}
               >
-                Poll question cannot exceed 500 characters.
+                {useString(
+                  'amity_social_error_poll_question_char_limit_error',
+                  MAX_POLL_QUESTION_LENGTH,
+                )}
               </Typography.Caption>
             </div>
           )}
@@ -641,8 +646,7 @@ export const PollPostComposerPage = ({
               <PollOptionsDesc pageId={pageId} />
             ) : (
               <Typography.Caption className={styles.pollPostComposerPage__pollOptions__desc}>
-                Poll must contain at least 2 options, and an image must be uploaded for every
-                option.
+                {useString('amity_social_label_poll_min_options_with_images')}
               </Typography.Caption>
             )}
           </Label>
@@ -656,7 +660,7 @@ export const PollPostComposerPage = ({
                       data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
                       className={styles.pollPostComposerPage__pollOptions__input}
                       value={option.data}
-                      placeholder={`Option ${index + 1}`}
+                      placeholder={resolveString('amity_social_button_option_number', index + 1)}
                       onChange={(e) => updateOption(index, e.target.value)}
                       rows={1}
                       onKeyDown={handleKeyDown}
@@ -674,7 +678,10 @@ export const PollPostComposerPage = ({
                       <Typography.Caption
                         className={styles.pollPostComposerPage__pollQuestion__validationText}
                       >
-                        Poll option cannot exceed 60 characters.
+                        {useString(
+                          'amity_social_error_poll_option_char_limit_error',
+                          MAX_OPTION_LENGTH,
+                        )}
                       </Typography.Caption>
                     </div>
                   )}
@@ -745,7 +752,7 @@ export const PollPostComposerPage = ({
                       <Input
                         className={styles.pollPostComposerPage__pollOptions__input}
                         data-image-poll={true}
-                        placeholder={`Option ${index + 1}`}
+                        placeholder={resolveString('amity_social_button_option_number', index + 1)}
                       />
                     </TextField>
                   </div>
@@ -761,7 +768,7 @@ export const PollPostComposerPage = ({
                     <Typography.CaptionBold
                       className={styles.pollPostComposerPage__imagePollOptions__addOptionCaption}
                     >
-                      Add option
+                      {useString('amity_social_button_add_option')}
                     </Typography.CaptionBold>
                   </div>
                 </div>
@@ -815,7 +822,9 @@ export const PollPostComposerPage = ({
                 >
                   <Typography.Body data-testid="poll-duration">
                     {selectedDate
-                      ? `Ends on ${formatEndDate} at ${formatEndTime}`
+                      ? useString('amity_social_poll_post_composer_page_ends_on')
+                          .replace('%s', formatEndDate ?? '')
+                          .replace('%s', formatEndTime ?? '')
                       : duration && duration.label}
                   </Typography.Body>
                   <DropdownIcon className={styles.pollPostComposerPage__duration__dropdownIcon} />
@@ -846,7 +855,9 @@ export const PollPostComposerPage = ({
               data-testid="poll-duration"
               className={styles.pollPostComposerPage__duration__caption}
             >
-              {`Ends on ${formattedDate} at ${formatEndTime}`}
+              {useString('amity_social_poll_post_composer_page_ends_on')
+                .replace('%s', formattedDate ?? '')
+                .replace('%s', formatEndTime ?? '')}
             </Typography.Caption>
           </div>
         )}
@@ -861,18 +872,24 @@ export const PollPostComposerPage = ({
                 pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
               }
             >
-              Post
+              {useString('amity_social_label_community_post_label')}
             </AriaButton>
           </div>
         )}
       </Form>
 
       <div className={styles.pollPostComposerPage__notificationWrapper}>
-        {isCreating && <Notification icon={<Spinner />} content="Posting..." alignment="fixed" />}
+        {isCreating && (
+          <Notification
+            icon={<Spinner />}
+            content={useString('amity_social_toast_poll_create_posting_toast')}
+            alignment="fixed"
+          />
+        )}
         {isError && (
           <Notification
             duration={3000}
-            content="Failed to create post. Please try again."
+            content={useString('amity_social_toast_post_create_generic_error_message')}
             alignment="fixed"
             icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
           />

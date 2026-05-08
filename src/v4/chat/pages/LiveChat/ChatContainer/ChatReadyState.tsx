@@ -14,9 +14,13 @@ import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChann
 import useSDK from '~/core/hooks/useSDK';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { useNetworkState } from 'react-use';
+import { useString } from '~/v4/core/localization';
 
 const ChatReadyState = ({ pageId = '*', channel }: { pageId?: string; channel: Amity.Channel }) => {
   const { online } = useNetworkState();
+
+  const bannedFromChatLabel = useString('amity_chat_label_banned_from_chat');
+  const bannedFromChatDescription = useString('amity_chat_label_banned_from_chat_description');
 
   const { isModerator } = useChannelPermission(channel.channelId);
 
@@ -49,10 +53,8 @@ const ChatReadyState = ({ pageId = '*', channel }: { pageId?: string; channel: A
       <ChatCustomState>
         <div className={styles.banStatePanel}>
           <CommentAltExclamation className={styles.commentAltIcon} />
-          <Typography.Headline>You are banned from chat</Typography.Headline>
-          <Typography.Body>
-            You won’t be able to participate in this chat until you’ve been unbanned.
-          </Typography.Body>
+          <Typography.Headline>{bannedFromChatLabel}</Typography.Headline>
+          <Typography.Body>{bannedFromChatDescription}</Typography.Body>
         </div>
       </ChatCustomState>
     );

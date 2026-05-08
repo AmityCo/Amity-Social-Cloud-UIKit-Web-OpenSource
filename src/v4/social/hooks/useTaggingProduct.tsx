@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { resolveString } from '~/v4/core/localization';
 import { PostRepository } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -29,8 +30,8 @@ export const useTaggingProduct = ({
   const handleProductTagError = (error: Error, fallbackMessage: string) => {
     if (error instanceof Error && error.message.includes(ERROR_CODE.DISABLED_PRODUCT_TAG)) {
       infoPopup({
-        title: `Product tagging isn't available`,
-        content: `You can no longer manage tagged products in this live stream. Any tagged products have been removed and won't be shown to viewers.`,
+        title: resolveString('amity_social_label_product_tagging_unavailable_title'),
+        content: resolveString('amity_social_product_tagging_disabled_content'),
         onOk: () => {
           disableProductCatalogue();
         },
@@ -51,9 +52,9 @@ export const useTaggingProduct = ({
     mutationFn: async ({ postId, productId }: { postId: string; productId: string }) => {
       return await PostRepository.pinProduct(postId, productId);
     },
-    onSuccess: () => success({ content: 'Product tag pinned.' }),
+    onSuccess: () => success({ content: resolveString('amity_social_label_product_tag_pinned') }),
     onError: (error: Error) =>
-      handleProductTagError(error, 'Failed to pin product tag. Please try again.'),
+      handleProductTagError(error, resolveString('amity_social_toast_pin_product_tag_failed')),
   });
 
   const {
@@ -64,9 +65,9 @@ export const useTaggingProduct = ({
     mutationFn: async (postId: string) => {
       return await PostRepository.unpinProduct(postId);
     },
-    onSuccess: () => success({ content: 'Product tag unpinned.' }),
+    onSuccess: () => success({ content: resolveString('amity_social_label_product_tag_unpinned') }),
     onError: (error: Error) =>
-      handleProductTagError(error, 'Failed to unpin product tag. Please try again.'),
+      handleProductTagError(error, resolveString('amity_social_toast_unpin_product_tag_failed')),
   });
 
   const {
@@ -93,14 +94,14 @@ export const useTaggingProduct = ({
       );
 
       if (hasUnavailableProducts) {
-        info({ content: 'Some products that you’ve tagged are no longer available.' });
+        info({ content: resolveString('amity_social_toast_post_products_unavailable_toast') });
       }
     },
     onError: (error: Error, variables) => {
       const fallbackMessage =
         variables.action === 'remove'
-          ? 'Failed to remove product tag. Please try again.'
-          : 'Failed to add product tags. Please try again.';
+          ? resolveString('amity_social_toast_product_tag_remove_failed')
+          : resolveString('amity_social_toast_product_tag_add_failed');
       handleProductTagError(error, fallbackMessage);
     },
   });

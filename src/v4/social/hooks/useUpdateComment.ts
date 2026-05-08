@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { CommentRepository } from '@amityco/ts-sdk';
 import { useNetworkState } from 'react-use';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -26,7 +27,7 @@ export const useUpdateComment = ({
   const handleSaveComment = useCallback(async () => {
     if (!online) {
       notification.info({
-        content: 'Oops, something went wrong',
+        content: resolveString('amity_social_toast_failed_generic'),
         alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
       });
       return;
@@ -43,15 +44,15 @@ export const useUpdateComment = ({
     } catch (error) {
       if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
-          content: 'Your comment contains inappropriate word. Please review and delete it.',
+          content: resolveString('amity_social_button_add_blocked_words_comment_error_message'),
         });
       } else if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
         notification.info({
-          content: "Your comment contains a link that's not allowed. Please review and delete it.",
+          content: resolveString('amity_add_blocked_url_comment_error_message'),
         });
       } else {
         notification.info({
-          content: 'Oops, something went wrong',
+          content: resolveString('amity_social_toast_failed_generic'),
         });
       }
       return;

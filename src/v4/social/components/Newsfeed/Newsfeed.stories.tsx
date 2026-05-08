@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 
 import { Newsfeed } from './Newsfeed';
 
@@ -11,5 +12,5 @@ export const NewsfeedStory = {
     return <Newsfeed />;
   },
 
-  name: 'Newsfeed',
+  name: useString('amity_social_button_social_home_newsfeed_button'),
 };

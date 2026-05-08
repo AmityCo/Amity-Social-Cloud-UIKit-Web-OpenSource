@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './UserProfilePage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -50,21 +51,6 @@ export const FeedSource = {
   USER: FeedSourceEnum.User,
 };
 
-const FEED_TYPE_OPTIONS = [
-  {
-    label: 'Public community & profile posts',
-    value: FeedSource.ALL,
-  },
-  {
-    label: 'Public community posts',
-    value: FeedSource.COMMUNITY,
-  },
-  {
-    label: 'Profile posts',
-    value: FeedSource.USER,
-  },
-];
-
 export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const pageId = 'user_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
@@ -82,6 +68,21 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { openPopup } = usePopupContext();
   const { linkToPost } = useLayoutContext();
   const { socialSettings } = useSocialSettings();
+
+  const FEED_TYPE_OPTIONS = [
+    {
+      label: useString('amity_social_user_profile_all_post_title'),
+      value: FeedSource.ALL,
+    },
+    {
+      label: useString('amity_social_label_user_profile_feed_option_community'),
+      value: FeedSource.COMMUNITY,
+    },
+    {
+      label: useString('amity_social_button_user_profile_feed_option_user'),
+      value: FeedSource.USER,
+    },
+  ];
 
   const isCurrentUser = user?.userId === currentUserId;
 
@@ -169,7 +170,11 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                  header: (
+                    <Typography.Headline>
+                      {useString('amity_social_label_choose_poll_type')}
+                    </Typography.Headline>
+                  ),
                   children: ({ close }) => (
                     <PollTypeSelection onClickNext={close} targetId={null} targetType="user" />
                   ),
@@ -205,7 +210,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
 
   const CreatePostHeader = (
     <Typography.Headline className={styles.userProfilePage__createPostHeader}>
-      My Timeline
+      {useString('amity_social_button_my_timeline')}
     </Typography.Headline>
   );
 

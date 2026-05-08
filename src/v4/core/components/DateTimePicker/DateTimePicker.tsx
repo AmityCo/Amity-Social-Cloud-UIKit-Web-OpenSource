@@ -7,6 +7,7 @@ import { CalendarDate, Time } from '@internationalized/date';
 import { Typography } from '~/v4/core/components/Typography';
 import { CalendarComponent as Calendar } from '~/v4/core/components/Calendar';
 import styles from './DateTimePicker.module.css';
+import { useString } from '~/v4/core/localization';
 
 type DateTimePickerProps = {
   label?: string;
@@ -83,7 +84,7 @@ export function DateTimePicker({
           onPress={() => onChange(formattedDate)}
           isDisabled={minDateTime.getTime() >= formattedDate.getTime()}
         >
-          Done
+          {useString('amity_social_button_done')}
         </Button>
       </div>
       <hr className={styles.dateTimePicker__divider} />

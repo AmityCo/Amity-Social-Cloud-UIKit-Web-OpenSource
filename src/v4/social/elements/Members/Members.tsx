@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+
 import React from 'react';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -24,8 +25,15 @@ export const Members = ({
   onClick,
 }: MembersProps) => {
   const elementId = 'members';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
   return (
@@ -45,7 +53,10 @@ export const Members = ({
           defaultIconName={defaultConfig.icon}
           configIconName={config.icon}
         />
-        {config.text && <Typography.Body>{config.text}</Typography.Body>}
+
+        <Typography.Body>
+          {resolveText('amity_social_label_community_members_label')}
+        </Typography.Body>
       </div>
       <ChevronRight className={styles.members__angleRight} />
     </Button>

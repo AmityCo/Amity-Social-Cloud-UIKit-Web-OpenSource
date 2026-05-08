@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
@@ -155,14 +156,14 @@ export const CommunityFeedStory = ({
     } catch (error) {
       setIsError(true);
       notification.info({
-        content: 'Failed to delete story. Please try again.',
+        content: resolveString('amity_social_failed_to_delete_story_please_try_again'),
         alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
       });
       return;
     }
 
     notification.success({
-      content: 'Story deleted',
+      content: resolveString('amity_social_button_delete_story_success'),
       alignment:
         page.type === PageTypes.ViewStoryPage && !isLastStory ? 'fullscreen' : 'withSidebar',
     });
@@ -180,10 +181,10 @@ export const CommunityFeedStory = ({
     setIsConfirmDialogOpen(true);
     confirm({
       pageId,
-      title: 'Delete this story?',
-      content:
-        "This story will be permanently deleted. You'll no longer to see and find this story.",
-      okText: 'Delete',
+      title: resolveString('amity_social_delete_this_story'),
+      content: resolveString('amity_social_button_delete_story_message'),
+      okText: resolveString('amity_social_button_delete'),
+      cancelText: resolveString('amity_social_button_cancel'),
       onOk: async () => {
         setIsBottomSheetOpen(false);
         setIsConfirmDialogOpen(false);
@@ -231,12 +232,12 @@ export const CommunityFeedStory = ({
           }
         }
         notification.success({
-          content: 'Successfully shared story',
+          content: resolveString('amity_social_toast_snackbar_story_shared'),
         });
       } catch (error: unknown) {
         if (error instanceof Error) {
           notification.info({
-            content: error.message ?? 'Failed to share story',
+            content: resolveString('amity_social_failed_to_share_story') ?? error.message,
           });
         }
       }
@@ -278,7 +279,7 @@ export const CommunityFeedStory = ({
         actions: [
           isStoryCreator || isModerator
             ? {
-                name: 'Delete',
+                name: resolveString('amity_common_button_delete'),
                 action: () => deleteStory(story),
                 icon: (
                   <Trash2Icon

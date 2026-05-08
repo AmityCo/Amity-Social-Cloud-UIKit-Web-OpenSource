@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
@@ -93,6 +94,7 @@ export function PostDetailPage({
   const { themeStyles } = useAmityPage({ pageId });
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
+
   const { community } = useCommunity({
     communityId: post?.targetId,
     shouldCall: post?.targetType === 'community' && !!post?.targetId,
@@ -135,7 +137,9 @@ export function PostDetailPage({
           if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
             hasShownReplyNotificationRef.current = true;
             if (!isDesktop) {
-              setDeletedReplyError('This reply is no longer available.');
+              setDeletedReplyError(
+                useString('amity_social_error_reply_no_longer_available_error_message'),
+              );
             } else {
               notification.info({
                 content: message,
@@ -150,12 +154,15 @@ export function PostDetailPage({
 
     const isL0Comment = !parentId;
     const commentMessage = isL0Comment
-      ? 'This comment is no longer available.'
-      : 'This reply is no longer available.';
+      ? useString('amity_social_error_add_reply_parent_deleted_error_message')
+      : useString('amity_social_error_reply_no_longer_available_error_message');
 
     const cleanupComment = checkDeleted(commentId, commentMessage);
     const cleanupParent = isL2Notification
-      ? checkDeleted(parentId, 'This reply is no longer available.')
+      ? checkDeleted(
+          parentId,
+          useString('amity_social_error_reply_no_longer_available_error_message'),
+        )
       : undefined;
 
     return () => {
@@ -274,7 +281,7 @@ export function PostDetailPage({
           data-testid={`${pageId}/page_title`}
           className={styles.postDetailPage__topBar__title}
         >
-          Post
+          {useString('amity_social_label_community_post_label')}
         </Typography.TitleBold>
         <Popover
           containerClassName={styles.postDetailPage__topBar__menuBar}

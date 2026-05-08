@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, useEffect, useMemo } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { ContentFlagReasonEnum } from '@amityco/ts-sdk';
 import clsx from 'clsx';
 import { BackButton, CloseButton } from '~/v4/social/elements';
@@ -7,7 +8,6 @@ import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
 import AngleRight from '~/v4/icons/AngleRight';
 import { Button } from '~/v4/core/components/AriaButton';
 import { TextArea, TextField } from '~/v4/core/components/TextField';
-import { useNetworkState } from 'react-use';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -16,6 +16,7 @@ import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 import { useMessageFlaggedByMe } from '~/v4/chat/hooks/useMessageFlaggedByMe';
+import { useNetworkState } from 'react-use';
 
 type ContentReportReasonProps = {
   pageId?: string;
@@ -50,6 +51,19 @@ export const ContentReportReason = ({
   const { isDesktop } = useResponsive();
   const { success, info } = useNotifications();
   const { closePopup } = usePopupContext();
+
+  const postReportedText = useString('amity_social_button_post_reported');
+  const postReportFailedText = useString('amity_social_toast_post_report_failed');
+  const postUnreportedText = useString('amity_social_button_post_unreported');
+  const postUnreportFailedText = useString('amity_social_toast_post_unreport_failed');
+  const othersTitle = useString('amity_social_button_others');
+  const reportReasonTitle = useString('amity_social_button_report_reason');
+  const reportOtherReasonDesc = useString('amity_social_label_report_other_reason_desc');
+  const reportOtherReasonOptional = useString('amity_social_button_report_other_reason_optional');
+  const reportTextPlaceholder = useString('amity_social_placeholder_report_text_placeholder');
+  const reportListDescription = useString('amity_social_report_list_screen_description');
+  const closeButtonText = useString('amity_social_modal_dialog_close_button');
+  const submitButtonText = useString('amity_social_button_report_submit_button');
 
   const handleTextAreaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setOtherReasonText(event.target.value);
@@ -95,7 +109,7 @@ export const ContentReportReason = ({
       selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
     isFlaggable: showReportPostButton,
     onReportSuccess: () => {
-      success({ content: 'Post reported.' });
+      success({ content: postReportedText });
       onCloseMenu?.();
       closePopup();
     },
@@ -104,18 +118,18 @@ export const ContentReportReason = ({
         setIsError(true);
       } else {
         info({
-          content: 'Failed to report post. Please try again.',
+          content: postReportFailedText,
           alignment: isDesktop ? 'fullscreen' : 'withSidebar',
         });
       }
     },
     onUnreportSuccess: () => {
-      success({ content: 'Post unreported.' });
+      success({ content: postUnreportedText });
       onCloseMenu?.();
     },
     onUnreportError: () => {
       info({
-        content: 'Failed to unreport post. Please try again.',
+        content: postUnreportFailedText,
         alignment: isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();
@@ -150,7 +164,7 @@ export const ContentReportReason = ({
   useEffect(() => {
     if (!online) {
       info({
-        content: 'No internet connection.',
+        content: resolveString('amity_social_label_no_internet_connection'),
         alignment: isDesktop ? 'fullscreen' : 'withSidebar',
       });
     }
@@ -160,30 +174,39 @@ export const ContentReportReason = ({
     const reasons = [
       {
         value: ContentFlagReasonEnum.CommunityGuidelines,
+        labelKey: 'amity_social_label_report_reason_community_guidelines',
       },
       {
         value: ContentFlagReasonEnum.HarassmentOrBullying,
+        labelKey: 'amity_social_label_report_reason_harassment_or_bullying',
       },
       {
         value: ContentFlagReasonEnum.SelfHarmOrSuicide,
+        labelKey: 'amity_social_label_report_reason_self_harm_or_suicide',
       },
       {
         value: ContentFlagReasonEnum.ViolenceOrThreateningContent,
+        labelKey: 'amity_social_label_report_reason_violence_or_threatening',
       },
       {
         value: ContentFlagReasonEnum.SellingRestrictedItems,
+        labelKey: 'amity_social_label_report_reason_selling_restricted',
       },
       {
         value: ContentFlagReasonEnum.SexualContentOrNudity,
+        labelKey: 'amity_social_label_report_reason_sexual_content_or_nudity',
       },
       {
         value: ContentFlagReasonEnum.SpamOrScams,
+        labelKey: 'amity_social_label_report_reason_spam_or_scams',
       },
       {
         value: ContentFlagReasonEnum.FalseInformation,
+        labelKey: 'amity_social_label_report_reason_false_information',
       },
       {
         value: ContentFlagReasonEnum.Others,
+        labelKey: 'amity_social_button_others',
         hasAngleRight: true,
       },
     ];
@@ -216,7 +239,7 @@ export const ContentReportReason = ({
                 <div className={styles.contentReportReason__leftSpace} />
               )}
               <Typography.TitleBold className={styles.contentReportReason__title}>
-                {isShowOthersOption ? 'Others' : 'Report reason'}
+                {isShowOthersOption ? othersTitle : reportReasonTitle}
               </Typography.TitleBold>
             </div>
 
@@ -230,8 +253,8 @@ export const ContentReportReason = ({
             {isShowOthersOption ? (
               <div>
                 <TextField
-                  label="Describe the reason"
-                  description="(Optional)"
+                  label={reportOtherReasonDesc}
+                  description={reportOtherReasonOptional}
                   isShowCounter
                   isRequired={false}
                   maxLength={MAX_LENGTH_DESCRIBE}
@@ -240,7 +263,7 @@ export const ContentReportReason = ({
                   value={otherReasonText}
                 >
                   <TextArea
-                    placeholder="Share more details about this issue"
+                    placeholder={reportTextPlaceholder}
                     value={otherReasonText}
                     onChange={handleTextAreaChange}
                     onKeyDown={handleKeyDown}
@@ -252,8 +275,7 @@ export const ContentReportReason = ({
             ) : (
               <>
                 <Typography.Caption as="p" className={styles.contentReportReason__description}>
-                  Tell us why you're reporting this content. Your report will be reviewed by our
-                  moderators and kept confidential.
+                  {reportListDescription}
                 </Typography.Caption>
                 <RadioGroup
                   className={styles.contentReportReason__radioGroup}
@@ -261,7 +283,7 @@ export const ContentReportReason = ({
                     value: reason.value,
                     label: (
                       <Typography.BodyBold className={styles.contentReportReason__option}>
-                        {reason.value}
+                        {resolveString(reason.labelKey)}
                       </Typography.BodyBold>
                     ),
                     isDisabled: isReportPostLoading || isReportCommentLoading,
@@ -289,7 +311,7 @@ export const ContentReportReason = ({
             className={styles.contentReportReason__submitButton}
             onPress={handleCloseReportReason}
           >
-            Close
+            {closeButtonText}
           </Button>
         ) : (
           <Button
@@ -299,7 +321,7 @@ export const ContentReportReason = ({
             className={styles.contentReportReason__submitButton}
             onPress={handleSubmitReport}
           >
-            Submit
+            {submitButtonText}
           </Button>
         )}
       </div>

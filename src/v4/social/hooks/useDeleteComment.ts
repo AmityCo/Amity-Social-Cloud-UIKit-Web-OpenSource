@@ -5,6 +5,7 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { resolveString } from '~/v4/core/localization';
 
 interface UseDeleteCommentParams {
   commentId: string | undefined;
@@ -29,11 +30,11 @@ export const useDeleteComment = ({ commentId, parentId, onSuccess }: UseDeleteCo
     onError: (error: Error) => {
       if (error.message.includes(ERROR_RESPONSE.DELETED_COMMENT))
         info({
-          content: 'This reply is no longer available.',
+          content: resolveString('amity_social_error_reply_no_longer_available_error_message'),
         });
       else {
         info({
-          content: 'Oops, something went wrong',
+          content: resolveString('amity_social_toast_failed_generic'),
         });
       }
     },

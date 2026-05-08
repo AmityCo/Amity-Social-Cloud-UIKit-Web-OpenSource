@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton, CloseButton } from '~/v4/social/elements';
@@ -182,8 +183,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       confirm({
         pageId: pageId,
         type: 'confirm',
-        title: 'Leave without finishing?',
-        content: 'Your progress won’t be saved and your community won’t be created.',
+        title: resolveString('amity_social_modal_event_detail_alert_leave_without_finishing_title'),
+        content: resolveString('amity_social_modal_setup_alert_message'),
         onOk: () => {
           setCoverImages([]);
           setCommunityName('');
@@ -194,8 +195,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
           setRequiresJoinApproval(false);
           onBack();
         },
-        okText: 'Leave',
-        cancelText: 'Cancel',
+        okText: resolveString('amity_social_button_leave'),
+        cancelText: resolveString('amity_social_button_cancel'),
       });
     } else {
       setCoverImages([]);
@@ -214,7 +215,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     if (!communities) return null;
     if (communities) {
       notification.success({
-        content: 'Successfully updated community profile.',
+        content: resolveString('amity_social_toast_community_setup_toast_update_success'),
       });
       goToCommunityProfilePage(community.communityId);
     }
@@ -242,7 +243,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
 
   const handleSubmitError = (error: any) => {
     notification.info({
-      content: 'Failed to update community. Please try again.',
+      content: resolveString('amity_social_toast_community_update_failed'),
     });
     setRequiresJoinApproval(community.requiresJoinApproval ?? false);
   };
@@ -262,7 +263,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
   const validateAndSubmit = async (data: EditFormValues) => {
     if (!online) {
       notification.info({
-        content: 'Failed to save your community profile. Please try again.',
+        content: resolveString('amity_social_toast_community_setup_toast_update_failed'),
       });
       return;
     }
@@ -274,8 +275,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       setSubmitting(false);
       info({
         pageId: pageId,
-        title: 'You have pending join requests',
-        content: 'Please address these requests before switching off membership approval.',
+        title: resolveString('amity_social_modal_dialog_title_pending_join_requests'),
+        content: resolveString('amity_social_modal_dialog_pending_requests_warning'),
       });
       return;
     }
@@ -289,9 +290,9 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       setSubmitting(false);
       confirm({
         pageId: pageId,
-        title: 'Change community privacy settings?',
-        content: `This community has globally featured posts. Changing the community from public to ${AmityCommunitySetupPrivacy.PRIVATE_VISIBLE ? 'private & visible' : 'private & hidden'} will remove these posts from being featured globally.`,
-        okText: 'Confirm',
+        title: resolveString('amity_social_modal_community_setup_dialog_change_privacy_title'),
+        content: resolveString('amity_social_modal_community_setup_dialog_change_privacy_message'),
+        okText: resolveString('amity_social_button_confirm'),
         onOk: () => performCommunityUpdate(data),
       });
       return;
@@ -381,12 +382,14 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                         pageId={pageId}
                         isVisibleVideo={false}
                         onImageFileChange={handleCoverPhotoChange}
+                        textId="social.button.community.setup.camera.button"
                       />
                     )}
                     <ImageButton
                       isSingleUpload
                       pageId={pageId}
                       onImageFileChange={handleCoverPhotoChange}
+                      textId="social.button.community.setup.image.button"
                     />
                   </>
                 ),
@@ -417,7 +420,11 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         <div className={styles.editCommunity__formContent}>
           <TextField>
             <Label className={styles.editCommunity__label}>
-              <TitleForm pageId={pageId} elementId="community_name_title" />
+              <TitleForm
+                pageId={pageId}
+                elementId="community_name_title"
+                textId="amity_social_label_community_setup_name_title"
+              />
               <Typography.Body className={styles.editCommunity__charactersCount}>
                 {displayName.length}/{MAX_LENGTH_COMMUNITY_NAME}
               </Typography.Body>
@@ -426,7 +433,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
               required
               type="text"
               aria-label="displayName"
-              placeholder="Name your community"
+              placeholder={useString('amity_social_label_community_setup_name_description')}
               value={displayName ?? communityName}
               maxLength={MAX_LENGTH_COMMUNITY_NAME}
               className={styles.editCommunity__input}
@@ -438,9 +445,13 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
           <TextField>
             <Label className={styles.editCommunity__label}>
               <div className={styles.editCommunity__description}>
-                <TitleForm pageId={pageId} elementId="community_about_title" />
+                <TitleForm
+                  pageId={pageId}
+                  elementId="community_about_title"
+                  textId="amity_social_label_community_setup_about_title"
+                />
                 <Typography.Body className={styles.editCommunity__optionalText}>
-                  (Optional)
+                  {useString('amity_social_button_report_other_reason_optional')}
                 </Typography.Body>
               </div>
               <Typography.Body className={styles.editCommunity__charactersCount}>
@@ -450,7 +461,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
             <TextArea
               value={description}
               maxLength={MAX_LENGTH_DESC}
-              placeholder="Enter description"
+              placeholder={useString('amity_social_button_community_setup_about_description')}
               className={styles.editCommunity__textarea}
               {...register('description')}
             />
@@ -459,9 +470,13 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         <div className={styles.editCommunity__formContent}>
           <label className={styles.editCommunity__label}>
             <div className={styles.editCommunity__description}>
-              <TitleForm pageId={pageId} elementId="community_category_title" />
+              <TitleForm
+                pageId={pageId}
+                elementId="community_category_title"
+                textId="amity_social_label_community_setup_category_title"
+              />
               <Typography.Body className={styles.editCommunity__optionalText}>
-                (Optional)
+                {useString('amity_social_button_report_other_reason_optional')}
               </Typography.Body>
             </div>
           </label>
@@ -529,7 +544,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                   }}
                 >
                   <Typography.Body className={styles.editCommunity__selectedCategory}>
-                    Select category
+                    {useString('amity_social_button_community_setup_categories_description')}
                     <IconComponent defaultIcon={() => arrowIcon} imgIcon={() => arrowIcon} />
                   </Typography.Body>
                 </Button>
@@ -544,7 +559,13 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
           value={privacySettings}
           labelClassName={styles.editCommunity__label}
           className={styles.editCommunity__formContent}
-          label={<TitleForm pageId={pageId} elementId="community_privacy_title" />}
+          label={
+            <TitleForm
+              pageId={pageId}
+              elementId="community_privacy_title"
+              textId="amity_social_label_community_setup_privacy_title"
+            />
+          }
           radioProps={{ className: styles.editCommunity__formRadio }}
           radios={[
             {
@@ -560,10 +581,12 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                     <CommunityPrivacyTitleOption
                       pageId={pageId}
                       elementId="community_privacy_public_title"
+                      textId="amity_social_label_community_setup_privacy_public_title"
                     />
                     <CommunityPrivacyDescription
                       pageId={pageId}
                       elementId="community_privacy_public_description"
+                      textId="amity_social_community_setup_page_community_privacy_public_description_text"
                     />
                   </div>
                 </div>
@@ -582,10 +605,12 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                     <CommunityPrivacyTitleOption
                       pageId={pageId}
                       elementId="community_privacy_private_and_visible_title"
+                      textId="amity_social_label_community_setup_privacy_private_and_visible_title"
                     />
                     <CommunityPrivacyDescription
                       pageId={pageId}
                       elementId="community_privacy_private_and_visible_description"
+                      textId="amity_social_label_community_setup_privacy_private_and_visible_description"
                     />
                   </div>
                 </div>
@@ -604,10 +629,12 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                     <CommunityPrivacyTitleOption
                       pageId={pageId}
                       elementId="community_privacy_private_and_hidden_title"
+                      textId="amity_social_label_community_setup_privacy_private_and_hidden_title"
                     />
                     <CommunityPrivacyDescription
                       pageId={pageId}
                       elementId="community_privacy_private_and_hidden_description"
+                      textId="amity_social_label_community_setup_privacy_private_and_hidden_description"
                     />
                   </div>
                 </div>
@@ -619,12 +646,24 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         <div className={styles.editCommunity__formDivider} />
         <div className={styles.editCommunity__formContent}>
           <label className={styles.editCommunity__label}>
-            <TitleForm pageId={pageId} elementId="community_membership_title" />
+            <TitleForm
+              pageId={pageId}
+              elementId="community_membership_title"
+              textId="amity_social_label_community_setup_membership_title"
+            />
           </label>
           <div className={styles.editCommunity__requireJoinApproval}>
             <div>
-              <Description pageId={pageId} elementId="community_membership_description" />
-              <SubDescription pageId={pageId} elementId="community_membership_sub_description" />
+              <Description
+                pageId={pageId}
+                elementId="community_membership_description"
+                textId="amity_social_label_community_setup_membership_description"
+              />
+              <SubDescription
+                pageId={pageId}
+                elementId="community_membership_sub_description"
+                textId="amity_social_label_community_setup_membership_sub_desc"
+              />
             </div>
             <Switch
               isSelected={requiresJoinApproval}

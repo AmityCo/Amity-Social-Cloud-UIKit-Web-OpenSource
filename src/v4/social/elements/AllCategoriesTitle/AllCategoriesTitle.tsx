@@ -13,7 +13,7 @@ export const AllCategoriesTitle = ({
   componentId = '*',
 }: AllCategoriesTitleProps) => {
   const elementId = 'all_categories_title';
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -27,7 +27,7 @@ export const AllCategoriesTitle = ({
       className={styles.communityName__truncate}
       style={themeStyles}
     >
-      All Categories
+      {resolveText('amity_social_button_all_categories')}
     </Typography.TitleBold>
   );
 };

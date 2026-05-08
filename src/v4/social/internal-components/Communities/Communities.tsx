@@ -1,4 +1,5 @@
 import { Key } from 'react-aria';
+import { useString } from '~/v4/core/localization';
 import { useState } from 'react';
 import { Plus } from '~/v4/icons/Plus';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -28,7 +29,7 @@ export function Communities({ pageId }: CommunitiesProps) {
   return (
     <section className={styles.communities}>
       <div className={styles.communities__header} data-has-tabs={!isVisitorOrBot}>
-        <Typography.Headline>Communities</Typography.Headline>
+        <Typography.Headline>{useString('amity_social_tab_tab_communities')}</Typography.Headline>
         {!isVisitorOrBot && socialCommunityCreationButtonVisible && (
           <Button
             icon={<Plus />}
@@ -52,12 +53,12 @@ export function Communities({ pageId }: CommunitiesProps) {
           tabs={[
             {
               value: CommunitiesTab.Explore,
-              label: 'Explore',
+              label: useString('amity_social_tab_tab_explore'),
               content: () => <Explore pageId={pageId} />,
             },
             {
               value: CommunitiesTab.MyCommunities,
-              label: 'My communities',
+              label: useString('amity_social_button_my_communities'),
               content: () => <MyCommunities pageId={pageId} />,
             },
           ]}

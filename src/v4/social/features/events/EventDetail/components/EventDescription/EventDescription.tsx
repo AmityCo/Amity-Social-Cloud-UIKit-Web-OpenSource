@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { useString, resolveString } from '~/v4/core/localization';
 import { Record } from '~/v4/icons/Record';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Location } from '~/v4/icons/Location';
@@ -24,6 +25,13 @@ export function EventDescription({ event }: EventDescriptionProps) {
   const { currentUserId, isVisitorOrBot } = useSDK();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
 
+  const statusLabel = useString(STATUS_LABEL[event.status]);
+  const startsLabel = useString('amity_social_button_starts');
+  const eventTypeLabel = useString('amity_social_button_event_type');
+  const attendeesLabel = useString('amity_social_button_attendees');
+  const hostedByLabel = useString('amity_social_button_hosted_by');
+  const setUpLiveStreamLabel = useString('amity_social_status_set_up_live_stream');
+
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
   const canSetupLiveStream =
@@ -35,7 +43,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
     <div className={styles.eventDescription}>
       <div className={styles.eventDescription__community}>
         <Typography.CaptionBold as="span" className={styles.eventDescription__status}>
-          {STATUS_LABEL[event.status]}
+          {statusLabel}
         </Typography.CaptionBold>
         <Typography.CaptionBold as="span" className={styles.eventDescription__status}>
           •
@@ -75,7 +83,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
           </div>
           <div>
             <Typography.Caption className={styles.eventDescription__subTitle}>
-              Starts
+              {startsLabel}
             </Typography.Caption>
             <Typography.BodyBold className={styles.eventDescription__name}>
               {formatEventDuration(event.startTime, event.endTime)}
@@ -92,10 +100,10 @@ export function EventDescription({ event }: EventDescriptionProps) {
           </div>
           <div>
             <Typography.Caption className={styles.eventDescription__subTitle}>
-              Event type
+              {eventTypeLabel}
             </Typography.Caption>
             <Typography.BodyBold className={styles.eventDescription__name}>
-              {EVENT_TYPE[event.type]}
+              {resolveString(EVENT_TYPE[event.type])}
             </Typography.BodyBold>
           </div>
         </div>
@@ -116,7 +124,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
               </div>
               <div>
                 <Typography.Caption className={styles.eventDescription__subTitle}>
-                  Attendees
+                  {attendeesLabel}
                 </Typography.Caption>
                 <Typography.BodyBold className={styles.eventDescription__name}>
                   {millify(event.rsvpCount)}
@@ -143,7 +151,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
           </div>
           <div className={styles.eventDescription__name}>
             <Typography.Caption className={styles.eventDescription__subTitle}>
-              Hosted by
+              {hostedByLabel}
             </Typography.Caption>
             <div className={styles.eventDescription__hostInfo}>
               <Typography.BodyBold className={styles.eventDescription__name}>
@@ -172,7 +180,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
               });
             }}
           >
-            Set up live stream
+            {setUpLiveStreamLabel}
           </Button>
         </div>
       )}

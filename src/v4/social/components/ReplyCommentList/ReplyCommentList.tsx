@@ -1,4 +1,5 @@
 import { CommentRepository } from '@amityco/ts-sdk';
+import { useString } from '~/v4/core/localization';
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography } from '~/v4/core/components';
 import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
@@ -127,6 +128,7 @@ export const ReplyCommentList = ({
         unsubscribe = undefined;
       }
     });
+
     return () => unsubscribe?.();
   }, [isL2List, highlightedCommentId]);
 
@@ -179,7 +181,9 @@ export const ReplyCommentList = ({
         pendingEmptyCheckRef.current = false;
         if (commentsRef.current.length === 0) {
           if (effectiveHighlightedCommentId) {
-            notification.info({ content: 'This reply is no longer available.' });
+            notification.info({
+              content: useString('amity_social_error_reply_no_longer_available_error_message'),
+            });
           }
           onEmpty?.();
         }
@@ -563,7 +567,7 @@ export const ReplyCommentList = ({
             >
               <AngleDown className={styles.postReplyCommentList__viewReply_icon} />
               <Typography.CaptionBold className={styles.postReplyCommentList__viewReply_text}>
-                View more replies
+                {useString('amity_social_label_view_more_replies')}
               </Typography.CaptionBold>
             </div>
           </div>

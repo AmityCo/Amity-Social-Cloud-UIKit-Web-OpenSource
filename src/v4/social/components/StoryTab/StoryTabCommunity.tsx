@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import Truncate from 'react-truncate-markup';
 import { FileTrigger } from 'react-aria-components';
 import { StoryRing } from '~/v4/social/elements/StoryRing/StoryRing';
@@ -123,7 +124,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}
       </div>
       <Typography.Caption data-testid={`${pageId}/${componentId}/story_title`}>
-        Story
+        {useString('amity_social_button_story')}
       </Typography.Caption>
     </div>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './UserAboutTitle.module.css';
 import { Typography } from '~/v4/core/components';
 import { Title } from '~/v4/social/internal-components/Title';
+import { useString } from '~/v4/core/localization';
 
 interface UserAboutTitleProps {
   pageId?: string;
@@ -25,9 +26,11 @@ export function UserAboutTitle({
           componentId={componentId}
           elementId={elementId}
           titleClassName={styles.userAboutTitle__title}
+          textKey="amity_social_label_edit_user_about_title"
         />
         <Typography.Caption className={styles.userAboutTitle__optional__text}>
-          {' (Optional)'}
+          {' '}
+          {useString('amity_social_label_optional')}
         </Typography.Caption>
       </div>
       <Typography.Caption className={styles.userAboutTitle__length}>

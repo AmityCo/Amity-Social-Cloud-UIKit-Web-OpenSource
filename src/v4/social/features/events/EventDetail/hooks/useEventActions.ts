@@ -2,6 +2,7 @@ import { useEventMutation } from '~/v4/social/features/events/hooks';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { resolveString } from '~/v4/core/localization';
 
 export function useEventActions() {
   const { onBack } = useNavigation();
@@ -11,20 +12,19 @@ export function useEventActions() {
 
   const deleteEvent = (eventId: string) => {
     confirm({
-      okText: 'Delete',
-      title: 'Delete this event?',
+      okText: resolveString('amity_social_button_delete'),
+      title: resolveString('amity_social_delete_this_event'),
       onOk: () =>
         deleteEventMutation.mutate(eventId, {
           onSuccess: () => {
             onBack();
-            success({ content: 'Event deleted.' });
+            success({ content: resolveString('amity_social_toast_snackbar_event_deleted') });
           },
           onError: () => {
-            info({ content: 'Failed to delete event. Please try again.' });
+            info({ content: resolveString('amity_social_toast_snackbar_delete_event_failed') });
           },
         }),
-      content:
-        'This event will be permanently deleted. You and others will no longer see and find this event.',
+      content: resolveString('amity_social_modal_dialog_delete_event_description'),
     });
   };
 

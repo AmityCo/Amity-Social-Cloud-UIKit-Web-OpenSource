@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { JoinRequestStatusEnum, JoinResultStatusEnum } from '@amityco/ts-sdk';
 import { StoryTab } from '~/v4/social/components/StoryTab';
 import { CommunityPendingPost } from '~/v4/social/elements/CommunityPendingPost';
@@ -147,14 +148,23 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
             pageId={pageId}
             componentId={componentId}
             count={community.postsCount}
-            text={`post${community.postsCount === 1 ? '' : 's'}`}
+            text={resolveString(
+              community.postsCount === 1
+                ? 'amity_social_label_community_post_label'
+                : 'amity_social_label_community_posts_label',
+              community.postsCount,
+            )}
           />
           <div className={styles.divider}></div>
           <CommunityInfo
             pageId={pageId}
             componentId={componentId}
             count={community.membersCount}
-            text={`member${community.membersCount === 1 ? '' : 's'}`}
+            text={resolveString(
+              community.membersCount === 1
+                ? 'amity_social_button_member_count_singular'
+                : 'amity_social_button_member_count_plural',
+            ).replace(/%s\s?/, '')}
             onClick={() =>
               handleCommunityProfileBehavior({
                 allowNonMember: false,
@@ -187,7 +197,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
                 onClick={() => {
                   if (!online) {
                     notification.info({
-                      content: 'Failed to join community. Please try again.',
+                      content: resolveString('amity_social_toast_snackbar_join_community_failed'),
                     });
                     return;
                   }
@@ -210,7 +220,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               variant="outlined"
               defaultIcon={<Clock className={styles.communityProfile__pendingIcon} />}
               onPress={cancelJoinCommunity}
-              text="Cancel request"
+              text={useString('amity_social_button_cancel_request')}
               typographyVariant="bodyBold"
               className={styles.communityProfile__cancelJoinButton}
             />

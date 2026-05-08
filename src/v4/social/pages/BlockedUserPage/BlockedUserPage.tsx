@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { Title } from '~/v4/social/elements/Title';
@@ -56,7 +57,7 @@ export const BlockedUserPage = () => {
           <EmptyContent
             pageId={pageId}
             defaultIcon={() => <List className={styles.blockedUserPage__emptyContent__icon} />}
-            text="Nothing here to see yet"
+            text={useString('amity_social_label_nothing_here_yet')}
           />
         </div>
       ) : (

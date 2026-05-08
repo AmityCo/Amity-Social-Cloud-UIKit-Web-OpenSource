@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
@@ -44,7 +45,7 @@ export function ImageViewer({
             <FailedImage className={styles.imageViewer__failedIcon} />
           </div>
           <Typography.Body className={styles.imageViewer__failedText}>
-            This photo is no longer available.
+            {useString('amity_social_label_this_photo_is_no_longer_available')}
           </Typography.Body>
         </>
       )}

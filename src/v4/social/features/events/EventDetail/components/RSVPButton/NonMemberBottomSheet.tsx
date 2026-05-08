@@ -1,4 +1,5 @@
 import { Button } from '~/v4/core/components/AriaButton/Button';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components/Typography';
 import styles from './RSVPButton.module.css';
 import { Divider } from '~/v4/social/elements/Divider/Divider';
@@ -55,10 +56,14 @@ export const NonMemberBottomSheet = ({
         />
       </div>
       <div className={styles.rsvpButton__bottomSheetMenuText}>
-        <Typography.Headline>Join community to continue</Typography.Headline>
+        <Typography.Headline>
+          {useString('amity_social_join_community_to_continue')}
+        </Typography.Headline>
         <Typography.Body className={styles.rsvpButton__bottomSheetMenuBody}>
-          {`Become a member of ${event.targetCommunity?.displayName} to participate in events and
-        discussions.`}
+          {useString('amity_social_label_join_to_attend_events').replace(
+            '%s',
+            event.targetCommunity?.displayName ?? '',
+          )}
         </Typography.Body>
       </div>
       <Divider className={styles.rsvpButton__divider} />
@@ -67,10 +72,12 @@ export const NonMemberBottomSheet = ({
         className={styles.rsvpButton__addToCalendarButton}
         onPress={onPressJoin}
       >
-        {event.targetCommunity?.requiresJoinApproval ? 'Join community' : 'Join community and RSVP'}
+        {event.targetCommunity?.requiresJoinApproval
+          ? useString('amity_social_join_community')
+          : useString('amity_social_join_community_and_rsvp')}
       </Button>
       <Button variant="outlined" className={styles.rsvpButton__cancelButton} onPress={onClose}>
-        Cancel
+        {useString('amity_social_button_cancel')}
       </Button>
     </div>
   );

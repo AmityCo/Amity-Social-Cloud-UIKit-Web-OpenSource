@@ -14,7 +14,7 @@ export const PollMultipleSelectionDesc = ({
 }: PollMultipleSelectionDescProps) => {
   const elementId = 'poll_multiple_selection_desc';
 
-  const { config, themeStyles, accessibilityId } = useAmityElement({
+  const { config, themeStyles, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -25,7 +25,7 @@ export const PollMultipleSelectionDesc = ({
       style={themeStyles}
       className={styles.pollMultipleSelectionDesc__text}
     >
-      {config.text}
+      {resolveText('amity_social_label_let_participants_vote_more_than_one_option')}
     </Typography.Caption>
   );
 };

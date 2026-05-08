@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './PollDurationOptions.module.css';
 import { Input, Label } from 'react-aria-components';
 import { Typography } from '~/v4/core/components';
@@ -107,14 +108,16 @@ export const PollDurationOptions = ({
           <div className={styles.pollDurationOptions__calendar}>
             <div className={styles.calendarNav}>
               <BackButton onPress={() => setIsShowDateTimePicker(false)} />
-              <Typography.TitleBold>Ends on</Typography.TitleBold>
+              <Typography.TitleBold>
+                {useString('amity_social_button_ends_on')}
+              </Typography.TitleBold>
               <AriaButton
                 slot={null}
                 variant="text"
                 onPress={onClickDone}
                 isDisabled={minTime && time < minTime}
               >
-                Done
+                {useString('amity_social_button_done')}
               </AriaButton>
             </div>
             <TimeField
@@ -169,7 +172,7 @@ export const PollDurationOptions = ({
             onPress={() => setIsShowDateTimePicker(true)}
             className={styles.pollDurationOptions__pickDateTime}
           >
-            <Typography.Body>Pick date and time</Typography.Body>
+            <Typography.Body>{useString('amity_social_pick_date_and_time')}</Typography.Body>
             <AngleRight className={styles.pollDurationOptions__angleRightIcon} />
           </Button>
         </>

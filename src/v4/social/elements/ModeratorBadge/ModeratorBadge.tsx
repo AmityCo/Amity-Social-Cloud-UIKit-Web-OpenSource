@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './ModeratorBadge.module.css';
 import Badge from '~/v4/icons/Badge';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { resolveString } from '~/v4/core/localization';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 
@@ -46,7 +47,7 @@ export function ModeratorBadge({
       <Badge className={clsx(styles.moderatorBadge__icon)} />
       {variant === 'textWithIcon' && (
         <Typography.CaptionSmall className={clsx(styles.moderatorBadge__text)}>
-          {config.text}
+          {resolveString('amity_common_button_moderator')}
         </Typography.CaptionSmall>
       )}
     </div>

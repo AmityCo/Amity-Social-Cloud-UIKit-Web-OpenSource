@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -171,19 +172,18 @@ export const CommentComposer = ({
       return { created, parentId };
     },
     onError: (error) => {
-      let message = 'Oops, something went wrong';
+      let message = resolveString('amity_social_toast_failed_generic');
       if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-        message = 'Your comment contains inappropriate word. Please review and delete it.';
+        message = resolveString('amity_social_button_add_blocked_words_comment_error_message');
       } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-        message =
-          'Your comment contains a link that\u2019s not allowed. Please review and delete it.';
+        message = resolveString('amity_add_blocked_url_comment_error_message');
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_POST) && post?.dataType === 'clip') {
-        message = 'This clip is no longer available.';
+        message = resolveString('amity_social_label_this_clip_is_no_longer_available');
       } else if (error.message.includes(ERROR_RESPONSE.DELETED_COMMENT)) {
         const isL0Comment = replyTo && !replyTo.parentId;
         message = isL0Comment
-          ? 'This comment is no longer available.'
-          : 'This reply is no longer available.';
+          ? resolveString('amity_social_error_add_reply_parent_deleted_error_message')
+          : resolveString('amity_social_error_reply_no_longer_available_error_message');
       }
 
       if (!isDesktop) {
@@ -227,7 +227,9 @@ export const CommentComposer = ({
     return (
       <div className={styles.commentComposer__disableContainer}>
         <LockSvg />
-        <Typography.Body>Comments are disabled for this story</Typography.Body>
+        <Typography.Body>
+          {useString('amity_social_label_comments_disabled_message')}
+        </Typography.Body>
       </div>
     );
   }
@@ -244,7 +246,7 @@ export const CommentComposer = ({
       {!online && isPending && page.type == PageTypes.ViewStoryPage && (
         <Notification
           icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}
-          content={'Oops, something went wrong'}
+          content={useString('amity_social_toast_failed_generic')}
           alignment="fixed"
           duration={3000}
         />
@@ -273,7 +275,7 @@ export const CommentComposer = ({
               data-testid={`${pageId}/${componentId}/comment_composer_reply_text`}
               className={styles.commentComposer__replyContainer__text}
             >
-              <span>Replying to </span>
+              <span>{useString('amity_social_replying_to')} </span>
               <span className={styles.commentComposer__replyContainer__username}>
                 {replyTo?.creator?.displayName ?? replyTo?.userId}
               </span>
@@ -324,7 +326,12 @@ export const CommentComposer = ({
             targetId={referenceId}
             value={initialCommentValue}
             placehoder={
-              replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
+              replyTo
+                ? useString('amity_social_replying_to_display_name').replace(
+                    '%s',
+                    replyTo?.creator?.displayName ?? '',
+                  )
+                : useString('amity_social_replying_to')
             }
             communityId={community?.communityId}
             shouldAutoFocus={
@@ -340,10 +347,10 @@ export const CommentComposer = ({
           onPressStart={() => {
             if (!online) {
               if (!isDesktop) {
-                showInlineError('No internet connection.');
+                showInlineError(resolveString('amity_social_label_no_internet_connection'));
               } else {
                 notification.info({
-                  content: 'No internet connection.',
+                  content: resolveString('amity_social_label_no_internet_connection'),
                   alignment: 'withSidebar',
                 });
               }
@@ -352,7 +359,7 @@ export const CommentComposer = ({
             mutateAsync({ params: textValue });
           }}
         >
-          <Typography.Body>Post</Typography.Body>
+          <Typography.Body>{useString('amity_social_label_post_label_singular')}</Typography.Body>
         </Button>
       </div>
     </div>

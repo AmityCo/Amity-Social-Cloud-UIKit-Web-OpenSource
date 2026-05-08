@@ -1,6 +1,7 @@
 import { ChannelRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { resolveString } from '~/v4/core/localization';
 
 const useChannelRole = ({ channel }: { channel?: Amity.Channel | null }) => {
   const channelId = channel?.channelId;
@@ -11,8 +12,8 @@ const useChannelRole = ({ channel }: { channel?: Amity.Channel | null }) => {
       channelId
         ? ChannelRepository.Moderation.addRole(channelId, roleId, userIds)
         : Promise.resolve(false),
-    onSuccess: () => success({ content: 'Moderator promoted!' }),
-    onError: () => info({ content: 'Moderator promoted!' }),
+    onSuccess: () => success({ content: resolveString('amity_chat_toast_moderator_promoted') }),
+    onError: () => info({ content: resolveString('amity_chat_toast_moderator_promoted') }),
   });
 
   const { mutate: removeRoleFromUsers } = useMutation({
@@ -20,8 +21,8 @@ const useChannelRole = ({ channel }: { channel?: Amity.Channel | null }) => {
       channelId
         ? ChannelRepository.Moderation.removeRole(channelId, roleId, userIds)
         : Promise.resolve(false),
-    onSuccess: () => success({ content: 'Moderator promoted!' }),
-    onError: () => info({ content: 'Moderator promoted!' }),
+    onSuccess: () => success({ content: resolveString('amity_chat_toast_moderator_promoted') }),
+    onError: () => info({ content: resolveString('amity_chat_toast_moderator_promoted') }),
   });
 
   return {

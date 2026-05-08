@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
@@ -32,6 +33,7 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
   const pinnedProductId = livestreamPost?.pinnedProductId;
 
   const lastKnownPinnedTagRef = useRef<Amity.MediaProductTag | undefined>(undefined);
+
   const [dismissedPinnedProductId, setDismissedPinnedProductId] = useState<string | undefined>(
     undefined,
   );
@@ -61,10 +63,10 @@ export const PinnedProductOverlay: React.FC<PinnedProductOverlayProps> = ({
         productTags: updatedTags || [],
         action: 'remove',
       });
-      success({ content: 'Product tag removed.' });
+      success({ content: useString('amity_social_label_product_tag_removed') });
     } catch (error) {
       info({
-        content: 'Failed to remove product tag. Please try again.',
+        content: useString('amity_social_toast_product_tag_remove_failed'),
       });
     }
   };

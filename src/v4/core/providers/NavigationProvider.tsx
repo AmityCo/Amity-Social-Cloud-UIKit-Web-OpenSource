@@ -16,6 +16,7 @@ import {
   AmityCommunitySetupPageMode,
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
+import { resolveString } from '~/v4/core/localization';
 import { AmityRoute } from './AmityUIKitProvider';
 import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
@@ -1513,17 +1514,23 @@ export default function NavigationProvider({
 
   const handleVisitorUserAction = (context: { alignment: NotificationAlignment }) => {
     notification.info({
-      content: 'Create an account or sign in to continue.',
+      content: resolveString('amity_social_label_create_account_or_sign_in'),
       alignment: context.alignment,
     });
   };
 
   const handleNonMemberAction = (context: { alignment: NotificationAlignment }) => {
-    notification.info({ content: 'Join community to interact.', alignment: context.alignment });
+    notification.info({
+      content: resolveString('amity_common_label_join_community_to_interact'),
+      alignment: context.alignment,
+    });
   };
 
   const handleNonFollowerAction = (context: { alignment: NotificationAlignment }) => {
-    notification.info({ content: 'Follow user to interact.', alignment: context.alignment });
+    notification.info({
+      content: resolveString('amity_common_label_follow_user_to_interact'),
+      alignment: context.alignment,
+    });
   };
 
   const goToEventSetupPage = useCallback(

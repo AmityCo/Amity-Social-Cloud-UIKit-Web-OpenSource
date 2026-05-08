@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { SubmitHandler } from 'react-hook-form';
 import {
   AspectRatioButton,
@@ -62,6 +63,7 @@ export const PlainDraftStoryPage = ({
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
   const { online } = useNetworkState();
+
   const [hyperLink, setHyperLink] = useState<
     {
       data: { url: string; customText: string };
@@ -131,12 +133,12 @@ export const PlainDraftStoryPage = ({
         await StoryRepository.createVideoStory(targetType, targetId, formData, metadata, items);
       }
       notification.success({
-        content: 'Successfully shared story',
+        content: useString('amity_social_toast_snackbar_story_shared'),
       });
     } catch (error: unknown) {
       if (error instanceof Error) {
         notification.info({
-          content: 'Failed to upload',
+          content: useString('amity_social_toast_failed_to_upload'),
         });
       }
     } finally {
@@ -147,10 +149,10 @@ export const PlainDraftStoryPage = ({
   const discardCreateStory = () => {
     confirm({
       pageId,
-      title: 'Discard this story?',
-      content: 'The story will be permanently discarded. It cannot be undone.',
-      cancelText: 'Cancel',
-      okText: 'Discard',
+      title: resolveString('amity_social_modal_dialog_title_discard_story'),
+      content: resolveString('amity_social_modal_dialog_discard_story_body'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      okText: resolveString('amity_social_button_discard'),
       onOk: () => {
         setFile(null);
         onDiscardCreateStory();
@@ -206,7 +208,7 @@ export const PlainDraftStoryPage = ({
   const handleOnClickHyperLinkActionButton = () => {
     if (hyperLink[0]?.data?.url) {
       notification.info({
-        content: 'Can’t add more than one link to your story.',
+        content: useString('amity_social_toast_snackbar_story_link_limit'),
         alignment: 'fullscreen',
       });
       return;
@@ -245,7 +247,7 @@ export const PlainDraftStoryPage = ({
 
   const extractColorsFromImage = useCallback(async (imageUrl: string) => {
     const img = new Image();
-    img.crossOrigin = 'Anonymous';
+    img.crossOrigin = useString('amity_social_general_anonymous');
     img.src = imageUrl;
 
     img.onload = () => {
@@ -338,7 +340,7 @@ export const PlainDraftStoryPage = ({
             onClick={() => {
               if (!online) {
                 notification.info({
-                  content: 'Failed to shared story. Please try again.',
+                  content: useString('amity_social_failed_to_shared_story_please_try_again'),
                   alignment: 'fullscreen',
                 });
                 return;

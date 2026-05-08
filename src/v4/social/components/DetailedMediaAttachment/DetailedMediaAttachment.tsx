@@ -47,6 +47,7 @@ export function DetailedMediaAttachment({
           isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           onVideoFileChange={onVideoFileChange}
           onImageFileChange={onImageFileChange}
+          textId="amity_social_button_post_composer_camera_button"
         />
       )}
       {isVisibleImage && (
@@ -55,6 +56,7 @@ export function DetailedMediaAttachment({
           componentId={componentId}
           isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           onImageFileChange={onImageFileChange}
+          textId="amity_social_button_post_composer_image_button"
         />
       )}
 
@@ -64,6 +66,7 @@ export function DetailedMediaAttachment({
           componentId={componentId}
           isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           onVideoFileChange={onVideoFileChange}
+          textId="amity_social_button_post_composer_video_button"
         />
       )}
     </div>

@@ -14,6 +14,7 @@ interface CameraButtonProps {
   isVisibleImage?: boolean;
   isVisibleVideo?: boolean;
   isDisabled?: boolean;
+  textId?: string;
   onVideoFileChange?: (files: File[]) => void;
   onImageFileChange?: (files: File[]) => void;
 }
@@ -54,12 +55,20 @@ export function CameraButton({
   isVisibleImage,
   isVisibleVideo,
   isDisabled,
+  textId = 'amity_social_button_community_setup_camera_button',
   onVideoFileChange,
   onImageFileChange,
 }: CameraButtonProps) {
   const elementId = 'camera_button';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
 
@@ -104,7 +113,9 @@ export function CameraButton({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-      {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
+      {(resolveText(textId) || config.text) && (
+        <Typography.BodyBold>{resolveText(textId) || config.text}</Typography.BodyBold>
+      )}
 
       <input
         type="file"

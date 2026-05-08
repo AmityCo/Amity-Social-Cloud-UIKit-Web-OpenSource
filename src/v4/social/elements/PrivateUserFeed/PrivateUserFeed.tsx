@@ -22,6 +22,8 @@ export const PrivateUserFeed: React.FC<PrivateUserFeedProps> = ({
       componentId={componentId}
       elementId={elementId}
       infoElementId={infoElementId}
+      textKey="amity_social_label_private_user_feed"
+      infoTextKey="amity_social_label_private_user_feed_info"
       defaultIcon={() => <PrivateFeed className={styles.privateUserFeed__icon} />}
     />
   );

@@ -13,7 +13,7 @@ export const JoinRequestsTabDescription = ({
   componentId = '*',
 }: JoinRequestsTabDescriptionProps) => {
   const elementId = 'join_requests_tab_description';
-  const { config, accessibilityId, themeStyles } = useAmityElement({
+  const { config, accessibilityId, themeStyles, resolveText } = useAmityElement({
     elementId,
     componentId,
     pageId,
@@ -26,7 +26,7 @@ export const JoinRequestsTabDescription = ({
       className={styles.joinRequestsTabDescription}
     >
       <Typography.Caption className={styles.joinRequestsTabDescription__text}>
-        {config.text}
+        {resolveText('amity_social_label_declining_a_join_request_is_irreversible_the_user_must_')}
       </Typography.Caption>
     </div>
   );

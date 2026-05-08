@@ -1,4 +1,5 @@
 import { AmityEventType } from '@amityco/ts-sdk';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -21,14 +22,22 @@ export function Location({ value, onChange }: LocationProps) {
   const { openPopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
 
-  const label =
-    value.type === AmityEventType.Virtual
-      ? value.platform === ''
-        ? 'Select where this event will be happening'
-        : value.platform === 'livestream'
-          ? 'Live stream'
-          : value.externalUrl
-      : value.location;
+  const selectLocationLabel = useString('amity_social_label_event_select_location');
+  const liveStreamLabel = useString('amity_social_status_live_stream');
+  const locationTitleLabel = useString('amity_social_label_event_location_title');
+
+  let label: string | undefined;
+  if (value.type === AmityEventType.Virtual) {
+    if (value.platform === '') {
+      label = selectLocationLabel;
+    } else if (value.platform === 'livestream') {
+      label = liveStreamLabel;
+    } else {
+      label = value.externalUrl;
+    }
+  } else {
+    label = value.location;
+  }
 
   return (
     <Button
@@ -39,7 +48,7 @@ export function Location({ value, onChange }: LocationProps) {
       onPress={() => {
         isDesktop
           ? openPopup({
-              header: <Typography.Headline>Location</Typography.Headline>,
+              header: <Typography.Headline>{locationTitleLabel}</Typography.Headline>,
               children: ({ close }) => (
                 <LocationForm value={value} onChange={onChange} onCancel={close} />
               ),
@@ -51,7 +60,7 @@ export function Location({ value, onChange }: LocationProps) {
             });
       }}
     >
-      {label === 'Select where this event will be happening' ? (
+      {label === selectLocationLabel ? (
         <Typography.Body className={styles.location__label}>{label}</Typography.Body>
       ) : (
         <Typography.Body className={styles.location__value}>{label}</Typography.Body>

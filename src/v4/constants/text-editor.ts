@@ -13,7 +13,7 @@ export const CONTENT_TYPE_DEFAULTS: Record<
     maxLines: number;
     enableHashtag: boolean;
     enableUrlDetection: boolean;
-    placeholder: string;
+    placeholderKey: string;
   }
 > = {
   post: {
@@ -21,20 +21,20 @@ export const CONTENT_TYPE_DEFAULTS: Record<
     maxLines: 30,
     enableHashtag: true,
     enableUrlDetection: true,
-    placeholder: "What's on your mind?",
+    placeholderKey: 'amity_social_placeholder_whats_on_your_mind',
   },
   comment: {
     maxCharacters: 50000,
     maxLines: 6,
     enableHashtag: false,
     enableUrlDetection: false,
-    placeholder: 'Write a comment...',
+    placeholderKey: 'amity_social_write_a_comment',
   },
   message: {
     maxCharacters: 200,
     maxLines: 1,
     enableHashtag: false,
     enableUrlDetection: false,
-    placeholder: 'Type a message...',
+    placeholderKey: 'amity_social_type_a_message',
   },
 };

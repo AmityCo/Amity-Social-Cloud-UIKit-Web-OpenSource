@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode, useRef } from 'react';
-import { useIntl } from 'react-intl';
+import { useString } from '~/v4/core/localization';
 import clsx from 'clsx';
 import { Button } from '~/v4/core/components';
 import styles from './LoadMoreWrapper.module.css';
@@ -25,7 +25,7 @@ export const LoadMoreWrapper = ({
   appendIcon,
   isExpanded = true,
 }: LoadMoreWrapperProps) => {
-  const { formatMessage } = useIntl();
+  const loadMoreText = useString('amity_loadMore');
   const [expanded, setExpanded] = useState(isExpanded);
   const observerRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +67,7 @@ export const LoadMoreWrapper = ({
     <>
       <Button className={clsx(styles.loadMoreButton, className)} onClick={() => setExpanded(true)}>
         {prependIcon}
-        {text || formatMessage({ id: 'loadMore' })}
+        {text || loadMoreText}
         {appendIcon}
       </Button>
     </>

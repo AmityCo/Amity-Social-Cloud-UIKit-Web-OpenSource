@@ -1,4 +1,5 @@
 import { MessageRepository } from '@amityco/ts-sdk';
+import { resolveString } from '~/v4/core/localization';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { ERROR_RESPONSE } from '~/v4/chat/constants';
 
@@ -28,14 +29,14 @@ export const useCreateMessage: ({
     },
     onError: (error) => {
       const { message } = error;
-      let notificationMessage = "Your message wasn't sent. Please try again.";
+      let notificationMessage = resolveString('amity_common_label_message_not_sent');
 
       if (message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
-        notificationMessage = "Your message wasn't sent as it contains a blocked word.";
+        notificationMessage = resolveString('amity_social_label_msg_blocked_word');
       } else if (message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
-        notificationMessage = 'Your message wasn’t sent as it contained a link that’s not allowed.';
+        notificationMessage = resolveString('amity_social_label_msg_link_not_allowed');
       } else if (message.includes(ERROR_RESPONSE.USER_MUTED)) {
-        notificationMessage = 'User is muted';
+        notificationMessage = resolveString('amity_social_button_user_muted');
       }
 
       onError?.(notificationMessage);

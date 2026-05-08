@@ -7,6 +7,8 @@ interface PrivateUserMediaFeedProps {
   componentId?: string;
   elementId?: string;
   infoElementId?: string;
+  textKey?: string;
+  infoTextKey?: string;
 }
 
 export function PrivateUserMediaFeed({
@@ -14,6 +16,8 @@ export function PrivateUserMediaFeed({
   componentId = '*',
   elementId = '*',
   infoElementId = '*',
+  textKey,
+  infoTextKey,
 }: PrivateUserMediaFeedProps) {
   return (
     <EmptyContent
@@ -21,6 +25,8 @@ export function PrivateUserMediaFeed({
       componentId={componentId}
       elementId={elementId}
       infoElementId={infoElementId}
+      textKey={textKey}
+      infoTextKey={infoTextKey}
       emptyContentClassName={styles.privateUserMediaFeed}
       defaultIcon={() => <PrivateFeed className={styles.privateUserMediaFeed__icon} />}
     />

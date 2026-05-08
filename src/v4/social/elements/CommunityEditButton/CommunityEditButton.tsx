@@ -19,7 +19,7 @@ export const CommunityEditButton = ({
   componentId = '*',
 }: CommunityEditButtonProps) => {
   const elementId = 'community_edit_button';
-  const { config, accessibilityId, themeStyles, isExcluded } = useAmityElement({
+  const { config, accessibilityId, themeStyles, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -39,7 +39,7 @@ export const CommunityEditButton = ({
       data-testid={accessibilityId}
       className={styles.communityEditButton__button}
     >
-      {config.text}
+      {resolveText('amity_social_button_edit_user_save_button')}
     </Button>
   );
 };

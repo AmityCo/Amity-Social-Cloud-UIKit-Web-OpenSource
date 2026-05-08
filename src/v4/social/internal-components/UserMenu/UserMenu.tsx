@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './UserMenu.module.css';
 import { Button } from '~/v4/core/natives/Button';
 import { Pencil } from '~/v4/icons/Pencil';
@@ -110,7 +111,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         >
           <Pencil className={styles.userMenu__editProfile__icon} />
           <Typography.BodyBold className={styles.userMenu__editProfile__text}>
-            Edit profile
+            {useString('amity_social_button_edit_profile')}
           </Typography.BodyBold>
         </Button>
       )}
@@ -122,7 +123,9 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         >
           <Flag className={styles.userMenu__reportUser__icon} />
           <Typography.BodyBold className={styles.userMenu__reportUser__text}>
-            {isReportedByMe ? 'Unreport user' : 'Report user'}
+            {isReportedByMe
+              ? useString('amity_social_button_unreport_user')
+              : useString('amity_social_button_report_user')}
           </Typography.BodyBold>
         </Button>
       )}
@@ -135,10 +138,10 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         <BlockedUser className={styles.userMenu__blockedUser__icon} />
         <Typography.BodyBold className={styles.userMenu__blockedUser__text}>
           {isCurrentUser
-            ? 'Manage blocked users'
+            ? useString('amity_social_label_manage_blocked_users')
             : followStatus === 'blocked'
-              ? 'Unblock user'
-              : 'Block user'}
+              ? useString('amity_social_button_unblock_user')
+              : useString('amity_social_button_block_user')}
         </Typography.BodyBold>
       </Button>
       <CopyLinkButton
@@ -147,6 +150,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         model={SharableModel.USER}
         referenceId={user.userId}
         onDone={onCloseMenu}
+        textId="amity_social_label_copy_profile_link"
       />
     </div>
   );

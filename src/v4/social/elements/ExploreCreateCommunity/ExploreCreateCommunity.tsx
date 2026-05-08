@@ -16,7 +16,7 @@ export function ExploreCreateCommunity({
 }: DescriptionProps) {
   const elementId = 'explore_create_community';
 
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -34,7 +34,7 @@ export function ExploreCreateCommunity({
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveText('amity_social_button_community_setup_create_button')}
     </Button>
   );
 }

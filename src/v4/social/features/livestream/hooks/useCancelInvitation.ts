@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { InvitationRepository } from '@amityco/ts-sdk';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { resolveString } from '~/v4/core/localization';
 
 export interface UseCancelInvitationProps {
   pageId?: string;
@@ -35,12 +36,11 @@ export const useCancelInvitation = ({
           onSuccess: () => options?.onSuccess?.(),
           onError: () => options?.onError?.(),
         }),
-      okText: 'Confirm',
-      cancelText: 'Cancel',
-      title: 'Cancel co-host invitation',
+      okText: resolveString('amity_social_button_confirm'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      title: resolveString('amity_social_cancel_co_host_invitation'),
       pageId,
-      content:
-        "Are you sure you want to cancel this invitation? They'll no longer be invited as a co-host and will remain as a viewer.",
+      content: resolveString('amity_social_modal_alert_cancel_cohost_invitation_message'),
     });
   };
 

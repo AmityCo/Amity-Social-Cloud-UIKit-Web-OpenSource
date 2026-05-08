@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import { useString, resolveString } from '~/v4/core/localization';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Plyr from 'plyr';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
@@ -90,6 +91,23 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   }, [subscribedPost]);
 
   const { success, info } = useNotifications();
+
+  const leftStageText = useString('amity_social_label_left_stage');
+  const invitationUnavailableText = useString(
+    'amity_social_error_community_invitation_unavailable_error',
+  );
+  const invitationAcceptedText = useString('amity_social_invitation_accepted');
+  const invitationFailToAcceptText = useString(
+    'amity_social_toast_community_invitation_fail_to_accept',
+  );
+  const invitationFailToRejectText = useString(
+    'amity_social_toast_community_invitation_fail_to_reject',
+  );
+  const productTagAddedText = useString('amity_social_label_product_tag_added');
+  const productTagRemovedText = useString('amity_social_label_product_tag_removed');
+  const taggedProductsText = useString('amity_social_button_tagged_products');
+  const productsTaggedText = useString('amity_social_button_products_tagged');
+
   const { leaveRoom, isPending: isLeaving } = useLeaveRoom({
     room,
     onSettled: () => {
@@ -97,7 +115,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
       reloadPlayer();
       if (!coHostEndSessionRef.current)
         success({
-          content: 'You left the stage and are now watching as a viewer.',
+          content: leftStageText,
         });
 
       coHostEndSessionRef.current = false;
@@ -242,7 +260,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         if (invitation) setInvitations([invitation]);
         else
           info({
-            content: 'This invitation is no longer available.',
+            content: invitationUnavailableText,
           });
       });
   }, [room?.roomId]);
@@ -261,7 +279,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
           setShouldRequestDevicePermissions(true);
           setUiState('backStage');
           success({
-            content: 'Invitation accepted.',
+            content: invitationAcceptedText,
           });
         } catch (e) {
           if (
@@ -269,11 +287,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             e.message?.includes('Invitation has already been accepted or rejected')
           ) {
             info({
-              content: 'This invitation is no longer available.',
+              content: invitationUnavailableText,
             });
           } else {
             info({
-              content: 'Failed to accept invitation. Please try again.',
+              content: invitationFailToAcceptText,
             });
           }
         }
@@ -284,7 +302,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         try {
           await myInvitation?.reject();
           success({
-            content: 'Invitation declined.',
+            content: resolveString('amity_social_toast_snackbar_invitation_declined'),
           });
         } catch (e) {
           if (
@@ -292,11 +310,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             e.message?.includes('Invitation has already been accepted or rejected')
           ) {
             info({
-              content: 'This invitation is no longer available.',
+              content: invitationUnavailableText,
             });
           } else {
             info({
-              content: 'Failed to decline invitation. Please try again.',
+              content: invitationFailToRejectText,
             });
           }
         }
@@ -410,7 +428,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
           );
           if (newTagsCount > previousTagsCount && !hasUnavailableProducts) {
-            success({ content: 'Product tags added.' });
+            success({ content: productTagAddedText });
           }
 
           return result?.data?.productTags as Amity.ProductTag[] | undefined;
@@ -434,7 +452,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
           productTags: updatedTags || [],
           action: 'remove',
         });
-        success({ content: 'Product tag removed.' });
+        success({ content: productTagRemovedText });
       } catch (error) {
         //
       }
@@ -473,7 +491,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     isProductDrawerOpenRef.current = true;
     setDrawerData({
       content: getTaggedProductsModalContent(),
-      ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
+      ariaLabel: isHost ? taggedProductsText : productsTaggedText,
     });
   };
 
@@ -482,7 +500,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     if (isProductDrawerOpenRef.current && subscribedPost) {
       setDrawerData({
         content: getTaggedProductsModalContent(),
-        ariaLabel: isHost ? 'Tagged products' : 'Products tagged',
+        ariaLabel: isHost ? taggedProductsText : productsTaggedText,
       });
     }
   }, [subscribedPost?.productTags, subscribedPost?.pinnedProductId]);
@@ -524,7 +542,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             data-is-live={isLive}
             data-backstage={uiState === 'backStage'}
             data-community={!!community}
-            aria-label={uiState === 'backStage' ? 'Livestream backstage' : 'Livestream player'}
+            aria-label={
+              uiState === 'backStage'
+                ? resolveString('amity_social_livestream_backstage')
+                : resolveString('amity_social_livestream_player')
+            }
           >
             {uiState === 'player' ? (
               <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">

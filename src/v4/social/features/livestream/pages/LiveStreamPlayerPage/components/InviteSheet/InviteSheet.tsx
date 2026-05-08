@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
 import styles from './InviteSheet.module.css';
@@ -20,6 +21,11 @@ export const InviteSheet: React.FC<InviteSheetProps> = ({
   host,
   coHost,
 }) => {
+  const joinAsCohostLabel = useString('amity_social_label_join_as_co_host');
+  const cohostInvitationMessage = useString('amity_social_status_cohost_invitation_message');
+  const rejectButtonLabel = useString('amity_social_button_community_invitation_reject_button');
+  const acceptButtonLabel = useString('amity_social_button_accept_invite');
+
   return (
     <>
       <div className={styles.inviteSheet}>
@@ -52,11 +58,10 @@ export const InviteSheet: React.FC<InviteSheetProps> = ({
         </div>
         <div className={styles.inviteSheet__text__wrapper}>
           <Typography.Headline className={styles.inviteSheet__title}>
-            Join as co-host
+            {joinAsCohostLabel}
           </Typography.Headline>
           <Typography.Body className={styles.inviteSheet__description}>
-            {host.displayName} invited you to join their livestream as a co-host. You’ll enter a
-            backstage room to set up before going live.
+            {cohostInvitationMessage.replace('%s', host.displayName ?? '')}
           </Typography.Body>
         </div>
         <div className={styles.inviteSheet__footer}>
@@ -66,10 +71,10 @@ export const InviteSheet: React.FC<InviteSheetProps> = ({
             className={styles.inviteSheet__footer__button}
             onPress={onCloseSheet}
           >
-            Decline
+            {rejectButtonLabel}
           </Button>
           <Button className={styles.inviteSheet__footer__button} onPress={onAccept}>
-            Accept
+            {acceptButtonLabel}
           </Button>
         </div>
       </div>

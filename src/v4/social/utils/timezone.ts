@@ -6,6 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 import isYesterday from 'dayjs/plugin/isYesterday';
 import isTomorrow from 'dayjs/plugin/isTomorrow';
 import { getLocalTimeZone } from '@internationalized/date';
+import { resolveString } from '~/v4/core/localization';
 
 dayjs.extend(utc);
 dayjs.extend(isToday);
@@ -13,45 +14,73 @@ dayjs.extend(timezone);
 dayjs.extend(isYesterday);
 dayjs.extend(isTomorrow);
 
+const getLocale = () => (typeof navigator !== 'undefined' ? navigator.language : 'en');
+
+const formatOffsetFromMinutes = (offsetInMinutes: number): string => {
+  const sign = offsetInMinutes >= 0 ? '+' : '-';
+  const abs = Math.abs(offsetInMinutes);
+  const hh = String(Math.floor(abs / 60)).padStart(2, '0');
+  const mm = String(abs % 60).padStart(2, '0');
+  return `${sign}${hh}:${mm}`;
+};
+
 export const getFormattedTimeZone = (timeZone?: TimeZone) => {
-  return `(GMT ${timeZone?.currentTimeFormat?.split(' ')[0]}) ${timeZone?.currentTimeFormat?.split(' ').slice(1).join(' ').split(' - ')[0]} - ${timeZone?.mainCities[0]}`;
+  if (!timeZone) return '';
+
+  const offset = formatOffsetFromMinutes(timeZone.currentTimeOffsetInMinutes);
+
+  // Localize the timezone region name via Intl
+  let regionName: string;
+  try {
+    const parts = new Intl.DateTimeFormat(getLocale(), {
+      timeZoneName: 'long',
+      timeZone: timeZone.name,
+    }).formatToParts(new Date());
+    regionName = parts.find((p) => p.type === 'timeZoneName')?.value ?? timeZone.alternativeName;
+  } catch {
+    regionName = timeZone.alternativeName;
+  }
+
+  // Localize the main city — no standard Intl API supports city-name translation,
+  // so we keep the raw city name from tzdb as-is.
+  const mainCity: string = timeZone.mainCities[0] ?? '';
+
+  return `(GMT ${offset}) ${regionName} - ${mainCity}`;
 };
 
 export const getCurrentTimeZone = () => getLocalTimeZone();
 
+const formatDateTimeLocal = (date: string | Date): string =>
+  new Intl.DateTimeFormat(getLocale(), {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(date));
+
 export function formatEventDuration(start: string, end?: string): string {
-  const formatStartTime = () => {
-    const isYesterday = dayjs(start).isYesterday();
-    const isToday = dayjs(start).isToday();
-    const isTomorrow = dayjs(start).isTomorrow();
-    const startTime = dayjs(start).format('HH:mm');
+  const isYesterday = dayjs(start).isYesterday();
+  const isToday = dayjs(start).isToday();
+  const isTomorrow = dayjs(start).isTomorrow();
+  const startTime = dayjs(start).format('HH:mm');
 
-    const startDate = isToday
-      ? `Today, ${startTime}`
-      : isTomorrow
-        ? `Tomorrow, ${startTime}`
-        : isYesterday
-          ? `Yesterday, ${startTime}`
-          : dayjs(start).format('DD MMM YYYY, HH:mm');
+  const endTime = end
+    ? dayjs(start).isSame(dayjs(end), 'day')
+      ? dayjs(end).format('HH:mm')
+      : formatDateTimeLocal(end)
+    : '';
 
-    return startDate;
-  };
+  if (isToday) return resolveString('amity_social_time_event_date_today', startTime, endTime);
+  if (isTomorrow)
+    return resolveString('amity_social_label_event_date_tomorrow', startTime, endTime);
+  if (isYesterday)
+    return resolveString('amity_social_time_event_date_yesterday', startTime, endTime);
 
-  const formatEndTime = () => {
-    if (!end) return '';
-
-    const isSameDay = dayjs(start).isSame(dayjs(end), 'day');
-
-    const endDate = isSameDay
-      ? ` to ${dayjs(end).format('HH:mm')}`
-      : ` to ${dayjs(end).format('DD MMM YYYY, HH:mm')}`;
-
-    return endDate;
-  };
-
-  const formattedDuration = `${formatStartTime()}${formatEndTime()}`;
-
-  return formattedDuration;
+  return end
+    ? resolveString('amity_social_label_event_date_other', formatDateTimeLocal(start), endTime)
+    : formatDateTimeLocal(start);
 }
 
 export function checkIsWithinMinutes(date: string, minutes = 15) {

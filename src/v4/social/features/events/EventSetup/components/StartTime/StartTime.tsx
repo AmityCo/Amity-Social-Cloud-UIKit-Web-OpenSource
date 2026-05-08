@@ -1,4 +1,5 @@
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import { Button } from '~/v4/core/components/AriaButton';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -18,7 +19,7 @@ export function StartTime({ value, onChange }: StartTimeProps) {
     <div className={styles.startTime__dateTimePickerContainer}>
       <DateTimePicker
         value={value}
-        label="Starts on"
+        label={useString('amity_social_button_event_starts_on')}
         minDate={today(getLocalTimeZone())}
         onClose={close}
         onChange={(value) => {
@@ -31,7 +32,9 @@ export function StartTime({ value, onChange }: StartTimeProps) {
 
   return (
     <div className={styles.startTime}>
-      <Typography.Body className={styles.startTime__label}>Starts on</Typography.Body>
+      <Typography.Body className={styles.startTime__label}>
+        {useString('amity_social_button_event_setup_starts_on')}
+      </Typography.Body>
       <Popover
         trigger={({ openPopover, isDesktop }) => {
           return (
@@ -45,17 +48,17 @@ export function StartTime({ value, onChange }: StartTimeProps) {
               }}
             >
               <Typography.Body className={styles.startTime__label}>
-                {value.toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric',
-                })}
-                {' at '}
-                {value.toLocaleTimeString('en-GB', {
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  hour12: false,
-                })}
+                {new Intl.DateTimeFormat(
+                  typeof navigator !== 'undefined' ? navigator.language : 'en',
+                  {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: false,
+                  },
+                ).format(value)}
               </Typography.Body>
             </Button>
           );

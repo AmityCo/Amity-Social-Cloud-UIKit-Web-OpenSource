@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import EventListSkeleton from './EventListSkeleton';
 import EventOutlined from '~/v4/icons/EventOutlined';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -30,7 +31,7 @@ export function EventList({
       {!isLoading && !isLoadingFirstPage && items.length === 0 && (
         <EmptyContent
           variant="item"
-          text="No events yet"
+          text={useString('amity_social_label_no_events_yet')}
           defaultIcon={() => <EventOutlined className={styles.eventList__emptyIcon} />}
         />
       )}

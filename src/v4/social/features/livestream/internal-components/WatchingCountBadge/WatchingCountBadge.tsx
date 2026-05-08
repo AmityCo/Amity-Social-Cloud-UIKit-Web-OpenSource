@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import LiveDot from '~/v4/icons/LiveDot';
 import UserOutlined from '~/v4/icons/UserOutlined';
@@ -60,7 +61,7 @@ export function WatchingCountBadge({
         <>
           <LiveDot className={styles.watchingCountBadge__liveDotIcon} />
           <Typography.CaptionBold className={styles.watchingCountBadge__text}>
-            {'LIVE'}
+            {useString('amity_social_status_live')}
           </Typography.CaptionBold>
         </>
       )}

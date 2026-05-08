@@ -1,4 +1,5 @@
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { resolveString } from '~/v4/core/localization';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -48,8 +49,8 @@ export const useProductTagSelection = <T extends MediaType = MediaType>({
       const hadInitialTags = initialProductTags && initialProductTags.length > 0;
       success({
         content: hadInitialTags
-          ? 'Product tags have been updated.'
-          : 'Product tags have been added.',
+          ? resolveString('amity_social_product_tags_have_been_updated')
+          : resolveString('amity_social_label_product_tags_added'),
       });
     };
 

@@ -29,7 +29,7 @@ export const UserFollower: React.FC<UserFollowerProps> = ({
   const { followerCount } = useFollowCount(userId);
   const elementId = 'user_follower';
   const { AmityUserProfileHeaderComponentBehavior } = usePageBehavior();
-  const { themeStyles, config, accessibilityId } = useAmityElement({
+  const { themeStyles, config, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -54,9 +54,9 @@ export const UserFollower: React.FC<UserFollowerProps> = ({
       <Typography.BodyBold className={styles.userFollower__count}>
         {millify(followerCount)}
       </Typography.BodyBold>
-      {config.text && (
+      {resolveText('amity_social_button_user_profile_follower') && (
         <Typography.Caption className={styles.userFollower__label}>
-          {config.text}
+          {resolveText('amity_social_button_user_profile_follower')}
         </Typography.Caption>
       )}
     </Button>

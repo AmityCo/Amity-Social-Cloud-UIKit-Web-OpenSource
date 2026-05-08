@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import { ParticipantHeader } from '~/v4/social/features/livestream/internal-components/LivestreamStage/StreamerStage/ParticipantHeader';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import styles from './CoHostPlaceholder.module.css';
@@ -18,6 +19,7 @@ export const CoHostPlaceholder: React.FC<CoHostPlaceholderProps> = ({
   isMuted,
 }) => {
   const { invitationByMe, coHost } = useLivestreamData();
+  const waitingForCohostLabel = useString('amity_social_label_waiting_for_cohost');
 
   const imgUrl = invitationByMe?.user?.avatar?.fileUrl ?? coHost?.user?.avatar?.fileUrl;
 
@@ -30,7 +32,7 @@ export const CoHostPlaceholder: React.FC<CoHostPlaceholderProps> = ({
         textPlaceholderClassName={styles.coHostPlaceholder__avatarText}
       />
       <Typography.Title className={styles.coHostPlaceholder__text}>
-        Waiting for co-host to get ready…
+        {waitingForCohostLabel}
       </Typography.Title>
     </div>
   );

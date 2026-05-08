@@ -1,4 +1,5 @@
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import { AmityEventStatus } from '@amityco/ts-sdk';
 import { Skeleton } from '~/v4/core/components/Skeleton';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -43,7 +44,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
       ) : (
         <div className={styles.explore__recommended}>
           <Typography.TitleBold className={styles.explore__recommendedTitle}>
-            Recommended for you
+            {useString('amity_social_label_recommended_for_you')}
           </Typography.TitleBold>
           <EventList
             {...eventCollection}
@@ -60,7 +61,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
                 })
               }
             >
-              View all
+              {useString('amity_social_button_view_all')}
             </Button>
           )}
         </div>

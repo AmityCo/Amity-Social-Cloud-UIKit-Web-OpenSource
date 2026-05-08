@@ -16,7 +16,7 @@ export function ExploreTrendingTitle({
   titleClassName,
 }: TitleProps) {
   const elementId = 'explore_trending_title';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -30,7 +30,7 @@ export function ExploreTrendingTitle({
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveText('amity_social_button_trending_now')}
     </Typography.TitleBold>
   );
 }

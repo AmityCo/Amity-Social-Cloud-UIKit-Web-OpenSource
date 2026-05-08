@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { DateValue } from 'react-aria';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { Time } from '@internationalized/date';
@@ -20,12 +21,13 @@ type EndTimeProps = {
 export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: EndTimeProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const [isEndDateIncluded, setIsEndDateIncluded] = useState(true);
+  const removeEndDateLabel = useString('amity_social_button_remove_end_date');
 
   const renderEndTimePicker = (close: () => void) => (
     <div className={styles.endTime__dateTimePickerContainer}>
       <DateTimePicker
         value={value}
-        label="Ends on"
+        label={useString('amity_social_button_event_setup_ends_on')}
         minDate={minDate}
         onClose={close}
         minTime={minTime}
@@ -39,7 +41,9 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
 
   return isEndDateIncluded ? (
     <div className={styles.endTime}>
-      <Typography.Body className={styles.endTime__label}>Ends on</Typography.Body>
+      <Typography.Body className={styles.endTime__label}>
+        {useString('amity_social_button_event_setup_ends_on')}
+      </Typography.Body>
       <Popover
         trigger={({ openPopover, isDesktop }) => {
           return (
@@ -54,22 +58,23 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
                 }
               >
                 <Typography.Body className={styles.endTime__label}>
-                  {value?.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
-                  {' at '}
-                  {value?.toLocaleTimeString('en-GB', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: false,
-                  })}
+                  {value &&
+                    new Intl.DateTimeFormat(
+                      typeof navigator !== 'undefined' ? navigator.language : 'en',
+                      {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: false,
+                      },
+                    ).format(value)}
                 </Typography.Body>
               </Button>
               <Button
                 variant="text"
-                aria-label="Remove end date"
+                aria-label={removeEndDateLabel}
                 className={styles.endTime__deleteButton}
                 onPress={() => {
                   setIsEndDateIncluded(false);
@@ -88,7 +93,7 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
   ) : (
     <div className={styles.endTime__noEndDate}>
       <Typography.Caption className={styles.endTime__noEndDateLabel}>
-        Event without specified end time will end after 12 hours.
+        {useString('amity_social_time_event_without_specified_end_time_will_end_after_12_hour')}
       </Typography.Caption>
       <Button
         variant="outlined"
@@ -98,7 +103,7 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
           setIsEndDateIncluded(true);
         }}
       >
-        Add end date and time
+        {useString('amity_social_label_add_end_date_and_time')}
       </Button>
     </div>
   );

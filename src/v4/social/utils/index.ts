@@ -1,6 +1,7 @@
 // // TODO: refactor to align with SDK roles once available.
 
 import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/v4/helpers/utils';
+import { resolveString, useString } from '~/v4/core/localization';
 import { MemberRoles } from '~/v4/social/constants/memberRoles';
 import { Permissions } from '~/v4/social/constants/permissions';
 
@@ -201,15 +202,15 @@ export function formatTimeAgo(dateString: string | Date | undefined): string | u
   const timeDifferenceInSeconds = Math.floor((currentDate.getTime() - givenDate.getTime()) / 1000);
 
   if (timeDifferenceInSeconds === 1) {
-    return 'Just now';
+    return useString('amity_common_time_just_now');
   } else if (timeDifferenceInSeconds > 1 && timeDifferenceInSeconds < 60) {
-    return `${timeDifferenceInSeconds}s`;
+    return `${timeDifferenceInSeconds}${useString('amity_common_time_time_seconds_suffix')}`;
   } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds < 3600) {
     const minutes = Math.floor(timeDifferenceInSeconds / 60);
-    return `${minutes}m`;
+    return `${minutes}${useString('amity_common_time_time_minutes_suffix')}`;
   } else if (timeDifferenceInSeconds >= 3600 && timeDifferenceInSeconds < 86400) {
     const hours = Math.floor(timeDifferenceInSeconds / 3600);
-    return `${hours}h`;
+    return `${hours}${useString('amity_common_time_time_hours_suffix')}`;
   }
 }
 
@@ -314,4 +315,4 @@ export const formatAltText = ({
 }) =>
   leftCount && isLastImage && total > 4
     ? `Activate to view ${leftCount} more photos`
-    : `Photo ${current} of ${total}: ${altText || 'No description available'}`;
+    : `Photo ${current} of ${total}: ${altText || resolveString('amity_social_label_no_description_available')}`;

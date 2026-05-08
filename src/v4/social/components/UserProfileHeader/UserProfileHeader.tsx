@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './UserProfileHeader.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { UserFollowing } from '~/v4/social/elements/UserFollowing/UserFollowing';
@@ -128,7 +129,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
     >
       <UserTimes className={styles.userProfileHeader__unFollowButton__icon} />
       <Typography.BodyBold className={styles.userProfileHeader__unFollowButton__text}>
-        Unfollow
+        {useString('amity_social_button_unfollow')}
       </Typography.BodyBold>
     </Button>
   );
@@ -242,7 +243,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
             <div className={styles.pendingCountButton__notification}>
               <NotificationIndicator className={styles.pendingCountButton__notification__icon} />
               <Typography.BodyBold className={styles.pendingCountButton__notification__text}>
-                New follow requests
+                {useString('amity_social_label_new_follow_requests')}
               </Typography.BodyBold>
             </div>
             <div>
@@ -264,7 +265,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
               defaultBehavior: () => {
                 if (!online) {
                   notification.info({
-                    content: 'Oops, something went wrong.',
+                    content: useString('amity_social_toast_failed_generic'),
                   });
                   return;
                 }
@@ -284,7 +285,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
           onClick={() => {
             if (!online) {
               notification.info({
-                content: 'Oops, something went wrong.',
+                content: useString('amity_social_toast_failed_generic'),
               });
               return;
             }
@@ -300,7 +301,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
           onClick={() => {
             if (!online) {
               notification.info({
-                content: 'Failed to unblock user. Please try again.',
+                content: useString('amity_social_toast_user_unblock_failed'),
               });
               return;
             }

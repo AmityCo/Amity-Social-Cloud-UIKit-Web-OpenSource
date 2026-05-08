@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import { v4 as uuidv4 } from 'uuid';
 import Truncate from 'react-truncate-markup';
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
@@ -511,7 +512,7 @@ export const TextWithMention = ({
               }}
               data-testid="see-less-button"
             >
-              <Typography.BodyBold>See less</Typography.BodyBold>
+              <Typography.BodyBold>{useString('amity_social_see_less')}</Typography.BodyBold>
             </Button>
           )}
         </>
@@ -530,7 +531,10 @@ export const TextWithMention = ({
                 }}
                 data-testid="see-more-button"
               >
-                <Typography.BodyBold> See more</Typography.BodyBold>
+                <Typography.BodyBold>
+                  {' '}
+                  {useString('amity_social_button_see_more')}
+                </Typography.BodyBold>
               </Button>
             </>
           }

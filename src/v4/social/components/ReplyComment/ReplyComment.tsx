@@ -1,4 +1,5 @@
 import { CommentRepository } from '@amityco/ts-sdk';
+import { useString, resolveString } from '~/v4/core/localization';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { BottomSheet, Typography } from '~/v4/core/components';
@@ -89,6 +90,14 @@ const PostReplyComment = ({
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const notification = useNotifications();
+  const deleteReplyTitleText = useString('amity_social_button_delete_reply_title');
+  const deleteReplyWarningText = useString('amity_social_button_delete_reply_warning_message');
+  const cancelReplyText = useString('amity_social_button_cancel');
+  const deleteReplyOkText = useString('amity_social_button_delete');
+  const replyDeletedText = useString('amity_social_button_reply_deleted_message');
+  const editedSuffixText = useString('amity_social_button_edited_suffix');
+  const replyButtonText = useString('amity_social_button_reply');
+  const viewMoreRepliesText = useString('amity_social_label_view_more_replies');
   const { online } = useNetworkState();
   const { page } = useNavigation();
 
@@ -136,6 +145,7 @@ const PostReplyComment = ({
       );
     };
     document.addEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+
     return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
   }, [comment.commentId, isL2]);
 
@@ -233,7 +243,7 @@ const PostReplyComment = ({
     toggleBottomSheet();
     if (!online) {
       notification.info({
-        content: 'No internet connection.',
+        content: resolveString('amity_social_label_no_internet_connection'),
         alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
       });
 
@@ -242,10 +252,10 @@ const PostReplyComment = ({
     confirm({
       pageId,
       componentId,
-      title: 'Delete reply',
-      content: 'This reply will be permanently deleted.',
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      title: deleteReplyTitleText,
+      content: deleteReplyWarningText,
+      cancelText: cancelReplyText,
+      okText: deleteReplyOkText,
       onOk: deleteComment,
     });
   };
@@ -265,7 +275,6 @@ const PostReplyComment = ({
   });
 
   if (isExcluded) return null;
-
   return (
     <>
       {comment.isDeleted ? (
@@ -276,7 +285,7 @@ const PostReplyComment = ({
         >
           <MinusCircleIcon className={styles.postReplyComment__deleteComment_icon} />
           <Typography.Caption className={styles.postReplyComment__deleteComment_text}>
-            This reply has been deleted
+            {replyDeletedText}
           </Typography.Caption>
         </div>
       ) : isEditing ? (
@@ -425,7 +434,7 @@ const PostReplyComment = ({
                     />
                     <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
                       {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
-                        ' (edited)'}
+                        ` ${editedSuffixText}`}
                     </span>
                   </Typography.Caption>
                   <ReactionButton
@@ -446,7 +455,7 @@ const PostReplyComment = ({
                       className={styles.postReplyComment__secondRow__replyButton}
                     >
                       <Typography.CaptionBold className={styles.postReplyComment__secondRow__reply}>
-                        Reply
+                        {replyButtonText}
                       </Typography.CaptionBold>
                     </Button>
                   )}
@@ -507,13 +516,18 @@ const PostReplyComment = ({
                   >
                     <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
                       {pendingL2Comments.length > 0
-                        ? 'View more replies'
+                        ? viewMoreRepliesText
                         : (() => {
                             const count = Math.max(
                               0,
                               replyChildrenCount - pendingL2Comments.length,
                             );
-                            return `View ${count} ${count > 1 ? 'replies' : 'reply'}`;
+                            return resolveString(
+                              count > 1
+                                ? 'amity_social_label_view_replies'
+                                : 'amity_social_label_view_reply',
+                              count,
+                            );
                           })()}
                     </Typography.CaptionBold>
                   </Button>

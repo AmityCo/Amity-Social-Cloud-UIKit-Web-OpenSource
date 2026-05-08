@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
@@ -61,6 +62,15 @@ export const CommentOptions = ({
   const { canDelete, canEdit, canReport } = useCommentPermission(comment, false, userRoles);
   useNotifications();
 
+  const editReplyText = useString('amity_social_button_edit_reply');
+  const editCommentText = useString('amity_social_button_edit_comment');
+  const unreportReplyText = useString('amity_social_button_unreport_reply');
+  const unreportCommentText = useString('amity_social_button_unreport_comment');
+  const reportReplyText = useString('amity_social_button_report_reply_v4');
+  const reportCommentText = useString('amity_social_button_report_comment');
+  const deleteReplyText = useString('amity_social_button_delete_reply');
+  const deleteCommentText = useString('amity_social_button_delete_comment');
+
   const onClickReportComment = () => {
     if (isDesktop) {
       onCloseMenu();
@@ -109,7 +119,7 @@ export const CommentOptions = ({
   const options = [
     canEdit
       ? {
-          name: isReplyComment ? 'Edit reply' : 'Edit comment',
+          name: isReplyComment ? editReplyText : editCommentText,
           action: handleEditComment,
           icon: <CreatePost className={styles.commentOptions__actionButton__icon} />,
           accessibilityId: 'edit_comment',
@@ -120,11 +130,11 @@ export const CommentOptions = ({
       ? {
           name: isFlaggedByMe
             ? isReplyComment
-              ? 'Unreport reply'
-              : 'Unreport comment'
+              ? unreportReplyText
+              : unreportCommentText
             : isReplyComment
-              ? 'Report reply'
-              : 'Report comment',
+              ? reportReplyText
+              : reportCommentText,
           action: isFlaggedByMe ? handleClickUnReportComment : handleClickReportComment,
           icon: isFlaggedByMe ? (
             <UnFlag className={styles.commentOptions__actionButton__icon} />
@@ -137,7 +147,7 @@ export const CommentOptions = ({
       : null,
     canDelete
       ? {
-          name: isReplyComment ? 'Delete reply' : 'Delete comment',
+          name: isReplyComment ? deleteReplyText : deleteCommentText,
           action: handleDeleteComment,
           icon: <TrashIcon className={styles.commentOptions__deleteButton__icon} />,
           accessibilityId: 'delete_comment',

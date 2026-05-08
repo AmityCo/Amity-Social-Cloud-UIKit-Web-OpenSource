@@ -1,4 +1,5 @@
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { AmityEventStatus } from '@amityco/ts-sdk';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -53,7 +54,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
       ) : (
         <div className={styles.myEvents__section}>
           <Typography.TitleBold className={styles.myEvents__sectionTitle}>
-            Upcoming
+            {useString('amity_social_status_event_feed_upcoming')}
           </Typography.TitleBold>
           <EventList
             {...upcomingEventCollection}
@@ -68,7 +69,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
                 AmityMyEventFeedComponentBehavior?.goToUpcomingEventsPage?.({ fromExplore: false })
               }
             >
-              View all
+              {useString('amity_social_button_view_all')}
             </Button>
           )}
         </div>
@@ -81,7 +82,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
       ) : (
         <div className={styles.myEvents__section}>
           <Typography.TitleBold className={styles.myEvents__sectionTitle}>
-            Past
+            {useString('amity_social_button_event_feed_past')}
           </Typography.TitleBold>
           <EventList
             {...pastEventCollection}
@@ -94,7 +95,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
               color="secondary"
               onPress={AmityMyEventFeedComponentBehavior?.goToPastEventsPage}
             >
-              View all
+              {useString('amity_social_button_view_all')}
             </Button>
           )}
         </div>

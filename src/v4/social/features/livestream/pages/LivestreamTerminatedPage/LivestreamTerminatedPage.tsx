@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { Typography } from '~/v4/core/components';
 import { Terminated } from '~/v4/icons/Terminated';
@@ -15,18 +16,21 @@ export function LivestreamTerminatedPage() {
     <section style={themeStyles} className={styles.liveStreamTerminatedPage}>
       <div>
         <div className={styles.liveStreamTerminatedPage__header}>
-          <Typography.TitleBold>Live terminated</Typography.TitleBold>
+          <Typography.TitleBold>
+            {useString('amity_social_status_create_livestream_terminated_toolbar_title')}
+          </Typography.TitleBold>
         </div>
         <div className={styles.liveStreamTerminatedPage__terminatedContent}>
           <Terminated className={styles.liveStreamTerminatedPage__terminatedIcon} />
-          <Typography.Headline>The live stream has been terminated.</Typography.Headline>
-          <Typography.Body>
-            It looks like the live stream you're watching goes against our content moderation
-            guidelines.
-          </Typography.Body>
+          <Typography.Headline>
+            {useString('amity_social_modal_dialog_livestream_time_limit')}
+          </Typography.Headline>
+          <Typography.Body>{useString('amity_social_livestream_terminated_body')}</Typography.Body>
         </div>
         <div className={styles.liveStreamTerminatedPage__playbackContent}>
-          <Typography.BodyBold>What does it mean?</Typography.BodyBold>
+          <Typography.BodyBold>
+            {useString('amity_social_label_create_livestream_terminated_question')}
+          </Typography.BodyBold>
           <div className={styles.liveStreamTerminatedPage__playback}>
             <TrashIcon className={styles.liveStreamTerminatedPage__deletedIcon} />
             <Typography.Body>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useCommunitySetupContext } from '~/v4/social/providers/CommunitySetupProvider';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton';
@@ -39,6 +40,7 @@ export const CommunityAddMemberPage = ({
     pageId,
   });
   const { members, setMembers } = useCommunitySetupContext();
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [memberSearch, setMemberSearch] = useState('');
   const [selectedMembers, setSelectedMembers] = useState<MemberCommunitySetup[]>(members ?? []);
@@ -100,7 +102,7 @@ export const CommunityAddMemberPage = ({
   const handleAddMember = () => {
     if (!online) {
       notification.info({
-        content: 'Failed to add member. Please try again.',
+        content: resolveString('amity_social_toast_add_member_failed'),
         alignment: 'fixed',
       });
       return;
@@ -173,7 +175,7 @@ export const CommunityAddMemberPage = ({
             defaultClassName={styles.communityAddMemberPage__closeButton}
           />
           <Typography.TitleBold className={styles.communityAddMemberPage__title}>
-            Add member
+            {useString('amity_social_button_add_member')}
           </Typography.TitleBold>
           <div className={styles.communityAddMemberPage__emptySapce} />
         </div>
@@ -185,7 +187,7 @@ export const CommunityAddMemberPage = ({
           <Input
             className={styles.communityAddMemberPage__searchInput}
             type="text"
-            placeholder="Search user"
+            placeholder={useString('amity_social_placeholder_search_user_hint')}
             value={memberSearch}
             onChange={(e) => handleSearchUser(e)}
           />
@@ -265,7 +267,7 @@ export const CommunityAddMemberPage = ({
           data-testid={`${pageId}/*/add_member_button`}
           className={styles.communityAddMemberPage__button}
         >
-          Add member
+          {useString('amity_social_button_add_member')}
         </AriaButton>
       </div>
     </div>

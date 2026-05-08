@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { useCustomization } from './CustomizationProvider';
 
 export type AmityReactionType = {
@@ -9,9 +10,11 @@ export type AmityReactionType = {
 const CustomReactionContext = createContext<{
   reactions: AmityReactionType[];
   socialReactions: AmityReactionType[];
+  getReactionLabel: (reactionName: string) => string;
 }>({
   reactions: [],
   socialReactions: [],
+  getReactionLabel: (reactionName) => reactionName,
 });
 
 export const useCustomReaction = () => {
@@ -41,8 +44,13 @@ export const CustomReactionProvider: React.FC = ({ children }) => {
     setSocialReactions(socialReactionConfig);
   }, [config]);
 
+  const getReactionLabel = (reactionName: string): string => {
+    const name = reactionName.toLowerCase();
+    return resolveString(`amity_social_button_reaction_${name}`) || reactionName;
+  };
+
   return (
-    <CustomReactionContext.Provider value={{ reactions, socialReactions }}>
+    <CustomReactionContext.Provider value={{ reactions, socialReactions, getReactionLabel }}>
       {children}
     </CustomReactionContext.Provider>
   );

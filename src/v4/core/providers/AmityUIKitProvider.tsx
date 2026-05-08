@@ -2,8 +2,6 @@ import './index.css';
 import '~/v4/styles/global.css';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import useUser from '~/core/hooks/useUser';
-
 import SDKConnectorProviderV3 from '~/core/providers/SDKConnectorProvider';
 import SDKConnectorProvider from '~/v4/core/providers/SDKConnectorProvider';
 import {
@@ -22,7 +20,7 @@ import { NotificationsContainer } from '~/v4/core/components/Notification';
 import { DrawerContainer } from '~/v4/core/components/Drawer';
 import { NotificationsContainer as LegacyNotificationsContainer } from '~/core/components/Notification';
 
-import Localization from '~/core/providers/UiKitProvider/Localization';
+import { LocaleProvider, defaultLocaleMap, type LocaleBundle } from '~/v4/core/localization';
 
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import buildGlobalTheme from '~/core/providers/UiKitProvider/theme';
@@ -68,7 +66,7 @@ const InternalComponent = ({
   displayName,
   postRendererConfig,
   theme = {},
-  children /* TODO localization */,
+  children,
   socialCommunityCreationButtonVisible,
   pageBehavior,
   onConnectionStatusChange,
@@ -331,13 +329,35 @@ interface AmityUIKitProviderProps {
   seoOptimizationEnabled?: boolean;
   syncNetworkConfig?: boolean;
   onEmptyNavigationStack?: () => void;
+  /**
+   * Localization configuration for the UIKit.
+   * - `localeBundle`: initial Level 3 locale bundle (key → translated string)
+   * - `overrides`: initial Level 2 programmatic overrides (merge with locale)
+   * - `localeMap`: map of locale code → bundle for automatic device-language detection.
+   *   When `localeBundle` is not set the provider checks `navigator.language` against
+   *   this map (exact match, then language-prefix). Falls back to English if no match.
+   *
+   * @example
+   *   localization={{ localeBundle: jaLocale }}
+   * @example
+   *   localization={{ localeMap: { ja: jaLocale, th: thLocale } }}
+   */
+  localization?: {
+    localeBundle?: LocaleBundle;
+    overrides?: LocaleBundle;
+    localeMap?: Record<string, LocaleBundle>;
+  };
 }
 
 const queryClient = new QueryClient();
 
 const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
   return (
-    <Localization locale="en">
+    <LocaleProvider
+      initialLocaleBundle={props.localization?.localeBundle}
+      initialOverrides={props.localization?.overrides}
+      localeMap={props.localization?.localeMap ?? defaultLocaleMap}
+    >
       <QueryClientProvider client={queryClient}>
         <ThemeProvider config={props.configs}>
           <StyledThemeProvider theme={buildGlobalTheme(props.theme)}>
@@ -358,7 +378,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       </QueryClientProvider>
-    </Localization>
+    </LocaleProvider>
   );
 };
 

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useDeviceManagement } from '~/v4/core/hooks/useDeviceManagement';
 
@@ -20,10 +21,12 @@ export const useMicrophoneValidation = ({
 
     if (!deviceManagement.isLoading && deviceManagement.audioDevices.length === 0) {
       info({
-        okText: 'OK',
-        title: 'No microphone found',
         pageId,
-        content: "We couldn't found your microphone. Make sure it's properly connected,",
+        title: resolveString('amity_social_toast_create_livestream_no_microphone_found'),
+        content: resolveString(
+          'amity_social_toast_create_livestream_no_microphone_found_description',
+        ),
+        okText: resolveString('amity_social_button_ok'),
       });
     }
   }, [enabled, deviceManagement.isLoading, deviceManagement.audioDevices.length, info, pageId]);

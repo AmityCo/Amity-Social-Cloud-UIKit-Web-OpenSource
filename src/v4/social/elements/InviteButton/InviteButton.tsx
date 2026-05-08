@@ -10,7 +10,11 @@ type InviteButtonProps = ButtonProps & {
 
 export function InviteButton({ pageId = '*', componentId = '*', ...props }: InviteButtonProps) {
   const elementId = 'invite_button';
-  const { config, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { config, accessibilityId, resolveText } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   return (
     <Button
@@ -22,7 +26,7 @@ export function InviteButton({ pageId = '*', componentId = '*', ...props }: Invi
       className={styles.inviteButton}
       {...props}
     >
-      {config.text ?? 'Invite'}
+      {resolveText('amity_social_button_community_add_member_button')}
     </Button>
   );
 }

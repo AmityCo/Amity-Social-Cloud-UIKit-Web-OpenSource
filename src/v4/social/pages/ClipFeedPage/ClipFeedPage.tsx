@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useString } from '~/v4/core/localization';
 import type SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
@@ -48,6 +49,7 @@ export const ClipFeedPage = ({
   const pageId = 'clip_feed_page';
 
   const { isVisitorOrBot } = useSDK();
+
   const { accessibilityId, themeStyles } = useAmityPage({
     pageId,
   });
@@ -412,7 +414,7 @@ export const ClipFeedPage = ({
             >
               <ViewPost className={styles.clipFeedPage__viewPostIcon} />
               <Typography.BodyBold className={styles.clipFeedPage__viewPostText}>
-                View post
+                {useString('amity_social_button_view_post')}
               </Typography.BodyBold>
             </Button>
             {isShowCopyLinkButton && (
@@ -421,6 +423,7 @@ export const ClipFeedPage = ({
                 model={SharableModel.POST}
                 referenceId={postId || currentVisiblePost?.postId}
                 onDone={removeDrawerData}
+                textId="amity_social_label_copy_clip_link"
               />
             )}
           </>

@@ -13,7 +13,7 @@ export const InvitationSectionTitle = ({
   componentId = '*',
 }: InvitationSectionTitleProps) => {
   const elementId = 'invitation_section_title';
-  const { accessibilityId, isExcluded, config } = useAmityElement({
+  const { accessibilityId, isExcluded, config, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -27,7 +27,7 @@ export const InvitationSectionTitle = ({
       data-testid={accessibilityId}
       className={styles.invitationSectionTitle}
     >
-      {config.text}
+      {resolveText('amity_social_button_requests')}
     </Typography.CaptionBold>
   );
 };

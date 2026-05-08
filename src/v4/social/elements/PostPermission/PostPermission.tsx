@@ -24,8 +24,15 @@ export const PostPermission = ({
   onClick,
 }: PostPermissionProps) => {
   const elementId = 'post_permission';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
   return (
@@ -45,7 +52,11 @@ export const PostPermission = ({
           defaultIconName={defaultConfig.icon}
           configIconName={config.icon}
         />
-        {config.text && <Typography.Body>{config.text}</Typography.Body>}
+        {resolveText('amity_social_permission_community_setting_post_permission') && (
+          <Typography.Body>
+            {resolveText('amity_social_permission_community_setting_post_permission')}
+          </Typography.Body>
+        )}
       </div>
       <ChevronRight className={styles.postPermission__angleRight} />
     </Button>

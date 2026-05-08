@@ -7,6 +7,7 @@ import Copy from '~/v4/icons/Copy';
 import Bin from '~/v4/icons/Bin';
 import Flag from '~/v4/icons/Flag';
 import { Typography } from '~/v4/core/components';
+import { resolveString } from '~/v4/core/localization';
 
 export type MessageActionType = {
   onCopy?: () => void;
@@ -72,13 +73,13 @@ export const MessageAction = ({
           <>
             <div className={styles.messageActionButton} onClick={onReplyMessage}>
               <div className={styles.messageActionButtonText}>
-                <Typography.Body>Reply</Typography.Body>
+                <Typography.Body>{resolveString('amity_social_button_reply')}</Typography.Body>
               </div>
               <Reply className={styles.replyIcon} />
             </div>
             <div className={styles.messageActionButton} onClick={onCopyMessage}>
               <div className={styles.messageActionButtonText}>
-                <Typography.Body>Copy</Typography.Body>
+                <Typography.Body>{resolveString('amity_social_button_copy')}</Typography.Body>
               </div>
               <Copy className={styles.copyIcon} />
             </div>
@@ -112,7 +113,7 @@ export const MessageAction = ({
             {(isOwner || isModerator) && (
               <div className={styles.messageActionButton} onClick={onDeleteMessage}>
                 <div className={styles.messageDangerActionButtonText}>
-                  <Typography.Body>Delete</Typography.Body>
+                  <Typography.Body>{resolveString('amity_social_button_delete')}</Typography.Body>
                 </div>
                 <Bin className={styles.binIcon} />
               </div>

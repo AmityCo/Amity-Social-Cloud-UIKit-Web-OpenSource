@@ -1,4 +1,5 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
+import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -51,14 +52,14 @@ export const useCommunityActions = (
       success({
         content:
           data.status === 'success'
-            ? `You joined ${community.displayName}.`
-            : 'Requested to join. You will be notified once your request is accepted.',
+            ? resolveString('amity_social_label_joined_community', community.displayName)
+            : resolveString('amity_social_modal_dialog_join_request_sent'),
       });
       onJoinSuccess?.({ data, communityId: community.communityId });
     },
     onError: (error) => {
       info({
-        content: 'Failed to join the community. Please try again.',
+        content: resolveString('amity_social_toast_snackbar_join_community_failed'),
       });
       onJoinError?.(error);
     },
@@ -71,12 +72,12 @@ export const useCommunityActions = (
       onLeaveSuccess?.()
         ? onLeaveSuccess?.()
         : success({
-            content: 'Successfully left the group',
+            content: resolveString('amity_social_toast_setting_leave_success'),
           });
     },
     onError: (error) => {
       info({
-        content: 'Failed to leave the community. Please try again.',
+        content: resolveString('amity_social_toast_leave_community_failed'),
       });
       onLeaveError?.(error);
     },
@@ -86,13 +87,13 @@ export const useCommunityActions = (
     mutationFn: async () => await joinRequest?.cancel(),
     onSuccess: () => {
       success({
-        content: 'Canceled to join the community.',
+        content: resolveString('amity_social_canceled_to_join_the_community'),
       });
       onCancelJoinSuccess?.();
     },
     onError: (error) => {
       info({
-        content: 'Failed to cancel joining the community.',
+        content: resolveString('amity_social_toast_cancel_request_failed'),
       });
       onCancelJoinError?.(error);
     },

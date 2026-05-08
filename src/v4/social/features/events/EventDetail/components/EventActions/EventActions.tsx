@@ -1,4 +1,5 @@
 import { Pencil } from '~/v4/icons/Pencil';
+import { useString } from '~/v4/core/localization';
 import Trash from '~/v4/social/icons/trash';
 import { Typography } from '~/v4/core/components';
 import { EventSetupMode } from '~/v4/social/features';
@@ -39,18 +40,19 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     {
       key: 'edit',
       Icon: Pencil,
-      label: 'Edit event',
+      label: useString('amity_social_button_edit_event'),
       condition: isHostEvent,
       onPress: () => {
         if (checkIsWithinMinutes(event.startTime)) {
           info({
-            okText: 'OK',
-            title: 'Editing is not possible',
-            content:
-              'You can no longer edit this event. Changes are restricted 15 minutes before the start time.',
+            okText: useString('amity_social_button_ok'),
+            title: useString('amity_social_label_editing_is_not_possible'),
+            content: useString(
+              'amity_social_label_you_can_no_longer_edit_this_event_changes_are_restricte',
+            ),
           });
         } else {
-          AmityEventDetailPageBehavior?.goToEventSetupPage({
+          AmityEventDetailPageBehavior?.goToEventSetupPage?.({
             mode: EventSetupMode.EDIT,
             event,
           });
@@ -60,7 +62,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     {
       key: 'add-to-calendar',
       Icon: AddCalendar,
-      label: 'Add to calendar',
+      label: useString('amity_social_modal_add_calendar_sheet_add_button'),
       condition:
         (isHostEvent || myRSVP?.status === AmityEventResponseStatus.Going) &&
         event.status !== 'ended',
@@ -72,7 +74,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       Icon: Trash,
       danger: true,
       key: 'delete',
-      label: 'Delete event',
+      label: useString('amity_social_button_delete_event'),
       condition: hasDeleteEventPermission || isHostEvent,
       onPress: () => deleteEvent(event.eventId),
     },

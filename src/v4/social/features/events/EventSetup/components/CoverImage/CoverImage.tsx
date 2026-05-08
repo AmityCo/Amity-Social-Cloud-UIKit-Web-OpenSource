@@ -1,5 +1,6 @@
 import { FileRepository } from '@amityco/ts-sdk';
 import { FileTrigger } from 'react-aria-components';
+import { resolveString } from '~/v4/core/localization';
 import { isMobile } from '~/v4/social/utils/isMobile';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -30,8 +31,8 @@ export function CoverImage({ value, onChange }: CoverImageProps) {
     const oversizedFile = files.find((file) => file.size > MAX_FILE_SIZE_ONE_BG);
     if (oversizedFile) {
       return info({
-        title: 'File too large',
-        content: 'The file exceeds the maximum upload size.',
+        title: resolveString('amity_social_button_file_too_large'),
+        content: resolveString('amity_social_label_file_exceeds_max_upload'),
       });
     }
     removeDrawerData();

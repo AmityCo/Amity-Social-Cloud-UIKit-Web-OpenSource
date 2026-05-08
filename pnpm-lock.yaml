@@ -199,7 +199,7 @@ importers:
         specifier: ^8.42.3
         version: 8.42.3
       '@types/jest':
-        specifier: ^29.5.11
+        specifier: ^29.5.12
         version: 29.5.12
       '@types/lodash':
         specifier: ^4.14.202

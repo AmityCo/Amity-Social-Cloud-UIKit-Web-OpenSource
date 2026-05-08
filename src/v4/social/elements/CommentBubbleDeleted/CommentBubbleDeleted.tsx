@@ -33,12 +33,19 @@ export function CommentBubbleDeleted({
   imgIconClassName,
 }: CommentBubbleDeletedProps) {
   const elementId = 'comment_bubble_deleted_view';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -53,7 +60,9 @@ export function CommentBubbleDeleted({
             <CommentBubbleDeletedSvg
               className={clsx(styles.commentBubbleDeletedIcon, defaultIconClassName)}
             />
-            <Typography.Caption>{config.text}</Typography.Caption>
+            <Typography.Caption>
+              {resolveText('amity_social_button_reply_deleted_message')}
+            </Typography.Caption>
           </div>
         )}
         imgIcon={() => (

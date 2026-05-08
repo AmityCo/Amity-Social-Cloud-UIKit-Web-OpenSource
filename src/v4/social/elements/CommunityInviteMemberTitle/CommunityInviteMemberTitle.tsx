@@ -13,7 +13,7 @@ export const CommunityInviteMemberTitle = ({
   ...props
 }: CommunityInviteMemberTitleProps) => {
   const elementId = 'community_invite_member_title';
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -23,7 +23,7 @@ export const CommunityInviteMemberTitle = ({
 
   return (
     <Typography.TitleBold {...props} style={themeStyles} data-testid={accessibilityId}>
-      {config.text}
+      {resolveText('amity_social_label_community_setup_invite_members_title')}
     </Typography.TitleBold>
   );
 };

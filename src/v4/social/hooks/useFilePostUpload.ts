@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { generateThumbnailVideo } from '~/v4/social/utils/generateThumbnailVideo';
 import { isAmityFile } from '~/v4/utils/checkFileType';
+import { resolveString } from '~/v4/core/localization';
 
 export type FileItem<T extends Amity.FileType = any> = {
   id: string;
@@ -66,7 +67,7 @@ export function useFilePostUpload(pageId?: string) {
       file,
       id: uuid(),
       status: 'failed',
-      errorText: 'File size exceed the limit',
+      errorText: resolveString('amity_social_label_file_size_exceed_limit'),
     }));
 
     if (failedFiles.length > 0) {
@@ -144,7 +145,7 @@ export function useFilePostUpload(pageId?: string) {
             return {
               ...file,
               status: 'failed',
-              errorText: 'Failed to upload.',
+              errorText: resolveString('amity_social_toast_failed_to_upload'),
             };
           }
           return file;
@@ -182,25 +183,34 @@ export function useFilePostUpload(pageId?: string) {
     let contentText = '';
     switch (fileType) {
       case FileType.IMAGE:
-        contentText =
-          'You’ve reached the upload limit of 10 images. Any additional images will not be saved. ';
+        contentText = resolveString(
+          'amity_social_label_max_upload_limit_message',
+          'images',
+          'images',
+        );
         break;
       case FileType.FILE:
-        contentText =
-          'We’ve uploaded the first 10 files you selected. Any additional files have been discarded.';
+        contentText = resolveString(
+          'amity_social_label_max_upload_limit_message',
+          'files',
+          'files',
+        );
         break;
       case FileType.VIDEO:
-        contentText =
-          'You’ve reached the upload limit of 10 videos. Any additional videos will not be saved. ';
+        contentText = resolveString(
+          'amity_social_label_max_upload_limit_message',
+          'videos',
+          'videos',
+        );
         break;
     }
     if (filesAmount && filesAmount > 10) {
       info({
         pageId: pageId,
         type: 'info',
-        title: 'Maximum upload limit reached',
+        title: resolveString('amity_social_modal_dialog_title_max_upload_limit'),
         content: contentText,
-        okText: 'OK',
+        okText: resolveString('amity_social_button_ok'),
       });
       return;
     }

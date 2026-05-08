@@ -1,4 +1,5 @@
 import { Button } from '~/v4/core/natives/Button';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { EventSetupMode } from '~/v4/social/features';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -25,16 +26,21 @@ export function EventTargetSelection() {
     isLoading,
   } = useEventTargetSelection();
   const { AmityEventTargetSelectionPageBehavior } = usePageBehavior();
+  const myCommunitiesLabel = useString('amity_social_button_my_communities');
 
   return (
     <div className={styles.eventTargetSelection} style={themeStyles}>
       <div className={styles.eventTargetSelection__topBar}>
         <CloseButton pageId={pageId} onPress={() => onBack()} />
-        <Title pageId={pageId} titleClassName={styles.eventTargetSelection__title} />
+        <Title
+          pageId={pageId}
+          titleClassName={styles.eventTargetSelection__title}
+          textKey="amity_social_label_select_event_target_title"
+        />
         <div />
       </div>
       <Typography.Body className={styles.eventTargetSelection__myCommunities}>
-        My communities
+        {myCommunitiesLabel}
       </Typography.Body>
       {communities.filter((community) => canCreatePostCommunity(client, community)).length === 0 &&
         !isLoading && <EmptyTargetSelection />}

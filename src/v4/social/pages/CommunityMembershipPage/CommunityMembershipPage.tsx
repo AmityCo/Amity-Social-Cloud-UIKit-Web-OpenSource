@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -31,6 +32,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   const pageId = 'community_membership_page';
 
   const { onBack } = useNavigation();
+
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const { online } = useNetworkState();
@@ -40,7 +42,9 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   const { socialSettings } = useSocialSettings();
   const { members } = useCommunitySetupContext();
   const { AmityCommunityMembershipPageBehavior } = usePageBehavior();
-  const [activeTab, setActiveTab] = useState<Key>('members');
+  const [activeTab, setActiveTab] = useState<Key>(
+    useString('amity_social_label_community_members_label'),
+  );
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { hasModeratorPermissions } = useModerator({ community, user });
 
@@ -53,14 +57,18 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     if (community.communityId == null) return;
 
     if (!community.isJoined || !hasModeratorPermissions) {
-      return notification.error({ content: 'Failed to add members to this community' });
+      return notification.error({
+        content: useString('amity_social_toast_member_unban_failed'),
+      });
     }
 
     try {
       await CommunityRepository.Membership.addMembers(community.communityId, userIds);
-      notification.success({ content: 'Successfully added members to this community!' });
+      notification.success({
+        content: useString('amity_social_toast_community_add_member_success'),
+      });
     } catch (err) {
-      notification.error({ content: 'Failed to add members to this community. Please try again.' });
+      notification.error({ content: useString('amity_social_toast_community_add_member_failed') });
     }
   };
 
@@ -68,29 +76,37 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     if (community.communityId == null) return;
 
     if (!community.isJoined || !hasModeratorPermissions) {
-      return notification.error({ content: 'Failed to invite members to this community' });
+      return notification.error({
+        content: useString('amity_social_toast_community_invite_member_failed'),
+      });
     }
 
     if (!online) {
-      return notification.info({ content: 'No internet connection.' });
+      return notification.info({
+        content: resolveString('amity_social_label_no_internet_connection'),
+      });
     }
 
     try {
       await community.createInvitations(userIds);
-      notification.success({ content: 'Successfully invited members to this community.' });
+      notification.success({
+        content: useString('amity_social_toast_community_invitation_create_success'),
+      });
     } catch (err) {
-      notification.error({ content: 'Failed to invite members. Please try again.' });
+      notification.error({
+        content: useString('amity_social_toast_community_invitation_create_failed'),
+      });
     }
   };
 
   const tabs = [
     {
-      label: 'Members',
-      value: 'members',
+      label: useString('amity_social_button_members'),
+      value: useString('amity_social_label_community_members_label'),
       content: () => <MemberList pageId={pageId} community={community} />,
     },
     {
-      label: 'Moderators',
+      label: useString('amity_social_button_moderators'),
       value: 'moderators',
       content: () => <ModeratorList pageId={pageId} community={community} />,
     },
@@ -145,7 +161,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
       <div className={styles.communityMembershipPage__topBar}>
         <BackButton onPress={() => onBack()} />
         <Typography.TitleBold className={styles.communityMembershipPage__title}>
-          All members
+          {useString('amity_social_button_all_members')}
         </Typography.TitleBold>
         {hasModeratorPermissions ? (
           <Button

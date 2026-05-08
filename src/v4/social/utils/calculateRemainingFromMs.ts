@@ -1,5 +1,6 @@
-export const calculateRemainingFromMs = (ms: number) => {
-  const parts = [];
+import { resolveString } from '~/v4/core/localization';
+
+export const calculateRemainingFromMs = (ms: number): string => {
   const msInSecond = 1000;
   const msInMinute = msInSecond * 60;
   const msInHour = msInMinute * 60;
@@ -19,17 +20,17 @@ export const calculateRemainingFromMs = (ms: number) => {
   ms %= msInMinute;
   const seconds = Math.floor(ms / msInSecond);
 
-  // Special case: 30 days or approximately 1 month
-  if (months === 1 || (months === 0 && days === 30)) {
-    return '30d';
+  // Special case: approximately 1 month — show as "30d left"
+  if (months === 1) {
+    return resolveString('amity_social_time_time_left_days', 30);
   }
 
-  if (years > 0) parts.push(`${years} year${years > 1 ? 's' : ''}`);
-  if (months > 0) parts.push(`${months} month${months > 1 ? 's' : ''}`);
-  if (days > 0) parts.push(`${days}d`);
-  if (hours > 0) parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
-  if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
-  if (seconds > 0) parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+  if (years > 0) return `${years} year${years > 1 ? 's' : ''} left`;
+  if (months > 0) return `${months} month${months > 1 ? 's' : ''} left`;
+  if (days > 0) return resolveString('amity_social_time_time_left_days', days);
+  if (hours > 0) return resolveString('amity_social_time_time_left_hours', hours);
+  if (minutes > 0) return resolveString('amity_social_time_time_left_minutes', minutes);
+  if (seconds > 0) return resolveString('amity_social_time_time_left_seconds', seconds);
 
-  return parts.join(' ');
+  return resolveString('amity_social_time_time_left_minutes', 0);
 };

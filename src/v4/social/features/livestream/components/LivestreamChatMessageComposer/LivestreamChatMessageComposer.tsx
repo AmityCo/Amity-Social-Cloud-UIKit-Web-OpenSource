@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import InternalMessageComposer from '~/v4/chat/internal-components/MessageComposer/MessageComposer';
 import styles from './LivestreamChatMessageComposer.module.css';
 import { Typography } from '~/v4/core/components';
@@ -124,7 +125,7 @@ function LiveManageProductTagListContent({
               productTags: updatedTags || [],
               action: 'remove',
             });
-            success({ content: 'Product tag removed.' });
+            success({ content: resolveString('amity_social_label_product_tag_removed') });
           } catch (error) {
             return subscribedPost?.productTags as Amity.ProductTag[] | undefined;
           }
@@ -153,7 +154,7 @@ function LiveManageProductTagListContent({
               (tag: Amity.ProductTag) => !tag.product || tag.product.status === 'archived',
             );
             if (!hasUnavailableProducts && hasNewTags) {
-              success({ content: 'Product tags added.' });
+              success({ content: resolveString('amity_social_label_product_tag_added') });
             }
 
             return result?.data?.productTags as Amity.ProductTag[] | undefined;
@@ -207,6 +208,7 @@ export const LivestreamChatMessageComposer = ({
     setLivestreamPost,
   } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+
   const { info } = useNotifications();
 
   const componentId = 'livestream_chat_compose_bar';
@@ -442,7 +444,7 @@ export const LivestreamChatMessageComposer = ({
     if (!editorRef.current) return;
     if (!community?.isJoined) {
       return info({
-        content: 'Join community to interact.',
+        content: resolveString('amity_common_label_join_community_to_interact'),
         alignment: 'fullscreen',
       });
     }
@@ -452,7 +454,7 @@ export const LivestreamChatMessageComposer = ({
     if (text?.trim().length === 0) return;
 
     if (text.trim().length > LIVESTREAM_MESSAGE_MAX_CHARACTOR) {
-      setError('Your message is too long. Please shorten your message and try again.');
+      setError(resolveString('amity_social_message_too_long'));
       return;
     }
 
@@ -478,8 +480,8 @@ export const LivestreamChatMessageComposer = ({
     if (!latestSettings?.product.enabled) {
       setIsProductTagButtonHidden(true);
       warning({
-        title: `Product tagging isn't available`,
-        content: `Any products you've tagged will be removed and won't be shown to viewers.`,
+        title: resolveString('amity_social_label_product_tagging_unavailable_title'),
+        content: resolveString('amity_social_label_product_tagging_unavailable_description'),
       });
       return false;
     }
@@ -495,8 +497,9 @@ export const LivestreamChatMessageComposer = ({
       return (
         <div className={styles.livestreamChatMessageComposer__pendingPost__container}>
           <Typography.Body className={styles.livestreamChatMessageComposer__pendingPost__text}>
-            This live stream has started, but with limited visibility until the post has been
-            approved.
+            {resolveString(
+              'amity_social_status_this_live_stream_has_started_but_with_limited_visibilit',
+            )}
           </Typography.Body>
         </div>
       );
@@ -504,7 +507,7 @@ export const LivestreamChatMessageComposer = ({
     if (channel?.isMuted)
       return renderReadOnlyState({
         allowReaction: !isHost,
-        message: 'This live stream is now read-only.',
+        message: resolveString('amity_social_status_livestream_read_only'),
         channel,
       });
     if (
@@ -514,7 +517,7 @@ export const LivestreamChatMessageComposer = ({
     )
       return renderReadOnlyState({
         allowReaction: !isHost,
-        message: 'You have been muted.',
+        message: resolveString('amity_social_label_you_have_been_muted'),
         channel,
       });
 
@@ -652,7 +655,7 @@ export const LivestreamChatMessageComposer = ({
                       <Typography.Headline
                         className={styles.livestreamChatMessageComposer__inviteCoHost__header}
                       >
-                        Invite co-host
+                        {resolveString('amity_social_button_invite_co_host')}
                       </Typography.Headline>
                     ),
                     children: (

@@ -57,9 +57,9 @@ export const IconButton = ({
       className={className}
     >
       {typographyVariant === 'captionBold' ? (
-        <Typography.CaptionBold>{config.text ? config.text : text}</Typography.CaptionBold>
+        <Typography.CaptionBold>{text || config.text}</Typography.CaptionBold>
       ) : (
-        <Typography.BodyBold>{config.text ? config.text : text}</Typography.BodyBold>
+        <Typography.BodyBold>{text || config.text}</Typography.BodyBold>
       )}
     </Button>
   );

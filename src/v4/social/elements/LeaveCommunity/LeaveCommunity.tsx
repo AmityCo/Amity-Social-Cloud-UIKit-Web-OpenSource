@@ -16,7 +16,7 @@ export const LeaveCommunity = ({
   onClick,
 }: LeaveCommunityProps) => {
   const elementId = 'leave_community';
-  const { themeStyles, isExcluded, config, accessibilityId } = useAmityElement({
+  const { themeStyles, isExcluded, config, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -31,11 +31,9 @@ export const LeaveCommunity = ({
       data-testid={accessibilityId}
       className={styles.leaveCommunity__button}
     >
-      {config.text && (
-        <Typography.BodyBold className={styles.leaveCommunity__text}>
-          {config.text}
-        </Typography.BodyBold>
-      )}
+      <Typography.BodyBold className={styles.leaveCommunity__text}>
+        {resolveText('amity_social_button_leave_community')}
+      </Typography.BodyBold>
     </Button>
   );
 };

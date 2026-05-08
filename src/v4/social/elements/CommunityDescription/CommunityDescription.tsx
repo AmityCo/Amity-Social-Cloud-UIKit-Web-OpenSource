@@ -19,7 +19,7 @@ export const CommunityDescription: React.FC<CommunityDescriptionProps> = ({
   const elementId = 'community_description';
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const { themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     elementId,
     componentId,
@@ -41,7 +41,7 @@ export const CommunityDescription: React.FC<CommunityDescriptionProps> = ({
               <>
                 ...{' '}
                 <Button className={styles.communityDescription__seeMoreButton} onPress={expandText}>
-                  See more
+                  {resolveText('amity_social_button_see_more')}
                 </Button>
               </>
             }

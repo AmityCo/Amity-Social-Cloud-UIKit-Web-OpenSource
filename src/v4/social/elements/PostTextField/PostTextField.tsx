@@ -176,7 +176,7 @@ export const PostTextField = ({
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const { isDesktop } = useResponsive();
 
-  const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { accessibilityId, resolveText } = useAmityElement({ pageId, componentId, elementId });
 
   const firstUrl = React.useMemo(() => {
     const links = dataValue?.links;
@@ -305,7 +305,7 @@ export const PostTextField = ({
               className={clsx(styles.editorPlaceholder, placeholderClassName)}
               data-isclip={componentId === 'clipPost'}
             >
-              {placeholder ?? "What's going on..."}
+              {placeholder ?? resolveText('amity_social_post_composer_body_placeholder')}
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}

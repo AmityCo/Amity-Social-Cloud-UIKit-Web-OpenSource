@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
+
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -17,6 +18,7 @@ type ImageButtonProps = {
   defaultIconClassName?: string;
   onImageFileChange?: (files: File[]) => void;
   isDisabled?: boolean;
+  textId?: string;
 };
 
 export function ImageButton({
@@ -28,10 +30,18 @@ export function ImageButton({
   defaultIconClassName,
   isSingleUpload = false,
   isDisabled = false,
+  textId = 'amity_social_button_post_composer_image_button',
 }: ImageButtonProps) {
   const elementId = 'image_button';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
 
@@ -61,7 +71,9 @@ export function ImageButton({
           />
         )}
       />
-      {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
+      {(resolveText(textId) || config.text) && (
+        <Typography.BodyBold>{resolveText(textId) || config.text}</Typography.BodyBold>
+      )}
     </Button>
   );
 

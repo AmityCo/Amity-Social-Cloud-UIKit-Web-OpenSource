@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { ActionButton } from '~/v4/core/components/ActionButton/ActionButton';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -76,7 +77,7 @@ export function ManageProductTag({
         <div className={styles.manageProductTag__top}>
           {unavailable && (
             <Typography.Caption as="p" className={styles.manageProductTag__unavailableLabel}>
-              Unlisted
+              {useString('amity_social_button_tagged_products_archived_info')}
             </Typography.Caption>
           )}
           <Typography.BodyBold
@@ -125,14 +126,20 @@ export function ManageProductTag({
             className={styles.manageProductTag__pinButton}
             iconClassName={styles.manageProductTag__pinIcon}
             onPress={() => onTogglePin?.(productTag, !isPinned)}
-            aria-label={isPinned ? 'Unpin product' : 'Pin product'}
+            aria-label={
+              isPinned
+                ? useString('amity_social_unpin_product')
+                : useString('amity_social_pin_product')
+            }
             variant="outlined"
             size="small"
             icon={<PinStraight />}
             isDisabled={isDisabled || !online}
           >
             <Typography.CaptionBold as="span" className={styles.manageProductTag__pinButtonText}>
-              {isPinned ? 'Unpin' : 'Pin'}
+              {isPinned
+                ? useString('amity_social_label_unpin_label')
+                : useString('amity_social_label_pin_label')}
             </Typography.CaptionBold>
           </Button>
         )}

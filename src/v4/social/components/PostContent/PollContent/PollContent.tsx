@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import styles from './PollContent.module.css';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -40,6 +41,11 @@ export const PollContent: FC<PollContentProps> = ({
   forceShowResults = false,
 }) => {
   const { currentUserId } = useSDK();
+  const leftLabel = useString('amity_social_time_time_left');
+  const voterLabel = useString('amity_social_button_poll_voter');
+  const votersLabel = useString('amity_social_button_poll_voters');
+  const seeMoreOptionLabel = useString('amity_social_label_see_more_options');
+  const seeMoreOptionSingularLabel = useString('amity_social_label_see_more_option');
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
@@ -180,7 +186,7 @@ export const PollContent: FC<PollContentProps> = ({
               onPress={() => setIsExpanded(true)}
               isDisabled={disabled}
             >
-              See full results
+              {useString('amity_social_label_see_full_results')}
             </Button>
           )}
         </>
@@ -188,7 +194,7 @@ export const PollContent: FC<PollContentProps> = ({
         <>
           {poll.answerType === 'single' ? (
             <PollSingleAnswer
-              caption="Select one option"
+              caption={useString('amity_social_label_select_one_option')}
               answers={pollAnswers}
               disabled={isVoteDisabled}
               onAnswerChanged={(ans) => setAnswers([ans])}
@@ -196,7 +202,7 @@ export const PollContent: FC<PollContentProps> = ({
             />
           ) : (
             <PollMultipleAnswer
-              caption="Select one or more options"
+              caption={useString('amity_social_label_select_multiple_options')}
               answers={pollAnswers}
               disabled={isVoteDisabled}
               onAnswerChanged={setAnswers}
@@ -209,7 +215,13 @@ export const PollContent: FC<PollContentProps> = ({
               color="secondary"
               className={styles.pollContent__seeMore__button}
               onPress={() => setIsExpanded(true)}
-            >{`See ${poll.answers.length - maxChoicesShown} more option${poll.answers.length - maxChoicesShown > 1 ? 's' : ''}`}</Button>
+            >
+              {(() => {
+                const count = poll.answers.length - maxChoicesShown;
+                const template = count === 1 ? seeMoreOptionSingularLabel : seeMoreOptionLabel;
+                return template.replace('%d', String(count));
+              })()}
+            </Button>
           )}
           <Button
             className={styles.pollContent__vote__button}
@@ -220,29 +232,33 @@ export const PollContent: FC<PollContentProps> = ({
             isDisabled={isVoteButtonDisabled}
             data-testid="poll-vote-button"
           >
-            Vote
+            {useString('amity_social_button_vote')}
           </Button>
         </>
       )}
       <div className={styles.pollContent__pollDetail__container}>
         <div className={styles.pollContent__pollDetail}>
-          <Typography.CaptionBold>{voteCount}</Typography.CaptionBold>
-          <Typography.CaptionBold>vote{`${voteCount !== 1 ? 's' : ''}`}</Typography.CaptionBold>
+          <Typography.CaptionBold>
+            {(voteCount !== 1 ? votersLabel : voterLabel).replace('%@', String(voteCount))}
+          </Typography.CaptionBold>
           <Typography.CaptionBold>•</Typography.CaptionBold>
           {!isPollEnded && typeof poll.closedIn === 'number' ? (
             <>
               <Typography.CaptionBold data-testid="poll-closeIn">
                 {calculateRemainingFromMs(poll.closedIn)}
               </Typography.CaptionBold>
-              <Typography.CaptionBold>left</Typography.CaptionBold>
             </>
           ) : (
-            <Typography.CaptionBold>Ended</Typography.CaptionBold>
+            <Typography.CaptionBold>
+              {useString('amity_social_event_detail_status_ended')}
+            </Typography.CaptionBold>
           )}
         </div>
         {poll.isVoted && !isPollEnded && (
           <Button variant="text" onPress={() => mutateUnvotePoll({ pollId: poll.pollId })}>
-            <Typography.CaptionBold>Unvote</Typography.CaptionBold>
+            <Typography.CaptionBold>
+              {useString('amity_social_button_unvote')}
+            </Typography.CaptionBold>
           </Button>
         )}
         {isAuthor &&
@@ -252,14 +268,14 @@ export const PollContent: FC<PollContentProps> = ({
           !isPollEnded && (
             <Button variant="text" onPress={() => setIsAuthorSeeingPoll(true)}>
               <Typography.CaptionBold className={styles.pollContent__pollDetail__seeResult}>
-                See results
+                {useString('amity_social_button_see_results')}
               </Typography.CaptionBold>
             </Button>
           )}
         {isAuthorSeeingPoll && !forceShowResults && (
           <Button variant="text" onPress={() => setIsAuthorSeeingPoll(false)}>
             <Typography.CaptionBold className={styles.pollContent__pollDetail__seeResult}>
-              Back to poll
+              {useString('amity_social_label_back_to_poll')}
             </Typography.CaptionBold>
           </Button>
         )}

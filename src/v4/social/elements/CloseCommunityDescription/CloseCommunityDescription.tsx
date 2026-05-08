@@ -1,9 +1,7 @@
 import React from 'react';
 import styles from './CloseCommunityDescription.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { Button } from '~/v4/core/natives/Button/Button';
 import { Typography } from '~/v4/core/components';
-import AngleRight from '~/v4/icons/AngleRight';
 
 type CloseCommunityDescriptionProps = {
   pageId?: string;
@@ -15,7 +13,7 @@ export const CloseCommunityDescription = ({
   componentId = '*',
 }: CloseCommunityDescriptionProps) => {
   const elementId = 'close_community_description';
-  const { themeStyles, isExcluded, config, accessibilityId } = useAmityElement({
+  const { themeStyles, isExcluded, config, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -28,11 +26,9 @@ export const CloseCommunityDescription = ({
       data-testid={accessibilityId}
       className={styles.closeCommunityDescription__container}
     >
-      {config.text && (
-        <Typography.Caption className={styles.closeCommunityDescription__text}>
-          {config.text}
-        </Typography.Caption>
-      )}
+      <Typography.Caption className={styles.closeCommunityDescription__text}>
+        {resolveText('amity_social_label_close_community_description')}
+      </Typography.Caption>
     </div>
   );
 };

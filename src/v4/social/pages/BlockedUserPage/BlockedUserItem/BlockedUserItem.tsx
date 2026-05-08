@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './BlockedUserItem.module.css';
 import { UserListUnblockUserButton } from '~/v4/social/elements/UserListUnblockUserButton';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
@@ -50,7 +51,7 @@ export const BlockedUserItem: FC<BlockedUserItemProps> = ({
         onClick={() => {
           if (!online) {
             notification.info({
-              content: 'Failed to unblock user. Please try again.',
+              content: useString('amity_social_toast_user_unblock_failed'),
             });
             return;
           }

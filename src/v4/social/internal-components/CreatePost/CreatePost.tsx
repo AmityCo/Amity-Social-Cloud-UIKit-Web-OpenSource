@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { AmityAttachmentProductTags, CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
 import { FileType } from '@amityco/ts-sdk';
 import { useForm } from 'react-hook-form';
@@ -76,6 +77,11 @@ export function CreatePost({
   const { setVideoThumbnail, setCanBeDiscarded } = useLayoutContext();
 
   const { online } = useNetworkState();
+
+  const postingText = useString('amity_social_toast_poll_create_posting_toast');
+  const waitingForNetworkText = useString('amity_social_label_waiting_for_network');
+  const genericPostErrorText = useString('amity_social_toast_error_create_post_failed');
+  const titleOptionalPlaceholder = useString('amity_social_label_title_optional');
   const {
     files,
     progress,
@@ -103,6 +109,7 @@ export function CreatePost({
 
   const [title, setTitle] = useState<string>('');
   const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>();
+
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
@@ -186,7 +193,7 @@ export function CreatePost({
 
       if (hasDeletedProducts || hasArchivedProducts) {
         notification.info({
-          content: "Some products that you've tagged are no longer available.",
+          content: resolveString('amity_social_toast_post_products_unavailable_toast'),
         });
       }
 
@@ -213,10 +220,9 @@ export function CreatePost({
       ) {
         info({
           pageId,
-          title: 'Posts sent for review',
-          content:
-            'Your post has been submitted to the pending list. It will be published once approved by the community moderator.',
-          okText: 'OK',
+          title: resolveString('amity_social_button_post_composer_create_buttons_sent_for_review'),
+          content: resolveString('amity_social_modal_dialog_post_pending_approval'),
+          okText: resolveString('amity_social_button_ok'),
         });
       }
       setIsMuted(false);
@@ -274,16 +280,19 @@ export function CreatePost({
 
   async function onCreatePost({ removeTag }: { removeTag?: boolean } = {}) {
     if (textValue.text?.length > MAXIMUM_POST_CHARACTERS) {
-      setPostErrorText('You have reached the maximum of 50,000 characters in a post.');
+      setPostErrorText(resolveString('amity_social_error_post_text_exceed_error_message'));
       return;
     }
 
     if (textValue.links && textValue.links.length > MAX_LINKS_PER_POST) {
       info({
-        title: 'Link limit reached',
-        content: `You can only add link up to ${MAX_LINKS_PER_POST} links per post.`,
+        title: resolveString('amity_social_modal_dialog_title_link_limit_reached'),
+        content: resolveString('amity_social_modal_dialog_link_limit').replace(
+          '%s',
+          String(MAX_LINKS_PER_POST),
+        ),
         pageId,
-        okText: 'OK',
+        okText: resolveString('amity_social_button_ok'),
       });
       return;
     }
@@ -368,12 +377,12 @@ export function CreatePost({
       confirm({
         pageId: pageId,
         type: 'confirm',
-        title: 'Product tagging isn’t available',
-        content: 'Your post can still be published, but product tags will be removed.',
+        title: resolveString('amity_social_label_product_tagging_unavailable_title'),
+        content: resolveString('amity_social_label_product_tagging_unavailable_description'),
         onOk: () => onCreatePost({ removeTag: true }),
-        okText: 'Publish',
+        okText: resolveString('amity_social_button_publish'),
         okButtonColor: 'primary',
-        cancelText: 'Review post',
+        cancelText: resolveString('amity_social_button_review_post'),
         onCancel: () => removeProductTag(),
       });
     } else onCreatePost();
@@ -386,11 +395,11 @@ export function CreatePost({
 
   const handlePostError = (error: Error) => {
     if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-      setPostErrorText("Your post wasn't posted as it contains an inappropriate word.");
+      setPostErrorText(resolveString('amity_social_error_post_create_ban_word_error'));
     } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-      setPostErrorText("Your post wasn't posted as it contains a link that's not allowed.");
+      setPostErrorText(resolveString('amity_social_error_add_blocked_links_post_error_message'));
     } else {
-      setPostErrorText('Failed to create post. Please try again.');
+      setPostErrorText(resolveString('amity_social_toast_error_create_post_failed'));
     }
   };
 
@@ -399,14 +408,14 @@ export function CreatePost({
     confirm({
       pageId: pageId,
       type: 'confirm',
-      title: 'Discard this post?',
-      content: 'The post will be permanently discarded. It cannot be undone.',
+      title: resolveString('amity_social_modal_dialog_title_discard_post'),
+      content: resolveString('amity_social_modal_dialog_discard_post'),
       onOk: () => {
         setClipFile(null);
         checkRedirectPage();
       },
-      okText: 'Discard',
-      cancelText: 'Keep editing',
+      okText: resolveString('amity_social_button_discard'),
+      cancelText: resolveString('amity_social_button_keep_editing'),
     });
   };
 
@@ -419,14 +428,14 @@ export function CreatePost({
       {(isCreating || !online) && (
         <Notification
           icon={<Spinner />}
-          content={online ? 'Posting...' : 'Waiting for network...'}
+          content={online ? postingText : waitingForNetworkText}
           alignment="fixed"
         />
       )}
       {(isError || postErrorText) && (
         <Notification
           duration={3000}
-          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+          content={postErrorText ? postErrorText : genericPostErrorText}
           alignment="fixed"
           icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
           onClose={() => {
@@ -483,7 +492,11 @@ export function CreatePost({
         >
           <Notification
             className={styles.createPost__notificationToast}
-            content={online ? 'Posting...' : 'Waiting for network...'}
+            content={
+              online
+                ? resolveString('amity_social_toast_poll_create_posting_toast')
+                : resolveString('amity_social_label_waiting_for_network')
+            }
             icon={<Spinner />}
             alignment="fixed"
           />
@@ -503,7 +516,11 @@ export function CreatePost({
           data-is-clip-post={isClipPost}
         >
           <Notification
-            content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+            content={
+              postErrorText
+                ? postErrorText
+                : resolveString('amity_social_toast_error_create_post_failed')
+            }
             icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
             alignment="fixed"
             duration={3000}
@@ -556,7 +573,7 @@ export function CreatePost({
                 ? setTitle(e.target.value.slice(0, 150))
                 : setTitle(e.target.value);
             }}
-            placeholder="Title (optional)"
+            placeholder={titleOptionalPlaceholder}
             className={styles.createPost__titleInput}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
           />

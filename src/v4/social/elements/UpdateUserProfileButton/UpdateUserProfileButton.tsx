@@ -18,7 +18,7 @@ export const UpdateUserProfileButton: React.FC<UpdateUserProfileButtonProps> = (
   onClick,
 }) => {
   const elementId = 'update_user_profile_button';
-  const { accessibilityId, config, isExcluded } = useAmityElement({
+  const { accessibilityId, config, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -34,9 +34,9 @@ export const UpdateUserProfileButton: React.FC<UpdateUserProfileButtonProps> = (
       isDisabled={disabled}
       type="submit"
     >
-      {config.text && (
+      {(resolveText('amity_social_button_edit_user_save_button') || config.text) && (
         <Typography.Body className={styles.updateUserProfileButton__text}>
-          {config.text}
+          {resolveText('amity_social_button_edit_user_save_button')}
         </Typography.Body>
       )}
     </Button>

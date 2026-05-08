@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import SmilePlus from '~/v4/icons/SmilePlus';
 import styles from './ReactionList.module.css';
@@ -16,11 +17,11 @@ export const ReactionListEmptyState = ({
         <SmilePlus className={styles.reactionListEmptyState__smileIcon} />
         <div className={styles.reactionState2Line}>
           <Typography.Body className={styles.reactionListEmptyState__caption}>
-            No reactions yet
+            {useString('amity_common_button_no_reactions_yet')}
           </Typography.Body>
-          <Typography.Caption
-            className={styles.reactionListEmptyState__caption}
-          >{`Be the first to react to this ${referenceType}!`}</Typography.Caption>
+          <Typography.Caption className={styles.reactionListEmptyState__caption}>
+            {useString('amity_common_label_be_first_to_react', referenceType)}
+          </Typography.Caption>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import CloseIcon from '~/v4/icons/Close';
 import Muted from '~/v4/icons/Muted';
@@ -38,7 +39,11 @@ export const VideoHeader: React.FC<VideoHeaderProps> = ({
           onPress={onClickMute}
           className={styles.videoHeader__iconButton}
           iconClassName={styles.videoHeader__icon}
-          aria-label={isMuted ? 'Unmute' : 'Mute'}
+          aria-label={
+            isMuted
+              ? useString('amity_social_button_unmute')
+              : useString('amity_social_button_mute')
+          }
           data-muted={isMuted}
         />
         {onClickMenu && (

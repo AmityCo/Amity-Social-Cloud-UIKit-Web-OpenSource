@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import styles from './UserDescription.module.css';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -18,7 +19,7 @@ export const UserDescription: React.FC<UserDescriptionProps> = ({
 }) => {
   const elementId = 'user_description';
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isExcluded, accessibilityId } = useAmityElement({
+  const { isExcluded, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -42,7 +43,7 @@ export const UserDescription: React.FC<UserDescriptionProps> = ({
               <>
                 ...
                 <Button className={styles.userDescription__seeMore__button} onPress={handleSeeMore}>
-                  See more
+                  {resolveText('amity_social_button_see_more')}
                 </Button>
               </>
             }

@@ -57,6 +57,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { FloatingLinkEditorPlugin } from '~/v4/social/internal-components/Lexical/plugins/FloatingLinkEditorPlugin';
 import { LinkValidationPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkValidationPlugin';
+import { useString } from '~/v4/core/localization';
 
 // Content type enum
 export type EditorContentType = 'post' | 'comment' | 'message';
@@ -233,7 +234,8 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
     const defaults = CONTENT_TYPE_DEFAULTS[editorContentType];
     const finalEnableHashtag = enableHashtag ?? defaults.enableHashtag;
     const finalEnableUrlDetection = enableUrlDetection ?? defaults.enableUrlDetection;
-    const finalPlaceholder = placeholder ?? defaults.placeholder;
+    const defaultPlaceholder = useString(defaults.placeholderKey);
+    const finalPlaceholder = placeholder ?? defaultPlaceholder;
     const finalMaxCharacters = maxCharacters ?? defaults.maxCharacters;
     const finalMaxLines = maxLines ?? defaults.maxLines;
     const finalMinLines = minLines;

@@ -24,8 +24,15 @@ export const StorySetting = ({
   onClick,
 }: StorySettingProps) => {
   const elementId = 'story_setting';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
   return (
@@ -45,7 +52,11 @@ export const StorySetting = ({
           defaultIconName={defaultConfig.icon}
           configIconName={config.icon}
         />
-        {config.text && <Typography.Body>{config.text}</Typography.Body>}
+        {resolveText('amity_social_setting_community_setting_story_setting') && (
+          <Typography.Body>
+            {resolveText('amity_social_setting_community_setting_story_setting')}
+          </Typography.Body>
+        )}
       </div>
       <ChevronRight className={styles.storySetting__angleRight} />
     </Button>

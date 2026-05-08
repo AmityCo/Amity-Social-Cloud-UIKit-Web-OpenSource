@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PAGE_ID, COMPONENT_ID } from '~/v4/constants/customization';
 import {
@@ -49,7 +50,7 @@ export interface ProductTagSelectionProps {
   pinnedProductId?: string;
   onPinnedProductIdChange?: (pinnedProductId: string | undefined) => void;
   renderMode?: RenderModeEnum;
-  isShowSearch?: boolean; // Only used for livestream mode to determine whether to show search or the "No products tagged yet" screen
+  isShowSearch?: boolean; // Only used for livestream mode to determine whether to show search or the useString('amity_social_empty_state_tagged_products_empty_title') screen
   isHost?: boolean;
   onRemoveProduct?: (productTag: Amity.ProductTag) => void;
   remainingLimit?: number; // The remaining number of products that can be selected
@@ -389,7 +390,11 @@ export function ProductTagSelection({
       data-display={displayMode}
     >
       {!online && (
-        <Notification icon={<Spinner />} content="Waiting for network..." alignment="fixed" />
+        <Notification
+          icon={<Spinner />}
+          content={useString('amity_social_label_waiting_for_network')}
+          alignment="fixed"
+        />
       )}
       <ProductTagSelectionHeader
         mode={mode}
@@ -417,7 +422,7 @@ export function ProductTagSelection({
       {selectedProductTagsToShow && selectedProductTagsToShow?.length > 0 && (
         <>
           <Typography.BodyBold className={styles.productTagSelection__selectedProduct__title}>
-            Tagged products
+            {useString('amity_social_button_tagged_products')}
           </Typography.BodyBold>
           <div className={styles.productTagSelection__selectedProductWrapper}>
             {selectedProductTagsToShow?.length > 5 && showLeftArrow && (
@@ -584,7 +589,11 @@ export function ProductTagSelection({
       {!isShowNoProductsTagYet && (
         <div data-mode={mode} className={styles.productTagSelection__submitButton}>
           <SubmitButton
-            textButton={mode === 'livestream' ? 'Add products' : 'Done'}
+            textButton={
+              mode === 'livestream'
+                ? useString('amity_social_button_add_products')
+                : useString('amity_social_button_done')
+            }
             isDisabled={
               (mode === 'livestream'
                 ? localSelectedProduct.length === 0 || isSubmitting

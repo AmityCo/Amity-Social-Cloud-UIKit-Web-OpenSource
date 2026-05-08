@@ -1,4 +1,5 @@
 import React, { useState, FC } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './UserRelationshipPage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
@@ -10,8 +11,8 @@ import { UserFollowingTabContent } from './TabContent/UserFollowingTabContent';
 import { UserFollowerTabContent } from './TabContent/UserFollowerTabContent';
 
 export const enum UserRelationshipPageTabs {
-  FOLLOWING = 'following',
-  FOLLOWER = 'followers',
+  FOLLOWING = 'Following',
+  FOLLOWER = 'Follower',
 }
 type UserRelationshipPageProps = {
   userId: string;
@@ -29,14 +30,14 @@ export const UserRelationshipPage: FC<UserRelationshipPageProps> = ({ userId, se
 
   const tabs = [
     {
-      label: 'Following',
+      label: useString('amity_social_button_following'),
       value: UserRelationshipPageTabs.FOLLOWING,
       content: () => {
         return <UserFollowingTabContent userId={userId} />;
       },
     },
     {
-      label: 'Followers',
+      label: useString('amity_social_button_followers'),
       value: UserRelationshipPageTabs.FOLLOWER,
       content: () => {
         return <UserFollowerTabContent userId={userId} />;

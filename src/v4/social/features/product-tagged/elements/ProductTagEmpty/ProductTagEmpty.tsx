@@ -21,7 +21,7 @@ export function ProductTagEmpty({
   iconSize = 'small',
 }: ProductTagEmptyProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG_EMPTY;
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -44,7 +44,7 @@ export function ProductTagEmpty({
     <div className={styles.productTagEmpty} style={themeStyles} data-test-id={accessibilityId}>
       {iconElement}
       <TextComponent as="p" className={styles.productTagEmpty__text}>
-        {config.text ?? 'Start typing to search for products.'}
+        {resolveText('amity_social_label_start_typing_to_search')}
       </TextComponent>
     </div>
   );

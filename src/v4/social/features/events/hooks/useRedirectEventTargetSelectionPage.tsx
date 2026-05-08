@@ -17,7 +17,13 @@ export function useRedirectEventTargetSelectionPage() {
       ? openPopup({
           pageId,
           view: 'desktop',
-          header: <Title pageId={pageId} variant="headline" />,
+          header: (
+            <Title
+              pageId={pageId}
+              variant="headline"
+              textKey="amity_social_label_select_event_target_title"
+            />
+          ),
           children: <EventTargetSelection />,
         })
       : AmityCreatePostMenuComponentBehavior?.goToSelectEventTargetPage?.();
