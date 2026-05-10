@@ -25,6 +25,8 @@ import { SharableModel } from '~/v4/utils/sharableLink';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import { Pencil } from '~/v4/icons/Pencil';
+import { Share } from '~/v4/icons/Share';
+import { createRepostMetadata, createRepostText } from '~/v4/social/utils/repost';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -55,7 +57,7 @@ export const PostMenu = ({
   const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
-  const { client } = useSDK();
+  const { client, currentUserId, isVisitorOrBot } = useSDK();
 
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
@@ -116,6 +118,8 @@ export const PostMenu = ({
     if (poll && poll.status === 'open' && isOwner) return true;
     return false;
   }, [isOwner, poll]);
+
+  const showRepostButton = !isVisitorOrBot && !!currentUserId;
 
   const showCopyLinkButton = useMemo(() => {
     if (!sharableLink) return false;
@@ -178,6 +182,30 @@ export const PostMenu = ({
     },
     onError: () => {
       info({ content: 'Oops, something went wrong.' });
+    },
+  });
+
+  const { mutateAsync: mutateRepost, isPending: isReposting } = useMutation({
+    networkMode: 'always',
+    mutationFn: async () => {
+      if (!currentUserId) throw new Error('Missing current user ID');
+
+      return PostRepository.createPost({
+        targetType: 'user',
+        targetId: currentUserId,
+        data: { text: createRepostText(post) },
+        metadata: createRepostMetadata(post, sharableLink),
+      });
+    },
+    onSuccess: () => {
+      success({ content: 'Post reposted.' });
+      onCloseMenu();
+    },
+    onError: () => {
+      info({
+        content: 'Failed to repost. Please try again.',
+        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+      });
     },
   });
 
@@ -256,6 +284,16 @@ export const PostMenu = ({
       pageId,
       componentId,
     });
+  };
+
+  const onRepostClick = () => {
+    if (!navigator.onLine) {
+      info({ content: 'Failed to repost. Please try again.' });
+      onCloseMenu();
+      return;
+    }
+
+    mutateRepost();
   };
 
   const handleUnreportPost = () => {
@@ -342,6 +380,19 @@ export const PostMenu = ({
           <Pencil className={styles.postMenu__editPost__icon} />
           <Typography.BodyBold className={styles.postMenu__editPost__text}>
             Edit post
+          </Typography.BodyBold>
+        </Button>
+      ) : null}
+      {!isShowReportReason && showRepostButton ? (
+        <Button
+          data-testid={`${pageId}/${componentId}/repost_button`}
+          className={styles.postMenu__item}
+          isDisabled={isReposting}
+          onPress={onRepostClick}
+        >
+          <Share className={styles.postMenu__repostPost__icon} />
+          <Typography.BodyBold className={styles.postMenu__repostPost__text}>
+            {isReposting ? 'Sharing...' : 'Share to my wall'}
           </Typography.BodyBold>
         </Button>
       ) : null}

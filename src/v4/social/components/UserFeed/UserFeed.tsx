@@ -6,7 +6,6 @@ import {
   AmityPostContentComponentStyle,
 } from '~/v4/social/components/PostContent/PostContent';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import { Button } from '~/v4/core/natives/Button/Button';
 import { EmptyUserFeed } from '~/v4/social/elements/EmptyUserFeed';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { BlockedUserFeed } from '~/v4/social/elements/BlockedUserFeed/BlockedUserFeed';
@@ -23,6 +22,7 @@ interface UserFeedProps {
   pageId?: string;
   feedSources?: FeedSourceEnum[];
   followStatus?: Amity.FollowStatus['status'] | null;
+  targetUserPostsOnly?: boolean;
 }
 
 const UserFeedPostContentSkeleton: React.FC = () => {
@@ -48,7 +48,13 @@ const UserFeedPostContentSkeleton: React.FC = () => {
   );
 };
 
-export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: UserFeedProps) => {
+export const UserFeed = ({
+  pageId = '*',
+  userId,
+  feedSources,
+  followStatus,
+  targetUserPostsOnly = false,
+}: UserFeedProps) => {
   const componentId = 'user_feed';
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { AmityUserFeedComponentBehavior } = usePageBehavior();
@@ -75,6 +81,16 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
     dataTypes,
   });
 
+  const visiblePosts = useMemo(() => {
+    if (!targetUserPostsOnly) return posts;
+
+    return posts.filter(
+      (post) =>
+        post.targetType === 'user' &&
+        (post.targetId === userId || (!post.targetId && post.postedUserId === userId)),
+    );
+  }, [posts, targetUserPostsOnly, userId]);
+
   useIntersectionObserver({
     onIntersect: () => {
       if (isLoading === false) {
@@ -96,10 +112,10 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
 
     if (!isLoading && error) return <ErrorContent />;
 
-    if (!isLoading && posts.length === 0)
+    if (!isLoading && visiblePosts.length === 0)
       return <EmptyUserFeed pageId={pageId} componentId={componentId} />;
 
-    return posts.map((post) => (
+    return visiblePosts.map((post) => (
       <div key={post.postId} className={styles.userFeed__postContent}>
         <PostContent
           category={AmityPostCategory.GENERAL}

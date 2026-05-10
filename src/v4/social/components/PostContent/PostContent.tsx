@@ -47,6 +47,10 @@ import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBe
 import { EventHostBadge } from '~/v4/social/elements';
 import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import { usePost as usePostById } from '~/v4/social/hooks/posts/usePost';
+import { getRepostedPostId } from '~/v4/social/utils/repost';
+import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
+import VideoControl from '~/v4/icons/VideoControl';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -123,6 +127,129 @@ const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: bool
   }, [post.latestComments, findLastestComment, disabled, post.postId]);
 
   return { inlineComment, isLoading }; // Return the state, not the ref
+};
+
+const getPostText = (post: Amity.Post): { title: string; text: string } => {
+  if (!isTextPost(post)) return { title: '', text: '' };
+
+  return {
+    title: post.data?.title ?? '',
+    text: post.data?.text ?? '',
+  };
+};
+
+const RepostedPostReference = ({ postId }: { postId: string }) => {
+  const { post, isLoading } = usePostById({ postId, shouldCall: !!postId });
+
+  if (isLoading) {
+    return (
+      <div className={styles.postContent__repostReference}>
+        <Typography.Caption className={styles.postContent__repostReference__status}>
+          Loading original post...
+        </Typography.Caption>
+      </div>
+    );
+  }
+
+  if (!post || post.isDeleted) {
+    return (
+      <div className={styles.postContent__repostReference}>
+        <Typography.Caption className={styles.postContent__repostReference__status}>
+          Original post is unavailable.
+        </Typography.Caption>
+      </div>
+    );
+  }
+
+  const { title, text } = getPostText(post);
+  const avatarUrl = post.creator?.avatar?.fileUrl
+    ? getFileUrlWithSize(post.creator.avatar.fileUrl, 'small')
+    : undefined;
+  const avatarPlaceholder = (post.creator?.displayName || post.postedUserId).trim().charAt(0);
+  const mediaPosts = (post.childrenPosts ?? []).filter(
+    (childPost) => childPost.dataType === 'image' || childPost.dataType === 'video',
+  );
+  const mediaLeftCount = Math.max(0, mediaPosts.length - 4);
+
+  return (
+    <div className={styles.postContent__repostReference}>
+      <div className={styles.postContent__repostReference__header}>
+        <div className={styles.postContent__repostReference__avatar}>
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt=""
+              className={styles.postContent__repostReference__avatarImage}
+            />
+          ) : (
+            <Typography.CaptionBold
+              className={styles.postContent__repostReference__avatarPlaceholder}
+            >
+              {avatarPlaceholder}
+            </Typography.CaptionBold>
+          )}
+        </div>
+        <div className={styles.postContent__repostReference__headerText}>
+          <Typography.BodyBold className={styles.postContent__repostReference__author}>
+            {post.creator?.displayName || post.postedUserId}
+          </Typography.BodyBold>
+          <Typography.Caption className={styles.postContent__repostReference__status}>
+            Original post
+          </Typography.Caption>
+        </div>
+      </div>
+      {title && (
+        <Typography.BodyBold className={styles.postContent__repostReference__text}>
+          {title}
+        </Typography.BodyBold>
+      )}
+      {text && (
+        <Typography.Body className={styles.postContent__repostReference__text}>
+          {text}
+        </Typography.Body>
+      )}
+      {mediaPosts.length > 0 && (
+        <div
+          className={styles.postContent__repostReference__mediaGrid}
+          data-media-amount={Math.min(mediaPosts.length, 4)}
+        >
+          {mediaPosts.slice(0, 4).map((mediaPost, index) => {
+            const imageInfo =
+              mediaPost.dataType === 'image'
+                ? (mediaPost as Amity.Post<'image'>).getImageInfo()
+                : undefined;
+            const imageUrl = imageInfo?.fileUrl ? getFileUrlWithSize(imageInfo.fileUrl) : undefined;
+
+            return (
+              <div
+                key={mediaPost.postId}
+                className={styles.postContent__repostReference__mediaItem}
+              >
+                {imageUrl ? (
+                  <img
+                    loading="lazy"
+                    src={imageUrl}
+                    alt=""
+                    className={styles.postContent__repostReference__mediaImage}
+                  />
+                ) : (
+                  <div className={styles.postContent__repostReference__mediaPlaceholder} />
+                )}
+                {mediaPost.dataType === 'video' && (
+                  <VideoControl className={styles.postContent__repostReference__mediaIcon} />
+                )}
+                {mediaLeftCount > 0 && index === 3 && (
+                  <Typography.Headline className={styles.postContent__repostReference__mediaMore}>
+                    +{mediaLeftCount}
+                  </Typography.Headline>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export const PostContent = ({
@@ -208,6 +335,7 @@ export const PostContent = ({
     model: SharableModel.POST,
     referenceId: post.postId,
   });
+  const repostedPostId = getRepostedPostId(post);
 
   const onReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
@@ -586,6 +714,7 @@ export const PostContent = ({
                 community={targetCommunity}
               />
             ) : null}
+            {repostedPostId && <RepostedPostReference postId={repostedPostId} />}
           </Button>
           {canShowProductTags && (
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />

@@ -48,6 +48,16 @@
   height: 1.25rem;
 }
 
+.postMenu__repostPost__text {
+  color: var(--asc-color-base-default);
+}
+
+.postMenu__repostPost__icon {
+  color: var(--asc-color-base-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
 .postMenu__closePoll__icon {
   color: var(--asc-color-base-default);
   width: 1.5rem;
