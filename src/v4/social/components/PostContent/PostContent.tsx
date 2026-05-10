@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type KeyboardEvent,
+  type MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
@@ -138,8 +146,20 @@ const getPostText = (post: Amity.Post): { title: string; text: string } => {
   };
 };
 
-const RepostedPostReference = ({ postId }: { postId: string }) => {
+const RepostedPostReference = ({ postId, onClick }: { postId: string; onClick?: () => void }) => {
   const { post, isLoading } = usePostById({ postId, shouldCall: !!postId });
+
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onClick?.();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    event.stopPropagation();
+    onClick?.();
+  };
 
   if (isLoading) {
     return (
@@ -172,7 +192,13 @@ const RepostedPostReference = ({ postId }: { postId: string }) => {
   const mediaLeftCount = Math.max(0, mediaPosts.length - 4);
 
   return (
-    <div className={styles.postContent__repostReference}>
+    <div
+      className={styles.postContent__repostReference}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       <div className={styles.postContent__repostReference__header}>
         <div className={styles.postContent__repostReference__avatar}>
           {avatarUrl ? (
@@ -315,7 +341,7 @@ export const PostContent = ({
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
-  const { page, goToClipFeedPage } = useNavigation();
+  const { page, goToClipFeedPage, goToPostDetailPage } = useNavigation();
 
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -714,7 +740,12 @@ export const PostContent = ({
                 community={targetCommunity}
               />
             ) : null}
-            {repostedPostId && <RepostedPostReference postId={repostedPostId} />}
+            {repostedPostId && (
+              <RepostedPostReference
+                postId={repostedPostId}
+                onClick={() => goToPostDetailPage({ postId: repostedPostId })}
+              />
+            )}
           </Button>
           {canShowProductTags && (
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />

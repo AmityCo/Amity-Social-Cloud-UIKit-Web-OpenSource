@@ -123,10 +123,9 @@ export const PostMenu = ({
 
   const showCopyLinkButton = useMemo(() => {
     if (!sharableLink) return false;
-    if (post.targetType === 'user') return false;
-    if (community?.isPublic && !community?.isJoined) return true;
-    if (community?.isPublic && community?.isJoined) return false;
-  }, [post.targetType, community?.isJoined, community?.isPublic]);
+    if (post.targetType === 'user') return true;
+    return !!community?.isPublic;
+  }, [sharableLink, post.targetType, community?.isPublic]);
 
   const isPollPost = useMemo(() => {
     return !!poll;

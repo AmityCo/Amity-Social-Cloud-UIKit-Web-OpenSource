@@ -25,9 +25,12 @@ import { CommentRepository, PostStructureType } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
+import { SharableModel } from '~/v4/utils/sharableLink';
 
 export interface PostDetailPageProps {
   id: string;
+  showBackButton?: boolean;
   hideTarget?: boolean;
   category?: AmityPostCategory;
   commentId?: string;
@@ -47,6 +50,7 @@ export interface GoToPostDetailPageParams extends Omit<PostDetailPageProps, 'id'
 
 export function PostDetailPage({
   id,
+  showBackButton = true,
   hideTarget,
   category,
   commentId,
@@ -91,6 +95,10 @@ export function PostDetailPage({
   const notification = useNotifications();
   const { themeStyles } = useAmityPage({ pageId });
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
+  const { link: sharableLink } = useSharableLink({
+    model: SharableModel.POST,
+    referenceId: post?.postId,
+  });
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { community } = useCommunity({
     communityId: post?.targetId,
@@ -264,11 +272,13 @@ export function PostDetailPage({
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
       <div className={styles.postDetailPage__topBar}>
-        <BackButton
-          pageId={pageId}
-          defaultClassName={styles.postDetailPage__backIcon}
-          onPress={handleBack}
-        />
+        <div style={showBackButton ? undefined : { visibility: 'hidden', pointerEvents: 'none' }}>
+          <BackButton
+            pageId={pageId}
+            defaultClassName={styles.postDetailPage__backIcon}
+            onPress={handleBack}
+          />
+        </div>
         <Typography.TitleBold
           data-testid={`${pageId}/page_title`}
           className={styles.postDetailPage__topBar__title}
@@ -286,6 +296,7 @@ export function PostDetailPage({
                     post={post}
                     pageId={pageId}
                     onPostDeleted={handlePostDeleted}
+                    sharableLink={sharableLink}
                     onCloseMenu={() => {
                       closePopover();
                       removeDrawerData();
@@ -300,6 +311,7 @@ export function PostDetailPage({
               post={post}
               pageId={pageId}
               onPostDeleted={handlePostDeleted}
+              sharableLink={sharableLink}
               onCloseMenu={() => {
                 closePopover();
                 removeDrawerData();
