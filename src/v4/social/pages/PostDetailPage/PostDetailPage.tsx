@@ -92,6 +92,12 @@ export function PostDetailPage({
   const { onBack, prevPage } = useNavigation();
   const notification = useNotifications();
   const { themeStyles } = useAmityPage({ pageId });
+  const replyNoLongerAvailableText = useString(
+    'amity_social_error_reply_no_longer_available_error_message',
+  );
+  const addReplyParentDeletedText = useString(
+    'amity_social_error_add_reply_parent_deleted_error_message',
+  );
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
 
@@ -137,9 +143,7 @@ export function PostDetailPage({
           if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
             hasShownReplyNotificationRef.current = true;
             if (!isDesktop) {
-              setDeletedReplyError(
-                useString('amity_social_error_reply_no_longer_available_error_message'),
-              );
+              setDeletedReplyError(message);
             } else {
               notification.info({
                 content: message,
@@ -153,16 +157,11 @@ export function PostDetailPage({
     };
 
     const isL0Comment = !parentId;
-    const commentMessage = isL0Comment
-      ? useString('amity_social_error_add_reply_parent_deleted_error_message')
-      : useString('amity_social_error_reply_no_longer_available_error_message');
+    const commentMessage = isL0Comment ? addReplyParentDeletedText : replyNoLongerAvailableText;
 
     const cleanupComment = checkDeleted(commentId, commentMessage);
     const cleanupParent = isL2Notification
-      ? checkDeleted(
-          parentId,
-          useString('amity_social_error_reply_no_longer_available_error_message'),
-        )
+      ? checkDeleted(parentId, replyNoLongerAvailableText)
       : undefined;
 
     return () => {
