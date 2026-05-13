@@ -395,6 +395,8 @@ export const ClipFeedPage = ({
     setIsLocalMuted((prev) => !prev);
   };
 
+  const viewPostLabel = useString('amity_social_button_view_post');
+
   const handleMenuClick = useCallback(
     (postId: string) => {
       setDrawerData({
@@ -414,7 +416,7 @@ export const ClipFeedPage = ({
             >
               <ViewPost className={styles.clipFeedPage__viewPostIcon} />
               <Typography.BodyBold className={styles.clipFeedPage__viewPostText}>
-                {useString('amity_social_button_view_post')}
+                {viewPostLabel}
               </Typography.BodyBold>
             </Button>
             {isShowCopyLinkButton && (
@@ -430,7 +432,7 @@ export const ClipFeedPage = ({
         ),
       });
     },
-    [isShowCopyLinkButton, posts, currentVisiblePost?.postId],
+    [isShowCopyLinkButton, posts, currentVisiblePost?.postId, viewPostLabel],
   );
 
   const handleClipFailed = useCallback((postId: string) => {
