@@ -30,7 +30,7 @@ type RSVPButtonProps = {
 export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonProps) => {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { createRSVP, updateRSVP } = useRSVP({ event });
-  const { error } = useNotifications();
+  const { info: infoToast } = useNotifications();
   const { info } = useConfirmContext();
   const { currentUserId } = useSDK();
   const { isDesktop } = useResponsive();
@@ -171,8 +171,8 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
   };
 
   const handleVisitorClick = () => {
-    info({
-      content: useString('amity_social_label_create_account_or_sign_in'),
+    infoToast({
+      content: resolveString('amity_social_label_create_account_or_sign_in'),
     });
   };
 
