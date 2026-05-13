@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
 import { AmityAttachmentProductTags, CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
@@ -13,7 +14,12 @@ import {
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CreateNewPostButton } from '~/v4/social/elements/CreateNewPostButton';
-import { TextEditor } from '~/v4/core/components/TextEditor';
+import {
+  TextEditor,
+  TextEditorLinkPreview,
+  UrlHighlight,
+  LinkRetentionState,
+} from '~/v4/core/components/TextEditor';
 import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
 import ReactDOM from 'react-dom';
@@ -106,6 +112,12 @@ export function CreatePost({
   const [isError, setIsError] = useState(false);
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [urlHighlights, setUrlHighlights] = useState<UrlHighlight[]>([]);
+  // Ref to store link retention state from TextEditorLinkPreview
+  const linkRetentionRef = useRef<LinkRetentionState>({
+    debouncedFirstUrl: null,
+    hiddenPreviewUrl: null,
+  });
 
   const [title, setTitle] = useState<string>('');
   const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>();
@@ -128,6 +140,11 @@ export function CreatePost({
     ],
     links: [],
   });
+
+  // Callback to update link retention state from TextEditorLinkPreview
+  const handleLinkRetentionChange = useCallback((state: LinkRetentionState) => {
+    linkRetentionRef.current = state;
+  }, []);
 
   useEffect(() => {
     if (isPreviewLoading && files.length > 0) {
@@ -284,7 +301,39 @@ export function CreatePost({
       return;
     }
 
-    if (textValue.links && textValue.links.length > MAX_LINKS_PER_POST) {
+    // Get link retention state from the ref (updated by TextEditorLinkPreview)
+    const { debouncedFirstUrl, hiddenPreviewUrl } = linkRetentionRef.current;
+
+    // Handle link retention - same logic as PostTextField OnChangePlugin
+    let effectiveLinks = textValue.links ?? [];
+
+    // If no links in text but debounced URL exists and not hidden, retain the link
+    // This handles the case where link text was removed but preview is still showing
+    if (
+      effectiveLinks.length === 0 &&
+      debouncedFirstUrl &&
+      debouncedFirstUrl !== hiddenPreviewUrl &&
+      files.length === 0
+    ) {
+      effectiveLinks = [
+        {
+          index: 0,
+          length: 0,
+          url: debouncedFirstUrl,
+          renderPreview: true,
+        },
+      ];
+    }
+
+    // If media is attached, set renderPreview to false for all links (Requirement 5)
+    if (files.length > 0 && effectiveLinks.length > 0) {
+      effectiveLinks = effectiveLinks.map((link) => ({
+        ...link,
+        renderPreview: false,
+      }));
+    }
+
+    if (effectiveLinks && effectiveLinks.length > MAX_LINKS_PER_POST) {
       info({
         title: resolveString('amity_social_modal_dialog_title_link_limit_reached'),
         content: resolveString('amity_social_modal_dialog_link_limit').replace(
@@ -339,7 +388,7 @@ export function CreatePost({
       mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
       hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
-      links: textValue.links,
+      links: effectiveLinks,
     };
 
     if (!removeTag) {
@@ -606,6 +655,7 @@ export function CreatePost({
                 setTextValue((prev) => ({ ...prev, hashtagsMetadata: hashtags }));
               }}
               onUrlsDetected={(urls) => {
+                setUrlHighlights(urls);
                 const links: Amity.Link[] = urls.map((url) => ({
                   url: url.url,
                   index: url.start,
@@ -619,6 +669,28 @@ export function CreatePost({
               initialProductMentions={productTags}
             />
           </div>
+          {!isClipPost && (
+            <TextEditorLinkPreview
+              pageId={pageId}
+              urls={urlHighlights}
+              attachmentAmount={files.length}
+              isClipPost={isClipPost}
+              onPreviewStateChange={(showPreview, isLoading) => {
+                setIsPreviewLoading(isLoading ?? false);
+              }}
+              onLinkRetentionChange={handleLinkRetentionChange}
+              onClose={(updatedUrls) => {
+                setUrlHighlights(updatedUrls);
+                const links: Amity.Link[] = updatedUrls.map((url) => ({
+                  url: url.url,
+                  index: url.start,
+                  length: url.end - url.start,
+                  renderPreview: url.renderPreview,
+                }));
+                setTextValue((prev) => ({ ...prev, links }));
+              }}
+            />
+          )}
           <ImageThumbnail
             files={files}
             pageId={pageId}

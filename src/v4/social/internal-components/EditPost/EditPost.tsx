@@ -16,7 +16,12 @@ import {
   AmityPostComposerEditOptions,
   CreatePostParams,
 } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { TextEditor } from '~/v4/core/components/TextEditor';
+import {
+  TextEditor,
+  TextEditorLinkPreview,
+  UrlHighlight,
+  LinkRetentionState,
+} from '~/v4/core/components/TextEditor';
 import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
@@ -141,6 +146,28 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [urlHighlights, setUrlHighlights] = useState<UrlHighlight[]>(() => {
+    // Initialize from post.links if available
+    return (post.links || []).map((link) => ({
+      url: link.url,
+      start: link.index ?? 0,
+      end: (link.index ?? 0) + (link.length ?? 0),
+      renderPreview: link.renderPreview ?? true,
+    }));
+  });
+  // Ref to store link retention state from TextEditorLinkPreview
+  const linkRetentionRef = useRef<LinkRetentionState>({
+    debouncedFirstUrl: (() => {
+      // Initialize with the first link that has renderPreview: true
+      const links = post.links || [];
+      if (links.length > 0) {
+        const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+        return firstLinkWithPreview?.url ?? null;
+      }
+      return null;
+    })(),
+    hiddenPreviewUrl: null,
+  });
   const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>(
     post.productTags as Amity.TextProductTag[],
   );
@@ -184,6 +211,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
     return Array.from(productMap.values());
   }, [postImages, postVideos, productTags, files]);
+
+  // Callback to receive link retention state from TextEditorLinkPreview
+  const handleLinkRetentionChange = useCallback((state: LinkRetentionState) => {
+    linkRetentionRef.current = state;
+  }, []);
 
   const mediaOnlyProductCount = useMemo(() => {
     const textProductIds = new Set(productTags?.map((tag) => tag.product?._id) ?? []);
@@ -423,6 +455,42 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           })
         : undefined;
 
+    // Compute effective links, including retained URL if preview is still showing but text was removed
+    const currentTotalMedia =
+      ((files && files?.length) || 0) +
+      ((postImages && postImages?.length) || 0) +
+      ((postVideos && postVideos?.length) || 0);
+
+    let effectiveLinks = textValue?.links ?? [];
+
+    // If no links in text but debounced URL exists and not hidden, retain the link
+    // This handles the case where link text was removed but preview is still showing
+    const { debouncedFirstUrl: retainedUrl, hiddenPreviewUrl: hiddenUrl } =
+      linkRetentionRef.current;
+    if (
+      effectiveLinks.length === 0 &&
+      retainedUrl &&
+      retainedUrl !== hiddenUrl &&
+      currentTotalMedia === 0
+    ) {
+      effectiveLinks = [
+        {
+          index: 0,
+          length: 0,
+          url: retainedUrl,
+          renderPreview: true,
+        },
+      ];
+    }
+
+    // If media is attached, set renderPreview to false for all links (Requirement 5)
+    if (currentTotalMedia > 0 && effectiveLinks.length > 0) {
+      effectiveLinks = effectiveLinks.map((link) => ({
+        ...link,
+        renderPreview: false,
+      }));
+    }
+
     if (textValue) {
       isClipPost
         ? mutateUpdatePostAsync({
@@ -433,7 +501,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             },
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
-            links: textValue.links,
+            links: effectiveLinks,
             productTags: finalProductTags,
           })
         : mutateUpdatePostAsync({
@@ -445,7 +513,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
-            links: textValue.links,
+            links: effectiveLinks,
             productTags: finalProductTags,
             attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
           });
@@ -799,6 +867,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                 setTextValue((prev) => ({ ...prev, hashtagsMetadata: hashtags }));
               }}
               onUrlsDetected={(urls) => {
+                setUrlHighlights(urls);
                 const links: Amity.Link[] = urls.map((url) => ({
                   url: url.url,
                   index: url.start,
@@ -811,6 +880,29 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialProductMentions={productTags as Amity.TextProductTag[]}
             />
           </div>
+          {!isClipPost && (
+            <TextEditorLinkPreview
+              pageId={pageId}
+              urls={urlHighlights}
+              attachmentAmount={totalMedia}
+              isClipPost={isClipPost}
+              onPreviewStateChange={(showPreview, isLoading) => {
+                setIsPreviewLoading(isLoading ?? false);
+              }}
+              onLinkRetentionChange={handleLinkRetentionChange}
+              onClose={(updatedUrls) => {
+                // hiddenPreviewUrl is now managed inside TextEditorLinkPreview
+                setUrlHighlights(updatedUrls);
+                const links: Amity.Link[] = updatedUrls.map((url) => ({
+                  url: url.url,
+                  index: url.start,
+                  length: url.end - url.start,
+                  renderPreview: url.renderPreview,
+                }));
+                setTextValue((prev) => ({ ...prev, links }));
+              }}
+            />
+          )}
 
           <ImageThumbnail
             files={files}

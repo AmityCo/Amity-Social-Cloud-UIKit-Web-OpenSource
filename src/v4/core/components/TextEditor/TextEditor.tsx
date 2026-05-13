@@ -541,6 +541,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
                   end: (link.index ?? 0) + (link.length ?? 0),
                   renderPreview: link.renderPreview,
                 }));
+
                 onUrlsDetected?.(urls);
               }
             }}

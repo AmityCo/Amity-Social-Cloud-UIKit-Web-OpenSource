@@ -1,0 +1,21 @@
+.textEditorLinkPreview {
+  position: relative;
+  background-color: var(--asc-color-background-default);
+}
+
+.textEditorLinkPreview__closeButton {
+  position: absolute;
+  right: -0.5rem;
+  top: -0.5rem;
+  border-radius: 50%;
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--asc-color-background-transparent-black);
+}
+
+.textEditorLinkPreview__closeButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-white);
+}
