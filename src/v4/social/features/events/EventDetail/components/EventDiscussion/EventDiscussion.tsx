@@ -48,6 +48,9 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({ pageId, componentId });
 
+  const choosePollTypeLabel = useString('amity_social_label_choose_poll_type');
+  const emptyFeedLabel = useString('amity_social_empty_feed_no_posts');
+
   const { posts, isLoading, isLoadingFirstPage, refresh, hasMore, loadMore } = usePostsCollection({
     targetType: 'community',
     targetId: event.discussionCommunityId,
@@ -143,11 +146,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
               pageId,
               view: 'desktop',
               isDismissable: false,
-              header: (
-                <Typography.Headline>
-                  {useString('amity_social_label_choose_poll_type')}
-                </Typography.Headline>
-              ),
+              header: <Typography.Headline>{choosePollTypeLabel}</Typography.Headline>,
               children: ({ close }) => (
                 <PollTypeSelection
                   onClickNext={close}
@@ -159,6 +158,12 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
               ),
             });
           }}
+          onClickLivestream={() => {
+            AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
+              targetType: 'community',
+              targetId: event.discussionCommunityId!,
+            });
+          }}
         />
       )}
       <div className={styles.eventDiscussion__posts}>
@@ -166,7 +171,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
           posts.filter((post) => post.postId !== event.postId).length === 0 && (
             <EmptyContent
               variant="container"
-              text={useString('amity_social_empty_feed_no_posts')}
+              text={emptyFeedLabel}
               defaultIcon={() => <EmptyPost className={styles.emptyUserFeed__emptyIcon} />}
             />
           )}
