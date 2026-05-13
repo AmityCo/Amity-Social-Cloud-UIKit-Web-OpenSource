@@ -568,31 +568,33 @@ export const Comment = ({
                       {replyButtonText}
                     </Typography.CaptionBold>
                   </Button>
-                  <Popover
-                    trigger={{
-                      onClick: () => setBottomSheetOpen(true),
-                      className: styles.postComment__secondRow__actionButton,
-                      iconClassName: styles.postComment__secondRow__actionButton__icon,
-                    }}
-                  >
-                    {({ closePopover }) => (
-                      <CommentOptions
-                        pageId={pageId}
-                        componentId={componentId}
-                        comment={comment}
-                        community={community}
-                        handleEditComment={() => {
-                          closePopover();
-                          handleEditComment();
-                        }}
-                        handleDeleteComment={() => {
-                          closePopover();
-                          handleDeleteComment();
-                        }}
-                        onCloseMenu={closePopover}
-                      />
-                    )}
-                  </Popover>
+                  {!hideOptionButton && (
+                    <Popover
+                      trigger={{
+                        onClick: () => setBottomSheetOpen(true),
+                        className: styles.postComment__secondRow__actionButton,
+                        iconClassName: styles.postComment__secondRow__actionButton__icon,
+                      }}
+                    >
+                      {({ closePopover }) => (
+                        <CommentOptions
+                          pageId={pageId}
+                          componentId={componentId}
+                          comment={comment}
+                          community={community}
+                          handleEditComment={() => {
+                            closePopover();
+                            handleEditComment();
+                          }}
+                          handleDeleteComment={() => {
+                            closePopover();
+                            handleDeleteComment();
+                          }}
+                          onCloseMenu={closePopover}
+                        />
+                      )}
+                    </Popover>
+                  )}
                 </div>
               ) : (
                 <div />
