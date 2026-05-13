@@ -18,15 +18,23 @@ export function Header({ showDiscardPopup, targetName, isCreateEvent }: HeaderPr
   const { isDesktop } = useResponsive();
   const { confirm } = useConfirmContext();
 
+  const leaveWithoutFinishingTitle = useString(
+    'amity_social_modal_dialog_title_leave_without_finishing',
+  );
+  const progressNotSavedContent = useString('amity_social_button_event_progress_not_saved');
+  const unsavedChangesContent = useString('amity_social_button_event_unsaved_changes');
+  const leaveText = useString('amity_social_button_leave');
+  const cancelText = useString('amity_social_button_cancel');
+  const createEventLabel = useString('amity_social_button_create_event');
+  const editEventLabel = useString('amity_social_button_edit_event');
+
   const handleBackClick = () => {
     showDiscardPopup
       ? confirm({
-          title: useString('amity_social_modal_dialog_title_leave_without_finishing'),
-          content: isCreateEvent
-            ? useString('amity_social_button_event_progress_not_saved')
-            : useString('amity_social_button_event_unsaved_changes'),
-          okText: useString('amity_social_button_leave'),
-          cancelText: useString('amity_social_button_cancel'),
+          title: leaveWithoutFinishingTitle,
+          content: isCreateEvent ? progressNotSavedContent : unsavedChangesContent,
+          okText: leaveText,
+          cancelText: cancelText,
           onOk: onBack,
         })
       : onBack();
@@ -40,11 +48,7 @@ export function Header({ showDiscardPopup, targetName, isCreateEvent }: HeaderPr
         <CloseButton pageId={PAGE_ID.EVENT_SETUP_PAGE} onPress={handleBackClick} />
       )}
       <div className={styles.header__title}>
-        <Title variant="headline">
-          {isCreateEvent
-            ? useString('amity_social_button_create_event')
-            : useString('amity_social_button_edit_event')}
-        </Title>
+        <Title variant="headline">{isCreateEvent ? createEventLabel : editEventLabel}</Title>
         {isCreateEvent && (
           <Typography.Caption className={styles.header__description}>
             {targetName}

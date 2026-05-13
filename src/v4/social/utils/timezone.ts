@@ -51,7 +51,7 @@ export const getFormattedTimeZone = (timeZone?: TimeZone) => {
 export const getCurrentTimeZone = () => getLocalTimeZone();
 
 const formatDateTimeLocal = (date: string | Date): string =>
-  new Intl.DateTimeFormat(getLocale(), {
+  new Intl.DateTimeFormat(new Intl.Locale(getLocale(), { calendar: 'gregory' }).toString(), {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

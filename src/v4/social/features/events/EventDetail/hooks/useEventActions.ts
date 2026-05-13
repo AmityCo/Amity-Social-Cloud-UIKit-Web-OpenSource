@@ -13,6 +13,7 @@ export function useEventActions() {
   const deleteEvent = (eventId: string) => {
     confirm({
       okText: resolveString('amity_social_button_delete'),
+      cancelText: resolveString('amity_social_button_cancel'),
       title: resolveString('amity_social_delete_this_event'),
       onOk: () =>
         deleteEventMutation.mutate(eventId, {

@@ -14,12 +14,13 @@ type StartTimeProps = {
 
 export function StartTime({ value, onChange }: StartTimeProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const startsOnLabel = useString('amity_social_button_event_starts_on');
 
   const renderStartTimePicker = (close: () => void) => (
     <div className={styles.startTime__dateTimePickerContainer}>
       <DateTimePicker
         value={value}
-        label={useString('amity_social_button_event_starts_on')}
+        label={startsOnLabel}
         minDate={today(getLocalTimeZone())}
         onClose={close}
         onChange={(value) => {
@@ -49,7 +50,9 @@ export function StartTime({ value, onChange }: StartTimeProps) {
             >
               <Typography.Body className={styles.startTime__label}>
                 {new Intl.DateTimeFormat(
-                  typeof navigator !== 'undefined' ? navigator.language : 'en',
+                  new Intl.Locale(typeof navigator !== 'undefined' ? navigator.language : 'en', {
+                    calendar: 'gregory',
+                  }).toString(),
                   {
                     day: '2-digit',
                     month: 'short',

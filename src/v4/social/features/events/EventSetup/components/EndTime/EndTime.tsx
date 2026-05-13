@@ -22,12 +22,17 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const [isEndDateIncluded, setIsEndDateIncluded] = useState(true);
   const removeEndDateLabel = useString('amity_social_button_remove_end_date');
+  const endsOnLabel = useString('amity_social_button_event_setup_ends_on');
+  const addEndDateLabel = useString('amity_social_label_add_end_date_and_time');
+  const noEndDateLabel = useString(
+    'amity_social_time_event_without_specified_end_time_will_end_after_12_hour',
+  );
 
   const renderEndTimePicker = (close: () => void) => (
     <div className={styles.endTime__dateTimePickerContainer}>
       <DateTimePicker
         value={value}
-        label={useString('amity_social_button_event_setup_ends_on')}
+        label={endsOnLabel}
         minDate={minDate}
         onClose={close}
         minTime={minTime}
@@ -41,9 +46,7 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
 
   return isEndDateIncluded ? (
     <div className={styles.endTime}>
-      <Typography.Body className={styles.endTime__label}>
-        {useString('amity_social_button_event_setup_ends_on')}
-      </Typography.Body>
+      <Typography.Body className={styles.endTime__label}>{endsOnLabel}</Typography.Body>
       <Popover
         trigger={({ openPopover, isDesktop }) => {
           return (
@@ -60,7 +63,10 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
                 <Typography.Body className={styles.endTime__label}>
                   {value &&
                     new Intl.DateTimeFormat(
-                      typeof navigator !== 'undefined' ? navigator.language : 'en',
+                      new Intl.Locale(
+                        typeof navigator !== 'undefined' ? navigator.language : 'en',
+                        { calendar: 'gregory' },
+                      ).toString(),
                       {
                         day: '2-digit',
                         month: 'short',
@@ -93,7 +99,7 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
   ) : (
     <div className={styles.endTime__noEndDate}>
       <Typography.Caption className={styles.endTime__noEndDateLabel}>
-        {useString('amity_social_time_event_without_specified_end_time_will_end_after_12_hour')}
+        {noEndDateLabel}
       </Typography.Caption>
       <Button
         variant="outlined"
@@ -103,7 +109,7 @@ export function EndTime({ value, onChange, minDate, minTime, setDefaultEndOn }: 
           setIsEndDateIncluded(true);
         }}
       >
-        {useString('amity_social_label_add_end_date_and_time')}
+        {addEndDateLabel}
       </Button>
     </div>
   );
