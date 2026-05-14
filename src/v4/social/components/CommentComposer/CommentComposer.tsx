@@ -191,6 +191,14 @@ export const CommentComposer = ({
       } else {
         notification.info({ content: message });
       }
+
+      setTextValue({
+        data: { text: '' },
+        mentionees: [],
+        metadata: {},
+        links: [],
+      });
+      editorRef.current?.clearEditorState();
     },
     onSuccess: (data) => {
       // Notify ReplyCommentList so it can prepend the new comment optimistically

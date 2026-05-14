@@ -9,12 +9,13 @@ const useCommentPermission = (
   const { currentUserId } = useSDK();
   const isCommentOwner = comment?.userId === currentUserId;
   const isReplyComment = !!comment?.parentId;
+  const isErrorState = comment?.syncState === 'error';
 
   const canDelete = (!readonly && isCommentOwner) || isModerator(userRoles);
-  const canEdit = !readonly && isCommentOwner;
+  const canEdit = !readonly && isCommentOwner && !isErrorState;
   const canLike = !readonly;
   const canReply = !readonly && !isReplyComment;
-  const canReport = !readonly && !isCommentOwner;
+  const canReport = !readonly && !isCommentOwner && !isErrorState;
 
   return {
     canDelete,

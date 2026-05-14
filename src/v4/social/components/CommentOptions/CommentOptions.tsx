@@ -26,6 +26,7 @@ interface CommentOptionsProps {
   handleEditComment: () => void;
   handleDeleteComment: () => void;
   onCloseMenu: () => void;
+  onlyShowDelete?: boolean;
 }
 
 export const CommentOptions = ({
@@ -36,6 +37,7 @@ export const CommentOptions = ({
   handleEditComment,
   handleDeleteComment,
   onCloseMenu,
+  onlyShowDelete = false,
 }: CommentOptionsProps) => {
   const { userRoles } = useSDK();
   const [reasonReport, setReasonReport] = useState<Amity.ContentFlagReason>(
@@ -117,7 +119,7 @@ export const CommentOptions = ({
   };
 
   const options = [
-    canEdit
+    !onlyShowDelete && canEdit
       ? {
           name: isReplyComment ? editReplyText : editCommentText,
           action: handleEditComment,
@@ -126,7 +128,7 @@ export const CommentOptions = ({
           textStyle: styles.commentOptions__actionButton__text,
         }
       : null,
-    canReport
+    !onlyShowDelete && canReport
       ? {
           name: isFlaggedByMe
             ? isReplyComment

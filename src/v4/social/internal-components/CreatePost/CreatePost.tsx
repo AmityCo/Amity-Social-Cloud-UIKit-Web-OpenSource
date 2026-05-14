@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
 import { AmityAttachmentProductTags, CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
 import { FileType } from '@amityco/ts-sdk';
