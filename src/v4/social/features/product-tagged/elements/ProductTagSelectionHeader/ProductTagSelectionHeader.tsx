@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { CloseButton } from '~/v4/social/elements/CloseButton';
@@ -40,13 +41,13 @@ export function ProductTagSelectionHeader({
   const title =
     mode === 'livestream'
       ? isShowNoProductsTagYet
-        ? 'Tagged products'
-        : 'Add products'
+        ? useString('amity_social_button_tagged_products')
+        : useString('amity_social_button_add_products')
       : mode === 'create'
-        ? config.create_mode_title || 'Tag products'
-        : config.edit_mode_title || 'Edit tags';
+        ? config.create_mode_title || useString('amity_social_button_tag_products')
+        : config.edit_mode_title || useString('amity_social_edit_tags');
 
-  const doneButtonText = config.done_button_text || 'Done';
+  const doneButtonText = config.done_button_text || useString('amity_social_button_done');
 
   const TitleComponent = displayMode === 'mobile' ? Typography.TitleBold : Typography.Headline;
 

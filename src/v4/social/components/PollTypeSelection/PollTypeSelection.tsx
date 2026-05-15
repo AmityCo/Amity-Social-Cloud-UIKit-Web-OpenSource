@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './PollTypeSelection.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -67,7 +68,7 @@ export function PollTypeSelection({
   return (
     <div className={styles.pollTypeSelection}>
       <Typography.TitleBold className={styles.pollTypeSelection__title}>
-        Choose poll type
+        {useString('amity_social_label_choose_poll_type')}
       </Typography.TitleBold>
       <div className={styles.pollTypeSelection__line} />
 
@@ -83,7 +84,7 @@ export function PollTypeSelection({
             className={styles.pollTypeSelection__iconCard}
           />
           <Typography.BodyBold className={styles.pollTypeSelection__textCard}>
-            Text-only poll
+            {useString('amity_social_button_text_only_poll')}
           </Typography.BodyBold>
         </div>
         <div
@@ -97,13 +98,13 @@ export function PollTypeSelection({
             className={styles.pollTypeSelection__iconCard}
           />
           <Typography.BodyBold className={styles.pollTypeSelection__textCard}>
-            Image poll
+            {useString('amity_social_button_image_poll')}
           </Typography.BodyBold>
         </div>
       </div>
       <div className={styles.pollTypeSelection__line} />
       <Button onPress={onClickNextButton} className={styles.pollTypeSelection__button}>
-        <Typography.Body>Next</Typography.Body>
+        <Typography.Body>{useString('amity_social_button_next')}</Typography.Body>
       </Button>
     </div>
   );

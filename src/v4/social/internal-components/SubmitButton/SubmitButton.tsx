@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './SubmitButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -62,7 +63,7 @@ export const SubmitButton = ({
       )}
 
       <Typography.BodyBold className={styles.submitButton__text}>
-        {textButton ?? 'Done'}
+        {textButton ?? useString('amity_social_button_done')}
       </Typography.BodyBold>
     </Button>
   );

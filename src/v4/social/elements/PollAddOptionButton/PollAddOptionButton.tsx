@@ -19,11 +19,12 @@ export const PollAddOptionButton = ({
 }: PollAddOptionButtonProps) => {
   const elementId = 'poll_add_option_button';
 
-  const { config, themeStyles, accessibilityId, uiReference, defaultConfig } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { config, themeStyles, accessibilityId, uiReference, defaultConfig, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
   return (
     <Button
       style={themeStyles}
@@ -44,7 +45,7 @@ export const PollAddOptionButton = ({
         />
       )}
     >
-      Add Option
+      {resolveText('amity_social_button_add_option')}
     </Button>
   );
 };

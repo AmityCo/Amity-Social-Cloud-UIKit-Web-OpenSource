@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { StoryPreview } from '.';
 
@@ -36,7 +37,10 @@ StoryWithHyperlink.args = {
   },
   hyperLink: [
     {
-      data: { url: 'https://example.com', customText: 'Visit Website' },
+      data: {
+        url: useString('amity_social_placeholder_hyperlink_url_hint'),
+        customText: useString('amity_social_label_visit_website'),
+      },
       type: 'hyperlink' as Amity.StoryItemType,
     },
   ],

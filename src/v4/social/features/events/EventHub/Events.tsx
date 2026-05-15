@@ -1,4 +1,5 @@
 import { Key } from 'react-aria';
+import { useString } from '~/v4/core/localization';
 import { useState } from 'react';
 import { Plus } from '~/v4/icons/Plus';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -30,7 +31,9 @@ export function Events({ pageId }: EventsProps) {
   return (
     <section className={styles.events}>
       <div className={styles.events__header} data-has-tabs={!isVisitorOrBot}>
-        <Typography.Headline>Events</Typography.Headline>
+        <Typography.Headline>
+          {useString('amity_social_button_social_home_events_button')}
+        </Typography.Headline>
         {hasCreateEventPermission && (
           <Button
             icon={<Plus />}
@@ -52,12 +55,12 @@ export function Events({ pageId }: EventsProps) {
           tabs={[
             {
               value: EventsTab.Explore,
-              label: 'Explore',
+              label: useString('amity_social_tab_tab_explore'),
               content: () => <ExploreEvent pageId={pageId} />,
             },
             {
               value: EventsTab.MyEvents,
-              label: 'My events',
+              label: useString('amity_social_tab_tab_my_events'),
               content: () => <MyEvents pageId={pageId} />,
             },
           ]}

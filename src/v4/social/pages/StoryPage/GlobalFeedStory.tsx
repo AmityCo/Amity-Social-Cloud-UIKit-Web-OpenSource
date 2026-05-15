@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
 import Stories from 'react-insta-stories';
@@ -140,7 +141,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     } catch (error: Error | unknown) {
       setIsError(true);
       notification.info({
-        content: 'Failed to delete story. Please try again.',
+        content: resolveString('amity_social_failed_to_delete_story_please_try_again'),
         alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
       });
 
@@ -148,7 +149,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     }
 
     notification.success({
-      content: 'Story deleted',
+      content: resolveString('amity_social_button_delete_story_success'),
       alignment:
         (page.type === PageTypes.ViewStoryPage && stories.length > 1 && isLastStory) || !isLastStory
           ? 'fullscreen'
@@ -168,10 +169,10 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setIsConfirmDialogOpen(true);
     confirm({
       pageId,
-      title: 'Delete this story?',
-      content:
-        "This story will be permanently deleted. You'll no longer to see and find this story.",
-      okText: 'Delete',
+      title: resolveString('amity_social_delete_this_story'),
+      content: resolveString('amity_social_button_delete_story_message'),
+      okText: resolveString('amity_social_button_delete'),
+      cancelText: resolveString('amity_social_button_cancel'),
       onOk: async () => {
         setIsConfirmDialogOpen(false);
         await onDeleteStory(storyId);
@@ -207,7 +208,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         );
         if (imageData) {
           notification.success({
-            content: 'Successfully shared story',
+            content: resolveString('amity_social_toast_snackbar_story_shared'),
           });
         }
       } else {
@@ -221,7 +222,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           );
           if (videoData) {
             notification.success({
-              content: 'Successfully shared story',
+              content: resolveString('amity_social_toast_snackbar_story_shared'),
             });
           }
         }
@@ -229,7 +230,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     } catch (error: unknown) {
       if (error instanceof Error) {
         notification.info({
-          content: error.message ?? 'Failed to share story',
+          content: resolveString('amity_social_failed_to_share_story') ?? error.message,
         });
       }
     }
@@ -272,7 +273,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         actions: [
           isStoryCreator || isModerator
             ? {
-                name: 'Delete',
+                name: resolveString('amity_social_button_delete'),
                 action: () => deleteStory(story?.storyId as string),
                 icon: <TrashIcon className={styles.deleteIcon} />,
               }

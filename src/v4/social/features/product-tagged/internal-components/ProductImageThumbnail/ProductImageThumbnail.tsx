@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import React, { useState } from 'react';
 import { ImageFailedThumbnail } from '~/v4/icons/Image';
 import { PinStraightFilled } from '~/v4/icons/PinStraightFilled';
@@ -64,7 +65,7 @@ export function ProductImageThumbnail({
         <div className={styles.productImageThumbnail__pinnedBanner}>
           <PinStraightFilled className={styles.productImageThumbnail__pinnedIcon} />
           <Typography.CaptionBold as="span" className={styles.productImageThumbnail__pinnedText}>
-            Pinned
+            {useString('amity_social_status_pinned_product_badge_label')}
           </Typography.CaptionBold>
         </div>
       )}

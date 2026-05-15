@@ -1,4 +1,5 @@
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import { SearchResult } from '~/v4/icons/SearchResult';
 import styles from './SearchLimit.module.css';
 
@@ -7,7 +8,7 @@ export function SearchLimit() {
     <div className={styles.searchLimit}>
       <SearchResult className={styles.searchLimit__icon} />
       <Typography.TitleBold className={styles.searchLimit__title}>
-        Start your search by typing at least 3 letters
+        {useString('amity_social_placeholder_community_search_placeholder')}
       </Typography.TitleBold>
     </div>
   );

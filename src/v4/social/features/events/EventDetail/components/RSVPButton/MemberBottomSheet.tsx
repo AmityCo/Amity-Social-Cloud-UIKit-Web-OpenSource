@@ -1,4 +1,5 @@
 import { Calendar } from '~/v4/icons/Calendar';
+import { useString } from '~/v4/core/localization';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Typography } from '~/v4/core/components/Typography';
 import styles from './RSVPButton.module.css';
@@ -14,6 +15,7 @@ type MemberBottomSheetProps = {
 
 export const MemberBottomSheet = ({ onPressAddToCalendar, onClose }: MemberBottomSheetProps) => {
   const { isDesktop } = useResponsive();
+
   return (
     <div className={styles.rsvpButton__bottomSheetMenu}>
       {isDesktop && (
@@ -27,7 +29,7 @@ export const MemberBottomSheet = ({ onPressAddToCalendar, onClose }: MemberBotto
       <div className={styles.rsvpButton__bottomSheetMenuText}>
         <Typography.Headline>You’ll be notified.</Typography.Headline>
         <Typography.Body className={styles.rsvpButton__bottomSheetMenuBody}>
-          You can also keep track of this event by adding it to your device’s calendar.
+          {useString('amity_social_modal_add_calendar_sheet_description')}
         </Typography.Body>
       </div>
       <Divider className={styles.rsvpButton__divider} />
@@ -37,7 +39,7 @@ export const MemberBottomSheet = ({ onPressAddToCalendar, onClose }: MemberBotto
         onPress={onPressAddToCalendar}
       >
         <AddCalendar className={styles.rsvpButton__addToCalendarIcon} />
-        Add to calendar
+        {useString('amity_social_modal_add_calendar_sheet_add_button')}
       </Button>
     </div>
   );

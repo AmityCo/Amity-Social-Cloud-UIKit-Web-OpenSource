@@ -101,6 +101,12 @@
   color: var(--asc-color-base-default);
 }
 
+.postComment__firstRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
 .postComment__secondRow {
   display: flex;
   justify-content: space-between;
@@ -149,6 +155,22 @@
 .postComment__secondRow__actionButton__icon {
   height: 0.5rem;
   fill: var(--asc-color-secondary-shade2);
+}
+
+.postComment__secondRow__errorButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--asc-color-background-transparent-black);
+  border-radius: var(--asc-border-radius-full);
+}
+
+.postComment__secondRow__errorButton__icon {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-white);
 }
 
 .postComment__viewReply_button {

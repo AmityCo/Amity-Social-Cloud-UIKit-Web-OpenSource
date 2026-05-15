@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import React, { Fragment, useEffect } from 'react';
 import ChevronRight from '~/v4/icons/ChevronRight';
@@ -57,7 +58,9 @@ export const ExploreCommunityCategories = ({ pageId = '*' }: ExploreCommunityCat
                 onPress={() => goToAllCategoriesPage()}
                 className={clsx(styles.exploreCommunityCategories__seeMore)}
               >
-                <Typography.BodyBold>See more</Typography.BodyBold>
+                <Typography.BodyBold>
+                  {useString('amity_social_button_see_more')}
+                </Typography.BodyBold>
                 <ChevronRight className={styles.exploreCommunityCategories__seeMoreIcon} />
               </Button>
             )}

@@ -10,12 +10,19 @@ export interface HeaderLabelProps {
 
 export function HeaderLabel({ pageId = '*', componentId = '*' }: HeaderLabelProps) {
   const elementId = 'header_label';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -25,7 +32,7 @@ export function HeaderLabel({ pageId = '*', componentId = '*' }: HeaderLabelProp
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveText('amity_social_label_social_home_header_label')}
     </Typography.Headline>
   );
 }

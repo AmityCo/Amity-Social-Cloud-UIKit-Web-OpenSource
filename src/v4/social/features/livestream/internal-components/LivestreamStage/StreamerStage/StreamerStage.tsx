@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import {
   isTrackReference,
   LiveKitRoom,
@@ -227,12 +228,11 @@ const Stage = ({
       type: 'confirm',
       okButtonColor: 'alert',
       onOk: () => handleLeaveAsCoHost(),
-      okText: 'Leave',
-      cancelText: 'Cancel',
-      title: 'Leave as co-host',
+      okText: useString('amity_social_modal_dialog_leave_button'),
+      cancelText: useString('amity_social_button_cancel'),
+      title: useString('amity_social_button_leave_as_co_host'),
       pageId: '*',
-      content:
-        "Are you sure you want to stop co-hosting? You'll leave the stage and continue watching as a viewer.",
+      content: useString('amity_social_leave_as_cohost_message'),
     });
   }, [confirm, handleLeaveAsCoHost]);
 
@@ -394,7 +394,10 @@ export const StreamerStage: FC<StreamerStageProps> = ({
 
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Approved) {
-      success({ content: 'Co-host accepted the invitation.', alignment: notificationAlignment });
+      success({
+        content: useString('amity_social_label_cohost_accepted_invitation'),
+        alignment: notificationAlignment,
+      });
       liveChannel?.channelId &&
         moderateChat({
           channelId: liveChannel?.channelId,
@@ -411,7 +414,10 @@ export const StreamerStage: FC<StreamerStageProps> = ({
 
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Rejected) {
-      success({ content: 'Co-host declined the invitation.', alignment: notificationAlignment });
+      success({
+        content: useString('amity_social_label_cohost_declined_invitation'),
+        alignment: notificationAlignment,
+      });
       setInvitationByMe?.(undefined);
     }
   }, [invitationByMe?.status]);

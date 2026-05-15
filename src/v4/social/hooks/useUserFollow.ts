@@ -2,6 +2,7 @@ import { UserRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { resolveString } from '~/v4/core/localization';
 
 type UseUserFollowReturnType = {
   followUser: (
@@ -21,8 +22,8 @@ const useUserFollow = (): UseUserFollowReturnType => {
     },
     onError: () => {
       confirm({
-        title: 'Unable to follow this user',
-        content: 'Oops! something went wrong. Please try again later.',
+        title: resolveString('amity_social_modal_dialog_title_unable_to_follow_user'),
+        content: resolveString('amity_social_modal_dialog_generic_error'),
         onOk: () => closeConfirm(),
       });
     },
@@ -34,7 +35,7 @@ const useUserFollow = (): UseUserFollowReturnType => {
     },
     onError: () => {
       notification.error({
-        content: 'Failed to unfollow user.',
+        content: resolveString('amity_social_failed_to_unfollow_user'),
       });
     },
   });
@@ -43,8 +44,8 @@ const useUserFollow = (): UseUserFollowReturnType => {
     confirm({
       pageId,
       type: 'info',
-      title: 'Unfollow this user?',
-      content: 'If you change your mind, you’ll have to request to follow them again.',
+      title: resolveString('amity_social_modal_dialog_title_unfollow_user'),
+      content: resolveString('amity_social_unfollow_user_dialog_content'),
       onOk: () => unFollowUser(userId),
     });
   };

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import { ProductTag } from '~/v4/social/features/product-tagged/elements';
 import { ActionButton } from '~/v4/core/components/ActionButton';
 import { Typography } from '~/v4/core/components';
@@ -20,6 +21,7 @@ export interface ProductCarouselProps {
 
 export function ProductCarousel({ pageId = '*', componentId = '*', post }: ProductCarouselProps) {
   const { AmityGlobalBehavior } = usePageBehavior();
+
   const { showProductTagList } = useShowProductTagList({
     pageId,
     mode: 'post',
@@ -110,7 +112,7 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
   return (
     <div className={styles.productCarousel}>
       <Typography.Caption className={styles.productCarousel__headerText}>
-        Products tagged
+        {useString('amity_social_button_products_tagged')}
       </Typography.Caption>
       <div className={styles.productCarousel__wrapper}>
         {canScrollLeft && (

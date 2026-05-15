@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { resolveString, useString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -45,7 +46,9 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
 
   const handleSubmitPermission = async () => {
     if (!online) {
-      notification.info({ content: 'Failed to update community profile.' });
+      notification.info({
+        content: resolveString('amity_social_toast_community_profile_update_failed'),
+      });
       return;
     }
 
@@ -61,9 +64,13 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
     try {
       await CommunityRepository.updateCommunity(community?.communityId, payload);
     } catch (error) {
-      notification.info({ content: 'Failed to update community profile.' });
+      notification.info({
+        content: resolveString('amity_social_toast_community_profile_update_failed'),
+      });
     } finally {
-      notification.success({ content: 'Successfully updated community profile.' });
+      notification.success({
+        content: resolveString('amity_social_toast_community_setup_toast_update_success'),
+      });
       onClickCommunity(community?.communityId);
     }
   };
@@ -71,9 +78,11 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
   const confirmPageChange = () => {
     if (community?.postSetting !== postSetting) {
       confirm({
-        title: 'Discard changes',
-        content: 'Are you sure you want to discard changes?',
+        title: resolveString('amity_social_modal_dialog_discard_changes_title'),
+        content: resolveString('amity_social_modal_dialog_discard_changes_description'),
         onOk: () => onBack(),
+        cancelText: resolveString('amity_social_button_cancel'),
+        okText: resolveString('amity_social_button_ok'),
       });
     } else {
       onBack();
@@ -91,7 +100,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
       <div className={styles.communityPostPermissionPage__communityTitleWrap}>
         <BackButton onPress={confirmPageChange} />
         <Typography.TitleBold className={styles.communityPostPermissionPage__communityTitle}>
-          Post permissions
+          {useString('amity_social_permission_community_setting_post_permission')}
         </Typography.TitleBold>
         <Button
           size="medium"
@@ -101,15 +110,17 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
           onPress={handleSubmitPermission}
           className={styles.communityPostPermissionPage__mobileCta}
         >
-          Save
+          {useString('amity_social_button_community_setup_edit_button')}
         </Button>
       </div>
       <div className={styles.communityPostPermissionPage__communityContentWrap}>
         <div className={styles.communityPostPermissionPage__label}>
-          <Typography.BodyBold>Who can post on this community</Typography.BodyBold>
+          <Typography.BodyBold>
+            {useString('amity_social_label_who_can_post_on_this_community')}
+          </Typography.BodyBold>
           <br />
           <Typography.Body className={styles.communityPostPermissionPage__desc}>
-            You can control who can create posts in your community.
+            {useString('amity_social_label_you_can_control_who_can_create_posts_in_your_community')}
           </Typography.Body>
         </div>
         <RadioGroup
@@ -120,15 +131,27 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
           radios={[
             {
               value: CommunityPostSettings.ANYONE_CAN_POST,
-              label: <Typography.Body>Everyone can post</Typography.Body>,
+              label: (
+                <Typography.Body>
+                  {useString('amity_social_permission_post_permission_everyone')}
+                </Typography.Body>
+              ),
             },
             {
               value: CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED,
-              label: <Typography.Body>Admin review post</Typography.Body>,
+              label: (
+                <Typography.Body>
+                  {useString('amity_social_permission_post_permission_admin_review')}
+                </Typography.Body>
+              ),
             },
             {
               value: CommunityPostSettings.ONLY_ADMIN_CAN_POST,
-              label: <Typography.Body>Only admins can post</Typography.Body>,
+              label: (
+                <Typography.Body>
+                  {useString('amity_social_permission_post_permission_only_admin')}
+                </Typography.Body>
+              ),
             },
           ]}
         />
@@ -141,7 +164,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
             onPress={handleSubmitPermission}
             className={styles.communityPostPermissionPage__desktopCta}
           >
-            Save
+            {resolveString('amity_social_button_community_setup_edit_button')}
           </Button>
         </div>
       </div>

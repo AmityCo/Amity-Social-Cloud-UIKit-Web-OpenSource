@@ -1,4 +1,5 @@
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { BackButton, CloseButton, Title } from '~/v4/social/elements';
@@ -17,15 +18,23 @@ export function Header({ showDiscardPopup, targetName, isCreateEvent }: HeaderPr
   const { isDesktop } = useResponsive();
   const { confirm } = useConfirmContext();
 
+  const leaveWithoutFinishingTitle = useString(
+    'amity_social_modal_dialog_title_leave_without_finishing',
+  );
+  const progressNotSavedContent = useString('amity_social_button_event_progress_not_saved');
+  const unsavedChangesContent = useString('amity_social_button_event_unsaved_changes');
+  const leaveText = useString('amity_social_button_leave');
+  const cancelText = useString('amity_social_button_cancel');
+  const createEventLabel = useString('amity_social_button_create_event');
+  const editEventLabel = useString('amity_social_button_edit_event');
+
   const handleBackClick = () => {
     showDiscardPopup
       ? confirm({
-          title: 'Leave without finishing?',
-          content: isCreateEvent
-            ? "Your progress won't be saved and your event won't be created."
-            : 'Your changes that you made may not be saved.',
-          okText: 'Leave',
-          cancelText: 'Cancel',
+          title: leaveWithoutFinishingTitle,
+          content: isCreateEvent ? progressNotSavedContent : unsavedChangesContent,
+          okText: leaveText,
+          cancelText: cancelText,
           onOk: onBack,
         })
       : onBack();
@@ -39,7 +48,7 @@ export function Header({ showDiscardPopup, targetName, isCreateEvent }: HeaderPr
         <CloseButton pageId={PAGE_ID.EVENT_SETUP_PAGE} onPress={handleBackClick} />
       )}
       <div className={styles.header__title}>
-        <Title variant="headline">{isCreateEvent ? 'Create event' : 'Edit event'}</Title>
+        <Title variant="headline">{isCreateEvent ? createEventLabel : editEventLabel}</Title>
         {isCreateEvent && (
           <Typography.Caption className={styles.header__description}>
             {targetName}

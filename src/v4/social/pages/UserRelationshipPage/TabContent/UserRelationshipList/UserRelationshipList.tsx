@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './UserRelationshipList.module.css';
 import { UserItem } from './UserItem';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -56,7 +57,7 @@ export const UserRelationshipList: React.FC<UserRelationshipListProps> = ({
         <div className={styles.userRelationshipList__emptyContainer}>
           <List className={styles.userRelationshipList__emptyIcon} />
           <Typography.TitleBold className={styles.userRelationshipList__emptyText}>
-            Nothing here to see yet
+            {useString('amity_social_label_nothing_here_yet')}
           </Typography.TitleBold>
         </div>
       ) : (

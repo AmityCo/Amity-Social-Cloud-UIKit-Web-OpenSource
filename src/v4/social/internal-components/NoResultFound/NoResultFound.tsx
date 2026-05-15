@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Search } from '~/v4/icons/Search';
 import styles from './NoResultFound.module.css';
@@ -13,13 +14,14 @@ export interface NoResultFoundProps {
 }
 
 export function NoResultFound({
-  text = 'No results found',
+  text,
   className,
   style,
   icon,
   variant = 'body',
   iconSize = 'small',
 }: NoResultFoundProps) {
+  const resolvedText = text ?? useString('amity_social_label_no_results_found');
   const TextComponent = variant === 'bodyBold' ? Typography.BodyBold : Typography.Body;
 
   const iconElement = icon ? (
@@ -35,7 +37,7 @@ export function NoResultFound({
     <div className={`${styles.noResultFound} ${className ?? ''}`} style={style}>
       {iconElement}
       <TextComponent as="p" className={styles.noResultFound__text}>
-        {text}
+        {resolvedText}
       </TextComponent>
     </div>
   );

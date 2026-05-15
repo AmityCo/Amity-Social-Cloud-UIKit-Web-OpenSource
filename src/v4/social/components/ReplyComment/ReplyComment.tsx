@@ -1,7 +1,8 @@
 import { CommentRepository } from '@amityco/ts-sdk';
+import { useString, resolveString } from '~/v4/core/localization';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { BottomSheet, Typography } from '~/v4/core/components';
+import { Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Mentionees } from '~/v4/helpers/utils';
@@ -10,6 +11,7 @@ import { BrandBadge, ReactionButton, SaveButton } from '~/v4/social/elements';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
+import Exclamation from '~/v4/icons/Exclamation';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
@@ -84,11 +86,19 @@ const PostReplyComment = ({
   const { confirm } = useConfirmContext();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
-  const { setDrawerData } = useDrawer();
+  const { setDrawerData, removeDrawerData } = useDrawer();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const notification = useNotifications();
+  const deleteReplyTitleText = useString('amity_social_button_delete_reply_title');
+  const deleteReplyWarningText = useString('amity_social_button_delete_reply_warning_message');
+  const cancelReplyText = useString('amity_social_button_cancel');
+  const deleteReplyOkText = useString('amity_social_button_delete');
+  const replyDeletedText = useString('amity_social_button_reply_deleted_message');
+  const editedSuffixText = useString('amity_social_button_edited_suffix');
+  const replyButtonText = useString('amity_social_button_reply');
+  const viewMoreRepliesText = useString('amity_social_label_view_more_replies');
   const { online } = useNetworkState();
   const { page } = useNavigation();
 
@@ -98,7 +108,6 @@ const PostReplyComment = ({
       componentId,
     });
 
-  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
   const [localCommentData, setLocalCommentData] = useState<{
@@ -136,6 +145,7 @@ const PostReplyComment = ({
       );
     };
     document.addEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
+
     return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
   }, [comment.commentId, isL2]);
 
@@ -217,7 +227,8 @@ const PostReplyComment = ({
 
   const isBrandUser = comment.creator?.isBrand ?? false;
 
-  const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
+  const isErrorState = comment.syncState === 'error';
+  const isSynced = comment.syncState !== 'error' && comment.syncState !== 'syncing';
 
   const { handleDeleteComment: deleteComment } = useDeleteComment({
     commentId: comment.commentId,
@@ -225,15 +236,15 @@ const PostReplyComment = ({
   });
 
   const handleEditComment = () => {
-    toggleBottomSheet();
+    removeDrawerData();
     setIsEditing(true);
   };
 
   const handleDeleteComment = () => {
-    toggleBottomSheet();
+    removeDrawerData();
     if (!online) {
       notification.info({
-        content: 'No internet connection.',
+        content: resolveString('amity_social_label_no_internet_connection'),
         alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
       });
 
@@ -242,10 +253,10 @@ const PostReplyComment = ({
     confirm({
       pageId,
       componentId,
-      title: 'Delete reply',
-      content: 'This reply will be permanently deleted.',
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      title: deleteReplyTitleText,
+      content: deleteReplyWarningText,
+      cancelText: cancelReplyText,
+      okText: deleteReplyOkText,
       onOk: deleteComment,
     });
   };
@@ -265,7 +276,6 @@ const PostReplyComment = ({
   });
 
   if (isExcluded) return null;
-
   return (
     <>
       {comment.isDeleted ? (
@@ -276,12 +286,12 @@ const PostReplyComment = ({
         >
           <MinusCircleIcon className={styles.postReplyComment__deleteComment_icon} />
           <Typography.Caption className={styles.postReplyComment__deleteComment_text}>
-            This reply has been deleted
+            {replyDeletedText}
           </Typography.Caption>
         </div>
       ) : isEditing ? (
         <div className={styles.postReplyComment__edit}>
-          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userData={comment.creator} />
           <div className={styles.postReplyComment__edit__inputWrap}>
             <div className={styles.postReplyComment__edit__input}>
               <CommentInput
@@ -360,121 +370,189 @@ const PostReplyComment = ({
                   : 'false'
               }
             >
-              <div
-                data-has-reaction={reactionsCount > 0}
-                className={clsx(
-                  styles.postReplyComment__content,
-                  isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
-                )}
-              >
-                <div className={styles.postReplyComment__userInfo}>
-                  <Typography.BodyBold
-                    data-testid={`${pageId}/${componentId}/username`}
-                    className={styles.postReplyComment__content__username}
-                  >
-                    {comment.creator?.displayName}
-                  </Typography.BodyBold>
-                  {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
-                </div>
-                {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
-                <TextWithMention
-                  pageId={pageId}
-                  componentId={componentId}
-                  data={{
-                    text: localCommentData?.text ?? (comment.data as Amity.ContentDataText).text,
-                  }}
-                  mentionees={
-                    (localCommentData?.mentionees ?? comment.mentionees) as Amity.UserMention[]
-                  }
-                  metadata={localCommentData?.metadata ?? comment.metadata}
-                  links={localCommentData?.links ?? comment.links}
-                  testId={`${pageId}/${componentId}/reply-comment-text`}
-                />
-                <CommentReactionDisplay
-                  pageId={pageId}
-                  componentId={componentId}
-                  comment={comment}
-                  reactionsCount={reactionsCount}
-                  position="replyComment"
-                  onReactionPress={() => {
-                    const reactionList = (
-                      <ReactionList
-                        pageId={pageId}
-                        referenceType="comment"
-                        referenceId={comment.commentId}
-                        customReferenceType="reply"
-                      />
-                    );
-                    isDesktop
-                      ? openPopup({ view: 'desktop', children: reactionList })
-                      : setDrawerData({
-                          content: reactionList,
-                          snapPoints: [0.7, 1],
-                          activeSnapPoint: 0.7,
-                        });
-                  }}
-                />
-              </div>
-              <div className={styles.postReplyComment__secondRow}>
-                <div className={styles.postReplyComment__secondRow__leftPane}>
-                  <Typography.Caption className={styles.postReplyComment__secondRow__timestamp}>
-                    <Timestamp
-                      pageId={pageId}
-                      componentId={componentId}
-                      timestamp={comment.createdAt}
-                    />
-                    <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
-                      {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
-                        ' (edited)'}
-                    </span>
-                  </Typography.Caption>
-                  <ReactionButton
+              <div className={styles.postReplyComment__firstRow}>
+                <div
+                  data-has-reaction={reactionsCount > 0}
+                  className={clsx(
+                    styles.postReplyComment__content,
+                    isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
+                  )}
+                >
+                  <div className={styles.postReplyComment__userInfo}>
+                    <Typography.BodyBold
+                      data-testid={`${pageId}/${componentId}/username`}
+                      className={styles.postReplyComment__content__username}
+                    >
+                      {comment.creator?.displayName}
+                    </Typography.BodyBold>
+                    {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
+                  </div>
+                  {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
+                  <TextWithMention
                     pageId={pageId}
                     componentId={componentId}
-                    myReaction={reactionByMe}
-                    onReactionClick={handleReactionClick}
-                    buttonClassName={styles.postReplyComment__secondRow__like}
-                    isCommentReaction
-                    referenceType="comment"
-                    community={community}
-                  />
-                  {onClickReply && (
-                    <Button
-                      data-testid={`${pageId}/${componentId}/reply_button`}
-                      variant="default"
-                      onPress={handleReplyClick}
-                      className={styles.postReplyComment__secondRow__replyButton}
-                    >
-                      <Typography.CaptionBold className={styles.postReplyComment__secondRow__reply}>
-                        Reply
-                      </Typography.CaptionBold>
-                    </Button>
-                  )}
-                  <Popover
-                    trigger={{
-                      pageId,
-                      componentId,
-                      onClick: () => setBottomSheetOpen(true),
-                      className: styles.postReplyComment__secondRow__actionButton,
-                      iconClassName: styles.postReplyComment__secondRow__actionButton__icon,
+                    data={{
+                      text: localCommentData?.text ?? (comment.data as Amity.ContentDataText).text,
                     }}
+                    mentionees={
+                      (localCommentData?.mentionees ?? comment.mentionees) as Amity.UserMention[]
+                    }
+                    metadata={localCommentData?.metadata ?? comment.metadata}
+                    links={localCommentData?.links ?? comment.links}
+                    testId={`${pageId}/${componentId}/reply-comment-text`}
+                  />
+                  <CommentReactionDisplay
+                    pageId={pageId}
+                    componentId={componentId}
+                    comment={comment}
+                    reactionsCount={reactionsCount}
+                    position="replyComment"
+                    onReactionPress={() => {
+                      const reactionList = (
+                        <ReactionList
+                          pageId={pageId}
+                          referenceType="comment"
+                          referenceId={comment.commentId}
+                          customReferenceType="reply"
+                        />
+                      );
+                      isDesktop
+                        ? openPopup({ view: 'desktop', children: reactionList })
+                        : setDrawerData({
+                            content: reactionList,
+                            snapPoints: [0.7, 1],
+                            activeSnapPoint: 0.7,
+                          });
+                    }}
+                  />
+                </div>
+
+                {isErrorState && (
+                  <Popover
+                    trigger={({ openPopover }) => (
+                      <Button
+                        aria-label="Reply failed to send"
+                        variant="default"
+                        className={styles.postReplyComment__errorButton}
+                        onPress={() => {
+                          if (!isDesktop) {
+                            setDrawerData({
+                              content: (
+                                <CommentOptions
+                                  pageId={pageId}
+                                  componentId={componentId}
+                                  comment={comment}
+                                  onlyShowDelete
+                                  handleEditComment={handleEditComment}
+                                  handleDeleteComment={handleDeleteComment}
+                                  onCloseMenu={() => removeDrawerData()}
+                                />
+                              ),
+                            });
+                          } else {
+                            openPopover();
+                          }
+                        }}
+                      >
+                        <Exclamation className={styles.postReplyComment__errorButton__icon} />
+                      </Button>
+                    )}
                   >
                     {({ closePopover }) => (
                       <CommentOptions
                         pageId={pageId}
                         componentId={componentId}
                         comment={comment}
-                        onCloseMenu={closePopover}
-                        handleEditComment={handleEditComment}
+                        onlyShowDelete
+                        handleEditComment={() => closePopover()}
                         handleDeleteComment={() => {
                           closePopover();
                           handleDeleteComment();
                         }}
+                        onCloseMenu={closePopover}
                       />
                     )}
                   </Popover>
-                </div>
+                )}
               </div>
+
+              {isSynced && (
+                <div className={styles.postReplyComment__secondRow}>
+                  <div className={styles.postReplyComment__secondRow__leftPane}>
+                    <Typography.Caption className={styles.postReplyComment__secondRow__timestamp}>
+                      <Timestamp
+                        pageId={pageId}
+                        componentId={componentId}
+                        timestamp={comment.createdAt}
+                      />
+                      <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                        {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
+                          ` ${editedSuffixText}`}
+                      </span>
+                    </Typography.Caption>
+                    <ReactionButton
+                      pageId={pageId}
+                      componentId={componentId}
+                      myReaction={reactionByMe}
+                      onReactionClick={handleReactionClick}
+                      buttonClassName={styles.postReplyComment__secondRow__like}
+                      isCommentReaction
+                      referenceType="comment"
+                      community={community}
+                    />
+                    {onClickReply && (
+                      <Button
+                        data-testid={`${pageId}/${componentId}/reply_button`}
+                        variant="default"
+                        onPress={handleReplyClick}
+                        className={styles.postReplyComment__secondRow__replyButton}
+                      >
+                        <Typography.CaptionBold
+                          className={styles.postReplyComment__secondRow__reply}
+                        >
+                          {replyButtonText}
+                        </Typography.CaptionBold>
+                      </Button>
+                    )}
+                    <Popover
+                      trigger={{
+                        pageId,
+                        componentId,
+                        onClick: () => {
+                          setDrawerData({
+                            content: (
+                              <CommentOptions
+                                pageId={pageId}
+                                componentId={componentId}
+                                comment={comment}
+                                onCloseMenu={() => removeDrawerData()}
+                                handleEditComment={handleEditComment}
+                                handleDeleteComment={handleDeleteComment}
+                              />
+                            ),
+                          });
+                        },
+                        className: styles.postReplyComment__secondRow__actionButton,
+                        iconClassName: styles.postReplyComment__secondRow__actionButton__icon,
+                      }}
+                    >
+                      {({ closePopover }) => (
+                        <CommentOptions
+                          pageId={pageId}
+                          componentId={componentId}
+                          comment={comment}
+                          onCloseMenu={closePopover}
+                          handleEditComment={handleEditComment}
+                          handleDeleteComment={() => {
+                            closePopover();
+                            handleDeleteComment();
+                          }}
+                        />
+                      )}
+                    </Popover>
+                  </div>
+                </div>
+              )}
 
               {/* Pending L2 comments — visible above "View x replies" */}
               {!isL2 &&
@@ -507,13 +585,18 @@ const PostReplyComment = ({
                   >
                     <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
                       {pendingL2Comments.length > 0
-                        ? 'View more replies'
+                        ? viewMoreRepliesText
                         : (() => {
                             const count = Math.max(
                               0,
                               replyChildrenCount - pendingL2Comments.length,
                             );
-                            return `View ${count} ${count > 1 ? 'replies' : 'reply'}`;
+                            return resolveString(
+                              count > 1
+                                ? 'amity_social_label_view_replies'
+                                : 'amity_social_label_view_reply',
+                              count,
+                            );
                           })()}
                     </Typography.CaptionBold>
                   </Button>
@@ -534,23 +617,6 @@ const PostReplyComment = ({
               })}
           </div>
         </div>
-      )}
-      {!isDesktop && (
-        <BottomSheet
-          onClose={toggleBottomSheet}
-          isOpen={bottomSheetOpen}
-          mountPoint={document.getElementById('asc-uikit-post-comment') as HTMLElement}
-          detent="content-height"
-        >
-          <CommentOptions
-            pageId={pageId}
-            componentId={componentId}
-            comment={comment}
-            onCloseMenu={toggleBottomSheet}
-            handleEditComment={handleEditComment}
-            handleDeleteComment={handleDeleteComment}
-          />
-        </BottomSheet>
       )}
     </>
   );

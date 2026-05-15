@@ -21,12 +21,19 @@ export function CreateClipButton({
   onClick,
 }: CreateClipButtonProps) {
   const elementId = 'create_clip_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -46,7 +53,7 @@ export function CreateClipButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.BodyBold className={styles.createClipButton__text}>
-        {config.text}
+        {resolveText('amity_social_button_clip')}
       </Typography.BodyBold>
     </Button>
   );

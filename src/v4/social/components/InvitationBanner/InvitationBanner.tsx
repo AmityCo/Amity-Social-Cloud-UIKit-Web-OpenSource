@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import TruncateMarkup from 'react-truncate-markup';
 import { useGetInvitation } from '~/v4/social/hooks';
@@ -40,17 +41,24 @@ export function InvitationBanner({
       await invitation?.accept();
       await CommunityRepository.getCommunityByIds([community.communityId]);
       notification.success({
-        content: `You joined ${(invitation?.target as Amity.Community)?.displayName}.`,
+        content: resolveString(
+          'amity_social_community_invitation_accept_success',
+          (invitation?.target as Amity.Community)?.displayName ?? '',
+        ),
       });
       invitation && setAcceptedInvitation(invitation);
       removeInvitation?.();
     } catch (error: any) {
       if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
-        notification.info({ content: 'This invitation is no longer available.' });
+        notification.info({
+          content: resolveString('amity_social_error_community_invitation_unavailable_error'),
+        });
         community.isPublic || community.isDiscoverable ? removeInvitation?.() : onBack();
         return;
       }
-      notification.info({ content: 'Failed to accept invitation. Please try again.' });
+      notification.info({
+        content: resolveString('amity_social_toast_community_invitation_fail_to_accept'),
+      });
     } finally {
       invitationNotificationTray.refresh();
     }
@@ -59,15 +67,21 @@ export function InvitationBanner({
   const handleRejectInvitation = async () => {
     try {
       await invitation?.reject();
-      notification.success({ content: 'Invitation declined.' });
+      notification.success({
+        content: resolveString('amity_social_toast_snackbar_invitation_declined'),
+      });
       community.isPublic || community.isDiscoverable ? removeInvitation?.() : onBack();
     } catch (error: any) {
       if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
-        notification.info({ content: 'This invitation is no longer available.' });
+        notification.info({
+          content: resolveString('amity_social_error_community_invitation_unavailable_error'),
+        });
         community.isPublic || community.isDiscoverable ? removeInvitation?.() : onBack();
         return;
       }
-      notification.info({ content: 'Failed to decline invitation. Please try again.' });
+      notification.info({
+        content: resolveString('amity_social_toast_community_invitation_fail_to_reject'),
+      });
     } finally {
       invitationNotificationTray.refresh();
     }
@@ -76,9 +90,9 @@ export function InvitationBanner({
   const onRejectClick = async () => {
     if (community?.requiresJoinApproval) {
       return confirm({
-        title: 'Decline invitation?',
-        content: 'If you change your mind, you’ll have to request to join again.',
-        okText: 'Decline',
+        title: resolveString('amity_social_modal_community_invitation_reject_dialog_title'),
+        content: resolveString('amity_social_modal_community_invitation_reject_dialog_subtitle'),
+        okText: resolveString('amity_social_button_community_invitation_reject_button'),
         onOk: handleRejectInvitation,
       });
     }
@@ -101,13 +115,21 @@ export function InvitationBanner({
             onTruncate={setTruncate}
             ellipsis={
               <>
-                ... <Typography.BodyBold as="span">invited you.</Typography.BodyBold>
+                ...{' '}
+                <Typography.BodyBold as="span">
+                  {useString('amity_social_label_community_invitation_invited_you')}
+                </Typography.BodyBold>
               </>
             }
           >
             <span className={styles.capitalize}>{invitation?.createdBy?.displayName}</span>
           </TruncateMarkup>
-          {!truncate && <Typography.BodyBold as="span"> invited you.</Typography.BodyBold>}
+          {!truncate && (
+            <Typography.BodyBold as="span">
+              {' '}
+              {useString('amity_social_label_community_invitation_invited_you')}
+            </Typography.BodyBold>
+          )}
         </Typography.BodyBold>
       </div>
       <div className={styles.invitationBanner__actions}>

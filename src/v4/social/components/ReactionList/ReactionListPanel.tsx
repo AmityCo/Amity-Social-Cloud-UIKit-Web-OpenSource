@@ -1,4 +1,5 @@
 import React, { Fragment, useMemo, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
@@ -85,11 +86,11 @@ export const ReactionListPanel = ({
                       <div
                         role="button"
                         tabIndex={0}
-                        aria-label="Click to remove reaction"
+                        aria-label={useString('amity_common_button_tap_to_remove_reaction')}
                         onClick={() => removeReaction(reaction.reactionName)}
                       >
                         <Typography.Caption className={styles.removeBtn}>
-                          Click to remove reaction
+                          {useString('amity_common_button_tap_to_remove_reaction')}
                         </Typography.Caption>
                       </div>
                     )}

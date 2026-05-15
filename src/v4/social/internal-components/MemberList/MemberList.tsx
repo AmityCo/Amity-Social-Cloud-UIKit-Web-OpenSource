@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './MemberList.module.css';
 import { Search } from '~/v4/icons/Search';
 import { Input } from 'react-aria-components';
@@ -85,7 +86,7 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
         <Input
           type="text"
           value={memberSearch}
-          placeholder="Search member"
+          placeholder={useString('amity_social_placeholder_search_member_hint')}
           onChange={(e) => handleSearchUser(e)}
           className={styles.memberList__searchInput}
           data-testid={`${accessibilityId}_search_input`}

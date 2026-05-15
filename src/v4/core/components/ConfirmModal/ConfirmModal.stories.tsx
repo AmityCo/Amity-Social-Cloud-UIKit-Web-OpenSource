@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { ConfirmModal } from '.';
 import { StoryObj, Meta } from '@storybook/react';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -46,11 +47,11 @@ export const Default: Story = {
           confirm({
             type: 'confirm',
             pageId: 'confirm',
-            okText: 'Discard',
+            okText: resolveString('amity_social_button_discard'),
             onOk: () => alert('ok'),
-            cancelText: 'Keep editing',
-            title: 'Discard this post?',
-            content: 'The post will be permanently discarded. It cannot be undone.',
+            cancelText: resolveString('amity_common_keep_editing'),
+            title: resolveString('amity_social_modal_dialog_title_discard_post'),
+            content: resolveString('amity_social_modal_dialog_discard_post'),
           });
         }}
       >

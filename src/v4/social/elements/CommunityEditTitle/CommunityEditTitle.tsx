@@ -14,7 +14,7 @@ export const CommunityEditTitle = ({
   componentId = '*',
 }: CommunityEditTitleProps) => {
   const elementId = 'community_edit_title';
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -24,7 +24,7 @@ export const CommunityEditTitle = ({
 
   return (
     <Typography.TitleBold style={themeStyles} data-testid={accessibilityId} className={className}>
-      {config.text}
+      {resolveText('amity_social_label_community_setup_edit_title')}
     </Typography.TitleBold>
   );
 };

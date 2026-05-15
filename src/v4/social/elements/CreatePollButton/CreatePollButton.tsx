@@ -21,12 +21,19 @@ export function CreatePollButton({
   defaultClassName,
 }: CreatePollButtonProps) {
   const elementId = 'create_poll_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
   return (
@@ -45,7 +52,7 @@ export function CreatePollButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.BodyBold className={styles.createPollButton__text}>
-        {config.text}
+        {resolveText('amity_social_button_post_menu_type_poll')}
       </Typography.BodyBold>
     </Button>
   );

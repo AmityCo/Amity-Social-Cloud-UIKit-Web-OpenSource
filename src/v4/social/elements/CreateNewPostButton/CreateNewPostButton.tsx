@@ -17,17 +17,19 @@ export function CreateNewPostButton({
   ...props
 }: CreateNewPostButtonProps) {
   const elementId = 'create_new_post_button';
-  const { config, isExcluded, themeStyles, accessibilityId } = useAmityElement({
+  const { config, isExcluded, themeStyles, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
 
+  const label = resolveText('amity_social_button_social_home_create_post_button') || config.text;
+
   if (isExcluded) return null;
 
   return (
     <Button {...props} type="submit" style={themeStyles} data-testid={accessibilityId}>
-      {config.text}
+      {label}
     </Button>
   );
 }

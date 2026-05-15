@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { useString } from '~/v4/core/localization';
 import styles from './MessageComposer.module.css';
 import {
   COMMAND_PRIORITY_HIGH,
@@ -87,6 +88,7 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
     const optionsRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<LexicalEditor | null>(null);
     const elementId = 'message_composer';
+    const chatHintLabel = useString('amity_social_placeholder_chat_hint');
 
     const { isVisitorOrBot } = useSDK();
     const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
@@ -147,7 +149,7 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
               contentEditable={<ContentEditable className={styles.editorEditableContent} />}
               placeholder={
                 <span className={styles.editorPlaceholder}>
-                  {config.placeholder_text ?? 'Chat...'}
+                  {config.placeholder_text ?? chatHintLabel}
                 </span>
               }
               ErrorBoundary={LexicalErrorBoundary}

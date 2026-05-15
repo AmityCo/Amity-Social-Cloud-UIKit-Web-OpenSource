@@ -1,4 +1,5 @@
 import React from 'react';
+
 import styles from './PostAcceptButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
@@ -18,13 +19,14 @@ export const PostAcceptButton = ({
 }: PostAcceptButtonProps) => {
   const elementId = 'post_accept_button';
 
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
 
   if (isExcluded) return null;
+
   return (
     <Button
       size="medium"
@@ -38,7 +40,7 @@ export const PostAcceptButton = ({
         data-testid={accessibilityId}
         className={styles.postAcceptButton__text}
       >
-        {config?.text ?? 'Accept'}
+        {resolveText('amity_social_button_pending_post_accept_button') ?? config?.text}
       </Typography.BodyBold>
     </Button>
   );

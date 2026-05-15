@@ -1,4 +1,5 @@
 import { BackButton } from '~/v4/social/elements';
+import { useString } from '~/v4/core/localization';
 import { usePastEvents } from './hooks/usePastEvents';
 import { Tabs, Typography } from '~/v4/core/components';
 import { EventList } from '~/v4/social/features/events/components/EventList';
@@ -31,7 +32,7 @@ export function PastEvents() {
       >
         <BackButton onPress={() => onBack()} />
         <Typography.Headline className={styles.pastEvents__headerTitle}>
-          Past events
+          {useString('amity_social_button_past_events')}
         </Typography.Headline>
         <div className={styles.pastEvents__headerActions} />
       </div>
@@ -46,12 +47,12 @@ export function PastEvents() {
           tabPanelClassName={styles.pastEvents__tabPanel}
           tabs={[
             {
-              label: 'All',
+              label: useString('amity_social_tab_tab_all'),
               value: PastEventsTab.All,
               content: renderEventList,
             },
             {
-              label: 'Hosting',
+              label: useString('amity_social_tab_tab_hosting'),
               value: PastEventsTab.Hosting,
               content: renderEventList,
             },

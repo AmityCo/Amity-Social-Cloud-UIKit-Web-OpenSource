@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { resolveString } from '~/v4/core/localization';
 import { getTimeZones } from '@vvo/tzdb';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -172,7 +173,10 @@ export function useEventSetup(props: EventSetupProps) {
   };
 
   const createEvent = async (data: EventSetupValues) => {
-    loading({ content: 'Creating...', id: 'create-event-loading' });
+    loading({
+      content: resolveString('amity_social_creating'),
+      id: 'create-event-loading',
+    });
 
     const payload = {
       ...preparePayload(data),
@@ -183,7 +187,7 @@ export function useEventSetup(props: EventSetupProps) {
     await createEventMutation.mutateAsync(payload, {
       onSettled: () => remove('create-event-loading'),
       onSuccess: ({ data }) => {
-        success({ content: 'Successfully created event.' });
+        success({ content: resolveString('amity_social_toast_snackbar_event_created') });
         AmityEventSetupPageBehavior?.goToEventDetailPage?.({
           eventId: data.eventId,
           pop: isDesktop ? 2 : 3,
@@ -191,36 +195,35 @@ export function useEventSetup(props: EventSetupProps) {
       },
       onError: (error) => {
         if (error.message?.includes(ERROR_CODE.BLOCKED_WORD)) {
-          info({ content: "Your event wasn't created as it contains an inappropriate word." });
+          info({ content: resolveString('amity_social_toast_event_create_blocked_word_error') });
         } else if (error.message?.includes(ERROR_CODE.BLOCKED_URL)) {
-          info({
-            content: "Your event wasn't created as it contains a link that's not allowed.",
-          });
+          info({ content: resolveString('amity_social_toast_event_create_blocked_url_error') });
         } else {
-          info({ content: 'Failed to create event. Please try again.' });
+          info({ content: resolveString('amity_social_toast_snackbar_create_event_failed') });
         }
       },
     });
   };
 
   const editEvent = async (eventId: string, data: EventSetupValues) => {
-    loading({ content: 'Saving...', id: 'edit-event-loading' });
+    loading({
+      content: resolveString('amity_social_saving'),
+      id: 'edit-event-loading',
+    });
 
     await updateEventMutation.mutateAsync([eventId, preparePayload(data)], {
       onSettled: () => remove('edit-event-loading'),
       onSuccess: () => {
-        success({ content: 'Successfully updated event.' });
+        success({ content: resolveString('amity_social_toast_snackbar_event_updated') });
         onBack?.();
       },
       onError: (error) => {
         if (error.message?.includes(ERROR_CODE.BLOCKED_WORD)) {
-          info({ content: "Your event wasn't updated as it contains an inappropriate word." });
+          info({ content: resolveString('amity_social_toast_event_update_blocked_word_error') });
         } else if (error.message?.includes(ERROR_CODE.BLOCKED_URL)) {
-          info({
-            content: "Your event wasn't updated as it contains a link that's not allowed.",
-          });
+          info({ content: resolveString('amity_social_toast_event_update_blocked_url_error') });
         } else {
-          info({ content: 'Failed to update event. Please try again.' });
+          info({ content: resolveString('amity_social_toast_snackbar_update_event_failed') });
         }
       },
     });
@@ -230,8 +233,8 @@ export function useEventSetup(props: EventSetupProps) {
     if (checkIsWithinMinutes(data.startOn.toISOString())) {
       return info({
         content: isCreateEvent
-          ? "Your event wasn't created as it needs to start at least 15 minutes from now."
-          : "Your event wasn't updated as it needs to start at least 15 minutes from now.",
+          ? resolveString('amity_social_toast_event_create_start_time_too_soon_error')
+          : resolveString('amity_social_toast_event_update_start_time_too_soon_error'),
       });
     }
     isCreateEvent ? await createEvent(data) : await editEvent(props.event.eventId, data);

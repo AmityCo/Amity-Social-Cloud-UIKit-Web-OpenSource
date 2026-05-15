@@ -7,6 +7,8 @@ type BlockedUserMediaFeedProps = {
   componentId?: string;
   elementId?: string;
   infoElementId?: string;
+  textKey?: string;
+  infoTextKey?: string;
 };
 
 export function BlockedUserMediaFeed({
@@ -14,6 +16,8 @@ export function BlockedUserMediaFeed({
   componentId = '*',
   elementId = '*',
   infoElementId = '*',
+  textKey,
+  infoTextKey,
 }: BlockedUserMediaFeedProps) {
   return (
     <EmptyContent
@@ -21,6 +25,8 @@ export function BlockedUserMediaFeed({
       componentId={componentId}
       elementId={elementId}
       infoElementId={infoElementId}
+      textKey={textKey}
+      infoTextKey={infoTextKey}
       emptyContentClassName={styles.blockedUserMediaFeed}
       defaultIcon={() => <BlockedUser className={styles.blockedUserMediaFeed__icon} />}
     />

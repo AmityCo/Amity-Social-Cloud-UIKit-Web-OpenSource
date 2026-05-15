@@ -16,7 +16,7 @@ export function ExploreRecommendedTitle({
   titleClassName,
 }: TitleProps) {
   const elementId = 'explore_recommended_title';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -30,7 +30,7 @@ export function ExploreRecommendedTitle({
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveText('amity_social_label_recommended_for_you')}
     </Typography.TitleBold>
   );
 }

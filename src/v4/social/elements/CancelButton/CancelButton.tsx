@@ -18,7 +18,7 @@ export const CancelButton = ({
   onPress = () => {},
 }: CancelButtonProps) => {
   const elementId = 'cancel_button';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -34,7 +34,7 @@ export const CancelButton = ({
       data-testid={accessibilityId}
       isDisabled={disabled}
     >
-      <Typography.Body>{config.text ?? 'Cancel'}</Typography.Body>
+      <Typography.Body>{resolveText('amity_social_button_cancel')}</Typography.Body>
     </Button>
   );
 };

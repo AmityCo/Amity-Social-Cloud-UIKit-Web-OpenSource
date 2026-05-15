@@ -19,11 +19,12 @@ export const EditCancelButton = ({
   onPress = () => {},
 }: EditCancelButtonProps) => {
   const elementId = 'edit_cancel_button';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+  const cancelText = resolveText('amity_social_button_cancel');
 
   if (isExcluded) return null;
 
@@ -37,7 +38,7 @@ export const EditCancelButton = ({
       }}
       onPress={onPress}
     >
-      <Typography.Body>{config.cancel_button_text}</Typography.Body>
+      <Typography.Body>{cancelText}</Typography.Body>
     </Button>
   );
 };

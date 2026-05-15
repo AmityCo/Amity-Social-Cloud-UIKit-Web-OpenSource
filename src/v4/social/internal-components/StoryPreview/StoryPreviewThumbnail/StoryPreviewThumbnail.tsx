@@ -7,6 +7,7 @@ import TruncateMarkup from 'react-truncate-markup';
 import styles from './StoryPreviewThumbnail.module.css';
 import Community from '~/v4/icons/Community';
 import { StoryPreviewThumbnailSkeleton } from './StoryPreviewThumbnailSkeleton';
+import { useString } from '~/v4/core/localization';
 
 type StoryPreviewThumbnailProps = {
   thumbnailUrl?: string;
@@ -34,6 +35,7 @@ export const StoryPreviewThumbnail: React.FC<StoryPreviewThumbnailProps> = ({
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const imageRef = useRef<HTMLImageElement>(null);
+  const noImageAvailableLabel = useString('amity_social_no_image_available');
 
   useEffect(() => {
     setIsLoading(true);
@@ -86,7 +88,7 @@ export const StoryPreviewThumbnail: React.FC<StoryPreviewThumbnailProps> = ({
     if (imageError || !thumbnailUrl) {
       return (
         <div className={styles.fallbackThumbnail}>
-          <Typography.Body>No Image Available</Typography.Body>
+          <Typography.Body>{noImageAvailableLabel}</Typography.Body>
         </div>
       );
     }

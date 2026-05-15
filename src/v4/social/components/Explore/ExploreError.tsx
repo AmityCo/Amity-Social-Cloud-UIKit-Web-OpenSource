@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 
 import styles from './ExploreError.module.css';
@@ -17,8 +18,10 @@ export const ExploreError = () => {
     <div className={styles.exploreError}>
       <ExploreErrorIcon />
       <div className={styles.exploreError__text}>
-        <Typography.TitleBold>Something went wrong</Typography.TitleBold>
-        <Typography.Caption>Please try again.</Typography.Caption>
+        <Typography.TitleBold>
+          {useString('amity_social_label_livestream_deleted_page_title')}
+        </Typography.TitleBold>
+        <Typography.Caption>{useString('amity_social_label_please_try_again')}</Typography.Caption>
       </div>
     </div>
   );

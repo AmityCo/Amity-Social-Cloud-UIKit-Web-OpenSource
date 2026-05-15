@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.16.0 (2026-05-15)
+
+
+### Bug Fixes
+
+* remove duplicate declarations from PostTextField and MessageComposer after merge ([08372b5](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/08372b57aff913c7df604755d78c409183baae5e))
+
 ## 4.15.0 (2026-04-28)
 
 ## 4.15.0-beta.10 (2026-04-24)

@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Label } from 'react-aria-components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -79,6 +80,18 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   onPinnedProductIdChange,
 }) => {
   const MAX_PRODUCTS = 20;
+  const livestreamTitleLabel = useString('amity_social_label_livestream_title');
+  const livestreamDescriptionLabel = useString('amity_social_label_livestream_description');
+  const nameYourLivePlaceholder = useString('amity_social_name_your_live');
+  const shareWhatPlaceholder = useString('amity_social_share_what_this_live_is_all_about');
+  const liveSettingLabel = useString('amity_social_live_setting');
+  const goLiveLabel = useString('amity_social_status_go_live');
+  const changeThumbnailLabel = useString('amity_social_button_change_thumbnail');
+  const deleteThumbnailLabel = useString('amity_social_button_delete_thumbnail');
+  const cohostBackstageTitleLabel = useString('amity_social_label_cohost_backstage_title');
+  const cohostBackstageDescLabel = useString(
+    'amity_social_status_set_up_your_camera_mic_and_lighting_before_the_livestre',
+  );
   const { uploadSingleImage, isUploading } = useImageUpload();
   const { openPopup, closePopup } = usePopupContext();
 
@@ -133,7 +146,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
             }}
           >
             <ImageIcon className={styles.livestreamSetup__thumbnail__menuItem__icon} />
-            <Typography.BodyBold>Change thumbnail</Typography.BodyBold>
+            <Typography.BodyBold>{changeThumbnailLabel}</Typography.BodyBold>
           </Button>
           <Button
             variant="default"
@@ -148,7 +161,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
             )}
           >
             <Bin className={styles.livestreamSetup__thumbnail__menuItem__icon} />
-            <Typography.BodyBold>Delete thumbnail</Typography.BodyBold>
+            <Typography.BodyBold>{deleteThumbnailLabel}</Typography.BodyBold>
           </Button>
         </div>
       );
@@ -299,8 +312,8 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                   <>
                     <UnderlineInput
                       pageId={pageId}
-                      name="Live title"
-                      label="Live title"
+                      name={livestreamTitleLabel}
+                      label={livestreamTitleLabel}
                       maxLength={30}
                       showCounter={true}
                       elementId="livestream_title"
@@ -308,13 +321,13 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setLivestreamTitle?.(e.target.value)
                       }
-                      placeholder="Name your live"
+                      placeholder={nameYourLivePlaceholder}
                       disabled={isPending}
                     />
                     <UnderlineInput
                       pageId={pageId}
-                      name="Description"
-                      label="Description"
+                      name={livestreamDescriptionLabel}
+                      label={livestreamDescriptionLabel}
                       maxLength={300}
                       showCounter={true}
                       elementId="livestream_description"
@@ -322,7 +335,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setLivestreamDescription?.(e.target.value)
                       }
-                      placeholder="Share what this live is all about"
+                      placeholder={shareWhatPlaceholder}
                       optional={true}
                       disabled={isPending}
                     />
@@ -331,7 +344,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
                 {targetType !== 'user' && readOnly !== undefined && setReadOnly !== undefined && (
                   <div className={styles.livestreamSetup__liveSetting}>
                     <Label>
-                      <Typography.TitleBold>Live Setting</Typography.TitleBold>
+                      <Typography.TitleBold>{liveSettingLabel}</Typography.TitleBold>
                     </Label>
                     <ReadOnlyToggle
                       isSelected={readOnly}
@@ -359,10 +372,10 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
           <div className={styles.livestreamSetup__coHost__description}>
             <CameraMovie className={styles.livestreamSetup__coHost__descriptionIcon} />
             <Typography.TitleBold className={styles.livestreamSetup__coHost__descriptionText}>
-              Get ready before going live.
+              {cohostBackstageTitleLabel}
             </Typography.TitleBold>
             <Typography.Caption className={styles.livestreamSetup__coHost__descriptionText}>
-              Set up your camera, mic, and lighting before the live stream begins.
+              {cohostBackstageDescLabel}
             </Typography.Caption>
           </div>
         )}
@@ -375,7 +388,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
             onPress={onGoLive}
           >
             <LivestreamOutlined className={styles.livestreamSetup__goLive__buttonIcon} />
-            <Typography.BodyBold>Go Live</Typography.BodyBold>
+            <Typography.BodyBold>{goLiveLabel}</Typography.BodyBold>
           </Button>
         </div>
       </div>

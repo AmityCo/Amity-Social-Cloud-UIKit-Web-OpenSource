@@ -8,6 +8,7 @@ import { formatEventDuration } from '~/v4/social/utils/timezone';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { EventTypeBadge } from '~/v4/social/features/events/EventHub/elements';
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
+import { useString } from '~/v4/core/localization';
 import styles from './EventCard.module.css';
 
 type EventCardProps = {
@@ -20,6 +21,10 @@ export function EventCard({ event, variant = 'card', size = 'lg' }: EventCardPro
   const { currentUserId } = useSDK();
   const [errorImage, setErrorImage] = useState(false);
   const { goToEventDetailPage } = useNavigation();
+  const byCreatorLabel = useString(
+    'amity_social_button_by_creator',
+    event.creator?.displayName ?? event.creator?.userPublicId ?? '',
+  );
 
   return (
     <div
@@ -76,7 +81,7 @@ export function EventCard({ event, variant = 'card', size = 'lg' }: EventCardPro
         <div className={styles.eventCard__creator}>
           <Typography.Body className={styles.eventCard__creatorName} as="p">
             <TruncateMarkup lines={1}>
-              <div>By {event.creator?.displayName || event.creator?.userPublicId}</div>
+              <div>{byCreatorLabel}</div>
             </TruncateMarkup>
           </Typography.Body>
           {event.creator?.isBrand && (

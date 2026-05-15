@@ -1,5 +1,6 @@
 import { AmityEventResponseStatus } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
+import { resolveString } from '~/v4/core/localization';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export const useRSVP = ({ event }: { event: Amity.Event }) => {
@@ -13,7 +14,9 @@ export const useRSVP = ({ event }: { event: Amity.Event }) => {
 
     onError: () => {
       info({
-        content: 'Failed to update your attending status. Please try again.',
+        content: resolveString(
+          'amity_social_failed_to_update_your_attending_status_please_try_again',
+        ),
       });
     },
   });
@@ -26,18 +29,20 @@ export const useRSVP = ({ event }: { event: Amity.Event }) => {
     onSuccess: (response) => {
       if (response?.status === AmityEventResponseStatus.NotGoing) {
         success({
-          content: 'Successfully updated your attending status.',
+          content: resolveString('amity_social_toast_snackbar_attending_status_updated'),
         });
       }
     },
     onError: (error) => {
       if (error.message.includes('Cannot update RSVP for live events')) {
         info({
-          content: 'Your attending status cannot be changed once the event has started.',
+          content: resolveString('amity_social_your_attending_status_cannot_be_changed_once_the_e'),
         });
       } else {
         info({
-          content: 'Failed to update your attending status. Please try again.',
+          content: resolveString(
+            'amity_social_failed_to_update_your_attending_status_please_try_again',
+          ),
         });
       }
     },

@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import { ChevronDown } from '~/icons';
 import { getTimeZones } from '@vvo/tzdb';
 import { Typography } from '~/v4/core/components';
@@ -66,7 +67,9 @@ export function TimeZone({ value, onChange }: TimeZoneProps) {
 
   return (
     <div className={styles.timeZone}>
-      <Typography.Body className={styles.timeZone__label}>Timezone</Typography.Body>
+      <Typography.Body className={styles.timeZone__label}>
+        {useString('amity_social_button_timezone')}
+      </Typography.Body>
       <Popover
         className={styles.timeZone__popoverContent}
         trigger={({ openPopover, isDesktop }) => {

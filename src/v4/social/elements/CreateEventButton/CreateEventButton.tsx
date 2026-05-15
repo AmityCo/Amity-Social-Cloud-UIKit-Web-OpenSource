@@ -17,12 +17,19 @@ export function CreateEventButton({
   componentId = '*',
   ...props
 }: CreateEventButtonProps) {
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId: ELEMENT_ID.CREATE_EVENT_BUTTON,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId: ELEMENT_ID.CREATE_EVENT_BUTTON,
+  });
 
   if (isExcluded) return null;
 
@@ -41,7 +48,7 @@ export function CreateEventButton({
         defaultIcon={() => <Event className={clsx(styles.createEventButton__icon)} />}
       />
       <Typography.BodyBold className={styles.createEventButton__text}>
-        {config.text}
+        {resolveText('amity_social_button_create_event')}
       </Typography.BodyBold>
     </Button>
   );

@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import { CustomRenderer, Tester } from './types';
 
 export const renderer: CustomRenderer = ({ story, action }) => {
+  const storyCouldNotBeLoadedLabel = useString('amity_social_label_story_could_not_be_loaded');
+
   useEffect(() => {
     action('play');
   }, [story]);
 
   return (
     <div style={styles.storyContent}>
-      <p style={styles.text}>This story could not be loaded.</p>
+      <p style={styles.text}>{storyCouldNotBeLoadedLabel}</p>
     </div>
   );
 };

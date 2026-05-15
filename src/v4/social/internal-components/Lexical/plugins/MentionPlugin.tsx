@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   LexicalTypeaheadMenuPlugin,
@@ -197,8 +198,10 @@ export function MentionPlugin<
           const currentMentionCount = countMentions();
           if (currentMentionCount >= maxMentions) {
             info({
-              title: 'Too many users mentioned',
-              content: `You can only mention up to ${maxMentions} users per message.`,
+              title: useString('amity_social_too_many_users_mentioned'),
+              content: useString(
+                'amity_social_modal_dialog_content_too_many_users_mentioned',
+              ).replace('%d', String(maxMentions)),
             });
             closeMenu();
             return;
@@ -210,8 +213,8 @@ export function MentionPlugin<
           const currentMentionCount = countMentions('product');
           if (currentMentionCount >= maxUniqueProductMentions) {
             info({
-              title: 'Product tag limit reached',
-              content: `You can only tag product up to ${DEFAULT_MAX_PRODUCTS} tags per post.`,
+              title: useString('amity_social_modal_dialog_title_product_tag_limit_reached'),
+              content: useString('amity_social_modal_dialog_product_tag_limit'),
             });
             closeMenu();
             return;

@@ -21,12 +21,19 @@ export function CreateStoryButton({
   defaultClassName,
 }: CreateStoryButtonProps) {
   const elementId = 'create_story_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
   return (
@@ -45,7 +52,7 @@ export function CreateStoryButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.BodyBold className={styles.createStoryButton__text}>
-        {config.text}
+        {resolveText('amity_social_button_social_home_create_story_button')}
       </Typography.BodyBold>
     </Button>
   );

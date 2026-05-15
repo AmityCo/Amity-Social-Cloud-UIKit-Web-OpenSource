@@ -15,7 +15,7 @@ export const MyCommunitiesSideBarTitle = ({
   componentId = '*',
 }: MyCommunitiesSideBarTitleProps) => {
   const elementId = 'my_communities_sidebar_title';
-  const { config, accessibilityId, isExcluded, themeStyles } = useAmityElement({
+  const { config, accessibilityId, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     elementId,
     componentId,
@@ -29,7 +29,7 @@ export const MyCommunitiesSideBarTitle = ({
       data-testid={accessibilityId}
       className={styles.myCommunitiesSideBarTitle}
     >
-      {config.text}
+      {resolveText('amity_social_tab_tab_my_communities')}
     </Typography.TitleBold>
   );
 };

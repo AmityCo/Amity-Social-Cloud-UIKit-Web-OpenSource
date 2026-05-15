@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import dayjs from 'dayjs';
 import { Typography } from '~/v4/core/components';
 import { MessageAction, MessageActionType } from './MessageAction';
@@ -48,7 +49,9 @@ const LiveChatMessageContent = ({
             <div className={styles.messageDeletedBubble}>
               <Bin className={styles.binIcon} />
               <div>
-                <Typography.Body>This message was deleted</Typography.Body>
+                <Typography.Body>
+                  {useString('amity_social_button_message_deleted')}
+                </Typography.Body>
               </div>
             </div>
           ) : (

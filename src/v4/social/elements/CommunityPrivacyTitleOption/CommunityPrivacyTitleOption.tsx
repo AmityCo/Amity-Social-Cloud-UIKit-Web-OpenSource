@@ -7,14 +7,16 @@ type CommunityPrivacyTitleOptionProps = {
   pageId?: string;
   componentId?: string;
   elementId: string;
+  textId?: string;
 };
 
 export const CommunityPrivacyTitleOption = ({
   pageId = '*',
   componentId = '*',
   elementId = '*',
+  textId,
 }: CommunityPrivacyTitleOptionProps) => {
-  const { isExcluded, config, accessibilityId } = useAmityElement({
+  const { isExcluded, config, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -26,7 +28,7 @@ export const CommunityPrivacyTitleOption = ({
       data-testid={accessibilityId}
       className={styles.communityPrivacyTitleOption__text}
     >
-      {config.text}
+      {textId ? resolveText(textId) : config.text}
     </Typography.BodyBold>
   );
 };

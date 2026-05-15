@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import useSDK from '~/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
+import { resolveString } from '~/v4/core/localization';
 
 export interface UseCoHostPermissionNotificationProps {
   room?: Amity.Room | null;
@@ -33,7 +34,7 @@ export const useCoHostPermissionNotification = ({
       if (canManageProductTags && !previousPermissionRef.current) {
         // Permission granted
         success({
-          content: 'You can now manage tagged products in this live stream.',
+          content: resolveString('amity_social_status_product_tagging_enabled'),
           alignment: notificationAlignment,
         });
       }

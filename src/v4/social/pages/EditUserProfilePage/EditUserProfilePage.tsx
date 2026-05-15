@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './EditUserProfilePage.module.css';
 import Camera from '~/v4/icons/Camera';
 import { Form } from 'react-aria-components';
@@ -57,15 +58,15 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
         info({
           pageId: pageId,
           type: 'info',
-          title: 'Inappropriate image',
-          content: 'Please choose a different image to upload.',
+          title: useString('amity_social_button_inappropriate_image'),
+          content: useString('amity_social_modal_dialog_image_upload_error'),
         });
       } else {
         info({
           pageId: pageId,
           type: 'info',
-          title: 'Failed to upload image',
-          content: 'Please try again.',
+          title: useString('amity_social_upload_image_failed'),
+          content: useString('amity_social_label_please_try_again'),
         });
       }
     }
@@ -91,22 +92,26 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
       },
       onSuccess: () => {
         onBack();
-        notification.success({ content: 'Successfully updated your profile!' });
+        notification.success({
+          content: useString('amity_social_toast_snackbar_profile_updated'),
+        });
       },
       onError: (error) => {
         if (
           error.message === 'Amity SDK (400301): Only administrator can update user display name.'
         ) {
-          notification.info({ content: 'Only administrator can update user display name.' });
+          notification.info({ content: resolveString('amity_social_toast_edit_user_admin_only') });
           return;
         }
         if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
           notification.info({
-            content: "Your profile wasn't updated as it contains an inappropriate word.",
+            content: useString('amity_social_user_profile_blocked_word_error'),
           });
           return;
         }
-        notification.info({ content: 'Failed to save your profile. Please try again.' });
+        notification.info({
+          content: useString('amity_social_toast_snackbar_profile_save_failed'),
+        });
       },
     });
 
@@ -120,7 +125,9 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
     };
     e.preventDefault();
     if (!online) {
-      notification.info({ content: 'Failed to save your profile. Please try again.' });
+      notification.info({
+        content: useString('amity_social_toast_snackbar_profile_save_failed'),
+      });
       return;
     }
     user?.userId && mutateUpdateEditUserProfile(updatedValue);
@@ -149,14 +156,13 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
       confirm({
         pageId: pageId,
         type: 'confirm',
-        title: 'Unsaved changes',
-        content:
-          'Are you sure you want to discard the changes? They will be lost when you leave this page.',
+        title: useString('amity_social_modal_community_setup_dialog_leave_edit_title'),
+        content: useString('amity_social_modal_community_setup_dialog_leave_edit_description'),
         onOk: () => {
           onBack();
         },
-        okText: 'Discard',
-        cancelText: 'Cancel',
+        okText: useString('amity_social_modal_dialog_discard_button'),
+        cancelText: useString('amity_social_modal_dialog_cancel_button'),
       });
     else onBack();
   };
@@ -173,6 +179,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
           pageId={pageId}
           componentId={userId}
           titleClassName={styles.editUserProfilePage__topSection__title}
+          textKey="amity_social_button_edit_profile"
         />
       </div>
       <div className={styles.editUserProfilePage__container}>
@@ -209,6 +216,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
               name="userDisplayName"
               pageId={pageId}
               elementId="user_display_name_title"
+              textKey="amity_social_label_edit_user_display_name_title"
               maxLength={MAX_DISPLAY_NAME_LENGTH}
               value={displayName}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -222,6 +230,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
               name="userAbout"
               pageId={pageId}
               elementId="user_about_title"
+              textKey="amity_social_label_edit_user_about_title"
               maxLength={MAX_ABOUT_LENGTH}
               value={description}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>

@@ -22,12 +22,19 @@ export const CommunityInviteMemberButton = ({
   ...props
 }: CommunityInviteMemberButtonProps) => {
   const elementId = 'community_invite_member_button';
-  const { config, accessibilityId, themeStyles, isExcluded, defaultConfig, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    accessibilityId,
+    themeStyles,
+    isExcluded,
+    defaultConfig,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -36,7 +43,7 @@ export const CommunityInviteMemberButton = ({
       {...props}
       type="button"
       style={themeStyles}
-      aria-label="Invite member"
+      aria-label={resolveText('amity_social_button_invite_member')}
       data-testid={accessibilityId}
       className={styles.communityInviteMemberButton}
     >
@@ -51,7 +58,7 @@ export const CommunityInviteMemberButton = ({
         />
       </div>
       <Typography.Body className={styles.communityInviteMemberButton__label}>
-        {config.text}
+        {resolveText('amity_social_button_invite_member')}
       </Typography.Body>
     </Button>
   );

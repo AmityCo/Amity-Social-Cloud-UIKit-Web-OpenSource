@@ -12,7 +12,7 @@ export const CommunityAddMemberTitle = ({
   componentId = '*',
 }: CommunityAddMemberTitleProps) => {
   const elementId = 'community_add_member_title';
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -22,7 +22,7 @@ export const CommunityAddMemberTitle = ({
 
   return (
     <Typography.TitleBold style={themeStyles} data-testid={accessibilityId}>
-      {config.text}
+      {resolveText('amity_social_button_members')}
     </Typography.TitleBold>
   );
 };

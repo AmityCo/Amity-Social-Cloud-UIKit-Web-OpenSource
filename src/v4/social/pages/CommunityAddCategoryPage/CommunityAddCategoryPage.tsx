@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './CommunityAddCategoryPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements';
@@ -100,7 +101,9 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
       <div className={styles.communityAddCategoryPage__topMenuSticky}>
         <div className={styles.communityAddCategoryPage__navbar}>
           <CloseButton pageId={pageId} onPress={() => handleClosePage()} />
-          <Typography.TitleBold>Select category</Typography.TitleBold>
+          <Typography.TitleBold>
+            {useString('amity_social_button_community_setup_categories_description')}
+          </Typography.TitleBold>
           <Typography.Body className={styles.communityAddCategoryPage__categoryCount}>
             {selectedCategories.length}/{MAX_CATEGORIES}
           </Typography.Body>
@@ -206,7 +209,7 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
           data-testid={`${pageId}/*/add_category_button`}
           className={styles.communityAddCategoryPage__button}
         >
-          Add category
+          {useString('amity_social_button_add_category')}
         </Button>
       </div>
     </div>

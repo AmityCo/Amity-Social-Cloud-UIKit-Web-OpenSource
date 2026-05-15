@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { ReactionRepository, StoryRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants';
 import Spinner from '~/social/components/Spinner';
@@ -53,14 +54,22 @@ const Footer: React.FC<
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const notification = useNotifications();
   const { confirm } = useConfirmContext();
+  const uploadingLabel = useString('amity_social_button_uploading');
+  const failedToUploadStoryTitle = useString(
+    'amity_social_toast_dialog_title_failed_to_upload_story',
+  );
+  const discardUploadingContent = useString('amity_social_modal_dialog_upload_failed');
+  const cancelText = useString('amity_social_button_cancel');
+  const discardText = useString('amity_social_button_discard');
+  const failedToUploadText = useString('amity_social_toast_failed_to_upload');
 
   const onClickFailedMenu = () => {
     onPause();
     confirm({
-      title: 'Failed to upload story',
-      content: 'Would you like to discard uploading?',
-      cancelText: 'Cancel',
-      okText: 'Discard',
+      title: failedToUploadStoryTitle,
+      content: discardUploadingContent,
+      cancelText: cancelText,
+      okText: discardText,
       onCancel() {
         onPlay();
       },
@@ -105,7 +114,7 @@ const Footer: React.FC<
       <div className={styles.viewStoryCompostBarContainer}>
         <div className={styles.viewStoryUploadingWrapper}>
           <Spinner width={20} height={20} />
-          Uploading...
+          {uploadingLabel}
         </div>
       </div>
     );
@@ -116,7 +125,7 @@ const Footer: React.FC<
       <div className={styles.viewStoryFailedCompostBarContainer}>
         <div className={styles.viewStoryFailedCompostBarWrapper}>
           <ExclamationCircle className={styles.menuButton} />
-          <span>Failed to upload</span>
+          <span>{failedToUploadText}</span>
         </div>
         <Button variant="text" onPress={onClickFailedMenu}>
           <EllipsisH className={styles.menuButton} />

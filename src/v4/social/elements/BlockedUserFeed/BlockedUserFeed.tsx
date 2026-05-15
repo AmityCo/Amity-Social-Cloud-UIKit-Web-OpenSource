@@ -22,6 +22,8 @@ export const BlockedUserFeed: React.FC<BlockedUserFeedProps> = ({
       componentId={componentId}
       elementId={elementId}
       infoElementId={infoElementId}
+      textKey="amity_social_label_blocked_user_feed"
+      infoTextKey="amity_social_label_blocked_user_feed_info"
       defaultIcon={() => <BlockedUser className={styles.blockedUserFeed__icon} />}
     />
   );

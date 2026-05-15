@@ -17,12 +17,19 @@ export function CommunityMembersCount({
   memberCount,
 }: CommunityMembersCountProps) {
   const elementId = 'community_members_count';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -31,8 +38,10 @@ export function CommunityMembersCount({
       className={styles.communityMembersCount}
       style={themeStyles}
       data-testid={accessibilityId}
-    >{`${millify(memberCount) || 0} ${
-      memberCount !== 1 ? 'members' : 'member'
-    }`}</Typography.Caption>
+    >
+      {memberCount !== 1
+        ? resolveText('amity_social_button_member_count_plural', millify(memberCount) || '0')
+        : resolveText('amity_social_button_member_count_singular', millify(memberCount) || '0')}
+    </Typography.Caption>
   );
 }

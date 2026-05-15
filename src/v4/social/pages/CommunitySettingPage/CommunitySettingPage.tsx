@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveString, useString } from '~/v4/core/localization';
 import styles from './CommunitySettingPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -47,33 +48,53 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
   const { confirm, info } = useConfirmContext();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { socialSettings } = useSocialSettings();
+
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
+
+  const leaveCommunityErrorTitle = resolveString('amity_social_button_leave_community_error_title');
+  const somethingWentWrong = resolveString('amity_social_modal_dialog_something_went_wrong');
+  const okText = resolveString('amity_social_button_ok');
+  const moderatorOnlyLeaveError = resolveString(
+    'amity_social_button_moderator_leave_community_error_msg',
+  );
+  const leaveCommunityTitle = resolveString('amity_social_modal_dialog_title_leave_community');
+  const leaveCommunityContent = resolveString('amity_social_modal_dialog_banned_from_community');
+  const leaveText = resolveString('amity_social_modal_dialog_leave_button');
+  const closeCommunityErrorTitle = resolveString('amity_social_error_close_community_error_title');
+  const closeCommunityTitle = resolveString('amity_social_modal_dialog_title_close_community');
+  const closeCommunityContent = resolveString('amity_social_close_community_msg');
+  const confirmText = resolveString('amity_social_button_confirm');
+  const cancelText = resolveString('amity_social_button_cancel');
+  const communityInfoTitle = resolveString('amity_social_label_community_information_title');
+  const communityPermissionsTitle = resolveString(
+    'amity_social_permission_community_permission_title',
+  );
 
   const handleLeaveCommunity = () => {
     if (!online) {
       info({
-        title: 'Unable to leave community',
-        content: 'Something went wrong. Please try again later.',
-        okText: 'OK',
+        title: leaveCommunityErrorTitle,
+        content: somethingWentWrong,
+        okText: okText,
       });
       return;
     }
     if (moderators.length == 1 && isCommunityModerator) {
       info({
-        title: 'Unable to leave community',
-        content:
-          'You’re the only moderator in this group. To leave community, nominate other members to moderator role.',
-        okText: 'OK',
+        title: leaveCommunityErrorTitle,
+        content: moderatorOnlyLeaveError,
+        okText: okText,
       });
     } else {
       confirm({
-        title: 'Leave community?',
-        content: 'You will no longer be able to post and interact in this community.',
-        okText: 'Leave',
+        title: leaveCommunityTitle,
+        content: leaveCommunityContent,
+        okText: leaveText,
         onOk: () => {
           leaveCommunity(community);
           onBack();
         },
+        cancelText: cancelText,
       });
     }
   };
@@ -81,31 +102,31 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
   const handleCloseCommunity = () => {
     if (!online) {
       info({
-        title: 'Unable to close community',
-        content: 'Something went wrong. Please try again later.',
-        okText: 'OK',
+        title: closeCommunityErrorTitle,
+        content: somethingWentWrong,
+        okText: okText,
       });
       return;
     }
     confirm({
-      title: 'Close community?',
-      content:
-        'All members will be removed from the community. All posts, messages, reactions, and media shared in community will be deleted. This cannot be undone.',
-      okText: 'Confirm',
+      title: closeCommunityTitle,
+      content: closeCommunityContent,
+      okText: confirmText,
       onOk: async () => {
         if (!community?.communityId) return;
         try {
           closeCommunity();
         } catch (error) {
           info({
-            title: 'Unable to close community',
-            content: 'Something went wrong. Please try again later.',
-            okText: 'OK',
+            title: closeCommunityErrorTitle,
+            content: somethingWentWrong,
+            okText: okText,
           });
         } finally {
           AmityCommunitySettingPageBehavior?.goToSocialHomePage?.();
         }
       },
+      cancelText: cancelText,
     });
   };
 
@@ -125,7 +146,7 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
       <div className={styles.communitySettingPage__content}>
         <div className={styles.communitySettingPage__basicInfoWrap}>
           <Typography.TitleBold className={styles.communitySettingPage__basicInfo}>
-            Community information
+            {communityInfoTitle}
           </Typography.TitleBold>
           {checkEditCommunityPermission(client, community?.communityId) && (
             <EditProfile
@@ -160,7 +181,7 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
           <div className={styles.communitySettingPage__communityPermissionWrap}>
             {
               <Typography.TitleBold className={styles.communitySettingPage__communityPermissions}>
-                Community permissions
+                {communityPermissionsTitle}
               </Typography.TitleBold>
             }
             {checkReviewPostPermission(client, community?.communityId) && (

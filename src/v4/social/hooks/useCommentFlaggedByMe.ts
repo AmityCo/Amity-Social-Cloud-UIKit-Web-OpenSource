@@ -3,6 +3,7 @@ import { CommentRepository } from '@amityco/ts-sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { resolveString } from '~/v4/core/localization';
 
 export const useCommentFlaggedByMe = ({
   commentId,
@@ -42,7 +43,9 @@ export const useCommentFlaggedByMe = ({
     },
     onSuccess: () => {
       success({
-        content: `${isReplyComment ? 'Reply' : 'Comment'} reported.`,
+        content: isReplyComment
+          ? resolveString('amity_social_toast_reply_reported_toast_message')
+          : resolveString('amity_social_toast_comment_reported_toast_message'),
       });
       onCloseMenu?.();
     },
@@ -61,7 +64,9 @@ export const useCommentFlaggedByMe = ({
         setIsCommentDeleted(true);
       } else {
         info({
-          content: `Failed to report ${isReplyComment ? 'reply' : 'comment'}. Please try again.`,
+          content: isReplyComment
+            ? resolveString('amity_social_reply_report_failed')
+            : resolveString('amity_social_comment_report_failed'),
           alignment: isDesktop ? 'fullscreen' : 'withSidebar',
         });
       }
@@ -80,7 +85,9 @@ export const useCommentFlaggedByMe = ({
     },
     onSuccess: () => {
       success({
-        content: `${isReplyComment ? 'Reply' : 'Comment'} unreported.`,
+        content: isReplyComment
+          ? resolveString('amity_social_toast_reply_unreported_toast_message')
+          : resolveString('amity_social_toast_comment_unreported_toast_message'),
       });
     },
     onMutate: async () => {
@@ -95,7 +102,9 @@ export const useCommentFlaggedByMe = ({
     },
     onError: () => {
       info({
-        content: `Failed to unreport ${isReplyComment ? 'reply' : 'comment'}. Please try again.`,
+        content: isReplyComment
+          ? resolveString('amity_social_reply_unreport_failed')
+          : resolveString('amity_social_comment_unreport_failed'),
         alignment: isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import InfoCircle from '~/v4/icons/InfoCircle';
 import { Drawer } from 'vaul';
@@ -35,28 +36,32 @@ export const StoryAdInformation = ({
               <div className={styles.drawer__innerContent}>
                 <div className={styles.drawer__placeholder} />
                 <Drawer.Title className={styles.drawer__title}>
-                  <Typography.TitleBold>About this advertisement</Typography.TitleBold>
+                  <Typography.TitleBold>
+                    {useString('amity_common_ad_ad_about_title')}
+                  </Typography.TitleBold>
                 </Drawer.Title>
                 <div className={styles.drawer__content__data}>
                   <Typography.BodyBold className={styles.drawer__content__data__title}>
-                    Why this advertisement?
+                    {useString('amity_common_ad_ad_why_title')}
                   </Typography.BodyBold>
                   <div className={styles.drawer__content__data__text}>
                     <InfoCircle className={styles.drawer__content__data__infoIcon} />
                     <Typography.Caption className={styles.drawer__content__data__caption}>
-                      You're seeing this advertisement because it was displayed to all users in the
-                      system.
+                      {useString('amity_common_ad_ad_why_description')}
                     </Typography.Caption>
                   </div>
                 </div>
                 <div className={styles.drawer__content__data}>
                   <Typography.BodyBold className={styles.drawer__content__data__title}>
-                    About this advertiser
+                    {useString('amity_common_ad_ad_about_advertiser')}
                   </Typography.BodyBold>
                   <div className={styles.drawer__content__data__text}>
                     <InfoCircle className={styles.drawer__content__data__infoIcon} />
                     <Typography.Caption className={styles.drawer__content__data__caption}>
-                      Advertiser name: {ad.advertiser?.companyName}
+                      {resolveString(
+                        'amity_common_ad_advertiser_name',
+                        ad.advertiser?.companyName ?? '',
+                      )}
                     </Typography.Caption>
                   </div>
                 </div>

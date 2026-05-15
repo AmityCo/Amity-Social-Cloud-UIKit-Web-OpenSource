@@ -1,4 +1,5 @@
 import { CommentRepository } from '@amityco/ts-sdk';
+import { useString, resolveString } from '~/v4/core/localization';
 import React from 'react';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import { Close, Lock2Icon } from '~/icons';
@@ -65,7 +66,7 @@ export const StoryCommentComposeBar = ({
     return (
       <div className={styles.disabledCommentComposerBarContainer}>
         <Lock2Icon />
-        Comments are disabled for this story
+        {useString('amity_social_label_comments_disabled_message')}
       </div>
     );
   }
@@ -75,7 +76,7 @@ export const StoryCommentComposeBar = ({
       {isReplying && (
         <div className={styles.replyingBlock}>
           <div className={styles.replyingToText}>
-            {'Replying to '}
+            {`${resolveString('amity_social_replying_to')} `}
             <span className={styles.replyingToUsername}>{replyTo?.userId}</span>
           </div>
           <Close onClick={onCancelReply} className={styles.closeButton} />

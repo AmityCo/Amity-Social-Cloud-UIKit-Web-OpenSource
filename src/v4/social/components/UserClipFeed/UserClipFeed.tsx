@@ -56,6 +56,8 @@ export const UserClipFeed = ({
           componentId={componentId}
           elementId={ELEMENT_ID.BLOCKED_USER_CLIP_FEED}
           infoElementId={ELEMENT_ID.BLOCKED_USER_CLIP_FEED_INFO}
+          textKey="amity_social_label_blocked_user_video_feed"
+          infoTextKey="amity_social_label_blocked_user_video_feed_info"
         />
       );
 
@@ -66,6 +68,8 @@ export const UserClipFeed = ({
           componentId={componentId}
           elementId={ELEMENT_ID.PRIVATE_USER_CLIP_FEED}
           infoElementId={ELEMENT_ID.PRIVATE_USER_CLIP_FEED_INFO}
+          textKey="amity_social_label_private_user_video_feed"
+          infoTextKey="amity_social_label_private_user_video_feed_info"
         />
       );
 

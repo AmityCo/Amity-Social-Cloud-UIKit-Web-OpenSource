@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import {
   LivestreamHeader,
   LivestreamHeaderProps,
@@ -98,12 +99,11 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
         // In case of co-host is leaving the back stage, the ui will be changed back to player
         onLeaveStreamStage?.();
       },
-      okText: 'Leave',
-      cancelText: 'Cancel',
-      title: 'Leave backstage',
+      okText: useString('amity_social_modal_dialog_leave_button'),
+      cancelText: useString('amity_social_modal_dialog_cancel_button'),
+      title: useString('amity_social_leave_backstage'),
       pageId,
-      content:
-        "Are you sure you want to leave backstage? You'll return to viewer mode and need a new invite to rejoin.",
+      content: useString('amity_social_leave_backstage'),
     });
   };
 
@@ -116,12 +116,11 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
         onLeaveStreamStage?.(true);
         onClose();
       },
-      okText: 'Leave',
-      cancelText: 'Cancel',
-      title: 'Leave live stream',
+      okText: useString('amity_social_modal_dialog_leave_button'),
+      cancelText: useString('amity_social_modal_dialog_cancel_button'),
+      title: useString('amity_social_leave_live_stream'),
       pageId,
-      content:
-        'Are you sure you want to leave this livestream? You’ll stop broadcasting and exit the session completely.',
+      content: useString('amity_social_modal_alert_cohost_leave_message'),
     });
   };
 

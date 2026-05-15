@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import styles from './PendingUserItem.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
@@ -19,11 +20,14 @@ export const PendingUserItem: FC<PendingUserItemProps> = ({ userId }) => {
     try {
       await UserRepository.Relationship.acceptMyFollower(userId);
       success({
-        content: `${displayName} is now following you.`,
+        content: useString('amity_social_label_follow_request_accepted').replace(
+          '%1$s',
+          displayName,
+        ),
       });
     } catch (e) {
       error({
-        content: 'Failed to accept follow request.',
+        content: useString('amity_social_toast_follow_request_accept_failed'),
       });
     }
   };
@@ -32,11 +36,11 @@ export const PendingUserItem: FC<PendingUserItemProps> = ({ userId }) => {
     try {
       await UserRepository.Relationship.declineMyFollower(userId);
       success({
-        content: 'Following request declined.',
+        content: useString('amity_social_label_follow_request_declined'),
       });
     } catch (e) {
       error({
-        content: 'Failed to decline follow request.',
+        content: useString('amity_social_failed_to_decline_follow_request'),
       });
     }
   };
@@ -61,7 +65,7 @@ export const PendingUserItem: FC<PendingUserItemProps> = ({ userId }) => {
             })
           }
         >
-          Accept
+          {useString('amity_social_accept_button')}
         </Button>
         <Button
           className={styles.pendingUserItem__button__decline}
@@ -71,7 +75,7 @@ export const PendingUserItem: FC<PendingUserItemProps> = ({ userId }) => {
             })
           }
         >
-          Decline
+          {useString('amity_social_button_decline')}
         </Button>
       </div>
     </div>

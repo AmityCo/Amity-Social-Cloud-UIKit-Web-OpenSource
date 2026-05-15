@@ -67,6 +67,8 @@ export const UserImageFeed = ({
           componentId={componentId}
           elementId={ELEMENT_ID.BLOCKED_USER_IMAGE_FEED}
           infoElementId={ELEMENT_ID.BLOCKED_USER_IMAGE_FEED_INFO}
+          textKey="amity_social_label_blocked_user_image_feed"
+          infoTextKey="amity_social_label_blocked_user_image_feed_info"
         />
       );
 
@@ -77,6 +79,8 @@ export const UserImageFeed = ({
           componentId={componentId}
           elementId={ELEMENT_ID.PRIVATE_USER_IMAGE_FEED}
           infoElementId={ELEMENT_ID.PRIVATE_USER_IMAGE_FEED_INFO}
+          textKey="amity_social_label_private_user_image_feed"
+          infoTextKey="amity_social_label_private_user_image_feed_info"
         />
       );
 

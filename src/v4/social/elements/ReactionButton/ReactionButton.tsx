@@ -20,6 +20,7 @@ import millify from 'millify';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { resolveString } from '~/v4/core/localization';
 
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -60,6 +61,14 @@ interface ReactionButtonProps {
 
 const MOUSE_DURATION = 250;
 const LONG_PRESS_DURATION = 500;
+
+const resolveReactionLabel = (reactionName: string | null | undefined): string => {
+  if (!reactionName) return '';
+  const name = reactionName.toLowerCase();
+  const key = `amity_social_button_reaction_${name}`;
+  const resolved = resolveString(key);
+  return resolved === key ? reactionName : resolved;
+};
 const PANEL_TOP_THRESHOLD_DESKTOP = 95; // Minimum space from top of page to show panel
 const PANEL_TOP_THRESHOLD_MOBILE = 170;
 const PANEL_TOP_THRESHOLD_MOBILE_USER_FEED = 215;
@@ -89,12 +98,19 @@ export function ReactionButton({
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
 
-  const { isExcluded, accessibilityId, config, defaultConfig, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    isExcluded,
+    accessibilityId,
+    config,
+    defaultConfig,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   const { socialReactions } = useCustomReaction();
 
@@ -160,6 +176,7 @@ export function ReactionButton({
 
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+  const likeText = resolveText('amity_social_button_reaction_like');
 
   useEffect(() => {
     if (showReactionPicker && shouldNotShowReactionPicker) {
@@ -227,16 +244,16 @@ export function ReactionButton({
     let elementId: string = '';
 
     if (isCommentReaction) {
-      text = displayReaction ?? config.text ?? 'Like';
+      text = (displayReaction ? resolveReactionLabel(displayReaction) : likeText) ?? '';
       elementId = 'comment-reaction-text';
     } else if (isClipReaction) {
       text =
         typeof reactionsCount === 'number'
           ? millify(reactionsCount)
-          : (myReaction || config.text) ?? '';
+          : (myReaction ? resolveReactionLabel(myReaction) : likeText) || '';
       elementId = 'clip-reaction-text';
     } else {
-      text = (displayReaction || config.text) ?? '';
+      text = resolveReactionLabel(displayReaction) || likeText || '';
       elementId = 'reaction-text';
     }
 

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { ContentFlagReasonEnum, PollRepository, PostRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
@@ -112,6 +113,23 @@ export const PostMenu = ({
     }
   }, [isCommunityModerator, isOwner, client, post, isSearchPost, community?.isJoined]);
 
+  const closePollTitle = useString('amity_social_button_close_poll');
+  const postUnreportedText = useString('amity_social_button_post_unreported');
+  const postUnreportFailedText = useString('amity_social_toast_post_unreport_failed');
+  const postDeletedText = useString('amity_social_button_post_deleted');
+  const deletePostFailedText = useString('amity_social_toast_delete_post_failed');
+  const pollClosedText = useString('amity_social_poll_closed');
+  const failedGenericText = useString('amity_social_toast_failed_generic');
+  const deletePostTitleText = useString('amity_social_button_delete_post_title');
+  const deletePostWarningText = useString('amity_social_button_delete_post_warning_message');
+  const cancelText = useString('amity_social_button_cancel');
+  const deleteText = useString('amity_common_button_delete');
+  const closePollDialogTitleText = useString('amity_social_modal_dialog_title_close_poll');
+  const unreportPostText = useString('amity_social_button_unreport_post');
+  const reportPostText = useString('amity_social_button_report_post');
+  const editPostTitleText = useString('amity_social_label_post_composer_edit_title');
+  const deletePostText = useString('amity_social_button_delete_post');
+
   const showClosePollButton = useMemo(() => {
     if (poll && poll.status === 'open' && isOwner) return true;
     return false;
@@ -134,12 +152,12 @@ export const PostMenu = ({
     isFlaggable: showReportPostButton,
 
     onUnreportSuccess: () => {
-      success({ content: 'Post unreported.' });
+      success({ content: postUnreportedText });
       onCloseMenu();
     },
     onUnreportError: () => {
       info({
-        content: 'Failed to unreport post. Please try again.',
+        content: postUnreportFailedText,
         alignment: isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu();
@@ -155,12 +173,12 @@ export const PostMenu = ({
       return PostRepository.softDeletePost(post.postId);
     },
     onSuccess: () => {
-      success({ content: 'Post deleted.' });
+      success({ content: postDeletedText });
       onPostDeleted?.(post);
     },
     onError: () => {
       info({
-        content: 'Failed to delete post. Please try again.',
+        content: deletePostFailedText,
         alignment: isDesktop ? 'fullscreen' : 'withSidebar',
       });
     },
@@ -173,25 +191,27 @@ export const PostMenu = ({
       return PollRepository.closePoll(poll.pollId);
     },
     onSuccess: () => {
-      success({ content: 'Poll closed.' });
+      success({
+        content: pollClosedText,
+      });
       onPollClosed?.();
     },
     onError: () => {
-      info({ content: 'Oops, something went wrong.' });
+      info({ content: failedGenericText });
     },
   });
 
   const onDeleteClick = () => {
     onCloseMenu();
     confirm({
-      title: 'Delete post?',
-      content: 'This post will be permanently deleted.',
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      title: deletePostTitleText,
+      content: deletePostWarningText,
+      cancelText: cancelText,
+      okText: deleteText,
       onOk: () => {
         const isCurrentlyOnline = navigator.onLine;
         if (!isCurrentlyOnline) {
-          info({ content: 'Failed to delete post. Please try again.' });
+          info({ content: deletePostFailedText });
           return;
         }
         mutateDeletePost();
@@ -214,11 +234,11 @@ export const PostMenu = ({
           confirm({
             onOk: close,
             type: 'confirm',
-            okText: 'Discard',
-            cancelText: 'Keep editing',
-            title: 'Discard this post?',
+            okText: resolveString('amity_social_button_discard'),
+            cancelText: resolveString('amity_social_button_keep_editing'),
+            title: resolveString('amity_social_modal_dialog_title_discard_post'),
             pageId: 'post_composer_page',
-            content: 'The post will be permanently discarded. It cannot be undone.',
+            content: resolveString('amity_social_modal_dialog_discard_post'),
           });
         },
       });
@@ -241,14 +261,14 @@ export const PostMenu = ({
   const onClosePollClick = () => {
     onCloseMenu();
     confirm({
-      title: 'Close poll?',
-      content: `The poll duration you've set will be ignored and your poll will be closed immediately.`,
-      cancelText: 'Cancel',
-      okText: 'Close poll',
+      title: closePollDialogTitleText,
+      content: resolveString('amity_social_modal_dialog_poll_duration_warning'),
+      cancelText: cancelText,
+      okText: closePollTitle,
       onOk: () => {
         const isCurrentlyOnline = navigator.onLine;
         if (!isCurrentlyOnline) {
-          info({ content: 'Oops, something went wrong.' });
+          info({ content: failedGenericText });
           return;
         }
         mutateClosePoll();
@@ -312,7 +332,7 @@ export const PostMenu = ({
         >
           <ClosePollIcon className={styles.postMenu__closePoll__icon} />
           <Typography.BodyBold className={styles.postMenu__reportPost__text}>
-            Close poll
+            {closePollTitle}
           </Typography.BodyBold>
         </Button>
       )}
@@ -328,7 +348,7 @@ export const PostMenu = ({
             <FlagIcon className={styles.postMenu__reportPost__icon} />
           )}
           <Typography.BodyBold className={styles.postMenu__reportPost__text}>
-            {isFlaggedByMe ? 'Unreport post' : 'Report post'}
+            {isFlaggedByMe ? unreportPostText : reportPostText}
           </Typography.BodyBold>
         </Button>
       ) : null}
@@ -341,7 +361,7 @@ export const PostMenu = ({
         >
           <Pencil className={styles.postMenu__editPost__icon} />
           <Typography.BodyBold className={styles.postMenu__editPost__text}>
-            Edit post
+            {editPostTitleText}
           </Typography.BodyBold>
         </Button>
       ) : null}
@@ -362,7 +382,7 @@ export const PostMenu = ({
         >
           <TrashIcon className={styles.postMenu__deletePost__icon} />
           <Typography.BodyBold className={styles.postMenu__deletePost__text}>
-            Delete post
+            {deletePostText}
           </Typography.BodyBold>
         </Button>
       ) : null}

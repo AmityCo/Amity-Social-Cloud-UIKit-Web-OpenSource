@@ -1,4 +1,5 @@
 import { Button } from '~/v4/core/components/AriaButton';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './RSVPButton.module.css';
 import { BellTransparent } from '~/v4/icons/BellTransparent';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -29,7 +30,7 @@ type RSVPButtonProps = {
 export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonProps) => {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { createRSVP, updateRSVP } = useRSVP({ event });
-  const { error } = useNotifications();
+  const { info: infoToast } = useNotifications();
   const { info } = useConfirmContext();
   const { currentUserId } = useSDK();
   const { isDesktop } = useResponsive();
@@ -104,9 +105,8 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
 
     if (community?.requiresJoinApproval) {
       info({
-        title: 'You’ll be able to RSVP once your join request is accepted',
-        content:
-          "Requested to join the community. You'll be notified once your request is accepted. ",
+        title: useString('amity_social_label_rsvp_after_join'),
+        content: resolveString('amity_social_modal_dialog_join_request_sent'),
       });
     } else {
       const response = await createRSVP(AmityEventResponseStatus.Going);
@@ -171,8 +171,8 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
   };
 
   const handleVisitorClick = () => {
-    info({
-      content: 'Create an account or sign in to continue.',
+    infoToast({
+      content: resolveString('amity_social_label_create_account_or_sign_in'),
     });
   };
 
@@ -195,7 +195,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
                   data-disabled={isDisabledStatusButton}
                   className={styles.rsvpButton__goingIcon}
                 />
-                Going
+                {useString('amity_social_button_going')}
               </Button>
             )}
           >
@@ -225,7 +225,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
                   data-disabled={isDisabledStatusButton}
                   className={styles.rsvpButton__goingIcon}
                 />
-                Not Going
+                {useString('amity_social_button_not_going')}
               </Button>
             )}
           >
@@ -253,7 +253,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
               className={styles.rsvpButton}
             >
               <BellTransparent className={styles.rsvpButton__icon} />
-              RSVP
+              {useString('amity_social_button_rsvp')}
             </Button>
           )
         )
@@ -265,7 +265,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
           isDisabled={isDisabledStatusButton}
         >
           <Check data-disabled={isDisabledStatusButton} className={styles.rsvpButton__goingIcon} />
-          Going
+          {useString('amity_social_button_going')}
         </Button>
       ) : myRSVP?.status === AmityEventResponseStatus.NotGoing ? (
         <Button
@@ -278,7 +278,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
             data-disabled={isDisabledStatusButton}
             className={styles.rsvpButton__goingIcon}
           />
-          Not Going
+          {useString('amity_social_button_not_going')}
         </Button>
       ) : (
         event.status === AmityEventStatus.Scheduled &&
@@ -294,7 +294,7 @@ export const RSVPButton = ({ event, myRSVP, setMyRSVP, onRefresh }: RSVPButtonPr
             className={styles.rsvpButton}
           >
             <BellTransparent className={styles.rsvpButton__icon} />
-            RSVP
+            {useString('amity_social_button_rsvp')}
           </Button>
         )
       )}

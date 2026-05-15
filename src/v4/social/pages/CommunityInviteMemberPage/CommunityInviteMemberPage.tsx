@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useCommunitySetupContext } from '~/v4/social/providers/CommunitySetupProvider';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton';
@@ -42,6 +43,7 @@ function useCommunityInviteMemberPage({
   const pageId = 'community_invite_member_page';
 
   const { onBack } = useNavigation();
+
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
   const notification = useNotifications();
@@ -110,7 +112,7 @@ function useCommunityInviteMemberPage({
     !online &&
       notification.info({
         alignment: 'fixed',
-        content: 'No internet connection.',
+        content: resolveString('amity_social_label_no_internet_connection'),
         duration: 1000 * 60,
       });
   }, [online]);
@@ -125,7 +127,7 @@ function useCommunityInviteMemberPage({
     if (!online) {
       return notification.info({
         alignment: 'fixed',
-        content: 'Failed to invite members. Please try again.',
+        content: useString('amity_social_toast_community_invitation_create_failed'),
       });
     }
     onSubmit
@@ -246,7 +248,7 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             data-selected={selectedMembers.length > 0}
             className={styles.communityInviteMemberPage__state}
           >
-            <EmptyResult pageId={pageId} />
+            <EmptyResult pageId={pageId} textId="amity_social_label_no_users_available" />
           </div>
         )}
         {filteredUsers.length > 0 && (
@@ -328,7 +330,11 @@ function CommunityInviteMemberPageTopBar({
           onPress={handleClose}
           defaultClassName={styles.communityInviteMemberPage__closeButton}
         />
-        <Title pageId={pageId} titleClassName={styles.communityInviteMemberPage__title} />
+        <Title
+          pageId={pageId}
+          textKey="amity_social_button_invite_member"
+          titleClassName={styles.communityInviteMemberPage__title}
+        />
         <div className={styles.communityInviteMemberPage__emptySpace} />
       </nav>
       <div className={styles.communityInviteMemberPage__search}>

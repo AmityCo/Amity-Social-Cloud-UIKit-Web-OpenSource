@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage';
 import { Title } from '~/v4/social/elements/Title';
@@ -160,7 +161,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         members.length > 0 &&
         community.data.createInvitations(members.map((m) => m.userId));
       notification.success({
-        content: 'Successfully created community.',
+        content: resolveString('amity_social_toast_community_setup_create_success'),
       });
       goToCommunityProfilePage(community.data.communityId, 2);
     }
@@ -169,7 +170,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
   const validateAndSubmit = async (data: CreateFormValues) => {
     if (!online) {
       notification.info({
-        content: 'Failed to create community. Please try again.',
+        content: resolveString('amity_social_toast_community_setup_toast_create_failed'),
       });
       return;
     }
@@ -177,7 +178,9 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
       setSubmitting(true);
 
       if (!data.isPublic && data.userIds?.length === 0) {
-        setError('userIds', { message: 'Please select at least one member' });
+        setError('userIds', {
+          message: resolveString('amity_social_please_select_at_least_one_member'),
+        });
         return;
       }
 
@@ -192,7 +195,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
       });
     } catch (error) {
       notification.info({
-        content: 'Failed to create community. Please try again.',
+        content: resolveString('amity_social_toast_community_setup_toast_create_failed'),
       });
     } finally {
       setSubmitting(false);
@@ -287,8 +290,8 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
       confirm({
         pageId: pageId,
         type: 'confirm',
-        title: 'Leave without finishing?',
-        content: 'Your progress won’t be saved and your community won’t be created.',
+        title: resolveString('amity_social_modal_event_detail_alert_leave_without_finishing_title'),
+        content: resolveString('amity_social_modal_setup_alert_message'),
         onOk: () => {
           setCoverImages([]);
           setCommunityName('');
@@ -299,8 +302,8 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
           onBack();
           onBack();
         },
-        okText: 'Leave',
-        cancelText: 'Cancel',
+        okText: resolveString('amity_social_button_leave'),
+        cancelText: resolveString('amity_social_button_cancel'),
       });
     } else {
       setCoverImages([]);
@@ -321,7 +324,11 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         ) : (
           <CloseButton onPress={handleClosePage} />
         )}
-        <Title pageId={pageId} titleClassName={styles.createCommunity__title} />
+        <Title
+          pageId={pageId}
+          titleClassName={styles.createCommunity__title}
+          textKey="amity_social_button_setup_create_button"
+        />
         <div className={styles.createCommunity__emptySpace} />
       </div>
       <form onSubmit={handleSubmit(validateAndSubmit)} className={styles.createCommunity__form}>
@@ -375,12 +382,14 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                         onImageFileChange={handleCoverPhotoChange}
                         isVisibleVideo={false}
                         isVisibleImage
+                        textId="amity_social_button_community_setup_camera_button"
                       />
                     )}
                     <ImageButton
                       pageId={pageId}
                       onImageFileChange={handleCoverPhotoChange}
                       isSingleUpload
+                      textId="amity_social_button_community_setup_image_button"
                     />
                   </>
                 ),
@@ -409,7 +418,11 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         <div className={styles.createCommunity__formContent}>
           <TextField>
             <Label className={styles.createCommunity__label}>
-              <TitleForm pageId={pageId} elementId="community_name_title" />
+              <TitleForm
+                pageId={pageId}
+                elementId="community_name_title"
+                textId="amity_social_label_community_setup_name_title"
+              />
               <Typography.Body className={styles.createCommunity__charactersCount}>
                 {displayName.length}/{MAX_LENGTH_COMMUNITY_NAME}
               </Typography.Body>
@@ -417,7 +430,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             <Input
               required
               type="text"
-              placeholder="Name your community"
+              placeholder={useString('amity_social_label_community_setup_name_description')}
               value={displayName ?? communityName}
               maxLength={MAX_LENGTH_COMMUNITY_NAME}
               className={styles.createCommunity__input}
@@ -429,9 +442,13 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
           <TextField>
             <Label className={styles.createCommunity__label}>
               <div className={styles.createCommunity__description}>
-                <TitleForm pageId={pageId} elementId="community_about_title" />
+                <TitleForm
+                  pageId={pageId}
+                  elementId="community_about_title"
+                  textId="amity_social_label_community_setup_about_title"
+                />
                 <Typography.Body className={styles.createCommunity__optionalText}>
-                  (Optional)
+                  {useString('amity_social_label_community_setup_about_optional_title')}
                 </Typography.Body>
               </div>
               <Typography.Body className={styles.createCommunity__charactersCount}>
@@ -442,7 +459,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
               rows={1}
               value={description}
               maxLength={MAX_LENGTH_DESC}
-              placeholder="Enter description"
+              placeholder={useString('amity_social_button_community_setup_about_description')}
               className={styles.createCommunity__textarea}
               {...register('description')}
             />
@@ -451,9 +468,13 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         <div className={styles.createCommunity__formContent}>
           <label className={styles.createCommunity__label}>
             <div className={styles.createCommunity__description}>
-              <TitleForm pageId={pageId} elementId="community_category_title" />
+              <TitleForm
+                pageId={pageId}
+                elementId="community_category_title"
+                textId="amity_social_label_community_setup_category_title"
+              />
               <Typography.Body className={styles.createCommunity__optionalText}>
-                (Optional)
+                {useString('amity_social_label_community_setup_about_optional_title')}
               </Typography.Body>
             </div>
           </label>
@@ -519,7 +540,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                   }}
                 >
                   <Typography.Body className={styles.createCommunity__selectedCategory}>
-                    Select category
+                    {useString('amity_social_button_community_setup_categories_description')}
                     <IconComponent defaultIcon={() => arrowIcon} imgIcon={() => arrowIcon} />
                   </Typography.Body>
                 </Button>
@@ -534,7 +555,13 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
           value={privacySettings}
           className={styles.createCommunity__formContent}
           labelClassName={styles.createCommunity__label}
-          label={<TitleForm pageId={pageId} elementId="community_privacy_title" />}
+          label={
+            <TitleForm
+              pageId={pageId}
+              elementId="community_privacy_title"
+              textId="amity_social_label_community_setup_privacy_title"
+            />
+          }
           radioProps={{ className: styles.createCommunity__formRadio }}
           radios={[
             {
@@ -550,10 +577,12 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                     <CommunityPrivacyTitleOption
                       pageId={pageId}
                       elementId="community_privacy_public_title"
+                      textId="amity_social_label_community_setup_privacy_public_title"
                     />
                     <CommunityPrivacyDescription
                       pageId={pageId}
                       elementId="community_privacy_public_description"
+                      textId="amity_social_community_setup_page_community_privacy_public_description_text"
                     />
                   </div>
                 </div>
@@ -572,10 +601,12 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                     <CommunityPrivacyTitleOption
                       pageId={pageId}
                       elementId="community_privacy_private_and_visible_title"
+                      textId="amity_social_label_community_setup_privacy_private_and_visible_title"
                     />
                     <CommunityPrivacyDescription
                       pageId={pageId}
                       elementId="community_privacy_private_and_visible_description"
+                      textId="amity_social_label_community_setup_privacy_private_and_visible_description"
                     />
                   </div>
                 </div>
@@ -594,10 +625,12 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                     <CommunityPrivacyTitleOption
                       pageId={pageId}
                       elementId="community_privacy_private_and_hidden_title"
+                      textId="amity_social_label_community_setup_privacy_private_and_hidden_title"
                     />
                     <CommunityPrivacyDescription
                       pageId={pageId}
                       elementId="community_privacy_private_and_hidden_description"
+                      textId="amity_social_label_community_setup_privacy_private_and_hidden_description"
                     />
                   </div>
                 </div>
@@ -608,12 +641,24 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         <div className={styles.createCommunity__formDivider} />
         <div className={styles.createCommunity__formContent}>
           <label className={styles.createCommunity__label}>
-            <TitleForm pageId={pageId} elementId="community_membership_title" />
+            <TitleForm
+              pageId={pageId}
+              elementId="community_membership_title"
+              textId="amity_social_label_community_setup_membership_title"
+            />
           </label>
           <div className={styles.createCommunity__requireJoinApproval}>
             <div>
-              <Description pageId={pageId} elementId="community_membership_description" />
-              <SubDescription pageId={pageId} elementId="community_membership_sub_description" />
+              <Description
+                pageId={pageId}
+                elementId="community_membership_description"
+                textId="amity_social_label_community_setup_membership_description"
+              />
+              <SubDescription
+                pageId={pageId}
+                elementId="community_membership_sub_description"
+                textId="amity_social_label_community_setup_membership_sub_desc"
+              />
             </div>
             <Switch
               defaultSelected

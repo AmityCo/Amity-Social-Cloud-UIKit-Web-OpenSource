@@ -10,6 +10,7 @@ import { BackButton } from '~/v4/social/elements';
 import styles from './TopSearchBar.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
+import { useString } from '~/v4/core/localization';
 
 export type TopSearchBarProps = {
   pageId?: string;
@@ -40,7 +41,7 @@ export function TopSearchBar({
       setSearchValue(initialValue);
     }
   }, [initialValue]);
-  const { config, isExcluded, themeStyles, accessibilityId } = useAmityComponent({
+  const { isExcluded, themeStyles, accessibilityId, resolveText } = useAmityComponent({
     pageId,
     componentId,
   });
@@ -71,7 +72,7 @@ export function TopSearchBar({
             type="text"
             onFocus={onFocus}
             value={searchValue}
-            placeholder={config.text}
+            placeholder={useString('amity_social_label_search_my_communities')}
             className={styles.topSearchBar__textInput}
             onChange={(ev) => setSearchValue(ev.target.value)}
           />

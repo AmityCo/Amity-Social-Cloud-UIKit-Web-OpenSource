@@ -25,12 +25,19 @@ export const CommunityAddMemberButton = ({
   isDisabled,
 }: CommunityAddMemberButtonProps) => {
   const elementId = 'community_add_member_button';
-  const { config, accessibilityId, themeStyles, isExcluded, defaultConfig, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    accessibilityId,
+    themeStyles,
+    isExcluded,
+    defaultConfig,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -54,7 +61,7 @@ export const CommunityAddMemberButton = ({
         />
       </div>
       <Typography.Body className={styles.communityAddMemberButton__text}>
-        {config.text}
+        {resolveText('amity_social_community_setup_page_community_add_member_button_text')}
       </Typography.Body>
     </Button>
   );

@@ -7,14 +7,16 @@ type CommunityPrivacyDescriptionProps = {
   pageId?: string;
   componentId?: string;
   elementId: string;
+  textId?: string;
 };
 
 export const CommunityPrivacyDescription = ({
   pageId = '*',
   componentId = '*',
   elementId,
+  textId,
 }: CommunityPrivacyDescriptionProps) => {
-  const { isExcluded, config, accessibilityId } = useAmityElement({
+  const { isExcluded, config, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -26,7 +28,7 @@ export const CommunityPrivacyDescription = ({
       data-testid={accessibilityId}
       className={styles.communityPrivacyDescription__text}
     >
-      {config.text}
+      {textId ? resolveText(textId) : config.text}
     </Typography.Caption>
   );
 };

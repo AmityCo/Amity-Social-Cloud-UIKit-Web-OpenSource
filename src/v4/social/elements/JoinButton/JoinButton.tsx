@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { Button, ButtonProps } from '~/v4/core/components/AriaButton';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 
@@ -6,12 +7,14 @@ type JoinButtonProps = ButtonProps & {
   pageId?: string;
   componentId?: string;
   elementId?: string;
+  textId?: string;
 };
 
 export const JoinButton = ({
   pageId = '*',
   componentId = '*',
   elementId: $elementId,
+  textId = 'amity_social_accept_button',
   ...props
 }: JoinButtonProps) => {
   const elementId = $elementId ? $elementId : 'join_button';
@@ -32,7 +35,7 @@ export const JoinButton = ({
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveString(textId) || config.text}
     </Button>
   );
 };

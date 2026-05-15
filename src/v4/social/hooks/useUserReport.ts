@@ -1,6 +1,7 @@
 import { UserRepository } from '@amityco/ts-sdk';
 import { useMutation, UseMutateAsyncFunction } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { resolveString } from '~/v4/core/localization';
 
 type ReportUserParams = Parameters<typeof UserRepository.flagUser>[0];
 type UnreportUserParams = Parameters<typeof UserRepository.unflagUser>[0];
@@ -19,12 +20,12 @@ const useUserReport = (): UseUserReportReturnType => {
     },
     onSuccess: () => {
       notification.success({
-        content: 'User reported.',
+        content: resolveString('amity_social_button_user_reported'),
       });
     },
     onError: () => {
       notification.error({
-        content: 'Failed to report user. Please try again.',
+        content: resolveString('amity_social_toast_user_report_failed'),
       });
     },
   });
@@ -35,12 +36,12 @@ const useUserReport = (): UseUserReportReturnType => {
     },
     onSuccess: () => {
       notification.success({
-        content: 'User unreported.',
+        content: resolveString('amity_social_button_user_unreported'),
       });
     },
     onError: () => {
       notification.error({
-        content: 'Failed to unreported user. Please try again.',
+        content: resolveString('amity_social_toast_user_unreport_failed'),
       });
     },
   });

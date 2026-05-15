@@ -13,7 +13,7 @@ export const PostsTabDescription = ({
   componentId = '*',
 }: PostsTabDescriptionProps) => {
   const elementId = 'posts_tab_description';
-  const { config, accessibilityId, themeStyles } = useAmityElement({
+  const { config, accessibilityId, themeStyles, resolveText } = useAmityElement({
     elementId,
     componentId,
     pageId,
@@ -22,7 +22,7 @@ export const PostsTabDescription = ({
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.postsTabDescription}>
       <Typography.Caption className={styles.postsTabDescription__text}>
-        {config.text}
+        {resolveText('amity_social_button_decline_pending_post_will_permanently_delete_the_select')}
       </Typography.Caption>
     </div>
   );

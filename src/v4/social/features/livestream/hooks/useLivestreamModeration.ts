@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { MemberRoles } from '~/v4/chat/constants';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { resolveString } from '~/v4/core/localization';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useCancelInvitation } from '~/v4/social/features/livestream/hooks';
 import { useRemoveParticipant } from '~/v4/social/features/livestream/hooks/useRemoveParticipant';
 import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
@@ -71,6 +73,7 @@ export const useLivestreamModeration = ({
   // Permission checks
   const isHost = currentUserId === host?.userId;
   const { isModerator } = useChannelPermission(channel?.channelId);
+  const notification = useNotifications();
 
   // Hooks
   const { cancelInvitation, isPending: isPendingCancelInvitation } = useCancelInvitation({
@@ -83,7 +86,13 @@ export const useLivestreamModeration = ({
   // Action handlers
   const handleCancelInvitation = () => {
     if (invitation?.invitationId) {
-      cancelInvitation(invitation.invitationId);
+      cancelInvitation(invitation.invitationId, {
+        onSuccess: () => {
+          notification.success({
+            content: resolveString('amity_social_toast_snackbar_invitation_declined'),
+          });
+        },
+      });
     }
   };
 

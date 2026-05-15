@@ -258,12 +258,12 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/edit_comment_component/edit_cancel_button': {
       cancel_icon: '',
-      cancel_button_text: 'Cancel',
+      cancel_button_text: '',
       background_color: '',
     },
     '*/edit_comment_component/save_button': {
       save_icon: '',
-      save_button_text: 'Save',
+      save_button_text: '',
       background_color: '#1243EE',
     },
     '*/hyper_link_config_component/*': {
@@ -271,19 +271,18 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/hyper_link_config_component/done_button': {
       done_icon: '',
-      done_button_text: 'Done',
+      done_button_text: '',
       background_color: '#1243EE',
     },
     '*/hyper_link_config_component/edit_cancel_button': {
       cancel_icon: '',
-      cancel_button_text: 'Cancel',
+      cancel_button_text: '',
     },
     '*/comment_tray_component/*': {
       theme: {},
     },
     '*/comment_tray_component/comment_bubble_deleted_view': {
       comment_bubble_deleted_icon: 'comment_bubble_deleted.png',
-      text: 'This reply has been deleted',
     },
     '*/story_tab_component/*': {},
     '*/story_tab_component/story_ring': {
@@ -297,9 +296,7 @@ export const defaultConfig: DefaultConfig = {
     '*/*/close_button': {
       close_icon: 'close.png',
     },
-    'social_home_page/top_navigation/header_label': {
-      text: 'Community',
-    },
+    'social_home_page/top_navigation/header_label': {},
     'social_home_page/top_navigation/global_search_button': {
       image: 'searchButtonIcon',
     },
@@ -309,38 +306,22 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/top_navigation/notification_tray_button': {
       image: 'value',
     },
-    'social_home_page/*/newsfeed_button': {
-      text: 'Newsfeed',
-    },
-    'social_home_page/*/explore_button': {
-      text: 'Explore',
-    },
-    'social_home_page/*/my_communities_button': {
-      text: 'My communities',
-    },
-    'social_home_page/*/communities_button': {
-      text: 'Communities',
-    },
-    'social_home_page/*/events_button': {
-      text: 'Events',
-    },
+    'social_home_page/*/newsfeed_button': {},
+    'social_home_page/*/explore_button': {},
+    'social_home_page/*/my_communities_button': {},
+    'social_home_page/*/communities_button': {},
+    'social_home_page/*/events_button': {},
 
     'social_home_page/empty_newsfeed/illustration': {
       icon: 'emptyFeedIcon',
     },
-    'social_home_page/empty_newsfeed/title': {
-      text: 'Your Feed is empty',
-    },
-    'social_home_page/empty_newsfeed/description': {
-      text: 'Find community or create your own.',
-    },
+    'social_home_page/empty_newsfeed/title': {},
+    'social_home_page/empty_newsfeed/description': {},
     'social_home_page/empty_newsfeed/explore_communities_button': {
       icon: 'exploreCommunityIcon',
-      text: 'Explore Community',
     },
     'social_home_page/empty_newsfeed/create_community_button': {
       icon: 'createCommunityIcon',
-      text: 'Create Community',
     },
     'social_home_page/my_communities/community_avatar': {},
     'social_home_page/my_communities/community_display_name': {},
@@ -364,13 +345,10 @@ export const defaultConfig: DefaultConfig = {
       icon: 'ImageIcon',
     },
     'social_home_page/create_post_menu/create_clip_button': {
-      text: 'Clip',
       image: 'value',
     },
 
-    'social_home_page/*/clipsfeed_button': {
-      text: 'Clips',
-    },
+    'social_home_page/*/clipsfeed_button': {},
     'global_search_page/*/*': {},
     'post_detail_page/*/back_button': {
       image: 'backButtonIcon',
@@ -380,7 +358,6 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/*/moderator_badge': {
       icon: 'badgeIcon',
-      text: 'Moderator',
     },
     '*/post_content/timestamp': {},
     '*/post_content/menu_button': {
@@ -389,30 +366,21 @@ export const defaultConfig: DefaultConfig = {
     '*/post_content/post_content_view_count': {},
     '*/post_content/reaction_button': {
       icon: 'likeButtonIcon',
-      text: 'Like',
     },
     '*/post_content/comment_button': {
       icon: 'commentButtonIcon',
-      text: 'Comment',
     },
     '*/post_content/share_button': {
       icon: 'shareButtonIcon',
-      text: 'Share',
     },
     'post_composer_page/*/*': {},
     'post_composer_page/*/close_button': {
       image: 'platformValue',
     },
     'post_composer_page/*/community_display_name': {},
-    'post_composer_page/*/create_new_post_button': {
-      text: 'Post',
-    },
-    'post_composer_page/*/edit_post_button': {
-      text: 'Save',
-    },
-    'post_composer_page/*/edit_post_title': {
-      text: 'Edit post',
-    },
+    'post_composer_page/*/create_new_post_button': {},
+    'post_composer_page/*/edit_post_button': {},
+    'post_composer_page/*/edit_post_title': {},
     'post_composer_page/media_attachment/*': {},
     'post_composer_page/media_attachment/camera_button': {
       image: 'platformValue',
@@ -431,62 +399,45 @@ export const defaultConfig: DefaultConfig = {
     },
     'post_composer_page/detailed_media_attachment/*': {},
     'post_composer_page/detailed_media_attachment/camera_button': {
-      text: 'Camera',
       image: 'platformValue',
     },
     'post_composer_page/detailed_media_attachment/image_button': {
-      text: 'Photo',
       image: 'platformValue',
     },
     'post_composer_page/detailed_media_attachment/video_button': {
-      text: 'Video',
       image: 'platformValue',
     },
     'post_composer_page/detailed_media_attachment/file_button': {
-      text: 'Attachment',
       image: 'platformValue',
     },
     'social_home_page/*/*': {},
     'social_home_page/create_post_menu/*': {},
     'social_home_page/create_post_menu/create_post_button': {
-      text: 'Post',
       image: 'Post',
     },
     'social_home_page/create_post_menu/create_story_button': {
-      text: 'Story',
       image: 'Story',
     },
     'social_home_page/create_post_menu/create_poll_button': {
-      text: 'Poll',
       image: 'Poll',
     },
     'social_home_page/create_post_menu/create_livestream_button': {
-      text: 'Livestream',
       image: 'Livestream',
     },
     'social_home_page/create_post_menu/create_event_button': {
-      text: 'Event',
       image: '',
     },
     'select_post_target_page/*/close_button': {
       image: 'platformValue',
     },
     'select_post_target_page/*/my_timeline_avatar': {},
-    'select_post_target_page/*/title': {
-      text: 'Post to',
-    },
-    'select_post_target_page/*/my_timeline_text': {
-      text: 'My Timeline',
-    },
+    'select_post_target_page/*/title': {},
+    'select_post_target_page/*/my_timeline_text': {},
     'select_story_target_page/*/close_button': {
       image: 'platformValue',
     },
-    'select_story_target_page/*/title': {
-      text: 'Share to',
-    },
-    'select_story_target_page/*/my_timeline_text': {
-      text: 'My Timeline',
-    },
+    'select_story_target_page/*/title': {},
+    'select_story_target_page/*/my_timeline_text': {},
     '*/*/community_official_badge': {
       image: 'platformValue',
     },
@@ -494,18 +445,14 @@ export const defaultConfig: DefaultConfig = {
       image: 'platformValue',
     },
     'social_global_search_page/*/*': {},
-    'social_global_search_page/top_search_bar/*': {
-      text: 'Search',
-    },
+    'social_global_search_page/top_search_bar/*': {},
     'social_global_search_page/top_search_bar/search_icon': {
       icon: 'search',
     },
     'social_global_search_page/top_search_bar/clear_button': {
       icon: 'clear',
     },
-    'social_global_search_page/top_search_bar/cancel_button': {
-      text: 'Cancel',
-    },
+    'social_global_search_page/top_search_bar/cancel_button': {},
     'social_global_search_page/community_search_result/community_avatar': {},
     'social_global_search_page/community_search_result/community_display_name': {},
     'social_global_search_page/community_search_result/community_private_badge': {
@@ -516,9 +463,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_global_search_page/community_search_result/community_category_name': {},
     'social_global_search_page/community_search_result/community_members_count': {},
-    'my_communities_search_page/top_search_bar/*': {
-      text: 'Search my community',
-    },
+    'my_communities_search_page/top_search_bar/*': {},
     'my_communities_search_page/*/community_avatar': {},
     'my_communities_search_page/*/community_display_name': {},
     'my_communities_search_page/*/community_private_badge': {
@@ -529,9 +474,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'my_communities_search_page/*/community_category_name': {},
     'my_communities_search_page/*/community_members_count': {},
-    'my_communities_search_page/top_search_bar/cancel_button': {
-      text: 'Cancel',
-    },
+    'my_communities_search_page/top_search_bar/cancel_button': {},
     'community_profile_page/*/*': {},
     'community_profile_page/community_feed/*': {},
     '*/post_content/announcement_badge': {
@@ -567,12 +510,8 @@ export const defaultConfig: DefaultConfig = {
     'community_profile_page/community_header/community_cancel_request_button': {
       image: 'value',
     },
-    'community_profile_page/invitation_banner/join_button': {
-      text: 'Join',
-    },
-    'community_profile_page/invitation_banner/reject_button': {
-      text: 'Decline',
-    },
+    'community_profile_page/invitation_banner/join_button': {},
+    'community_profile_page/invitation_banner/reject_button': {},
     'community_profile_page/community_profile_tab/*': {},
     'community_profile_page/community_profile_tab/community_feed_tab_button': {
       image: 'value',
@@ -585,112 +524,60 @@ export const defaultConfig: DefaultConfig = {
       image: 'value',
     },
     'community_profile_page/post_content/*': {},
-    'community_profile_page/*/create_post_button': {
-      text: 'Post',
-    },
-    'community_profile_page/*/create_story_button': {
-      text: 'Story',
-    },
-    'community_profile_page/*/create_poll_button': {
-      text: 'Poll',
-    },
-    'community_profile_page/*/create_clip_button': {
-      text: 'Clip',
-    },
-    'community_profile_page/*/create_event_button': {
-      text: 'Event',
-    },
-    'community_profile_page/community_video_feed/videos_button': {
-      text: 'Videos',
-    },
-    'community_profile_page/community_video_feed/clips_button': {
-      text: 'Clips',
-    },
+    'community_profile_page/*/create_post_button': {},
+    'community_profile_page/*/create_story_button': {},
+    'community_profile_page/*/create_poll_button': {},
+    'community_profile_page/*/create_clip_button': {},
+    'community_profile_page/*/create_event_button': {},
+    'community_profile_page/community_video_feed/videos_button': {},
+    'community_profile_page/community_video_feed/clips_button': {},
     'community_profile_page/community_video_feed/empty_clip_feed': {
-      text: 'No clips yet',
       image: 'emptyClipIcon',
     },
     'pending_posts_page/*/*': {},
     'pending_posts_page/*/back_button': {
       image: 'value',
     },
-    'pending_posts_page/*/title': {
-      text: 'Pending posts ',
-    },
+    'pending_posts_page/*/title': {},
     'pending_posts_page/pending_post_content/*': {},
     'pending_posts_page/pending_post_content/timestamp': {},
-    'pending_posts_page/pending_post_content/post_accept_button': {
-      text: 'Accept',
-    },
-    'pending_posts_page/pending_post_content/post_decline_button': {
-      text: 'Decline',
-    },
+    'pending_posts_page/pending_post_content/post_accept_button': {},
+    'pending_posts_page/pending_post_content/post_decline_button': {},
     'social_home_page/explore_community_categories/*': {},
     'social_home_page/recommended_communities/*': {},
     'social_home_page/*/explore_empty_image': {
       image: 'value',
     },
-    'social_home_page/explore_empty/title': {
-      text: 'Your explore is empty',
-    },
-    'social_home_page/explore_empty/description': {
-      text: 'Find community or create your own.',
-    },
-    'social_home_page/explore_empty/explore_create_community': {
-      text: 'Create community',
-    },
-    'social_home_page/explore_community_empty/title': {
-      text: 'No community yet',
-    },
-    'social_home_page/explore_community_empty/description': {
-      text: `Let's create your own communities`,
-    },
-    'social_home_page/explore_community_empty/explore_create_community': {
-      text: 'Create community',
-    },
-    'social_home_page/*/explore_trending_title': {
-      text: 'Trending now',
-    },
-    'social_home_page/*/explore_recommended_title': {
-      text: 'Recommended for you',
-    },
+    'social_home_page/explore_empty/title': {},
+    'social_home_page/explore_empty/description': {},
+    'social_home_page/explore_empty/explore_create_community': {},
+    'social_home_page/explore_community_empty/title': {},
+    'social_home_page/explore_community_empty/description': {},
+    'social_home_page/explore_community_empty/explore_create_community': {},
+    'social_home_page/*/explore_trending_title': {},
+    'social_home_page/*/explore_recommended_title': {},
     'social_home_page/trending_communities/*': {},
     'all_categories_page/*/*': {},
     'communities_by_category_page/*/*': {},
-    '*/*/community_join_button': {
-      text: 'Join',
-    },
-    '*/*/community_joined_button': {
-      text: 'Joined',
-    },
+    '*/*/community_join_button': {},
+    '*/*/community_joined_button': {},
     'communities_by_category_page/*/community_empty_image': {},
-    'communities_by_category_page/*/community_empty_title': {
-      text: 'No community yet',
-    },
-    '*/community_sidebar/community_sidebar_title': {
-      text: 'Community',
-    },
+    'communities_by_category_page/*/community_empty_title': {},
+    '*/community_sidebar/community_sidebar_title': {},
     '*/community_sidebar/newsfeed_sidebar_menu_item': {
-      text: 'Newsfeed',
       icon: 'Newspaper',
     },
     '*/community_sidebar/explore_sidebar_menu_item': {
-      text: 'Explore',
       icon: 'Global',
     },
-    '*/community_sidebar/my_communities_sidebar_title': {
-      text: 'My communities',
-    },
+    '*/community_sidebar/my_communities_sidebar_title': {},
     '*/community_sidebar/create_community_sidebar_menu_item': {
-      text: 'Create community',
       icon: 'Plus',
     },
     '*/community_sidebar/communities_sidebar_menu_item': {
-      text: 'Communities',
       icon: '',
     },
     '*/community_sidebar/events_sidebar_menu_item': {
-      text: 'Events',
       icon: '',
     },
     'user_profile_page/*/*': {},
@@ -725,108 +612,68 @@ export const defaultConfig: DefaultConfig = {
     'user_relationship_page/*/*': {},
     'user_pending_follow_request_page/*/*': {},
     'user_profile_page/user_profile_header/follow_user_button': {
-      text: 'Follow',
       image: 'Plus',
     },
     'user_profile_page/user_profile_header/following_user_button': {
-      text: 'Following',
       image: 'FollowingUser',
     },
     'user_profile_page/user_profile_header/pending_user_button': {
-      text: 'Cancel request',
       image: 'PendingUser',
     },
     'user_profile_page/user_profile_header/unblock_user_button': {
-      text: 'Unblock',
       image: 'UnblockUser',
     },
     'user_profile_page/user_profile_header/user_avatar': {},
     'user_profile_page/user_profile_header/user_name': {},
     'user_profile_page/user_profile_header/user_description': {},
-    'user_profile_page/user_profile_header/user_following': {
-      text: 'following',
-    },
-    'user_profile_page/user_profile_header/user_follower': {
-      text: 'followers',
-    },
+    'user_profile_page/user_profile_header/user_following': {},
+    'user_profile_page/user_profile_header/user_follower': {},
     'user_profile_page/user_feed/empty_user_feed': {
-      text: 'No posts yet',
       image: 'EmptyPost',
     },
     'user_profile_page/user_feed/private_user_feed': {
-      text: 'This account is private',
       image: 'PrivateFeed',
     },
-    'user_profile_page/user_feed/private_user_feed_info': {
-      text: 'Follow this user to see their posts.',
-    },
+    'user_profile_page/user_feed/private_user_feed_info': {},
     'user_profile_page/user_feed/blocked_user_feed': {
-      text: 'You’ve blocked this user',
       image: 'BlockedUser',
     },
-    'user_profile_page/user_feed/blocked_user_feed_info': {
-      text: 'Unblock to see their posts.',
-    },
+    'user_profile_page/user_feed/blocked_user_feed_info': {},
     'user_profile_page/user_image_feed/empty_user_image_feed': {
-      text: 'No photos yet',
       image: 'EmptyImagePost',
     },
     'user_profile_page/user_image_feed/private_user_image_feed': {
-      text: 'This account is private',
       image: 'PrivateFeed',
     },
-    'user_profile_page/user_image_feed/private_user_image_feed_info': {
-      text: 'Follow this user to see their posts.',
-    },
+    'user_profile_page/user_image_feed/private_user_image_feed_info': {},
     'user_profile_page/user_image_feed/blocked_user_image_feed': {
-      text: 'You’ve blocked this user',
       image: 'BlockedUser',
     },
-    'user_profile_page/user_image_feed/blocked_user_image_feed_info': {
-      text: 'Unblock to see their posts.',
-    },
+    'user_profile_page/user_image_feed/blocked_user_image_feed_info': {},
     'user_profile_page/user_video_feed/empty_user_video_feed': {
-      text: 'No videos yet',
       image: 'EmptyVideoPost',
     },
     'user_profile_page/user_video_feed/private_user_video_feed': {
-      text: 'This account is private',
       image: 'PrivateFeed',
     },
-    'user_profile_page/user_video_feed/private_user_video_feed_info': {
-      text: 'Follow this user to see their posts.',
-    },
+    'user_profile_page/user_video_feed/private_user_video_feed_info': {},
     'user_profile_page/user_video_feed/blocked_user_video_feed': {
-      text: 'You’ve blocked this user',
       image: 'BlockedUser',
     },
-    'user_profile_page/user_video_feed/blocked_user_video_feed_info': {
-      text: 'Unblock to see their posts.',
-    },
+    'user_profile_page/user_video_feed/blocked_user_video_feed_info': {},
 
     'user_profile_page/user_clip_feed/private_user_clip_feed': {
-      text: 'This account is private',
       image: 'PrivateFeed',
     },
-    'user_profile_page/user_clip_feed/private_user_clip_feed_info': {
-      text: 'Follow this user to see their posts.',
-    },
+    'user_profile_page/user_clip_feed/private_user_clip_feed_info': {},
     'user_profile_page/user_clip_feed/blocked_user_clip_feed': {
-      text: 'You’ve blocked this user',
       image: 'BlockedUser',
     },
-    'user_profile_page/user_clip_feed/blocked_user_clip_feed_info': {
-      text: 'Unblock to see their posts.',
-    },
+    'user_profile_page/user_clip_feed/blocked_user_clip_feed_info': {},
 
-    'user_profile_page/user_video_feed/videos_button': {
-      text: 'Videos',
-    },
-    'user_profile_page/user_video_feed/clips_button': {
-      text: 'Clips',
-    },
+    'user_profile_page/user_video_feed/videos_button': {},
+    'user_profile_page/user_video_feed/clips_button': {},
     'user_profile_page/user_video_feed/empty_clip_feed': {
-      text: 'No clips yet',
       image: 'emptyClipIcon',
     },
 
@@ -834,161 +681,86 @@ export const defaultConfig: DefaultConfig = {
     'edit_user_profile_page/*/back_button': {
       image: 'ArrowLeft',
     },
-    'edit_user_profile_page/*/title': {
-      text: 'Edit profile',
-    },
-    'edit_user_profile_page/*/user_display_name_title': {
-      text: 'Display name',
-    },
-    'edit_user_profile_page/*/user_about_title': {
-      text: 'About',
-    },
-    'edit_user_profile_page/*/update_user_profile_button': {
-      text: 'Save',
-    },
+    'edit_user_profile_page/*/title': {},
+    'edit_user_profile_page/*/user_display_name_title': {},
+    'edit_user_profile_page/*/user_about_title': {},
+    'edit_user_profile_page/*/update_user_profile_button': {},
     'blocked_users_page/*/*': {},
     'blocked_users_page/*/back_button': {
       image: 'ArrowLeft',
     },
-    'blocked_users_page/*/title': {
-      text: 'Manage blocked users',
-    },
-    'blocked_users_page/*/user_list_unblock_user_button': {
-      text: 'Unblock',
-    },
+    'blocked_users_page/*/title': {},
+    'blocked_users_page/*/user_list_unblock_user_button': {},
     'community_setup_page/*/*': {},
     'community_setup_page/*/close_button': {
       image: 'value',
     },
-    'community_setup_page/*/title': {
-      text: 'Create community',
-    },
-    'community_setup_page/*/community_edit_title': {
-      text: 'Edit community',
-    },
-    'community_setup_page/*/community_name_title': {
-      text: 'Community name',
-    },
-    'community_setup_page/*/community_about_title': {
-      text: 'About',
-    },
-    'community_setup_page/*/community_category_title': {
-      text: 'Categories',
-    },
-    'community_setup_page/*/community_privacy_title': {
-      text: 'Privacy',
-    },
+    'community_setup_page/*/title': {},
+    'community_setup_page/*/community_edit_title': {},
+    'community_setup_page/*/community_name_title': {},
+    'community_setup_page/*/community_about_title': {},
+    'community_setup_page/*/community_category_title': {},
+    'community_setup_page/*/community_privacy_title': {},
     'community_setup_page/*/community_privacy_private_icon': {
       image: 'value',
     },
-    'community_setup_page/*/community_privacy_private_title': {
-      text: 'Private',
-    },
-    'community_setup_page/*/community_privacy_private_description': {
-      text: 'Only members invited by the moderators can join, view, and search the posts in this community.',
-    },
+    'community_setup_page/*/community_privacy_private_title': {},
+    'community_setup_page/*/community_privacy_private_description': {},
     'community_setup_page/*/community_privacy_public_icon': {
       image: 'value',
     },
-    'community_setup_page/*/community_privacy_public_title': {
-      text: 'Public',
-    },
-    'community_setup_page/*/community_privacy_public_description': {
-      text: 'Community is discoverable by anyone. Content is visible to anyone.',
-    },
-    'community_setup_page/*/community_add_member_title': {
-      text: 'Member',
-    },
+    'community_setup_page/*/community_privacy_public_title': {},
+    'community_setup_page/*/community_privacy_public_description': {},
+    'community_setup_page/*/community_add_member_title': {},
     'community_setup_page/*/community_add_member_button': {
-      text: 'Add',
       image: 'value',
     },
-    'community_setup_page/*/community_invite_member_title': {
-      text: 'Invite members',
-    },
+    'community_setup_page/*/community_invite_member_title': {},
     'community_setup_page/*/community_invite_member_button': {
-      text: 'Invite',
       image: 'value',
     },
     'community_setup_page/*/community_invite_member_description': {
-      text: 'They will join as members after accepting your invitation.',
       image: 'value',
     },
     'community_setup_page/*/community_create_button': {
-      text: 'Create community',
       image: 'value',
     },
     'community_setup_page/*/community_edit_button': {
-      text: 'Save',
       image: 'value',
     },
     'community_setup_page/*/image_button': {
-      text: 'Photo',
       image: 'value',
     },
     'community_setup_page/*/camera_button': {
-      text: 'Camera',
       image: 'value',
     },
-    'community_setup_page/*/community_membership_title': {
-      text: 'Membership',
-    },
-    'community_setup_page/*/community_membership_description': {
-      text: 'Requires moderator approval',
-    },
-    'community_setup_page/*/community_membership_sub_description': {
-      text: 'Users will become members only when their join request is approved by a moderator of this community.',
-    },
+    'community_setup_page/*/community_membership_title': {},
+    'community_setup_page/*/community_membership_description': {},
+    'community_setup_page/*/community_membership_sub_description': {},
     'community_setup_page/*/community_privacy_private_and_visible_icon': {
       image: 'value',
     },
-    'community_setup_page/*/community_privacy_private_and_visible_title': {
-      text: 'Private & visible',
-    },
-    'community_setup_page/*/community_privacy_private_and_visible_description': {
-      text: 'Community is discoverable by anyone. Content is hidden from non-members.',
-    },
+    'community_setup_page/*/community_privacy_private_and_visible_title': {},
+    'community_setup_page/*/community_privacy_private_and_visible_description': {},
     'community_setup_page/*/community_privacy_private_and_hidden_icon': {
       image: 'value',
     },
-    'community_setup_page/*/community_privacy_private_and_hidden_title': {
-      text: 'Private & hidden',
-    },
-    'community_setup_page/*/community_privacy_private_and_hidden_description': {
-      text: 'Community and content are hidden from non-members, and cannot be discovered via search.',
-    },
+    'community_setup_page/*/community_privacy_private_and_hidden_title': {},
+    'community_setup_page/*/community_privacy_private_and_hidden_description': {},
     'community_add_category_page/*/*': {},
     'community_add_member_page/*/*': {},
     'community_membership_page/*/*': {},
     'community_setting_page/*/*': {},
 
-    'community_setting_page/*/edit_profile': {
-      text: 'Community profile',
-    },
-    'community_setting_page/*/members': {
-      text: 'Members',
-    },
-    'community_setting_page/*/pending_invitations': {
-      text: 'Pending invitations',
-    },
-    'community_setting_page/*/notifications': {
-      text: 'Notifications',
-    },
-    'community_setting_page/*/post_permission': {
-      text: 'Post permission',
-    },
-    'community_setting_page/*/story_setting': {
-      text: 'Story comment',
-    },
-    'community_setting_page/*/leave_community': {
-      text: 'Leave community',
-    },
-    'community_setting_page/*/close_community': {
-      text: 'Close community',
-    },
-    'community_setting_page/*/close_community_description': {
-      text: 'Closing this community will remove the community  page and all its content and comments.',
-    },
+    'community_setting_page/*/edit_profile': {},
+    'community_setting_page/*/members': {},
+    'community_setting_page/*/pending_invitations': {},
+    'community_setting_page/*/notifications': {},
+    'community_setting_page/*/post_permission': {},
+    'community_setting_page/*/story_setting': {},
+    'community_setting_page/*/leave_community': {},
+    'community_setting_page/*/close_community': {},
+    'community_setting_page/*/close_community_description': {},
     'community_post_permission_page/*/*': {},
     'community_story_setting_page/*/*': {},
     'community_notification_page/*/*': {},
@@ -996,112 +768,63 @@ export const defaultConfig: DefaultConfig = {
     'community_comments_notification_page/*/*': {},
     'community_stories_notification_page/*/*': {},
     'poll_post_composer_page/*/*': {},
-    'poll_post_composer_page/*/post_title': {
-      text: 'Post title',
-    },
-    'poll_post_composer_page/*/poll_question_title': {
-      text: 'Poll question',
-    },
-    'poll_post_composer_page/*/poll_options_title': {
-      text: 'Options',
-    },
-    'poll_post_composer_page/*/poll_options_desc': {
-      text: 'Poll must contain at least 2 options.',
-    },
+    'poll_post_composer_page/*/post_title': {},
+    'poll_post_composer_page/*/poll_question_title': {},
+    'poll_post_composer_page/*/poll_options_title': {},
+    'poll_post_composer_page/*/poll_options_desc': {},
     'poll_post_composer_page/*/poll_add_option_button': {
-      text: 'Add option',
       image: 'plusIcon',
     },
-    'poll_post_composer_page/*/poll_duration_title': {
-      text: 'Poll duration',
-    },
-    'poll_post_composer_page/*/poll_duration_desc': {
-      text: 'You can always close the poll before the set duration.',
-    },
-    'poll_post_composer_page/*/poll_multiple_selection_title': {
-      text: 'Multiple selection',
-    },
-    'poll_post_composer_page/*/poll_multiple_selection_desc': {
-      text: 'Let participants vote more than one option',
-    },
-    'poll_post_composer_page/*/create_new_post_button': {
-      text: 'Post',
-    },
+    'poll_post_composer_page/*/poll_duration_title': {},
+    'poll_post_composer_page/*/poll_duration_desc': {},
+    'poll_post_composer_page/*/poll_multiple_selection_title': {},
+    'poll_post_composer_page/*/poll_multiple_selection_desc': {},
+    'poll_post_composer_page/*/create_new_post_button': {},
     'select_poll_target_page/*/close_button': {
       image: 'platformValue',
     },
     'select_poll_target_page/*/my_timeline_avatar': {},
-    'select_poll_target_page/*/title': {
-      text: 'Post to',
-    },
-    'select_poll_target_page/*/my_timeline_text': {
-      text: 'My Timeline',
-    },
+    'select_poll_target_page/*/title': {},
+    'select_poll_target_page/*/my_timeline_text': {},
     'select_livestream_target_page/*/close_button': {
       image: 'platformValue',
     },
     'select_livestream_target_page/*/my_timeline_avatar': {},
-    'select_livestream_target_page/*/title': {
-      text: 'Live on',
-    },
-    'select_livestream_target_page/*/my_timeline_text': {
-      text: 'My Timeline',
-    },
+    'select_livestream_target_page/*/title': {},
+    'select_livestream_target_page/*/my_timeline_text': {},
     'livestream_terminated_page/*/*': {},
     'livestream_terminated_page/*/livestream_terminated_action_button': {},
     'livestream_banned_page/*/*': {},
-    'livestream_banned_page/*/title': {
-      text: 'Live stream',
-    },
+    'livestream_banned_page/*/title': {},
     'livestream_banned_page/*/livestream_banned_image': {
       image: 'BannedCaution',
     },
-    'livestream_banned_page/*/livestream_banned_title': {
-      text: 'You’ve been banned.',
-    },
-    'livestream_banned_page/*/livestream_banned_description': {
-      text: 'You can no longer access this live stream.',
-    },
-    'livestream_banned_page/*/livestream_banned_button': {
-      text: 'OK',
-    },
+    'livestream_banned_page/*/livestream_banned_title': {},
+    'livestream_banned_page/*/livestream_banned_description': {},
+    'livestream_banned_page/*/livestream_banned_button': {},
     'notification_tray_page/*/*': {},
     'notification_tray_page/*/back_button': {
       image: 'value',
     },
-    'notification_tray_page/*/title': {
-      text: 'Notifications',
-    },
+    'notification_tray_page/*/title': {},
     'notification_tray_page/*/empty_notification': {
       image: 'value',
-      text: 'No notifications',
     },
     'notification_tray_page/*/no_internet_connection': {
       image: 'value',
-      text: 'No internet connection',
     },
     'notification_tray_page/*/user_avatar': {
       image: 'value',
     },
-    '*/*/notification_section_text': {
-      text: 'value',
-    },
+    '*/*/notification_section_text': {},
     'notification_tray_page/invitation_section/*': {},
-    'notification_tray_page/invitation_section/invitation_section_title': {
-      text: 'Requests',
-    },
+    'notification_tray_page/invitation_section/invitation_section_title': {},
     'notification_tray_page/invitation_section/user_avatar': {},
     'notification_tray_page/invitation_section/invitation_description': {},
     'notification_tray_page/invitation_section/invitation_date': {},
-    'notification_tray_page/invitation_section/accept_invite_button': {
-      text: 'Join',
-    },
-    'notification_tray_page/invitation_section/decline_invite_button': {
-      text: 'Decline',
-    },
-    'community_invite_member_page/top_search_bar/*': {
-      text: 'Search user',
-    },
+    'notification_tray_page/invitation_section/accept_invite_button': {},
+    'notification_tray_page/invitation_section/decline_invite_button': {},
+    'community_invite_member_page/top_search_bar/*': {},
     'community_invite_member_page/top_search_bar/search_icon': {
       image: 'value',
     },
@@ -1111,45 +834,29 @@ export const defaultConfig: DefaultConfig = {
     'community_invite_member_page/*/close_button': {
       image: 'value',
     },
-    'community_invite_member_page/*/invite_button': {
-      text: 'Invite',
-    },
-    'community_invite_member_page/*/title': {
-      text: 'Invite member',
-    },
-    'community_invite_member_page/*/no_result_title': {
-      text: 'No results found',
-    },
+    'community_invite_member_page/*/invite_button': {},
+    'community_invite_member_page/*/title': {},
+    'community_invite_member_page/*/no_result_title': {},
     'community_invite_member_page/*/no_result_icon': {
       image: 'value',
     },
-    'community_invite_member_page/*/empty_result_title': {
-      text: 'No users available',
-    },
+    'community_invite_member_page/*/empty_result_title': {},
     'community_invite_member_page/*/empty_result_icon': {
       image: 'value',
     },
-    'community_invite_member_page/*/no_internet_title': {
-      text: 'No internet connection',
-    },
+    'community_invite_member_page/*/no_internet_title': {},
     'community_invite_member_page/*/no_internet_icon': {
       image: 'value',
     },
     'community_pending_invitation_page/*/back_button': {
       image: 'value',
     },
-    'community_pending_invitation_page/*/title': {
-      text: 'Pending invitations',
-    },
-    'community_pending_invitation_page/*/empty_result_title': {
-      text: 'Nothing here to see yet',
-    },
+    'community_pending_invitation_page/*/title': {},
+    'community_pending_invitation_page/*/empty_result_title': {},
     'community_pending_invitation_page/*/empty_result_icon': {
       image: 'value',
     },
-    'community_pending_invitation_page/*/no_internet_title': {
-      text: 'No internet connection',
-    },
+    'community_pending_invitation_page/*/no_internet_title': {},
     'community_pending_invitation_page/*/no_internet_icon': {
       image: 'value',
     },
@@ -1157,35 +864,17 @@ export const defaultConfig: DefaultConfig = {
     'pending_request_page/*/back_button': {
       image: 'backIcon',
     },
-    'pending_request_page/*/title': {
-      text: 'Pending requests',
-    },
+    'pending_request_page/*/title': {},
     'pending_request_page/pending_post_list/*': {},
     'pending_request_page/pending_post_list/timestamp': {},
-    'pending_request_page/pending_post_list/post_accept_button': {
-      text: 'Accept',
-    },
-    'pending_request_page/pending_post_list/post_decline_button': {
-      text: 'Decline',
-    },
-    'pending_request_page/*/posts_button_tab': {
-      text: 'Posts',
-    },
-    'pending_request_page/pending_post_list/posts_tab_description': {
-      text: 'Decline pending post will permanently delete the selected post from community.',
-    },
-    'pending_request_page/*/join_requests_button_tab': {
-      text: 'Join requests',
-    },
-    'pending_request_page/join_request_content/join_requests_tab_description': {
-      text: 'Declining a join request is irreversible. The user must send a new request if declined.',
-    },
-    'pending_request_page/join_request_content/join_accept_button': {
-      text: 'Accept',
-    },
-    'pending_request_page/join_request_content/join_decline_button': {
-      text: 'Decline',
-    },
+    'pending_request_page/pending_post_list/post_accept_button': {},
+    'pending_request_page/pending_post_list/post_decline_button': {},
+    'pending_request_page/*/posts_button_tab': {},
+    'pending_request_page/pending_post_list/posts_tab_description': {},
+    'pending_request_page/*/join_requests_button_tab': {},
+    'pending_request_page/join_request_content/join_requests_tab_description': {},
+    'pending_request_page/join_request_content/join_accept_button': {},
+    'pending_request_page/join_request_content/join_decline_button': {},
     '*/livestream_chat_compose_bar/message_composer': {},
     '*/livestream_chat_compose_bar/reaction_button': {
       name: 'like',
@@ -1215,9 +904,7 @@ export const defaultConfig: DefaultConfig = {
     'clip_feed_page/*/back_button': {
       image: 'value',
     },
-    'clip_feed_page/*/title': {
-      text: 'value',
-    },
+    'clip_feed_page/*/title': {},
     'clip_feed_page/*/create_new_clip_button': {
       image: 'value',
     },
@@ -1242,98 +929,70 @@ export const defaultConfig: DefaultConfig = {
     },
     'clip_feed_page/*/explore_communities_button': {
       icon: 'exploreCommunityIcon',
-      text: 'Explore Community',
     },
     'clip_feed_page/*/create_community_button': {
       icon: 'createCommunityIcon',
-      text: 'Create Community',
     },
     'livestream_player_page/*/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     'livestream_player_page/*/copy_link': {
       image: 'icon',
-      text: 'Copy live stream link',
     },
     'create_livestream_page/*/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     'create_livestream_page/*/copy_link': {
       image: 'icon',
-      text: 'Copy live stream link',
     },
     'clip_feed_page/*/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     'clip_feed_page/*/copy_link': {
       image: 'icon',
-      text: 'Copy clip link',
     },
     'post_detail_page/*/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     'post_detail_page/*/copy_link': {
       image: 'icon',
-      text: 'Copy post link',
     },
     '*/post_content/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     '*/post_content/copy_link': {
       image: 'icon',
-      text: 'Copy post link',
     },
     'user_profile_page/*/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     'user_profile_page/*/copy_link': {
       image: 'icon',
-      text: 'Copy profile link',
     },
     'community_profile_page/*/share_link': {
       image: 'icon',
-      text: 'Share to',
     },
     'community_profile_page/*/copy_link': {
       image: 'icon',
-      text: 'Copy profile link',
     },
 
     'select_event_target_page/*/*': {},
     'select_event_target_page/*/close_button': {
       image: '',
     },
-    'select_event_target_page/*/title': {
-      text: 'Create event in',
-    },
+    'select_event_target_page/*/title': {},
 
     'event_setup_page/*/*': {},
     'event_setup_page/*/camera_button': {
-      text: 'Camera',
       image: '',
     },
     'event_setup_page/*/image_button': {
-      text: 'Photo',
       image: '',
     },
-    'event_setup_page/*/event_name_title': {
-      text: 'Event name',
-    },
-    'event_setup_page/*/event_details_title': {
-      text: 'Event details',
-    },
-    'event_setup_page/*/event_date_time_title': {
-      text: 'Date and time',
-    },
-    'event_setup_page/*/event_location_title': {
-      text: 'Location',
-    },
+    'event_setup_page/*/event_name_title': {},
+    'event_setup_page/*/event_details_title': {},
+    'event_setup_page/*/event_date_time_title': {},
+    'event_setup_page/*/event_location_title': {},
     '*/*/brand_badge': {
       image: 'value',
     },
@@ -1343,20 +1002,16 @@ export const defaultConfig: DefaultConfig = {
       background_color: '',
     },
     '*/product_tag_selection/product_tag_selection_header': {
-      create_mode_title: 'Tag products',
-      edit_mode_title: 'Edit tags',
-      done_button_text: 'Done',
+      create_mode_title: '',
+      edit_mode_title: '',
+      done_button_text: '',
     },
     '*/product_tag_selection/product_tag_selection_search_bar': {
-      placeholder: 'Search products',
+      placeholder: '',
     },
     '*/product_tag_selection/product_tag_selection_item': {},
-    '*/product_tag_selection/product_tag_empty': {
-      text: 'Start typing to search for products',
-    },
-    '*/product_tag_selection/product_tag_no_result': {
-      text: 'No results found',
-    },
+    '*/product_tag_selection/product_tag_empty': {},
+    '*/product_tag_selection/product_tag_no_result': {},
   },
 };
 

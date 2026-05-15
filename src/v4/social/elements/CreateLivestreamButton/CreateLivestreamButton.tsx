@@ -33,12 +33,19 @@ export function CreateLivestreamButton({
   defaultClassName,
 }: CreateLivestreamButtonProps) {
   const elementId = 'create_livestream_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
   return (
@@ -60,7 +67,7 @@ export function CreateLivestreamButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.BodyBold className={styles.createLivestreamButton__text}>
-        {config.text}
+        {resolveText('amity_social_status_live_stream')}
       </Typography.BodyBold>
     </Button>
   );

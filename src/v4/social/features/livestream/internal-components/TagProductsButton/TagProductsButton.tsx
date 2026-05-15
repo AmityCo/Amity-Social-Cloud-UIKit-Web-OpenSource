@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Label } from 'react-aria-components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Typography } from '~/v4/core/components';
@@ -22,6 +23,7 @@ export const TagProductsButton: React.FC<TagProductsButtonProps> = ({
   className,
 }) => {
   const { isDesktop } = useResponsive();
+
   return (
     <Button
       variant="default"
@@ -36,11 +38,11 @@ export const TagProductsButton: React.FC<TagProductsButtonProps> = ({
         <Label>
           {isDesktop ? (
             <Typography.TitleBold className={styles.tagProductsButton__text}>
-              Tag products
+              {useString('amity_social_button_tag_products')}
             </Typography.TitleBold>
           ) : (
             <Typography.Body className={styles.tagProductsButton__text}>
-              Tag products
+              {useString('amity_social_button_tag_products')}
             </Typography.Body>
           )}
         </Label>

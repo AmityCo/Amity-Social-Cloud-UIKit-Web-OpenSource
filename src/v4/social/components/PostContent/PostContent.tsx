@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
@@ -168,6 +169,9 @@ export const PostContent = ({
 
   const canShowProductTags = !(post?.childrenPosts?.[0]?.dataType === 'room');
 
+  const commentCountPluralLabel = useString('amity_social_button_feed_comment_count_plural');
+  const commentCountSingularLabel = useString('amity_social_button_feed_comment_count_singular');
+
   // State to force poll results view when poll is closed from menu
   const [forceShowPollResults, setForceShowPollResults] = useState(false);
 
@@ -318,10 +322,10 @@ export const PostContent = ({
 
   const onEditFeaturePost = ({ onConfirm }: { onConfirm: () => void }) => {
     confirm({
-      title: 'Edit globally featured post?',
-      content: `The post you're editing has been featured globally. If you edit your post, it will need to be re-approved and will no longer be globally featured.`,
-      cancelText: 'Cancel',
-      okText: 'Edit',
+      title: useString('amity_social_modal_dialog_title_edit_globally_featured'),
+      content: useString('amity_social_featured_post_edit_warning'),
+      cancelText: useString('amity_social_button_cancel'),
+      okText: useString('amity_social_button_edit'),
       onOk: onConfirm,
     });
   };
@@ -462,7 +466,7 @@ export const PostContent = ({
                   data-testid={`${pageId}/${componentId}/post_edited_text`}
                   className={styles.postContent__bar__information__editedTag}
                 >
-                  (edited)
+                  {useString('amity_social_button_edited_suffix')}
                 </Typography.Caption>
               )}
             </div>
@@ -646,7 +650,10 @@ export const PostContent = ({
                   data-testid={`${pageId}/${componentId}/comment_count`}
                   className={styles.postContent__commentsCount}
                 >
-                  {`${millify(post?.commentsCount) || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
+                  {(post?.commentsCount === 1
+                    ? commentCountSingularLabel
+                    : commentCountPluralLabel
+                  ).replace('%d', millify(post?.commentsCount) || '0')}
                 </Typography.Caption>
               </Button>
             )}

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Title.module.css';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { resolveString } from '~/v4/core/localization';
 import clsx from 'clsx';
 
 interface TitleProps {
@@ -11,6 +12,7 @@ interface TitleProps {
   titleClassName?: string;
   required?: boolean;
   labelText?: string;
+  textKey?: string;
 }
 
 export function Title({
@@ -20,8 +22,9 @@ export function Title({
   titleClassName,
   required = false,
   labelText,
+  textKey,
 }: TitleProps) {
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -35,7 +38,7 @@ export function Title({
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text ?? labelText}
+      {textKey ? resolveString(textKey) : labelText}
       {required && <span className={styles.title__requiredIndicator}>*</span>}
     </Typography.TitleBold>
   );

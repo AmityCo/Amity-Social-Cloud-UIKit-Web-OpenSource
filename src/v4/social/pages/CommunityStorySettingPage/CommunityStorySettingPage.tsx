@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { resolveString, useString } from '~/v4/core/localization';
 import { Label } from 'react-aria-components';
 import { Typography } from '~/v4/core/components';
 import { BackButton } from '~/v4/social/elements';
@@ -27,7 +28,9 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
   const handleToggleChange = async (selected: boolean) => {
     if (!online) {
       notification.info({
-        content: 'Failed to update community story permissions. Please try again.',
+        content: resolveString(
+          'amity_social_failed_to_update_community_story_permissions_please_try_again',
+        ),
       });
       return;
     }
@@ -38,7 +41,9 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
       });
     } catch (error) {
       notification.info({
-        content: 'Failed to update community story permissions. Please try again.',
+        content: resolveString(
+          'amity_social_failed_to_update_community_story_permissions_please_try_again',
+        ),
       });
     }
   };
@@ -52,17 +57,19 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
       <div className={styles.communityStorySettingPage__communityTitleWrap}>
         <BackButton onPress={() => onBack()} />
         <Typography.TitleBold className={styles.communityStorySettingPage__communityTitle}>
-          Story comments
+          {useString('amity_social_label_title_story_comments')}
         </Typography.TitleBold>
         <div className={styles.communityStorySettingPage__emptyDiv} />
       </div>
       <div className={styles.communityStorySettingPage__wrapLabel}>
         <Label>
           <Typography.BodyBold className={styles.communityStorySettingPage__labelText}>
-            Allow comments on community stories
+            {useString('amity_social_label_allow_comments_on_community_stories')}
           </Typography.BodyBold>
           <Typography.Caption className={styles.communityStorySettingPage__description}>
-            Turn on to receive comments on stories in this community.
+            {useString(
+              'amity_social_label_turn_on_to_receive_comments_on_stories_in_this_communit',
+            )}
           </Typography.Caption>
         </Label>
         <Switch

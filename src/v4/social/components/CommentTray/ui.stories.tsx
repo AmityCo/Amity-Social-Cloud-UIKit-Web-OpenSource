@@ -8,6 +8,7 @@ export default {
   argTypes: {
     referenceType: {
       control: 'select',
+
       options: ['content', 'post', 'story'],
     },
     referenceId: {

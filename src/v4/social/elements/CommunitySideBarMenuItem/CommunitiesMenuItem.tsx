@@ -16,11 +16,12 @@ export function CommunitiesMenuItem({ pageId = '*', componentId = '*' }: Communi
 
   const { onChangePage, page } = useNavigation();
   const { activeTab, setActiveTab } = useLayoutContext();
-  const { accessibilityId, config, isExcluded, defaultConfig, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, isExcluded, defaultConfig, uiReference, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -41,7 +42,7 @@ export function CommunitiesMenuItem({ pageId = '*', componentId = '*' }: Communi
         />
       )}
     >
-      {config.text}
+      {resolveText('amity_social_tab_tab_communities')}
     </CommunitySideBarMenuItem>
   );
 }

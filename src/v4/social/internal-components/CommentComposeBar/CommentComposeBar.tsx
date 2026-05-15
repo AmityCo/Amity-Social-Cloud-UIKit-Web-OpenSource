@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useMention from '~/v4/chat/hooks/useMention';
 
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import useSDK from '~/core/hooks/useSDK';
 
-import { FormattedMessage, useIntl } from 'react-intl';
 import styles from './CommentComposeBar.module.css';
 
 import User, { backgroundImage as UserImage } from '~/icons/User';
@@ -43,7 +43,7 @@ export const CommentComposeBar = ({
       targetId: targetId,
       targetType,
     });
-  const { formatMessage } = useIntl();
+
   const { info } = useConfirmContext();
 
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
@@ -59,17 +59,17 @@ export const CommentComposeBar = ({
 
     if (mentions && mentions?.length > TOTAL_MENTIONEES_LIMIT) {
       return info({
-        title: <FormattedMessage id="CommentComposeBar.unableToMention" />,
-        content: <FormattedMessage id="CommentComposeBar.overMentionees" />,
-        okText: <FormattedMessage id="CommentComposeBar.okText" />,
+        title: resolveString('amity_social_label_unable_to_mention'),
+        content: resolveString('amity_social_label_comment_over_mentionees_limit'),
+        okText: resolveString('amity_social_button_ok'),
       });
     }
 
     if (text?.length > COMMENT_LENGTH_LIMIT) {
       return info({
-        title: <FormattedMessage id="CommentComposeBar.unableToPost" />,
-        content: <FormattedMessage id="CommentComposeBar.overCharacter" />,
-        okText: <FormattedMessage id="CommentComposeBar.done" />,
+        title: resolveString('amity_social_unable_to_post'),
+        content: resolveString('amity_social_error_post_text_exceed_error_message'),
+        okText: resolveString('amity_social_button_done'),
       });
     }
 
@@ -80,8 +80,8 @@ export const CommentComposeBar = ({
   const isEmpty = text === '';
 
   const placeholder = userToReply
-    ? formatMessage({ id: 'CommentComposeBar.replayTo' }) + userToReply
-    : formatMessage({ id: 'CommentComposeBar.saySomething' });
+    ? resolveString('amity_social_label_comment_compose_bar_reply_to') + userToReply
+    : resolveString('amity_social_placeholder_comment_text_field_placeholder');
 
   return (
     <div className={styles.commentComposeBarContainer}>
@@ -111,7 +111,7 @@ export const CommentComposeBar = ({
         onClick={addComment}
         className={styles.addCommentButton}
       >
-        {formatMessage({ id: 'storyViewer.commentComposeBar.submit' })}
+        {useString('amity_social_button_post_composer_create_button')}
       </Button>
     </div>
   );

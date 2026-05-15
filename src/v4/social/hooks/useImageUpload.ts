@@ -1,4 +1,5 @@
 import { FileRepository } from '@amityco/ts-sdk';
+import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -41,13 +42,13 @@ export default function useImageUpload() {
         onError: (error) => {
           if (error.message.includes(ERROR_RESPONSE.INVALID_IMAGE)) {
             info({
-              title: 'Inappropriate image',
-              content: 'Please choose a different image to upload.',
+              title: resolveString('amity_social_button_inappropriate_image'),
+              content: resolveString('amity_social_modal_dialog_image_upload_error'),
             });
           } else {
             info({
-              title: 'Upload failed',
-              content: "We couldn't complete your upload. Please try again.",
+              title: resolveString('amity_social_error_upload_failed_title'),
+              content: resolveString('amity_social_upload_not_complete'),
             });
           }
         },

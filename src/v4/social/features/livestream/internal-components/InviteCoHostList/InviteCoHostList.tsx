@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { InviteButton } from '~/v4/social/elements/InviteButton';
@@ -85,7 +86,7 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
           onPress={handleCancel}
           isDisabled={isLoading}
         >
-          Cancel
+          {useString('amity_social_button_cancel')}
         </Button>
       ) : isCoHost ? (
         <Button
@@ -96,7 +97,7 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
           onPress={onRemoveCoHost}
           isDisabled={isLoading}
         >
-          Remove
+          {useString('amity_social_button_remove')}
         </Button>
       ) : (
         <InviteButton
@@ -119,6 +120,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
 }) => {
   const componentId = 'inivte_co_host_list';
   const { watchingUsers, isLoading } = useWatchingUsers({ room });
+  const noViewersMessageLabel = useString('amity_social_status_no_viewers_message');
 
   const { handleCreateInvitation, isPending: isPendingCreateInvitation } = useCreateInvitation({
     room,
@@ -130,15 +132,18 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
 
   const { handleRemoveParticipant } = useRemoveParticipant({ room });
 
-  const onCreateInvitation = (userId: string) =>
+  const onCreateInvitation = (userId: string, displayName?: string) =>
     handleCreateInvitation(userId, {
+      displayName,
       onSuccess: onAction,
     });
+
   const onCancelInvitation = (invitationId?: string) =>
     invitationId &&
     cancelInvitation(invitationId, {
       onSuccess: onAction,
     });
+
   const onRemoveCoHost = () => coHost?.userId && handleRemoveParticipant(coHost?.userId);
 
   const renderHeader = useCallback((text: string) => {
@@ -183,10 +188,10 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
       <div className={styles.inviteCoHostList__empty}>
         <AddUser className={styles.inviteCoHostList__emptyIcon} />
         <Typography.TitleBold className={styles.inviteCoHostList__emptyText}>
-          No viewers available right now
+          {useString('amity_social_no_viewers_title')}
         </Typography.TitleBold>
         <Typography.Caption className={styles.inviteCoHostList__emptyText}>
-          Viewers who join your livestream will appear here.
+          {noViewersMessageLabel}
         </Typography.Caption>
       </div>
     );
@@ -196,7 +201,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
     <div className={styles.inviteCoHostList}>
       {coHost?.user && (
         <>
-          {renderHeader('Co-hosting')}
+          {renderHeader(useString('amity_social_button_co_hosting'))}
           <WatchingUserItem
             user={coHost?.user}
             pageId={pageId}
@@ -209,7 +214,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
 
       {pendingInvitation?.user && (
         <>
-          {renderHeader('Pending invitation')}
+          {renderHeader(useString('amity_social_button_pending_invitation'))}
           <WatchingUserItem
             user={pendingInvitation?.user}
             pageId={pageId}
@@ -222,14 +227,14 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
 
       {filteredWatchingUsers.length > 0 && (
         <>
-          {renderHeader("Who's watching")}
+          {renderHeader(useString('amity_social_button_whos_watching'))}
           {filteredWatchingUsers.map((user) => (
             <WatchingUserItem
               key={user.userId}
               user={user}
               pageId={pageId}
               componentId={componentId}
-              onInviteUser={() => onCreateInvitation(user.userId)}
+              onInviteUser={() => onCreateInvitation(user.userId, user.displayName || user.userId)}
               onCancelInvite={() => onCancelInvitation(pendingInvitation?.invitationId)}
               isLoading={isPendingCreateInvitation || isPendingCancelInvitation}
               hasPendingInvitation={!!pendingInvitation}

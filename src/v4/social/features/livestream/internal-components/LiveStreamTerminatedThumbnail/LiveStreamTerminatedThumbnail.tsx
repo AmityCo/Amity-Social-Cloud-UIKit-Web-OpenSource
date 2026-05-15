@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import {
@@ -27,10 +28,12 @@ export function LiveStreamTerminatedThumbnail({
       data-view={view}
       style={aspectRatio ? { aspectRatio } : undefined}
     >
-      <Typography.TitleBold>The live stream has been terminated.</Typography.TitleBold>
+      <Typography.TitleBold>
+        {useString('amity_social_status_create_livestream_terminated_first_reason')}
+      </Typography.TitleBold>
       <Typography.Caption>
-        It looks like the live stream you're watching goes against our content moderation
-        guidelines. There will be no playback of this live stream on any feeds.
+        {useString('amity_social_button_create_livestream_terminated_desc')}{' '}
+        {useString('amity_social_livestream_terminated_second_reason')}
       </Typography.Caption>
     </div>
   );

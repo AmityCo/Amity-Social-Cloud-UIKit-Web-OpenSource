@@ -11,6 +11,8 @@ interface EmptyContentProps {
   elementId?: string;
   infoElementId?: string;
   text?: string;
+  textKey?: string;
+  infoTextKey?: string;
   emptyContentClassName?: string;
   defaultIcon: () => JSX.Element;
   variant?: 'container' | 'item';
@@ -22,24 +24,36 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
   elementId = '*',
   infoElementId = '*',
   text,
+  textKey,
+  infoTextKey,
   emptyContentClassName,
   variant = 'container',
   defaultIcon,
 }) => {
-  const { config, defaultConfig, isExcluded, themeStyles, accessibilityId, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    defaultConfig,
+    isExcluded,
+    themeStyles,
+    accessibilityId,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
-  const { config: infoConfig } = useAmityElement({
+  const { config: infoConfig, resolveText: resolveInfoText } = useAmityElement({
     pageId,
     componentId,
     elementId: infoElementId,
   });
 
   if (isExcluded) return null;
+
+  const titleText = textKey ? resolveText(textKey) : config.text ?? text;
+  const infoText = infoTextKey ? resolveInfoText(infoTextKey) : infoConfig.text;
 
   return (
     <div
@@ -55,19 +69,17 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
         imgIcon={() => <img src={config.image} alt={uiReference} />}
       />
 
-      {config.text ? (
+      {titleText ? (
         <>
           <Typography.TitleBold className={styles.emptyContent__text}>
-            {config.text}
+            {titleText}
           </Typography.TitleBold>
-          {infoConfig.text && (
+          {infoText && (
             <Typography.Caption className={styles.emptyContent__text}>
-              {infoConfig.text}
+              {infoText}
             </Typography.Caption>
           )}
         </>
-      ) : text ? (
-        <Typography.TitleBold className={styles.emptyContent__text}>{text}</Typography.TitleBold>
       ) : null}
     </div>
   );

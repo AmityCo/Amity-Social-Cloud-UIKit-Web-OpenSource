@@ -8,6 +8,7 @@ interface TextElementProps {
   elementId: string;
   className?: string;
   labelText?: string;
+  textKey?: string;
   variant: TypographyVariant;
 }
 
@@ -28,9 +29,10 @@ export function TextElement({
   elementId,
   className,
   labelText,
+  textKey,
   variant,
 }: TextElementProps) {
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -39,10 +41,11 @@ export function TextElement({
   if (isExcluded) return null;
 
   const Component = TypographyComponentMap[variant];
+  const text = textKey ? resolveText(textKey) : config.text ?? labelText;
 
   return (
     <Component className={className} style={themeStyles} data-testid={accessibilityId}>
-      {config.text ?? labelText}
+      {text}
     </Component>
   );
 }

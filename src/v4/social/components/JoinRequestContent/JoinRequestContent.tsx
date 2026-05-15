@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import User from '~/v4/icons/User';
 import { Avatar, Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -89,12 +90,14 @@ export const JoinRequestContent = ({
                 pageId={pageId}
                 componentId={componentId}
                 elementId="join_accept_button"
+                textId="amity_social_button_pending_join_accept_button"
                 onPress={() => onClickAccept(joinRequest)}
               />
               <RejectButton
                 pageId={pageId}
                 componentId={componentId}
                 elementId="join_decline_button"
+                textId="amity_social_button_pending_join_decline_button"
                 onPress={() => onClickReject(joinRequest)}
               />
             </div>
@@ -105,7 +108,7 @@ export const JoinRequestContent = ({
         <div className={styles.joinRequestContent__noJoinRequest}>
           <FireworkPaper className={styles.joinRequestContent__fireworkIcon} />
           <Typography.TitleBold className={styles.joinRequestContent__noJoinRequestText}>
-            No pending requests
+            {useString('amity_social_label_no_pending_requests')}
           </Typography.TitleBold>
         </div>
       )}

@@ -90,6 +90,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
             elementId={ELEMENT_ID.NEWSFEED_BUTTON}
             isActive={activeTab === HomePageTab.Newsfeed}
             onPress={() => handleTabClick(HomePageTab.Newsfeed)}
+            textId="amity_social_button_social_home_newsfeed_button"
           />
         )}
         <ChipButton
@@ -97,12 +98,14 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
           elementId={ELEMENT_ID.COMMUNITIES_BUTTON}
           isActive={activeTab === HomePageTab.Communities}
           onPress={() => handleTabClick(HomePageTab.Communities)}
+          textId="amity_social_button_social_home_communities_button"
         />
         <ChipButton
           pageId={PAGE_ID.SOCIAL_HOME_PAGE}
           elementId={ELEMENT_ID.EVENTS_BUTTON}
           isActive={activeTab === HomePageTab.Events}
           onPress={() => handleTabClick(HomePageTab.Events)}
+          textId="amity_social_button_social_home_events_button"
         />
         {!hideClipFeedTab && (
           <ChipButton
@@ -110,6 +113,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
             elementId={ELEMENT_ID.CLIPSFEED_BUTTON}
             isActive={activeTab === HomePageTab.Clips}
             onPress={() => handleTabClick(HomePageTab.Clips)}
+            textId="amity_social_button_social_home_clips_button"
           />
         )}
       </div>

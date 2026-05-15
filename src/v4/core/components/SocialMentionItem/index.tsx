@@ -6,7 +6,7 @@ import useUser from '~/core/hooks/useUser';
 import useImage from '~/core/hooks/useImage';
 import styles from './styles.module.css';
 import { MentionIcon } from '~/icons';
-import { FormattedMessage } from 'react-intl';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Avatar } from '~/v4/core/components/Avatar';
 import User from '~/v4/icons/User';
@@ -76,6 +76,8 @@ const CustomMentionItem = ({
   targetRef,
   containerRef,
 }: Omit<UserMentionItemProps, 'entry' | 'loadMore'>) => {
+  const mentionAllText = useString('amity_common_button_all');
+  const mentionAllDescription = useString('amity_common_button_all_description');
   return (
     <div
       ref={isLastItem ? targetRef : null}
@@ -86,15 +88,11 @@ const CustomMentionItem = ({
       <div>
         <MentionIcon width={32} height={32} />
         <div className={styles.userDisplayName}>
-          <Typography.Body>
-            <FormattedMessage id="livechat.mention.all" />
-          </Typography.Body>
+          <Typography.Body>{mentionAllText}</Typography.Body>
         </div>
       </div>
       <div className={styles.mentionAllDescription}>
-        <Typography.Caption>
-          <FormattedMessage id="livechat.mention.all.description" />
-        </Typography.Caption>
+        <Typography.Caption>{mentionAllDescription}</Typography.Caption>
       </div>
     </div>
   );

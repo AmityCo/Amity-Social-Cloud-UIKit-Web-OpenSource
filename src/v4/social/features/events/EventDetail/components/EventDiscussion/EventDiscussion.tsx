@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Plus } from '~/v4/icons/Plus';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Menu } from '~/v4/social/elements';
@@ -46,6 +47,10 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   const { AmityEventDetailPageBehavior } = usePageBehavior();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({ pageId, componentId });
+
+  const choosePollTypeLabel = useString('amity_social_label_choose_poll_type');
+  const emptyFeedLabel = useString('amity_social_empty_feed_no_posts');
+
   const { posts, isLoading, isLoadingFirstPage, refresh, hasMore, loadMore } = usePostsCollection({
     targetType: 'community',
     targetId: event.discussionCommunityId,
@@ -54,8 +59,8 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
 
   const actions = [
     {
-      id: 'post',
-      label: 'Post',
+      id: useString('amity_social_label_community_post_label'),
+      label: useString('amity_social_label_community_post_label'),
       Icon: CreatePost,
       onPress: () => {
         removeDrawerData();
@@ -69,7 +74,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     },
     {
       id: 'poll',
-      label: 'Poll',
+      label: useString('amity_social_button_poll'),
       Icon: CreatePoll,
       onPress: () => {
         setDrawerData({
@@ -87,7 +92,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     },
     {
       id: 'livestream',
-      label: 'Livestream',
+      label: useString('amity_social_status_live_stream'),
       Icon: LivestreamFill,
       onPress: () => {
         removeDrawerData();
@@ -141,7 +146,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
               pageId,
               view: 'desktop',
               isDismissable: false,
-              header: <Typography.Headline>Choose poll type</Typography.Headline>,
+              header: <Typography.Headline>{choosePollTypeLabel}</Typography.Headline>,
               children: ({ close }) => (
                 <PollTypeSelection
                   onClickNext={close}
@@ -153,6 +158,12 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
               ),
             });
           }}
+          onClickLivestream={() => {
+            AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
+              targetType: 'community',
+              targetId: event.discussionCommunityId!,
+            });
+          }}
         />
       )}
       <div className={styles.eventDiscussion__posts}>
@@ -160,7 +171,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
           posts.filter((post) => post.postId !== event.postId).length === 0 && (
             <EmptyContent
               variant="container"
-              text="No posts yet"
+              text={emptyFeedLabel}
               defaultIcon={() => <EmptyPost className={styles.emptyUserFeed__emptyIcon} />}
             />
           )}

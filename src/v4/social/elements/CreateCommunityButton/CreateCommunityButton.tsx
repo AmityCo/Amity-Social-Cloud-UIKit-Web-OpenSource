@@ -18,12 +18,19 @@ export function CreateCommunityButton({
   textClassName,
 }: CreateCommunityButtonProps) {
   const elementId = 'create_community_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -40,7 +47,9 @@ export function CreateCommunityButton({
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}
       />
-      <Typography.Body className={textClassName}>Create Community</Typography.Body>
+      <Typography.Body className={textClassName}>
+        {resolveText('amity_social_button_social_home_create_community')}
+      </Typography.Body>
     </div>
   );
 }

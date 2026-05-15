@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -20,6 +21,7 @@ export const FailedToShow = ({ pageId = '*', className }: FailedToShowProps) => 
     pageId,
     componentId,
   });
+
   return (
     <div data-testid={accessibilityId} className={clsx(styles.failedToShow, className)}>
       <IconComponent
@@ -27,13 +29,13 @@ export const FailedToShow = ({ pageId = '*', className }: FailedToShowProps) => 
         defaultIcon={() => <NoPage className={styles.failedToShow__icon} />}
       />
       <Typography.Headline className={styles.failedToShow__title}>
-        Something went wrong
+        {useString('amity_social_label_livestream_deleted_page_title')}
       </Typography.Headline>
       <Typography.Body className={styles.failedToShow__desc}>
-        The content you’re looking for is unavailable.
+        {useString('amity_social_button_livestream_unavailable_desc')}
       </Typography.Body>
       <Button onPress={() => onBack()} className={styles.failedToShow__button}>
-        <Typography.Body>Go Back</Typography.Body>
+        <Typography.Body>{useString('amity_social_button_go_back')}</Typography.Body>
       </Button>
     </div>
   );

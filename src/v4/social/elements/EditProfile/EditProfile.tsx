@@ -23,8 +23,15 @@ export const EditProfile = ({
   onClick,
 }: EditProfileProps) => {
   const elementId = 'edit_profile';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
   return (
@@ -44,7 +51,11 @@ export const EditProfile = ({
           defaultIconName={defaultConfig.icon}
           configIconName={config.icon}
         />
-        {config.text && <Typography.Body>{config.text}</Typography.Body>}
+        {resolveText('amity_social_community_setting_page_edit_profile_text') && (
+          <Typography.Body>
+            {resolveText('amity_social_community_setting_page_edit_profile_text')}
+          </Typography.Body>
+        )}
       </div>
       <ChevronRight className={styles.editProfile__angleRight} />
     </Button>

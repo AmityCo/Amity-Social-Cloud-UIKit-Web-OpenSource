@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import Truncate from 'react-truncate-markup';
 import {
   CustomRenderer,
@@ -301,7 +302,7 @@ export const renderer: CustomRenderer = ({
         componentId: 'comment_tray_component',
         header: (
           <Typography.Headline className={rendererStyles.commentTrayHeader}>
-            Comments
+            {resolveString('amity_social_label_title_comments')}
           </Typography.Headline>
         ),
         children: renderCommentTray(),
@@ -345,7 +346,8 @@ export const renderer: CustomRenderer = ({
         subheading={
           createdAt && creator?.displayName ? (
             <span className={rendererStyles.creatorWrapper}>
-              <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+              <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> •{' '}
+              {useString('amity_social_button_by')}{' '}
               <span
                 data-testid="creator_display_name"
                 className={rendererStyles.creatorDisplayName}

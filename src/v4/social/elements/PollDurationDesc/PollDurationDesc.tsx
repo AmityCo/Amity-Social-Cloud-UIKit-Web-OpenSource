@@ -11,7 +11,7 @@ type PollDurationDescProps = {
 export const PollDurationDesc = ({ pageId = '*', componentId = '*' }: PollDurationDescProps) => {
   const elementId = 'poll_duration_desc';
 
-  const { config, themeStyles, accessibilityId } = useAmityElement({
+  const { config, themeStyles, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -22,7 +22,7 @@ export const PollDurationDesc = ({ pageId = '*', componentId = '*' }: PollDurati
       style={themeStyles}
       className={styles.pollDurationDesc__text}
     >
-      {config.text}
+      {resolveText('amity_social_label_you_can_always_close_the_poll_before_the_set_duration')}
     </Typography.Caption>
   );
 };

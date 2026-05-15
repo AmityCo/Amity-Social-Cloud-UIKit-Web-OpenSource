@@ -19,11 +19,12 @@ export const PendingUserButton: React.FC<PendingUserButtonProps> = ({
   onClick,
 }) => {
   const elementId = 'pending_user_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -36,9 +37,9 @@ export const PendingUserButton: React.FC<PendingUserButtonProps> = ({
           defaultIconName={defaultConfig.image}
           imgIcon={() => <img src={config.image} alt={uiReference} />}
         />
-        {config.text && (
+        {resolveText('amity_social_button_cancel_request') && (
           <Typography.BodyBold className={styles.pendingUserButton__text}>
-            {config.text}
+            {resolveText('amity_social_button_cancel_request')}
           </Typography.BodyBold>
         )}
       </div>

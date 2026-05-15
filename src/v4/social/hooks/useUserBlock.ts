@@ -2,6 +2,7 @@ import { UserRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { resolveString } from '~/v4/core/localization';
 
 const useUserBlock = () => {
   const { confirm } = useConfirmContext();
@@ -13,12 +14,12 @@ const useUserBlock = () => {
     },
     onSuccess: () => {
       notification.success({
-        content: 'User blocked.',
+        content: resolveString('amity_social_button_user_blocked'),
       });
     },
     onError: () => {
       notification.error({
-        content: 'Failed to block user. Please try again.',
+        content: resolveString('amity_social_toast_user_block_failed'),
       });
     },
   });
@@ -29,12 +30,12 @@ const useUserBlock = () => {
     },
     onSuccess: () => {
       notification.success({
-        content: 'User unblocked.',
+        content: resolveString('amity_social_button_user_unblocked'),
       });
     },
     onError: () => {
       notification.error({
-        content: 'Failed to unblock user. Please try again.',
+        content: resolveString('amity_social_toast_user_unblock_failed'),
       });
     },
   });
@@ -53,16 +54,16 @@ const useUserBlock = () => {
     confirm({
       pageId,
       componentId,
-      title: 'Block user?',
-      content: `${displayName} won't be able to see posts and comments that you've created. They won't be notified that you've blocked them.`,
-      cancelText: 'Cancel',
-      okText: 'Block',
+      title: resolveString('amity_social_modal_dialog_title_block_user'),
+      content: resolveString('amity_social_label_user_block_message_format', displayName),
+      cancelText: resolveString('amity_social_button_cancel'),
+      okText: resolveString('amity_social_button_block'),
       onOk: async () => {
         if (!navigator.onLine) {
           notification.error({
-            content: 'Failed to block user. Please try again.',
+            content: resolveString('amity_social_toast_user_block_failed'),
           });
-          throw new Error('No internet connection');
+          throw new Error(resolveString('amity_social_label_no_internet_connection'));
         }
         await blockUser(userId);
       },
@@ -83,16 +84,16 @@ const useUserBlock = () => {
     confirm({
       pageId,
       componentId,
-      title: 'Unblock user?',
-      content: `${displayName} will now be able to see posts and comments that you've created. They won't be notified that you've unblocked them.`,
-      cancelText: 'Cancel',
-      okText: 'Unblock',
+      title: resolveString('amity_social_modal_dialog_title_unblock_user'),
+      content: resolveString('amity_social_modal_dialog_unblock_user_description'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      okText: resolveString('amity_social_button_unblock'),
       onOk: async () => {
         if (!navigator.onLine) {
           notification.error({
-            content: 'Failed to unblock user. Please try again.',
+            content: resolveString('amity_social_toast_user_unblock_failed'),
           });
-          throw new Error('No internet connection');
+          throw new Error(resolveString('amity_social_label_no_internet_connection'));
         }
         await unblockUser(userId);
       },

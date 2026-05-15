@@ -1,4 +1,5 @@
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import React from 'react';
 import {
   getLivestreamAspectRatioString,
@@ -22,9 +23,11 @@ export function LiveStreamEndThumbnail({ view = 'post', resolution }: LiveStream
       data-view={view}
       style={aspectRatio ? { aspectRatio } : undefined}
     >
-      <Typography.TitleBold>This live stream has ended.</Typography.TitleBold>
+      <Typography.TitleBold>
+        {useString('amity_social_status_livestream_post_thumbnail_processing_title')}
+      </Typography.TitleBold>
       <Typography.Caption>
-        Playback will be available for you <br /> to watch shortly.
+        {useString('amity_social_label_livestream_post_thumbnail_processing_desc')}
       </Typography.Caption>
     </div>
   );

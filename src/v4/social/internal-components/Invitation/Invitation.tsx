@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { CommunityRepository } from '@amityco/ts-sdk';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -48,16 +49,25 @@ export const Invitation = ({
       onClose?.();
       await invitation.accept();
       await CommunityRepository.getCommunityByIds([invitation.targetId]);
-      notification.success({ content: `You joined ${invitation.target?.displayName}.` });
+      notification.success({
+        content: resolveString('amity_social_label_community_invitation_accept_success').replace(
+          '%s',
+          invitation.target?.displayName ?? '',
+        ),
+      });
       AmityNotificationTrayPageBehavior?.goToCommunityProfilePage?.({
         communityId: invitation.targetId,
       });
       invitation && setAcceptedInvitation(invitation);
     } catch (error: any) {
       if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
-        return notification.info({ content: 'This invitation is no longer available.' });
+        return notification.info({
+          content: resolveString('amity_social_error_community_invitation_unavailable_error'),
+        });
       }
-      notification.info({ content: 'Failed to accept invitation. Please try again.' });
+      notification.info({
+        content: resolveString('amity_social_toast_community_invitation_fail_to_accept'),
+      });
     } finally {
       invitationNotificationTray.refresh();
     }
@@ -67,12 +77,18 @@ export const Invitation = ({
     try {
       onClose?.();
       await invitation.reject();
-      notification.success({ content: 'Invitation declined.' });
+      notification.success({
+        content: resolveString('amity_social_toast_snackbar_invitation_declined'),
+      });
     } catch (error: any) {
       if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
-        return notification.info({ content: 'This invitation is no longer available.' });
+        return notification.info({
+          content: resolveString('amity_social_error_community_invitation_unavailable_error'),
+        });
       }
-      notification.info({ content: 'Failed to decline invitation. Please try again.' });
+      notification.info({
+        content: resolveString('amity_social_toast_community_invitation_fail_to_reject'),
+      });
     } finally {
       invitationNotificationTray.refresh();
     }
@@ -82,9 +98,9 @@ export const Invitation = ({
     if (community?.requiresJoinApproval) {
       onClose?.();
       return confirm({
-        title: 'Decline invitation?',
-        content: 'If you change your mind, you’ll have to request to join again.',
-        okText: 'Decline',
+        title: resolveString('amity_social_modal_community_invitation_reject_dialog_title'),
+        content: resolveString('amity_social_modal_community_invitation_reject_dialog_subtitle'),
+        okText: resolveString('amity_social_button_community_invitation_reject_button'),
         onOk: handleRejectInvitation,
       });
     }
@@ -125,6 +141,7 @@ export const Invitation = ({
           pageId={pageId}
           onPress={onJoinClick}
           componentId={componentId}
+          textId="amity_social_button_community_invitation_accept_button"
           elementId="accept_invite_button"
         />
         <RejectButton

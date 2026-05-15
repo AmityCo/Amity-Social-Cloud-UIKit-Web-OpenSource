@@ -17,6 +17,7 @@ type VideoButtonProps = {
   defaultIconClassName?: string;
   isDisabled?: boolean;
   onVideoFileChange?: (files: File[]) => void;
+  textId?: string;
 };
 
 export function VideoButton({
@@ -27,10 +28,18 @@ export function VideoButton({
   onVideoFileChange,
   defaultIconClassName,
   isDisabled = false,
+  textId = 'amity_social_button_post_composer_video_button',
 }: VideoButtonProps) {
   const elementId = 'video_button';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
 
@@ -67,9 +76,9 @@ export function VideoButton({
           />
         )}
       />
-      {config.text && (
+      {resolveText(textId) && (
         <Typography.BodyBold className={styles.videoButton__label}>
-          {config.text}
+          {resolveText('amity_social_button_post_composer_video_button')}
         </Typography.BodyBold>
       )}
       {!onPress && (

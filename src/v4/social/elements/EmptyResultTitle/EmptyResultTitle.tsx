@@ -7,16 +7,18 @@ import styles from './EmptyResultTitle.module.css';
 type EmptyResultTitleProps = TypographyProps & {
   pageId?: string;
   componentId?: string;
+  textId?: string;
 };
 
 export const EmptyResultTitle = ({
   className,
   pageId = '*',
   componentId = '*',
+  textId = 'amity_social_label_nothing_here_yet',
   ...props
 }: EmptyResultTitleProps) => {
   const elementId = 'empty_result_title';
-  const { accessibilityId, themeStyles, config, isExcluded } = useAmityElement({
+  const { accessibilityId, themeStyles, config, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -31,7 +33,7 @@ export const EmptyResultTitle = ({
       data-testid={accessibilityId}
       className={clsx(styles.emptyResultTitle, className)}
     >
-      {config.text}
+      {resolveText(textId)}
     </Typography.TitleBold>
   );
 };

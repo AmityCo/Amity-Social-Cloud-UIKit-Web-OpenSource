@@ -38,7 +38,7 @@ export const usePostFlaggedByMe = ({
     networkMode: 'always',
     queryKey: ['asc-uikit', 'PostRepository', 'isPostFlaggedByMe', postId],
     queryFn: () => {
-      return PostRepository.isPostFlaggedByMe(postId);
+      return PostRepository.isPostFlaggedByMe(postId!);
     },
     enabled: postId != null && isFlaggable && !isVisitorOrBot,
   });
@@ -46,7 +46,7 @@ export const usePostFlaggedByMe = ({
   const { mutateAsync: mutateReportPost, isPending } = useMutation({
     networkMode: 'always',
     mutationFn: async () => {
-      return PostRepository.flagPost(post.postId, reasonReport);
+      return PostRepository.flagPost(post?.postId ?? '', reasonReport);
     },
     onMutate: async () => {
       await queryClient.cancelQueries({
@@ -78,7 +78,7 @@ export const usePostFlaggedByMe = ({
   const { mutateAsync: mutateUnReportPost } = useMutation({
     networkMode: 'always',
     mutationFn: async () => {
-      return PostRepository.unflagPost(post.postId);
+      return PostRepository.unflagPost(post?.postId ?? '');
     },
     onMutate: async () => {
       await queryClient.cancelQueries({

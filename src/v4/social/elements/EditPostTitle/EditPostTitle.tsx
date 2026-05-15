@@ -9,16 +9,17 @@ interface EditPostTitleProps {
 
 export function EditPostTitle({ pageId = '*', componentId = '*' }: EditPostTitleProps) {
   const elementId = 'edit_post_title';
-  const { config, isExcluded, themeStyles, accessibilityId } = useAmityElement({
+  const { config, isExcluded, themeStyles, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
   if (isExcluded) return null;
 
   return (
     <div data-testid={accessibilityId} style={themeStyles} className={styles.editPostTitle}>
-      {config.text}
+      {resolveText('amity_social_button_edit_post')}
     </div>
   );
 }

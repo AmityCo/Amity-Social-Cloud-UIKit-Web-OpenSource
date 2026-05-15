@@ -19,11 +19,12 @@ export const FollowUserButton: React.FC<FollowUserButtonProps> = ({
   onClick,
 }) => {
   const elementId = 'follow_user_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -36,9 +37,9 @@ export const FollowUserButton: React.FC<FollowUserButtonProps> = ({
           defaultIconName={defaultConfig.image}
           imgIcon={() => <img src={config.image} alt={uiReference} />}
         />
-        {config.text && (
+        {resolveText('amity_social_button_user_follow_button') && (
           <Typography.BodyBold className={styles.followUserButton__text}>
-            {config.text}
+            {resolveText('amity_social_button_user_follow_button')}
           </Typography.BodyBold>
         )}
       </div>
