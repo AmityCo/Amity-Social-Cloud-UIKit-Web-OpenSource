@@ -93,9 +93,6 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
     const { isVisitorOrBot } = useSDK();
     const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
 
-    const { isVisitorOrBot } = useSDK();
-    const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
-
     const { themeStyles, uiReference, config, accessibilityId } = useAmityElement({
       pageId,
       componentId,
