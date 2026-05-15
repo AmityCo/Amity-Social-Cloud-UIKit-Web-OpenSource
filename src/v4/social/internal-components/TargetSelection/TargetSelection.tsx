@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { MyTimelineAvatar } from '~/v4/social/elements/MyTimelineAvatar';
@@ -68,7 +69,9 @@ export function TargetSelection({
         </Button>
       </div>
       <div className={styles.targetSelection__line} />
-      <div className={styles.targetSelection__myCommunities}>My Communities</div>
+      <div className={styles.targetSelection__myCommunities}>
+        {useString('amity_social_button_my_communities')}
+      </div>
       <div className={styles.targetSelection__myCommunitiesList}>
         {communities
           .filter((community) => canCreatePostCommunity(client, community))

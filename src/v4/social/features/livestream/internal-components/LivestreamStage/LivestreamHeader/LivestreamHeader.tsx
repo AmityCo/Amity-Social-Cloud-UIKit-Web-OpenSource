@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './LivestreamHeader.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -85,6 +86,18 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
+
+  const byLabel = useString(
+    'amity_social_button_by_creator',
+    livestreamPost?.creator?.displayName ?? '',
+  );
+  const createLivestreamTargetTitleLabel = useString(
+    'amity_social_status_create_livestream_target_title',
+  );
+  const selectLivestreamTargetMyTimelineLabel = useString(
+    'amity_social_button_select_livestream_target_my_timeline',
+  );
+  const inTheBackstageLabel = useString('amity_social_label_you_re_in_the_backstage');
 
   const isPlayer = pageId === PAGE_ID.LIVESTREAM_PLAYER_PAGE;
 
@@ -212,7 +225,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
               <div className={styles.livestreamHeader__liveDetail__displayName}>
                 {community ? (
                   <Typography.CaptionSmall className={styles.livestreamHeader__liveDetail__text}>
-                    By {livestreamPost?.creator?.displayName}
+                    {byLabel}
                   </Typography.CaptionSmall>
                 ) : (
                   <Typography.BodyBold className={styles.livestreamHeader__liveDetail__text}>
@@ -360,9 +373,13 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
                 variant="default"
                 onPress={onTargetSelection}
               >
-                <Typography.Body className={styles.livestreamHeader__text}>Live on</Typography.Body>
+                <Typography.Body className={styles.livestreamHeader__text}>
+                  {createLivestreamTargetTitleLabel}
+                </Typography.Body>
                 <Typography.BodyBold className={styles.livestreamHeader__text}>
-                  {targetType === 'user' ? 'My Timeline' : community?.displayName}
+                  {targetType === 'user'
+                    ? selectLivestreamTargetMyTimelineLabel
+                    : community?.displayName}
                 </Typography.BodyBold>
                 <ChevronDown className={styles.livestreamHeader__selectTarget__icon} />
               </Button>
@@ -374,7 +391,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
       {isPlayer && uiState === 'backStage' && (
         <>
           <Typography.Body className={styles.livestreamHeader__text}>
-            You’re in the backstage
+            {inTheBackstageLabel}
           </Typography.Body>
           <div />
         </>

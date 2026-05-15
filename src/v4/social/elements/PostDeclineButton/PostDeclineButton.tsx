@@ -1,4 +1,5 @@
 import React from 'react';
+import { resolveString } from '~/v4/core/localization';
 import styles from './PostDeclineButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
@@ -8,12 +9,14 @@ export type PostDeclineButtonProps = ButtonProps & {
   pageId?: string;
   componentId?: string;
   onClick?: () => void;
+  textId?: string;
 };
 
 export const PostDeclineButton = ({
   onClick,
   pageId = '*',
   componentId = '*',
+  textId = 'amity_decline',
   ...props
 }: PostDeclineButtonProps) => {
   const elementId = 'post_decline_button';
@@ -40,7 +43,7 @@ export const PostDeclineButton = ({
         data-testid={accessibilityId}
         className={styles.postDeclineButton__text}
       >
-        {config?.text ?? 'Decline'}
+        {resolveString(textId) || config?.text}
       </Typography.BodyBold>
     </Button>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { LiveChatLoadingIndicator } from './LiveChatLoadingIndicator';
@@ -56,15 +57,15 @@ export const MessageList = ({
 
   const onDeleteMessage = (messageId: string) => {
     confirm({
-      title: 'Delete this message?',
-      content: 'This message will also be removed from your friend’s devices.',
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      title: resolveString('amity_social_modal_dialog_delete_message_title'),
+      content: resolveString('amity_social_modal_dialog_delete_message_description'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      okText: resolveString('amity_social_button_delete'),
       onOk: () =>
         deleteMessage(messageId, {
           onError: () =>
             notification.error({
-              content: 'Unable to delete message. Please try again.',
+              content: resolveString('amity_social_button_delete_message_failed'),
             }),
         }),
     });
@@ -95,7 +96,7 @@ export const MessageList = ({
         <div className={styles.iconContainer}>
           <Redo className={styles.icon} />
         </div>
-        <Typography.Caption>Couldn't load chat</Typography.Caption>
+        <Typography.Caption>{useString('amity_social_couldnt_load_chat')}</Typography.Caption>
       </div>
     );
   }
@@ -153,11 +154,11 @@ export const MessageList = ({
                       message.messageId,
                       () =>
                         notification.success({
-                          content: 'Message reported',
+                          content: resolveString('amity_social_button_message_reported'),
                         }),
                       () =>
                         notification.error({
-                          content: 'This message failed to be reported. Please try again.',
+                          content: resolveString('amity_social_toast_message_report_failed'),
                         }),
                     ),
                   onUnflag: () =>
@@ -165,11 +166,11 @@ export const MessageList = ({
                       message.messageId,
                       () =>
                         notification.success({
-                          content: 'Message unreported',
+                          content: resolveString('amity_social_button_message_unreported'),
                         }),
                       () =>
                         notification.error({
-                          content: 'This message failed to be unreported. Please try again.',
+                          content: resolveString('amity_social_message_unreport_failed'),
                         }),
                     ),
                 }}

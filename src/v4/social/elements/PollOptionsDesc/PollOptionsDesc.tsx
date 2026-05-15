@@ -10,7 +10,7 @@ type PollOptionsDescProps = {
 
 export const PollOptionsDesc = ({ pageId = '*', componentId = '*' }: PollOptionsDescProps) => {
   const elementId = 'poll_options_desc';
-  const { accessibilityId, themeStyles, config } = useAmityElement({
+  const { accessibilityId, themeStyles, config, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -21,7 +21,7 @@ export const PollOptionsDesc = ({ pageId = '*', componentId = '*' }: PollOptions
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveText('amity_social_label_poll_options_desc')}
     </Typography.Caption>
   );
 };

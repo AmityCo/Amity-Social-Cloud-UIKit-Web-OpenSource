@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import clsx from 'clsx';
 import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
 import { Typography } from '~/v4/core/components';
@@ -240,7 +241,9 @@ export const ReactionList = ({
                 onClick={() => handleTabClick('All')}
               >
                 <Typography.BodyBold testId={`${accessibilityId}_tab_all`}>
-                  <span className={styles.reactionEmoji}>All {abbreviateCount(reactionCount)}</span>
+                  <span className={styles.reactionEmoji}>
+                    {useString('amity_social_tab_tab_all')} {abbreviateCount(reactionCount)}
+                  </span>
                 </Typography.BodyBold>
               </div>
             )}

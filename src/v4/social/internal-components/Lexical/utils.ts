@@ -425,10 +425,17 @@ export function editorStateToText(editorState: SerializedEditorState) {
           const urlRegex = new RegExp(URL_REGEX);
           if (url && urlRegex.test(url)) {
             // Determine renderPreview based on whether text matches URL:
-            // - If linkText equals URL: it's an auto-detected link → renderPreview = true
-            // - If linkText is different from URL: it's an embedded link → renderPreview = false
-            const renderPreview = linkText === url;
-
+            // - Auto-detected link (AutoLinkNode): url === linkText → true
+            // - Auto-link-style LinkNode (from initialLinks): url is https:// prefixed version of linkText → true
+            // - Embedded link (user-created via FloatingLinkEditor): url differs from linkText → false
+            // Also cover stale-URL case: user is mid-edit and the stored URL hasn't
+            // been synced yet (e.g. url='https://www.google.com', linkText='www.google').
+            const renderPreview =
+              linkText === url ||
+              url === `https://${linkText}` ||
+              url === `http://${linkText}` ||
+              url.startsWith(`https://${linkText}`) ||
+              url.startsWith(`http://${linkText}`);
             links.push({
               index: runningIndex,
               length: linkText.length,

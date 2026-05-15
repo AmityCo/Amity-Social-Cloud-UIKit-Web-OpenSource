@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 
 import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -164,6 +165,7 @@ export const CommentList = ({
       });
     };
     document.addEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
+
     return () => document.removeEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
   }, [referenceId]);
 
@@ -234,7 +236,7 @@ export const CommentList = ({
     return (
       <div className={styles.noCommentsContainer}>
         <Redo className={styles.noCommentsContainer__icon} />
-        <Typography.Body>Unable to load comments</Typography.Body>
+        <Typography.Body>{useString('amity_social_label_unable_to_load_comments')}</Typography.Body>
       </div>
     );
   }
@@ -242,7 +244,7 @@ export const CommentList = ({
   if (!isLoading && items.length === 0 && visiblePendingL0.length === 0) {
     return (
       <div className={styles.noCommentsContainer}>
-        <Typography.Body>No comments yet</Typography.Body>
+        <Typography.Body>{useString('amity_social_empty_state_no_comments_yet')}</Typography.Body>
       </div>
     );
   }
@@ -335,7 +337,7 @@ export const CommentList = ({
             }}
           >
             <Typography.BodyBold className={styles.commentList__viewAllComments__button__text}>
-              View all comments...
+              {useString('amity_social_button_view_all_comments')}
             </Typography.BodyBold>
           </Button>
         )}

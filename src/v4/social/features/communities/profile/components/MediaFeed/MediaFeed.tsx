@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import ChipButton from '~/v4/social/elements/ChipButton';
 import { CommunityVideoFeed } from '~/v4/social/components';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
@@ -32,18 +33,26 @@ export const CommunityMediaFeed = ({ pageId = '*', communityId }: CommunityMedia
   return (
     <section className={styles.communityMediaFeed} data-testid="community-media-feed">
       <div className={styles.communityMediaFeed__tabs}>
-        {MEDIA_TABS.map((tab) => (
-          <ChipButton
-            key={tab.type}
-            variant="body"
-            label={tab.label}
-            isTransparent={false}
-            aria-label={tab.label}
-            isActive={activeTab === tab.type}
-            data-testid={`chip-button-${tab.type}`}
-            onPress={() => setActiveTab(tab.type)}
-          />
-        ))}
+        {MEDIA_TABS.map((tab) => {
+          const tabLabel =
+            tab.type === MediaTabType.IMAGES
+              ? resolveString('amity_social_tab_tab_photos')
+              : tab.type === MediaTabType.VIDEOS
+                ? resolveString('amity_social_tab_tab_videos')
+                : resolveString('amity_social_tab_tab_clips');
+          return (
+            <ChipButton
+              key={tab.type}
+              variant="body"
+              label={tabLabel}
+              isTransparent={false}
+              aria-label={tabLabel}
+              isActive={activeTab === tab.type}
+              data-testid={`chip-button-${tab.type}`}
+              onPress={() => setActiveTab(tab.type)}
+            />
+          );
+        })}
       </div>
       <div className={styles.communityMediaFeed__content}>
         {activeTab === MediaTabType.IMAGES && (

@@ -29,7 +29,7 @@ export const TimeField = ({
 }: TimeFieldProps) => {
   const elementId = 'time_field';
 
-  const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { accessibilityId, resolveText } = useAmityElement({ pageId, componentId, elementId });
 
   return (
     <TimeInput
@@ -41,7 +41,9 @@ export const TimeField = ({
       className={styles.timeField__container}
     >
       <div className={styles.timeField__wrap}>
-        <Label className={styles.timeField__label}>Time</Label>
+        <Label className={styles.timeField__label}>
+          {resolveText('amity_social_label_event_time')}
+        </Label>
         <DateInput data-testid={accessibilityId} className={styles.timeField__dateInput}>
           {(segment) => <DateSegment segment={segment} className={styles.timeField__dateSegment} />}
         </DateInput>

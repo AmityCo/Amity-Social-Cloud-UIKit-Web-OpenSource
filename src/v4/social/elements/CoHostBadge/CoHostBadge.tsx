@@ -13,12 +13,19 @@ interface CoHostBadgeProps {
 
 export function CoHostBadge({ pageId = '*', componentId = '*', className }: CoHostBadgeProps) {
   const elementId = 'co_host_badge';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -30,7 +37,7 @@ export function CoHostBadge({ pageId = '*', componentId = '*', className }: CoHo
     >
       <PersonOutline className={styles.coHostBadge__icon} />
       <Typography.CaptionSmall className={styles.coHostBadge__text}>
-        {config.text ?? 'Co-Host'}
+        {resolveText('amity_social_button_cohost')}
       </Typography.CaptionSmall>
     </div>
   );

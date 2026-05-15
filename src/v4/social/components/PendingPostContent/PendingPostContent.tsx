@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './PendingPostContent.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
@@ -53,6 +54,12 @@ export const PendingPostContent = ({
   const { openPopup, closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
 
+  const postAcceptedText = useString('amity_social_button_post_accepted');
+  const postDeclinedText = useString('amity_social_button_post_declined');
+  const editedSuffixText = useString('amity_social_button_edited_suffix');
+  const deletePostText = useString('amity_social_button_delete_post');
+  const declinePostText = useString('amity_social_failed_to_decline_post_please_try_again');
+
   const { productCatalogueSettings } = useProductCatalogueSettings();
 
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
@@ -82,11 +89,11 @@ export const PendingPostContent = ({
     try {
       await PostRepository.approvePost(postId);
       notification.success({
-        content: 'Post accepted.',
+        content: postAcceptedText,
       });
     } catch (error) {
       notification.info({
-        content: 'Failed to accept post. This post has been reviewed by another moderator.',
+        content: resolveString('amity_social_toast_accept_post_reviewed_by_moderator'),
       });
       refresh?.();
     }
@@ -98,11 +105,11 @@ export const PendingPostContent = ({
     try {
       await PostRepository.declinePost(postId);
       notification.success({
-        content: 'Post declined.',
+        content: postDeclinedText,
       });
     } catch (error) {
       notification.info({
-        content: 'Failed to decline post. This post has been reviewed by another moderator.',
+        content: resolveString('amity_social_toast_decline_post_reviewed_by_moderator'),
       });
       refresh?.();
     }
@@ -115,11 +122,11 @@ export const PendingPostContent = ({
       await PostRepository.deletePost(postId);
       removeDrawerData();
       notification.success({
-        content: 'Post deleted.',
+        content: resolveString('amity_social_toast_post_deleted'),
       });
     } catch (error) {
       notification.info({
-        content: 'Failed to delete post. Post has been deleted.',
+        content: resolveString('amity_social_failed_to_delete_post_post_has_been_deleted'),
       });
       refresh?.();
     }
@@ -184,7 +191,7 @@ export const PendingPostContent = ({
                     data-testid={`${pageId}/${componentId}/post_edited_text`}
                     className={styles.pendingPostContent__editedTag}
                   >
-                    (edited)
+                    {editedSuffixText}
                   </Typography.Caption>
                 )}
               </div>
@@ -213,7 +220,7 @@ export const PendingPostContent = ({
                           <Typography.TitleBold
                             className={styles.pendingPostContent__deletePost__text}
                           >
-                            Delete post
+                            {deletePostText}
                           </Typography.TitleBold>
                         </Button>
                       ),
@@ -231,7 +238,7 @@ export const PendingPostContent = ({
                   >
                     <TrashIcon className={styles.pendingPostContent__deletePost__icon} />
                     <Typography.TitleBold className={styles.pendingPostContent__deletePost__text}>
-                      Delete post
+                      {deletePostText}
                     </Typography.TitleBold>
                   </Button>
                 )}
@@ -273,7 +280,7 @@ export const PendingPostContent = ({
               onClick={() => {
                 if (!online) {
                   notification.info({
-                    content: 'Failed to accept post. Please try again.',
+                    content: resolveString('amity_social_failed_to_accept_post_please_try_again'),
                   });
                   return;
                 }
@@ -283,11 +290,12 @@ export const PendingPostContent = ({
             <PostDeclineButton
               pageId={pageId}
               componentId={componentId}
+              textId="amity_social_button_pending_post_decline_button"
               onClick={() => {
                 {
                   if (!online) {
                     notification.info({
-                      content: 'Failed to decline post. Please try again.',
+                      content: declinePostText,
                     });
                     return;
                   }

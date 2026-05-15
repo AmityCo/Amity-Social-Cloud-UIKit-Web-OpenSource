@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { set } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { resolveString } from '~/v4/core/localization';
 
 interface UsePostReactionParams {
   post: Amity.Post;
@@ -41,7 +42,7 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
         } catch (err) {
           setReactionByMe(post?.myReactions?.[0] || null);
           info({
-            content: 'Oops, something went wrong.',
+            content: resolveString('amity_social_toast_failed_generic'),
           });
         }
       }
@@ -59,7 +60,7 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
       setReactionByMe(post?.myReactions?.[0] || null);
       setReactionsCount(post?.reactionsCount || 0);
       info({
-        content: 'Oops, something went wrong.',
+        content: resolveString('amity_social_toast_failed_generic'),
       });
     },
   });
@@ -78,7 +79,7 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
       setReactionByMe(post?.myReactions?.[0] || null);
       setReactionsCount(post?.reactionsCount || 0);
       info({
-        content: 'Oops, something went wrong.',
+        content: resolveString('amity_social_toast_failed_generic'),
       });
     },
   });

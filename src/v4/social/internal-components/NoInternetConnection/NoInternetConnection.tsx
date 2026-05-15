@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { NoInternetConnection as NoInternetConnectionIcon } from '~/v4/icons/NoInternetConnection';
 import styles from './NoInternetConnection.module.css';
 import { Typography } from '~/v4/core/components';
@@ -20,11 +21,11 @@ export const NoInternetConnection = ({
     <div className={clsx(styles.noInternetConnection__container, className)}>
       <NoInternetConnectionIcon className={styles.noInternetConnection__icon} />
       <Typography.TitleBold className={styles.noInternetConnection__title}>
-        No internet connection
+        {useString('amity_social_label_no_internet_connection')}
       </Typography.TitleBold>
       {isShowRetryButton && (
         <Button onPress={onRetry} variant="outlined" className={styles.noInternetConnection__retry}>
-          Retry
+          {useString('amity_social_button_retry')}
         </Button>
       )}
     </div>

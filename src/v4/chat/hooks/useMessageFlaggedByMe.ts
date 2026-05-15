@@ -3,6 +3,7 @@ import { MessageRepository } from '@amityco/ts-sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { resolveString } from '~/v4/core/localization';
 
 export const useMessageFlaggedByMe = ({
   messageId,
@@ -41,7 +42,7 @@ export const useMessageFlaggedByMe = ({
     },
     onSuccess: () => {
       success({
-        content: 'Message reported.',
+        content: resolveString('amity_chat_toast_message_reported'),
         alignment: type === 'live-chat' ? 'live-chat' : isDesktop ? 'fullscreen' : 'withSidebar',
       });
       onCloseMenu?.();

@@ -13,14 +13,14 @@ export const PollMultipleSelectionTitle = ({
 }: PollMultipleSelectionTitleProps) => {
   const elementId = 'poll_multiple_selection_title';
 
-  const { config, themeStyles, accessibilityId } = useAmityElement({
+  const { config, themeStyles, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
   return (
     <Typography.TitleBold data-testid={accessibilityId} style={themeStyles}>
-      {config.text}
+      {resolveText('amity_social_button_multiple_selection')}
     </Typography.TitleBold>
   );
 };

@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { useString, resolveString } from '~/v4/core/localization';
 import React from 'react';
 import { FileRepository } from '@amityco/ts-sdk';
 import { useEffect, useMemo, useRef } from 'react';
@@ -42,23 +43,39 @@ export function useAltTextConfig({ mode, result }: AltTextConfigProps) {
     },
     onSuccess: (_, { altText }) => {
       result(altText);
-      isEdit && success({ content: 'Alt text updated.', alignment: 'fullscreen' });
+      isEdit &&
+        success({
+          content: resolveString('amity_social_label_image_alt_text_updated_message'),
+          alignment: 'fullscreen',
+        });
     },
     onError: (error) => {
       if (error.message.includes('Network Error')) {
-        return info({ content: 'No internet connection.', alignment: 'fullscreen' });
+        return info({
+          content: resolveString('amity_social_label_no_internet_connection'),
+          alignment: 'fullscreen',
+        });
       }
 
-      if (
-        error.message.includes(`${ERROR_RESPONSE.BLOCKED_WORD}`) ||
-        error.message.includes(`${ERROR_RESPONSE.BLOCKED_URL}`)
-      ) {
-        return info({ content: error?.message?.split(': ')[1], alignment: 'fullscreen' });
+      if (error.message.includes(`${ERROR_RESPONSE.BLOCKED_WORD}`)) {
+        return info({
+          content: resolveString('amity_social_error_image_alt_text_ban_word_error_message'),
+          alignment: 'fullscreen',
+        });
+      }
+      if (error.message.includes(`${ERROR_RESPONSE.BLOCKED_URL}`)) {
+        return info({
+          content: resolveString('amity_social_error_image_alt_text_ban_url_error_message'),
+          alignment: 'fullscreen',
+        });
       }
 
       info({
         alignment: 'fullscreen',
-        content: `Failed to ${mode.type === 'create' ? 'add' : 'edit'} alt text. Please try again.`,
+        content:
+          mode.type === 'create'
+            ? resolveString('amity_social_toast_image_add_alt_text_generic_error_message')
+            : resolveString('amity_social_toast_image_edit_alt_text_generic_error_message'),
       });
     },
   });
@@ -138,6 +155,9 @@ export function AltTextConfig({ mode, result, renderHeader }: AltTextConfigProps
     handleTextareaChange,
   } = useAltTextConfig({ mode, result });
 
+  const altTextPlaceholder = useString('amity_social_placeholder_image_alt_text_hint_message');
+  const addAltTextLabel = useString('amity_social_button_done');
+  const editAltTextLabel = useString('amity_social_button_community_setup_edit_button');
   return (
     <form
       id="alt-text-form"
@@ -163,7 +183,7 @@ export function AltTextConfig({ mode, result, renderHeader }: AltTextConfigProps
         </figure>
         <div>
           <Label className="srOnly" id="alt-text">
-            Describe this photo briefly to help visually impaired users understand its content
+            {altTextPlaceholder}
           </Label>
           <TextArea
             {...register('altText')}
@@ -175,7 +195,7 @@ export function AltTextConfig({ mode, result, renderHeader }: AltTextConfigProps
             aria-labelledby="alt-text"
             onChange={handleTextareaChange}
             className={styles.altTextConfig__input}
-            placeholder="Describe this photo briefly to help visually impaired users understand its content"
+            placeholder={altTextPlaceholder}
             onKeyDown={(e) => {
               if (e.key === 'Enter') e.preventDefault();
             }}
@@ -190,7 +210,7 @@ export function AltTextConfig({ mode, result, renderHeader }: AltTextConfigProps
           className={styles.altTextConfig__cta}
           isDisabled={!formState.isDirty || !formState.isValid || formState.isSubmitting}
         >
-          {mode.type === 'create' ? 'Done' : 'Save'}
+          {mode.type === 'create' ? addAltTextLabel : editAltTextLabel}
         </AriButton>
       </div>
     </form>

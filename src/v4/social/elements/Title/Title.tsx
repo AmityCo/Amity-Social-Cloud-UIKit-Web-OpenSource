@@ -8,6 +8,7 @@ type TitleProps = {
   componentId?: string;
   titleClassName?: string;
   variant?: 'headline' | 'title';
+  textKey?: string;
   children?: React.ReactNode;
 };
 
@@ -16,10 +17,11 @@ export function Title({
   titleClassName,
   componentId = '*',
   variant = 'title',
+  textKey,
   children,
 }: TitleProps) {
   const elementId = 'title';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -35,7 +37,7 @@ export function Title({
       data-testid={accessibilityId}
       className={clsx(styles.title, titleClassName)}
     >
-      {children ?? config.text}
+      {children ?? (textKey ? resolveText(textKey) : undefined)}
     </Component>
   );
 }

@@ -43,6 +43,7 @@ export const LivestreamHeaderMenu: React.FC<LivestreamHeaderMenuProps> = ({
           referenceId={postId}
           onDone={onLinkCopied}
           notificationAlignment={notificationAlignment}
+          textId="amity_social_status_copy_live_stream_link"
         />
       )}
     </div>

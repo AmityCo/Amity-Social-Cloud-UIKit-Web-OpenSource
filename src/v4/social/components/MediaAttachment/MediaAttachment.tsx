@@ -59,6 +59,7 @@ export function MediaAttachment({
               onVideoFileChange={onVideoFileChange}
               onImageFileChange={onImageFileChange}
               isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+              textId=""
             />
           )}
           {isVisibleImage && (
@@ -67,6 +68,7 @@ export function MediaAttachment({
               componentId={componentId}
               onImageFileChange={onImageFileChange}
               isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+              textId=""
             />
           )}
 
@@ -76,6 +78,7 @@ export function MediaAttachment({
               componentId={componentId}
               onVideoFileChange={onVideoFileChange}
               isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+              textId=""
             />
           )}
         </div>

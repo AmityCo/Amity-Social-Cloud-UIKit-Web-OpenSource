@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import { formatPrice } from '~/v4/social/utils/formatPrice';
 import clsx from 'clsx';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -139,7 +140,7 @@ export function LivestreamPinnedProduct({
             onClick={handleLinkClick}
             style={{ cursor: unavailable ? 'default' : 'pointer' }}
           >
-            {unavailable ? 'Unlisted' : price}
+            {unavailable ? useString('amity_social_button_tagged_products_archived_info') : price}
           </Typography.Caption>
           {isViewer ? (
             <div
@@ -163,7 +164,7 @@ export function LivestreamPinnedProduct({
                   as="span"
                   className={styles.livestreamPinnedProduct__viewText}
                 >
-                  View
+                  {useString('amity_social_button_view')}
                 </Typography.CaptionBold>
               </Button>
             </div>
@@ -195,7 +196,7 @@ export function LivestreamPinnedProduct({
                 as="span"
                 className={styles.livestreamPinnedProduct__unpinText}
               >
-                Unpin
+                {useString('amity_social_label_unpin_label')}
               </Typography.CaptionBold>
             </Button>
           )}

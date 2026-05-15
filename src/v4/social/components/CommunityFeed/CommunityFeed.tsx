@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PostContent } from '~/v4/social/components/PostContent';
 import {
@@ -46,6 +47,7 @@ interface CommunityFeedProps {
 
 export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps) => {
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+
   const componentId = 'community_feed_component';
   const { isExcluded, accessibilityId, themeStyles } = useAmityComponent({
     pageId,
@@ -234,7 +236,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
           <div className={styles.communityFeed__emptyPost}>
             <EmptyPost className={styles.communityFeed__emptyPostIcon} />
             <Typography.Body className={styles.communityFeed__emptyPostText}>
-              No posts yet
+              {useString('amity_social_empty_feed_no_posts')}
             </Typography.Body>
           </div>
         )}

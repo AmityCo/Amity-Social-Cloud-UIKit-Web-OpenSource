@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { TagOutlined } from '~/v4/icons/TagOutlined';
 import styles from './ProductTagNoTagsYet.module.css';
@@ -24,20 +25,23 @@ export function ProductTagNoTagsYet({
     elementId,
   });
 
+  const title = useString('amity_social_empty_state_tagged_products_empty_title');
+  const description = useString('amity_social_empty_state_tagged_products_empty_desc');
+  const addProductsLabel = useString('amity_social_button_add_products');
+
   if (isExcluded) return null;
 
   return (
     <div data-testid={accessibilityId} className={styles.productTagNoTagsYet} style={themeStyles}>
       <TagOutlined className={styles.productTagNoTagsYet__icon} />
       <Typography.TitleBold as="p" className={styles.productTagNoTagsYet__text}>
-        No products tagged yet
+        {title}
       </Typography.TitleBold>
       <Typography.Body as="p" className={styles.productTagNoTagsYet__text}>
-        You can add or remove products anytime and pin them to control what viewers see while you’re
-        live.
+        {description}
       </Typography.Body>
       <Button variant="default" onPress={onPress} className={styles.productTagNoTagsYet__button}>
-        <Typography.CaptionBold as="span">Add products</Typography.CaptionBold>
+        <Typography.CaptionBold as="span">{addProductsLabel}</Typography.CaptionBold>
       </Button>
     </div>
   );

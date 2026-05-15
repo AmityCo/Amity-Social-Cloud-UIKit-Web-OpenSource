@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './ManageProductTagList.module.css';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -112,13 +113,13 @@ export function ManageProductTagList({
       } else if (onUpdateProductTags && updatedTags) {
         await onUpdateProductTags(updatedTags);
         success({
-          content: 'Product tag removed.',
+          content: useString('amity_social_label_product_tag_removed'),
         });
       }
     } catch (error) {
       // Show error message
       info({
-        content: 'Failed to remove product tag. Please try again.',
+        content: useString('amity_social_toast_product_tag_remove_failed'),
       });
       // Rollback UI state on failure
       setProductTags(previousTags);
@@ -146,11 +147,10 @@ export function ManageProductTagList({
       if (hasUnsavedChanges) {
         confirm({
           type: 'confirm',
-          title: 'Discard product selection?',
-          content:
-            "You have products selected that haven't been added yet. If you close now, your selection will be lost.",
-          okText: 'Discard',
-          cancelText: 'Keep editing',
+          title: useString('amity_social_modal_dialog_title_discard_product_selection'),
+          content: useString('amity_social_unsaved_products'),
+          okText: useString('amity_social_button_discard'),
+          cancelText: useString('amity_social_button_keep_editing'),
           okButtonColor: 'alert',
           onOk: () => {
             closePopup();
@@ -212,7 +212,7 @@ export function ManageProductTagList({
       // Mobile: show in drawer
       setDrawerData({
         content: productTagSelectionContent(() => removeDrawerData()),
-        ariaLabel: 'Add products',
+        ariaLabel: useString('amity_social_button_tagged_products_empty_action'),
       });
     }
   };
@@ -261,7 +261,7 @@ export function ManageProductTagList({
     } else {
       setDrawerData({
         content: productTagSelectionContent(() => removeDrawerData()),
-        ariaLabel: 'Add products',
+        ariaLabel: useString('amity_social_button_tagged_products_empty_action'),
       });
     }
   }, [
@@ -291,13 +291,17 @@ export function ManageProductTagList({
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.manageProductTagList}>
       {!online && (
-        <Notification icon={<Spinner />} content="Waiting for network..." alignment="fixed" />
+        <Notification
+          icon={<Spinner />}
+          content={useString('amity_social_label_waiting_for_network')}
+          alignment="fixed"
+        />
       )}
       <div className={styles.manageProductTagList__header}>
         <div className={styles.manageProductTagList__headerContent}>
           {!isDesktop && <div className={styles.manageProductTagList__emptySpace} />}
           <Typography.TitleBold as="h2" className={styles.manageProductTagList__title}>
-            Tagged products
+            {useString('amity_social_button_tagged_products')}
           </Typography.TitleBold>
           <Typography.Caption as="p" className={styles.manageProductTagList__description}>
             {productTags?.length}/{maxCount}
@@ -343,7 +347,9 @@ export function ManageProductTagList({
                 {pinnedProducts.length > 0 && (
                   <div className={styles.manageProductTagList__pinnedSection}>
                     <div className={styles.manageProductTagList__sectionTitle}>
-                      <Typography.TitleBold as="h3">Pinned product</Typography.TitleBold>
+                      <Typography.TitleBold as="h3">
+                        {useString('amity_social_label_pinned_product_label')}
+                      </Typography.TitleBold>
                     </div>
 
                     <div className={styles.manageProductTagList__pinnedContent}>
@@ -371,7 +377,9 @@ export function ManageProductTagList({
                 {otherProducts.length > 0 && (
                   <div className={styles.manageProductTagList__otherSection}>
                     <div className={styles.manageProductTagList__sectionTitle}>
-                      <Typography.TitleBold as="h3">Other products</Typography.TitleBold>
+                      <Typography.TitleBold as="h3">
+                        {useString('amity_social_label_other_products_label')}
+                      </Typography.TitleBold>
                     </div>
                     <div className={styles.manageProductTagList__scrollableContent}>
                       <div className={styles.manageProductTagList__list}>
@@ -405,7 +413,9 @@ export function ManageProductTagList({
                 fullWidth
                 isDisabled={productTags?.length === maxCount || !online}
               >
-                <Typography.BodyBold as="span">Add products</Typography.BodyBold>
+                <Typography.BodyBold as="span">
+                  {useString('amity_social_button_add_products')}
+                </Typography.BodyBold>
               </Button>
             </div>
           </>

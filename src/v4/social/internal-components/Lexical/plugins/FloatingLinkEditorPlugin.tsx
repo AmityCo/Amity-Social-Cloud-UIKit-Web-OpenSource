@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $getSelection,
@@ -35,6 +36,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
   const [lastSelection, setLastSelection] = useState<RangeSelection | null>(null);
   const positionRef = useRef<DOMRect | null>(null);
   const selectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const typeOrPasteALinkLabel = useString('amity_social_type_or_paste_a_link');
 
   // If plugin is disabled, don't render anything
   if (!enabled) {
@@ -369,7 +371,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
             type="button"
             variant="text"
             color="secondary"
-            aria-label="clear link"
+            aria-label={useString('amity_social_button_remove_link')}
             className={styles.linkSaveBtn}
             onPress={handleRemoveLink}
           >
@@ -383,7 +385,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
             type="text"
             ref={inputRef}
             value={editedLinkUrl}
-            placeholder="Type or paste a link"
+            placeholder={typeOrPasteALinkLabel}
             className={styles.linkInput}
             style={
               {
@@ -445,10 +447,12 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
           color="secondary"
           className={styles.addLinkBtn}
           onPress={handleAddLinkClick}
-          aria-label="Add link"
+          aria-label={useString('amity_social_button_add_link')}
         >
           <Link className={styles.addLinkBtn__icon} />
-          <Typography.CaptionBold>Add Link</Typography.CaptionBold>
+          <Typography.CaptionBold>
+            {useString('amity_social_button_add_link')}
+          </Typography.CaptionBold>
         </Button>
       )}
     </div>

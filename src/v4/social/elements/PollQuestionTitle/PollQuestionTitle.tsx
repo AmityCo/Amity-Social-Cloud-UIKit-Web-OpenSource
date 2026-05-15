@@ -9,14 +9,14 @@ type PollQuestionTitleProps = {
 
 export const PollQuestionTitle = ({ pageId = '*', componentId = '*' }: PollQuestionTitleProps) => {
   const elementId = 'poll_question_title';
-  const { accessibilityId, themeStyles, config } = useAmityElement({
+  const { accessibilityId, themeStyles, config, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
   return (
     <Typography.TitleBold style={themeStyles} data-testid={accessibilityId}>
-      {config.text}
+      {resolveText('amity_social_button_poll_question')}
     </Typography.TitleBold>
   );
 };

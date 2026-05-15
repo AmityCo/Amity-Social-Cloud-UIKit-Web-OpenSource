@@ -10,6 +10,7 @@ import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
+import { useString } from '~/v4/core/localization';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -50,6 +51,12 @@ const ChatFeed: FC<ChatFeedProps> = ({
   );
 
   const { parentPost } = useLivestreamData();
+
+  const noMessagesTitle = useString('amity_chat_empty_state_no_messages_title');
+  const pendingPostDescription = useString('amity_chat_empty_state_pending_post_description');
+  const startConversationDescription = useString(
+    'amity_chat_empty_state_start_conversation_description',
+  );
 
   const handlePopoverStateChange = (isOpen: boolean) => {
     setCurrentMessages(isOpen ? messages ?? [] : []);
@@ -114,12 +121,10 @@ const ChatFeed: FC<ChatFeedProps> = ({
           <div className={styles.chatFeed__empty__container}>
             <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
             <Typography.TitleBold className={styles.chatFeed__emptyText}>
-              No messages yet
+              {noMessagesTitle}
             </Typography.TitleBold>
             <Typography.Caption className={styles.chatFeed__emptyText}>
-              {isPendingPost
-                ? 'Users can start messaging once the post has been approved.'
-                : 'Be the first to start conversation.'}
+              {isPendingPost ? pendingPostDescription : startConversationDescription}
             </Typography.Caption>
           </div>
         </>

@@ -22,7 +22,7 @@ export function CommunityDisplayName({
   typography = 'BodyBold',
 }: CommunityDisplayNameProps) {
   const elementId = 'community_display_name';
-  const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -38,7 +38,7 @@ export function CommunityDisplayName({
       data-testid={accessibilityId}
       className={clsx(styles.communityDisplayName, className)}
     >
-      {displayName ?? community?.displayName ?? 'My Timeline'}
+      {displayName ?? community?.displayName ?? resolveText('amity_social_button_my_timeline')}
     </$Typography>
   );
 }

@@ -18,6 +18,7 @@ import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBa
 import { CommunityJoinedButton } from '~/v4/social/elements/CommunityJoinedButton/CommunityJoinedButton';
 import styles from './RecommendedCommunities.module.css';
 import { useNetworkState } from 'react-use';
+import { resolveString } from '~/v4/core/localization';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useGetJoinRequestList } from '~/v4/social/hooks/useGetJoinRequestList';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -197,7 +198,7 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
   const handleJoinButtonClick = async (community: Amity.Community) => {
     if (!online) {
       notification.info({
-        content: 'Failed to join community. Please try again.',
+        content: resolveString('amity_social_toast_snackbar_join_community_failed'),
       });
       return;
     }
@@ -207,7 +208,7 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
   const handleLeaveButtonClick = (community: Amity.Community) => {
     if (!online) {
       notification.info({
-        content: 'Failed to leave community. Please try again.',
+        content: resolveString('amity_social_toast_leave_community_failed'),
       });
       return;
     }

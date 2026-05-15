@@ -1,5 +1,6 @@
 export const formatToDayMonth = (date: Date) => {
-  return new Intl.DateTimeFormat('en-GB', {
+  const locale = typeof navigator !== 'undefined' ? navigator.language : 'en';
+  return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'short',
   }).format(date);

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import styles from './ProductTag.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -143,7 +144,7 @@ export function ProductTag({
                 className={styles.productTag__unavailableLabel}
                 data-theme={currentTheme}
               >
-                Unlisted
+                {useString('amity_social_button_tagged_products_archived_info')}
               </Typography.Caption>
             )}
             <Typography.BodyBold
@@ -168,7 +169,9 @@ export function ProductTag({
                   color="primary"
                   className={styles.productTag__viewButton}
                 >
-                  <Typography.CaptionBold as="span">View</Typography.CaptionBold>
+                  <Typography.CaptionBold as="span">
+                    {useString('amity_social_button_view')}
+                  </Typography.CaptionBold>
                 </Button>
               )}
             </div>

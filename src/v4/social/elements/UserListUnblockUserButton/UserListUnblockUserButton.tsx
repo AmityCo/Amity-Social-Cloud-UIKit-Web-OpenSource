@@ -19,7 +19,7 @@ export const UserListUnblockUserButton: React.FC<UserListUnblockUserButtonProps>
   onClick,
 }) => {
   const elementId = 'user_list_unblock_user_button';
-  const { accessibilityId, config, isExcluded } = useAmityElement({
+  const { accessibilityId, config, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -33,9 +33,9 @@ export const UserListUnblockUserButton: React.FC<UserListUnblockUserButtonProps>
       className={styles.userListUnblockUserButton}
       onPress={onClick}
     >
-      {config.text && (
+      {resolveText('amity_social_button_unblock') && (
         <Typography.CaptionBold className={styles.userListUnblockUserButton__text}>
-          {config.text}
+          {resolveText('amity_social_button_unblock')}
         </Typography.CaptionBold>
       )}
     </Button>

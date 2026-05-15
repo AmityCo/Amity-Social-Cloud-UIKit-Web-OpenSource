@@ -1,5 +1,6 @@
 import { Input } from 'react-aria-components';
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { SearchIcon } from '~/v4/social/elements/SearchIcon';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
@@ -22,10 +23,11 @@ export function SearchInput({
   elementId = 'search_input',
   value,
   onChange,
-  placeholder = 'Search',
+  placeholder,
   onFocus,
   onClear,
 }: SearchInputProps) {
+  const defaultPlaceholder = useString('amity_social_button_search');
   const { isExcluded, themeStyles, accessibilityId } = useAmityElement({
     pageId,
     componentId,
@@ -52,7 +54,7 @@ export function SearchInput({
           type="text"
           onFocus={onFocus}
           value={value}
-          placeholder={placeholder}
+          placeholder={placeholder ?? defaultPlaceholder}
           className={styles.searchInput__textInput}
           onChange={(ev) => onChange(ev.target.value)}
         />

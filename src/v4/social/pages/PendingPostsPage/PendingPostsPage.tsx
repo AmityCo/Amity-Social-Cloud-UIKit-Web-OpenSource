@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './PendingPostsPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -55,7 +56,11 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
       >
         <BackButton onPress={() => onBack()} />
         <div className={styles.pendingPostsPage__titleWrap}>
-          <Title titleClassName={styles.pendingPostsPage__title} pageId={pageId} />
+          <Title
+            titleClassName={styles.pendingPostsPage__title}
+            pageId={pageId}
+            textKey="amity_social_label_page_pending_post_title"
+          />
           <Typography.TitleBold>{`(${pendingPostsCount})`}</Typography.TitleBold>
         </div>
         <div className={styles.pendingPostsPage__emptyDiv} />
@@ -63,7 +68,9 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
       {(canReviewCommunityPosts || isDesktop) && (
         <div className={styles.pendingPostsPage__descWrap}>
           <Typography.Caption className={styles.pendingPostsPage__desc}>
-            Decline pending post will permanently delete the selected post from community.
+            {useString(
+              'amity_social_button_decline_pending_post_will_permanently_delete_the_select',
+            )}
           </Typography.Caption>
         </div>
       )}
@@ -78,7 +85,7 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
         <div className={styles.pendingPostsPage__noPendingPost}>
           <FireworkPaper className={styles.pendingPostsPage__fireworkIcon} />
           <Typography.TitleBold className={styles.pendingPostsPage__noPendingPostText}>
-            No post to review
+            {useString('amity_social_no_post_to_review')}
           </Typography.TitleBold>
         </div>
       )}

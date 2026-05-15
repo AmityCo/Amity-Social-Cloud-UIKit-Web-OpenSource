@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { ActionButton } from '~/v4/core/components/ActionButton/ActionButton';
 import styles from './ProductTagSelectedItem.module.css';
@@ -49,7 +50,7 @@ export function ProductTagSelectedItem({
       <div className={styles.productTagSelectedItem__textContent}>
         {unavailable && (
           <Typography.Caption as="p" className={styles.productTagSelectedItem__unavailableLabel}>
-            Unlisted
+            {useString('amity_social_button_tagged_products_archived_info')}
           </Typography.Caption>
         )}
         <Typography.BodyBold

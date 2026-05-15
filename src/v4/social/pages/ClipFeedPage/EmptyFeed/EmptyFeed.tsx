@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './EmptyFeed.module.css';
 import { BackButton } from '~/v4/social/elements';
 import { CreateNewClipButton } from '~/v4/social/elements/CreateNewClipButton';
@@ -46,10 +47,10 @@ export const EmptyFeed = ({
         />
 
         <Typography.TitleBold className={styles.emptyFeed__textWhite}>
-          Your feed is empty
+          {useString('amity_social_empty_state_social_home_empty_title')}
         </Typography.TitleBold>
         <Typography.Body className={styles.emptyFeed__textWhite}>
-          Find community or create your own.
+          {useString('amity_social_label_find_community_or_create_your_own')}
         </Typography.Body>
 
         <ExploreCommunitiesButton

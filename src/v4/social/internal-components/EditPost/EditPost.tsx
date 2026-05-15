@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import {
   FileType,
   PostContentType,
@@ -15,7 +16,12 @@ import {
   AmityPostComposerEditOptions,
   CreatePostParams,
 } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { TextEditor } from '~/v4/core/components/TextEditor';
+import {
+  TextEditor,
+  TextEditorLinkPreview,
+  UrlHighlight,
+  LinkRetentionState,
+} from '~/v4/core/components/TextEditor';
 import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
@@ -128,6 +134,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
+  const postingText = useString('amity_social_toast_poll_create_posting_toast');
+  const waitingForNetworkText = useString('amity_social_label_waiting_for_network');
+  const postEditGenericErrorText = useString('amity_social_toast_post_edit_generic_error_message');
+  const titlePlaceholder = useString('amity_social_label_title_optional');
+
   const [postImages, setPostImages] = useState<Amity.Post<'image'>[]>([]);
   const [postVideos, setPostVideos] = useState<Amity.Post<'video'>[]>([]);
   const [postClip, setPostClip] = useState<Amity.Post<'clip'>[]>([]);
@@ -135,6 +146,28 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [urlHighlights, setUrlHighlights] = useState<UrlHighlight[]>(() => {
+    // Initialize from post.links if available
+    return (post.links || []).map((link) => ({
+      url: link.url,
+      start: link.index ?? 0,
+      end: (link.index ?? 0) + (link.length ?? 0),
+      renderPreview: link.renderPreview ?? true,
+    }));
+  });
+  // Ref to store link retention state from TextEditorLinkPreview
+  const linkRetentionRef = useRef<LinkRetentionState>({
+    debouncedFirstUrl: (() => {
+      // Initialize with the first link that has renderPreview: true
+      const links = post.links || [];
+      if (links.length > 0) {
+        const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+        return firstLinkWithPreview?.url ?? null;
+      }
+      return null;
+    })(),
+    hiddenPreviewUrl: null,
+  });
   const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>(
     post.productTags as Amity.TextProductTag[],
   );
@@ -178,6 +211,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
     return Array.from(productMap.values());
   }, [postImages, postVideos, productTags, files]);
+
+  // Callback to receive link retention state from TextEditorLinkPreview
+  const handleLinkRetentionChange = useCallback((state: LinkRetentionState) => {
+    linkRetentionRef.current = state;
+  }, []);
 
   const mediaOnlyProductCount = useMemo(() => {
     const textProductIds = new Set(productTags?.map((tag) => tag.product?._id) ?? []);
@@ -270,7 +308,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
         if (hasDeletedProducts || hasArchivedProducts) {
           infoNotification({
-            content: "Some products that you've tagged are no longer available.",
+            content: resolveString('amity_social_toast_post_products_unavailable_toast'),
           });
         }
 
@@ -280,7 +318,9 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
         if (isPostNeedsApproval) {
           success({
-            content: 'Post sent for review.',
+            content: resolveString(
+              'amity_social_label_post_composer_post_updates_sent_for_review_title',
+            ),
           });
         }
       },
@@ -289,11 +329,13 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setIsError(true);
 
         if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-          setPostErrorText("Your post wasn't posted as it contains an inappropriate word.");
+          setPostErrorText(resolveString('amity_social_error_post_create_ban_word_error'));
         } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-          setPostErrorText("Your post wasn't posted as it contains a link that's not allowed.");
+          setPostErrorText(
+            resolveString('amity_social_error_add_blocked_links_post_error_message'),
+          );
         } else {
-          setPostErrorText('Failed to create post. Please try again.');
+          setPostErrorText(resolveString('amity_social_toast_post_create_generic_error_message'));
         }
       },
     });
@@ -413,6 +455,42 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           })
         : undefined;
 
+    // Compute effective links, including retained URL if preview is still showing but text was removed
+    const currentTotalMedia =
+      ((files && files?.length) || 0) +
+      ((postImages && postImages?.length) || 0) +
+      ((postVideos && postVideos?.length) || 0);
+
+    let effectiveLinks = textValue?.links ?? [];
+
+    // If no links in text but debounced URL exists and not hidden, retain the link
+    // This handles the case where link text was removed but preview is still showing
+    const { debouncedFirstUrl: retainedUrl, hiddenPreviewUrl: hiddenUrl } =
+      linkRetentionRef.current;
+    if (
+      effectiveLinks.length === 0 &&
+      retainedUrl &&
+      retainedUrl !== hiddenUrl &&
+      currentTotalMedia === 0
+    ) {
+      effectiveLinks = [
+        {
+          index: 0,
+          length: 0,
+          url: retainedUrl,
+          renderPreview: true,
+        },
+      ];
+    }
+
+    // If media is attached, set renderPreview to false for all links (Requirement 5)
+    if (currentTotalMedia > 0 && effectiveLinks.length > 0) {
+      effectiveLinks = effectiveLinks.map((link) => ({
+        ...link,
+        renderPreview: false,
+      }));
+    }
+
     if (textValue) {
       isClipPost
         ? mutateUpdatePostAsync({
@@ -423,7 +501,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             },
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
-            links: textValue.links,
+            links: effectiveLinks,
             productTags: finalProductTags,
           })
         : mutateUpdatePostAsync({
@@ -435,7 +513,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionees: textValue.mentionees as Amity.UserMention[],
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
-            links: textValue.links,
+            links: effectiveLinks,
             productTags: finalProductTags,
             attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
           });
@@ -461,12 +539,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       confirm({
         pageId: pageId,
         type: 'confirm',
-        title: "Product tagging isn't available",
-        content: 'Your post can still be published, but product tags will be removed.',
+        title: resolveString('amity_social_label_product_tagging_unavailable_title'),
+        content: resolveString('amity_social_your_post_can_still_be_published_but_product_tags_'),
         onOk: () => performPostUpdate({ removeTag: true }),
-        okText: 'Publish',
+        okText: resolveString('amity_social_button_publish'),
         okButtonColor: 'primary',
-        cancelText: 'Review post',
+        cancelText: resolveString('amity_social_button_review_post'),
         onCancel: () => removeProductTag(),
       });
     } else {
@@ -479,11 +557,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     if (shouldCallCommunity && isPostNeedsApproval) {
       confirm({
         pageId,
-        title: 'Post will be sent for review',
-        content:
-          'Posting in this community requires approval. Your edited post will be published once approved by the community moderator.',
-        okText: 'OK',
-        cancelText: 'Cancel',
+        title: resolveString(
+          'amity_social_button_post_composer_create_button_will_be_sent_for_review',
+        ),
+        content: resolveString('amity_social_label_edit_post_community_requires_approval_content'),
+        okText: resolveString('amity_social_button_ok'),
+        cancelText: resolveString('amity_social_button_cancel'),
         onOk: () => {
           performPostUpdate();
         },
@@ -495,16 +574,19 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const onSave = () => {
     if (textValue.text?.length && textValue.text.length > MAXIMUM_POST_CHARACTERS) {
-      setPostErrorText('You have reached maximum 50,000 characters in a post.');
+      setPostErrorText(resolveString('amity_social_error_post_text_exceed_error_message'));
       return;
     }
 
     if (textValue.links && textValue.links.length > MAX_LINKS_PER_POST) {
       info({
-        title: 'Link limit reached',
-        content: `You can only add link up to ${MAX_LINKS_PER_POST} links per post.`,
+        title: resolveString('amity_social_modal_dialog_title_link_limit_reached'),
+        content: resolveString('amity_social_modal_dialog_link_limit').replace(
+          '%s',
+          String(MAX_LINKS_PER_POST),
+        ),
         pageId,
-        okText: 'OK',
+        okText: resolveString('amity_social_button_ok'),
       });
       return;
     }
@@ -517,13 +599,13 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     confirm({
       pageId: pageId,
       type: 'confirm',
-      title: 'Discard this post?',
-      content: 'The post will be permanently discarded. It cannot be undone.',
+      title: resolveString('amity_social_modal_dialog_title_discard_post'),
+      content: resolveString('amity_social_modal_dialog_discard_post'),
       onOk: () => {
         onBack();
       },
-      okText: 'Discard',
-      cancelText: 'Keep editing',
+      okText: resolveString('amity_social_button_discard'),
+      cancelText: resolveString('amity_social_button_keep_editing'),
     });
   };
 
@@ -540,14 +622,14 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       {(isUpdating || !online) && (
         <Notification
           icon={<Spinner />}
-          content={online ? 'Posting...' : 'Waiting for network...'}
+          content={online ? postingText : waitingForNetworkText}
           alignment="fixed"
         />
       )}
       {(isError || postErrorText) && (
         <Notification
           duration={3000}
-          content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+          content={postErrorText ?? postEditGenericErrorText}
           alignment="fixed"
           icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
           onClose={() => {
@@ -671,7 +753,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         >
           <Notification
             className={styles.editPost__notificationToast}
-            content={online ? 'Posting...' : 'Waiting for network...'}
+            content={online ? postingText : waitingForNetworkText}
             icon={<Spinner />}
             alignment="fixed"
           />
@@ -691,7 +773,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           data-isclip={isClipPost}
         >
           <Notification
-            content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+            content={postErrorText ?? postEditGenericErrorText}
             icon={<ExclamationCircle className={styles.editPost_notificationIcon} />}
             alignment="fixed"
             duration={3000}
@@ -744,7 +826,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             name="title"
             value={title}
             maxLength={150}
-            placeholder="Title (optional)"
+            placeholder={titlePlaceholder}
             className={styles.editPost__titleInput}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
             onChange={(e) => {
@@ -785,6 +867,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                 setTextValue((prev) => ({ ...prev, hashtagsMetadata: hashtags }));
               }}
               onUrlsDetected={(urls) => {
+                setUrlHighlights(urls);
                 const links: Amity.Link[] = urls.map((url) => ({
                   url: url.url,
                   index: url.start,
@@ -797,6 +880,29 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialProductMentions={productTags as Amity.TextProductTag[]}
             />
           </div>
+          {!isClipPost && (
+            <TextEditorLinkPreview
+              pageId={pageId}
+              urls={urlHighlights}
+              attachmentAmount={totalMedia}
+              isClipPost={isClipPost}
+              onPreviewStateChange={(showPreview, isLoading) => {
+                setIsPreviewLoading(isLoading ?? false);
+              }}
+              onLinkRetentionChange={handleLinkRetentionChange}
+              onClose={(updatedUrls) => {
+                // hiddenPreviewUrl is now managed inside TextEditorLinkPreview
+                setUrlHighlights(updatedUrls);
+                const links: Amity.Link[] = updatedUrls.map((url) => ({
+                  url: url.url,
+                  index: url.start,
+                  length: url.end - url.start,
+                  renderPreview: url.renderPreview,
+                }));
+                setTextValue((prev) => ({ ...prev, links }));
+              }}
+            />
+          )}
 
           <ImageThumbnail
             files={files}
@@ -957,7 +1063,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           >
             <Notification
               className={styles.editPost__notificationToast}
-              content={online ? 'Posting...' : 'Waiting for network...'}
+              content={online ? postingText : waitingForNetworkText}
               icon={<Spinner />}
               alignment="fixed"
             />
@@ -970,7 +1076,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             data-show-detail-media-attachment={showToastPosition()}
           >
             <Notification
-              content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+              content={postErrorText ?? postEditGenericErrorText}
               icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
               alignment="fixed"
               duration={3000}

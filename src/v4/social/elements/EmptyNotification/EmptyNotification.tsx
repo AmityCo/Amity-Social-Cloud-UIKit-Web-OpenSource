@@ -21,12 +21,19 @@ export const EmptyNotification = ({
 }: EmptyNotificationProps) => {
   const elementId = 'empty_notification';
 
-  const { accessibilityId, themeStyles, isExcluded, config, defaultConfig, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    themeStyles,
+    isExcluded,
+    config,
+    defaultConfig,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -42,7 +49,7 @@ export const EmptyNotification = ({
       />
 
       <Typography.TitleBold className={styles.emptyNotification__text}>
-        {config.text}
+        {resolveText('amity_social_notification_no_notifications')}
       </Typography.TitleBold>
     </div>
   );

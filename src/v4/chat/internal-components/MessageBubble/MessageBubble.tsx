@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
@@ -93,6 +94,12 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     pageId,
   });
 
+  const unmuteUserText = useString('amity_social_button_unmute_user');
+  const muteUserText = useString('amity_social_button_mute_user');
+  const promoteToModeratorText = useString('amity_social_label_promote_to_moderator');
+  const demoteToMemberText = useString('amity_social_label_demote_to_member');
+  const messageDeletedText = useString('amity_social_button_message_deleted');
+
   const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
     return (
       <div className={styles.messageBubble__optionsButton__container}>
@@ -110,7 +117,11 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
           <LivestreamModerationOptions
             isHost={isHost}
             coHostId={invitedCoHost?.userId ?? coHost?.userId}
-            onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
+            onInviteAsCoHost={() =>
+              handleCreateInvitation(message.creatorId, {
+                displayName: message.creator?.displayName || message.creatorId,
+              })
+            }
             onCancelInvitation={handleCancelInvitation}
             onRemoveCoHost={handleRemoveCoHost}
             onLeaveAsCoHost={handleLeaveAsCoHost}
@@ -159,7 +170,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                 }}
               >
                 <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
-                  Demote to moderator
+                  {demoteToMemberText}
                 </Typography.BodyBold>
               </Button>
             ) : (
@@ -191,7 +202,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                     <Typography.BodyBold
                       className={styles.messageBubble__optionUserInfo__buttonLabel}
                     >
-                      Unmute user
+                      {unmuteUserText}
                     </Typography.BodyBold>
                   </Button>
                 ) : (
@@ -223,7 +234,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                       <Typography.BodyBold
                         className={styles.messageBubble__optionUserInfo__buttonLabel}
                       >
-                        Promote to moderator
+                        {promoteToModeratorText}
                       </Typography.BodyBold>
                     </Button>
                     <Button
@@ -249,7 +260,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                       <Typography.BodyBold
                         className={styles.messageBubble__optionUserInfo__buttonLabel}
                       >
-                        Mute user
+                        {muteUserText}
                       </Typography.BodyBold>
                     </Button>
                   </>
@@ -357,7 +368,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
         <div className={styles.messageBubble__deletedMessageText__container}>
           <Bin className={styles.messageBubble__deletedMessageText__icon} />
           <Typography.Caption className={styles.messageBubble__deletedMessageText}>
-            This message was deleted.
+            {messageDeletedText}
           </Typography.Caption>
         </div>
       ) : (

@@ -22,7 +22,7 @@ export const ShareStoryButton = ({
 }: ShareButtonProps) => {
   const elementId = 'share_story_button';
 
-  const { config, isExcluded, accessibilityId } = useAmityElement({
+  const { config, isExcluded, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -45,7 +45,7 @@ export const ShareStoryButton = ({
           className={styles.shareStoryButton__image}
         />
       )}
-      <Typography.BodyBold>{config?.text || 'Share story'}</Typography.BodyBold>
+      <Typography.BodyBold>{resolveText('amity_social_button_share_story')}</Typography.BodyBold>
       <ArrowRight className={styles.shareStoryButton__icon} />
     </Button>
   );

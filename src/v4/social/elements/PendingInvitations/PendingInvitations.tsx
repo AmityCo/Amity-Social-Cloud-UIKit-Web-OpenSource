@@ -24,8 +24,15 @@ export const PendingInvitations = ({
 }: PendingInvitationsProps) => {
   const elementId = 'pending_invitations';
 
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
 
@@ -48,7 +55,11 @@ export const PendingInvitations = ({
             />
           )}
         />
-        {config.text && <Typography.Body>{config.text}</Typography.Body>}
+        {resolveText('amity_social_setting_community_setting_pending_invitations') && (
+          <Typography.Body>
+            {resolveText('amity_social_setting_community_setting_pending_invitations')}
+          </Typography.Body>
+        )}
       </div>
       <ChevronRight className={styles.pendingInvitations__arrowIcon} />
     </Button>

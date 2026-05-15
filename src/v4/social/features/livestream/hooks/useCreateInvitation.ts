@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { resolveString } from '~/v4/core/localization';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
@@ -11,7 +12,7 @@ export interface UseCreateInvitationReturn {
   createInvitation: (userId: string) => void;
   handleCreateInvitation: (
     userId: string,
-    options?: { onSuccess?: () => void; onError?: () => void },
+    options?: { displayName?: string; onSuccess?: () => void; onError?: () => void },
   ) => void;
   isPending: boolean;
 }
@@ -29,8 +30,9 @@ export const useCreateInvitation = ({
 
   const handleCreateInvitation = (
     userId: string,
-    options?: { onSuccess?: () => void; onError?: () => void },
+    options?: { displayName?: string; onSuccess?: () => void; onError?: () => void },
   ) => {
+    const name = options?.displayName || userId;
     confirm({
       type: 'confirm',
       okButtonColor: 'primary',
@@ -39,14 +41,13 @@ export const useCreateInvitation = ({
           onSuccess: () => options?.onSuccess?.(),
           onError: () => options?.onError?.(),
         });
-        success({ content: 'Invitation sent.' });
+        success({ content: resolveString('amity_social_button_invitation_sent') });
       },
-      okText: 'Invite',
-      cancelText: 'Cancel',
-      title: 'Confirm invite co-host',
+      okText: resolveString('amity_social_button_invite'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      title: resolveString('amity_social_confirm_invite_co_host'),
       pageId,
-      content:
-        "If they accept your invitation, they'll join as a co-host with moderator access. They can turn on their camera and mic, appear on stage, and help manage chat.",
+      content: resolveString('amity_social_modal_dialog_cohost_invitation_description', name),
     });
   };
 

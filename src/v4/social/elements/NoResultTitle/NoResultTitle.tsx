@@ -16,7 +16,7 @@ export const NoResultTitle = ({
   ...props
 }: NoResultTitleProps) => {
   const elementId = 'no_result_title';
-  const { accessibilityId, themeStyles, config, isExcluded } = useAmityElement({
+  const { accessibilityId, themeStyles, config, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -31,7 +31,7 @@ export const NoResultTitle = ({
       data-testid={accessibilityId}
       className={clsx(styles.noResultTitle, className)}
     >
-      {config.text}
+      {resolveText('amity_social_label_no_results_found')}
     </Typography.TitleBold>
   );
 };

@@ -22,7 +22,11 @@ export function ExploreEmpty({ pageId = '*' }: ExploreEmptyProps) {
     <div className={styles.exploreEmpty} style={themeStyles} data-testid={accessibilityId}>
       <ExploreEmptyImage pageId={pageId} componentId={componentId} />
       <div className={styles.exploreEmpty__text}>
-        <Title pageId={pageId} componentId={componentId} />
+        <Title
+          pageId={pageId}
+          componentId={componentId}
+          textKey="amity_social_empty_state_explore_empty"
+        />
         <Description pageId={pageId} componentId={componentId} />
       </div>
       <ExploreCreateCommunity

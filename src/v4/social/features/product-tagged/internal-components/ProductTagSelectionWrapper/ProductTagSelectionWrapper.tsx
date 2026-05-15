@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useString } from '~/v4/core/localization';
 import { ProductTagSelection } from '~/v4/social/features/product-tagged/components/ProductTagSelection';
 import { ProductTagSelectionMode } from '~/v4/social/features/product-tagged/components/ProductTagSelection/ProductTagSelection';
 import { RenderModeEnum } from '~/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag';
@@ -106,11 +107,10 @@ export function ProductTagSelectionWrapper({
       if (hasUnsavedChanges) {
         confirm({
           type: 'confirm',
-          title: 'Discard product tags',
-          content:
-            "You have tagged products that haven't been saved yet. If you leave now, your changes will be lost.",
-          okText: 'Discard',
-          cancelText: 'Keep editing',
+          title: useString('amity_social_modal_dialog_title_discard_product_tags'),
+          content: useString('amity_social_unsaved_tagged_products'),
+          okText: useString('amity_social_button_discard'),
+          cancelText: useString('amity_social_button_keep_editing'),
           okButtonColor: 'alert',
           onOk: () => {
             onClose(mergedTags, false);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './UserPendingFollowRequestPage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
@@ -34,13 +35,12 @@ export const UserPendingFollowRequestPage = () => {
         <div className={styles.userPendingFollowRequestPage__topBar}>
           <BackButton pageId={pageId} onPress={() => onBack()} />
           <Typography.TitleBold className={styles.userPendingFollowRequestPage__topBar__text}>
-            Follow requests ({pendingCount})
+            {useString('amity_social_label_follow_requests', pendingCount)}
           </Typography.TitleBold>
         </div>
         <div className={styles.userPendingFollowRequestPage__description}>
           <Typography.Caption>
-            Declining a follow request is irreversible. The user must send a new request if
-            declined.
+            {useString('amity_social_decline_follow_request_message')}
           </Typography.Caption>
         </div>
         {followers && followers.length === 0 ? (
@@ -50,7 +50,7 @@ export const UserPendingFollowRequestPage = () => {
               defaultIcon={() => (
                 <PartyHorn className={styles.userPendingFollowRequestPage__noPending__icon} />
               )}
-              text="No requests to review"
+              text={useString('amity_social_label_no_requests_to_review')}
             />
           </div>
         ) : (

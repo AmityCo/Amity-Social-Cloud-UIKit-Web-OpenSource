@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { Switch } from '~/v4/core/components/AriaSwitch';
@@ -19,10 +20,13 @@ export const CoHostToggleProductPermission: React.FC<CoHostToggleProductPermissi
     <div className={clsx(styles.coHostToggleProductPermission, className)}>
       <div className={styles.coHostToggleProductPermission__content}>
         <div className={styles.coHostToggleProductPermission__label}>
-          <Typography.Body>Allow co-host to manage product tags</Typography.Body>
+          <Typography.Body>
+            {useString('amity_social_label_allow_co_host_to_manage_product_tags')}
+          </Typography.Body>
           <Typography.Caption className={styles.coHostToggleProductPermission__caption}>
-            When enabled, co-host can add or remove tagged products and pin or unpin a product
-            during the live stream.
+            {useString(
+              'amity_social_status_when_enabled_co_host_can_add_or_remove_tagged_products_',
+            )}
           </Typography.Caption>
         </div>
         <Switch isSelected={isSelected} onChange={onChange} />

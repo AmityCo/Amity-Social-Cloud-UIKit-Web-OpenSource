@@ -9,7 +9,7 @@ type EditPostButtonProps = ButtonProps & {
 
 export function EditPostButton({ pageId = '*', componentId = '*', ...props }: EditPostButtonProps) {
   const elementId = 'edit_post_button';
-  const { config, isExcluded, themeStyles, accessibilityId } = useAmityElement({
+  const { config, isExcluded, themeStyles, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -18,7 +18,7 @@ export function EditPostButton({ pageId = '*', componentId = '*', ...props }: Ed
 
   return (
     <Button type="submit" style={themeStyles} data-testid={accessibilityId} {...props}>
-      {config.text}
+      {resolveText('amity_social_button_post_composer_edit_button')}
     </Button>
   );
 }

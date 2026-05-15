@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import EyeSlash from '~/v4/icons/EyeSlash';
@@ -47,30 +48,33 @@ const LivestreamOverlayBase: React.FC<LivestreamOverlayProps> = ({
 };
 
 // Preset components
-const Starting: React.FC<{ className?: string }> = ({ className }) => (
-  <LivestreamOverlayBase
-    title="Starting livestream"
-    description="Please wait while we prepare your stream..."
-    className={className}
-  />
-);
+const Starting: React.FC<{ className?: string }> = ({ className }) => {
+  const title = useString('amity_social_status_create_livestream_connecting_text');
+  const description = useString('amity_social_overlay_starting_description');
+  return <LivestreamOverlayBase title={title} description={description} className={className} />;
+};
 
-const Reconnecting: React.FC<{ className?: string }> = ({ className }) => (
-  <LivestreamOverlayBase
-    title="Reconnecting"
-    description="Due to poor connection, this live stream has been paused. It will resume automatically once the connection is stable."
-    className={className}
-  />
-);
+const Reconnecting: React.FC<{ className?: string }> = ({ className }) => {
+  const title = useString('amity_social_button_reconnecting');
+  return (
+    <LivestreamOverlayBase
+      title={title}
+      description={useString('amity_social_livestream_reconnecting_message')}
+      className={className}
+    />
+  );
+};
 
 const WaitForApproval: React.FC<{ className?: string; view?: 'moderator' | 'streamer' }> = ({
   className,
   view,
-}) =>
-  view === 'streamer' ? (
+}) => {
+  return view === 'streamer' ? (
     <LivestreamOverlayBase
-      title="Waiting for approval"
-      description="This live stream has started. However, it will have limited visibility until your post has been approved."
+      title={useString('amity_social_label_waiting_for_approval')}
+      description={useString(
+        'amity_social_status_this_live_stream_has_started_however_it_will_have_limit',
+      )}
       icon={<EyeSlash className={styles.livestreamOverlay__waitingApprovalIcon} />}
       className={className}
     />
@@ -79,33 +83,42 @@ const WaitForApproval: React.FC<{ className?: string; view?: 'moderator' | 'stre
       <div className={styles.livestreamOverlay__top} />
       <div className={styles.livestreamOverlay__bottom}>
         <Typography.Body className={styles.livestreamOverlay__watingApproval__bottomText}>
-          This live stream has started, but with limited visibility until the post has been
-          approved.
+          {useString('amity_social_status_this_live_stream_has_started_but_with_limited_visibilit')}
         </Typography.Body>
       </div>
     </>
   );
+};
 
-const Ending: React.FC<{ className?: string }> = ({ className }) => (
-  <LivestreamOverlayBase title="Ending live stream" className={className} />
-);
+const Ending: React.FC<{ className?: string }> = ({ className }) => {
+  return (
+    <LivestreamOverlayBase
+      title={useString('amity_social_ending_live_stream')}
+      className={className}
+    />
+  );
+};
 
 const CountdownEnding: React.FC<{ countdown: number; className?: string }> = ({
   countdown,
   className,
-}) => (
-  <LivestreamOverlayBase title="Live stream ends in" withIcon={false} className={className}>
-    <CountdownSpinner countdown={countdown} />
-  </LivestreamOverlayBase>
-);
+}) => {
+  return (
+    <LivestreamOverlayBase
+      title={useString('amity_social_status_create_livestream_count_down_title')}
+      withIcon={false}
+      className={className}
+    >
+      <CountdownSpinner countdown={countdown} />
+    </LivestreamOverlayBase>
+  );
+};
 
-const LeavingStage: React.FC<{ className?: string }> = ({ className }) => (
-  <LivestreamOverlayBase
-    title="Leaving stage…"
-    description="You’ll return to the livestream as a viewer shortly."
-    className={className}
-  />
-);
+const LeavingStage: React.FC<{ className?: string }> = ({ className }) => {
+  const title = useString('amity_social_leaving_stage');
+  const description = useString('amity_social_overlay_leaving_stage_description');
+  return <LivestreamOverlayBase title={title} description={description} className={className} />;
+};
 
 // Main component with compound pattern
 export const LivestreamOverlay = Object.assign(LivestreamOverlayBase, {

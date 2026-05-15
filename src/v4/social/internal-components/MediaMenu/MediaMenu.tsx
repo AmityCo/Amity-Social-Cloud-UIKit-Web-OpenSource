@@ -1,4 +1,5 @@
 import { Pencil } from '~/v4/icons/Pencil';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { CloseButton } from '~/v4/social/elements';
@@ -26,6 +27,8 @@ export function MediaMenu({
   onAltTextChange,
 }: MediaMenuProps) {
   const { openPopup } = usePopupContext();
+  const viewPostLabel = useString('amity_social_button_view_post');
+  const editAltTextTitle = useString('amity_social_label_image_edit_alt_text_title');
 
   return (
     <div className={styles.mediaMenu}>
@@ -37,7 +40,7 @@ export function MediaMenu({
           data-testid={`${pageId}/${componentId}/view_post_button`}
         >
           <Feed className={styles.mediaMenu__item__icon} />
-          <Typography.BodyBold>View post</Typography.BodyBold>
+          <Typography.BodyBold>{viewPostLabel}</Typography.BodyBold>
         </Button>
       )}
       {onEditAltTextPress && (
@@ -64,7 +67,7 @@ export function MediaMenu({
                       renderHeader={({ count }) => (
                         <div className={styles.altTextConfig__header}>
                           <div>
-                            <Typography.Headline>Edit alt text</Typography.Headline>
+                            <Typography.Headline>{editAltTextTitle}</Typography.Headline>
                             <Typography.Caption
                               aria-live="polite"
                               className={styles.altTextConfig__header__count}
@@ -86,7 +89,7 @@ export function MediaMenu({
           }}
         >
           <Pencil className={styles.mediaMenu__item__icon} />
-          <Typography.BodyBold>Edit alt text</Typography.BodyBold>
+          <Typography.BodyBold>{editAltTextTitle}</Typography.BodyBold>
         </Button>
       )}
     </div>

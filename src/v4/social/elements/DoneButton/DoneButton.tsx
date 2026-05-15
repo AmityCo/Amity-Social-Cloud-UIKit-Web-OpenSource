@@ -22,11 +22,12 @@ export function DoneButton({
   ...buttonProps
 }: DoneButtonProps) {
   const elementId = 'done_button';
-  const { accessibilityId, config, isExcluded } = useAmityElement({
+  const { accessibilityId, config, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+  const doneText = resolveText('amity_social_button_done');
   const { isDesktop } = useResponsive();
 
   if (isExcluded) return null;
@@ -39,7 +40,7 @@ export function DoneButton({
       isDisabled={isDisabled}
       {...buttonProps}
     >
-      <Typography.Body>{config.done_button_text}</Typography.Body>
+      <Typography.Body>{config.done_button_text || doneText}</Typography.Body>
     </Button>
   );
 }

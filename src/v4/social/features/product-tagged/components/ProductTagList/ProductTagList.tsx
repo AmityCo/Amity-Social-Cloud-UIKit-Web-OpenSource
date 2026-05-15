@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './ProductTagList.module.css';
 import { Typography } from '~/v4/core/components';
 import { CloseButton } from '~/v4/social/elements';
@@ -40,6 +41,7 @@ export function ProductTagList({
 }: ProductTagListProps) {
   const componentId = COMPONENT_ID.PRODUCT_TAG_LIST;
   const { AmityGlobalBehavior } = usePageBehavior();
+
   const { config, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
@@ -71,10 +73,10 @@ export function ProductTagList({
   }, [productTags, pinnedProductId, renderMode]);
 
   const headerTextMap = {
-    [ProductTagListRenderModeEnum.LIVESTREAM]: 'Products tagged',
-    [ProductTagListRenderModeEnum.IMAGE]: 'Products tagged in this photo',
-    [ProductTagListRenderModeEnum.VIDEO]: 'Products tagged in this video',
-    [ProductTagListRenderModeEnum.POST]: 'Products tagged in this post',
+    [ProductTagListRenderModeEnum.LIVESTREAM]: useString('amity_social_button_products_tagged'),
+    [ProductTagListRenderModeEnum.IMAGE]: useString('amity_social_label_products_tagged_in_photo'),
+    [ProductTagListRenderModeEnum.VIDEO]: useString('amity_social_label_products_tagged_in_video'),
+    [ProductTagListRenderModeEnum.POST]: useString('amity_social_label_products_tagged_in_post'),
   };
 
   const headerText = config.text ?? headerTextMap[renderMode];

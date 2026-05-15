@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { Switch } from '~/v4/core/components/AriaSwitch';
@@ -18,9 +19,11 @@ export const ReadOnlyToggle: React.FC<ReadOnlyToggleProps> = ({
   return (
     <div className={clsx(styles.readOnlyToggle, className)}>
       <div>
-        <Typography.Body>Set live stream to read-only</Typography.Body>
+        <Typography.Body>
+          {useString('amity_social_status_set_livestream_read_only')}
+        </Typography.Body>
         <Typography.Caption className={styles.readOnlyToggle__caption}>
-          Members who are not streamer can read messages but cannot send any messages.
+          {useString('amity_social_label_livestream_read_only_description')}
         </Typography.Caption>
       </div>
       <Switch isSelected={isSelected} onChange={onChange} />

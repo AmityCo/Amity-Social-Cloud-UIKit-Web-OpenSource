@@ -1,4 +1,5 @@
 import { Key } from 'react-aria';
+import { useString } from '~/v4/core/localization';
 import { FeedDataTypeEnum, UserRepository } from '@amityco/ts-sdk';
 import { useClickAway } from 'react-use';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
@@ -163,7 +164,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
   const tabs = [
     {
       value: 'posts',
-      label: 'Posts',
+      label: useString('amity_social_label_title_posts'),
       accessibilityId: `${pageId}/top_search_bar/posts`,
       content: () => (
         <PostSearchResult
@@ -181,7 +182,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
     },
     {
       value: 'communities',
-      label: 'Communities',
+      label: useString('amity_social_button_social_home_communities_button'),
       accessibilityId: `${pageId}/top_search_bar/communities`,
       content: () => (
         <CommunitySearchResult
@@ -199,7 +200,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
     },
     {
       value: 'users',
-      label: 'Users',
+      label: useString('amity_social_tab_tab_users'),
       accessibilityId: `${pageId}/top_search_bar/users`,
       content: () => (
         <UserSearchResult

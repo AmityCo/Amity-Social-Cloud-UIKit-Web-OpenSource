@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Button } from '~/v4/core/components/AriaButton';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -18,7 +19,7 @@ export const DeletedClipView = ({ onWatchNext }: DeletedClipViewProps) => {
           imgIcon={() => <FailedClip className={styles.deletedClipView__failedClipIcon} />}
         />
         <Typography.Body className={styles.deletedClipView__errorStateText}>
-          This clip is no longer available.
+          {useString('amity_social_label_this_clip_is_no_longer_available')}
         </Typography.Body>
         <Button
           variant="text"
@@ -26,7 +27,7 @@ export const DeletedClipView = ({ onWatchNext }: DeletedClipViewProps) => {
           onPress={onWatchNext}
         >
           <Typography.BodyBold className={styles.deletedClipView__errorStateText}>
-            Watch next clip
+            {useString('amity_social_label_watch_next_clip')}
           </Typography.BodyBold>
         </Button>
       </div>

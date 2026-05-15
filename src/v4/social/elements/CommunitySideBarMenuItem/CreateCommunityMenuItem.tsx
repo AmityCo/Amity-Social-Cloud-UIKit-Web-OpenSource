@@ -16,11 +16,12 @@ export function CreateCommunityMenuItem({
   componentId = '*',
 }: CreateCommunityMenuItemProps) {
   const elementId = 'create_community_sidebar_menu_item';
-  const { accessibilityId, config, isExcluded, uiReference, defaultConfig } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, isExcluded, uiReference, defaultConfig, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -37,7 +38,7 @@ export function CreateCommunityMenuItem({
         />
       )}
     >
-      {config.text}
+      {resolveText('amity_social_button_community_setup_create_button')}
     </CommunitySideBarMenuItem>
   );
 }

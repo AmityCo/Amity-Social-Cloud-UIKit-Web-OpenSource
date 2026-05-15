@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { resolveString } from '~/v4/core/localization';
 import { PollRepository } from '@amityco/ts-sdk';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -19,13 +20,13 @@ export function useVotePoll({
     },
     onError: (err: Error) => {
       if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) {
-        info({ content: 'Poll ended.' });
+        info({ content: resolveString('amity_social_button_poll_ended') });
         onPollEnded?.(true);
       } else if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
-        info({ content: 'This post is no longer available.' });
+        info({ content: resolveString('amity_social_toast_poll_post_unavailable_toast') });
         onPostDeleted?.(parentPost);
       } else {
-        info({ content: 'Oops, something went wrong.' });
+        info({ content: resolveString('amity_social_toast_failed_generic') });
       }
     },
   });
@@ -46,17 +47,17 @@ export function useUnvotePoll({
       return PollRepository.unvotePoll(pollId);
     },
     onSuccess: () => {
-      success({ content: 'Vote removed.' });
+      success({ content: resolveString('amity_social_button_vote_removed') });
     },
     onError: (err: Error) => {
       if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) {
-        info({ content: 'Poll ended.' });
+        info({ content: resolveString('amity_social_button_poll_ended') });
         onPollEnded?.(true);
       } else if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
-        info({ content: 'This post is no longer available.' });
+        info({ content: resolveString('amity_social_toast_poll_post_unavailable_toast') });
         onPostDeleted?.(parentPost);
       } else {
-        info({ content: 'Oops, something went wrong.' });
+        info({ content: resolveString('amity_social_toast_failed_generic') });
       }
     },
   });

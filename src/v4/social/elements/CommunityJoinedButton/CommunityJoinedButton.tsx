@@ -22,12 +22,19 @@ export const CommunityJoinedButton = ({
   componentId = '*',
 }: CommunityJoinedButtonProps) => {
   const elementId = 'community_joined_button';
-  const { config, themeStyles, accessibilityId, isExcluded, uiReference, defaultConfig } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    themeStyles,
+    accessibilityId,
+    isExcluded,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -49,7 +56,7 @@ export const CommunityJoinedButton = ({
         />
       )}
     >
-      <Typography.CaptionBold>{config.text}</Typography.CaptionBold>
+      <Typography.CaptionBold>{resolveText('amity_social_button_joined')}</Typography.CaptionBold>
     </Button>
   );
 };

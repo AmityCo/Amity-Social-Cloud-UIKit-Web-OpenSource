@@ -22,12 +22,19 @@ export const CommunityJoinButton = ({
   ...props
 }: CommunityJoinButtonProps) => {
   const elementId = 'community_join_button';
-  const { config, themeStyles, accessibilityId, isExcluded, uiReference, defaultConfig } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    themeStyles,
+    accessibilityId,
+    isExcluded,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -50,7 +57,7 @@ export const CommunityJoinButton = ({
       )}
       {...props}
     >
-      {config.text}
+      {resolveText('amity_common_join')}
     </Button>
   );
 };

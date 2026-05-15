@@ -176,7 +176,90 @@ export const PostTextField = ({
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const { isDesktop } = useResponsive();
 
-  const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { accessibilityId, resolveText } = useAmityElement({ pageId, componentId, elementId });
+
+  const firstUrl = React.useMemo(() => {
+    const links = dataValue?.links;
+
+    if (links && links.length > 0) {
+      const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+      return firstLinkWithPreview?.url ?? null;
+    }
+    return null;
+  }, [dataValue?.links]);
+
+  const firstLinkRenderPreview = React.useMemo(() => {
+    const links = dataValue?.links;
+
+    if (links && links.length > 0) {
+      const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+      return !!firstLinkWithPreview;
+    }
+    return true;
+  }, [dataValue?.links]);
+
+  // Initialize debouncedFirstUrl with the first link that has renderPreview: true
+  const [debouncedFirstUrl, setDebouncedFirstUrl] = useState<string | null>(() => {
+    const links = dataValue?.links;
+    if (links && links.length > 0) {
+      const firstLinkWithPreview = links.find((link) => link.renderPreview === true);
+      return firstLinkWithPreview?.url ?? null;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedFirstUrl(firstUrl);
+    }, DEBOUNCE_PREVIEW_LINK);
+
+    return () => clearTimeout(timer);
+  }, [firstUrl]);
+
+  // Reset hidden preview when the debounced URL changes to a different URL
+  useEffect(() => {
+    if (debouncedFirstUrl && hiddenPreviewUrl && debouncedFirstUrl !== hiddenPreviewUrl) {
+      setHiddenPreviewUrl(null);
+    }
+  }, [debouncedFirstUrl, hiddenPreviewUrl]);
+
+  // Notify parent component when preview link state changes
+  useEffect(() => {
+    const showPreview =
+      !!debouncedFirstUrl && debouncedFirstUrl !== hiddenPreviewUrl && firstLinkRenderPreview;
+    onPreviewLinkChange?.(showPreview, isPreviewLoading);
+  }, [
+    debouncedFirstUrl,
+    hiddenPreviewUrl,
+    isPreviewLoading,
+    onPreviewLinkChange,
+    firstLinkRenderPreview,
+  ]);
+
+  // Determine if we should show link preview - only show if there's a valid URL, no attachments, not hidden, and renderPreview is true
+  const shouldShowLinkPreview =
+    debouncedFirstUrl &&
+    !attachmentAmount &&
+    debouncedFirstUrl !== hiddenPreviewUrl &&
+    firstLinkRenderPreview &&
+    !isClipPost &&
+    !isPollPost;
+
+  const handleClosePreview = () => {
+    if (debouncedFirstUrl) {
+      setHiddenPreviewUrl(debouncedFirstUrl);
+      onChange({
+        mentioned: dataValue.metadata?.mentioned || [],
+        mentionees: dataValue.mentionees || [],
+        hashtags: dataValue.metadata?.hashtags || [],
+        text: dataValue.data.text,
+        links: dataValue.links?.map((link, index) => ({
+          ...link,
+          renderPreview: index === 0 ? false : link.renderPreview,
+        })),
+      });
+    }
+  };
 
   const firstUrl = React.useMemo(() => {
     const links = dataValue?.links;
@@ -305,7 +388,7 @@ export const PostTextField = ({
               className={clsx(styles.editorPlaceholder, placeholderClassName)}
               data-isclip={componentId === 'clipPost'}
             >
-              {placeholder ?? "What's going on..."}
+              {placeholder ?? resolveText('amity_social_post_composer_body_placeholder')}
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}

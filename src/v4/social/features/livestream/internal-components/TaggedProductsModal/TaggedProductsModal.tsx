@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useString } from '~/v4/core/localization';
 import styles from './TaggedProductsModal.module.css';
 import { Typography } from '~/v4/core/components';
 import { Divider, DividerType } from '~/v4/social/elements/Divider/Divider';
@@ -143,7 +144,9 @@ export function TaggedProductsModal({
           {!isDesktop && <div className={styles.taggedProductsModal__spacer} />}
           <div className={styles.taggedProductsModal__header__tileContainer}>
             <Typography.TitleBold className={styles.taggedProductsModal__title}>
-              {isHost ? 'Tagged products' : 'Products tagged'}
+              {isHost
+                ? useString('amity_social_button_tagged_products')
+                : useString('amity_social_button_products_tagged')}
             </Typography.TitleBold>
             {isHost && (
               <Typography.Caption className={styles.taggedProductsModal__description}>
@@ -222,7 +225,7 @@ export function TaggedProductsModal({
         )}
       </div>
 
-      {/* Footer - Only show "Add products" button for hosts */}
+      {/* Footer - Only show useString('amity_social_button_tagged_products_empty_action') button for hosts */}
       {isHost && totalCount > 0 && canShowAddProducts && (
         <>
           <Divider type={DividerType.FULL_WIDTH} />
@@ -235,7 +238,9 @@ export function TaggedProductsModal({
               data-isDisabled={totalCount === MAX_COUNT || !online}
               isDisabled={totalCount === MAX_COUNT || !online}
             >
-              <Typography.BodyBold>Add products</Typography.BodyBold>
+              <Typography.BodyBold>
+                {useString('amity_social_button_add_products')}
+              </Typography.BodyBold>
             </Button>
           </div>
         </>

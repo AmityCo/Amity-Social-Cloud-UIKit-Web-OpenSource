@@ -1,4 +1,5 @@
 import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
+import { useString } from '~/v4/core/localization';
 import styles from './RSVPButton.module.css';
 import { AmityEventResponseStatus } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components';
@@ -14,11 +15,11 @@ export const UpdateStatusBottomSheet = ({
 }: UpdateStatusBottomSheetProps) => {
   const RSVP_STATUS = [
     {
-      label: 'Going',
+      label: useString('amity_social_button_going'),
       value: AmityEventResponseStatus.Going,
     },
     {
-      label: 'Not Going',
+      label: useString('amity_social_button_not_going'),
       value: AmityEventResponseStatus.NotGoing,
     },
   ];

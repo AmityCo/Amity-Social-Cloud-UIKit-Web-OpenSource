@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { MenuOptionButton } from '~/v4/core/internal-components/MenuOptionButton';
 import AddUser from '~/v4/icons/AddUser';
 import SignOut from '~/v4/icons/SignOut';
@@ -53,7 +54,7 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
     <div>
       {isHost && !coHostId && (
         <MenuOptionButton
-          text="Invite as co-host"
+          text={useString('amity_social_label_invite_as_co_host')}
           icon={<AddUser />}
           onPress={handleInviteAsCoHost}
         />
@@ -61,7 +62,7 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
 
       {isHost && isPendingCoHost && (
         <MenuOptionButton
-          text="Cancel invitation"
+          text={useString('amity_social_button_cancel_invitation')}
           icon={<UserTimes />}
           onPress={() => onCancelInvitation?.()}
           isDanger={true}
@@ -74,12 +75,10 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
             onChange={(canManageProductTags) => {
               if (!canManageProductTags) {
                 confirm({
-                  title: 'Disable co-host product tags control?',
-                  content:
-                    'If you disable this, the co-host can’t add, remove, or pin products in this live stream.',
-
-                  cancelText: 'Cancel',
-                  okText: 'Disable',
+                  title: useString('amity_social_modal_dialog_title_disable_cohost_product_tags'),
+                  content: useString('amity_social_disable_product_tagging_description'),
+                  cancelText: useString('amity_social_button_cancel'),
+                  okText: useString('amity_social_button_disable'),
                   okButtonColor: 'alert',
                   onOk: () => {
                     onCoHostPermissionChange?.(canManageProductTags);
@@ -91,7 +90,7 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
             }}
           />
           <MenuOptionButton
-            text="Remove from live"
+            text={useString('amity_social_status_remove_from_live')}
             icon={<UserTimes />}
             onPress={handleRemoveCoHost}
             isDanger={true}
@@ -100,7 +99,7 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
       )}
       {!isHost && coHostId && !isPendingCoHost && (
         <MenuOptionButton
-          text="Leave as co-host"
+          text={useString('amity_social_button_leave_as_co_host')}
           icon={<SignOut />}
           onPress={handleLeaveAsCoHost}
           isDanger={true}

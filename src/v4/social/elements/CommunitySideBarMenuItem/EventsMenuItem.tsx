@@ -16,11 +16,12 @@ export function EventsMenuItem({ pageId = '*', componentId = '*' }: EventsMenuIt
 
   const { onChangePage, page } = useNavigation();
   const { activeTab, setActiveTab } = useLayoutContext();
-  const { accessibilityId, config, isExcluded, defaultConfig, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, isExcluded, defaultConfig, uiReference, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -41,7 +42,7 @@ export function EventsMenuItem({ pageId = '*', componentId = '*' }: EventsMenuIt
         />
       )}
     >
-      {config.text}
+      {resolveText('amity_social_button_social_home_events_button')}
     </CommunitySideBarMenuItem>
   );
 }

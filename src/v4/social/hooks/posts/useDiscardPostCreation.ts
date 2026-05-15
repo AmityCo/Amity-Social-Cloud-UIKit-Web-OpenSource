@@ -1,4 +1,5 @@
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { resolveString } from '~/v4/core/localization';
 
 type UseDiscardPostCreation = {
   pageId?: string;
@@ -13,10 +14,10 @@ export function useDiscardPostCreation() {
       pageId,
       onOk: onDiscard,
       type: 'confirm',
-      okText: 'Discard',
-      cancelText: 'Keep editing',
-      title: 'Discard this post?',
-      content: 'The post will be permanently discarded. It cannot be undone.',
+      okText: resolveString('amity_social_modal_dialog_discard_button'),
+      cancelText: resolveString('amity_social_button_keep_editing'),
+      title: resolveString('amity_social_modal_dialog_title_discard_post'),
+      content: resolveString('amity_social_modal_dialog_discard_post'),
     });
   }
 

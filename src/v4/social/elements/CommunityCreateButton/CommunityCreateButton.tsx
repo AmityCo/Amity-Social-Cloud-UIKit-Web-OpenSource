@@ -25,12 +25,19 @@ export const CommunityCreateButton = ({
 }: CommunityCreateButtonProps) => {
   const elementId = 'community_create_button';
 
-  const { config, accessibilityId, themeStyles, isExcluded, defaultConfig, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    accessibilityId,
+    themeStyles,
+    isExcluded,
+    defaultConfig,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -51,7 +58,7 @@ export const CommunityCreateButton = ({
         />
       )}
     >
-      {config.text}
+      {resolveText('amity_social_label_community_setup_create_title')}
     </Button>
   );
 };

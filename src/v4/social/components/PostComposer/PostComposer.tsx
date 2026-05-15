@@ -20,6 +20,7 @@ import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events
 import styles from './PostComposer.module.css';
 import { LivestreamButton } from '~/v4/social/elements/LivestreamButton';
 import { LivestreamTargetSelectionPage } from '~/v4/social/features/livestream/pages/LivestreamTargetSelectionPage';
+import { useString } from '~/v4/core/localization/useString';
 
 type PostComposerProps = {
   pageId?: string;
@@ -62,7 +63,11 @@ export function PostComposer({
       componentId,
       view: 'desktop',
       header: (
-        <Title pageId="select_post_target_page" titleClassName={styles.postComposer__title} />
+        <Title
+          pageId="select_post_target_page"
+          titleClassName={styles.postComposer__title}
+          textKey="amity_social_button_post_to"
+        />
       ),
       children: <SelectPostTargetPage />,
     });
@@ -74,7 +79,11 @@ export function PostComposer({
       componentId,
       view: 'desktop',
       header: (
-        <Title pageId="select_story_target_page" titleClassName={styles.postComposer__title} />
+        <Title
+          pageId="select_story_target_page"
+          titleClassName={styles.postComposer__title}
+          textKey="amity_social_button_share_to"
+        />
       ),
       children: <StoryTargetSelectionPage />,
     });
@@ -90,7 +99,11 @@ export function PostComposer({
       componentId,
       view: 'desktop',
       header: (
-        <Title pageId="select_poll_target_page" titleClassName={styles.postComposer__title} />
+        <Title
+          pageId="select_poll_target_page"
+          titleClassName={styles.postComposer__title}
+          textKey="amity_social_button_post_to"
+        />
       ),
       children: <PollTargetSelectionPage />,
     });
@@ -131,7 +144,11 @@ export function PostComposer({
       componentId,
       view: 'desktop',
       header: (
-        <Title pageId="select_livestream_target_page" titleClassName={styles.postComposer__title} />
+        <Title
+          pageId="select_livestream_target_page"
+          titleClassName={styles.postComposer__title}
+          textKey="amity_social_status_select_livestream_target_title"
+        />
       ),
       children: <LivestreamTargetSelectionPage />,
     });
@@ -163,19 +180,21 @@ export function PostComposer({
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}
       />
       <Button className={styles.postComposer__input} onPress={handlePostClick}>
-        What's going on?
+        {useString('amity_social_placeholder_post_composer_body_placeholder')}
       </Button>
       <ImageButton
         onPress={handlePostClick}
         pageId={pageId}
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
+        textId=""
       />
       <VideoButton
         onPress={handlePostClick}
         pageId={pageId}
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
+        textId=""
       />
       <LivestreamButton onPress={handleLivestreamClick} pageId="post_composer_page" />
       <PollButton onPress={handlePollClick} pageId="post_composer_page" componentId="poll_button" />

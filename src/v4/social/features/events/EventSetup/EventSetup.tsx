@@ -1,4 +1,5 @@
 import { Plus } from '~/v4/icons/Plus';
+import { useString } from '~/v4/core/localization';
 import { Controller } from 'react-hook-form';
 import { Button } from '~/v4/core/components/AriaButton';
 import { FormLabel } from '~/v4/core/components/FormLabel';
@@ -70,8 +71,8 @@ export const EventSetup = (props: EventSetupProps) => {
               {...field}
               maxLength={60}
               id="event-name"
-              label="Event name"
-              placeholder="Name your event"
+              label={useString('amity_social_button_event_name')}
+              placeholder={useString('amity_social_label_name_your_event')}
               className={styles.eventSetup__input}
             />
           )}
@@ -85,14 +86,14 @@ export const EventSetup = (props: EventSetupProps) => {
               multiLine
               maxLength={1000}
               id="event-details"
-              label="Event details"
+              label={useString('amity_social_button_event_details')}
               className={styles.eventSetup__input}
-              placeholder="Share what this event is all about"
+              placeholder={useString('amity_social_share_what_this_event_is_all_about')}
             />
           )}
         />
         <div className={styles.eventSetup__dateTime}>
-          <FormLabel label="Date and time" />
+          <FormLabel label={useString('amity_social_label_date_and_time')} />
           <div className={styles.eventSetup__dateTimeInputs}>
             <Controller
               name="timezone"
@@ -141,7 +142,7 @@ export const EventSetup = (props: EventSetupProps) => {
           </div>
         </div>
         <div className={styles.eventSetup__dateTime}>
-          <FormLabel label="Location" />
+          <FormLabel label={useString('amity_social_label_event_location_title')} />
           <Location
             value={values}
             onChange={(values) => {
@@ -163,7 +164,9 @@ export const EventSetup = (props: EventSetupProps) => {
             icon={isCreateEvent ? <Plus /> : null}
             isDisabled={!isDirty || isSubmitting || !isValid}
           >
-            {isCreateEvent ? 'Create event' : 'Save'}
+            {isCreateEvent
+              ? useString('amity_social_button_create_event')
+              : useString('amity_social_button_community_setup_edit_button')}
           </Button>
         </div>
       </form>

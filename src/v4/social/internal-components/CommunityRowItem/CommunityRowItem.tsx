@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { JoinRequestStatusEnum, JoinResultStatusEnum } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
@@ -97,17 +98,17 @@ export const CommunityRowItem = <T extends boolean | undefined>({
   const handleLeaveButtonClick = (community: Amity.Community) => {
     if (!online) {
       notification.info({
-        content: 'Failed to leave community. Please try again.',
+        content: resolveString('amity_social_toast_leave_community_failed'),
       });
       return;
     }
 
     if (community.requiresJoinApproval) {
       return confirm({
-        title: 'Leave Community',
-        content: "If you change your mind, you'll have to request to join again.",
+        title: resolveString('amity_social_leave_community'),
+        content: resolveString('amity_social_modal_community_invitation_reject_dialog_subtitle'),
         onOk: () => leaveCommunity(community),
-        okText: 'Leave',
+        okText: resolveString('amity_social_button_leave'),
       });
     }
 
@@ -180,7 +181,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
                 variant="outlined"
                 defaultIcon={<Clock className={styles.communityRowItem__pendingButton} />}
                 onPress={() => onPendingButtonClick?.() ?? cancelJoinCommunity()}
-                text="Pending"
+                text={useString('amity_social_button_pending')}
                 className={styles.communityRowItem__pendingButtonWrapper}
               />
             );
@@ -194,7 +195,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
                 onClick={() => {
                   if (!online) {
                     notification.info({
-                      content: 'Failed to join community. Please try again.',
+                      content: resolveString('amity_social_toast_snackbar_join_community_failed'),
                     });
                     return;
                   }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton, EmptyNotification, NoInternetConnection, Title } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -33,8 +34,6 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
     pageId,
   });
 
-  if (isExcluded) return null;
-
   const { onBack } = useNavigation();
   const { isLoading, items, refresh, loadMore, hasMore, error } =
     useNotificationTrayItemsCollection({
@@ -43,7 +42,12 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
+
   const [notificationItemLoading, setNotificationItemLoading] = useState(false);
+
+  const recentLabel = useString('amity_social_notification_notification_recent');
+  const olderLabel = useString('amity_social_notification_notification_older');
+  const errorToastLabel = useString('amity_social_toast_failed_generic');
 
   useIntersectionObserver({
     onIntersect: () => {
@@ -86,6 +90,8 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
     };
   }, []);
 
+  if (isExcluded) return null;
+
   return (
     <div
       data-testid={accessibilityId}
@@ -101,7 +107,11 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
             imgClassName={styles.notificationTrayPage__closeButton}
           />
         )}
-        <Title pageId={pageId} titleClassName={styles.notificationTrayPage__title} />
+        <Title
+          pageId={pageId}
+          titleClassName={styles.notificationTrayPage__title}
+          textKey="amity_social_notification_title_notifications"
+        />
         <div className={styles.notificationTrayPage__topBarGap} />
       </div>
       <div className={styles.notificationTrayPage__content}>
@@ -121,7 +131,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                 {recentItems.length > 0 && (
                   <>
                     <Typography.CaptionBold as="p" className={styles.notificationTrayPage__header}>
-                      Recent
+                      {recentLabel}
                     </Typography.CaptionBold>
                     {recentItems.map((item) => (
                       <NotificationItem
@@ -136,7 +146,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                 {unRecentItems.length > 0 && (
                   <>
                     <Typography.CaptionBold as="p" className={styles.notificationTrayPage__header}>
-                      Older
+                      {olderLabel}
                     </Typography.CaptionBold>
                     {unRecentItems.map((item) => (
                       <NotificationItem
@@ -168,7 +178,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                   icon={
                     <ExclamationCircle className={styles.notificationTrayPage__notificationIcon} />
                   }
-                  content="Oops, something went wrong."
+                  content={errorToastLabel}
                 />
               </div>
             )}

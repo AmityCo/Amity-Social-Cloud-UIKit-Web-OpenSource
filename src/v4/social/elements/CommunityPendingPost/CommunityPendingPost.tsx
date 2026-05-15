@@ -28,7 +28,7 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
   isShowPendingPost = false,
 }) => {
   const elementId = 'community_pending_post';
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -41,27 +41,50 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
 
   const getOwnerPostMessage = () => {
     return pendingPostsCount === 1
-      ? 'Your post is pending for review'
-      : 'Your posts are pending for review';
+      ? resolveText('amity_social_label_community_posts_pending_review')
+      : resolveText('amity_social_label_community_posts_pending_review');
   };
 
   const getPendingPostsMessage = () => {
+    const postLabel =
+      pendingPostsCount === 1
+        ? resolveText('amity_social_label_post_label_singular')
+        : resolveText('amity_social_label_community_posts_label');
+    const countText = pendingPostsCount === 1 ? '1' : String(pendingPostsCountNumber);
+    const subjectText = `${countText} ${postLabel}`;
     return pendingPostsCount === 1
-      ? '1 post requires approval'
-      : `${pendingPostsCountNumber} posts require approval`;
+      ? resolveText('amity_social_button_community_require_approval', subjectText)
+      : resolveText('amity_social_button_community_requires_approval', subjectText);
   };
 
   const getJoinRequestsMessage = () => {
+    const requestLabel =
+      joinRequestsCount === 1
+        ? resolveText('amity_social_label_community_join_request_label')
+        : resolveText('amity_social_label_community_join_requests_label');
+    const countText = joinRequestsCount === 1 ? '1' : String(joinRequestsCountNumber);
+    const subjectText = `${countText} ${requestLabel}`;
     return joinRequestsCount === 1
-      ? '1 join request requires approval'
-      : `${joinRequestsCountNumber} join requests require approval`;
+      ? resolveText('amity_social_button_community_require_approval', subjectText)
+      : resolveText('amity_social_button_community_requires_approval', subjectText);
   };
 
   const getCombinedMessage = () => {
-    const postsText = pendingPostsCount === 1 ? '1 post' : `${pendingPostsCountNumber} posts`;
-    const requestsText =
-      joinRequestsCount === 1 ? '1 request' : `${joinRequestsCountNumber} requests`;
-    return `${postsText} and ${requestsText} require approval`;
+    const postsLabel =
+      pendingPostsCount === 1
+        ? resolveText('amity_social_label_post_label_singular')
+        : resolveText('amity_social_label_community_posts_label');
+    const requestsLabel =
+      joinRequestsCount === 1
+        ? resolveText('amity_social_label_community_join_request_label')
+        : resolveText('amity_social_label_community_join_requests_label');
+    const postsText = `${pendingPostsCount === 1 ? '1' : pendingPostsCountNumber} ${postsLabel}`;
+    const requestsText = `${joinRequestsCount === 1 ? '1' : joinRequestsCountNumber} ${requestsLabel}`;
+    const andLabel = resolveText('amity_social_button_community_and');
+    return resolveText(
+      'amity_social_button_community_requires_approval',
+      `${postsText} ${andLabel} ${requestsText}`,
+    );
   };
 
   const renderTextBanner = () => {
@@ -95,7 +118,9 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
         <div className={styles.communityPendingPost__textContainer}>
           <div className={styles.communityPendingPost__title__wrapper}>
             <div className={styles.communityPendingPost__icon} />
-            <Typography.BodyBold>Pending requests</Typography.BodyBold>
+            <Typography.BodyBold>
+              {resolveText('amity_social_button_pending_requests')}
+            </Typography.BodyBold>
           </div>
           <Typography.Caption className={styles.communityPendingPost__subtext}>
             {renderTextBanner()}

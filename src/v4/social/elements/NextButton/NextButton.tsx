@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Button, ButtonProps } from '~/v4/core/natives/Button';
@@ -25,11 +26,12 @@ export function NextButton({
   onPress,
 }: NextButtonProps) {
   const elementId = 'next_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, resolveText } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -39,7 +41,9 @@ export function NextButton({
       data-testid={accessibilityId}
       onPress={onPress}
     >
-      <Typography.BodyBold className={styles.nextButton__text}>Next</Typography.BodyBold>
+      <Typography.BodyBold className={styles.nextButton__text}>
+        {resolveText('amity_social_button_next')}
+      </Typography.BodyBold>
       <IconComponent
         defaultIcon={() => (
           <ArrowRight className={clsx(styles.nextButton__icon, defaultIconClassName)} />

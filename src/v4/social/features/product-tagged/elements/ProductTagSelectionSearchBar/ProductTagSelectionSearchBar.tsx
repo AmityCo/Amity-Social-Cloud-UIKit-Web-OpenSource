@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ELEMENT_ID } from '~/v4/constants/customization';
 import { SearchInput } from '~/v4/core/components/SearchInput';
@@ -26,6 +27,7 @@ export function ProductTagSelectionSearchBar({
     componentId,
     elementId,
   });
+  const searchProductsPlaceholder = useString('amity_social_placeholder_search_product_hint');
 
   return (
     <SearchInput
@@ -34,7 +36,7 @@ export function ProductTagSelectionSearchBar({
       elementId={elementId}
       value={value}
       onChange={onChange}
-      placeholder={(config?.placeholder as string) ?? 'Search by product name'}
+      placeholder={(config?.placeholder as string) ?? searchProductsPlaceholder}
       onFocus={onFocus}
       onClear={onClear}
     />

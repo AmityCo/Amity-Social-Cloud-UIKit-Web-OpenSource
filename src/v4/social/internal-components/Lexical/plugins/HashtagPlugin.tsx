@@ -10,6 +10,7 @@ import {
   KEY_ENTER_COMMAND,
 } from 'lexical';
 import { useEffect, useRef } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import {
   $createHashtagNode,
@@ -204,8 +205,8 @@ export function HashtagPlugin({ maxHashtags = MAX_HASHTAGS }: HashtagPluginProps
   const showHashtagLimitWarning = (): void => {
     hasShownLimitWarningRef.current = true;
     info({
-      title: 'Hashtag limit reached',
-      content: `You can only add hashtag up to ${maxHashtags} hashtags per post.`,
+      title: resolveString('amity_social_modal_post_composer_hashtag_limit_alert_title'),
+      content: resolveString('amity_social_modal_dialog_hashtag_limit', maxHashtags),
     });
   };
 

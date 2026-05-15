@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+
 import styles from './SaveButton.module.css';
 
 import { Button } from '~/v4/core/natives/Button';
@@ -21,11 +22,12 @@ export function SaveButton({
   isDisabled = false,
 }: SaveButtonProps) {
   const elementId = 'save_button';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+  const saveText = resolveText('amity_social_button_save');
 
   if (isExcluded) return null;
 
@@ -37,7 +39,7 @@ export function SaveButton({
       onPress={onPress}
       isDisabled={isDisabled}
     >
-      {config.save_button_text}
+      {config.save_button_text || saveText}
     </Button>
   );
 }

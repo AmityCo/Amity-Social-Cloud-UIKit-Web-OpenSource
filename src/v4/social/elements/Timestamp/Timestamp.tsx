@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './Timestamp.module.css';
 import dayjs from 'dayjs';
@@ -13,6 +14,11 @@ interface TimestampProps {
   className?: string;
 }
 
+function formatLocalDate(date: Date, options: Intl.DateTimeFormatOptions): string {
+  const locale = typeof navigator !== 'undefined' ? navigator.language : 'en';
+  return new Intl.DateTimeFormat(locale, options).format(date);
+}
+
 function formatTimestamp(input: Date | string): string {
   const now = dayjs();
   const time = dayjs(input);
@@ -22,16 +28,17 @@ function formatTimestamp(input: Date | string): string {
   const diffInDays = now.diff(time, 'day');
   const diffInWeeks = now.diff(time, 'week');
   const diffInMonths = now.diff(time, 'month');
-  const diffInYears = now.diff(time, 'year');
 
-  if (diffInSeconds < 60) return 'Just now';
-  if (diffInMinutes < 60) return `${diffInMinutes}m`;
-  if (diffInHours < 24) return `${diffInHours}h`;
-  if (diffInDays === 1) return '1d';
-  if (diffInDays <= 7) return `${diffInDays}d`;
-  if (diffInWeeks <= 4) return time.format('D MMM');
-  if (diffInMonths < 12) return time.format('D MMM');
-  return time.format('D MMM YYYY');
+  if (diffInSeconds < 60) return resolveString('amity_common_time_just_now');
+  if (diffInMinutes < 60)
+    return `${diffInMinutes}${resolveString('amity_common_time_time_minutes_suffix')}`;
+  if (diffInHours < 24)
+    return `${diffInHours}${resolveString('amity_common_time_time_hours_suffix')}`;
+  if (diffInDays === 1) return `1${resolveString('amity_common_time_time_days_suffix')}`;
+  if (diffInDays <= 7) return `${diffInDays}${resolveString('amity_common_time_time_days_suffix')}`;
+  if (diffInWeeks <= 4) return formatLocalDate(time.toDate(), { day: 'numeric', month: 'short' });
+  if (diffInMonths < 12) return formatLocalDate(time.toDate(), { day: 'numeric', month: 'short' });
+  return formatLocalDate(time.toDate(), { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 export function Timestamp({

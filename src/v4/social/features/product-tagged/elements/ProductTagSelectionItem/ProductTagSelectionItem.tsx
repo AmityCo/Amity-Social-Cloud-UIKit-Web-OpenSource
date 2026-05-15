@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Checkbox } from '~/v4/core/components/AriaCheckbox/Checkbox';
 import styles from './ProductTagSelectionItem.module.css';
@@ -65,7 +66,7 @@ export function ProductTagSelectionItem({
                   as="p"
                   className={styles.productTagSelectionItem__unavailableLabel}
                 >
-                  Unavailable
+                  {useString('amity_social_tagged_products_deleted_info')}
                 </Typography.Caption>
               )}
               <Typography.Body
@@ -80,7 +81,7 @@ export function ProductTagSelectionItem({
                   as="p"
                   className={styles.productTagSelectionItem__alreadyTaggedLabel}
                 >
-                  Already tagged
+                  {useString('amity_social_button_product_already_tagged')}
                 </Typography.Caption>
               )}
             </div>

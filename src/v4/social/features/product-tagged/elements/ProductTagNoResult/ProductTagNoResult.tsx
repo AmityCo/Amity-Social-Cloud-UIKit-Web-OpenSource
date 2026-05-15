@@ -20,7 +20,7 @@ export function ProductTagNoResult({
   iconSize,
 }: ProductTagNoResultProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG_NO_RESULT;
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -30,7 +30,12 @@ export function ProductTagNoResult({
 
   return (
     <div className={styles.productTagNoResult} style={themeStyles} data-test-id={accessibilityId}>
-      <NoResultFound text={config.text} icon={icon} variant={variant} iconSize={iconSize} />
+      <NoResultFound
+        text={resolveText('amity_social_label_no_results_found')}
+        icon={icon}
+        variant={variant}
+        iconSize={iconSize}
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { useString } from '~/v4/core/localization';
 import { useState } from 'react';
 import { Record } from '~/v4/icons/Record';
 import { AmityEventType } from '@amityco/ts-sdk';
@@ -108,7 +109,9 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                 }}
               >
                 <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                  {eventType === AmityEventType.Virtual ? 'Virtual' : 'In-person'}
+                  {eventType === AmityEventType.Virtual
+                    ? useString('amity_social_button_virtual')
+                    : useString('amity_social_button_in_person')}
                 </Typography.BodyBold>
               </Button>
             ))}
@@ -130,9 +133,9 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
             form="location-form"
             onPress={() => onCancel()}
           >
-            Cancel
+            {useString('amity_social_button_cancel')}
           </Button>
-          <Typography.TitleBold>Location</Typography.TitleBold>
+          <Typography.TitleBold>{useString('amity_social_button_location')}</Typography.TitleBold>
           <Button
             type="submit"
             variant="text"
@@ -141,7 +144,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
             form="location-form"
             isDisabled={isSubmitting || !isValid}
           >
-            Done
+            {useString('amity_social_button_done')}
           </Button>
         </div>
         <hr className={styles.locationForm__divider} />
@@ -153,7 +156,10 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
           <Popover
             trigger={({ openPopover, isDesktop }) => (
               <div>
-                <FormLabel label="Event type" className={styles.locationForm__eventTypeLabel} />
+                <FormLabel
+                  label={useString('amity_social_button_event_type')}
+                  className={styles.locationForm__eventTypeLabel}
+                />
                 <Button
                   type="button"
                   variant="default"
@@ -162,7 +168,9 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                   onPress={() => (isDesktop ? openPopover() : setShownEventTypeOption(true))}
                 >
                   <Typography.Body className={styles.locationForm__eventTypeLabel}>
-                    {value === AmityEventType.Virtual ? 'Virtual' : 'In-person'}
+                    {value === AmityEventType.Virtual
+                      ? useString('amity_social_button_virtual')
+                      : useString('amity_social_button_in_person')}
                   </Typography.Body>
                   <ChevronDown className={styles.locationForm__icon} />
                 </Button>
@@ -183,7 +191,9 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                     }}
                   >
                     <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                      {eventType === AmityEventType.Virtual ? 'Virtual' : 'In-person'}
+                      {eventType === AmityEventType.Virtual
+                        ? useString('amity_social_button_virtual')
+                        : useString('amity_social_button_in_person')}
                     </Typography.BodyBold>
                   </Button>
                 ))}
@@ -194,7 +204,10 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
       />
       {values.type === AmityEventType.Virtual && (
         <div>
-          <FormLabel className={styles.locationForm__eventTypeLabel} label="Platform" />
+          <FormLabel
+            className={styles.locationForm__eventTypeLabel}
+            label={useString('amity_social_event_platform')}
+          />
           <Controller
             name="platform"
             control={control}
@@ -212,10 +225,10 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                         </div>
                         <div className={styles.locationForm__radioLabel}>
                           <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                            Live stream
+                            {useString('amity_social_status_live_stream')}
                           </Typography.BodyBold>
                           <Typography.Caption className={styles.locationForm__radioDescription}>
-                            Users can join the live stream on the app or website.
+                            {useString('amity_social_label_event_platform_livestream_description')}
                           </Typography.Caption>
                         </div>
                       </div>
@@ -230,10 +243,10 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                         </div>
                         <div className={styles.locationForm__radioLabel}>
                           <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                            External platform
+                            {useString('amity_social_label_event_platform_external')}
                           </Typography.BodyBold>
                           <Typography.Caption className={styles.locationForm__radioDescription}>
-                            Users will join the event on an external platform.
+                            {useString('amity_social_label_event_platform_external_description')}
                           </Typography.Caption>
                         </div>
                       </div>
@@ -253,7 +266,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                     value={value}
                     variant="boxed"
                     maxLength={200}
-                    placeholder="Event link"
+                    placeholder={useString('amity_social_placeholder_event_link_hint')}
                     onChange={(e) => onChange(e.target.value)}
                   />
                 </div>
@@ -269,13 +282,15 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
           render={({ field: { onChange, value } }) => (
             <FormInput
               multiLine
-              label="Address"
+              label={useString('amity_social_button_address')}
               maxLength={180}
               variant="underlined"
               value={value}
               onChange={(e) => onChange(e.target.value)}
               className={styles.locationForm__addressInput}
-              placeholder="Enter address of where this event will be happening"
+              placeholder={useString(
+                'amity_social_label_enter_address_of_where_this_event_will_be_happening',
+              )}
             />
           )}
         />
@@ -288,7 +303,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
           color="secondary"
           onPress={() => onCancel()}
         >
-          Cancel
+          {useString('amity_social_button_cancel')}
         </Button>
         <Button
           type="submit"
@@ -297,7 +312,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
           form="location-form"
           isDisabled={isSubmitting || !isValid}
         >
-          Done
+          {useString('amity_social_button_done')}
         </Button>
       </div>
     </form>

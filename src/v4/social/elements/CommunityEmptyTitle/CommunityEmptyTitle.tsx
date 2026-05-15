@@ -14,7 +14,7 @@ export const CommunityEmptyTitle = ({
 }: CommunityEmptyTitleProps) => {
   const elementId = 'community_empty_title';
 
-  const { themeStyles, config, accessibilityId, isExcluded } = useAmityElement({
+  const { themeStyles, config, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -30,7 +30,7 @@ export const CommunityEmptyTitle = ({
       className={styles.communityEmptyTitle}
       data-testid={accessibilityId}
     >
-      {config.text}
+      {resolveText('amity_social_label_no_community_yet_2')}
     </Typography.TitleBold>
   );
 };

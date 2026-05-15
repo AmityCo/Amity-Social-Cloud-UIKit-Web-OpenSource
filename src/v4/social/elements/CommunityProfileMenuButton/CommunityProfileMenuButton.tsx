@@ -40,12 +40,19 @@ export function CommunityProfileMenuButton({
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { currentUserId } = useSDK();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
-  const { isExcluded, accessibilityId, themeStyles, config, defaultConfig, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    isExcluded,
+    accessibilityId,
+    themeStyles,
+    config,
+    defaultConfig,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   const goToCommunitySettingPage = () => {
     if (!isDesktop) removeDrawerData();
@@ -72,7 +79,7 @@ export function CommunityProfileMenuButton({
               componentId={componentId}
               elementId={elementId}
               variant="text"
-              text="Community settings"
+              text={resolveText('amity_social_setting_community_settings')}
               defaultIcon={<Setting className={styles.menuButton__optionButton__icon} />}
               onPress={goToCommunitySettingPage}
               typographyVariant="bodyBold"
@@ -85,7 +92,7 @@ export function CommunityProfileMenuButton({
               componentId={componentId}
               elementId={elementId}
               variant="text"
-              text="Community information"
+              text={resolveText('amity_social_label_community_information_title')}
               defaultIcon={<Users className={styles.menuButton__optionButton__icon} />}
               onPress={goToCommunitySettingPage}
               typographyVariant="bodyBold"
@@ -98,6 +105,7 @@ export function CommunityProfileMenuButton({
               model={SharableModel.COMMUNITY}
               referenceId={community?.communityId}
               onDone={isDesktop ? removeDrawerData : closePopover}
+              textId="amity_social_label_copy_profile_link"
             />
           )}
         </div>

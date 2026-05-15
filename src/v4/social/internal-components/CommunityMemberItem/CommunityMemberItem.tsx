@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './CommunityMemberItem.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
@@ -48,6 +49,7 @@ export const CommunityMemberItem = ({
   const notification = useNotifications();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(user?.userId as string);
+
   const { hasModeratorPermissions, assignRolesToUsers, removeRolesFromUsers, removeMembers } =
     useModerator({
       community,
@@ -62,16 +64,24 @@ export const CommunityMemberItem = ({
 
     if (!online) {
       notification.info({
-        content: `Failed to ${isFlaggedByMe ? 'unreport' : 'report'} member. Please try again.`,
+        content: resolveString(
+          isFlaggedByMe
+            ? 'amity_social_toast_member_unreport_failed'
+            : 'amity_social_toast_member_report_failed',
+        ),
       });
       return;
     }
 
     try {
       await toggleFlagUser();
-      notification.success({ content: isFlaggedByMe ? 'Member unreported.' : 'Member reported.' });
+      notification.success({
+        content: isFlaggedByMe
+          ? resolveString('amity_social_button_user_unreported')
+          : resolveString('amity_social_button_user_reported'),
+      });
     } catch (err) {
-      notification.info({ content: 'Failed to report member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_report_failed') });
     }
   };
 
@@ -79,7 +89,7 @@ export const CommunityMemberItem = ({
     removeDrawerData();
 
     if (!online) {
-      notification.info({ content: 'Failed to promote member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_promote_failed') });
       return;
     }
 
@@ -88,9 +98,11 @@ export const CommunityMemberItem = ({
       setTimeout(() => {
         refresh?.();
       }, 2000); // TODO: to remove refresh function after SDK has been fixed.
-      notification.success({ content: 'Successfully promoted to moderator!' });
+      notification.success({
+        content: resolveString('amity_social_toast_snackbar_user_promoted'),
+      });
     } catch (err) {
-      notification.info({ content: 'Failed to promote member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_promote_failed') });
     }
   };
 
@@ -98,7 +110,7 @@ export const CommunityMemberItem = ({
     removeDrawerData();
 
     if (!online) {
-      notification.info({ content: 'Failed to demote member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_demote_failed') });
       return;
     }
 
@@ -107,9 +119,11 @@ export const CommunityMemberItem = ({
         [COMMUNITY_MODERATOR, CHANNEL_MODERATOR],
         [user?.userId as string],
       );
-      notification.success({ content: 'Successfully demoted to member!' });
+      notification.success({
+        content: resolveString('amity_social_member_demote_success'),
+      });
     } catch (err) {
-      notification.info({ content: 'Failed to demote member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_demote_failed') });
     }
   };
 
@@ -117,22 +131,22 @@ export const CommunityMemberItem = ({
     removeDrawerData();
 
     if (!online) {
-      notification.info({ content: 'Failed to remove member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_remove_failed') });
       return;
     }
 
     try {
       user?.userId && (await removeMembers([user.userId]));
-      notification.success({ content: 'Member removed from this community.' });
+      notification.success({ content: resolveString('amity_social_member_removed_toast') });
     } catch (err) {
-      notification.info({ content: 'Failed to remove member. Please try again.' });
+      notification.info({ content: resolveString('amity_social_toast_member_remove_failed') });
     }
   };
 
   const options = [
     hasModeratorPermissions && !memberHasModeratorRole && !isGlobalBanned
       ? {
-          name: 'Promote to moderator',
+          name: useString('amity_social_label_promote_to_moderator'),
           action: onPromoteModeratorClick,
           accessibilityId: 'promote_moderator',
           icon: <PromoteToModerator className={styles.communityMemberItem__bottomSheeticon} />,
@@ -141,7 +155,7 @@ export const CommunityMemberItem = ({
 
     hasModeratorPermissions && memberHasModeratorRole
       ? {
-          name: 'Demote to member',
+          name: useString('amity_social_label_demote_to_member'),
           action: onDismissModeratorClick,
           accessibilityId: 'demote_member',
           icon: <DemoteToMember className={styles.communityMemberItem__bottomSheeticon} />,
@@ -151,7 +165,9 @@ export const CommunityMemberItem = ({
     {
       action: onReportMember,
       accessibilityId: 'report_member',
-      name: isFlaggedByMe ? 'Unreport user' : 'Report user',
+      name: isFlaggedByMe
+        ? useString('amity_social_button_unreport_user')
+        : useString('amity_social_button_report_user'),
       icon: isFlaggedByMe ? (
         <UnFlag className={styles.communityMemberItem__bottomSheeticon} />
       ) : (
@@ -160,7 +176,7 @@ export const CommunityMemberItem = ({
     },
     hasModeratorPermissions
       ? {
-          name: 'Remove from community',
+          name: useString('amity_social_label_remove_from_community'),
           accessibilityId: 'remove_member',
           action: onRemoveFromCommunityClick,
           className: styles.communityMemberItem__alertText,

@@ -27,6 +27,7 @@ export const EmptyUserFeed = ({ pageId = '*', componentId = '*' }: EmptyUserFeed
       pageId={pageId}
       componentId={componentId}
       elementId={elementId}
+      textKey="amity_social_empty_state_empty_feed_no_posts"
       defaultIcon={() => <EmptyPost className={styles.emptyUserFeed__icon} />}
     />
   );

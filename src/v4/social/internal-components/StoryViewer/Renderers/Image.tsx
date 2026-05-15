@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useIntl } from 'react-intl';
+import { useString, resolveString } from '~/v4/core/localization';
 import Truncate from 'react-truncate-markup';
 import {
   CustomRenderer,
@@ -51,7 +51,6 @@ export const renderer: CustomRenderer = ({
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
 
-  const { formatMessage } = useIntl();
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
@@ -100,11 +99,12 @@ export const renderer: CustomRenderer = ({
     () => <div data-testid="community_display_name">{community?.displayName}</div>,
     [community?.displayName],
   );
+  const byLabel = useString('amity_social_button_by');
   const subheading = useMemo(
     () =>
       createdAt && creator?.displayName ? (
         <span className={styles.creatorWrapper}>
-          <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+          <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • {byLabel}{' '}
           <span data-testid="creator_display_name" className={styles.creatorDisplayName}>
             {creator?.displayName}
           </span>
@@ -113,7 +113,7 @@ export const renderer: CustomRenderer = ({
       ) : (
         ''
       ),
-    [createdAt, creator?.displayName],
+    [createdAt, creator?.displayName, byLabel],
   );
   const targetRootId = 'asc-uikit-stories-viewer';
 
@@ -265,7 +265,9 @@ export const renderer: CustomRenderer = ({
         pageId: 'story_page',
         componentId: 'comment_tray_component',
         header: (
-          <Typography.Headline className={styles.commentTrayHeader}>Comments</Typography.Headline>
+          <Typography.Headline className={styles.commentTrayHeader}>
+            {resolveString('amity_social_label_title_comments')}
+          </Typography.Headline>
         ),
         children: renderCommentTray(),
         isDismissable: false,
@@ -366,7 +368,7 @@ export const renderer: CustomRenderer = ({
         onClose={closeCommentSheet}
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
         detent="full-height"
-        headerTitle={formatMessage({ id: 'storyViewer.commentSheet.title' })}
+        headerTitle={resolveString('amity_social_button_comments')}
       >
         {renderCommentTray()}
       </BottomSheet>

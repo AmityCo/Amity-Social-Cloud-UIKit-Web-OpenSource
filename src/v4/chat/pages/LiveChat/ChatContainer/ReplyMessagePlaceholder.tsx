@@ -2,6 +2,7 @@ import React from 'react';
 import useUser from '~/core/hooks/useUser';
 import styles from './styles.module.css';
 import CloseIcon from '~/v4/icons/Close';
+import { resolveString } from '~/v4/core/localization';
 import { Avatar } from '~/v4/core/components';
 import User from '~/v4/icons/User';
 
@@ -24,7 +25,9 @@ export const ReplyMessagePlaceholder = ({
         <Avatar avatarUrl={profile.avatar?.fileUrl} defaultImage={<User />} />
       </div>
       <div className={styles.replyProfile}>
-        <div className={styles.replyProfileName}>{`Replying to ${profile.displayName}`}</div>
+        <div
+          className={styles.replyProfileName}
+        >{`${resolveString('amity_social_replying_to')} ${profile.displayName}`}</div>
         <div className={styles.replyProfileMessage}>{replyMessage.data?.text}</div>
       </div>
       <div className={styles.replyDismiss}>

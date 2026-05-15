@@ -74,10 +74,141 @@ export function LinkValidationPlugin() {
       if (!node.isSimpleText()) return;
 
       const parent = node.getParent();
-      if ($isLinkNode(parent) || $isAutoLinkNode(parent)) return;
+      if ($isAutoLinkNode(parent)) return;
+
+      // When a TextNode inside an auto-link-style LinkNode changes, sync the URL.
+      // registerNodeTransform(LinkNode) only fires when the LinkNode itself is dirty,
+      // NOT when only its child TextNode is dirty (leaf mutation). So URL sync must
+      // happen here in the TextNode transform.
+      if ($isLinkNode(parent)) {
+        const textContent = parent.getTextContent();
+        const url = parent.getURL();
+
+        const isAutoLinkStyle =
+          textContent === url ||
+          textContent === url.replace(/^https?:\/\//, '') ||
+          url === `https://${textContent}` ||
+          url === `http://${textContent}` ||
+          url.startsWith(`https://${textContent}`) ||
+          url.startsWith(`http://${textContent}`) ||
+          url.startsWith(textContent);
+
+        if (isAutoLinkStyle) {
+          URL_REGEX.lastIndex = 0;
+          const fullMatchRegex = new RegExp(`^${URL_REGEX.source}$`);
+          const isValidUrl = fullMatchRegex.test(textContent);
+
+          if (!isValidUrl) {
+            // Text no longer a valid URL — unwrap the link
+            const children = parent.getChildren();
+            for (const child of children) {
+              parent.insertBefore(child);
+            }
+            parent.remove();
+          } else {
+            // Keep URL in sync with the edited text
+            const newUrl =
+              textContent.startsWith('http') ||
+              textContent.startsWith('ftp') ||
+              textContent.startsWith('mailto')
+                ? textContent
+                : `https://${textContent}`;
+            if (parent.getURL() !== newUrl) {
+              parent.setURL(newUrl);
+            }
+          }
+        }
+        return;
+      }
 
       const text = node.getTextContent();
       if (!text) return;
+
+      // Extend previous auto-link-style LinkNode/AutoLinkNode if the new text continues the URL.
+      // LinkNode.canInsertTextAfter() === false, so chars typed at the end of a link
+      // land in a sibling TextNode. Merge them back into the link when they extend the URL.
+      const prevSibling = node.getPreviousSibling();
+      if ($isLinkNode(prevSibling)) {
+        const linkText = prevSibling.getTextContent();
+        const linkUrl = prevSibling.getURL();
+
+        const isAutoLinkStyle =
+          linkText === linkUrl ||
+          linkText === linkUrl.replace(/^https?:\/\//, '') ||
+          linkUrl === `https://${linkText}` ||
+          linkUrl === `http://${linkText}` ||
+          // Handle stale URL: chars were deleted from inside the link but the URL attribute
+          // wasn't updated yet. The stored URL starts with the current (shortened) link text.
+          linkUrl.startsWith(`https://${linkText}`) ||
+          linkUrl.startsWith(`http://${linkText}`);
+
+        if (isAutoLinkStyle) {
+          const combined = linkText + text;
+          URL_REGEX.lastIndex = 0;
+          const extMatch = URL_REGEX.exec(combined);
+
+          if (extMatch && extMatch.index === 0 && extMatch[0].length > linkText.length) {
+            if ($isAutoLinkNode(prevSibling)) {
+              // For AutoLinkNode: unwrap back to plain text and merge with the new TextNode.
+              // AutoLinkPlugin owns AutoLinkNode state — mutating it directly causes
+              // handleLinkEdit to revert our changes afterward.
+              // Unwrapping hands the merged text back to AutoLinkPlugin so it re-detects
+              // the full URL from scratch and builds a correct AutoLinkNode.
+              const autoLinkChildren = prevSibling.getChildren();
+              for (const child of autoLinkChildren) {
+                prevSibling.insertBefore(child);
+              }
+              prevSibling.remove();
+
+              const prevTextNode = node.getPreviousSibling();
+              if ($isTextNode(prevTextNode)) {
+                prevTextNode.setTextContent(prevTextNode.getTextContent() + text);
+                node.remove();
+              }
+              return;
+            }
+
+            // For our custom LinkNode (not AutoLinkNode): extend in place.
+            // AutoLinkPlugin doesn't manage LinkNode, so direct mutation is safe.
+            const extensionLen = extMatch[0].length - linkText.length;
+            const extensionText = text.slice(0, extensionLen);
+            const remaining = text.slice(extensionLen);
+
+            const newFullText = extMatch[0];
+            const newUrl =
+              newFullText.startsWith('http') ||
+              newFullText.startsWith('ftp') ||
+              newFullText.startsWith('mailto')
+                ? newFullText
+                : `https://${newFullText}`;
+
+            prevSibling.setURL(newUrl);
+
+            const linkChild = prevSibling.getLastDescendant();
+            if ($isTextNode(linkChild)) {
+              const newOffset = linkChild.getTextContent().length + extensionText.length;
+              linkChild.setTextContent(linkChild.getTextContent() + extensionText);
+
+              if (remaining.length > 0) {
+                node.setTextContent(remaining);
+              } else {
+                node.remove();
+              }
+              linkChild.select(newOffset, newOffset);
+            } else {
+              const newChild = $createTextNode(extensionText);
+              prevSibling.append(newChild);
+              if (remaining.length > 0) {
+                node.setTextContent(remaining);
+              } else {
+                node.remove();
+              }
+              newChild.select(extensionText.length, extensionText.length);
+            }
+            return;
+          }
+        }
+      }
 
       URL_REGEX.lastIndex = 0;
       const match = URL_REGEX.exec(text);
@@ -140,22 +271,42 @@ export function LinkValidationPlugin() {
       const textContent = node.getTextContent();
 
       // Only manage "auto-link style" LinkNodes (text ≈ URL)
+      // Also covers stale-URL case: the url attribute wasn't updated when chars were deleted,
+      // so the stored URL may still start with the current (shorter) text.
       const isAutoLinkStyle =
         textContent === url ||
         textContent === url.replace(/^https?:\/\//, '') ||
         url === `https://${textContent}` ||
-        url === `http://${textContent}`;
+        url === `http://${textContent}` ||
+        url.startsWith(`https://${textContent}`) ||
+        url.startsWith(`http://${textContent}`) ||
+        url.startsWith(textContent);
 
       if (!isAutoLinkStyle) return; // User-created embedded link, leave it alone
 
       // If text no longer matches URL_REGEX, unwrap the link
       const fullMatchRegex = new RegExp(`^${URL_REGEX.source}$`);
-      if (!fullMatchRegex.test(textContent)) {
+      const isValidUrl = fullMatchRegex.test(textContent);
+      if (!isValidUrl) {
         const children = node.getChildren();
         for (const child of children) {
           node.insertBefore(child);
         }
         node.remove();
+      } else {
+        // Text is still a valid URL but may have been edited inside the link — keep URL in sync.
+        // Without this, the stored URL becomes stale (e.g. still 'https://www.google.com'
+        // after deleting '.com' and typing '.c'), breaking the isAutoLinkStyle checks
+        // in the TextNode transform when the user types after the link.
+        const newUrl =
+          textContent.startsWith('http') ||
+          textContent.startsWith('ftp') ||
+          textContent.startsWith('mailto')
+            ? textContent
+            : `https://${textContent}`;
+        if (node.getURL() !== newUrl) {
+          node.setURL(newUrl);
+        }
       }
     });
 

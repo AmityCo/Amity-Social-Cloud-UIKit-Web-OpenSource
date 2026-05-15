@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { resolveString, useString } from '~/v4/core/localization';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { AspectRatioButton } from '~/v4/social/elements';
@@ -36,10 +37,10 @@ export const DraftClipPage = ({ targetId, targetType, community }: DraftClipPage
   const discardCreateStory = () => {
     confirm({
       pageId,
-      title: 'Discard this clip?',
-      content: 'The clip will be permanently discarded. It cannot be undone.',
-      cancelText: 'Keep editing',
-      okText: 'Discard',
+      title: useString('amity_social_modal_dialog_title_discard_clip'),
+      content: useString('amity_social_modal_dialog_discard_clip'),
+      cancelText: useString('amity_social_button_keep_editing'),
+      okText: useString('amity_social_button_discard'),
       onOk: () => {
         setFile(null);
         onBack();
@@ -64,9 +65,9 @@ export const DraftClipPage = ({ targetId, targetType, community }: DraftClipPage
     if (files.some((f) => f.status === 'failed')) {
       info({
         pageId,
-        title: 'Maximum file size limit reached',
-        content: 'Please choose a video with smaller file size.',
-        okText: 'OK',
+        title: resolveString('amity_social_modal_dialog_title_max_file_size_limit'),
+        content: resolveString('amity_social_modal_dialog_video_upload_error'),
+        okText: resolveString('amity_social_button_ok'),
         onOk: () => {
           onBack();
         },

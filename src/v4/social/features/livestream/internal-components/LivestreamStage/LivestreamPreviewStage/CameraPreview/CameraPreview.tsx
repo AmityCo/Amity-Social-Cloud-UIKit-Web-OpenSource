@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useEffect } from 'react';
+import { useString } from '~/v4/core/localization';
 import { CurrentDevices } from '~/v4/core/hooks/useDeviceManagement';
 import { MediaDeviceInfo } from '~/v4/core/hooks/useMediaPermissions';
 import { CameraPlaceholder } from './CameraPlaceholder';
@@ -30,6 +31,7 @@ export const CameraPreview: React.FC<CameraPreviewProps> = ({
 }) => {
   const lastValidationRef = useRef<string>('');
   const videoRef = useRef<HTMLVideoElement>(null);
+  const loadingCameraLabel = useString('amity_social_camera_preview_loading');
 
   // Update video element when track changes
   useEffect(() => {
@@ -85,7 +87,7 @@ export const CameraPreview: React.FC<CameraPreviewProps> = ({
       // Track exists but media stream not ready yet, show loading or fallback to PreJoin
       return (
         <div className={clsx(styles.cameraPreview__cameraContainer, className)}>
-          <div className={styles.cameraPreview__loading}>Loading camera...</div>
+          <div className={styles.cameraPreview__loading}>{loadingCameraLabel}</div>
         </div>
       );
     }

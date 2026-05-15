@@ -11,7 +11,7 @@ type CloseCommunityProps = {
 
 export const CloseCommunity = ({ pageId = '*', componentId = '*' }: CloseCommunityProps) => {
   const elementId = 'close_community';
-  const { themeStyles, isExcluded, config, accessibilityId } = useAmityElement({
+  const { themeStyles, isExcluded, config, accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -24,11 +24,9 @@ export const CloseCommunity = ({ pageId = '*', componentId = '*' }: CloseCommuni
       data-testid={accessibilityId}
       className={styles.closeCommunity__container}
     >
-      {config.text && (
-        <Typography.BodyBold className={styles.closeCommunity__text}>
-          {config.text}
-        </Typography.BodyBold>
-      )}
+      <Typography.BodyBold className={styles.closeCommunity__text}>
+        {resolveText('amity_social_button_close_community')}
+      </Typography.BodyBold>
     </div>
   );
 };

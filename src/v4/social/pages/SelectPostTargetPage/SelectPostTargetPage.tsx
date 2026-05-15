@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -39,6 +40,7 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
   const { canBeDiscarded } = useLayoutContext();
   const canBeDiscardedRef = useRef(canBeDiscarded);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member' },
   });
@@ -86,7 +88,11 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
           onPress={() => onBack()}
           imgClassName={styles.selectPostTargetPage__closeButton}
         />
-        <Title pageId={pageId} titleClassName={styles.selectPostTargetPage__title} />
+        <Title
+          pageId={pageId}
+          titleClassName={styles.selectPostTargetPage__title}
+          textKey="amity_social_button_post_to"
+        />
         <div />
       </div>
       <div className={styles.selectPostTargetPage__timelineContainer}>
@@ -105,7 +111,10 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
           >
             <Button className={styles.selectPostTargetPage__timeline} key="timeline-button">
               <MyTimelineAvatar pageId={pageId} userId={user?.userId} />
-              <MyTimelineText pageId={pageId} />
+              <MyTimelineText
+                pageId={pageId}
+                textId="amity_social_button_select_post_target_my_timeline"
+              />
             </Button>
           </FileTrigger>
         ) : (
@@ -124,11 +133,11 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
                         confirm({
                           type: 'confirm',
                           onOk: closePopup,
-                          okText: 'Discard',
-                          cancelText: 'Keep editing',
-                          title: 'Discard this post?',
+                          okText: resolveString('amity_social_modal_dialog_discard_button'),
+                          cancelText: resolveString('amity_social_button_keep_editing'),
+                          title: resolveString('amity_social_modal_dialog_title_discard_post'),
                           pageId: 'post_composer_page',
-                          content: 'The post will be permanently discarded. It cannot be undone.',
+                          content: resolveString('amity_social_modal_dialog_discard_post'),
                         });
                       }
                     },
@@ -162,7 +171,9 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
         )}
       </div>
       <div className={styles.selectPostTargetPage__line} />
-      <div className={styles.selectPostTargetPage__myCommunities}>My Communities</div>
+      <div className={styles.selectPostTargetPage__myCommunities}>
+        {useString('amity_social_button_my_communities')}
+      </div>
       <div className={styles.selectPostTargetPage__myCommunitiesList}>
         {communities
           .filter((community) => canCreatePostCommunity(client, community))
@@ -214,12 +225,11 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
                             confirm({
                               type: 'confirm',
                               onOk: closePopup,
-                              okText: 'Discard',
-                              cancelText: 'Keep editing',
-                              title: 'Discard this post?',
+                              okText: resolveString('amity_social_modal_dialog_discard_button'),
+                              cancelText: resolveString('amity_social_button_keep_editing'),
+                              title: resolveString('amity_social_modal_dialog_title_discard_post'),
                               pageId: 'post_composer_page',
-                              content:
-                                'The post will be permanently discarded. It cannot be undone.',
+                              content: resolveString('amity_social_modal_dialog_discard_post'),
                             });
                           }
                         },

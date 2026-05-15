@@ -1,4 +1,5 @@
 import { Typography } from '~/v4/core/components';
+import { useString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { AmityEventStatus, AmityEventType } from '@amityco/ts-sdk';
@@ -34,7 +35,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
     >
       <div className={styles.eventInfo__container}>
         <Typography.TitleBold className={styles.eventInfo__text}>
-          About the event
+          {useString('amity_social_label_about_the_event')}
         </Typography.TitleBold>
         <TextWithMention
           maxLines={10}
@@ -48,7 +49,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
         event.externalUrl ? (
           <div className={styles.eventInfo__container}>
             <Typography.TitleBold className={styles.eventInfo__text}>
-              Event link
+              {useString('amity_social_placeholder_event_link_hint')}
             </Typography.TitleBold>
             <div className={styles.eventInfo__row}>
               <TextWithMention
@@ -56,18 +57,23 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
                 textClassName={styles.eventInfo__link}
                 data={{ text: event.externalUrl || '' }}
               />
-              <CopyButton text={event.externalUrl || ''} toast="Link copied" />
+              <CopyButton
+                text={event.externalUrl || ''}
+                toast={useString('amity_social_button_link_copied')}
+              />
             </div>
           </div>
         ) : (
           <div className={styles.eventInfo__container}>
             <div>
               <Typography.TitleBold className={styles.eventInfo__text}>
-                Live stream
+                {useString('amity_social_status_live_stream')}
               </Typography.TitleBold>
               {event.status === AmityEventStatus.Scheduled && (
                 <Typography.Caption className={styles.eventInfo__subTitle}>
-                  You can start setting up live 15 minutes before the event starts.
+                  {useString(
+                    'amity_social_status_you_can_start_setting_up_live_15_minutes_before_the_eve',
+                  )}
                 </Typography.Caption>
               )}
             </div>
@@ -91,7 +97,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
       ) : (
         <div className={styles.eventInfo__container}>
           <Typography.TitleBold className={styles.eventInfo__text}>
-            Event address
+            {useString('amity_social_event_info_event_address')}
           </Typography.TitleBold>
           <div className={styles.eventInfo__row}>
             <TextWithMention
@@ -99,7 +105,10 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
               textClassName={styles.eventInfo__text}
               data={{ text: event.location || '' }}
             />
-            <CopyButton text={event.location || ''} toast="Address copied" />
+            <CopyButton
+              text={event.location || ''}
+              toast={useString('amity_social_button_address_copied')}
+            />
           </div>
         </div>
       )}

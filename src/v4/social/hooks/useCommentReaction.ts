@@ -2,6 +2,7 @@ import { ReactionRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { resolveString } from '~/v4/core/localization';
 
 interface UseCommentReactionParams {
   comment: Amity.Comment;
@@ -45,7 +46,7 @@ export const useCommentReaction = ({
           await ReactionRepository.removeReaction('comment', comment?.commentId, reactionByMe);
         } catch (err) {
           info({
-            content: 'Oops, something went wrong.',
+            content: resolveString('amity_social_toast_failed_generic'),
           });
         }
       }
@@ -63,7 +64,7 @@ export const useCommentReaction = ({
       setReactionByMe(comment?.myReactions?.[0] || null);
       setReactionsCount(comment?.reactionsCount || 0);
       info({
-        content: 'Oops, something went wrong.',
+        content: resolveString('amity_social_toast_failed_generic'),
       });
     },
   });
@@ -82,7 +83,7 @@ export const useCommentReaction = ({
       setReactionByMe(comment?.myReactions?.[0] || null);
       setReactionsCount(comment?.reactionsCount || 0);
       info({
-        content: 'Oops, something went wrong.',
+        content: resolveString('amity_social_toast_failed_generic'),
       });
     },
   });

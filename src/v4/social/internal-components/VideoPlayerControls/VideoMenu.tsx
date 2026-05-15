@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import styles from './VideoMenu.module.css';
@@ -51,7 +52,7 @@ export function VideoMenu({ videoRef, closePopover }: VideoMenuProps) {
       <div className={styles.videoMenu}>
         <Button className={styles.videoMenu__header} onPress={() => setShowSpeedMenu(false)}>
           <ArrowLeft className={styles.videoMenu__header__icon} />
-          <Typography.BodyBold>Options</Typography.BodyBold>
+          <Typography.BodyBold>{useString('amity_social_button_options')}</Typography.BodyBold>
         </Button>
         {PLAYBACK_SPEEDS.map((speed) => (
           <Button
@@ -59,7 +60,9 @@ export function VideoMenu({ videoRef, closePopover }: VideoMenuProps) {
             className={clsx(styles.videoMenu__item, styles.videoMenu__item__speedItem)}
             onPress={() => handleSpeedChange(speed)}
           >
-            <Typography.BodyBold>{speed === 1 ? 'Normal' : `${speed}x`}</Typography.BodyBold>
+            <Typography.BodyBold>
+              {speed === 1 ? useString('amity_social_normal') : `${speed}x`}
+            </Typography.BodyBold>
             <div className={styles.videoMenu__item__checkContainer}>
               {currentSpeed === speed && <Check className={styles.videoMenu__item__check} />}
             </div>
@@ -73,7 +76,7 @@ export function VideoMenu({ videoRef, closePopover }: VideoMenuProps) {
     <div className={styles.videoMenu}>
       <Button className={styles.videoMenu__item} onPress={() => setShowSpeedMenu(true)}>
         <PlaybackSpeed className={styles.videoMenu__item__icon} />
-        <Typography.BodyBold>Playback speed</Typography.BodyBold>
+        <Typography.BodyBold>{useString('amity_social_playback_speed')}</Typography.BodyBold>
       </Button>
       {document.pictureInPictureEnabled && (
         <Button className={styles.videoMenu__item} onPress={handlePictureInPicture}>
@@ -83,7 +86,9 @@ export function VideoMenu({ videoRef, closePopover }: VideoMenuProps) {
             <PictureInPicture className={styles.videoMenu__item__icon} />
           )}
           <Typography.BodyBold>
-            {document.pictureInPictureElement ? 'Exit Picture-in-Picture' : 'Picture-in-Picture'}
+            {document.pictureInPictureElement
+              ? useString('amity_social_exit_picture_in_picture')
+              : useString('amity_social_picture_in_picture')}
           </Typography.BodyBold>
         </Button>
       )}

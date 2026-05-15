@@ -4,6 +4,7 @@ import { TextArea, Label, TextField } from 'react-aria-components';
 import { Typography } from '~/v4/core/components';
 import { Title } from '~/v4/social/internal-components/Title';
 import clsx from 'clsx';
+import { useString } from '~/v4/core/localization/useString';
 
 // TODO: move this component to core component
 
@@ -23,6 +24,7 @@ export type UnderlineInputProps = {
   required?: boolean;
   placeholder?: string;
   placeholderClassName?: string;
+  textKey?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
@@ -43,6 +45,7 @@ export const UnderlineInput = forwardRef(function (
     required = false,
     placeholder = '',
     placeholderClassName = '',
+    textKey,
     onChange,
     ...props
   }: UnderlineInputProps,
@@ -78,10 +81,12 @@ export const UnderlineInput = forwardRef(function (
             titleClassName={styles.underlineInput__labelText}
             labelText={label}
             required={required}
+            textKey={textKey}
           />
           {optional && (
             <Typography.Caption className={styles.underlineInput__optional}>
-              {' (Optional)'}
+              {' '}
+              {useString('amity_social_label_optional')}
             </Typography.Caption>
           )}
         </div>

@@ -16,7 +16,7 @@ export const NoInternetTitle = ({
   ...props
 }: NoInternetTitleProps) => {
   const elementId = 'no_internet_title';
-  const { accessibilityId, themeStyles, config, isExcluded } = useAmityElement({
+  const { accessibilityId, themeStyles, config, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -31,7 +31,7 @@ export const NoInternetTitle = ({
       data-testid={accessibilityId}
       className={clsx(styles.noInternetTitle, className)}
     >
-      {config.text}
+      {resolveText('amity_social_label_no_internet_connection')}
     </Typography.TitleBold>
   );
 };

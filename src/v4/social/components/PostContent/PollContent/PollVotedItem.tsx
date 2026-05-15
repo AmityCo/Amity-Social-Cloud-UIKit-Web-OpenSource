@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import { useString, resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import millify from 'millify';
@@ -27,10 +28,17 @@ export const PollVotedItem: React.FC<PollVotedItemProps> = ({
   const calVoteCount = currentUserId ? voteCount - 1 : voteCount;
 
   const voteByText = useMemo(() => {
-    if (calVoteCount === 0 && currentUserId) return 'Voted by you';
-    if (calVoteCount !== 0)
-      return `Voted by ${millify(calVoteCount)} participant${calVoteCount > 1 ? 's' : ''}${currentUserId ? ' and you' : ''}`;
-    else return 'No votes';
+    if (calVoteCount === 0 && currentUserId)
+      return resolveString('amity_social_label_voted_by_you');
+    if (calVoteCount !== 0) {
+      const participantText =
+        calVoteCount > 1
+          ? resolveString('amity_social_label_voted_by_participants', millify(calVoteCount))
+          : resolveString('amity_social_label_voted_by_1_participant');
+      return currentUserId
+        ? `${participantText} ${resolveString('amity_social_button_poll_answer_result_voted_by_and_you')}`
+        : participantText;
+    } else return resolveString('amity_social_button_no_votes');
   }, [currentUserId, calVoteCount]);
 
   const renderVoteByText = useCallback(() => {

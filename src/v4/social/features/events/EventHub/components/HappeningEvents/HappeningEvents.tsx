@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { AmityEventStatus } from '@amityco/ts-sdk';
 import { Carousel } from '~/v4/core/components/Carousel';
@@ -49,7 +50,7 @@ export function HappeningEvents(props: HappeningEventsProps) {
   return (
     <section className={styles.happeningEvents}>
       <Typography.TitleBold className={styles.happeningEvents__title}>
-        Happening now
+        {useString('amity_social_button_happening_now')}
       </Typography.TitleBold>
       <Carousel
         scrollOffset={400}

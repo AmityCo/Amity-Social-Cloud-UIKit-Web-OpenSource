@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { MenuOptionButton } from '~/v4/core/internal-components/MenuOptionButton';
 import Flag from '~/v4/icons/Flag';
 import UnFlag from '~/v4/icons/UnFlag';
@@ -106,13 +107,13 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
             <Skeleton.Line height="0.625rem" width="100%" />
           ) : isFlaggedByMe ? (
             <MenuOptionButton
-              text="Unreport message"
+              text={useString('amity_social_button_unreport_message')}
               icon={<UnFlag />}
               onPress={handleUnreportMessage}
             />
           ) : (
             <MenuOptionButton
-              text="Report message"
+              text={useString('amity_social_button_report_message')}
               icon={<Flag />}
               onPress={handleClickReportMessage}
             />
@@ -121,7 +122,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
       )}
       {(isOwner || (isModerator && !isHostMessage)) && (
         <MenuOptionButton
-          text="Delete message"
+          text={useString('amity_social_button_delete')}
           icon={<Bin />}
           onPress={handleDeleteMessage}
           isDanger={true}

@@ -46,6 +46,7 @@ export function EmptyNewsfeed({ pageId = '*' }: EmptyNewsfeedProps) {
             pageId={pageId}
             componentId={componentId}
             titleClassName={styles.emptyNewsfeed__title}
+            textKey="amity_social_empty_state_social_home_empty_title"
           />
           <Description pageId={pageId} componentId={componentId} />
         </div>

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
@@ -175,11 +176,13 @@ export const useCreateLivestream = ({
       confirm({
         onOk: () => room?.roomId && handleStopRoom(room?.roomId),
         type: 'confirm',
-        okText: 'End',
-        cancelText: 'Cancel',
-        title: 'End live stream?',
+        okText: resolveString(
+          'amity_social_modal_create_livestream_end_livestream_dialog_confirm_text',
+        ),
+        cancelText: resolveString('amity_social_button_cancel'),
+        title: resolveString('amity_social_modal_create_livestream_end_livestream_dialog_title'),
         pageId,
-        content: 'If you end your live stream, it will also end for all your viewers.',
+        content: resolveString('amity_social_modal_create_livestream_end_livestream_dialog_desc'),
       });
     } else if (
       livestreamTitle.length > 0 ||
@@ -190,12 +193,17 @@ export const useCreateLivestream = ({
       confirm({
         onOk: onBack,
         type: 'confirm',
-        okText: 'Discard',
-        cancelText: 'Cancel',
-        title: 'Unsaved changes',
+        okText: resolveString(
+          'amity_social_modal_create_livestream_discard_livestream_dialog_confirm_text',
+        ),
+        cancelText: resolveString('amity_social_modal_dialog_cancel_button'),
+        title: resolveString(
+          'amity_social_modal_create_livestream_discard_livestream_dialog_title',
+        ),
         pageId,
-        content:
-          'Are you sure you want to discard the changes? They will be lost when you leave this page.',
+        content: resolveString(
+          'amity_social_modal_create_livestream_discard_livestream_dialog_desc',
+        ),
       });
     } else onBack();
   }, [
@@ -254,12 +262,12 @@ export const useCreateLivestream = ({
         await refetchProductCatalogueSettings();
       },
       type: 'confirm',
-      okText: 'Go live',
+      okText: resolveString('amity_social_status_go_live'),
       okButtonColor: 'primary',
-      cancelText: 'Edit live',
-      title: 'Product tagging isn’t available',
+      cancelText: resolveString('amity_social_status_edit_live'),
+      title: resolveString('amity_social_label_product_tagging_unavailable_title'),
       pageId,
-      content: 'Any products you’ve tagged will be removed and won’t be shown to viewers.',
+      content: resolveString('amity_social_label_product_tagging_unavailable_description'),
     });
   };
 

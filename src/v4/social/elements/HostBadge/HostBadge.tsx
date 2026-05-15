@@ -13,12 +13,19 @@ interface HostBadgeProps {
 
 export function HostBadge({ pageId = '*', componentId = '*', className }: HostBadgeProps) {
   const elementId = 'host_badge';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -30,7 +37,7 @@ export function HostBadge({ pageId = '*', componentId = '*', className }: HostBa
     >
       <LivestreamOutlined className={styles.hostBadge__icon} />
       <Typography.CaptionSmall className={styles.hostBadge__text}>
-        {config.text ?? 'Host'}
+        {resolveText('amity_social_button_host')}
       </Typography.CaptionSmall>
     </div>
   );

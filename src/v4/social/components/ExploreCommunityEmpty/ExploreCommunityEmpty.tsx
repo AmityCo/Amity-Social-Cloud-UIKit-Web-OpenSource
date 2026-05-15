@@ -23,7 +23,11 @@ export function ExploreCommunityEmpty({ pageId = '*' }: ExploreCommunityEmptyPro
       <ExploreEmptyImage pageId={pageId} componentId={componentId} />
       <div className={styles.exploreCommunityEmpty__text}>
         <Title pageId={pageId} componentId={componentId} />
-        <Description pageId={pageId} componentId={componentId} />
+        <Description
+          pageId={pageId}
+          componentId={componentId}
+          textId="amity_social_label_no_community_yet_description"
+        />
       </div>
       <ExploreCreateCommunity
         pageId={pageId}

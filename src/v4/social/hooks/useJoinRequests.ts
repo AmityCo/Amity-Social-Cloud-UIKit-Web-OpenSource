@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { resolveString } from '~/v4/core/localization';
 
 type useJoinRequestsProps = {
   onApproveSuccess?: () => void;
@@ -28,20 +29,20 @@ export const useJoinRequests = ({
     onSuccess: (data: any) => {
       setJoinRequest(data);
       success({
-        content: 'Join request accepted.',
+        content: resolveString('amity_social_label_join_request_accepted'),
       });
       onApproveSuccess?.();
     },
     onError: (error) => {
       info({
-        content: 'Failed to accept join request. Please try again.',
+        content: resolveString('amity_social_toast_accept_join_request_failed'),
       });
       onApproveError?.(error)
         ? onApproveError?.(error)
         : info({
             content: error.message.includes(ERROR_RESPONSE.DELETED_POST)
-              ? 'This join request is no longer available.'
-              : 'Failed to accept join request. Please try again.',
+              ? resolveString('amity_social_label_join_request_unavailable')
+              : resolveString('amity_social_toast_accept_join_request_failed'),
           });
     },
   });
@@ -53,7 +54,7 @@ export const useJoinRequests = ({
       onDeclineSuccess?.()
         ? onDeclineSuccess?.()
         : success({
-            content: 'Join request declined.',
+            content: resolveString('amity_social_label_join_request_declined'),
           });
     },
     onError: (error) => {
@@ -61,8 +62,8 @@ export const useJoinRequests = ({
         ? onDeclineError?.(error)
         : info({
             content: error.message.includes(ERROR_RESPONSE.DELETED_POST)
-              ? 'This join request is no longer available.'
-              : 'Failed to decline join request. Please try again.',
+              ? resolveString('amity_social_label_join_request_unavailable')
+              : resolveString('amity_social_toast_decline_join_request_failed'),
           });
     },
   });

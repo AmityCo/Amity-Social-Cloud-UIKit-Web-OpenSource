@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+
 import React from 'react';
 import styles from './FormLabel.module.css';
 import { Typography } from '~/v4/core/components';
@@ -7,6 +8,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 type FormLabelProps = LabelProps & {
   label?: string;
+  textKey?: string;
   pageId?: string;
   length?: number;
   maxLength?: number;
@@ -17,6 +19,7 @@ type FormLabelProps = LabelProps & {
 
 export const FormLabel = ({
   label,
+  textKey,
   length,
   optional,
   maxLength,
@@ -26,11 +29,13 @@ export const FormLabel = ({
   elementId = '*',
   ...props
 }: FormLabelProps) => {
-  const { accessibilityId, themeStyles, config } = useAmityElement({
+  const { accessibilityId, themeStyles, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  const labelText = textKey ? resolveText(textKey) : label;
 
   return (
     <Label
@@ -40,9 +45,11 @@ export const FormLabel = ({
       {...props}
     >
       <Typography.TitleBold>
-        {config.text || label}{' '}
+        {labelText}{' '}
         {optional && (
-          <Typography.Caption className={styles.formLabel__optional}>(Optional)</Typography.Caption>
+          <Typography.Caption className={styles.formLabel__optional}>
+            {resolveText('amity_social_button_report_other_reason_optional')}
+          </Typography.Caption>
         )}
       </Typography.TitleBold>
       {maxLength && (

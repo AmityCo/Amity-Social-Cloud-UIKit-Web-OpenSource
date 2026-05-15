@@ -42,9 +42,15 @@ export function FileButton({
   onClick,
 }: FileButtonProps) {
   const elementId = 'file_button';
-  const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
-    useAmityElement({ pageId, componentId, elementId });
-
+  const {
+    themeStyles,
+    isExcluded,
+    config,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+  } = useAmityElement({ pageId, componentId, elementId });
   if (isExcluded) return null;
 
   return (
@@ -62,7 +68,11 @@ export function FileButton({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-      {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
+      {resolveText('amity_social_button_post_composer_file_button') && (
+        <Typography.BodyBold>
+          {resolveText('amity_social_button_post_composer_file_button')}
+        </Typography.BodyBold>
+      )}
     </div>
   );
 }

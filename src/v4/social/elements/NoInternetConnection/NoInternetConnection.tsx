@@ -21,12 +21,19 @@ export const NoInternetConnection = ({
 }: NoInternetConnectionProps) => {
   const elementId = 'no_internet_connection';
 
-  const { accessibilityId, themeStyles, isExcluded, config, defaultConfig, uiReference } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    themeStyles,
+    isExcluded,
+    config,
+    defaultConfig,
+    uiReference,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -44,7 +51,7 @@ export const NoInternetConnection = ({
       />
 
       <Typography.TitleBold className={styles.noInternetConnection__text}>
-        {config.text}
+        {resolveText('amity_social_label_no_internet_connection')}
       </Typography.TitleBold>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements';
@@ -57,7 +58,7 @@ export const EventAttendees = ({ event }: EventAttendeesProps) => {
     <div ref={containerRef}>
       <div data-scrolled={isScrolled} className={styles.eventAttendees__topBar}>
         <BackButton onPress={() => onBack()} />
-        <Typography.TitleBold>Attendees</Typography.TitleBold>
+        <Typography.TitleBold>{useString('amity_social_button_attendees')}</Typography.TitleBold>
         <div className={styles.eventAttendees__spacer} />
       </div>
 

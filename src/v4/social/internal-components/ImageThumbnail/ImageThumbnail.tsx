@@ -1,4 +1,5 @@
 import React from 'react';
+import { useString } from '~/v4/core/localization';
 import { Drawer as $Drawer } from 'vaul';
 import CloseIcon from '~/v4/icons/Close';
 import { Typography } from '~/v4/core/components';
@@ -306,6 +307,7 @@ function AltText({ file, onAltTextChange }: AltTextProps) {
   const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = React.useState(false);
+  const addAltTextTitle = useString('amity_social_label_image_add_alt_text_title');
 
   return (
     <div className={styles.thumbnail__altText}>
@@ -341,7 +343,7 @@ function AltText({ file, onAltTextChange }: AltTextProps) {
                             defaultClassName={styles.altTextConfig__header__icon}
                           />
                           <div>
-                            <Typography.Headline>Alt text</Typography.Headline>
+                            <Typography.Headline>{addAltTextTitle}</Typography.Headline>
                             <Typography.Caption className={styles.altTextConfig__header__count}>
                               {count}/180
                             </Typography.Caption>
@@ -379,6 +381,11 @@ export function AltTextBottomSheet({
   onAltTextChange,
   mode = 'create',
 }: AltTextBottomSheetProps) {
+  const addAltTextTitle = useString('amity_social_label_image_add_alt_text_title');
+  const editAltTextTitle = useString('amity_social_label_image_edit_alt_text_title');
+  const doneLabel = useString('amity_social_button_done');
+  const editLabel = useString('amity_social_button_community_setup_edit_button');
+
   return (
     <$Drawer.Root
       open={isOpen}
@@ -416,7 +423,7 @@ export function AltTextBottomSheet({
                 />
                 <div className={styles.altTextConfig__mobile__header__title}>
                   <Typography.BodyBold>
-                    {mode === 'create' ? 'Alt text' : 'Edit alt text'}
+                    {mode === 'create' ? addAltTextTitle : editAltTextTitle}
                   </Typography.BodyBold>
                   <Typography.Caption className={styles.altTextConfig__mobile__header__count}>
                     {count}/180
@@ -430,7 +437,7 @@ export function AltTextBottomSheet({
                   form="alt-text-form"
                   isDisabled={isDisabled}
                 >
-                  {mode === 'create' ? 'Done' : 'Save'}
+                  {mode === 'create' ? doneLabel : editLabel}
                 </AriaButton>
               </div>
             )}

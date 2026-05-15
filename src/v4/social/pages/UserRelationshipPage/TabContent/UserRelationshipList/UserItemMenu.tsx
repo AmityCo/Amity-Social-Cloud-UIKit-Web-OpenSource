@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useString } from '~/v4/core/localization';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Typography } from '~/v4/core/components';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -58,7 +59,9 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
           >
             <Flag className={styles.userItem__menuButton__icon} />
             <Typography.BodyBold className={styles.userItem__menuButton__label}>
-              {isReportedByMe ? 'Unreport user' : 'Report user'}
+              {isReportedByMe
+                ? useString('amity_social_button_unreport_user')
+                : useString('amity_social_button_report_user')}
             </Typography.BodyBold>
           </Button>
           <Button
@@ -70,7 +73,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
               removeDrawerData();
               if (!online) {
                 notification.info({
-                  content: 'Failed to block user. Please try again.',
+                  content: useString('amity_social_toast_user_block_failed'),
                 });
                 return;
               }
@@ -84,7 +87,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
           >
             <BlockedUser className={styles.userItem__menuButton__icon} />
             <Typography.BodyBold className={styles.userItem__menuButton__label}>
-              Block user
+              {useString('amity_social_button_block_user')}
             </Typography.BodyBold>
           </Button>
         </>

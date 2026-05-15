@@ -136,13 +136,13 @@
     "*/edit_comment_component/cancel_button": {
       "theme": {},
       "cancel_icon": "",
-      "cancel_button_text": "cancel",
+      "cancel_button_text": "",
       "background_color": ""
     },
     "*/edit_comment_component/save_button": {
       "theme": {},
       "save_icon": "",
-      "save_button_text": "Save",
+      "save_button_text": "",
       "background_color": ""
     },
 
@@ -152,13 +152,13 @@
     "*/hyper_link_config_component/done_button": {
       "theme": {},
       "done_icon": "",
-      "done_button_text": "Done",
+      "done_button_text": "",
       "background_color": ""
     },
     "*/hyper_link_config_component/cancel_button": {
       "theme": {},
       "cancel_icon": "",
-      "cancel_button_text": "Cancel"
+      "cancel_button_text": ""
     },
     "*/comment_tray_component/*": {
       "theme": {}

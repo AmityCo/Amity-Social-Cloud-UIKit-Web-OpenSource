@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -24,6 +25,7 @@ import styles from './PollTargetSelectionPage.module.css';
 
 export function PollTargetSelectionPage() {
   const { client } = useSDK();
+
   const pageId = 'select_poll_target_page';
   const { themeStyles } = useAmityPage({
     pageId,
@@ -38,6 +40,7 @@ export function PollTargetSelectionPage() {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const choosePollTypeLabel = useString('amity_social_label_choose_poll_type');
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
@@ -61,7 +64,11 @@ export function PollTargetSelectionPage() {
           onPress={() => onBack()}
           imgClassName={styles.pollTargetSelectionPage__closeButton}
         />
-        <Title pageId={pageId} titleClassName={styles.pollTargetSelectionPage__title} />
+        <Title
+          pageId={pageId}
+          titleClassName={styles.pollTargetSelectionPage__title}
+          textKey="amity_social_button_post_to"
+        />
         <div />
       </div>
       <div className={styles.pollTargetSelectionPage__timelineContainer}>
@@ -75,7 +82,7 @@ export function PollTargetSelectionPage() {
                   view: 'desktop',
                   isDismissable: false,
                   onClose: () => closePopup(),
-                  header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                  header: <Typography.Headline>{choosePollTypeLabel}</Typography.Headline>,
                   children: () => (
                     <PollTypeSelection
                       targetId={null}
@@ -96,11 +103,16 @@ export function PollTargetSelectionPage() {
           }}
         >
           <MyTimelineAvatar pageId={pageId} userId={user?.userId} />
-          <MyTimelineText pageId={pageId} />
+          <MyTimelineText
+            pageId={pageId}
+            textId="amity_social_button_select_poll_target_my_timeline"
+          />
         </Button>
       </div>
       <div className={styles.pollTargetSelectionPage__line} />
-      <div className={styles.pollTargetSelectionPage__myCommunities}>My Communities</div>
+      <div className={styles.pollTargetSelectionPage__myCommunities}>
+        {useString('amity_social_button_my_communities')}
+      </div>
       {communities
         .filter((community) => canCreatePostCommunity(client, community))
         .map((community) => {
@@ -117,7 +129,7 @@ export function PollTargetSelectionPage() {
                       view: 'desktop',
                       isDismissable: false,
                       onClose: () => closePopup(),
-                      header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                      header: <Typography.Headline>{choosePollTypeLabel}</Typography.Headline>,
                       children: () => (
                         <PollTypeSelection
                           onClickNext={() =>

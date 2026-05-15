@@ -32,12 +32,19 @@ export function ExploreCommunitiesButton({
   onClick,
 }: DescriptionProps) {
   const elementId = 'explore_communities_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    accessibilityId,
+    config,
+    defaultConfig,
+    isExcluded,
+    uiReference,
+    themeStyles,
+    resolveText,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -50,7 +57,7 @@ export function ExploreCommunitiesButton({
     >
       <Globe className={styles.exploreCommunitiesButton__icon} />
       <Typography.BodyBold className={styles.exploreCommunitiesButton__text}>
-        {config.text}
+        {resolveText('amity_social_button_social_home_explore_button')}
       </Typography.BodyBold>
     </Button>
   );

@@ -13,7 +13,7 @@ export const CommunityInviteMemberDescription = ({
   componentId = '*',
 }: CommunityInviteMemberDescriptionProps) => {
   const elementId = 'community_invite_member_description';
-  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -27,7 +27,7 @@ export const CommunityInviteMemberDescription = ({
       data-testid={accessibilityId}
       className={styles.communityInviteMemberDescription}
     >
-      {config.text}
+      {resolveText('amity_social_label_community_setup_invite_members_description')}
     </Typography.Caption>
   );
 };

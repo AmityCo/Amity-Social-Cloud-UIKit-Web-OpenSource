@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -34,6 +35,7 @@ export function StoryTargetSelectionPage() {
   const { AmityStoryTargetSelectionPage } = usePageBehavior();
   const { file, setFile } = useStoryContext();
   const { client } = useSDK();
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
 
@@ -117,12 +119,16 @@ export function StoryTargetSelectionPage() {
           pageId={pageId}
           onPress={() => onBack()}
         />
-        <Title pageId={pageId} titleClassName={styles.selectStoryTargetPage__title} />
+        <Title
+          pageId={pageId}
+          titleClassName={styles.selectStoryTargetPage__title}
+          textKey="amity_social_button_post_to"
+        />
         <div />
       </div>
 
       <Typography.Body className={styles.selectStoryTargetPage__myCommunities_text}>
-        My Communities
+        {useString('amity_social_button_my_communities')}
       </Typography.Body>
       <div className={styles.selectStoryTargetPage__myCommunities__container}>
         {renderCommunity}

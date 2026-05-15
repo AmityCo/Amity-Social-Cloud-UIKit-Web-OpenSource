@@ -9,6 +9,7 @@ import { Avatar } from '~/v4/core/components/Avatar/Avatar';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import styles from './ChatHeader.module.css';
 import { useNetworkState } from 'react-use';
+import { useString } from '~/v4/core/localization';
 
 interface ChatHeaderProps {
   channel: Amity.Channel | null;
@@ -21,6 +22,7 @@ export const ChatHeader = ({ channel, pageId = '*' }: ChatHeaderProps) => {
   const { themeStyles } = useAmityComponent({ pageId, componentId });
   const { chatName, chatAvatar } = useChatInfo({ channel });
   const { online } = useNetworkState();
+  const waitingForConnectionLabel = useString('amity_social_label_waiting_for_network');
 
   return (
     <div className={styles.messageListHeader} style={themeStyles}>
@@ -45,7 +47,7 @@ export const ChatHeader = ({ channel, pageId = '*' }: ChatHeaderProps) => {
           ) : (
             <>
               <ConnectionSpinner width={20} height={20} />
-              <Typography.Caption>Waiting for connection...</Typography.Caption>
+              <Typography.Caption>{waitingForConnectionLabel}</Typography.Caption>
             </>
           )}
         </div>
