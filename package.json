@@ -10,7 +10,6 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
       "default": "./dist/index.js"
     },
@@ -22,7 +21,6 @@
   "files": [
     "dist/"
   ],
-  "types": "dist/index.d.ts",
   "description": "React Ui-Kit for Amity Social Cloud",
   "scripts": {
     "prepare": "husky install",

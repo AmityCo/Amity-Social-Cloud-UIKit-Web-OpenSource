@@ -5,7 +5,12 @@ import pkg from './package.json';
 export default defineConfig((options) => ({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: true,
+  // `.d.ts` emission disabled: monorepo consumers do not import the fork's
+  // types directly (they wrap the dynamic imports with local structural types
+  // in `packages/amity/src/uikit/index.ts`). Skipping dts also avoids tsup's
+  // rollup-dts plugin failing on TS4023 from `@types/react` pulled via pnpm's
+  // workspace hoisting.
+  dts: false,
   sourcemap: options.sourcemap,
   // Avoid esbuild's CSS-module identifier minification. It can emit global
   // selectors such as `.md`, which collides with Ionic's Material Design mode
