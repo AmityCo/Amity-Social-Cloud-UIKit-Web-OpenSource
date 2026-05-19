@@ -43,6 +43,9 @@ type CommentListProps = {
   commentListClassName?: string;
   showReplyCommentAt?: string;
   eventCreatorId?: Amity.Event['userId'];
+  /** When true, suppress the "No comments yet" placeholder so the list can be embedded
+   *  in dense surfaces (e.g. feed cards) without reserving vertical space. */
+  hideEmptyState?: boolean;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -67,6 +70,7 @@ export const CommentList = ({
   commentListClassName,
   showReplyCommentAt,
   eventCreatorId,
+  hideEmptyState = false,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -239,7 +243,7 @@ export const CommentList = ({
     );
   }
 
-  if (!isLoading && items.length === 0 && visiblePendingL0.length === 0) {
+  if (!isLoading && items.length === 0 && visiblePendingL0.length === 0 && !hideEmptyState) {
     return (
       <div className={styles.noCommentsContainer}>
         <Typography.Body>No comments yet</Typography.Body>

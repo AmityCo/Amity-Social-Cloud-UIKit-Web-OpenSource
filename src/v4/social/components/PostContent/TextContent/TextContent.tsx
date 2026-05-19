@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { PostContentType } from '@amityco/ts-sdk';
 import useStream from '~/v4/social/hooks/useStream';
 import usePost from '~/v4/core/hooks/objects/usePost';
@@ -7,6 +8,7 @@ import { TextWithMention } from '~/v4/social/internal-components/TextWithMention
 import { Typography } from '~/v4/core/components';
 import styles from './TextContent.module.css';
 import { isValidUrl } from '~/v4/social/utils/isValidUrl';
+import { extractLinks } from '~/v4/social/utils/extractLinks';
 
 type TextContentProps = {
   title?: string;
@@ -54,7 +56,12 @@ export const TextContent = ({
 
   const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
 
-  const firstLinkWithPreview = post?.links?.find((link) => link.renderPreview);
+  const effectiveLinks = useMemo<Amity.Link[]>(() => {
+    if (post?.links && post.links.length > 0) return post.links;
+    return extractLinks(text);
+  }, [post?.links, text]);
+
+  const firstLinkWithPreview = effectiveLinks.find((link) => link.renderPreview);
   const canPreviewShown =
     firstLinkWithPreview && !isHasMedia && isValidUrl(firstLinkWithPreview.url);
 
@@ -103,7 +110,7 @@ export const TextContent = ({
               mentionees={mentionees}
               metadata={{ mentioned, hashtagged }}
               hashtags={hashtags}
-              links={post?.links}
+              links={effectiveLinks}
               productTags={productTags}
               keyword={keyword}
               isSearchPost={isSearchPost}
