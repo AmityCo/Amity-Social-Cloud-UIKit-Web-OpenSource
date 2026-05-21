@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.16.1 (2026-05-21)
+
+
+### Bug Fixes
+
+* remove bundke th language ([4e00f32](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/4e00f32e2444c60357436d8737aa1d766c558390))
+
 ## 4.16.0 (2026-05-15)
 
 
