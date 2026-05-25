@@ -27,6 +27,7 @@ interface RegisterDeviceParams {
   onDisconnected?: () => void;
   onGlobalBanned?: (payload: Amity.UserPayload) => void;
   onUserDeleted?: (payload: Amity.UserPayload) => void;
+  onVisitorUsageLimitReached?: () => void;
 }
 
 /**
@@ -54,8 +55,10 @@ export class AmityUIKitManager {
   private onConnected?: () => void;
   private onDisconnected?: () => void;
   private globalBannedUnsubscribe?: Amity.Unsubscriber;
+  private visitorUsageLimitUnsubscribe?: Amity.Unsubscriber;
   private onGlobalBanned?: (users: Amity.UserPayload) => void;
   private onUserDeleted?: (users: Amity.UserPayload) => void;
+  private onVisitorUsageLimitReached?: () => void;
 
   /**
    * Private constructor to prevent direct instantiation.
@@ -101,6 +104,7 @@ export class AmityUIKitManager {
     onDisconnected,
     onGlobalBanned,
     onUserDeleted,
+    onVisitorUsageLimitReached,
   }: RegisterDeviceParams): Promise<void> {
     if (!AmityUIKitManager.instance) {
       throw new Error('AmityUIKitManager must be set up first using the setup method.');
@@ -111,6 +115,7 @@ export class AmityUIKitManager {
     AmityUIKitManager.instance.onDisconnected = onDisconnected;
     AmityUIKitManager.instance.onGlobalBanned = onGlobalBanned;
     AmityUIKitManager.instance.onUserDeleted = onUserDeleted;
+    AmityUIKitManager.instance.onVisitorUsageLimitReached = onVisitorUsageLimitReached;
 
     await AmityUIKitManager.instance.connectAndLogin({
       userId,
@@ -180,6 +185,10 @@ export class AmityUIKitManager {
       this.onGlobalBanned?.(payload);
     });
 
+    this.visitorUsageLimitUnsubscribe = ASCClient.onVisitorUsageLimitReached(() => {
+      this.onVisitorUsageLimitReached?.();
+    });
+
     // TODO: confirm if we have this on SDK - confirm with mobile platform
 
     // this.deletedUserUnsubscribe = ASCClient.onUserDeleted((payload) => {
@@ -201,6 +210,7 @@ export class AmityUIKitManager {
     this.stateChangeHandler?.();
     this.disconnectedHandler?.();
     this.globalBannedUnsubscribe?.();
+    this.visitorUsageLimitUnsubscribe?.();
     this.client = null;
     this.isConnected = false;
   }

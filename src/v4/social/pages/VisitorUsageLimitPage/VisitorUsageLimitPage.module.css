@@ -1,0 +1,59 @@
+/* Mobile: full-screen, vertically and horizontally centered */
+.visitorUsageLimitPage {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--asc-color-background-default);
+}
+
+.visitorUsageLimitPage__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.visitorUsageLimitPage__icon {
+  width: 3.75rem;
+  height: 2.5rem;
+  margin-bottom: 1rem;
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.visitorUsageLimitPage__text {
+  text-align: center;
+  color: var(--asc-color-base-shade3);
+  white-space: pre-line;
+}
+
+.visitorUsageLimitPage__signInButton {
+  margin-top: 1rem;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--asc-color-primary-default);
+}
+
+/* Desktop: centered white card on shade background */
+@media (width >= 768px) {
+  .visitorUsageLimitPage {
+    background-color: #f6f7f8;
+  }
+
+  .visitorUsageLimitPage__card {
+    width: auto;
+    min-width: 25rem;
+    padding: 5.3125rem 2rem;
+    background-color: var(--asc-color-background-default);
+    border: 1px solid #ebecef;
+    border-radius: 0.5rem;
+  }
+}

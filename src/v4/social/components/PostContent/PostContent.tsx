@@ -48,6 +48,8 @@ import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBe
 import { EventHostBadge } from '~/v4/social/elements';
 import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -147,6 +149,8 @@ export const PostContent = ({
   const componentId = 'post_content';
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+  const { isVisitorOrBot } = useSDK();
+  const { AmityGlobalBehavior } = usePageBehavior();
 
   const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
@@ -689,7 +693,7 @@ export const PostContent = ({
                 />
               </div>
               <div className={styles.postContent__reactionBar__rightPane}>
-                {(!targetCommunity || targetCommunity?.isPublic) && (
+                {(!targetCommunity || targetCommunity?.isPublic || isVisitorOrBot) && (
                   <Popover
                     containerClassName={styles.postContent__bar__actionButton}
                     trigger={({ openPopover }) => (
@@ -699,7 +703,13 @@ export const PostContent = ({
                         componentId={componentId}
                         elementId="copy_link_button"
                         defaultIcon={<Share className={styles.postContent__shareIcon} />}
-                        onPress={() =>
+                        onPress={() => {
+                          if (isVisitorOrBot) {
+                            AmityGlobalBehavior?.handleVisitorUsageLimitSignIn?.({
+                              alignment: 'withSidebar',
+                            });
+                            return;
+                          }
                           isDesktop
                             ? openPopover()
                             : setDrawerData({
@@ -712,8 +722,8 @@ export const PostContent = ({
                                     onDone={removeDrawerData}
                                   />
                                 ),
-                              })
-                        }
+                              });
+                        }}
                       />
                     )}
                   >

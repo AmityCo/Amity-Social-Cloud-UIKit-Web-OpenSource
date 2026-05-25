@@ -56,11 +56,12 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
+import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
   const [open, setOpen] = useState(false);
-  const { page, goToSocialHomePage } = useNavigation();
+  const { page, goToSocialHomePage, handleVisitorUsageLimitSignIn } = useNavigation();
   const { liveStreamPlayer } = useLayoutContext();
   const toggleOpen = () => setOpen((open) => !open);
 
@@ -74,6 +75,16 @@ const Application = () => {
       goToSocialHomePage();
     }
   }, [isDesktop]);
+
+  if (page.type === PageTypes.VisitorUsageLimitPage) {
+    return (
+      <div className={styles.applicationContainer}>
+        <VisitorUsageLimitPage
+          onSignIn={() => handleVisitorUsageLimitSignIn({ alignment: 'fixed' })}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.applicationContainer}>

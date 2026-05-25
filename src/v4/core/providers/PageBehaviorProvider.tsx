@@ -258,6 +258,8 @@ export interface PageBehavior {
     handleNonFollowerAction?(context: { alignment: NotificationAlignment }): void;
     onPostProductTagClick?(context: { product: Amity.Product }): void;
     onLivestreamProductTagClick?(context: { product: Amity.Product }): void;
+    handleVisitorUsageLimitReached?(): void;
+    handleVisitorUsageLimitSignIn?(context: { alignment: NotificationAlignment }): void;
   };
   AmityEventTargetSelectionPageBehavior?: {
     goToEventSetupPage?(context: EventSetupProps): void;
@@ -355,6 +357,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     handleVisitorUserAction,
     handleNonMemberAction,
     handleNonFollowerAction,
+    handleVisitorUsageLimitSignIn,
     goToEventSetupPage,
     goToCreateCommunityPage,
     goToUpcomingEventsPage,
@@ -1010,6 +1013,18 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         context.product?.productUrl &&
           window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
+      },
+      handleVisitorUsageLimitReached: () => {
+        if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUsageLimitReached) {
+          return pageBehavior.AmityGlobalBehavior.handleVisitorUsageLimitReached();
+        }
+        // Default: no-op here — state is driven from AmityUIKitProvider via onVisitorUsageLimitReached callback
+      },
+      handleVisitorUsageLimitSignIn: (context: { alignment: NotificationAlignment }) => {
+        if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUsageLimitSignIn) {
+          return pageBehavior.AmityGlobalBehavior.handleVisitorUsageLimitSignIn(context);
+        }
+        handleVisitorUsageLimitSignIn(context);
       },
     },
     AmityMyCommunitiesComponentBehavior: {

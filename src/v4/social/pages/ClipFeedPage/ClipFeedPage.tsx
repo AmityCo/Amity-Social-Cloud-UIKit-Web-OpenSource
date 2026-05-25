@@ -484,18 +484,25 @@ export const ClipFeedPage = ({
       data-testid={accessibilityId}
       className={styles.clipFeedPage__container}
     >
-      {!isVisitorOrBot &&
-      (post === undefined ||
-        post?.isDeleted ||
-        (posts.length === 0 && !isLoading && !isLoadingCollectionPosts)) ? (
+      {post === undefined ||
+      post?.isDeleted ||
+      (posts.length === 0 && !isLoading && !isLoadingCollectionPosts) ||
+      (isVisitorOrBot &&
+        posts.length === 0 &&
+        !isGlobalFeedLoading &&
+        !isLoadingCollectionPosts) ? (
         <EmptyFeed
           pageId={pageId}
-          onClickBack={() => onBack()}
+          onClickBack={() => {
+            onBack();
+            isVisitorOrBot ? setActiveTab(HomePageTab.Communities) : null;
+          }}
           onPressCreateNewClip={() =>
             AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
               isClipPost: true,
             })
           }
+          isVisitorOrBot={isVisitorOrBot}
         />
       ) : (
         <Swiper

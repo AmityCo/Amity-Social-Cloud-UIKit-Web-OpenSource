@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: '>=7.21.0'
-        version: 7.21.0
+        specifier: 7.21.1-fa2c575.0
+        version: 7.21.1-fa2c575.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -342,8 +342,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.21.0':
-    resolution: {integrity: sha512-rPBiiwQjtdZT0FEzdT+MNW+yyXO8u/FyqbcB6L+R/ReZcA0FLWnQp+AzNH1sRdpTwNmPziLACqCSd3Ka7MzupA==}
+  '@amityco/ts-sdk@7.21.1-fa2c575.0':
+    resolution: {integrity: sha512-V+6Yg3UAQWVQmY/CfzA3v/QDOi4RuIBlT/JdxP1zoZkbhOC/mSK6ev4kK1jt7s9Teb2+hZAZJspNGgm92YwLXA==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7909,8 +7909,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  ws@7.5.10:
-    resolution: {integrity: sha512-+dbF1tHwZpXcbOJdVOkzLDxZP1ailvSxM6ZweXTegylPny803bFhA+vqBYw4s31NSAk4S2Qz+AKXK9a4wkdjcQ==}
+  ws@7.5.11:
+    resolution: {integrity: sha512-zS54Oen9bITtp7kp2XM3AydrCIq1D+HwJOuH+c+e4LfpL/lotP5osijd+UoMnxwAam1GN8R4KtLAyIrIcBNpiA==}
     engines: {node: '>=8.3.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -7994,7 +7994,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.21.0':
+  '@amityco/ts-sdk@7.21.1-fa2c575.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
@@ -15138,7 +15138,7 @@ snapshots:
       reinterval: 1.1.0
       rfdc: 1.4.1
       split2: 3.2.2
-      ws: 7.5.10
+      ws: 7.5.11
       xtend: 4.0.2
     transitivePeerDependencies:
       - bufferutil
@@ -17227,7 +17227,7 @@ snapshots:
     dependencies:
       async-limiter: 1.0.1
 
-  ws@7.5.10: {}
+  ws@7.5.11: {}
 
   ws@8.18.2: {}
 
