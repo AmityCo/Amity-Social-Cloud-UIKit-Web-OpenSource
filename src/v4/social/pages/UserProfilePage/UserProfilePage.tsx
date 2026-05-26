@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './UserProfilePage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -172,7 +172,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   isDismissable: false,
                   header: (
                     <Typography.Headline>
-                      {useString('amity_social_label_choose_poll_type')}
+                      {resolveString('amity_social_label_choose_poll_type')}
                     </Typography.Headline>
                   ),
                   children: ({ close }) => (
