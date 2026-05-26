@@ -57,6 +57,8 @@ import {
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
+import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
+import { usePost } from '~/v4/social/hooks';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -78,8 +80,17 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const wasEverLiveRef = useRef(false);
 
   const { post: subscribedPost } = usePostSubscription(post?.childrenPosts[0]?.postId);
-  const { post: parentPost } = usePostSubscription(post?.postId);
-  const { room } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
+
+  const { room, isLoading: isLoadingRoom } = useRoom(
+    subscribedPost?.getRoomInfo()?.roomId ?? roomId,
+  );
+
+  const { post: parentPost, isLoading: isLoadingParentPost } = usePostSubscription(
+    (room?.referenceType === 'post' ? room?.referenceId : room?.post?.postId) ?? post?.postId,
+  );
+
+  const isRoomPostUnavailable =
+    !!roomId && !isLoadingRoom && !isLoadingParentPost && !!room && !parentPost;
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
 
@@ -254,6 +265,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   });
 
   useEffect(() => {
+    if (isLoadingParentPost) return;
+    if (isRoomPostUnavailable) return;
     // if there is roomId, the page open from notification tray
     if (room?.roomId && roomId)
       room.getInvitations().then((invitation) => {
@@ -263,9 +276,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
             content: invitationUnavailableText,
           });
       });
-  }, [room?.roomId]);
+  }, [room?.roomId, isLoadingParentPost, isRoomPostUnavailable]);
 
   useEffect(() => {
+    if (isRoomPostUnavailable) return;
     if (invitations && invitations?.length > 0) {
       const myInvitation = invitations?.find(
         (invitation) =>
@@ -334,7 +348,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         });
       }
     }
-  }, [invitations]);
+  }, [invitations, isRoomPostUnavailable]);
 
   useEffect(() => {
     if (keyboardOffset) setHideChatFeed(true);
@@ -548,181 +562,191 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                 : resolveString('amity_social_livestream_player')
             }
           >
-            {uiState === 'player' ? (
-              <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
-                {(isDesktop || (!isDesktop && room?.status !== 'recorded')) && (
-                  <LivestreamHeader
-                    pageId={pageId}
-                    community={community}
-                    uiState="player"
-                    isLive={isLive && !isUserBanned}
-                    onClose={onClose}
-                    productTags={livestreamPost?.productTags || []}
-                    isHost={isHost}
-                    onUpdateProductTags={handleUpdateProductTags}
-                    canShowProductTags={canShowProductTags}
-                  />
-                )}
-                <div
-                  data-is-live={isLive}
-                  className={styles.liveStreamPlayer__videoSection__wrapper}
-                >
-                  <LivestreamPlayer
-                    themeStyles={themeStyles}
-                    accessibilityId={accessibilityId}
-                    isLive={isLive && !isTerminated}
-                    showWaitingApprovalBanner={showWaitingApprovalBanner}
-                    isLoading={isLoading}
-                    isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
-                    isEnded={isEnded}
-                    isTerminated={!!isTerminated}
-                    isUserBanned={!!isUserBanned}
-                    isRecorded={isRecorded}
-                    pageId={pageId}
-                    ref={videoRef}
-                    productTags={
-                      !isDesktop && isRecorded && hasTaggedProductsToDisplay
-                        ? livestreamPost?.productTags ?? []
-                        : []
-                    }
-                    onClickProductTagBadge={onClickProductTagBadge}
-                    onClose={onClose}
-                    canShowProductTags={canShowProductTags}
-                  />
-                  {isDesktop && !isLive && hasTaggedProductsToDisplay && (
-                    <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
-                      <TaggedProductsModal
-                        key={`${subscribedPost?.productTags?.length}-${subscribedPost?.pinnedProductId || 'none'}`}
-                        roomId={roomId || room?.roomId}
-                        pageId={pageId}
-                        productTags={subscribedPost?.productTags || []}
-                        pinnedProductId={subscribedPost?.pinnedProductId}
-                        isHost={isHost}
-                        onClose={() => {
-                          isProductDrawerOpenRef.current = false;
-                        }}
-                        onUpdateProductTags={(tags) => handleUpdateProductTags(tags)}
-                        onRemove={(tag) => handleRemove(tag)}
-                        canShowAddProducts={canShowProductTags}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div key="backstage-view" className={styles.liveStreamPlayer__cameraSection__wrapper}>
-                {isLeaving && <LivestreamOverlay.LeavingStage />}
-                <LivestreamStage
-                  pageId={pageId}
-                  isCoHost={true}
-                  onClose={onClose}
-                  uiState={uiState}
-                  deviceManagement={deviceManagement}
-                  targetType={subscribedPost?.targetType}
-                  broadcasterData={broadcasterData}
-                  isStarting={isGettingBroadcasterData}
-                  onLeaveStreamStage={(isSessionEnded?: boolean) => {
-                    coHostEndSessionRef.current = isSessionEnded ?? false;
-                    leaveRoom();
-                  }}
-                  onLeaveByKickout={() => {
-                    setUiState('player');
-                    reloadPlayer();
-                  }}
-                  community={community}
-                />
-              </div>
-            )}
-
-            {uiState === 'backStage' ? (
-              <div
-                className={styles.liveStreamPlayer__rightSection__wrapper}
-                key="livestream-setup"
-              >
-                <LivestreamSetup
-                  isCoHost={true}
-                  isEnabledProductTag={productCatalogueSettings?.product.enabled}
-                  isGoLiveButtonDisabled={
-                    deviceManagement.microphonePermission === 'denied' ||
-                    deviceManagement.cameraPermission === 'denied' ||
-                    isGettingBroadcasterData
-                  }
-                  isTargetEvent={
-                    subscribedPost?.targetType !== 'user' &&
-                    subscribedPost?.targetType !== 'community'
-                  }
-                  targetType={subscribedPost?.targetType}
-                  isPending={isGettingBroadcasterData}
-                  pageId={pageId}
-                  onGoLive={handleGoLive}
-                />
-              </div>
+            {isRoomPostUnavailable ? (
+              <FailedToShow pageId={pageId} onBack={onClose} />
             ) : (
               <>
-                {showLivestreamChat && (
-                  <div className={styles.liveStreamPlayer__rightSection__wrapper}>
-                    {isDesktop && channel ? (
-                      <LivestreamChat
+                {uiState === 'player' ? (
+                  <div className={styles.liveStreamPlayer__player__wrapper} key="player-view">
+                    {(isDesktop || (!isDesktop && room?.status !== 'recorded')) && (
+                      <LivestreamHeader
                         pageId={pageId}
-                        isPoorConnection={false}
                         community={community}
-                        isLoading={isChannelLoading}
-                        isPlayer={uiState === 'player'}
-                        isPendingPost={parentPost?.feedType === 'reviewing'}
+                        uiState="player"
+                        isLive={isLive && !isUserBanned}
+                        onClose={onClose}
+                        productTags={livestreamPost?.productTags || []}
+                        isHost={isHost}
+                        onUpdateProductTags={handleUpdateProductTags}
+                        canShowProductTags={canShowProductTags}
                       />
-                    ) : (
-                      <>
-                        {uiState === 'player' &&
-                          plyrContainer &&
-                          ReactDOM.createPortal(
-                            <>
-                              {!hideChatFeed && (
-                                <>
-                                  <div className={styles.livestreamChat__overlay__top} />
-                                  <div className={styles.livestreamChat__overlay__bottom} />
-                                  <div
-                                    className={styles.livestreamChat__reactionLane__ref}
-                                    style={{ bottom: chatContainerHeight }}
-                                  >
-                                    {channel?.attachedTo?.roomId && (
-                                      <ReactionFloating post={room?.post as Amity.Post} />
-                                    )}
-                                  </div>
-                                  <div
-                                    className={styles.livestreamChat__container__inner}
-                                    ref={chatContainerRef}
-                                  >
-                                    {channel && (
-                                      <ChatFeed
-                                        pageId={pageId}
-                                        channel={channel}
-                                        isJoinedCommunity={!!community?.isJoined}
-                                      />
-                                    )}
-                                    {!isPendingPost && (
-                                      <div className={styles.liveStreamPlayer__pinnedProduct}>
-                                        <PinnedProductOverlay pageId={pageId} />
-                                      </div>
-                                    )}
-                                  </div>
-                                </>
-                              )}
-                            </>,
-                            plyrContainer,
-                          )}
-                        {channel && uiState === 'player' && (
-                          <LivestreamChatMessageComposer
-                            pageId={pageId}
-                            channelId={channel.channelId}
-                            disabled={room?.status === liveStreamStatus.ended || isPoorConnection}
-                            community={community}
-                            isPendingPost={parentPost?.feedType === 'reviewing'}
-                            isPlayer={uiState === 'player'}
-                          />
-                        )}
-                      </>
                     )}
+                    <div
+                      data-is-live={isLive}
+                      className={styles.liveStreamPlayer__videoSection__wrapper}
+                    >
+                      <LivestreamPlayer
+                        themeStyles={themeStyles}
+                        accessibilityId={accessibilityId}
+                        isLive={isLive && !isTerminated}
+                        showWaitingApprovalBanner={showWaitingApprovalBanner}
+                        isLoading={isLoading}
+                        isPoorConnection={isPoorConnection || room?.status === 'waitingReconnect'}
+                        isEnded={isEnded}
+                        isTerminated={!!isTerminated}
+                        isUserBanned={!!isUserBanned}
+                        isRecorded={isRecorded}
+                        pageId={pageId}
+                        ref={videoRef}
+                        productTags={
+                          !isDesktop && isRecorded && hasTaggedProductsToDisplay
+                            ? livestreamPost?.productTags ?? []
+                            : []
+                        }
+                        onClickProductTagBadge={onClickProductTagBadge}
+                        onClose={onClose}
+                        canShowProductTags={canShowProductTags}
+                      />
+                      {isDesktop && !isLive && hasTaggedProductsToDisplay && (
+                        <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
+                          <TaggedProductsModal
+                            key={`${subscribedPost?.productTags?.length}-${subscribedPost?.pinnedProductId || 'none'}`}
+                            roomId={roomId || room?.roomId}
+                            pageId={pageId}
+                            productTags={subscribedPost?.productTags || []}
+                            pinnedProductId={subscribedPost?.pinnedProductId}
+                            isHost={isHost}
+                            onClose={() => {
+                              isProductDrawerOpenRef.current = false;
+                            }}
+                            onUpdateProductTags={(tags) => handleUpdateProductTags(tags)}
+                            onRemove={(tag) => handleRemove(tag)}
+                            canShowAddProducts={canShowProductTags}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
+                ) : (
+                  <div
+                    key="backstage-view"
+                    className={styles.liveStreamPlayer__cameraSection__wrapper}
+                  >
+                    {isLeaving && <LivestreamOverlay.LeavingStage />}
+                    <LivestreamStage
+                      pageId={pageId}
+                      isCoHost={true}
+                      onClose={onClose}
+                      uiState={uiState}
+                      deviceManagement={deviceManagement}
+                      targetType={subscribedPost?.targetType}
+                      broadcasterData={broadcasterData}
+                      isStarting={isGettingBroadcasterData}
+                      onLeaveStreamStage={(isSessionEnded?: boolean) => {
+                        coHostEndSessionRef.current = isSessionEnded ?? false;
+                        leaveRoom();
+                      }}
+                      onLeaveByKickout={() => {
+                        setUiState('player');
+                        reloadPlayer();
+                      }}
+                      community={community}
+                    />
+                  </div>
+                )}
+                {uiState === 'backStage' ? (
+                  <div
+                    className={styles.liveStreamPlayer__rightSection__wrapper}
+                    key="livestream-setup"
+                  >
+                    <LivestreamSetup
+                      isCoHost={true}
+                      isEnabledProductTag={productCatalogueSettings?.product.enabled}
+                      isGoLiveButtonDisabled={
+                        deviceManagement.microphonePermission === 'denied' ||
+                        deviceManagement.cameraPermission === 'denied' ||
+                        isGettingBroadcasterData
+                      }
+                      isTargetEvent={
+                        subscribedPost?.targetType !== 'user' &&
+                        subscribedPost?.targetType !== 'community'
+                      }
+                      targetType={subscribedPost?.targetType}
+                      isPending={isGettingBroadcasterData}
+                      pageId={pageId}
+                      onGoLive={handleGoLive}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    {showLivestreamChat && (
+                      <div className={styles.liveStreamPlayer__rightSection__wrapper}>
+                        {isDesktop && channel ? (
+                          <LivestreamChat
+                            pageId={pageId}
+                            isPoorConnection={false}
+                            community={community}
+                            isLoading={isChannelLoading}
+                            isPlayer={uiState === 'player'}
+                            isPendingPost={parentPost?.feedType === 'reviewing'}
+                          />
+                        ) : (
+                          <>
+                            {uiState === 'player' &&
+                              plyrContainer &&
+                              ReactDOM.createPortal(
+                                <>
+                                  {!hideChatFeed && (
+                                    <>
+                                      <div className={styles.livestreamChat__overlay__top} />
+                                      <div className={styles.livestreamChat__overlay__bottom} />
+                                      <div
+                                        className={styles.livestreamChat__reactionLane__ref}
+                                        style={{ bottom: chatContainerHeight }}
+                                      >
+                                        {channel?.attachedTo?.roomId && (
+                                          <ReactionFloating post={room?.post as Amity.Post} />
+                                        )}
+                                      </div>
+                                      <div
+                                        className={styles.livestreamChat__container__inner}
+                                        ref={chatContainerRef}
+                                      >
+                                        {channel && (
+                                          <ChatFeed
+                                            pageId={pageId}
+                                            channel={channel}
+                                            isJoinedCommunity={!!community?.isJoined}
+                                          />
+                                        )}
+                                        {!isPendingPost && (
+                                          <div className={styles.liveStreamPlayer__pinnedProduct}>
+                                            <PinnedProductOverlay pageId={pageId} />
+                                          </div>
+                                        )}
+                                      </div>
+                                    </>
+                                  )}
+                                </>,
+                                plyrContainer,
+                              )}
+                            {channel && uiState === 'player' && (
+                              <LivestreamChatMessageComposer
+                                pageId={pageId}
+                                channelId={channel.channelId}
+                                disabled={
+                                  room?.status === liveStreamStatus.ended || isPoorConnection
+                                }
+                                community={community}
+                                isPendingPost={parentPost?.feedType === 'reviewing'}
+                                isPlayer={uiState === 'player'}
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}

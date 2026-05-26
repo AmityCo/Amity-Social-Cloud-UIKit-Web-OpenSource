@@ -11,3 +11,6 @@ storybook-build/
 dist/
 
 _temporary
+
+.claude/
+CLAUDE.md
