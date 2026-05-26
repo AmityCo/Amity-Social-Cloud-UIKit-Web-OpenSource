@@ -44,8 +44,21 @@ export const UploadsContainer = styled.div`
 
 export const PostInputText = styled(InputText)`
   display: block;
-  & > textarea {
+  /*
+   * Match v4 CommentComposer's foreground/background so the v3 post composer
+   * tracks our DS tokens in both light and dark themes instead of the kit's
+   * styled-components palette (which is frozen at light). Drop the wrapper
+   * border (the v4 comment input has no border either) and match the post
+   * card's corner radius.
+   */
+  background: var(--asc-color-base-shade4) !important;
+  border: none !important;
+  border-radius: var(--asc-border-radius-md) !important;
+  overflow: hidden !important;
+
+  textarea {
     width: 100%;
+    color: var(--asc-color-base-default) !important;
   }
 `;
 
