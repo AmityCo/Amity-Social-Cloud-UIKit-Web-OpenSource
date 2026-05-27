@@ -503,6 +503,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
                 result.mentioned.map((m) => ({
                   type: m.userId ? 'user' : 'channel',
                   userId: m.userId,
+                  displayName: m.displayName,
                   index: m.index,
                   length: m.length,
                 })),
