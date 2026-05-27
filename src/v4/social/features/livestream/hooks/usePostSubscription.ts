@@ -8,6 +8,7 @@ export const usePostSubscription = (postId?: string) => {
   useEffect(() => {
     if (post) {
       const unsubscribe = subscribeTopic(getPostTopic(post));
+
       return () => unsubscribe();
     }
   }, [post]);
