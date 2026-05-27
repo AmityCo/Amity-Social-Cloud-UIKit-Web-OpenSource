@@ -17,7 +17,6 @@ export const AdInformation = ({ isOpen, onOpenChange, ad }: AdInformationProps) 
     <Drawer.Root
       open={isOpen}
       onOpenChange={onOpenChange}
-      repositionInputs={false}
       onDrag={(event) => event.stopPropagation()}
     >
       <Drawer.Portal>

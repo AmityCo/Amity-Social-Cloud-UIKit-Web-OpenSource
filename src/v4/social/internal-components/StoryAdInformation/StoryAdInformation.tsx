@@ -23,7 +23,6 @@ export const StoryAdInformation = ({
     <Drawer.Root
       open={isOpen}
       onOpenChange={onOpenChange}
-      repositionInputs={false}
       onDrag={(ev) => {
         ev.preventDefault();
         ev.stopPropagation();

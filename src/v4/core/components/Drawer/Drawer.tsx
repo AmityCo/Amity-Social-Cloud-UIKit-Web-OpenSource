@@ -25,7 +25,6 @@ export const DrawerContainer = () => {
       setActiveSnapPoint={handleSnapPointChange}
       modal={true}
       dismissible={true}
-      repositionInputs={false}
     >
       <Drawer.Portal>
         <Drawer.Overlay className={styles.drawer__overlay} />

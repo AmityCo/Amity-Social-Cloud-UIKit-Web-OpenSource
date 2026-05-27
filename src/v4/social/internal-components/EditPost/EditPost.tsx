@@ -993,7 +993,6 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                 <Drawer.Root
                   modal={false}
                   open
-                  repositionInputs={false}
                   activeSnapPoint={snap}
                   snapPoints={[
                     HEIGHT_MEDIA_ATTACHMENT_MENU,

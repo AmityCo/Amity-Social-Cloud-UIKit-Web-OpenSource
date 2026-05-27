@@ -393,7 +393,6 @@ export function AltTextBottomSheet({
       snapPoints={[1]}
       activeSnapPoint={1}
       modal={false}
-      repositionInputs={false}
     >
       <$Drawer.Portal>
         <$Drawer.Overlay className={styles.drawer__overlay} />
