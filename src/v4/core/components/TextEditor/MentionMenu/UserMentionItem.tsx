@@ -30,40 +30,35 @@ export function UserMentionItem({
   if (!user) return null;
 
   return (
-    // onPointerDown preventDefault prevents the editor from losing focus before
-    // react-aria's onPress (pointerup) fires. Using onPointerDown (not onMouseDown)
-    // ensures this also works on mobile touch, where mousedown does not fire.
-    <div onPointerDown={(e) => e.preventDefault()}>
-      <Button
-        key={option.key}
-        onPress={() => onClick(user)}
-        ref={option.setRefElement}
-        aria-selected={isSelected}
-        onHoverStart={onMouseEnter}
-        data-is-selected={isSelected}
-        className={styles.userMentionItem__item}
-        data-testid={`${pageId}/${componentId}/mention_item`}
-        variant="text"
-      >
-        <UserAvatar
-          pageId={pageId}
-          componentId={componentId}
-          userId={option.data.userId}
-          className={styles.userMentionItem__avatar}
-        />
-        <div className={styles.userMentionItem__rightPane}>
-          <Typography.BodyBold className={styles.userMentionItem__displayName}>
-            {user?.displayName}
-          </Typography.BodyBold>
-          {user?.isBrand ? (
-            <BrandBadge
-              pageId={pageId}
-              componentId={componentId}
-              className={styles.userMentionItem__brandIcon}
-            />
-          ) : null}
-        </div>
-      </Button>
-    </div>
+    <Button
+      key={option.key}
+      onPress={() => onClick(user)}
+      ref={option.setRefElement}
+      aria-selected={isSelected}
+      onHoverStart={onMouseEnter}
+      data-is-selected={isSelected}
+      className={styles.userMentionItem__item}
+      data-testid={`${pageId}/${componentId}/mention_item`}
+      variant="text"
+    >
+      <UserAvatar
+        pageId={pageId}
+        componentId={componentId}
+        userId={option.data.userId}
+        className={styles.userMentionItem__avatar}
+      />
+      <div className={styles.userMentionItem__rightPane}>
+        <Typography.BodyBold className={styles.userMentionItem__displayName}>
+          {user?.displayName}
+        </Typography.BodyBold>
+        {user?.isBrand ? (
+          <BrandBadge
+            pageId={pageId}
+            componentId={componentId}
+            className={styles.userMentionItem__brandIcon}
+          />
+        ) : null}
+      </div>
+    </Button>
   );
 }
