@@ -35,39 +35,43 @@ export function ProductMentionItem({
   if (!product) return null;
 
   return (
-    <Button
-      key={option.key}
-      onPress={() => !isAlreadyTagged && onClick(product)}
-      ref={option.setRefElement}
-      aria-selected={isSelected}
-      aria-disabled={isAlreadyTagged}
-      onHoverStart={onMouseEnter}
-      data-is-selected={isSelected}
-      data-is-already-tagged={isAlreadyTagged}
-      className={styles.productMentionItem__item}
-      data-testid={`${pageId}/${componentId}/product_mention_item`}
-      variant="text"
-    >
-      <ProductImageThumbnail
-        imageUrl={product.thumbnailUrl}
-        alt={product.productName}
-        size="small"
-        className={styles.productMentionItem__thumbnail}
-        thumbnailMode={product.thumbnailMode}
-      />
-      <div className={styles.productMentionItem__content}>
-        <Typography.BodyBold
-          className={styles.productMentionItem__name}
-          data-is-already-tagged={isAlreadyTagged}
-        >
-          {product.productName}
-        </Typography.BodyBold>
-        {isAlreadyTagged && (
-          <Typography.Caption className={styles.productMentionItem__alreadyTagged}>
-            Already tagged
-          </Typography.Caption>
-        )}
-      </div>
-    </Button>
+    // onPointerDown preventDefault prevents the editor from losing focus before
+    // react-aria's onPress (pointerup) fires. Works for both mouse and touch.
+    <div onPointerDown={(e) => e.preventDefault()}>
+      <Button
+        key={option.key}
+        onPress={() => !isAlreadyTagged && onClick(product)}
+        ref={option.setRefElement}
+        aria-selected={isSelected}
+        aria-disabled={isAlreadyTagged}
+        onHoverStart={onMouseEnter}
+        data-is-selected={isSelected}
+        data-is-already-tagged={isAlreadyTagged}
+        className={styles.productMentionItem__item}
+        data-testid={`${pageId}/${componentId}/product_mention_item`}
+        variant="text"
+      >
+        <ProductImageThumbnail
+          imageUrl={product.thumbnailUrl}
+          alt={product.productName}
+          size="small"
+          className={styles.productMentionItem__thumbnail}
+          thumbnailMode={product.thumbnailMode}
+        />
+        <div className={styles.productMentionItem__content}>
+          <Typography.BodyBold
+            className={styles.productMentionItem__name}
+            data-is-already-tagged={isAlreadyTagged}
+          >
+            {product.productName}
+          </Typography.BodyBold>
+          {isAlreadyTagged && (
+            <Typography.Caption className={styles.productMentionItem__alreadyTagged}>
+              Already tagged
+            </Typography.Caption>
+          )}
+        </div>
+      </Button>
+    </div>
   );
 }

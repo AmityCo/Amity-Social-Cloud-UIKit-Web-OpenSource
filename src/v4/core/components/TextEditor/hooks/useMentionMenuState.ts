@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
-import { ColorSlider } from 'react-aria-components';
 
 export const useMentionMenuState = () => {
   const [isMentionMenuManuallyClosed, setIsMentionMenuManuallyClosed] = useState(false);
@@ -11,8 +10,14 @@ export const useMentionMenuState = () => {
         // If query changed (user typed @), reset the manual close flag
         if (newQuery !== lastQueryString.current) {
           if (newQuery != null && lastQueryString.current === null) {
-            // User just typed @, allow menu to open
+            // User just typed @, allow menu to open.
+            // Also propagate the query immediately — we cannot rely on the
+            // !isMentionMenuManuallyClosed branch below because state is still
+            // true in the current closure render cycle (stale closure).
             setIsMentionMenuManuallyClosed(false);
+            lastQueryString.current = newQuery;
+            originalOnQueryChange(newQuery);
+            return;
           }
           lastQueryString.current = newQuery;
         }
