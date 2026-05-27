@@ -4,6 +4,7 @@ import useCommunityProfileGlobalBehavior from './useCommunityProfileGlobalBehavi
 import { useResponsive } from './useResponsive';
 import useSDK from './useSDK';
 import useUserProfileGlobalBehavior from './useUserProfileGlobalBehavior';
+import { MEETPERRY_DEFAULT_REACTION } from '~/v4/core/constants/meetperryReactions';
 
 interface UseReactionHandlerOptions {
   myReaction?: string | null;
@@ -290,8 +291,8 @@ export function useReactionHandler({
       const result = onReactionClick(currentReaction);
       result && setOptimisticReaction(null);
     } else {
-      const result = onReactionClick('like');
-      result && setOptimisticReaction('like');
+      const result = onReactionClick(MEETPERRY_DEFAULT_REACTION);
+      result && setOptimisticReaction(MEETPERRY_DEFAULT_REACTION);
     }
   }, [displayReaction, onReactionClick]);
 

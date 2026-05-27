@@ -116,7 +116,7 @@ export const ReactionList = ({
   const { closePopup } = usePopupContext();
   const [activeTab, setActiveTab] = useState('All');
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const { socialReactions: config } = useCustomReaction();
+  const { displaySocialReactions: config } = useCustomReaction();
   const { removeReaction } = useReaction(referenceType, referenceId);
   const { isDesktop } = useResponsive();
 

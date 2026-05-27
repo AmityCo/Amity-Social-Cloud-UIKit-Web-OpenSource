@@ -281,7 +281,7 @@ export const PostContent = ({
     reactionsCount,
   } = usePostReaction({ post });
 
-  const { socialReactions } = useCustomReaction();
+  const { displaySocialReactions } = useCustomReaction();
 
   const canShowProductTags = !(post?.childrenPosts?.[0]?.dataType === 'room');
 
@@ -496,14 +496,14 @@ export const PostContent = ({
     !disabledInlineComment && !!post && !isNotJoinedCommunity && !isVisitorOrBot;
 
   const allConfigReactions = useMemo(
-    () => socialReactions.map((reactionConfigItem) => reactionConfigItem.name),
-    [socialReactions],
+    () => displaySocialReactions.map((reactionConfigItem) => reactionConfigItem.name),
+    [displaySocialReactions],
   );
 
   const configuredReactions = useMemo(() => {
-    if (!socialReactions || !post?.reactions) return [];
+    if (!displaySocialReactions || !post?.reactions) return [];
 
-    return socialReactions
+    return displaySocialReactions
       .filter((reaction) => post.reactions[reaction.name] > 0)
       .sort((a, b) => {
         const countA = post.reactions[a.name] || 0;
@@ -517,7 +517,7 @@ export const PostContent = ({
         // If counts are equal, sort alphabetically by reaction name (ascending)
         return a.name.localeCompare(b.name);
       });
-  }, [socialReactions, post?.reactions]);
+  }, [displaySocialReactions, post?.reactions]);
 
   const unknownReactions = useMemo(() => {
     if (!post?.reactions) return [];

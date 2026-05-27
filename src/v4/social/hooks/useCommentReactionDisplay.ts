@@ -6,17 +6,17 @@ interface UseCommentReactionDisplayProps {
 }
 
 export const useCommentReactionDisplay = ({ comment }: UseCommentReactionDisplayProps) => {
-  const { socialReactions } = useCustomReaction();
+  const { displaySocialReactions } = useCustomReaction();
 
   const allConfigReactions = useMemo(
-    () => socialReactions.map((reactionConfigItem) => reactionConfigItem.name),
-    [socialReactions],
+    () => displaySocialReactions.map((reactionConfigItem) => reactionConfigItem.name),
+    [displaySocialReactions],
   );
 
   const configuredReactions = useMemo(() => {
-    if (!socialReactions || !comment?.reactions) return [];
+    if (!displaySocialReactions || !comment?.reactions) return [];
 
-    return socialReactions
+    return displaySocialReactions
       .filter((reaction) => comment.reactions[reaction.name] > 0)
       .sort((a, b) => {
         const countA = comment.reactions[a.name] || 0;
@@ -30,7 +30,7 @@ export const useCommentReactionDisplay = ({ comment }: UseCommentReactionDisplay
         // If counts are equal, sort alphabetically by reaction name (ascending)
         return a.name.localeCompare(b.name);
       });
-  }, [socialReactions, comment?.reactions]);
+  }, [displaySocialReactions, comment?.reactions]);
 
   const unknownReactions = useMemo(() => {
     if (!comment?.reactions) return [];

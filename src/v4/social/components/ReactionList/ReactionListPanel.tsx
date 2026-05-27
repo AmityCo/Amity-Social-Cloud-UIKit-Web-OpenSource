@@ -28,7 +28,7 @@ export const ReactionListPanel = ({
 }) => {
   const { currentUserId } = useSDK();
   const { goToUserProfilePage } = useNavigation();
-  const { socialReactions: config } = useCustomReaction();
+  const { displaySocialReactions: config } = useCustomReaction();
   const { closePopup } = usePopupContext();
   const reactionList = useMemo(() => config.map(({ name }) => name), [config]);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);

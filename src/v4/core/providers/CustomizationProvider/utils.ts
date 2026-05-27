@@ -1,4 +1,6 @@
 import { generateShades } from '~/v4/core/providers/ThemeProvider';
+import { MEETPERRY_REACTIONS } from '~/v4/core/constants/meetperryReactions';
+import type { AmityReactionType } from '~/v4/core/providers/CustomReactionProvider';
 
 export type IconConfiguration = {
   icon?: string;
@@ -56,6 +58,8 @@ export type DefaultConfig = {
     dark: Theme['dark'];
   };
   excludes: string[];
+  message_reactions?: AmityReactionType[];
+  social_reactions?: AmityReactionType[];
   customizations?: {
     [key: string]: GetConfigReturnValue;
   };
@@ -178,6 +182,8 @@ export const defaultConfig: DefaultConfig = {
     },
   },
   excludes: [],
+  message_reactions: MEETPERRY_REACTIONS,
+  social_reactions: MEETPERRY_REACTIONS,
   customizations: {
     'select_target_page/*/*': {
       theme: {},
@@ -388,8 +394,8 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/post_content/post_content_view_count': {},
     '*/post_content/reaction_button': {
-      icon: 'likeButtonIcon',
-      text: 'Like',
+      icon: 'loveButtonIcon',
+      text: 'Love',
     },
     '*/post_content/comment_button': {
       icon: 'commentButtonIcon',
@@ -1188,7 +1194,7 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/livestream_chat_compose_bar/message_composer': {},
     '*/livestream_chat_compose_bar/reaction_button': {
-      name: 'like',
+      name: 'love',
       image: '',
     },
     '*/livestream_chat_compose_bar/create_message_button': {
@@ -1356,6 +1362,9 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/product_tag_selection/product_tag_no_result': {
       text: 'No results found',
+    },
+    'live_chat/message_list/message_quick_reaction': {
+      reaction: 'love',
     },
   },
 };

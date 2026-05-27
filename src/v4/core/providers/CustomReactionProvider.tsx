@@ -1,5 +1,6 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useCustomization } from './CustomizationProvider';
+import { withLegacyReactions } from '~/v4/core/constants/meetperryReactions';
 
 export type AmityReactionType = {
   name: string;
@@ -9,9 +10,13 @@ export type AmityReactionType = {
 const CustomReactionContext = createContext<{
   reactions: AmityReactionType[];
   socialReactions: AmityReactionType[];
+  displayReactions: AmityReactionType[];
+  displaySocialReactions: AmityReactionType[];
 }>({
   reactions: [],
   socialReactions: [],
+  displayReactions: [],
+  displaySocialReactions: [],
 });
 
 export const useCustomReaction = () => {
@@ -41,8 +46,16 @@ export const CustomReactionProvider: React.FC = ({ children }) => {
     setSocialReactions(socialReactionConfig);
   }, [config]);
 
+  const displayReactions = useMemo(() => withLegacyReactions(reactions), [reactions]);
+  const displaySocialReactions = useMemo(
+    () => withLegacyReactions(socialReactions),
+    [socialReactions],
+  );
+
   return (
-    <CustomReactionContext.Provider value={{ reactions, socialReactions }}>
+    <CustomReactionContext.Provider
+      value={{ reactions, socialReactions, displayReactions, displaySocialReactions }}
+    >
       {children}
     </CustomReactionContext.Provider>
   );

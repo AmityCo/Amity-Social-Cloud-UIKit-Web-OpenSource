@@ -2,12 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
-import Crying from '~/v4/icons/Crying';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
-import Fire from '~/v4/icons/Fire';
-import Happy from '~/v4/icons/Happy';
-import Like from '~/v4/icons/Like';
-import Love from '~/v4/icons/Love';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
@@ -21,16 +16,21 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
-const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
+const LoveSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="17"
-    height="18"
-    viewBox="0 0 17 18"
+    height="17"
+    viewBox="0 0 17 17"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <path d="M15.9727 9.6543C16.1055 10.418 16.0059 11.1484 15.6738 11.7461C15.7734 12.543 15.541 13.373 15.0762 13.9707C15.043 15.8301 13.9141 17.125 11.3574 17.125C11.125 17.125 10.8594 17.125 10.5938 17.125C7.20703 17.125 6.17773 15.8633 4.68359 15.8301C4.58398 16.2617 4.15234 16.5938 3.6875 16.5938H1.5625C0.964844 16.5938 0.5 16.1289 0.5 15.5312V7.5625C0.5 6.99805 0.964844 6.5 1.5625 6.5H4.81641C5.44727 5.96875 6.34375 4.50781 7.10742 3.74414C7.57227 3.2793 7.43945 0.125 9.49805 0.125C11.3906 0.125 12.6523 1.1875 12.6523 3.61133C12.6523 4.24219 12.5195 4.74023 12.3535 5.17188H13.582C15.1758 5.17188 16.4375 6.5332 16.4375 7.99414C16.4375 8.625 16.2715 9.15625 15.9727 9.6543ZM13.9141 11.4473C14.6445 10.7832 14.5449 9.75391 14.0801 9.25586C14.4121 9.25586 14.8438 8.625 14.8438 8.02734C14.8105 7.39648 14.2793 6.76562 13.582 6.76562H10.1289C10.1289 5.50391 11.0586 4.90625 11.0586 3.61133C11.0586 2.81445 11.0586 1.71875 9.49805 1.71875C8.86719 2.34961 9.16602 3.94336 8.23633 4.87305C7.33984 5.76953 6.04492 8.09375 5.08203 8.09375H4.75V14.3027C6.50977 14.3027 8.07031 15.5312 10.4277 15.5312H11.6895C12.8516 15.5312 13.7148 14.9668 13.4492 13.373C13.9473 13.0742 14.3457 12.1445 13.9141 11.4473ZM3.42188 14.4688C3.42188 14.0371 3.05664 13.6719 2.625 13.6719C2.16016 13.6719 1.82812 14.0371 1.82812 14.4688C1.82812 14.9336 2.16016 15.2656 2.625 15.2656C3.05664 15.2656 3.42188 14.9336 3.42188 14.4688Z" />
+    <path
+      d="M8.5 14.7L7.665 13.94C4.62 11.18 2.6 9.345 2.6 7.105C2.6 5.27 4.04 3.83 5.875 3.83C6.91 3.83 7.905 4.315 8.5 5.077C9.095 4.315 10.09 3.83 11.125 3.83C12.96 3.83 14.4 5.27 14.4 7.105C14.4 9.345 12.38 11.18 9.335 13.945L8.5 14.7Z"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -96,7 +96,7 @@ export function ReactionButton({
       elementId,
     });
 
-  const { socialReactions } = useCustomReaction();
+  const { displaySocialReactions } = useCustomReaction();
 
   const reactionButtonRef = useRef<HTMLButtonElement>(null);
   const desktopButtonRef = useRef<HTMLDivElement>(null);
@@ -180,7 +180,9 @@ export function ReactionButton({
   const renderMyReaction = () => {
     if (!displayReaction) return null;
 
-    const customReaction = socialReactions?.find((reaction) => reaction.name === displayReaction);
+    const customReaction = displaySocialReactions?.find(
+      (reaction) => reaction.name === displayReaction,
+    );
 
     if (customReaction) {
       return (
@@ -193,28 +195,13 @@ export function ReactionButton({
       );
     }
 
-    switch (displayReaction) {
-      case 'like':
-        return <Like className={clsx(styles.reactButton__icon, reactButtonClassName)} />;
-      case 'love':
-        return <Love className={styles.reactButton__icon} />;
-      case 'fire':
-        return <Fire className={styles.reactButton__icon} />;
-      case 'happy':
-        return <Happy className={styles.reactButton__icon} />;
-      case 'crying':
-        return <Crying className={styles.reactButton__icon} />;
-      default:
-        return (
-          <FallbackReaction
-            className={clsx(styles.reactButton__icon, fallbackReactButtonClassName)}
-          />
-        );
-    }
+    return (
+      <FallbackReaction className={clsx(styles.reactButton__icon, fallbackReactButtonClassName)} />
+    );
   };
 
   const renderDefaultIcon = () => (
-    <LikeSvg
+    <LoveSvg
       className={clsx(styles.reactButton__icon, defaultIconClassName)}
       data-has-my-reaction="false"
     />
@@ -227,7 +214,7 @@ export function ReactionButton({
     let elementId: string = '';
 
     if (isCommentReaction) {
-      text = displayReaction ?? config.text ?? 'Like';
+      text = displayReaction ?? config.text ?? 'Love';
       elementId = 'comment-reaction-text';
     } else if (isClipReaction) {
       text =
