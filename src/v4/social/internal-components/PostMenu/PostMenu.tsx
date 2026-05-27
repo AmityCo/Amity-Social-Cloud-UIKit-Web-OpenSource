@@ -6,14 +6,13 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { Typography } from '~/v4/core/components';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { EditPostTitle } from '~/v4/social/elements/EditPostTitle';
 import FlagIcon from '~/v4/icons/Flag';
 import { TrashIcon } from '~/v4/icons/Trash';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { Mode } from '~/v4/social/pages/PostComposerPage';
 import styles from './PostMenu.module.css';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
 import UnFlag from '~/v4/icons/UnFlag';
@@ -229,27 +228,10 @@ export const PostMenu = ({
   };
 
   const onEdit = () => {
-    if (isDesktop) {
-      onCloseMenu();
-      return openPopup({
-        pageId,
-        view: 'desktop',
-        isDismissable: false,
-        header: <EditPostTitle pageId="post_composer_page" />,
-        children: <PostComposerPage mode={Mode.EDIT} post={post} />,
-        onClose: ({ close }) => {
-          confirm({
-            onOk: close,
-            type: 'confirm',
-            okText: 'Discard',
-            cancelText: 'Keep editing',
-            title: 'Discard this post?',
-            pageId: 'post_composer_page',
-            content: 'The post will be permanently discarded. It cannot be undone.',
-          });
-        },
-      });
-    }
+    // Route both breakpoints through the page-behavior hook so the host app's
+    // provider wrapper can intercept and open its own dialog. The kit's own
+    // popup is clipped inside Capacitor's IonPage and the desktop popup gave
+    // an inconsistent UX, so we skip both.
     onCloseMenu();
     AmityPostContentComponentBehavior?.goToPostComposerPage?.({
       mode: Mode.EDIT,
