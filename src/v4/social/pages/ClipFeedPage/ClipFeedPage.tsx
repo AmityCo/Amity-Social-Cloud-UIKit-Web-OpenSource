@@ -61,7 +61,7 @@ export const ClipFeedPage = ({
   } = useNavigation();
   const { AmityClipFeedPageBehavior } = usePageBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { setActiveTab } = useLayoutContext();
+  const { setActiveTab, prevActiveTab } = useLayoutContext();
   const drawerData = useDrawerData();
   const { currentUserId } = useSDK();
   const { followStatus } = useFollowCount(currentUserId);
@@ -450,7 +450,7 @@ export const ClipFeedPage = ({
 
   const handleOnBack = () => {
     if (prevPage?.type === PageTypes.SocialHomePage) {
-      setActiveTab(HomePageTab.Newsfeed);
+      setActiveTab(prevActiveTab);
       setActiveIndex(0);
     }
     onBack();
@@ -495,7 +495,7 @@ export const ClipFeedPage = ({
           pageId={pageId}
           onClickBack={() => {
             onBack();
-            isVisitorOrBot ? setActiveTab(HomePageTab.Communities) : null;
+            setActiveTab(prevActiveTab);
           }}
           onPressCreateNewClip={() =>
             AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
