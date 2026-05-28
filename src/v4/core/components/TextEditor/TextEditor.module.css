@@ -83,3 +83,10 @@
     width: 30rem !important;
   }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  .textEditor__content,
+  .textEditor__placeholder {
+    font-size: var(--asc-text-font-size-md);
+  }
+}

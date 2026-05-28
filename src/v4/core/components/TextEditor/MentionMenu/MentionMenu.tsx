@@ -257,7 +257,7 @@ export function MentionMenu<T>({
   if (isProductCatalogueEnabled === false) {
     return menuRenderRef?.current
       ? ReactDOM.createPortal(
-          <div ref={containerRef} className={styles.mentionContainer}>
+          <div data-react-aria-top-layer ref={containerRef} className={styles.mentionContainer}>
             <div className={styles.mentionContainer__inner} data-user-only={true}>
               <div className={styles.mentionList}>
                 {options.length > 0 ? (
@@ -292,7 +292,7 @@ export function MentionMenu<T>({
 
   return menuRenderRef?.current
     ? ReactDOM.createPortal(
-        <div ref={containerRef} className={styles.mentionContainer}>
+        <div data-react-aria-top-layer ref={containerRef} className={styles.mentionContainer}>
           <div className={styles.mentionContainer__inner}>
             <MentionMenuTabs
               variant="iconSmall"
