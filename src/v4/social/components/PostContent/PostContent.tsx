@@ -570,6 +570,14 @@ export const PostContent = ({
     threshold: 0.6,
     elementRef,
   });
+  // Mount the inline CommentList once the post has scrolled into view and keep it mounted for the rest of this PostContent's lifetime.
+  // Gating on the live `isVisible` flag caused the list to unmount/remount as the post crossed the viewport, refetching comments and shifting layout on every scroll.
+  // Sticky-once-seen still bounds SDK observers (posts the user never sees never subscribe), which is what the rate-limiter fix needs.
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  useEffect(() => {
+    if (isVisible) setHasBeenVisible(true);
+  }, [isVisible]);
+  const shouldRenderInlineComments = hasBeenVisible || !!replyTo;
 
   useEffect(() => {
     if (page.type === PageTypes.PostDetailPage) return;
@@ -933,45 +941,47 @@ export const PostContent = ({
               community={targetCommunity}
             />
           )}
-          <div className={styles.postContent__inlineComment__container}>
-            <CommentList
-              pageId={pageId}
-              referenceId={post.postId}
-              referenceType="post"
-              limit={3}
-              community={targetCommunity}
-              commentCount={post.commentsCount}
-              eventCreatorId={eventCreatorId}
-              hideEmptyState
-              onClickReply={handleInlineReplyClick}
-              replyTargetCommentId={
-                isDesktop && replyL0AncestorId
-                  ? replyParentIdOverride ?? replyTo?.commentId
-                  : undefined
-              }
-              renderReplyComment={(comment) => {
-                if (!isDesktop || !canShowInlineComposer) return undefined;
-                const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
-                if (replyTo && comment.commentId === effectiveL0Id) {
-                  const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
-                  return (
-                    <div style={{ marginLeft: composerMarginLeft }}>
-                      <CommentComposer
-                        pageId={pageId}
-                        referenceId={post.postId}
-                        referenceType={'post'}
-                        replyTo={replyTo}
-                        parentIdOverride={replyParentIdOverride}
-                        onCancelReply={handleCancelInlineReply}
-                        community={targetCommunity}
-                      />
-                    </div>
-                  );
+          {shouldRenderInlineComments && (
+            <div className={styles.postContent__inlineComment__container}>
+              <CommentList
+                pageId={pageId}
+                referenceId={post.postId}
+                referenceType="post"
+                limit={3}
+                community={targetCommunity}
+                commentCount={post.commentsCount}
+                eventCreatorId={eventCreatorId}
+                hideEmptyState
+                onClickReply={handleInlineReplyClick}
+                replyTargetCommentId={
+                  isDesktop && replyL0AncestorId
+                    ? replyParentIdOverride ?? replyTo?.commentId
+                    : undefined
                 }
-                return undefined;
-              }}
-            />
-          </div>
+                renderReplyComment={(comment) => {
+                  if (!isDesktop || !canShowInlineComposer) return undefined;
+                  const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
+                  if (replyTo && comment.commentId === effectiveL0Id) {
+                    const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
+                    return (
+                      <div style={{ marginLeft: composerMarginLeft }}>
+                        <CommentComposer
+                          pageId={pageId}
+                          referenceId={post.postId}
+                          referenceType={'post'}
+                          replyTo={replyTo}
+                          parentIdOverride={replyParentIdOverride}
+                          onCancelReply={handleCancelInlineReply}
+                          community={targetCommunity}
+                        />
+                      </div>
+                    );
+                  }
+                  return undefined;
+                }}
+              />
+            </div>
+          )}
         </>
       )}
     </div>
