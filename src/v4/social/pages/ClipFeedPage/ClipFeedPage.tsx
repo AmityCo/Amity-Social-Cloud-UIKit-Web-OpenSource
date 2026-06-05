@@ -61,7 +61,7 @@ export const ClipFeedPage = ({
   } = useNavigation();
   const { AmityClipFeedPageBehavior } = usePageBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { setActiveTab } = useLayoutContext();
+  const { setActiveTab, prevActiveTab } = useLayoutContext();
   const drawerData = useDrawerData();
   const { currentUserId } = useSDK();
   const { followStatus } = useFollowCount(currentUserId);
@@ -450,7 +450,7 @@ export const ClipFeedPage = ({
 
   const handleOnBack = () => {
     if (prevPage?.type === PageTypes.SocialHomePage) {
-      setActiveTab(HomePageTab.Newsfeed);
+      setActiveTab(prevActiveTab);
       setActiveIndex(0);
     }
     onBack();
@@ -484,18 +484,25 @@ export const ClipFeedPage = ({
       data-testid={accessibilityId}
       className={styles.clipFeedPage__container}
     >
-      {!isVisitorOrBot &&
-      (post === undefined ||
-        post?.isDeleted ||
-        (posts.length === 0 && !isLoading && !isLoadingCollectionPosts)) ? (
+      {post === undefined ||
+      post?.isDeleted ||
+      (posts.length === 0 && !isLoading && !isLoadingCollectionPosts) ||
+      (isVisitorOrBot &&
+        posts.length === 0 &&
+        !isGlobalFeedLoading &&
+        !isLoadingCollectionPosts) ? (
         <EmptyFeed
           pageId={pageId}
-          onClickBack={() => onBack()}
+          onClickBack={() => {
+            onBack();
+            setActiveTab(prevActiveTab);
+          }}
           onPressCreateNewClip={() =>
             AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
               isClipPost: true,
             })
           }
+          isVisitorOrBot={isVisitorOrBot}
         />
       ) : (
         <Swiper

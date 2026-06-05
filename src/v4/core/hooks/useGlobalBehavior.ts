@@ -10,7 +10,7 @@ const useGlobalBehavior = () => {
   const handleGlobalBehavior = useCallback(
     ({
       defaultBehavior,
-      alignment = 'fixed',
+      alignment = 'withSidebar',
     }: {
       defaultBehavior?: () => void;
       alignment?: NotificationAlignment;

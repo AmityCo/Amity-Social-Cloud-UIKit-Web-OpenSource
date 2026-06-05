@@ -1,7 +1,7 @@
 import './index.css';
 import '~/v4/styles/global.css';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import SDKConnectorProviderV3 from '~/core/providers/SDKConnectorProvider';
 import SDKConnectorProvider from '~/v4/core/providers/SDKConnectorProvider';
 import {
@@ -53,6 +53,7 @@ import { ClipProvider } from '~/v4/social/providers/ClipProvider';
 import { FeedScrollProvider } from '~/v4/core/providers/FeedScrollProvider';
 import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider';
 import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
+import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { Client, UserTypeEnum } from '@amityco/ts-sdk';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
@@ -86,6 +87,8 @@ const InternalComponent = ({
   const { networkConfig, isNetworkConfigLoading } = useNetworkConfig(client);
   const [isGlobalBanned, setIsGlobalBanned] = useState<boolean>(false);
   const [isUserDeleted, setIsUserDeleted] = useState<boolean>(false);
+  const [isVisitorUsageLimitReached, setIsVisitorUsageLimitReached] = useState<boolean>(false);
+  const isVisitorUsageLimitReachedRef = useRef<boolean>(false);
 
   const sdkContextValue: SDKContextType = useMemo(() => {
     if (!client) return initialSDKContext;
@@ -133,6 +136,15 @@ const InternalComponent = ({
   const onGlobalBanned = (payload: Amity.UserPayload) => {
     if (payload.users.find((user) => user.userId === userId)?.isGlobalBan) {
       setIsGlobalBanned(true);
+    }
+  };
+
+  const onVisitorUsageLimitReached = () => {
+    if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUsageLimitReached) {
+      pageBehavior.AmityGlobalBehavior.handleVisitorUsageLimitReached();
+    } else {
+      isVisitorUsageLimitReachedRef.current = true;
+      setIsVisitorUsageLimitReached(true);
     }
   };
 
@@ -194,9 +206,16 @@ const InternalComponent = ({
           onDisconnected,
           onGlobalBanned,
           onUserDeleted,
+          onVisitorUsageLimitReached,
         });
 
-        setClient(newClient);
+        // Only expose the client to the render tree if the visitor usage limit
+        // was not already hit synchronously during registerDevice. This prevents
+        // a single-frame flash of the main community content before the
+        // VisitorUsageLimitPage guard kicks in.
+        if (!isVisitorUsageLimitReachedRef.current) {
+          setClient(newClient);
+        }
       } catch (_error) {
         console.error('Error setting up AmityUIKitManager:', _error);
         if (_error instanceof Error) {
@@ -215,6 +234,20 @@ const InternalComponent = ({
   if (isGlobalBanned) return <GlobalBan />;
 
   if (isUserDeleted) return <FailedToShow />;
+
+  if (isVisitorUsageLimitReached) {
+    const handleSignIn = pageBehavior?.AmityGlobalBehavior?.handleVisitorUsageLimitSignIn
+      ? () =>
+          pageBehavior.AmityGlobalBehavior!.handleVisitorUsageLimitSignIn!({ alignment: 'fixed' })
+      : undefined;
+    return (
+      <div className="asc-uikit">
+        <CustomizationProvider initialConfig={initialConfig}>
+          <VisitorUsageLimitPage onSignIn={handleSignIn} />
+        </CustomizationProvider>
+      </div>
+    );
+  }
 
   if (!client || isNetworkConfigLoading) return null;
 

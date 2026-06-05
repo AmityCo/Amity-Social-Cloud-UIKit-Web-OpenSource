@@ -12,9 +12,10 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 type FailedToShowProps = {
   pageId?: string;
   className?: string;
+  onBack?: () => void;
 };
 
-export const FailedToShow = ({ pageId = '*', className }: FailedToShowProps) => {
+export const FailedToShow = ({ pageId = '*', className, onBack: $onBack }: FailedToShowProps) => {
   const componentId = 'failed_to_show';
   const { onBack } = useNavigation();
   const { accessibilityId } = useAmityComponent({
@@ -34,7 +35,10 @@ export const FailedToShow = ({ pageId = '*', className }: FailedToShowProps) => 
       <Typography.Body className={styles.failedToShow__desc}>
         {useString('amity_social_button_livestream_unavailable_desc')}
       </Typography.Body>
-      <Button onPress={() => onBack()} className={styles.failedToShow__button}>
+      <Button
+        onPress={() => ($onBack ? $onBack() : onBack())}
+        className={styles.failedToShow__button}
+      >
         <Typography.Body>{useString('amity_social_button_go_back')}</Typography.Body>
       </Button>
     </div>

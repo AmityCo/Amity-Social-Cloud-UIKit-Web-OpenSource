@@ -12,6 +12,8 @@ import { ExploreRecommendedTitle } from '~/v4/social/elements/ExploreRecommended
 import { Divider } from '~/v4/social/elements/Divider';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 type ExploreProps = {
   pageId?: string;
@@ -30,12 +32,20 @@ export function Explore({ pageId = '*' }: ExploreProps) {
   } = useExplore();
 
   const { isDesktop } = useResponsive();
+  const { goToVisitorUsageLimitPage } = useNavigation();
 
   useEffect(() => {
     refresh();
   }, []);
 
+  useEffect(() => {
+    if (error?.message?.includes(ERROR_CODE.VISITOR_USAGE_LIMIT)) {
+      goToVisitorUsageLimitPage();
+    }
+  }, [error]);
+
   if (error != null) {
+    if (error.message?.includes(ERROR_CODE.VISITOR_USAGE_LIMIT)) return null;
     return <ExploreError />;
   }
 

@@ -20,6 +20,7 @@ type LocalVideoPost = {
 
 type LayoutContextType = {
   activeTab: HomePageTab;
+  prevActiveTab: HomePageTab;
   setActiveTab: (tab: HomePageTab) => void;
   liveStreamPlayer: LiveStreamPlayerPageProps | null;
   setStreamPlayer: (props: LiveStreamPlayerPageProps | null) => void;
@@ -36,6 +37,7 @@ type LayoutContextType = {
 
 const LayoutContext = createContext<LayoutContextType>({
   activeTab: HomePageTab.Newsfeed,
+  prevActiveTab: HomePageTab.Newsfeed,
   setActiveTab: () => {},
   liveStreamPlayer: null,
   setStreamPlayer: () => {},
@@ -62,9 +64,14 @@ type LayoutProviderProps = PropsWithChildren<unknown>;
 
 export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const { isVisitorOrBot } = useSDK();
-  const [activeTab, setActiveTab] = useState<HomePageTab>(
-    isVisitorOrBot ? HomePageTab.Communities : HomePageTab.Newsfeed,
-  );
+  const defaultTab = isVisitorOrBot ? HomePageTab.Communities : HomePageTab.Newsfeed;
+  const [activeTab, setActiveTabState] = useState<HomePageTab>(defaultTab);
+  const [prevActiveTab, setPrevActiveTab] = useState<HomePageTab>(defaultTab);
+
+  const setActiveTab = (tab: HomePageTab) => {
+    setPrevActiveTab(activeTab);
+    setActiveTabState(tab);
+  };
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();
@@ -76,6 +83,7 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
     <LayoutContext.Provider
       value={{
         activeTab,
+        prevActiveTab,
         setActiveTab,
         liveStreamPlayer,
         setStreamPlayer,

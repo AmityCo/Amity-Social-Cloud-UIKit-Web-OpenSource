@@ -23,9 +23,12 @@
 }
 
 .pendingPostContent__username,
-.pendingPostContent__information__subtitle,
-.pendingPostContent__editedTag {
+.pendingPostContent__information__subtitle {
   color: var(--asc-color-base-default);
+}
+
+.pendingPostContent__editedTag {
+  color: var(--asc-color-base-shade2);
 }
 
 .pendingPostContent__deletePost__icon {
