@@ -9,13 +9,11 @@ export function useStoryPermission(communityId?: string) {
   const { user } = useUser({ userId: client?.userId, shouldCall: !isVisitorOrBot });
 
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isModeratorUser = isModerator(user?.roles);
 
   const hasStoryPermission = !communityId
     ? socialSettings?.story?.allowAllUserToCreateStory
     : socialSettings?.story?.allowAllUserToCreateStory ||
       isGlobalAdmin ||
-      isModeratorUser ||
       checkStoryPermission(client, communityId);
 
   return { hasStoryPermission };
