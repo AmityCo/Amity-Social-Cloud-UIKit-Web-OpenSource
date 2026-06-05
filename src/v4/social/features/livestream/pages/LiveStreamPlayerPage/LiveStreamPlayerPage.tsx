@@ -58,7 +58,7 @@ import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
-import { usePost } from '~/v4/social/hooks';
+import { useEvent } from '~/v4/social/features/events/hooks';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -143,8 +143,13 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const { keyboardOffset } = useKeyboardVisibility();
   const { isDesktop } = useResponsive();
 
+  const { event } = useEvent({
+    eventId: post?.eventId ?? '',
+    shouldCall: !!post?.eventId,
+  });
+
   const { community } = useCommunity({
-    communityId: livestreamPost?.targetId,
+    communityId: event ? event?.targetCommunity?.communityId : livestreamPost?.targetId,
   });
 
   const videoRef = useRef<HTMLVideoElement>(null);
