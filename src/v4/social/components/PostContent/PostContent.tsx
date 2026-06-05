@@ -175,6 +175,12 @@ export const PostContent = ({
 
   const commentCountPluralLabel = useString('amity_social_button_feed_comment_count_plural');
   const commentCountSingularLabel = useString('amity_social_button_feed_comment_count_singular');
+  const editGloballyFeaturedTitle = useString(
+    'amity_social_modal_dialog_title_edit_globally_featured',
+  );
+  const editGloballyFeaturedContent = useString('amity_social_featured_post_edit_warning');
+  const cancelText = useString('amity_social_button_cancel');
+  const editText = useString('amity_social_button_edit');
 
   // State to force poll results view when poll is closed from menu
   const [forceShowPollResults, setForceShowPollResults] = useState(false);
@@ -326,10 +332,10 @@ export const PostContent = ({
 
   const onEditFeaturePost = ({ onConfirm }: { onConfirm: () => void }) => {
     confirm({
-      title: useString('amity_social_modal_dialog_title_edit_globally_featured'),
-      content: useString('amity_social_featured_post_edit_warning'),
-      cancelText: useString('amity_social_button_cancel'),
-      okText: useString('amity_social_button_edit'),
+      title: editGloballyFeaturedTitle,
+      content: editGloballyFeaturedContent,
+      cancelText: cancelText,
+      okText: editText,
       onOk: onConfirm,
     });
   };
