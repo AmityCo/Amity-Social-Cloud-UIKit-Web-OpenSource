@@ -200,13 +200,9 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
     useImperativeHandle(ref, () => ({
       clearEditorState,
       focus: () => {
-        editorRef.current?.focus();
         const rootElement = editorRef.current?.getRootElement();
         if (rootElement) {
-          rootElement.focus();
-          setTimeout(() => {
-            rootElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 300);
+          rootElement.focus({ preventScroll: true });
         }
       },
     }));

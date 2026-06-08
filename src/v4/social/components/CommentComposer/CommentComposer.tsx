@@ -322,14 +322,6 @@ export const CommentComposer = ({
                 links: links || [],
               });
             }}
-            onFocus={() => {
-              // Scroll composer into view when user taps on input
-              if (composerInputRef.current) {
-                setTimeout(() => {
-                  composerInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-              }
-            }}
             targetType={referenceType}
             targetId={referenceId}
             value={initialCommentValue}
