@@ -520,6 +520,14 @@ export const LivestreamChatMessageComposer = ({
         message: resolveString('amity_social_label_you_have_been_muted'),
         channel,
       });
+    if (community && !community.isJoined)
+      return (
+        <div className={styles.livestreamChatMessageComposer__unJoined__container}>
+          <Typography.Body className={styles.livestreamChatMessageComposer__unJoined__text}>
+            {resolveString('amity_social_label_join_community_to_interact_with_live_stream')}
+          </Typography.Body>
+        </div>
+      );
 
     return (
       <div className={styles.livestreamChatMessageComposer__composeBar__outer}>

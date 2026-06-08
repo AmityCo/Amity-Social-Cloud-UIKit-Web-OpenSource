@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import styles from './CommunityProfilePage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CommunityHeader } from '~/v4/social/components/CommunityHeader';
@@ -238,7 +238,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                   isDismissable: false,
                   header: (
                     <Typography.Headline>
-                      {useString('amity_social_label_choose_poll_type')}
+                      {resolveString('amity_social_label_choose_poll_type')}
                     </Typography.Headline>
                   ),
                   children: ({ close }) => (

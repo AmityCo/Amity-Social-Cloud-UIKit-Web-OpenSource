@@ -28,7 +28,8 @@ function useLiveObjectV4<TParams, TCallback, TConfig>({
       if (!shouldCall) return;
       if (params == null) return;
       setIsLoading(response.loading);
-      if (response.data) setItem(response.data);
+      if (response.error) setItem(null);
+      else if (response.data) setItem(response.data);
       setOrigin(response.origin);
       setError(response.error);
       callback(response);

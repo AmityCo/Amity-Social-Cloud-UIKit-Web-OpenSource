@@ -191,6 +191,7 @@ export const PendingPostContent = ({
                     data-testid={`${pageId}/${componentId}/post_edited_text`}
                     className={styles.pendingPostContent__editedTag}
                   >
+                    {' '}
                     {editedSuffixText}
                   </Typography.Caption>
                 )}

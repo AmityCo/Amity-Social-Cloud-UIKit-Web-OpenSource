@@ -555,7 +555,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const proceedWithSave = () => {
     // Check if post needs approval and show confirmation popup before API call
     if (shouldCallCommunity && isPostNeedsApproval) {
-      confirm({
+      info({
         pageId,
         title: resolveString(
           'amity_social_button_post_composer_create_button_will_be_sent_for_review',

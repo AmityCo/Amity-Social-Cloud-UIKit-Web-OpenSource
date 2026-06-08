@@ -38,7 +38,7 @@ export function CommunityProfileMenuButton({
   const { isDesktop } = useResponsive();
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { currentUserId } = useSDK();
+  const { currentUserId, isVisitorOrBot } = useSDK();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const {
     isExcluded,
@@ -64,6 +64,8 @@ export function CommunityProfileMenuButton({
 
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
   const isMember = community?.isJoined;
+
+  if (isVisitorOrBot) return null;
 
   const shouldShowCopyButton =
     community?.isPublic || community?.isDiscoverable || isCommunityModerator;

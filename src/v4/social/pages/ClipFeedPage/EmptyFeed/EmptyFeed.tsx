@@ -18,6 +18,7 @@ type EmptyFeedProps = {
   componentId?: string;
   onClickBack?: () => void;
   onPressCreateNewClip?: () => void;
+  isVisitorOrBot?: boolean;
 };
 
 export const EmptyFeed = ({
@@ -25,6 +26,7 @@ export const EmptyFeed = ({
   componentId = '*',
   onClickBack,
   onPressCreateNewClip,
+  isVisitorOrBot = false,
 }: EmptyFeedProps) => {
   const { goToCreateCommunityPage, goToSocialHomePage } = useNavigation();
   const { setActiveTab } = useLayoutContext();
@@ -37,7 +39,7 @@ export const EmptyFeed = ({
           onPress={onClickBack}
           defaultClassName={styles.emptyFeed__backButton}
         />
-        <CreateNewClipButton pageId={pageId} onClick={onPressCreateNewClip} />
+        {!isVisitorOrBot && <CreateNewClipButton pageId={pageId} onClick={onPressCreateNewClip} />}
       </div>
 
       <div className={styles.emptyFeed__content}>
@@ -58,16 +60,20 @@ export const EmptyFeed = ({
           componentId={componentId}
           className={styles.emptyFeed__exploreCommunitiesButton}
           onClick={() => {
-            setActiveTab(HomePageTab.Explore);
+            isVisitorOrBot
+              ? setActiveTab(HomePageTab.Communities)
+              : setActiveTab(HomePageTab.Explore);
             goToSocialHomePage?.();
           }}
         />
-        <CreateCommunityButton
-          pageId={pageId}
-          componentId={componentId}
-          onClick={() => goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE })}
-          textClassName={styles.emptyFeed__createCommunityButtonText}
-        />
+        {!isVisitorOrBot && (
+          <CreateCommunityButton
+            pageId={pageId}
+            componentId={componentId}
+            onClick={() => goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE })}
+            textClassName={styles.emptyFeed__createCommunityButtonText}
+          />
+        )}
       </div>
     </div>
   );

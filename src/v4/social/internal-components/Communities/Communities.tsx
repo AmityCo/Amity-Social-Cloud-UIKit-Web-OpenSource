@@ -26,21 +26,29 @@ export function Communities({ pageId }: CommunitiesProps) {
   const { socialCommunityCreationButtonVisible } = useConfig();
   const [activeTab, setActiveTab] = useState<Key>(CommunitiesTab.Explore);
 
+  const communitiesTitle = useString('amity_social_tab_tab_communities');
+  const exploreLabel = useString('amity_social_tab_tab_explore');
+  const myCommunitiesLabel = useString('amity_social_button_my_communities');
+
   return (
     <section className={styles.communities}>
-      <div className={styles.communities__header} data-has-tabs={!isVisitorOrBot}>
-        <Typography.Headline>{useString('amity_social_tab_tab_communities')}</Typography.Headline>
-        {!isVisitorOrBot && socialCommunityCreationButtonVisible && (
-          <Button
-            icon={<Plus />}
-            variant="default"
-            iconClassName={styles.communities__header__icon}
-            onPress={() => {
-              goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE });
-            }}
-          />
-        )}
-      </div>
+      {!isVisitorOrBot && (
+        <div className={styles.communities__header} data-has-tabs={!isVisitorOrBot}>
+          <Typography.Headline>{communitiesTitle}</Typography.Headline>
+
+          {socialCommunityCreationButtonVisible && (
+            <Button
+              icon={<Plus />}
+              variant="default"
+              iconClassName={styles.communities__header__icon}
+              onPress={() => {
+                goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE });
+              }}
+            />
+          )}
+        </div>
+      )}
+
       {isVisitorOrBot ? (
         <Explore pageId={pageId} />
       ) : (
@@ -53,12 +61,12 @@ export function Communities({ pageId }: CommunitiesProps) {
           tabs={[
             {
               value: CommunitiesTab.Explore,
-              label: useString('amity_social_tab_tab_explore'),
+              label: exploreLabel,
               content: () => <Explore pageId={pageId} />,
             },
             {
               value: CommunitiesTab.MyCommunities,
-              label: useString('amity_social_button_my_communities'),
+              label: myCommunitiesLabel,
               content: () => <MyCommunities pageId={pageId} />,
             },
           ]}

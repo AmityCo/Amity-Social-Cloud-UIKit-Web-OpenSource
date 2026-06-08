@@ -81,6 +81,7 @@ export enum PageTypes {
   PastEventsPage = 'PastEventsPage',
   EventDetailPage = 'EventDetailPage',
   EventAttendeesPage = 'EventAttendeesPage',
+  VisitorUsageLimitPage = 'VisitorUsageLimitPage',
 }
 
 type Page =
@@ -323,6 +324,9 @@ type Page =
   | {
       type: PageTypes.EventAttendeesPage;
       context: EventAttendeesPageProps;
+    }
+  | {
+      type: PageTypes.VisitorUsageLimitPage;
     };
 
 type ContextValue = {
@@ -452,11 +456,13 @@ type ContextValue = {
   handleVisitorUserAction: (context: { alignment: NotificationAlignment }) => void;
   handleNonMemberAction: (context: { alignment: NotificationAlignment }) => void;
   handleNonFollowerAction: (context: { alignment: NotificationAlignment }) => void;
+  handleVisitorUsageLimitSignIn: (context: { alignment: NotificationAlignment }) => void;
   goToEventSetupPage: (context: EventSetupProps) => void;
   goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => void;
   goToPastEventsPage: () => void;
   goToEventDetailPage: (context: EventDetailPageProps) => void;
   goToEventAttendeesPage?: (context: EventAttendeesPageProps) => void;
+  goToVisitorUsageLimitPage: () => void;
 };
 
 let defaultValue: ContextValue = {
@@ -542,11 +548,13 @@ let defaultValue: ContextValue = {
   handleVisitorUserAction: () => {},
   handleNonMemberAction: () => {},
   handleNonFollowerAction: () => {},
+  handleVisitorUsageLimitSignIn: () => {},
   goToEventSetupPage: (context: EventSetupProps) => {},
   goToUpcomingEventsPage: () => {},
   goToPastEventsPage: () => {},
   goToEventDetailPage: (context: EventDetailPageProps) => {},
   goToEventAttendeesPage: (context: EventAttendeesPageProps) => {},
+  goToVisitorUsageLimitPage: () => {},
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -644,6 +652,8 @@ if (process.env.NODE_ENV !== 'production') {
     handleVisitorUserAction: () => console.log('NavigationContext handleVisitorUserAction()'),
     handleNonMemberAction: () => console.log('NavigationContext handleNonMemberAction()'),
     handleNonFollowerAction: () => console.log('NavigationContext handleNonFollowerAction()'),
+    handleVisitorUsageLimitSignIn: () =>
+      console.log('NavigationContext handleVisitorUsageLimitSignIn()'),
 
     goToEventSetupPage: (context) =>
       console.log(`NavigationContext goToEventSetupPage(${context.mode})`),
@@ -654,6 +664,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log('NavigationContext goToEventDetailPage()', context),
     goToEventAttendeesPage: (context) =>
       console.log('NavigationContext goToEventAttendeesPage()', context),
+    goToVisitorUsageLimitPage: () => console.log('NavigationContext goToVisitorUsageLimitPage()'),
   };
 }
 
@@ -1533,6 +1544,13 @@ export default function NavigationProvider({
     });
   };
 
+  const handleVisitorUsageLimitSignIn = (context: { alignment: NotificationAlignment }) => {
+    notification.info({
+      content: resolveString('visitor_usage_limit_toast'),
+      alignment: context.alignment,
+    });
+  };
+
   const goToEventSetupPage = useCallback(
     (context: EventSetupProps) => {
       const next = {
@@ -1587,6 +1605,13 @@ export default function NavigationProvider({
     },
     [pushPage],
   );
+
+  const goToVisitorUsageLimitPage = useCallback(() => {
+    const next = {
+      type: PageTypes.VisitorUsageLimitPage,
+    };
+    pushPage(next);
+  }, [pushPage]);
 
   const onProductTagClick = useCallback((context: { productTag: Amity.ProductTag }) => {
     context.productTag?.product?.productUrl &&
@@ -1672,11 +1697,13 @@ export default function NavigationProvider({
         handleVisitorUserAction,
         handleNonMemberAction,
         handleNonFollowerAction,
+        handleVisitorUsageLimitSignIn,
         goToEventSetupPage,
         goToUpcomingEventsPage,
         goToPastEventsPage,
         goToEventDetailPage,
         goToEventAttendeesPage,
+        goToVisitorUsageLimitPage,
         onProductTagClick,
       }}
     >

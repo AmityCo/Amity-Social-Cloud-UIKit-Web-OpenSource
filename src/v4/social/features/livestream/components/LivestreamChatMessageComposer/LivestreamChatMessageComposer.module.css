@@ -9,7 +9,9 @@
 }
 
 .livestreamChatMessageComposer__unJoined__container {
+  width: 100%;
   padding: 1.125rem 1rem;
+  text-align: center;
 }
 
 .livestreamChatMessageComposer__pendingPost__container {
