@@ -7,17 +7,10 @@
  *   import { defaultLocaleMap } from '~/v4/core/localization';
  *   <AmityUIKitProvider localization={{ localeMap: defaultLocaleMap }} ... />
  *
- * Resolution order:
- *   1. Exact match: navigator.language === "th" → Thai bundle
- *   2. Prefix match: navigator.language === "th-TH" → Thai bundle
- *   3. No match: falls through to English library defaults
- *
+ * Add locale bundles here to enable automatic device-language detection.
  * Add more bundles here as additional locale files are created.
  */
 
-import { thLocaleBundle } from './defaults/th';
 import type { LocaleBundle } from './resolveString';
 
-export const defaultLocaleMap: Record<string, LocaleBundle> = {
-  th: thLocaleBundle,
-};
+export const defaultLocaleMap: Record<string, LocaleBundle> = {};

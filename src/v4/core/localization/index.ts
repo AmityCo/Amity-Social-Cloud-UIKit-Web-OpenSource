@@ -37,5 +37,4 @@ export type { LocaleContextValue, LocaleProviderProps } from './LocaleProvider';
 export { useString } from './useString';
 
 export { defaultLocaleBundle } from './defaults/en';
-export { thLocaleBundle } from './defaults/th';
 export { defaultLocaleMap } from './defaultLocaleMap';

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.17.1 (2026-06-08)
+
+
+### Bug Fixes
+
+* remove TH localization ([358e711](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/358e7119c59937cf48ada2fc699815024f748cd5))
+
 ## 4.17.0 (2026-06-05)
 
 ### 4.16.3 (2026-05-28)
