@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.17.1 (2026-06-08)
+
+
+### Bug Fixes
+
+* input focus ([#1688](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1688)) ([d2ef876](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/d2ef8768ab8f03a0c56448dbb764b8dad7912685))
+
 ## 4.17.0 (2026-06-05)
 
 ## 4.16.0 (2026-05-15)
