@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { StoryPreviewThumbnail } from './StoryPreviewThumbnail';
 
 export default {
-  title: 'v4/Social/Story Preview Thumbnail',
+  title: 'v4/social/elements/StoryPreviewThumbnail',
   component: StoryPreviewThumbnail,
 } as ComponentMeta<typeof StoryPreviewThumbnail>;
 

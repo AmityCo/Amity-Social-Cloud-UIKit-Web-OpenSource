@@ -1,0 +1,15 @@
+.memberPermission {
+  flex: 1 0 0;
+  gap: 0.25rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.memberPermission__title {
+  color: var(--asc-color-base-default);
+}
+
+.memberPermission__description {
+  color: var(--asc-color-base-shade1);
+}

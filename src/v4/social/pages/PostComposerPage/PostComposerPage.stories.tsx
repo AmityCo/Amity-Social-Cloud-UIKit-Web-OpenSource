@@ -2,7 +2,7 @@ import React from 'react';
 import { Mode, PostComposerPage } from './PostComposerPage';
 
 export default {
-  title: 'v4-social/pages/PostComposerPage',
+  title: 'v4/social/pages/PostComposerPage',
 };
 
 export const PostComposerPageStories = {

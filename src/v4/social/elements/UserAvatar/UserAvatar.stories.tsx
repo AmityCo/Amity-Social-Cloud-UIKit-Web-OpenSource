@@ -2,7 +2,7 @@ import React from 'react';
 import { UserAvatar } from './UserAvatar';
 
 export default {
-  title: 'v4-social/elements/UserAvatar',
+  title: 'v4/social/elements/UserAvatar',
 };
 
 export const UserAvatarStory = {

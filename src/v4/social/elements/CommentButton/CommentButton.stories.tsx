@@ -3,7 +3,7 @@ import React from 'react';
 import { CommentButton } from './CommentButton';
 
 export default {
-  title: 'v4-social/elements/CommentButton',
+  title: 'v4/social/elements/CommentButton',
 };
 
 export const CommentButtonStory = {

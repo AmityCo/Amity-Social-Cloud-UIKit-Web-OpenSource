@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ModeratorBadge } from './ModeratorBadge';
 
 const meta: Meta<typeof ModeratorBadge> = {
-  title: 'v4/Social/Moderator Badge',
+  title: 'v4/social/elements/ModeratorBadge',
   component: ModeratorBadge,
   parameters: {
     layout: 'centered',

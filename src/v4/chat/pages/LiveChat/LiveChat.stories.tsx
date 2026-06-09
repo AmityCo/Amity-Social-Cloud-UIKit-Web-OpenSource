@@ -2,12 +2,11 @@ import React, { useRef, useState } from 'react';
 import useChannelsCollection from '~/chat/hooks/collections/useChannelsCollection';
 import ChatItem from '~/chat/components/ChatItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Sheet from 'react-modal-sheet';
 import { LiveChat } from './';
 import styles from './LiveChat.module.css';
 
 export default {
-  title: 'V4/LiveChat',
+  title: 'v4/live-chat',
 };
 
 const LiveChatList = () => {
@@ -50,7 +49,7 @@ const LiveChatList = () => {
         >
           {channels.map((channel) => (
             <ChatItem
-              channelId={channel.channelId}
+              channel={channel}
               key={channel.channelId}
               isSelected={selectedChannel === channel.channelId}
               onSelect={(data) => {
@@ -71,5 +70,5 @@ const LiveChatList = () => {
 
 export const LiveChatStory = {
   render: () => <LiveChatList />,
-  name: 'LiveChat',
+  name: 'Application',
 };

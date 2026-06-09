@@ -1,6 +1,4 @@
-import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-
 import styles from './SaveButton.module.css';
 
 import { Button } from '~/v4/core/natives/Button';

@@ -7,7 +7,7 @@ import {
 } from './CommunitySetupPage';
 
 export default {
-  title: 'v4-social/pages/CommunitySetupPage',
+  title: 'v4/social/pages/CommunitySetupPage',
 };
 
 export const CommunitySetupPageStories = {

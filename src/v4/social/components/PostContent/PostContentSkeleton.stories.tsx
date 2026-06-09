@@ -4,7 +4,7 @@ import useOnePost from '~/mock/useOnePost';
 import { PostContentSkeleton } from './PostContentSkeleton';
 
 export default {
-  title: 'v4-social/components/PostContentSkeleton',
+  title: 'v4/social/components/PostContentSkeleton',
 };
 
 export const PostContentSkeletonStory = {

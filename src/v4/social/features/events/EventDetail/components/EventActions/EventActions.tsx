@@ -7,7 +7,8 @@ import { EventSetupMode } from '~/v4/social/features';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { checkIsWithinMinutes } from '~/v4/social/utils/timezone';
-import { BackButton, MenuButton, Menu } from '~/v4/social/elements';
+import { BackButton, MenuButton } from '~/v4/social/elements';
+import { Menu } from '~/v4/core/components/Menu';
 import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -68,7 +69,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   const actions = [
     {
       key: 'edit',
-      Icon: Pencil,
+      icon: Pencil,
       label: useString('amity_social_button_edit_event'),
       condition: isHostEvent,
       onPress: () => {
@@ -90,7 +91,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     },
     {
       key: 'add-to-calendar',
-      Icon: AddCalendar,
+      icon: AddCalendar,
       label: useString('amity_social_modal_add_calendar_sheet_add_button'),
       condition:
         (isHostEvent || myRSVP?.status === AmityEventResponseStatus.Going) &&
@@ -124,8 +125,8 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       },
     },
     {
-      Icon: Trash,
-      danger: true,
+      icon: Trash,
+      destructive: true,
       key: 'delete',
       label: useString('amity_social_button_delete_event'),
       condition: hasDeleteEventPermission || isHostEvent,

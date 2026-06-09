@@ -1,6 +1,4 @@
 import clsx from 'clsx';
-
-import React from 'react';
 import styles from './FormLabel.module.css';
 import { Typography } from '~/v4/core/components';
 import { Label, LabelProps } from 'react-aria-components';

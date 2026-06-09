@@ -4,7 +4,7 @@ import useOnePost from '~/mock/useOnePost';
 import { CommentSkeleton } from './CommentSkeleton';
 
 export default {
-  title: 'v4-social/components/CommentSkeleton',
+  title: 'v4/social/components/CommentSkeleton',
 };
 
 export const PostCommentSkeletonStory = {

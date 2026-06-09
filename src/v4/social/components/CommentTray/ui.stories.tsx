@@ -3,7 +3,7 @@ import React from 'react';
 import { CommentTray } from './CommentTray';
 
 export default {
-  title: 'v4-social/components/CommentTrayComponent',
+  title: 'v4/social/components/CommentTrayComponent',
   component: CommentTray,
   argTypes: {
     referenceType: {

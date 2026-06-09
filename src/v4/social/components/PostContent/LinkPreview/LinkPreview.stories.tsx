@@ -3,7 +3,7 @@ import React from 'react';
 import { LinkPreview } from './LinkPreview';
 
 export default {
-  title: 'v4-social/internal-components/LinkPreview',
+  title: 'v4/social/internal-components/LinkPreview',
 };
 
 export const LinkPreviewStory = {

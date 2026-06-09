@@ -4,7 +4,7 @@ import { useString } from '~/v4/core/localization';
 import { Newsfeed } from './Newsfeed';
 
 export default {
-  title: 'v4-social/components/Newsfeed',
+  title: 'v4/social/components/Newsfeed',
 };
 
 export const NewsfeedStory = {

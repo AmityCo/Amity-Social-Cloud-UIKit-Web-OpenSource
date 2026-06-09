@@ -3,7 +3,7 @@ import React from 'react';
 import { TopNavigation } from './TopNavigation';
 
 export default {
-  title: 'v4-social/components/TopNavigation',
+  title: 'v4/social/components/TopNavigation',
 };
 
 export const TopNavigationStory = {

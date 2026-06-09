@@ -1,0 +1,30 @@
+.deletedMessagePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 0.0625rem solid currentcolor;
+  border-radius: 1.25rem;
+}
+
+.deletedMessagePill[data-user='own'] {
+  color: var(--asc-color-primary-default);
+}
+
+.deletedMessagePill[data-user='other'] {
+  color: var(--asc-color-base-shade2);
+  border-color: var(--asc-color-base-shade4);
+}
+
+.deletedMessagePill__icon {
+  width: 1rem;
+  height: 1rem;
+  color: currentcolor;
+  fill: currentcolor;
+}
+
+.deletedMessagePill__label {
+  color: currentcolor;
+  fill: currentcolor;
+  white-space: nowrap;
+}

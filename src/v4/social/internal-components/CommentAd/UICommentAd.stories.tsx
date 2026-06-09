@@ -2,7 +2,7 @@ import React from 'react';
 import { UICommentAd } from './UICommentAd';
 
 export default {
-  title: 'v4-social/internal-components/UICommentAd',
+  title: 'v4/social/internal-components/UICommentAd',
 };
 
 export const UICommentAdStory = {

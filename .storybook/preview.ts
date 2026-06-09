@@ -50,14 +50,20 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          'Ui Only',
-          ['Social', 'Chat'],
-          'SDK Connected',
-          ['Social', 'Chat'],
-          'Utilities',
-          'Assets',
+          'v4',
+          [
+            'social',
+            ['pages', 'components', 'elements', 'internal-components'],
+            'chat',
+            ['pages', 'components', 'elements'],
+            'live-chat',
+            'assets',
+            ['icons'],
+          ],
           'V4',
-          ['Chat'],
+          ['Core'],
+          'V3',
+          ['Social', 'Chat'],
         ],
       },
     },

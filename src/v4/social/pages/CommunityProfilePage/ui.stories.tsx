@@ -3,7 +3,7 @@ import { Story, Meta } from '@storybook/react';
 import { CommunityProfilePage } from './CommunityProfilePage';
 
 export default {
-  title: 'v4-social/pages/CommunityProfilePage',
+  title: 'v4/social/pages/CommunityProfilePage',
   component: CommunityProfilePage,
   argTypes: {
     community: { control: 'object' },

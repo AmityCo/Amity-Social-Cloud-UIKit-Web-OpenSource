@@ -4,7 +4,7 @@ import useOnePost from '~/mock/useOnePost';
 import { PostContent } from './PostContent';
 
 export default {
-  title: 'v4-social/components/PostContent',
+  title: 'v4/social/components/PostContent',
 };
 
 export const PostContentStory = {

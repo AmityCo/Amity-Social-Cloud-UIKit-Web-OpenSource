@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Menu } from '~/v4/icons/Menu';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';

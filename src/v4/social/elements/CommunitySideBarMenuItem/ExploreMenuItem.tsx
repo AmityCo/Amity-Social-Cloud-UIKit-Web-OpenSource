@@ -1,4 +1,3 @@
-import React from 'react';
 import Global from '~/v4/icons/Global';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';

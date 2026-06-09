@@ -1,0 +1,81 @@
+.fullTextScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: var(--asc-color-background-default);
+}
+
+.fullTextScreen__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 3.5rem;
+  padding: 0 1rem;
+  background: var(--asc-color-background-default);
+  flex-shrink: 0;
+}
+
+.fullTextScreen__backButton.fullTextScreen__backButton,
+.fullTextScreen__backButton.fullTextScreen__backButton:hover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.fullTextScreen__backIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-default);
+  fill: var(--asc-color-base-default);
+}
+
+.fullTextScreen__title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: -0.025rem;
+  color: var(--asc-color-base-default);
+  max-width: calc(100% - 6rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fullTextScreen__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem;
+  background: var(--asc-color-background-default);
+}
+
+.fullTextScreen__text {
+  margin: 0;
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  letter-spacing: -0.025rem;
+  color: var(--asc-color-base-default);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.fullTextScreen__text a {
+  color: var(--asc-color-primary-default);
+  text-decoration: underline;
+}

@@ -97,17 +97,20 @@ function createSerializeUserMentionNode({
   text: string;
   mention: Mentioned;
 }): SerializedMentionNode<MentionData> {
+  const isChannel = mention.type === 'channel';
   return {
     detail: 0,
     format: 0,
     mode: 'normal',
     style: '',
-    text: text.substring(mention.index, mention.index + mention.length + 1),
+    text: isChannel
+      ? text.substring(mention.index, mention.index + mention.length)
+      : text.substring(mention.index, mention.index + mention.length + 1),
     type: 'mention',
     version: 1,
     data: {
-      displayName: mention.displayName || (mention.userId as string),
-      userId: mention.userId as string,
+      displayName: isChannel ? 'all' : mention.displayName || (mention.userId as string),
+      userId: isChannel ? 'all' : (mention.userId as string),
     },
   };
 }
@@ -221,7 +224,7 @@ function isHashtagData(data: HighLightData): data is Amity.Hashtag {
 }
 
 function isMentionData(data: HighLightData): data is Mentioned {
-  return (data as Mentioned)?.userId !== undefined;
+  return (data as Mentioned)?.userId !== undefined || (data as Mentioned)?.type === 'channel';
 }
 
 function isTextProductTag(data: HighLightData): data is Amity.TextProductTag {
@@ -318,8 +321,10 @@ export function textToEditorState(value: {
               mention: currentItem,
             }),
           );
-          runningIndex += currentItem.length + 1;
-          globalIndex += currentItem.length + 1;
+          const advance =
+            currentItem.type === 'channel' ? currentItem.length : currentItem.length + 1;
+          runningIndex += advance;
+          globalIndex += advance;
         } else if (isTextProductTag(currentItem)) {
           paragraph.children.push(
             createSerializeProductMentionNode({

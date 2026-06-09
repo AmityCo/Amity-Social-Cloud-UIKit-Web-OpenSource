@@ -4,7 +4,7 @@ import useOneCommunity from '~/mock/useOneCommunity';
 import { CommunityAvatar } from './CommunityAvatar';
 
 export default {
-  title: 'v4-social/elements/CommunityAvatar',
+  title: 'v4/social/elements/CommunityAvatar',
 };
 
 export const CommunityAvatarStory = {

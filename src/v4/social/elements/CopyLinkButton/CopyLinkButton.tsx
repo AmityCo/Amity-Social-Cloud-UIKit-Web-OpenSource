@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconButton } from '~/v4/core/components/IconButton';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';

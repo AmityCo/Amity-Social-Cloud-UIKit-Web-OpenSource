@@ -409,7 +409,6 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
             </NotificationProvider>
           </StyledThemeProvider>
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       </QueryClientProvider>
     </LocaleProvider>
   );

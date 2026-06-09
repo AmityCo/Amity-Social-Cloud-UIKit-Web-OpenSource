@@ -1,0 +1,18 @@
+.dateSeparator {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.dateSeparator__pill {
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  background: var(--asc-color-background-default);
+  box-shadow:
+    0 0 0.125rem rgb(40 41 61 / 10%),
+    0 0.125rem 0.25rem rgb(96 97 112 / 16%);
+}
+
+.dateSeparator__label {
+  color: var(--asc-color-base-shade1);
+}

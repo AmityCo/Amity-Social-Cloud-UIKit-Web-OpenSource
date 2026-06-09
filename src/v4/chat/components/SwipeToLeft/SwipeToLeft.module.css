@@ -1,0 +1,56 @@
+.swipeToLeft {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.swipeToLeft__row {
+  position: relative;
+  z-index: 1;
+  background: var(--asc-color-background-default);
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.swipeToLeft__row:active {
+  cursor: grabbing;
+}
+
+.swipeToLeft__action {
+  position: absolute;
+  inset: 0;
+  background: var(--asc-color-base-shade2);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.swipeToLeft__actionContent {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem 0.5rem;
+}
+
+.swipeToLeft__actionIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.swipeToLeft__actionLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: -0.005em;
+  color: var(--asc-color-white);
+}

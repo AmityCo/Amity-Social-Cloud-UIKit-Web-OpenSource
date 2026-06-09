@@ -1,0 +1,15 @@
+.notificationMode {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.notificationMode__title {
+  color: var(--asc-color-base-default);
+}
+
+.notificationMode__description {
+  color: var(--asc-color-base-shade1);
+}

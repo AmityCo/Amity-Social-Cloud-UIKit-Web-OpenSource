@@ -2,7 +2,7 @@ import React from 'react';
 import { UIPostAd } from './UIPostAd';
 
 export default {
-  title: 'v4-social/internal-components/PostAd',
+  title: 'v4/social/internal-components/PostAd',
 };
 
 export const PostAdStory = {

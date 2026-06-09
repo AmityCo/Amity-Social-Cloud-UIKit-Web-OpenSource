@@ -2,7 +2,7 @@ import React from 'react';
 import UiKitSocialApplication from '.';
 
 export default {
-  title: 'V4/Social',
+  title: 'v4/social',
 };
 
 export const SDKCommunityAppV4 = {

@@ -1,0 +1,32 @@
+.bannedEmptyState {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.bannedEmptyState__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-base-shade4);
+  fill: var(--asc-color-base-shade4);
+}
+
+.bannedEmptyState__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 15.75rem;
+}
+
+.bannedEmptyState__title {
+  color: var(--asc-color-base-shade3);
+}
+
+.bannedEmptyState__subtitle {
+  color: var(--asc-color-base-shade3);
+}

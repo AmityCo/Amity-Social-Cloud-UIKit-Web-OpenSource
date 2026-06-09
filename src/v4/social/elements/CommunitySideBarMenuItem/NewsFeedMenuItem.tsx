@@ -1,4 +1,3 @@
-import React from 'react';
 import UserCheck from '~/v4/icons/UserCheck';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';

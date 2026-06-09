@@ -7,7 +7,7 @@ const meta: Meta<typeof UserProfilePage> = {
   tags: ['autodocs'],
   component: UserProfilePage,
   args: { userId: 'Web-Test' },
-  title: 'v4-social/pages/UserProfilePage',
+  title: 'v4/social/pages/UserProfilePage',
   argTypes: { userId: { control: { type: 'text' } } },
 };
 

@@ -1,0 +1,1 @@
+export { SettingMenu } from './SettingMenu';

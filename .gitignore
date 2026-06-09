@@ -12,5 +12,8 @@ dist/
 
 _temporary
 
+# claude
 .claude/
-CLAUDE.md
+
+# git
+.worktrees/

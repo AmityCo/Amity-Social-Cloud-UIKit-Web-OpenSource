@@ -11,7 +11,7 @@ import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { COMMAND_PRIORITY_HIGH, Klass, LexicalNode, LexicalEditor } from 'lexical';
+import { COMMAND_PRIORITY_HIGH, Klass, LexicalNode, LexicalEditor, $getRoot } from 'lexical';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
@@ -98,6 +98,9 @@ export interface TextEditorProps {
   suggestionMaxRows?: number;
   suggestionMaxHeight?: number;
   enableMention?: boolean;
+  mentionLimitTitle?: string;
+  mentionLimitMessage?: string;
+  mentionPortalContainer?: HTMLElement | null;
   maxCharacters?: number;
   maxLines?: number;
   minLines?: number;
@@ -158,6 +161,9 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       taggedProductIds = [],
       suggestionDisplayMode = 'inline',
       enableMention = true,
+      mentionLimitTitle,
+      mentionLimitMessage,
+      mentionPortalContainer,
       maxCharacters,
       maxLines,
       minLines = 1,
@@ -401,10 +407,7 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
       clear: () => {
         if (editorInstance) {
           editorInstance.update(() => {
-            const root = editorInstance.getRootElement();
-            if (root) {
-              root.textContent = '';
-            }
+            $getRoot().clear();
           });
         }
         setCurrentData({
@@ -574,6 +577,8 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
               }}
               maxMentions={maxMentions}
               maxUniqueProductMentions={maxUniqueProductMentions}
+              mentionLimitTitle={mentionLimitTitle}
+              mentionLimitMessage={mentionLimitMessage}
               $createNode={(data) =>
                 $createMentionNode({
                   text:
@@ -612,7 +617,8 @@ export const TextEditor = forwardRef<TextEditorHandle, TextEditorProps>(
                       onProductSelected?.(productData.product);
                     }}
                     onCloseMenu={closeMenu}
-                    // onSetIntersectionNode removed, handled internally
+                    displayMode={suggestionDisplayMode}
+                    portalContainer={mentionPortalContainer}
                     loadMoreUsers={loadMore}
                     hasMoreUsers={hasMore}
                     isLoadingUsers={isLoading}

@@ -1,0 +1,140 @@
+.replyQuote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.replyQuote[data-user='own'] {
+  align-items: flex-end;
+}
+
+.replyQuote[data-user='other'] {
+  align-items: flex-start;
+}
+
+.replyQuote__header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--asc-color-base-shade1);
+}
+
+.replyQuote__headerIcon {
+  width: 1rem;
+  height: 0.75rem;
+  color: var(--asc-color-base-shade1);
+  fill: var(--asc-color-base-shade1);
+  flex-shrink: 0;
+}
+
+.replyQuote__headerText {
+  color: var(--asc-color-base-shade1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 18.75rem;
+}
+
+.replyQuote__quote {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.replyQuote__quote:focus,
+.replyQuote__quote:focus-visible {
+  outline: none;
+}
+
+.replyQuote__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(255 255 255 / 60%);
+  border-radius: 1.25rem;
+  pointer-events: none;
+}
+
+.replyQuote__textBubble {
+  padding: 0.625rem 1rem;
+  background: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-default);
+  font-size: 0.825rem;
+  line-height: 1.25rem;
+  max-width: 14.25rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.replyQuote__textClamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.replyQuote__link {
+  color: var(--asc-color-primary-default);
+  text-decoration: underline;
+}
+
+.replyQuote__media {
+  display: block;
+  object-fit: cover;
+  border-radius: 1.25rem;
+}
+
+.replyQuote__videoOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.replyQuote__videoIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.replyQuote__placeholder {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14.25rem;
+  height: 3.75rem;
+  background: var(--asc-color-base-shade4);
+  border-radius: 1.25rem;
+}
+
+.replyQuote__spinner {
+  width: 1.4375rem;
+  height: 1.4375rem;
+}
+
+.replyQuote__deletedBubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 0.0625rem solid var(--asc-color-base-shade4);
+  border-radius: 1.25rem;
+}
+
+.replyQuote__deletedIcon {
+  width: 1rem;
+  height: 0.875rem;
+  color: var(--asc-color-base-shade2);
+  fill: var(--asc-color-base-shade2);
+}
+
+.replyQuote__deletedText {
+  color: var(--asc-color-base-shade2);
+}

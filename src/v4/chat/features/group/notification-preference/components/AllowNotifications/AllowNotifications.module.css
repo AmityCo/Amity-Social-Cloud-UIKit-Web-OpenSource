@@ -1,0 +1,31 @@
+.allowNotifications {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  align-items: flex-start;
+  background: var(--asc-color-background-default);
+}
+
+.allowNotifications__textBlock {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.allowNotifications__title {
+  color: var(--asc-color-base-default);
+}
+
+.allowNotifications__description {
+  color: var(--asc-color-base-shade1);
+}
+
+.allowNotifications[data-disabled='true'] .allowNotifications__title {
+  color: var(--asc-color-base-shade3);
+}
+
+.allowNotifications[data-disabled='true'] .allowNotifications__description {
+  color: var(--asc-color-base-shade3);
+}

@@ -4,7 +4,7 @@ import useOneComment from '~/mock/useOneComment';
 import { Comment } from './Comment';
 
 export default {
-  title: 'v4-social/components/Comment',
+  title: 'v4/social/components/Comment',
 };
 
 export const CommentStory = {

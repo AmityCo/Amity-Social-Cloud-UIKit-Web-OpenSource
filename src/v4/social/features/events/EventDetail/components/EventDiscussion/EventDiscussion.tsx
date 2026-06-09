@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useString } from '~/v4/core/localization';
 import { Plus } from '~/v4/icons/Plus';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { Menu } from '~/v4/social/elements';
+import { Menu } from '~/v4/core/components/Menu';
 import EmptyPost from '~/v4/icons/EmptyPost';
 import CreatePoll from '~/v4/icons/CreatePoll';
 import { Typography } from '~/v4/core/components';
@@ -61,7 +61,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     {
       id: useString('amity_social_label_community_post_label'),
       label: useString('amity_social_label_community_post_label'),
-      Icon: CreatePost,
+      icon: CreatePost,
       onPress: () => {
         removeDrawerData();
         AmityEventDetailPageBehavior?.goToPostComposerPage?.({
@@ -75,7 +75,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     {
       id: 'poll',
       label: useString('amity_social_button_poll'),
-      Icon: CreatePoll,
+      icon: CreatePoll,
       onPress: () => {
         setDrawerData({
           content: (
@@ -93,7 +93,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     {
       id: 'livestream',
       label: useString('amity_social_status_live_stream'),
-      Icon: LivestreamFill,
+      icon: LivestreamFill,
       onPress: () => {
         removeDrawerData();
         AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({

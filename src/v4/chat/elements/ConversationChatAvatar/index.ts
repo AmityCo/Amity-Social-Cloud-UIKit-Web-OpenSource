@@ -1,0 +1,1 @@
+export { ConversationChatAvatar } from './ConversationChatAvatar';

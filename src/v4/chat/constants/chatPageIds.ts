@@ -1,0 +1,18 @@
+export const CHAT_PAGE_IDS = {
+  CHAT_HOME_PAGE: 'chat_home_page',
+  CHAT_PAGE: 'chat_page',
+  GROUP_CHAT_PAGE: 'group_chat_page',
+  CREATE_CONVERSATION_PAGE: 'create_conversation_page',
+  SELECT_GROUP_MEMBER_PAGE: 'select_group_member_page',
+  CREATE_GROUP_CHAT_PAGE: 'create_group_chat_page',
+  GROUP_SETTING_PAGE: 'group_setting_page',
+  EDIT_GROUP_PROFILE_PAGE: 'edit_group_profile_page',
+  EDIT_GROUP_NOTIFICATION_PAGE: 'edit_group_notification_page',
+  EDIT_GROUP_MEMBER_PERMISSIONS_PAGE: 'edit_group_member_permissions_page',
+  GROUP_NOTIFICATION_PREFERENCE_PAGE: 'group_notification_preference_page',
+  GROUP_MEMBER_LIST_PAGE: 'group_member_list_page',
+  ADD_GROUP_MEMBER_PAGE: 'add_group_member_page',
+  BANNED_GROUP_MEMBER_LIST_PAGE: 'banned_group_member_list_page',
+  ARCHIVED_CHAT_PAGE: 'archived_chat_page',
+  SEARCH_CHANNEL_PAGE: 'search_channel_page',
+} as const;

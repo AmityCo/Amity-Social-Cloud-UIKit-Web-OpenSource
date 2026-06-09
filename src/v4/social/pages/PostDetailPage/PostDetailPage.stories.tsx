@@ -3,7 +3,7 @@ import useOnePostWithCommentAndReactions from '~/mock/useOnePostWithCommentsAndR
 import { PostDetailPage } from './PostDetailPage';
 
 export default {
-  title: 'v4-social/pages/PostDetailPage',
+  title: 'v4/social/pages/PostDetailPage',
 };
 
 export const PostDetailPageStories = {

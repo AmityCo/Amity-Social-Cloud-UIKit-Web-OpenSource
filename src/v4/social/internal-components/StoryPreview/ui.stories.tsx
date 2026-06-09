@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { StoryPreview } from '.';
 
 export default {
-  title: 'v4/Social/Story Preview',
+  title: 'v4/social/elements/StoryPreview',
   component: StoryPreview,
 } as ComponentMeta<typeof StoryPreview>;
 

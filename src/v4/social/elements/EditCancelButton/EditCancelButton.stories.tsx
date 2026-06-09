@@ -3,7 +3,7 @@ import React from 'react';
 import { EditCancelButton } from './EditCancelButton';
 
 export default {
-  title: 'v4-social/elements/EditCancelButton',
+  title: 'v4/social/elements/EditCancelButton',
 };
 
 export const EditCancelButtonStory = {

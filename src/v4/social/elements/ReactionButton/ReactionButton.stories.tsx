@@ -3,7 +3,7 @@ import React from 'react';
 import { ReactionButton } from './ReactionButton';
 
 export default {
-  title: 'v4-social/elements/ReactionButton',
+  title: 'v4/social/elements/ReactionButton',
 };
 
 export const ReactionButtonStory = {

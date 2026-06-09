@@ -1,0 +1,17 @@
+.mediaSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: var(--asc-color-background-default);
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.mediaSection__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4.5rem;
+  width: 20.25rem;
+}

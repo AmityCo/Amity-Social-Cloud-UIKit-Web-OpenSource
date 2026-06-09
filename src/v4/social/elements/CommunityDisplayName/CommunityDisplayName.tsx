@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, TypographyVariant } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CommunityDisplayName.module.css';

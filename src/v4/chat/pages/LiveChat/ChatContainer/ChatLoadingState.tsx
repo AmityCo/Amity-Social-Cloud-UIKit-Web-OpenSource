@@ -6,7 +6,7 @@ import { useString } from '~/v4/core/localization';
 import styles from './styles.module.css';
 
 const ChatLoadingState = ({ children }: { children?: React.ReactNode }) => {
-  const loadingChatLabel = useString('amity_chat_label_loading_chat');
+  const loadingChatLabel = useString('amity_chat_loading_label');
 
   return (
     <>

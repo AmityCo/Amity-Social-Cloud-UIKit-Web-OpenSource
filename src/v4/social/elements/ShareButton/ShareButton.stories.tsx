@@ -3,7 +3,7 @@ import React from 'react';
 import { ShareButton } from './ShareButton';
 
 export default {
-  title: 'v4-social/elements/ShareButton',
+  title: 'v4/social/elements/ShareButton',
 };
 
 export const ShareButtonStory = {

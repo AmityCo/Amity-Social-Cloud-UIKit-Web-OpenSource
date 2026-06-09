@@ -85,6 +85,8 @@ type BaseThemeValue = {
   elevation_08_03_color: string;
   host_color: string;
   host_color_shade1: string;
+  primary_pressed_color: string;
+  message_overlay_color: string;
 };
 
 type GeneratedThemeValue = {
@@ -115,6 +117,8 @@ const defaultBase = {
   base_divider_line: ' #292B32',
   host_color: '#4B1BD0',
   host_color_shade1: '#EAE2FF',
+  primary_pressed_color: '#1A4499',
+  message_overlay_color: 'rgb(41 43 50 / 40%)',
 };
 
 export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
@@ -1051,6 +1055,7 @@ export const getCustomizationKeys = ({
 
 const propertyMappings: Record<keyof ThemeValue, string> = {
   primary_color: '--asc-color-primary-default',
+  primary_pressed_color: '--asc-color-primary-pressed',
   primary_shade1_color: '--asc-color-primary-shade1',
   primary_shade2_color: '--asc-color-primary-shade2',
   primary_shade3_color: '--asc-color-primary-shade3',
@@ -1092,6 +1097,7 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   elevation_08_03_color: '--asc-color-elevation-08-03',
   host_color: '--asc-color-host-default',
   host_color_shade1: '--asc-color-host-shade1',
+  message_overlay_color: '--asc-color-message-overlay',
 };
 
 export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {

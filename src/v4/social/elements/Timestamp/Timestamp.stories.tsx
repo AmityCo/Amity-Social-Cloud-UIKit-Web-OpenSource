@@ -3,7 +3,7 @@ import React from 'react';
 import { Timestamp } from './Timestamp';
 
 export default {
-  title: 'v4-social/elements/Timestamp',
+  title: 'v4/social/elements/Timestamp',
 };
 
 export const TimestampStory = {

@@ -46,6 +46,8 @@ export function UserAvatar({
   const { onClickUser } = useNavigation();
   const { user, isLoading } = useUser({ userId, shouldCall: !!userId });
 
+  console.log('UserAvatar render', { userId, user, userData });
+
   const userImage = useMemo(() => {
     const url = userData?.avatar?.fileUrl ?? user?.avatar?.fileUrl;
     if (!url) return;

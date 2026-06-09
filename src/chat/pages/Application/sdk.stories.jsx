@@ -3,7 +3,7 @@ import React from 'react';
 import ChatApplication from '.';
 
 export default {
-  title: 'SDK Connected/Chat',
+  title: 'V3/Chat',
 };
 
 export const ChatApplicationStory = {

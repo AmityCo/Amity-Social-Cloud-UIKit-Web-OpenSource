@@ -6,6 +6,7 @@ function useLiveObjectV4<TParams, TCallback, TConfig>({
   callback = () => {},
   options,
   shouldCall = true,
+  calledOnce = false,
 }: {
   fetcher: (
     params: TParams,
@@ -16,6 +17,7 @@ function useLiveObjectV4<TParams, TCallback, TConfig>({
   callback?: Amity.LiveObjectCallback<TCallback>;
   options?: Amity.LiveObjectOptions<TConfig>;
   shouldCall?: boolean;
+  calledOnce?: boolean;
 }) {
   const [item, setItem] = useState<TCallback | null>(null);
   const [origin, setOrigin] = useState<string | undefined>(undefined);
@@ -42,13 +44,17 @@ function useLiveObjectV4<TParams, TCallback, TConfig>({
 
     const { unsubscribe } = subscribe({ fetcher, params, callback: callbackFn, options });
 
+    if (calledOnce) unsubscribe();
+
     return () => unsubscribe();
-  }, [JSON.stringify(params), shouldCall]);
+  }, [JSON.stringify(params), shouldCall, calledOnce]);
 
   const refresh = useCallback(() => {
     if (unsubscribeRef.current) unsubscribeRef.current();
 
     const { unsubscribe } = subscribe({ fetcher, params, callback: callbackFn, options });
+
+    if (calledOnce) unsubscribe();
 
     unsubscribeRef.current = unsubscribe;
 

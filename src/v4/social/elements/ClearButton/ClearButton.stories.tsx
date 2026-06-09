@@ -3,7 +3,7 @@ import React from 'react';
 import { ClearButton } from './ClearButton';
 
 export default {
-  title: 'v4-social/elements/ClearButton',
+  title: 'v4/social/elements/ClearButton',
 };
 
 export const ClearButtonStory = {

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './icons.style.module.css';
 
 export default {
-  title: 'V4/Icons',
+  title: 'v4/assets/icons/Icons',
 };
 
 export const Default = {

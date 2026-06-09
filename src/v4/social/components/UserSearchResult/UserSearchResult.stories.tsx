@@ -4,7 +4,7 @@ import useOneUser from '~/mock/useOneUser';
 import { UserSearchResult } from './UserSearchResult';
 
 export default {
-  title: 'v4-social/components/UserSearchResult',
+  title: 'v4/social/components/UserSearchResult',
 };
 
 export const UserSearchResultStory = {

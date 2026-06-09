@@ -1,0 +1,16 @@
+.youTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 4rem;
+}
+
+.youTile__name {
+  max-width: 4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--asc-color-base-default);
+  text-align: center;
+}

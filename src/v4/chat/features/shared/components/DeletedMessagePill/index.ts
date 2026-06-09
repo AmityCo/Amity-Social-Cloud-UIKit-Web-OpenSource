@@ -1,0 +1,1 @@
+export { DeletedMessagePill } from './DeletedMessagePill';

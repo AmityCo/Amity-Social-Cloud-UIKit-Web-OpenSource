@@ -3,7 +3,7 @@ import React from 'react';
 import { CommunityMembersCount } from './CommunityMembersCount';
 
 export default {
-  title: 'v4-social/elements/CommunityMembersCount',
+  title: 'v4/social/elements/CommunityMembersCount',
 };
 
 export const CreateCommunityButtonStory = {

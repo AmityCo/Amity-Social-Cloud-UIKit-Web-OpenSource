@@ -1,7 +1,5 @@
-import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-
 import styles from './InvitationDescription.module.css';
 
 type InvitationDescriptionProps = {

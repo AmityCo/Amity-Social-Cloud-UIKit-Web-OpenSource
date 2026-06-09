@@ -3,7 +3,7 @@ import React from 'react';
 import { PostSearchResult } from './PostSearchResult';
 
 export default {
-  title: 'v4-social/components/PostSearchResult',
+  title: 'v4/social/components/PostSearchResult',
 };
 
 export const PostSearchResultStory = {

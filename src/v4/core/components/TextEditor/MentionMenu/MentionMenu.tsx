@@ -32,7 +32,8 @@ export interface MentionMenuProps<T> {
   onMentionSelected?: (user: Amity.User) => void;
   onProductSelected?: (product: any) => void;
   onCloseMenu: () => void;
-  // onSetIntersectionNode is no longer needed, handled internally
+  displayMode?: 'inline' | 'bottom';
+  portalContainer?: HTMLElement | null;
   pageId: string;
   componentId: string;
   // Add loadMore and hasMore/isLoading for both users and products
@@ -169,6 +170,8 @@ export function MentionMenu<T>({
   onMentionSelected,
   onProductSelected,
   onCloseMenu,
+  displayMode = 'inline',
+  portalContainer,
   pageId,
   componentId,
   loadMoreUsers,
@@ -253,11 +256,17 @@ export function MentionMenu<T>({
     </div>
   ));
 
-  // If product catalogue is not enabled, show only user mention list without tabs
-  if (isProductCatalogueEnabled === false) {
-    return menuRenderRef?.current
+  const portalTarget = portalContainer ?? menuRenderRef?.current ?? null;
+
+  if (!isProductCatalogueEnabled) {
+    return portalTarget
       ? ReactDOM.createPortal(
-          <div data-react-aria-top-layer ref={containerRef} className={styles.mentionContainer}>
+          <div
+            data-react-aria-top-layer
+            ref={containerRef}
+            className={styles.mentionContainer}
+            data-display-mode={displayMode}
+          >
             <div className={styles.mentionContainer__inner} data-user-only={true}>
               <div className={styles.mentionList}>
                 {options.length > 0 ? (
@@ -285,14 +294,19 @@ export function MentionMenu<T>({
               onPress={onCloseMenu}
             />
           </div>,
-          menuRenderRef.current,
+          portalTarget!,
         )
       : null;
   }
 
-  return menuRenderRef?.current
+  return portalTarget
     ? ReactDOM.createPortal(
-        <div data-react-aria-top-layer ref={containerRef} className={styles.mentionContainer}>
+        <div
+          data-react-aria-top-layer
+          ref={containerRef}
+          className={styles.mentionContainer}
+          data-display-mode={displayMode}
+        >
           <div className={styles.mentionContainer__inner}>
             <MentionMenuTabs
               variant="iconSmall"
@@ -375,7 +389,7 @@ export function MentionMenu<T>({
             onPress={onCloseMenu}
           />
         </div>,
-        menuRenderRef.current,
+        portalTarget!,
       )
     : null;
 }

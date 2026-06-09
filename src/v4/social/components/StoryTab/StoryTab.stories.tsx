@@ -7,7 +7,7 @@ const meta: Meta<typeof StoryTab> = {
   tags: ['autodocs'],
   component: StoryTab,
   args: { type: 'globalFeed' },
-  title: 'v4-social/components/StoryTab',
+  title: 'v4/social/components/StoryTab',
 };
 
 export default meta;

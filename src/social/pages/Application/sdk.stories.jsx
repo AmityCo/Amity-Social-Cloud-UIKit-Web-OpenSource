@@ -3,7 +3,7 @@ import UiKitApp from '.';
 import { useArgs } from '@storybook/client-api';
 
 export default {
-  title: 'SDK Connected/Social',
+  title: 'V3/Social',
 };
 
 export const SDKCommunityApp = {
