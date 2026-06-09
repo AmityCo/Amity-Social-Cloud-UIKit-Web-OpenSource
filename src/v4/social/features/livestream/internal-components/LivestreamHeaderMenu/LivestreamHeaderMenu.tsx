@@ -3,9 +3,9 @@ import { Typography } from '~/v4/core/components';
 import { Label } from 'react-aria-components';
 import { ReadOnlyToggle } from '~/v4/social/features/livestream/internal-components/ReadOnlyToggle';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import styles from './LivestreamHeaderMenu.module.css';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 export interface LivestreamHeaderMenuProps {
   pageId: string;
@@ -39,7 +39,7 @@ export const LivestreamHeaderMenu: React.FC<LivestreamHeaderMenuProps> = ({
       {postId && (isCommunityPublic || targetType === 'user') && (
         <CopyLinkButton
           pageId={pageId}
-          model={SharableModel.POST}
+          model={AmitySharableContentType.POST}
           referenceId={postId}
           onDone={onLinkCopied}
           notificationAlignment={notificationAlignment}

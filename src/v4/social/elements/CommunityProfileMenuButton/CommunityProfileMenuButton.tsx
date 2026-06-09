@@ -15,7 +15,7 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import Users from '~/v4/icons/Users';
 import useSDK from '~/v4/core/hooks/useSDK';
 import Setting from '~/v4/icons/Setting';
-import { SharableModel } from '~/v4/utils/sharableLink';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 export type CommunityProfileMenuButtonProps = ButtonProps & {
   pageId?: string;
@@ -104,7 +104,7 @@ export function CommunityProfileMenuButton({
             <CopyLinkButton
               pageId={pageId}
               componentId={componentId}
-              model={SharableModel.COMMUNITY}
+              model={AmitySharableContentType.COMMUNITY}
               referenceId={community?.communityId}
               onDone={isDesktop ? removeDrawerData : closePopover}
               textId="amity_social_label_copy_profile_link"

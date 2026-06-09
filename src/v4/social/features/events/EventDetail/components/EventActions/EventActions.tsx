@@ -1,5 +1,6 @@
 import { Pencil } from '~/v4/icons/Pencil';
 import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import Trash from '~/v4/social/icons/trash';
 import { Typography } from '~/v4/core/components';
 import { EventSetupMode } from '~/v4/social/features';
@@ -15,8 +16,15 @@ import { useEventActions } from '~/v4/social/features/events/EventDetail/hooks';
 import styles from './EventActions.module.css';
 import { AddCalendar } from '~/v4/icons/AddCalendar';
 import { downloadICS } from '~/v4/social/utils/downloadICS';
-import { AmityEventResponseStatus } from '@amityco/ts-sdk';
+import {
+  AmityEventResponseStatus,
+  AmityEventStatus,
+  AmitySharableContentType,
+} from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
+import { CopyToClipboard } from '~/v4/icons/CopyToClipboard';
 
 export type EventActionsProps = {
   event: Amity.Event;
@@ -35,6 +43,27 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   const { currentUserId } = useSDK();
 
   const isHostEvent = event.creator?.userId === currentUserId;
+
+  const notification = useNotifications();
+
+  const {
+    link: shareableLink,
+    isEnabled: isSharableLinkEnabled,
+    isLoading: isSharableLinkLoading,
+  } = useSharableLink({
+    model: AmitySharableContentType.EVENT,
+    referenceId: event.eventId,
+  });
+
+  const isPublicCommunity = event.targetCommunity?.isPublic ?? false;
+  const isShareableStatus = event.status !== AmityEventStatus.Cancelled;
+  const showCopyLink =
+    isSharableLinkEnabled &&
+    !!shareableLink &&
+    !isSharableLinkLoading &&
+    event.isOriginPublic &&
+    isPublicCommunity &&
+    isShareableStatus;
 
   const actions = [
     {
@@ -68,6 +97,30 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
         event.status !== 'ended',
       onPress: () => {
         downloadICS(event);
+      },
+    },
+    {
+      key: 'copy-event-link',
+      Icon: CopyToClipboard,
+      label: useString('amity_social_button_copy_event_link'),
+      condition: showCopyLink,
+      onPress: async () => {
+        if (!shareableLink) {
+          notification.info({
+            content: resolveString('amity_social_failed_to_copy_link'),
+          });
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(shareableLink);
+          notification.success({
+            content: resolveString('amity_social_button_link_copied'),
+          });
+        } catch {
+          notification.info({
+            content: resolveString('amity_social_failed_to_copy_link'),
+          });
+        }
       },
     },
     {

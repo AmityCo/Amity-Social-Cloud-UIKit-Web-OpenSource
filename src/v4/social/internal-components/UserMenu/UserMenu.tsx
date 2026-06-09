@@ -15,8 +15,8 @@ import Flag from '~/v4/icons/Flag';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { useNetworkState } from 'react-use';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 interface UserMenuProps {
   user?: Amity.User | null;
@@ -147,7 +147,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       <CopyLinkButton
         pageId={pageId}
         componentId={componentId}
-        model={SharableModel.USER}
+        model={AmitySharableContentType.USER}
         referenceId={user.userId}
         onDone={onCloseMenu}
         textId="amity_social_label_copy_profile_link"

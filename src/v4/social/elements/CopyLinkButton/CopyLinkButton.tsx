@@ -3,7 +3,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconButton } from '~/v4/core/components/IconButton';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CopyToClipboard } from '~/v4/icons/CopyToClipboard';
-import { SharableModel } from '~/v4/utils/sharableLink';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import styles from './CopyLinkButton.module.css';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
@@ -13,7 +13,7 @@ interface CopyLinkButtonProps {
   pageId?: string;
   componentId?: string;
   textId?: string;
-  model: SharableModel;
+  model: AmitySharableContentType;
   referenceId?: string;
   notificationAlignment?: NotificationAlignment;
   onDone?: () => void;
