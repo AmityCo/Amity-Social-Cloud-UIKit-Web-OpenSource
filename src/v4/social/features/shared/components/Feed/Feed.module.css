@@ -1,0 +1,19 @@
+.feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed__postContainer {
+  width: 100%;
+}
+
+.feed__intersection {
+  height: 1px;
+}
+
+@media (width >= 48em) {
+  .feed__postContainer {
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+}

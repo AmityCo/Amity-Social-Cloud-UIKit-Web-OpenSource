@@ -306,6 +306,7 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/top_navigation/notification_tray_button': {
       image: 'value',
     },
+    'social_home_page/*/for_you_button': {},
     'social_home_page/*/newsfeed_button': {},
     'social_home_page/*/explore_button': {},
     'social_home_page/*/my_communities_button': {},
@@ -335,6 +336,8 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/my_communities/community_members_count': {},
     'social_home_page/newsfeed_component/*': {},
     'social_home_page/global_feed_component/*': {},
+    'social_home_page/for_you_feed_component/*': {},
+    'social_home_page/feed_caught_up_component/*': {},
     'social_home_page/post_composer/image_button': {
       icon: 'ImageIcon',
     },
@@ -564,8 +567,11 @@ export const defaultConfig: DefaultConfig = {
     'communities_by_category_page/*/community_empty_image': {},
     'communities_by_category_page/*/community_empty_title': {},
     '*/community_sidebar/community_sidebar_title': {},
+    '*/community_sidebar/for_you_sidebar_menu_item': {
+      icon: 'Home',
+    },
     '*/community_sidebar/newsfeed_sidebar_menu_item': {
-      icon: 'Newspaper',
+      icon: 'UserCheck',
     },
     '*/community_sidebar/explore_sidebar_menu_item': {
       icon: 'Global',

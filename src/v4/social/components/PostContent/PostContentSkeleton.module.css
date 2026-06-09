@@ -88,7 +88,7 @@
 
 @media only screen and (width >= 48em) {
   .postContentSkeleton {
-    border-radius: 0;
-    border: none;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
   }
 }

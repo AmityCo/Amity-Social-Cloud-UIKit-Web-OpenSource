@@ -3,6 +3,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CommunitySideBarTitle } from '~/v4/social/elements/CommunitySideBarTitle';
 import { NotificationTrayPage, SocialGlobalSearchPage } from '~/v4/social/pages';
 import {
+  ForYouMenuItem,
   NewsFeedMenuItem,
   CommunitiesMenuItem,
   EventsMenuItem,
@@ -66,6 +67,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
       </div>
 
       <div className={styles.communitySideBar__menuSection}>
+        <ForYouMenuItem pageId={pageId} componentId={componentId} />
         {!isVisitorOrBot && <NewsFeedMenuItem pageId={pageId} componentId={componentId} />}
         <CommunitiesMenuItem pageId={pageId} componentId={componentId} />
         <EventsMenuItem pageId={pageId} componentId={componentId} />

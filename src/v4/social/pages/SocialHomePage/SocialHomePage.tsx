@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FeedRepository } from '@amityco/ts-sdk';
 import { TopNavigation } from '~/v4/social/components/TopNavigation';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
@@ -11,6 +12,9 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Communities } from '~/v4/social/internal-components/Communities/Communities';
+import { useForYouFeedCollection } from '~/v4/social/hooks/collections/useForYouFeedCollection';
+import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
+import { ForYouFeed } from '~/v4/social/features/for-you';
 import styles from './SocialHomePage.module.css';
 import { Events } from '~/v4/social/features';
 import ChipButton from '~/v4/social/elements/ChipButton';
@@ -29,6 +33,11 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
   const { activeTab, setActiveTab } = useLayoutContext();
   const { AmitySocialHomePageBehavior } = usePageBehavior();
 
+  const { error: forYouError } = useForYouFeedCollection({ shouldCall: !isVisitorOrBot });
+  const forYouEnabled = !(forYouError instanceof FeedRepository.AmityForYouFeedDisabledError);
+  const [persistedTab, setPersistedTab] = useSocialHomePageTab();
+  const initialTabResolved = useRef(false);
+
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialLoad = useRef(true);
@@ -43,6 +52,27 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
       initialLoad.current = false;
     }, 100);
   }, [containerRef.current, activeTab]);
+
+  useEffect(() => {
+    if (initialTabResolved.current) return;
+    initialTabResolved.current = true;
+    if (isVisitorOrBot) {
+      setActiveTab(HomePageTab.Communities);
+      return;
+    }
+    if (persistedTab) {
+      setActiveTab(persistedTab);
+      return;
+    }
+    setActiveTab(HomePageTab.ForYou);
+  }, [isVisitorOrBot, persistedTab, setActiveTab]);
+
+  useEffect(() => {
+    if (forYouEnabled) return;
+    if (activeTab === HomePageTab.ForYou) {
+      setActiveTab(HomePageTab.Newsfeed);
+    }
+  }, [forYouEnabled, activeTab, setActiveTab]);
 
   const handleClickButton = () => {
     setIsShowCreatePostMenu((prev) => !prev);
@@ -73,9 +103,11 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
       setActiveTab(tab);
       if (tab === HomePageTab.Clips) {
         AmitySocialHomePageBehavior?.goToClipFeedPage?.({});
+        return;
       }
+      setPersistedTab(tab);
     },
-    [setActiveTab, AmitySocialHomePageBehavior],
+    [setActiveTab, AmitySocialHomePageBehavior, setPersistedTab],
   );
 
   const renderChipButtons = () => {
@@ -84,6 +116,15 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
 
     return (
       <div className={styles.socialHomePage__tabs}>
+        {!isVisitorOrBot && forYouEnabled && (
+          <ChipButton
+            pageId={PAGE_ID.SOCIAL_HOME_PAGE}
+            elementId={ELEMENT_ID.FOR_YOU_BUTTON}
+            isActive={activeTab === HomePageTab.ForYou}
+            onPress={() => handleTabClick(HomePageTab.ForYou)}
+            textId="amity_social_button_social_home_for_you_button"
+          />
+        )}
         {!isVisitorOrBot && (
           <ChipButton
             pageId={PAGE_ID.SOCIAL_HOME_PAGE}
@@ -134,6 +175,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
       </div>
       <NoInternetConnectionHoc page="feed" className={styles.socialHomePage__noConnection}>
         <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
+          {activeTab === HomePageTab.ForYou && <ForYouFeed pageId={pageId} />}
           {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
           {activeTab === HomePageTab.Communities && <Communities pageId={pageId} />}
           {activeTab === HomePageTab.Events && <Events pageId={pageId} />}

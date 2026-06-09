@@ -105,7 +105,6 @@ export {
 export {
   MyCommunities as AmityMyCommunitiesComponent,
   EmptyNewsfeed as AmityEmptyNewsFeedComponent,
-  GlobalFeed as AmityGlobalFeedComponent,
   PostContent as AmityPostContentComponent,
   TopSearchBar as AmityTopSearchBarComponent,
   Newsfeed as AmityNewsFeedComponent,
@@ -134,6 +133,10 @@ export {
   InvitationBanner as AmityInvitationBannerComponent,
   InvitationSection as AmityInvitationSectionComponent,
 } from '~/v4/social/components/';
+
+export { Feed as AmityGlobalFeedComponent } from '~/v4/social/features/shared/components/Feed';
+export { ForYouFeed as AmityForYouFeedComponent } from '~/v4/social/features/for-you';
+export { FeedCaughtUp as AmityFeedCaughtUpComponent } from '~/v4/social/components/FeedCaughtUp';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
 

@@ -34,6 +34,7 @@ export function TopNavigation({
 
   const handleGlobalSearchClick = () => {
     switch (selectedTab) {
+      case HomePageTab.ForYou:
       case HomePageTab.Newsfeed:
       case HomePageTab.Events:
       case HomePageTab.Communities:

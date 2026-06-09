@@ -63,7 +63,7 @@ export function PostDetailPage({
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
-  const { removeItem } = useGlobalFeedContext();
+  const { removeNewPost } = useGlobalFeedContext();
   const { isVisitorOrBot } = useSDK();
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
@@ -244,10 +244,10 @@ export function PostDetailPage({
 
   const handlePostDeleted = useCallback(
     (post: Amity.Post) => {
-      removeItem(post.postId);
+      removeNewPost(post.postId);
       handleBack();
     },
-    [handleBack],
+    [handleBack, removeNewPost],
   );
 
   if (isPostLoading) {
