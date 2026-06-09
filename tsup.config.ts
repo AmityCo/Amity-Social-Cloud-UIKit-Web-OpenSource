@@ -1,5 +1,6 @@
-import { defineConfig } from 'tsup';
 import { replace } from 'esbuild-plugin-replace';
+import { defineConfig } from 'tsup';
+
 import pkg from './package.json';
 
 export default defineConfig((options) => ({
@@ -42,4 +43,15 @@ export default defineConfig((options) => ({
   loader: {
     '.css': 'local-css',
   },
+  // tsup/esbuild intermittently leave the Node process alive after a finished
+  // one-shot build (a dangling handle, seen mostly in CI). All dist files are
+  // already written at this point, so force a clean exit on success to stop
+  // turbo and the GitHub runner from hanging until their timeout. Guarded so
+  // `--watch` (dev/storybook) is unaffected. See ENG-614.
+  onSuccess: options.watch
+    ? undefined
+    : async () => {
+        console.log('active resources at build end:', process.getActiveResourcesInfo());
+        process.exit(0);
+      },
 }));
