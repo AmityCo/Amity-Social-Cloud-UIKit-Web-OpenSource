@@ -92,7 +92,7 @@ export const ReplyCommentList = ({
     pageSize: 5,
     sortBy: isL2List ? 'firstCreated' : 'lastCreated',
     shouldCall: shouldFetch,
-    includeDeleted: true,
+    includeDeleted: false,
   });
 
   const notification = useNotifications();
