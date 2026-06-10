@@ -4,6 +4,7 @@ import { ImageContent } from '~/v4/social/components/PostContent/ImageContent';
 import { VideoContent } from '~/v4/social/components/PostContent/VideoContent';
 import { ClipContent } from '~/v4/social/components/PostContent/ClipContent';
 import { LiveStreamContent } from '~/v4/social/components/PostContent/LiveStreamContent';
+import { FileContent } from '~/v4/social/components/PostContent/FileContent';
 
 type ChildrenPostContentProps = {
   pageId?: string;
@@ -73,6 +74,11 @@ export const ChildrenPostContent = ({
         componentId={componentId}
         posts={post.childrenPosts as Amity.Post<'clip'>[]}
         onClipClick={onClipClick}
+      />
+      <FileContent
+        pageId={pageId}
+        componentId={componentId}
+        posts={post.childrenPosts as Amity.Post<'file'>[]}
       />
     </>
   );

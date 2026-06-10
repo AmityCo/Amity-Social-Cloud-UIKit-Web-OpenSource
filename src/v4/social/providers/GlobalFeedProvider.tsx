@@ -45,14 +45,10 @@ const useGlobalFeed = () => {
         if (data && !loading) {
           setHasNextPage(!!hasNextPage);
           onNextPageRef.current = onNextPage;
-          setItems(
-            data.filter(
-              (post) =>
-                post.structureType !== PostStructureType.AUDIO &&
-                post.structureType !== PostStructureType.FILE &&
-                post.structureType !== PostStructureType.MIXED,
-            ),
-          );
+          // Audio posts have no renderer in v4, so they stay filtered out. File and
+          // mixed posts (text+file and other attachment combos) now render via
+          // PostContent's FileContent, so they must remain in the feed.
+          setItems(data.filter((post) => post.structureType !== PostStructureType.AUDIO));
         }
         if (error) {
           console.error('error', error);

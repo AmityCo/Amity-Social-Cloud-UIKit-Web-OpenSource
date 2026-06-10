@@ -12,13 +12,12 @@ export default function useUserFeed({ userId, limit = QUERY_LIMIT, ...params }: 
     shouldCall: !!userId,
   });
 
-  // Filter out posts with children type 'file' or 'audio'
+  // Audio children have no renderer in v4, so drop posts containing them. File
+  // children now render (PostContent's FileContent), so file posts are kept.
   const filteredPosts = items.filter((post) => {
     const children = post.childrenPosts || [];
-    const hasFileOrAudioChild = children.some(
-      (child) => child.dataType === 'file' || child.dataType === 'audio',
-    );
-    return !hasFileOrAudioChild;
+    const hasAudioChild = children.some((child) => child.dataType === 'audio');
+    return !hasAudioChild;
   });
 
   return {

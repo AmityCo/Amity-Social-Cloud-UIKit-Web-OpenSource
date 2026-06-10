@@ -1,0 +1,50 @@
+.fileContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.fileContent__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  background-color: var(--asc-color-background-default);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.fileContent__item:hover {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.fileContent__icon {
+  display: block;
+  flex-shrink: 0;
+  width: 1.75rem;
+
+  /* Preserve the file-type icon's intrinsic 24:28 aspect ratio. */
+  aspect-ratio: 24 / 28;
+}
+
+.fileContent__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fileContent__name {
+  color: var(--asc-color-base-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileContent__size {
+  color: var(--asc-color-base-shade2);
+}
