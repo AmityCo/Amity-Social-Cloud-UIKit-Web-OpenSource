@@ -6,6 +6,7 @@ const emojiDataUrl = (emoji: string) =>
   )}`;
 
 export const MEETPERRY_REACTIONS: AmityReactionType[] = [
+  { name: 'like', image: emojiDataUrl('👍') },
   { name: 'love', image: emojiDataUrl('❤️') },
   { name: 'haha', image: emojiDataUrl('😂') },
   { name: 'bullish', image: emojiDataUrl('🚀') },
@@ -15,13 +16,12 @@ export const MEETPERRY_REACTIONS: AmityReactionType[] = [
   { name: 'celebrate', image: emojiDataUrl('👏') },
 ];
 
-export const MEETPERRY_DEFAULT_REACTION = 'love';
+export const MEETPERRY_DEFAULT_REACTION = 'like';
 
 // Display-only fallbacks for reactions stored under the kit's previous names.
 // These are NOT offered in the picker — they only render existing reaction
 // records correctly instead of showing the question-mark FallbackReaction icon.
 export const MEETPERRY_LEGACY_REACTIONS: AmityReactionType[] = [
-  { name: 'like', image: emojiDataUrl('👍') },
   { name: 'fire', image: emojiDataUrl('🔥') },
   { name: 'happy', image: emojiDataUrl('😀') },
   { name: 'sad', image: emojiDataUrl('😢') },
