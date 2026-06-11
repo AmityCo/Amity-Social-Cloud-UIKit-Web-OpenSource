@@ -1,0 +1,124 @@
+.createUserProfilePage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.createUserProfilePage__container {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.createUserProfilePage__avatarContainer {
+  width: 4rem;
+  height: 4rem;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 1.75rem auto 0;
+}
+
+.createUserProfilePage__avatar {
+  width: 7.5rem;
+  height: 7.5rem;
+  object-fit: cover;
+}
+
+.createUserProfilePage__avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.createUserProfilePage__avatarOverlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.createUserProfilePage__icon {
+  fill: var(--asc-color-white);
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.createUserProfilePage__topSection {
+  display: flex;
+  height: 3.625rem;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+
+.createUserProfilePage__topSection__cancelButton {
+  flex-basis: max-content;
+  color: var(--asc-color-base-default);
+}
+
+.createUserProfilePage__topSection__title {
+  width: 100%;
+  flex-grow: 1;
+  color: var(--asc-color-base-default);
+}
+
+.createUserProfilePage__form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.createUserProfilePage__imageInput {
+  display: none;
+}
+
+@media (width >=48em) {
+  .createUserProfilePage {
+    background-color: transparent;
+  }
+
+  .createUserProfilePage__container {
+    flex: 0;
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4, #ebecef);
+  }
+
+  .createUserProfilePage__topSection {
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .createUserProfilePage__topSection__title {
+    font-size: 1.25rem;
+  }
+
+  .createUserProfilePage__avatarContainer {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  .createUserProfilePage__form {
+    justify-content: flex-start;
+  }
+
+  .createUserProfilePage__fromInputWrap {
+    margin-bottom: 1rem;
+  }
+
+  .createUserProfilePage__icon {
+    fill: var(--asc-color-white);
+    height: 3rem;
+    width: 3rem;
+  }
+}

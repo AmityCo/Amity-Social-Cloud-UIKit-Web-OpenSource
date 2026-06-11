@@ -10,6 +10,8 @@ export { PostDetailPage } from './PostDetailPage';
 
 export { UserProfilePage } from './UserProfilePage';
 export { EditUserProfilePage } from './EditUserProfilePage';
+export { CreateUserProfilePage } from './CreateUserProfilePage';
+export type { CreateUserProfilePageProps } from './CreateUserProfilePage';
 export { BlockedUserPage } from './BlockedUserPage';
 export { UserRelationshipPage, UserRelationshipPageTabs } from './UserRelationshipPage';
 export { UserPendingFollowRequestPage } from './UserPendingFollowRequestPage';

@@ -6,6 +6,12 @@
   background-color: var(--asc-color-background-default);
 }
 
+/* Looks identical to the normal sidebar but blocks all interaction (used on
+   standalone pre-login screens such as the create-profile page). */
+.communitySideBar[data-disabled='true'] {
+  pointer-events: none;
+}
+
 .communitySideBar__header {
   gap: 1rem;
   padding: 1rem;

@@ -18,9 +18,21 @@ type CommunitySideBarProps = {
   pageId?: string;
   className?: string;
   isExploreHidden?: boolean;
+  /**
+   * When true the sidebar looks identical to normal (search box, menu items and
+   * notification tray all still render) but is non-interactive — clicks do
+   * nothing. Used on standalone pre-login screens (e.g. CreateUserProfilePage)
+   * where the sidebar is shown for visual continuity but should not navigate
+   * anywhere. Interaction is blocked at the container via `pointer-events: none`.
+   */
+  disabled?: boolean;
 };
 
-export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarProps) => {
+export const CommunitySideBar = ({
+  className,
+  pageId = '*',
+  disabled = false,
+}: CommunitySideBarProps) => {
   const componentId = 'community_sidebar';
   const { isVisitorOrBot } = useSDK();
   const { searchValue } = useSearchResultContext();
@@ -34,6 +46,10 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
     <div
       style={themeStyles}
       data-testid={accessibilityId}
+      // When disabled, block all interaction at the container so the sidebar
+      // still renders identically to the normal one but nothing is clickable.
+      data-disabled={disabled}
+      aria-disabled={disabled}
       className={clsx(styles.communitySideBar, className)}
     >
       <div className={styles.communitySideBar__header}>

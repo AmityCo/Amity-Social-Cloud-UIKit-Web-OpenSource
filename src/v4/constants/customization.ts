@@ -21,6 +21,7 @@ export const PAGE_ID = {
   USER_RELATIONSHIP_PAGE: 'user_relationship_page',
   USER_PENDING_FOLLOW_REQUEST_PAGE: 'user_pending_follow_request_page',
   EDIT_USER_PROFILE_PAGE: 'edit_user_profile_page',
+  CREATE_USER_PROFILE_PAGE: 'create_user_profile_page',
   BLOCKED_USERS_PAGE: 'blocked_users_page',
   COMMUNITY_SETUP_PAGE: 'community_setup_page',
   COMMUNITY_ADD_CATEGORY_PAGE: 'community_add_category_page',
