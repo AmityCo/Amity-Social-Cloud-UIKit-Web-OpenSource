@@ -58,8 +58,6 @@ function FileItem({ fileId, pageId = '*', componentId = '*' }: FileItemProps) {
     <a
       href={file.fileUrl}
       download
-      target="_blank"
-      rel="noopener noreferrer"
       className={styles.fileContent__item}
       data-testid={`${pageId}/${componentId}/post_file`}
     >

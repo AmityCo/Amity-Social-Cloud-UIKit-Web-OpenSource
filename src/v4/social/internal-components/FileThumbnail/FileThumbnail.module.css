@@ -1,0 +1,58 @@
+.fileThumbnail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.fileThumbnail__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.fileThumbnail__icon {
+  display: block;
+  flex-shrink: 0;
+  width: 1.75rem;
+  aspect-ratio: 24 / 28;
+}
+
+.fileThumbnail__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fileThumbnail__name {
+  overflow: hidden;
+  color: var(--asc-color-base-default);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileThumbnail__size {
+  color: var(--asc-color-base-shade2);
+}
+
+.fileThumbnail__remove {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--asc-color-base-shade1);
+  cursor: pointer;
+}
+
+.fileThumbnail__removeIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}

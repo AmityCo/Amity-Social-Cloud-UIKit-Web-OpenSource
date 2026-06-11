@@ -32,6 +32,7 @@ import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
+import { FileThumbnail } from '~/v4/social/internal-components/FileThumbnail';
 import { FileItem, useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
 import { DetailedMediaAttachment, MediaAttachment } from '~/v4/social/components';
 import ReactDOM from 'react-dom';
@@ -109,6 +110,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     isVisibleCamera,
     isVisibleImage,
     isVisibleVideo,
+    isVisibleFile,
     handleSnapChange,
     showToastPosition,
   } = useMediaAttachmentVisible({ files, posts: localPost });
@@ -131,6 +133,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [postImages, setPostImages] = useState<Amity.Post<'image'>[]>([]);
   const [postVideos, setPostVideos] = useState<Amity.Post<'video'>[]>([]);
   const [postClip, setPostClip] = useState<Amity.Post<'clip'>[]>([]);
+  const [postFiles, setPostFiles] = useState<Amity.Post<'file'>[]>([]);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -310,6 +313,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     setPostVideos(videoPosts);
     const clipPosts = posts.filter((post) => post.dataType === 'clip') as Amity.Post<'clip'>[];
     setPostClip(clipPosts);
+    const filePosts = posts.filter((post) => post.dataType === 'file') as Amity.Post<'file'>[];
+    setPostFiles(filePosts);
   }, [posts]);
 
   useEffect(() => {
@@ -340,6 +345,15 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       prevPost.filter(
         (item: Amity.Post) => (item as Amity.Post<'video'>)?.data?.videoFileId.original !== fieldId,
       ),
+    );
+  }, []);
+
+  const handleRemoveThumbnailFile = useCallback((fileId: string) => {
+    setPostFiles((prevFiles) =>
+      prevFiles.filter((item: Amity.Post<'file'>) => item?.data?.fileId !== fileId),
+    );
+    setLocalPost((prevPost) =>
+      prevPost.filter((item) => (item as Amity.Post<'file'>)?.data?.fileId !== fileId),
     );
   }, []);
 
@@ -400,8 +414,20 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         };
       });
 
+      // Re-attach existing file children. editPost replaces the attachment set, so
+      // any child left out here is dropped — omitting these silently deleted the file.
+      const attachmentsFile = postFiles.map((item: Amity.Post<'file'>) => ({
+        fileId: item?.data?.fileId as string,
+        type: PostContentType.FILE,
+      }));
+
       // Combine all attachments
-      attachments.push(...attachmentsImage, ...attachmentsVideo, ...newAttachments);
+      attachments.push(
+        ...attachmentsImage,
+        ...attachmentsVideo,
+        ...attachmentsFile,
+        ...newAttachments,
+      );
     }
 
     const finalProductTags = removeTag
@@ -530,7 +556,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const totalMedia =
     ((files && files?.length) || 0) +
     ((postImages && postImages?.length) || 0) +
-    ((postVideos && postVideos?.length) || 0);
+    ((postVideos && postVideos?.length) || 0) +
+    ((postFiles && postFiles?.length) || 0);
 
   const notifications = (
     <div
@@ -841,8 +868,14 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
             taggedProductIds={allProductTags.map((tag) => tag.productId)}
           />
+          <FileThumbnail
+            pageId={pageId}
+            postFiles={postFiles}
+            files={files}
+            onRemovePostFile={handleRemoveThumbnailFile}
+            removeFile={removeFile}
+          />
         </div>
-        {/* TODO: Handle file type */}
         {!isClipPost && (
           <div className={styles.editPost__attachment}>
             <MediaAttachment
@@ -852,6 +885,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               isVisibleCamera={isVisibleCamera}
               isVisibleImage={isVisibleImage}
               isVisibleVideo={isVisibleVideo}
+              isVisibleFile={isVisibleFile}
               productTags={allProductTags}
               onVideoFileChange={(files) =>
                 handleFileChange(files, FileType.VIDEO, localPost.length)
@@ -859,6 +893,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               onImageFileChange={(files) =>
                 handleFileChange(files, FileType.IMAGE, localPost.length)
               }
+              onFileChange={(files) => handleFileChange(files, FileType.FILE, localPost.length)}
             />
           </div>
         )}
@@ -911,12 +946,16 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
+                            isVisibleFile={isVisibleFile}
                             totalMedia={totalMedia}
                             onImageFileChange={(files) =>
                               handleFileChange(files, FileType.IMAGE, localPost.length)
                             }
                             onVideoFileChange={(files) =>
                               handleFileChange(files, FileType.VIDEO, localPost.length)
+                            }
+                            onFileChange={(files) =>
+                              handleFileChange(files, FileType.FILE, localPost.length)
                             }
                           />
                         ) : (
@@ -926,12 +965,16 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
+                            isVisibleFile={isVisibleFile}
                             totalMedia={totalMedia}
                             onImageFileChange={(files) =>
                               handleFileChange(files, FileType.IMAGE, localPost.length)
                             }
                             onVideoFileChange={(files) =>
                               handleFileChange(files, FileType.VIDEO, localPost.length)
+                            }
+                            onFileChange={(files) =>
+                              handleFileChange(files, FileType.FILE, localPost.length)
                             }
                           />
                         )}

@@ -4,6 +4,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
+import { FileButton } from '~/v4/social/elements/FileButton';
 import styles from './MediaAttachment.module.css';
 import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -16,10 +17,12 @@ interface MediaAttachmentProps {
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
+  isVisibleFile?: boolean;
   totalMedia?: number;
   productTags?: Amity.ProductTag[];
   onVideoFileChange?: (files: File[], fileType?: string) => void;
   onImageFileChange?: (files: File[], fileType?: string) => void;
+  onFileChange?: (files: File[]) => void;
 }
 
 export function MediaAttachment({
@@ -28,10 +31,12 @@ export function MediaAttachment({
   isVisibleCamera,
   isVisibleImage,
   isVisibleVideo,
+  isVisibleFile = false,
   totalMedia = 0,
   productTags = [],
   onVideoFileChange,
   onImageFileChange,
+  onFileChange,
 }: MediaAttachmentProps) {
   const componentId = 'media_attachment';
   const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ pageId, componentId });
@@ -75,6 +80,15 @@ export function MediaAttachment({
               pageId={pageId}
               componentId={componentId}
               onVideoFileChange={onVideoFileChange}
+              isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+            />
+          )}
+
+          {isVisibleFile && (
+            <FileButton
+              pageId={pageId}
+              componentId={componentId}
+              onFileChange={onFileChange}
               isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
             />
           )}

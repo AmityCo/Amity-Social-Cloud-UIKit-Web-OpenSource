@@ -1,16 +1,22 @@
-import React from 'react';
-import { IconComponent } from '~/v4/core/IconComponent';
-import { Typography } from '~/v4/core/components';
-import { useAmityElement } from '~/v4/core/hooks/uikit';
-import styles from './FileButton.module.css';
 import clsx from 'clsx';
+import React from 'react';
+import { FileTrigger } from 'react-aria-components';
+
+import { Typography } from '~/v4/core/components';
+import { IconComponent } from '~/v4/core/IconComponent';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { Button } from '~/v4/core/natives/Button';
+
+import styles from './FileButton.module.css';
 
 interface FileButtonProps {
   pageId: string;
   componentId?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
+  onFileChange?: (files: File[]) => void;
+  isDisabled?: boolean;
 }
 
 const FileButtonSvg = (props: React.SVGProps<SVGSVGElement>) => {
@@ -39,7 +45,9 @@ export function FileButton({
   componentId = '*',
   imgIconClassName,
   defaultIconClassName,
-  onClick,
+  onPress,
+  onFileChange,
+  isDisabled = false,
 }: FileButtonProps) {
   const elementId = 'file_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
@@ -47,22 +55,37 @@ export function FileButton({
 
   if (isExcluded) return null;
 
-  return (
-    <div
+  const onSelect = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    onFileChange?.(Array.from(files));
+  };
+
+  const button = (
+    <Button
+      type="button"
+      onPress={onPress}
       style={themeStyles}
-      data-testid={accessibilityId}
       className={styles.fileButton}
-      onClick={() => {}}
+      isDisabled={isDisabled}
+      data-testid={accessibilityId}
     >
       <IconComponent
+        configIconName={config.icon}
+        defaultIconName={defaultConfig.icon}
+        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
         defaultIcon={() => (
           <FileButtonSvg className={clsx(styles.fileButton__icon, defaultIconClassName)} />
         )}
-        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
-        defaultIconName={defaultConfig.icon}
-        configIconName={config.icon}
       />
       {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
-    </div>
+    </Button>
+  );
+
+  if (onPress) return button;
+
+  return (
+    <FileTrigger allowsMultiple onSelect={onSelect}>
+      {button}
+    </FileTrigger>
   );
 }
