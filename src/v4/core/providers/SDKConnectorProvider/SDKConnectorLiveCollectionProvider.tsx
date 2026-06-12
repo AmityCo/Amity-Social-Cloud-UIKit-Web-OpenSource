@@ -93,9 +93,15 @@ export default function SDKConnectorLiveCollectionProvider({
 
     return {
       unsubscribe() {
-        const callbackFn = subscriberMap.current[key].find((subscriber) => subscriber === callback);
+        // A prior refresh() or unsubscribe() may have already torn this key down
+        // (the refresh branch deletes subscriberMap.current[key]); if so there is
+        // nothing left to detach, and reading .find on undefined would throw.
+        const subscribers = subscriberMap.current[key];
+        if (!subscribers) return;
+
+        const callbackFn = subscribers.find((subscriber) => subscriber === callback);
         if (callbackFn) {
-          subscriberMap.current[key] = subscriberMap.current[key].filter(
+          subscriberMap.current[key] = subscribers.filter(
             (subscriber) => subscriber !== callbackFn,
           );
         }
