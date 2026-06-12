@@ -13,7 +13,9 @@ dist/
 _temporary
 
 # claude
-.claude/
+.claude/plans
+.claude/specs
+settings.local.json
 
 # git
 .worktrees/
