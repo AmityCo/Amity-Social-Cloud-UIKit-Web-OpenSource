@@ -86,7 +86,13 @@ export const TextWithMention = ({
   const Component = isBold ? Typography.BodyBold : Typography.Body;
 
   const editorState = useMemo(() => {
-    const extractedLinks = links && links.length > 0 ? links : extractLinks(data.text);
+    // Ignore link entries without a usable text span — e.g. the composer's
+    // link-preview placeholder ({index: 0, length: 0, url}) that the createPost
+    // response carries into the feed. Counting those as "links present" would
+    // suppress the URL auto-detection fallback and leave bare urls unlinked on
+    // the post's first render.
+    const usableLinks = links?.filter((link) => link.index !== undefined && (link.length ?? 0) > 0);
+    const extractedLinks = usableLinks?.length ? usableLinks : extractLinks(data.text);
     return textToEditorState({
       data,
       mentionees,

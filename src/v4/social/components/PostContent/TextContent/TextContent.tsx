@@ -9,6 +9,7 @@ import { Typography } from '~/v4/core/components';
 import styles from './TextContent.module.css';
 import { isValidUrl } from '~/v4/social/utils/isValidUrl';
 import { extractLinks } from '~/v4/social/utils/extractLinks';
+import { stripMarkdownLinkUrls } from '~/v4/social/utils/parseInlineMarkdown';
 
 type TextContentProps = {
   title?: string;
@@ -57,8 +58,10 @@ export const TextContent = ({
   const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
 
   const effectiveLinks = useMemo<Amity.Link[]>(() => {
-    if (post?.links && post.links.length > 0) return post.links;
-    return extractLinks(text);
+    const baseLinks = post?.links && post.links.length > 0 ? post.links : extractLinks(text);
+    // Exclude URLs that belong to a `[label](url)` markdown link so they neither
+    // break the text rendering nor surface a duplicate link-preview card.
+    return stripMarkdownLinkUrls(baseLinks, text);
   }, [post?.links, text]);
 
   const firstLinkWithPreview = effectiveLinks.find((link) => link.renderPreview);

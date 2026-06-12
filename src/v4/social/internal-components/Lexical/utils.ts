@@ -14,6 +14,7 @@ import {
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { SerializedMentionNode } from './nodes/MentionNode';
 import { hashtagRegex, hashtagTextRegex } from '~/v4/social/utils/hashtagRegex';
+import { markdownLinkSpans, stripMarkdownLinkUrls } from '~/v4/social/utils/parseInlineMarkdown';
 import { SerializedHashtagNode } from './nodes/HashtagNode';
 import { URL_REGEX } from '~/v4/social/constants/post';
 import { RangeSelection, ElementNode, TextNode } from 'lexical';
@@ -247,16 +248,21 @@ export function textToEditorState(value: {
 
   const productTags = value.productTags ?? [];
 
-  const links = value.links ?? [];
+  // Links and hashtags inside a `[label](url)` markdown link must not be carved
+  // into their own nodes — that would split the markdown before it can render
+  // (TextWithMention) and stop the editor from showing the literal text the
+  // composer produces for it.
+  const mdSpans = markdownLinkSpans(value.data.text);
+  const links = stripMarkdownLinkUrls(value.links ?? [], value.data.text);
 
-  // Create URL ranges for hashtag extraction
-  const urlRanges =
-    links.length > 0
-      ? links.map((link) => ({
-          start: link.index || 0,
-          end: link.index && link.length ? link.index + link.length - 1 : 0,
-        }))
-      : undefined;
+  // Create URL ranges for hashtag extraction (inclusive end positions)
+  const urlRanges = [
+    ...links.map((link) => ({
+      start: link.index || 0,
+      end: link.index && link.length ? link.index + link.length - 1 : 0,
+    })),
+    ...mdSpans.map((span) => ({ start: span.start, end: span.end - 1 })),
+  ];
 
   const hashtags = extractHashtagsFromText(value.data.text, urlRanges);
 
