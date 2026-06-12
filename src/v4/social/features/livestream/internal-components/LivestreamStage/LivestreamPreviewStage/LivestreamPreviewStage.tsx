@@ -18,7 +18,10 @@ export const LivestreamPreviewStage: React.FC<LivestreamPreviewStageProps> = ({
   const tracks = usePreviewTracks({
     audio: deviceManagement.currentDevices.audioEnabled,
     video: deviceManagement.currentDevices.videoEnabled
-      ? { deviceId: deviceManagement.currentDevices.videoDeviceId || 'default' }
+      ? {
+          deviceId: deviceManagement.currentDevices.videoDeviceId || 'default',
+          resolution: { width: 720, height: 1280 },
+        }
       : false,
   });
 
