@@ -385,7 +385,9 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   const { channel: liveChannel } = useChannel({ channelId: channel?.channelId });
   const { success } = useNotifications();
   const { moderateChat } = useChatModeration();
-  const [liveKitRoom] = useState(new Room());
+  const [liveKitRoom] = useState(
+    new Room({ videoCaptureDefaults: { resolution: { width: 720, height: 1280 } } }),
+  );
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {

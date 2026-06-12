@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.17.2 (2026-06-12)
+
+
+### Bug Fixes
+
+* PDT-3231 - broadcaster portrait stream ([f3323ce](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/f3323ce84ef18ae7a1ce293a4c7ce10bd2262423))
+
 ### 4.17.1 (2026-06-08)
 
 
