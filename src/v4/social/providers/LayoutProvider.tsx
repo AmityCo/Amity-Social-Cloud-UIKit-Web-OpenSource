@@ -1,4 +1,11 @@
-import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
 import {
@@ -67,6 +74,20 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const defaultTab = isVisitorOrBot ? HomePageTab.Communities : HomePageTab.Newsfeed;
   const [activeTab, setActiveTabState] = useState<HomePageTab>(defaultTab);
   const [prevActiveTab, setPrevActiveTab] = useState<HomePageTab>(defaultTab);
+
+  // The `defaultTab` above is only applied on first mount (useState initializer).
+  // When the user transitions between visitor and signed-in without remounting
+  // this provider (e.g. creating a profile from the visitor create-profile page),
+  // realign the active tab to the new default — otherwise a visitor who signs in
+  // stays stuck on the Communities tab instead of landing on Newsfeed.
+  const prevIsVisitorOrBotRef = useRef(isVisitorOrBot);
+  useEffect(() => {
+    if (prevIsVisitorOrBotRef.current !== isVisitorOrBot) {
+      prevIsVisitorOrBotRef.current = isVisitorOrBot;
+      setActiveTabState(defaultTab);
+      setPrevActiveTab(defaultTab);
+    }
+  }, [isVisitorOrBot, defaultTab]);
 
   const setActiveTab = (tab: HomePageTab) => {
     setPrevActiveTab(activeTab);

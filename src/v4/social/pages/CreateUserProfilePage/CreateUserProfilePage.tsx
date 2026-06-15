@@ -14,7 +14,6 @@ import { useMutation } from '@tanstack/react-query';
 import { Client, FileRepository, UserRepository } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { UnderlineInput } from '~/v4/social/internal-components/UnderlineInput';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNetworkState } from 'react-use';
 
@@ -57,44 +56,25 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
 
   const { themeStyles } = useAmityPage({ pageId });
   const { online } = useNetworkState();
-  const { info } = useConfirmContext();
 
   const [displayName, setDisplayName] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string | undefined>(undefined);
+  // The avatar image is held locally (raw File + a preview URL) and only
+  // uploaded AFTER login on save — FileRepository.uploadImage requires a
+  // signed-in session, which does not exist yet while creating the profile.
   const [image, setImage] = useState<File | null>(null);
-  const [newImage, setNewImage] = useState<Amity.File<'image'> | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
-  const uploadImage = async (image: File) => {
-    const formData = new FormData();
-    formData.append('files', image);
-    try {
-      const { data } = await FileRepository.uploadImage(formData);
-      setNewImage(data[0]);
-    } catch (error) {
-      // This runs inside an async callback (not during render), so it must use
-      // resolveString (a plain function), never useString (a hook).
-      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.IMAGE_NUDITY)) {
-        info({
-          pageId: pageId,
-          type: 'info',
-          title: resolveString('amity_social_button_inappropriate_image'),
-          content: resolveString('amity_social_modal_dialog_image_upload_error'),
-        });
-      } else {
-        info({
-          pageId: pageId,
-          type: 'info',
-          title: resolveString('amity_social_upload_image_failed'),
-          content: resolveString('amity_social_label_please_try_again'),
-        });
-      }
-    }
-  };
-
+  // Keep a local object-URL preview of the picked image and revoke it when the
+  // selection changes / the page unmounts to avoid leaking blob URLs.
   useEffect(() => {
-    if (image) {
-      uploadImage(image);
+    if (!image) {
+      setImagePreviewUrl(null);
+      return;
     }
+    const url = URL.createObjectURL(image);
+    setImagePreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
   }, [image]);
 
   useEffect(() => {
@@ -103,6 +83,10 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [description]);
+
+  // A stable id for the loading toast so it can be dismissed when the flow
+  // settles, regardless of how long login + upload + updateUser take.
+  const loadingToastIdRef = useRef<number>(0);
 
   // useMutation must be called directly at the top level of the component so the
   // hook keeps a stable position across renders. Wrapping it in a function and
@@ -126,11 +110,21 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
         },
       );
 
-      // Apply the remaining profile fields (about + avatar) now that the user
-      // is signed in. displayName was already set during login.
+      // Now that we are signed in, upload the avatar (if any). This is the
+      // deferred upload — it could not run earlier in visitor mode.
+      let avatarFileId: string | undefined;
+      if (image) {
+        const formData = new FormData();
+        formData.append('files', image);
+        const { data } = await FileRepository.uploadImage(formData);
+        avatarFileId = data[0]?.fileId;
+      }
+
+      // Apply the remaining profile fields (about + avatar). displayName was
+      // already set during login.
       const params: Parameters<typeof UserRepository.updateUser>[1] = {
         description: description || undefined,
-        avatarFileId: newImage?.fileId,
+        avatarFileId,
       };
 
       if (params.description != null || params.avatarFileId != null) {
@@ -139,15 +133,37 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
 
       return { userId, displayName: displayName || '' };
     },
+    // The whole flow (login + image upload + updateUser) can take a while,
+    // especially with an image, so show a persistent loading toast for its
+    // duration and dismiss it when the mutation settles.
+    onMutate: () => {
+      const id = Date.now();
+      loadingToastIdRef.current = id;
+      notification.loading({
+        id,
+        content: resolveString('amity_social_label_creating_profile'),
+        // Keep the toast up for the whole flow; it is removed in onSettled.
+        duration: 1000 * 60,
+      });
+    },
+    onSettled: () => {
+      notification.remove(loadingToastIdRef.current);
+    },
     // Note: these callbacks run during a mutation event, not during render, so
     // they must use resolveString (a plain function), never useString (a hook).
     onSuccess: (createdUser) => {
       notification.success({
-        content: resolveString('amity_social_toast_snackbar_profile_updated'),
+        content: resolveString('amity_social_toast_snackbar_profile_created'),
       });
       onCreated?.(createdUser);
     },
     onError: (error) => {
+      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.IMAGE_NUDITY)) {
+        notification.info({
+          content: resolveString('amity_social_modal_dialog_image_upload_error'),
+        });
+        return;
+      }
       if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
           content: resolveString('amity_social_user_profile_blocked_word_error'),
@@ -192,6 +208,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
           <Button
             className={styles.createUserProfilePage__topSection__cancelButton}
             onPress={onCancel}
+            isDisabled={isPending}
           >
             <Typography.Body>
               {useString('amity_social_modal_dialog_cancel_button')}
@@ -205,21 +222,24 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
         />
       </div>
       <div className={styles.createUserProfilePage__container}>
-        <div className={styles.createUserProfilePage__avatarContainer}>
-          {newImage ? (
-            <img
-              src={newImage.fileUrl}
-              alt="avatar"
-              className={styles.createUserProfilePage__avatar}
-            />
-          ) : (
-            <div className={styles.createUserProfilePage__avatarPlaceholder} />
-          )}
+        <div className={styles.createUserProfilePage__avatarSection}>
           <Button
-            className={styles.createUserProfilePage__avatarOverlay}
+            className={styles.createUserProfilePage__avatarContainer}
             onPress={triggerFileInput}
+            isDisabled={isPending}
           >
-            <Camera className={styles.createUserProfilePage__icon} />
+            {imagePreviewUrl ? (
+              <img
+                src={imagePreviewUrl}
+                alt="avatar"
+                className={styles.createUserProfilePage__avatar}
+              />
+            ) : (
+              <div className={styles.createUserProfilePage__avatarPlaceholder} />
+            )}
+            <span className={styles.createUserProfilePage__avatarOverlay}>
+              <Camera className={styles.createUserProfilePage__icon} />
+            </span>
             <input
               type="file"
               onChange={onChangeImage}
@@ -227,7 +247,17 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
               id="create-profile-image-upload"
               accept="image/png,image/jpg"
               className={styles.createUserProfilePage__imageInput}
+              disabled={isPending}
             />
+          </Button>
+          <Button
+            className={styles.createUserProfilePage__choosePhoto}
+            onPress={triggerFileInput}
+            isDisabled={isPending}
+          >
+            <Typography.BodyBold className={styles.createUserProfilePage__choosePhotoText}>
+              {useString('amity_social_label_create_user_choose_photo')}
+            </Typography.BodyBold>
           </Button>
         </div>
 
@@ -238,18 +268,21 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
               pageId={pageId}
               elementId="user_display_name_title"
               textKey="amity_social_label_edit_user_display_name_title"
+              placeholder={useString('amity_social_label_create_user_display_name_placeholder')}
               maxLength={MAX_DISPLAY_NAME_LENGTH}
               value={displayName}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setDisplayName(e.target.value)
               }
               showCounter={true}
+              disabled={isPending}
             />
             <UnderlineInput
               name="userAbout"
               pageId={pageId}
               elementId="user_about_title"
               textKey="amity_social_label_edit_user_about_title"
+              placeholder={useString('amity_social_label_create_user_about_placeholder')}
               maxLength={MAX_ABOUT_LENGTH}
               value={description}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -257,6 +290,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
               }
               showCounter={true}
               optional={true}
+              disabled={isPending}
             />
           </div>
           <UpdateUserProfileButton pageId={pageId} disabled={isSaveDisabled} />
