@@ -36,7 +36,7 @@
 }
 
 .imageContent__img {
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   height: 100%;
   width: 100%;
