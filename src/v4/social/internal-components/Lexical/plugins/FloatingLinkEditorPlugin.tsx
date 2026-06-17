@@ -36,11 +36,6 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
   const positionRef = useRef<DOMRect | null>(null);
   const selectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // If plugin is disabled, don't render anything
-  if (!enabled) {
-    return null;
-  }
-
   const updateLinkEditor = useCallback(
     (skipDebounce = false) => {
       const selection = $getSelection();
@@ -357,6 +352,13 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
     setEditedLinkUrl('');
     setLinkUrl('');
   };
+
+  // Disabled check must come after all hooks — an early return before them
+  // changes the hook count when `enabled` flips (e.g. on viewport resize)
+  // and crashes the whole tree
+  if (!enabled) {
+    return null;
+  }
 
   return (
     <div ref={editorRef} className={styles.linkEditorContainer}>
