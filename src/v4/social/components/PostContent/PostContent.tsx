@@ -35,10 +35,7 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import styles from './PostContent.module.css';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
-import { Share } from '~/v4/icons/Share';
-import { IconButton } from '~/v4/core/components/IconButton';
 import useCommunity from '~/v4/social/hooks/objects/useCommunity';
-import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { PostTitle } from './PostTitle';
 import { ChildrenPostContent } from './ChildrenPostContent';
 import { SharableModel } from '~/v4/utils/sharableLink';
@@ -863,47 +860,6 @@ export const PostContent = ({
                   imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
                   onPress={() => handleCommentClick({ isFromCommentClick: true })}
                 />
-              </div>
-              <div className={styles.postContent__reactionBar__rightPane}>
-                {(!targetCommunity || targetCommunity?.isPublic) && (
-                  <Popover
-                    containerClassName={styles.postContent__bar__actionButton}
-                    trigger={({ openPopover }) => (
-                      <IconButton
-                        variant="text"
-                        pageId={pageId}
-                        componentId={componentId}
-                        elementId="copy_link_button"
-                        defaultIcon={<Share className={styles.postContent__shareIcon} />}
-                        onPress={() =>
-                          isDesktop
-                            ? openPopover()
-                            : setDrawerData({
-                                content: (
-                                  <CopyLinkButton
-                                    pageId={pageId}
-                                    componentId={componentId}
-                                    model={SharableModel.POST}
-                                    referenceId={post.postId}
-                                    onDone={removeDrawerData}
-                                  />
-                                ),
-                              })
-                        }
-                      />
-                    )}
-                  >
-                    {({ closePopover }) => (
-                      <CopyLinkButton
-                        pageId={pageId}
-                        componentId={componentId}
-                        model={SharableModel.POST}
-                        referenceId={post.postId}
-                        onDone={isDesktop ? closePopover : removeDrawerData}
-                      />
-                    )}
-                  </Popover>
-                )}
               </div>
             </div>
           </>

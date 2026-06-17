@@ -93,12 +93,6 @@
   z-index: 50;
 }
 
-.postContent__reactionBar__rightPane {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .postContent__reactionBar__leftPane__icon {
   width: 1.25rem;
   height: 1.25rem;
@@ -115,12 +109,6 @@
   justify-content: center;
   cursor: pointer;
   gap: 0.25rem;
-}
-
-.postContent__shareIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--asc-color-base-shade2);
 }
 
 .postContent__inlineComment__container {
