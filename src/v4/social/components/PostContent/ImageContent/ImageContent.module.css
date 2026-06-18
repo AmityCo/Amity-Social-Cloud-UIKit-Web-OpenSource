@@ -7,7 +7,7 @@
 }
 
 .imageContent[data-images-amount='1'] {
-  grid-template: 'image1' auto / minmax(0, 1fr);
+  grid-template: 'image1' 1fr / minmax(0, 1fr);
 }
 
 .imageContent[data-images-amount='2'] {
