@@ -429,6 +429,7 @@
   "amity_social_label_edit_post_community_requires_approval_content": "Posting in this community requires approval. Your edited post will be published once approved by the community moderator.",
   "amity_social_label_create_user_about_placeholder": "Write something about yourself",
   "amity_social_label_create_user_choose_photo": "Choose a photo",
+  "amity_social_label_create_user_change_photo": "Change a photo",
   "amity_social_label_create_user_display_name_placeholder": "Username",
   "amity_social_label_creating_profile": "Creating profile…",
   "amity_social_label_edit_user_about_title": "About",

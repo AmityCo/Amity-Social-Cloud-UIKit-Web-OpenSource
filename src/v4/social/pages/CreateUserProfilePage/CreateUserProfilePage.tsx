@@ -16,6 +16,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { UnderlineInput } from '~/v4/social/internal-components/UnderlineInput';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNetworkState } from 'react-use';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface CreateUserProfilePageProps {
   /**
@@ -39,6 +40,14 @@ export interface CreateUserProfilePageProps {
    * Fired when the user dismisses the create-profile flow without creating.
    */
   onCancel?: () => void;
+  /**
+   * Optional existing profile image URL from the client's side. When provided,
+   * it is shown as the default avatar (instead of the camera-icon placeholder).
+   * On save, if the user has NOT picked a new photo, this URL is uploaded to
+   * Social+ via the "upload image from URL" API and used as the avatar. If the
+   * user picks a new photo, that file is uploaded instead (original flow).
+   */
+  defaultAvatarImageUrl?: string;
 }
 
 const MAX_DISPLAY_NAME_LENGTH = 100;
@@ -49,6 +58,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
   authToken,
   onCreated,
   onCancel,
+  defaultAvatarImageUrl,
 }) => {
   const pageId = 'create_user_profile_page';
   const notification = useNotifications();
@@ -56,6 +66,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
 
   const { themeStyles } = useAmityPage({ pageId });
   const { online } = useNetworkState();
+  const { client } = useSDK();
 
   const [displayName, setDisplayName] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string | undefined>(undefined);
@@ -110,14 +121,55 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
         },
       );
 
-      // Now that we are signed in, upload the avatar (if any). This is the
+      // Now that we are signed in, resolve the avatar (if any). This is the
       // deferred upload — it could not run earlier in visitor mode.
       let avatarFileId: string | undefined;
       if (image) {
+        // The user picked a new photo: upload the binary (original flow).
         const formData = new FormData();
         formData.append('files', image);
         const { data } = await FileRepository.uploadImage(formData);
         avatarFileId = data[0]?.fileId;
+      } else if (defaultAvatarImageUrl) {
+        // No new photo, but the client passed an existing image URL: upload it to
+        // Social+ via the "upload image from URL" API.
+        //
+        // This route is served by the apix host (client.http =
+        // https://apix.{region}.amity.co), per the OpenAPI spec — unlike the
+        // *binary* multipart upload (FileRepository.uploadImage), which streams
+        // bytes to the separate upload.{region} host. Posting from-url to
+        // client.upload returns 404. client.http attaches the access token
+        // automatically.
+        const { data } = await client!.http.post('/api/v4/images/from-url', {
+          fileUrl: defaultAvatarImageUrl,
+        });
+        // POST /api/v4/images/from-url returns the uploaded file under a single
+        // `items` object: { items: { fileId, fileUrl, ... } }. Stay defensive
+        // about array/top-level wrappings so the fileId is never silently dropped
+        // (it must reach updateUser below to actually set the avatar).
+        type UploadedFile = { fileId?: string };
+        const body = data as
+          | UploadedFile[]
+          | { items?: UploadedFile | UploadedFile[]; data?: UploadedFile[]; fileId?: string };
+        const pickFromArray = (arr?: UploadedFile[]) => arr?.find((f) => f?.fileId)?.fileId;
+
+        if (Array.isArray(body)) {
+          avatarFileId = pickFromArray(body);
+        } else {
+          const items = body?.items;
+          avatarFileId =
+            (Array.isArray(items) ? pickFromArray(items) : items?.fileId) ??
+            pickFromArray(body?.data) ??
+            body?.fileId;
+        }
+
+        if (!avatarFileId) {
+          // Surface the unexpected shape instead of silently creating the
+          // profile without the avatar the client asked for.
+          throw new Error(
+            `Upload image from URL succeeded but no fileId was returned: ${JSON.stringify(body)}`,
+          );
+        }
       }
 
       // Apply the remaining profile fields (about + avatar). displayName was
@@ -201,6 +253,10 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
   // A display name is the minimum requirement to create a profile.
   const isSaveDisabled = !displayName || isPending;
 
+  // What to render in the avatar circle: a freshly picked photo takes priority,
+  // then the client-provided default image URL, otherwise nothing (placeholder).
+  const displayedAvatarUrl = imagePreviewUrl ?? defaultAvatarImageUrl;
+
   const content = (
     <div className={styles.createUserProfilePage} style={themeStyles}>
       <div className={styles.createUserProfilePage__topSection}>
@@ -228,18 +284,24 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
             onPress={triggerFileInput}
             isDisabled={isPending}
           >
-            {imagePreviewUrl ? (
+            {/* Show the picked photo first, then the client-provided default
+                image, otherwise a placeholder. The camera overlay only appears
+                over the empty placeholder — when an image is shown, it is
+                displayed clean (no overlay). */}
+            {displayedAvatarUrl ? (
               <img
-                src={imagePreviewUrl}
+                src={displayedAvatarUrl}
                 alt="avatar"
                 className={styles.createUserProfilePage__avatar}
               />
             ) : (
-              <div className={styles.createUserProfilePage__avatarPlaceholder} />
+              <>
+                <div className={styles.createUserProfilePage__avatarPlaceholder} />
+                <span className={styles.createUserProfilePage__avatarOverlay}>
+                  <Camera className={styles.createUserProfilePage__icon} />
+                </span>
+              </>
             )}
-            <span className={styles.createUserProfilePage__avatarOverlay}>
-              <Camera className={styles.createUserProfilePage__icon} />
-            </span>
             <input
               type="file"
               onChange={onChangeImage}
@@ -256,7 +318,15 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
             isDisabled={isPending}
           >
             <Typography.BodyBold className={styles.createUserProfilePage__choosePhotoText}>
-              {useString('amity_social_label_create_user_choose_photo')}
+              {/* When the client supplied a default avatar, the action is a
+                  replacement ("Change a photo"); otherwise it's the initial
+                  pick ("Choose a photo"). Keyed off the provided default URL,
+                  not the locally picked image. */}
+              {useString(
+                defaultAvatarImageUrl
+                  ? 'amity_social_label_create_user_change_photo'
+                  : 'amity_social_label_create_user_choose_photo',
+              )}
             </Typography.BodyBold>
           </Button>
         </div>
