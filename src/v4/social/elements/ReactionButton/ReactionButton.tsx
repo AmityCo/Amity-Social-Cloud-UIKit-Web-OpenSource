@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -99,6 +99,10 @@ export function ReactionButton({
 
   const reactionButtonRef = useRef<HTMLButtonElement>(null);
   const desktopButtonRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  // Horizontal override (relative to the trigger) applied only when the comment
+  // reaction picker can't fit on screen anchored to its trigger. null = use CSS default.
+  const [panelLeft, setPanelLeft] = useState<number | null>(null);
 
   const { isVisitorOrBot } = useSDK();
   const shouldNotShowReactionPicker = isVisitorOrBot || (community && !community.isJoined);
@@ -156,6 +160,44 @@ export function ReactionButton({
       checkButtonPosition();
     }
   }, [showReactionPicker, checkButtonPosition]);
+
+  // Comment reactions are anchored to their trigger, which on the narrowest screens
+  // pushes the picker off the right edge. When it can't fit from the trigger, center
+  // it within the viewport instead. Wider layouts keep the default anchored position.
+  const computePanelLeft = useCallback(() => {
+    if (isDesktop || referenceType !== 'comment') return null;
+
+    const trigger = reactionButtonRef.current;
+    const panel = panelRef.current;
+    if (!trigger || !panel) return null;
+
+    const triggerRect = trigger.getBoundingClientRect();
+    const panelWidth = panel.offsetWidth;
+    const viewportWidth = document.documentElement.clientWidth;
+    const margin = 8;
+
+    // Anchored at the trigger the picker runs to roughly triggerRect.left + panelWidth.
+    // If that clears the right edge there's enough room, so keep the current position.
+    if (triggerRect.left + panelWidth <= viewportWidth - margin) return null;
+
+    // Otherwise center in the viewport (clamped to the margin), expressed relative to
+    // the trigger since the panel is absolutely positioned within it.
+    const centeredViewportLeft = Math.max(margin, (viewportWidth - panelWidth) / 2);
+    return centeredViewportLeft - triggerRect.left;
+  }, [isDesktop, referenceType]);
+
+  useLayoutEffect(() => {
+    if (!showReactionPicker) {
+      setPanelLeft(null);
+      return;
+    }
+
+    const update = () => setPanelLeft(computePanelLeft());
+    update();
+
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [showReactionPicker, computePanelLeft]);
 
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
@@ -261,11 +303,13 @@ export function ReactionButton({
         {renderReactionCountText()}
         {showReactionPicker && !shouldNotShowReactionPicker && (
           <div
+            ref={panelRef}
             data-testid={`${pageId}/${componentId}/reaction-picker-panel`}
             className={clsx(
               styles.reactButton__panel,
               showPanelBelow && styles.reactButton__panel__below,
             )}
+            style={panelLeft != null ? { left: `${panelLeft}px` } : undefined}
             data-is-clip={isClipReaction}
             data-position={showPanelBelow ? 'below' : 'above'}
             data-reference-type={referenceType}

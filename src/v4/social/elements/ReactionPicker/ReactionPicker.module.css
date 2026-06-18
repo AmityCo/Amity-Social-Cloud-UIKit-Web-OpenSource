@@ -174,3 +174,22 @@
     top: 2.25rem;
   }
 }
+
+/* On narrow (mobile) screens the picker is anchored to the left of the post and
+   its max-content width runs past the right edge, cutting off the last reactions.
+   Tighten the icons and gaps so all reactions fit within the viewport. */
+@media (width < 48em) {
+  .reactionPickerContainer {
+    gap: 0.25rem;
+  }
+
+  .reactionButton__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .reactionButton__activeBackground[data-active='true'] {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}

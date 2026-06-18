@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react';
+import React, { useCallback, useRef, useEffect, useLayoutEffect, useState } from 'react';
 import { MessageQuickReaction } from '~/v4/chat/components/MessageQuickReaction';
 import { MessageReactionPicker } from '~/v4/chat/components/MessageReactionPicker';
 import { convertRemToPx, getCssVariableValue } from '~/v4/helpers/utils';
@@ -20,7 +20,7 @@ export const MessageReaction = ({
   const [isHoveredQuickReaction, setIsHoveredQuickReaction] = useState(false);
   const [isHoveredReactionPicker, setIsHoveredReactionPicker] = useState(false);
 
-  const [transform, setTransform] = React.useState<string>();
+  const [transform, setTransform] = React.useState<string>('translate(-50%, 0px)');
   const ref = useRef<HTMLDivElement | null>(null);
 
   const isHoveredQuickReactionRef = useRef(isHoveredQuickReaction);
@@ -61,7 +61,7 @@ export const MessageReaction = ({
     }
   }, []);
 
-  const calculateTransform = () => {
+  const calculateTransform = useCallback(() => {
     if (!ref.current || !containerRef?.current) return 'translate(-50%, 0px)';
 
     const parentRect = containerRef.current.getBoundingClientRect();
@@ -77,16 +77,31 @@ export const MessageReaction = ({
     const overflowLeft = parentRect.left - pickerRect.left;
 
     if (overflowRight > 0) {
-      // If overflowing to the right, adjust the transform
-      return `translate(calc(-50% - ${overflowRight}px), 0px)`;
+      // If overflowing to the right, pull it back in (plus a small edge gap)
+      return `translate(calc(-50% - ${overflowRight + padding}px), 0px)`;
     } else if (overflowLeft > 0) {
-      // If overflowing to the left, adjust the transform
-      return `translate(calc(-50% + ${overflowLeft}px), 0px)`;
+      // If overflowing to the left, push it back in (plus a small edge gap)
+      return `translate(calc(-50% + ${overflowLeft + padding}px), 0px)`;
     } else {
       // If not overflowing, keep the original transform
       return 'translate(-50%, 0px)';
     }
-  };
+  }, [containerRef]);
+
+  // Clamp the picker within the chat container once it has mounted (and on resize).
+  // calculateTransform must run after the picker element exists so it can be measured;
+  // doing it during render (when ref is still null) skips the overflow correction and
+  // leaves the centered picker cut off near the chat edges — most visibly on narrow
+  // (mobile) screens where messages sit close to the left edge.
+  useLayoutEffect(() => {
+    if (!isReactionPickerOpen) return;
+
+    const updateTransform = () => setTransform(calculateTransform());
+    updateTransform();
+
+    window.addEventListener('resize', updateTransform);
+    return () => window.removeEventListener('resize', updateTransform);
+  }, [isReactionPickerOpen, calculateTransform]);
 
   const onMouseDown = (event: any) => {
     handleClickOutside(event);
@@ -120,7 +135,7 @@ export const MessageReaction = ({
       {isReactionPickerOpen && (
         <div
           className={styles.reactionPickerWrap}
-          style={{ transform: calculateTransform() }}
+          style={{ transform }}
           ref={ref}
           onMouseEnter={() => setIsHoveredReactionPicker(true)}
           onMouseLeave={() => {
