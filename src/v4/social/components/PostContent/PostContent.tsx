@@ -629,7 +629,7 @@ export const PostContent = ({
                 </div>
               ) : null}
               <Timestamp timestamp={post.createdAt} />
-              {post.createdAt !== post.editedAt && (
+              {!post?.metadata?.hideEditedLabel && post.createdAt !== post.editedAt && (
                 <Typography.Caption
                   data-testid={`${pageId}/${componentId}/post_edited_text`}
                   className={styles.postContent__bar__information__editedTag}
