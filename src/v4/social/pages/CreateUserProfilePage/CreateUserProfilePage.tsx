@@ -318,12 +318,12 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
             isDisabled={isPending}
           >
             <Typography.BodyBold className={styles.createUserProfilePage__choosePhotoText}>
-              {/* When the client supplied a default avatar, the action is a
-                  replacement ("Change a photo"); otherwise it's the initial
-                  pick ("Choose a photo"). Keyed off the provided default URL,
-                  not the locally picked image. */}
+              {/* Once any avatar is shown — a freshly picked photo OR the
+                  client-provided default URL — the action becomes a replacement
+                  ("Change a photo"). With nothing shown yet it's the initial
+                  pick ("Choose a photo"). */}
               {useString(
-                defaultAvatarImageUrl
+                displayedAvatarUrl
                   ? 'amity_social_label_create_user_change_photo'
                   : 'amity_social_label_create_user_choose_photo',
               )}
