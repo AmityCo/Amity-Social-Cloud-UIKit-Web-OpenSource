@@ -102,7 +102,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     },
     {
       key: 'copy-event-link',
-      Icon: CopyToClipboard,
+      icon: CopyToClipboard,
       label: useString('amity_social_button_copy_event_link'),
       condition: showCopyLink,
       onPress: async () => {
