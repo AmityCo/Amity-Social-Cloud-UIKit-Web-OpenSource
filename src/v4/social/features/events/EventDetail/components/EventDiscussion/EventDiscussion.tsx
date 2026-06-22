@@ -17,6 +17,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { EmptyContent } from '~/v4/social/internal-components/EmptyContent';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -45,6 +46,9 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { discardPostCreation } = useDiscardPostCreation();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
+  const { community: discussionCommunity } = useCommunity({
+    communityId: event.discussionCommunityId,
+  });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({ pageId, componentId });
 
@@ -69,6 +73,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
           targetName: event.title,
           targetType: 'community',
           targetId: event.discussionCommunityId!,
+          community: discussionCommunity as Amity.Community,
         });
       },
     },
@@ -135,7 +140,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
                 <PostComposerPage
                   mode={Mode.CREATE}
                   targetType="community"
-                  community={event.targetCommunity}
+                  community={discussionCommunity as Amity.Community}
                   targetId={event.discussionCommunityId!}
                 />
               ),
