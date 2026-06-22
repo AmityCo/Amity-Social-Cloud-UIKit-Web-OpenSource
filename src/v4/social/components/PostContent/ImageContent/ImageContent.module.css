@@ -7,7 +7,6 @@
 }
 
 .imageContent[data-images-amount='1'] {
-  aspect-ratio: 1;
   grid-template: 'image1' 1fr / minmax(0, 1fr);
 }
 
@@ -40,6 +39,11 @@
   object-position: center;
   height: 100%;
   width: 100%;
+}
+
+.imageContent[data-images-amount='1'] .imageContent__img {
+  height: auto;
+  max-height: 30rem;
 }
 
 .imageContent__imgContainer {
