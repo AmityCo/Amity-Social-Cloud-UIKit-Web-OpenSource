@@ -75,8 +75,7 @@ const preview: Preview = {
     uploadUrl: {
       name: 'Upload URL (linked to region)',
       control: { type: 'text' },
-      description:
-        'Auto-derived from region (e.g. https://upload.sg.amity.co). Always editable.',
+      description: 'Auto-derived from region (e.g. https://upload.sg.amity.co). Always editable.',
       table: { category: 'Network' },
     },
     // ── Security ──────────────────────────────────────────────────────────

@@ -24,32 +24,61 @@ type RegionConfig = {
   sdkRegion: string;
   defaultApiKey: string;
   uploadUrl: string;
+  /** Custom cluster (not a standard SDK region) — must pass a full apiEndpoint. */
+  custom?: boolean;
 };
 
+// sdkRegion falls back to the real region string (never '') so the SDK never
+// builds a malformed "apix..amity.co" from an empty region.
 export const REGION_CONFIG: Record<string, RegionConfig> = {
   Staging: {
-    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_STAGING || '',
+    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_STAGING || 'staging',
     defaultApiKey: import.meta.env.STORYBOOK_API_KEY_STAGING || '',
-    uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_STAGING || '',
+    uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_STAGING || 'https://upload.staging.amity.co',
+    custom: true,
   },
   SG: {
-    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_SG || '',
+    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_SG || 'sg',
     defaultApiKey: import.meta.env.STORYBOOK_API_KEY_SG || '',
     uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_SG || '',
   },
   EU: {
-    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_EU || '',
+    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_EU || 'eu',
     defaultApiKey: import.meta.env.STORYBOOK_API_KEY_EU || '',
     uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_EU || '',
   },
   US: {
-    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_US || '',
+    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_US || 'us',
     defaultApiKey: import.meta.env.STORYBOOK_API_KEY_US || '',
     uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_US || '',
   },
 };
 
-const DEFAULT_REGION = import.meta.env.STORYBOOK_DEFAULT_REGION || 'Staging';
+// Default to the "Staging" label — must match a REGION_CONFIG key.
+const DEFAULT_REGION = import.meta.env.STORYBOOK_DEFAULT_REGION || 'staging';
+
+const getPreset = (label?: string): RegionConfig | undefined => {
+  if (!label) return undefined;
+  const key = Object.keys(REGION_CONFIG).find((k) => k.toLowerCase() === label.toLowerCase());
+  return key ? REGION_CONFIG[key] : undefined;
+};
+
+// Builds the apiEndpoint for the SDK. Custom clusters (staging) get a full
+// http/mqtt/upload endpoint so the URL never depends on region templating.
+const buildApiEndpoint = (
+  preset: RegionConfig | undefined,
+  sdkRegion: string,
+  uploadUrl?: string,
+): { http?: string; mqtt?: string; upload?: string } | undefined => {
+  if (preset?.custom) {
+    return {
+      http: `https://apix.${sdkRegion}.amity.co`,
+      mqtt: `wss://sse.${sdkRegion}.amity.co:443/mqtt`,
+      upload: uploadUrl || preset.uploadUrl || `https://upload.${sdkRegion}.amity.co`,
+    };
+  }
+  return uploadUrl ? { upload: uploadUrl } : undefined;
+};
 
 const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) => {
   const [args, updateArgs] = useArgs();
@@ -57,7 +86,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
   // ── Sync apiKey + uploadUrl into the Controls panel when region changes ──────
   useEffect(() => {
     const regionLabel: string = args.apiRegion || DEFAULT_REGION;
-    const preset = REGION_CONFIG[regionLabel];
+    const preset = getPreset(regionLabel);
     if (preset) {
       updateArgs({ apiKey: preset.defaultApiKey, uploadUrl: preset.uploadUrl });
     }
@@ -70,10 +99,12 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
 
   // ── Resolve SDK values from current (possibly user-edited) args ─────────────
   const regionLabel: string = args.apiRegion || DEFAULT_REGION;
-  const preset = REGION_CONFIG[regionLabel];
-  const sdkRegion = preset?.sdkRegion ?? import.meta.env.STORYBOOK_API_REGION;
-  const resolvedApiKey = args.apiKey || import.meta.env.STORYBOOK_API_KEY;
-  const resolvedUploadUrl = args.uploadUrl || undefined;
+  const preset = getPreset(regionLabel);
+
+  const sdkRegion = preset?.sdkRegion || import.meta.env.STORYBOOK_API_REGION || 'sg';
+  const resolvedApiKey = preset?.defaultApiKey || args.apiKey || import.meta.env.STORYBOOK_API_KEY;
+  const resolvedUploadUrl = args.uploadUrl || preset?.uploadUrl || undefined;
+  const resolvedApiEndpoint = buildApiEndpoint(preset, sdkRegion, resolvedUploadUrl);
 
   // ── Identity ───────────────────────────────────────────────────────────────
   const currentUserId =
@@ -145,7 +176,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
     <AmityUIKitProvider
       apiKey={resolvedApiKey}
       apiRegion={sdkRegion}
-      apiEndpoint={resolvedUploadUrl ? { upload: resolvedUploadUrl } : undefined}
+      apiEndpoint={resolvedApiEndpoint}
       key={`${sdkRegion}-${userId}`}
       userId={userId}
       displayName={displayName || userId}
