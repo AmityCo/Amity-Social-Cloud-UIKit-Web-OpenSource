@@ -23,7 +23,7 @@ type CommunitiesProps = {
 export function Communities({ pageId }: CommunitiesProps) {
   const { isVisitorOrBot } = useSDK();
   const { goToCreateCommunityPage } = useNavigation();
-  const { socialCommunityCreationButtonVisible } = useConfig();
+  const { socialCommunityCreationButtonVisible, hideExplore } = useConfig();
   const [activeTab, setActiveTab] = useState<Key>(CommunitiesTab.Explore);
 
   const communitiesTitle = useString('amity_social_tab_tab_communities');
@@ -59,11 +59,15 @@ export function Communities({ pageId }: CommunitiesProps) {
           tabListClassName={styles.communities__tabList}
           tabPanelClassName={styles.communities__tabPanel}
           tabs={[
-            {
-              value: CommunitiesTab.Explore,
-              label: exploreLabel,
-              content: () => <Explore pageId={pageId} />,
-            },
+            ...(!hideExplore
+              ? [
+                  {
+                    value: CommunitiesTab.Explore,
+                    label: exploreLabel,
+                    content: () => <Explore pageId={pageId} />,
+                  },
+                ]
+              : []),
             {
               value: CommunitiesTab.MyCommunities,
               label: myCommunitiesLabel,

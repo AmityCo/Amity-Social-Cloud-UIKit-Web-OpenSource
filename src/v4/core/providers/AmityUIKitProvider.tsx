@@ -59,6 +59,7 @@ const InternalComponent = ({
   theme = {},
   children,
   socialCommunityCreationButtonVisible,
+  hideExplore,
   pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
@@ -253,7 +254,8 @@ const InternalComponent = ({
                     <ConfigProvider
                       config={{
                         socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
+                          socialCommunityCreationButtonVisible ?? true,
+                        hideExplore: hideExplore ?? false,
                       }}
                     >
                       <LayoutProvider>
@@ -315,6 +317,7 @@ interface AmityUIKitProviderProps {
   theme?: Record<string, unknown>;
   children?: React.ReactNode;
   socialCommunityCreationButtonVisible?: boolean;
+  hideExplore?: boolean;
   actionHandlers?: {
     onChangePage?: (data: { type: string; [x: string]: string | boolean }) => void;
     onClickCategory?: (categoryId: string) => void;

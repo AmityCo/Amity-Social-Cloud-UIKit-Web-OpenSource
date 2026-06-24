@@ -1,10 +1,10 @@
 import { Application } from './Application';
 
 export default {
-  title: 'v4/chat',
+  title: 'Chat',
 };
 
 export const ChatApplicationStory = {
-  name: 'Application',
+  name: 'Chat',
   render: () => <Application />,
 };
