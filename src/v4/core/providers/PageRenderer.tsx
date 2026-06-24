@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import {
   CreateLivestreamPage,
@@ -42,8 +42,6 @@ import {
   DraftClipPage,
   ClipFeedPage,
 } from '~/v4/social/pages';
-import CommunityFeed from '~/social/pages/CommunityFeed';
-import CommunityEditPage from '~/social/pages/CommunityEdit';
 import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
@@ -54,10 +52,8 @@ type PageRendererProps = {
 
 const PageRenderer = ({ children }: PageRendererProps) => {
   const { isDesktop } = useResponsive();
-  const [open, setOpen] = useState(false);
   const { liveStreamPlayer } = useLayoutContext();
   const { page, setDefaultPage } = useNavigation();
-  const toggleOpen = () => setOpen((open) => !open);
 
   useEffect(() => {
     setDefaultPage({
@@ -173,16 +169,9 @@ const PageRenderer = ({ children }: PageRendererProps) => {
     case PageTypes.NotificationTrayPage:
       return <NotificationTrayPage />;
     case PageTypes.CommunityFeed:
-      return (
-        <CommunityFeed
-          communityId={page.context.communityId}
-          isNewCommunity={page.context.isNewCommunity}
-          isOpen={open}
-          toggleOpen={toggleOpen}
-        />
-      );
+      return <Fragment>{children}</Fragment>;
     case PageTypes.CommunityEdit:
-      return <CommunityEditPage communityId={page.context.communityId} tab={page.context.tab} />;
+      return <Fragment>{children}</Fragment>;
     case PageTypes.PollTargetSelectionPage:
       return <PollTargetSelectionPage />;
     case PageTypes.PollPostComposerPage:

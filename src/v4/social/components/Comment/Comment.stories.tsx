@@ -1,5 +1,5 @@
 import React from 'react';
-import useOneComment from '~/mock/useOneComment';
+import useOneComment from '~/v4/mock/useOneComment';
 
 import { Comment } from './Comment';
 

@@ -1,6 +1,6 @@
 // // TODO: refactor to align with SDK roles once available.
-import { MemberRoles } from '~/social/constants';
-import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/helpers/utils';
+import { MemberRoles } from '~/v4/social/constants/memberRoles';
+import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/v4/helpers/utils';
 
 const ADMIN = 'global-admin';
 const { COMMUNITY_MODERATOR, CHANNEL_MODERATOR, MODERATOR, SUPER_MODERATOR } = MemberRoles;

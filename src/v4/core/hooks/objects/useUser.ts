@@ -35,3 +35,5 @@ export const useUser = ({
     ...rest,
   };
 };
+
+export default useUser;

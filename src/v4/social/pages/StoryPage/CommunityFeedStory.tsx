@@ -3,12 +3,12 @@ import { useString, resolveString } from '~/v4/core/localization';
 
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
-import { Trash2Icon } from '~/icons';
+import { TrashIcon as Trash2Icon } from '~/v4/icons/Trash';
 import { isNonNullable } from '~/v4/helpers/utils';
 
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
-import { checkStoryPermission } from '~/utils';
+import { checkStoryPermission } from '~/v4/social/utils';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';

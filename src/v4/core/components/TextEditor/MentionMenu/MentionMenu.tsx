@@ -15,7 +15,7 @@ import {
   UserListItemSkeleton,
   ProductMentionItemSkeleton,
 } from '~/v4/social/internal-components/Skeleton';
-import { SEARCH_PRODUCT_MINIMUM_CHARACTER } from '~/social/constants';
+const SEARCH_PRODUCT_MINIMUM_CHARACTER = 3;
 import { MentionMenuTabs } from './MentionMenuTabs';
 
 export interface MentionMenuProps<T> {

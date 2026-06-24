@@ -2,28 +2,21 @@ import './index.css';
 import '~/v4/styles/global.css';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import SDKConnectorProviderV3 from '~/core/providers/SDKConnectorProvider';
 import SDKConnectorProvider from '~/v4/core/providers/SDKConnectorProvider';
 import {
   initialSDKContext,
   SDKContext,
   type SDKContextType,
 } from '~/v4/core/providers/SDKProvider';
-import { SDKContext as SDKContextV3 } from '~/core/providers/SDKProvider';
-import PostRendererProvider from '~/social/providers/PostRendererProvider';
 import NavigationProvider from './NavigationProvider';
 
 import ConfigProvider from '~/v4/social/providers/ConfigProvider';
 import { ConfirmModal } from '~/v4/core/components/ConfirmModal';
-import { ConfirmComponent as LegacyConfirmComponent } from '~/core/components/Confirm';
 import { NotificationsContainer } from '~/v4/core/components/Notification';
 import { DrawerContainer } from '~/v4/core/components/Drawer';
-import { NotificationsContainer as LegacyNotificationsContainer } from '~/core/components/Notification';
 
 import { LocaleProvider, defaultLocaleMap, type LocaleBundle } from '~/v4/core/localization';
 
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import buildGlobalTheme from '~/core/providers/UiKitProvider/theme';
 import {
   defaultConfig,
   Config,
@@ -34,10 +27,8 @@ import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
-import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider, useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
-import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
 import { AdEngineProvider } from './AdEngineProvider';
 import { AdEngine } from '~/v4/core/AdEngine';
@@ -65,7 +56,6 @@ const InternalComponent = ({
   apiEndpoint,
   userId,
   displayName,
-  postRendererConfig,
   theme = {},
   children,
   socialCommunityCreationButtonVisible,
@@ -257,52 +247,46 @@ const InternalComponent = ({
         <CustomReactionProvider>
           <AdEngineProvider>
             <FeedScrollProvider>
-              <SDKContextV3.Provider value={sdkContextValue}>
-                <SDKContext.Provider value={sdkContextValue}>
-                  <UserCacheProvider>
-                    <SDKConnectorProviderV3>
-                      <SDKConnectorProvider>
-                        <ConfigProvider
-                          config={{
-                            socialCommunityCreationButtonVisible:
-                              socialCommunityCreationButtonVisible || true,
-                          }}
+              <SDKContext.Provider value={sdkContextValue}>
+                <UserCacheProvider>
+                  <SDKConnectorProvider>
+                    <ConfigProvider
+                      config={{
+                        socialCommunityCreationButtonVisible:
+                          socialCommunityCreationButtonVisible || true,
+                      }}
+                    >
+                      <LayoutProvider>
+                        <NavigationProvider
+                          activeRoute={activeRoute}
+                          onRouteChange={onRouteChange}
+                          onEmptyNavigationStack={onEmptyNavigationStack}
                         >
-                          <PostRendererProvider config={postRendererConfig}>
-                            <LayoutProvider>
-                              <NavigationProvider
-                                activeRoute={activeRoute}
-                                onRouteChange={onRouteChange}
-                                onEmptyNavigationStack={onEmptyNavigationStack}
-                              >
-                                <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                  <SearchResultProvider>
-                                    <StoryProvider>
-                                      <ClipProvider>
-                                        <CommunitySetupProvider>
-                                          <DrawerProvider>
-                                            <GlobalFeedProvider>
-                                              <PopupProvider>
-                                                <Popup />
-                                                {children}
-                                              </PopupProvider>
-                                            </GlobalFeedProvider>
-                                            <DrawerContainer />
-                                          </DrawerProvider>
-                                        </CommunitySetupProvider>
-                                      </ClipProvider>
-                                    </StoryProvider>
-                                  </SearchResultProvider>
-                                </PageBehaviorProvider>
-                              </NavigationProvider>
-                            </LayoutProvider>
-                          </PostRendererProvider>
-                        </ConfigProvider>
-                      </SDKConnectorProvider>
-                    </SDKConnectorProviderV3>
-                  </UserCacheProvider>
-                </SDKContext.Provider>
-              </SDKContextV3.Provider>
+                          <PageBehaviorProvider pageBehavior={pageBehavior}>
+                            <SearchResultProvider>
+                              <StoryProvider>
+                                <ClipProvider>
+                                  <CommunitySetupProvider>
+                                    <DrawerProvider>
+                                      <GlobalFeedProvider>
+                                        <PopupProvider>
+                                          <Popup />
+                                          {children}
+                                        </PopupProvider>
+                                      </GlobalFeedProvider>
+                                      <DrawerContainer />
+                                    </DrawerProvider>
+                                  </CommunitySetupProvider>
+                                </ClipProvider>
+                              </StoryProvider>
+                            </SearchResultProvider>
+                          </PageBehaviorProvider>
+                        </NavigationProvider>
+                      </LayoutProvider>
+                    </ConfigProvider>
+                  </SDKConnectorProvider>
+                </UserCacheProvider>
+              </SDKContext.Provider>
             </FeedScrollProvider>
           </AdEngineProvider>
         </CustomReactionProvider>
@@ -328,7 +312,6 @@ interface AmityUIKitProviderProps {
   };
   userId?: string;
   displayName?: string;
-  postRendererConfig?: any;
   theme?: Record<string, unknown>;
   children?: React.ReactNode;
   socialCommunityCreationButtonVisible?: boolean;
@@ -393,21 +376,13 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
     >
       <QueryClientProvider client={queryClient}>
         <ThemeProvider config={props.configs}>
-          <StyledThemeProvider theme={buildGlobalTheme(props.theme)}>
-            <NotificationProvider>
-              <LegacyNotificationProvider>
-                <ConfirmProvider>
-                  <LegacyConfirmProvider>
-                    <InternalComponent {...props} />
-                    <NotificationsContainer />
-                    <LegacyNotificationsContainer />
-                    <ConfirmModal />
-                    <LegacyConfirmComponent />
-                  </LegacyConfirmProvider>
-                </ConfirmProvider>
-              </LegacyNotificationProvider>
-            </NotificationProvider>
-          </StyledThemeProvider>
+          <NotificationProvider>
+            <ConfirmProvider>
+              <InternalComponent {...props} />
+              <NotificationsContainer />
+              <ConfirmModal />
+            </ConfirmProvider>
+          </NotificationProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </LocaleProvider>

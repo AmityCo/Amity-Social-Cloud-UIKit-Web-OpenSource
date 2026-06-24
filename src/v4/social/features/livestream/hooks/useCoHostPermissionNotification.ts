@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 import { resolveString } from '~/v4/core/localization';

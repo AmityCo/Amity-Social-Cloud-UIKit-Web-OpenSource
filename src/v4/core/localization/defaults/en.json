@@ -1,5 +1,5 @@
 {
-  "amity_add_blocked_url_comment_error_message": "Your comment contains a blocked URL.",
+  "amity_add_blocked_url_comment_error_message": "Your comment wasn't posted as it contains a link that is not allowed.",
   "amity_chat_home_title": "Chat",
   "amity_chat_home_empty_title": "No conversation yet",
   "amity_chat_home_empty_description": "Let's create chat to get started.",

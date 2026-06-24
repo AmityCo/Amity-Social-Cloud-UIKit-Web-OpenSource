@@ -1,5 +1,5 @@
 import React from 'react';
-import useUser from '~/core/hooks/useUser';
+import useUser from '~/v4/core/hooks/objects/useUser';
 import styles from './styles.module.css';
 import CloseIcon from '~/v4/icons/Close';
 import { resolveString } from '~/v4/core/localization';

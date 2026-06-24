@@ -6,7 +6,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChannelMembersCollection';
 import { useMentionAllConfig } from '~/v4/chat/hooks/useMentionAllConfig';
 import { TEXT } from '~/v4/chat/constants';
-import { SEARCH_USER_MINIMUM_CHARACTER } from '~/social/constants';
+const SEARCH_USER_MINIMUM_CHARACTER = 2;
 
 export interface SuggestionData {
   userId: string;

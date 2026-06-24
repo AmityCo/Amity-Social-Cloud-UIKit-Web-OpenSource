@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
 import { useCoHostPermissionNotification } from '~/v4/social/features/livestream/hooks';
 import { NotificationAlignment } from '~/v4/core/components/Notification';

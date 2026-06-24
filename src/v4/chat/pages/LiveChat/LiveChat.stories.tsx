@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import useChannelsCollection from '~/chat/hooks/collections/useChannelsCollection';
-import ChatItem from '~/chat/components/ChatItem';
+import useChannelsCollection from '~/v4/chat/hooks/collections/useChannelsCollection';
+import { ChannelItem } from '~/v4/chat/features/home/components/ChannelItem/ChannelItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { LiveChat } from './';
 import styles from './LiveChat.module.css';
@@ -16,10 +16,6 @@ const LiveChatList = () => {
     sortBy: 'lastActivity',
     types: ['live'],
   });
-
-  const onSelectedChannel = (channelId: string) => {
-    setSelectedChannel(channelId);
-  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +35,7 @@ const LiveChatList = () => {
         <InfiniteScroll
           scrollableTarget={containerRef.current}
           scrollThreshold={0.7}
-          hasMore={hasMore}
+          hasMore={hasMore ?? false}
           next={loadMore}
           loader={isLoading ? <span key={0}>Loading...</span> : null}
           inverse={true}
@@ -48,13 +44,10 @@ const LiveChatList = () => {
           height={containerRef.current.clientHeight}
         >
           {channels.map((channel) => (
-            <ChatItem
-              channel={channel}
+            <ChannelItem
               key={channel.channelId}
-              isSelected={selectedChannel === channel.channelId}
-              onSelect={(data) => {
-                onSelectedChannel(data.channelId);
-              }}
+              channel={channel}
+              onPress={() => setSelectedChannel(channel.channelId)}
             />
           ))}
         </InfiniteScroll>

@@ -1,5 +1,5 @@
 import React from 'react';
-import useOneUser from '~/mock/useOneUser';
+import useOneUser from '~/v4/mock/useOneUser';
 
 import { UserSearchResult } from './UserSearchResult';
 

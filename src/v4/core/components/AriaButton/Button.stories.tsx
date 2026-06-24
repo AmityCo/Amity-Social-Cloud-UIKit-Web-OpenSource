@@ -1,5 +1,5 @@
 import { Button } from '.';
-import { Plus } from '~/icons';
+import { Plus } from '~/v4/icons';
 import React, { Fragment } from 'react';
 import { StoryObj, Meta } from '@storybook/react';
 

@@ -4,7 +4,7 @@ import { Avatar, Typography } from '~/v4/core/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import TruncateMarkup from 'react-truncate-markup';
 import styles from './StoryPreview.module.css';
-import { PauseIcon, PlayIcon } from '~/icons';
+import { PauseIcon, PlayIcon } from '~/v4/icons';
 import ColorThief from 'colorthief';
 import Community from '~/v4/icons/Community';
 import clsx from 'clsx';

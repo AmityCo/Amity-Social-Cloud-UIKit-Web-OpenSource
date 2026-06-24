@@ -1,5 +1,5 @@
 import React from 'react';
-import useOneCommunity from '~/mock/useOneCommunity';
+import useOneCommunity from '~/v4/mock/useOneCommunity';
 
 import { CommunityAvatar } from './CommunityAvatar';
 

@@ -6,7 +6,7 @@ import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryPro
 import InfoCircle from '~/v4/icons/InfoCircle';
 import { Avatar, Typography } from '~/v4/core/components';
 import Broadcast from '~/v4/icons/Broadcast';
-import { PauseIcon, PlayIcon } from '~/icons';
+import { PauseIcon, PlayIcon } from '~/v4/icons';
 import { CloseButton } from '~/v4/social/elements';
 import { StoryAdInformation } from '~/v4/social/internal-components/StoryAdInformation/StoryAdInformation';
 import { AdsBadge } from '~/v4/social/internal-components/AdsBadge/AdsBadge';

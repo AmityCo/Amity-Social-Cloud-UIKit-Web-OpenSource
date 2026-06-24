@@ -4,7 +4,7 @@ import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import useCategoriesCollection from '~/v4/core/hooks/collections/useCategoriesCollection';
-import useImage from '~/core/hooks/useImage';
+import useImage from '~/v4/core/hooks/useImage';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { AllCategoriesTitle } from '~/v4/social/elements/AllCategoriesTitle';

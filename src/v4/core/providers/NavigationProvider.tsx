@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { NavigationContext as NavigationContextV3 } from '~/social/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import {
@@ -1707,25 +1706,7 @@ export default function NavigationProvider({
         onProductTagClick,
       }}
     >
-      <NavigationContextV3.Provider
-        value={{
-          page: currentPage as any, //TODO : Fix any type
-          onChangePage: handleChangePage,
-          onClickCategory: handleClickCategory,
-          onClickCommunity: handleClickCommunity,
-          onClickUser: handleClickUser,
-          onCommunityCreated: handleCommunityCreated,
-          onEditCommunity: handleEditCommunity,
-          onEditUser: handleEditUser,
-          onMessageUser: handleMessageUser,
-          onBack: handleBack,
-          setNavigationBlocker,
-          goToDraftStoryPage,
-          onClickStory: handleClickStory,
-        }}
-      >
-        {children}
-      </NavigationContextV3.Provider>
+      {children}
     </NavigationContext.Provider>
   );
 }

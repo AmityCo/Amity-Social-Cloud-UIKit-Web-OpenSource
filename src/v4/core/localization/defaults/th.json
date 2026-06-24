@@ -1,5 +1,5 @@
 {
-  "amity_add_blocked_url_comment_error_message": "ความคิดเห็นของคุณมี URL ที่ถูกบล็อก",
+  "amity_add_blocked_url_comment_error_message": "ความคิดเห็นของคุณไม่ถูกโพสต์เนื่องจากมีลิงก์ที่ไม่ได้รับอนุญาต",
   "amity_chat_label_banned_from_chat": "คุณถูกแบนจากการแชท",
   "amity_chat_label_banned_from_chat_description": "คุณจะไม่สามารถเข้าร่วมการแชทนี้ได้จนกว่าจะถูกยกเลิกการแบน",
   "amity_chat_loading_label": "กำลังโหลดแชท...",

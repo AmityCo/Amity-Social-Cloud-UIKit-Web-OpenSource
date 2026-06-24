@@ -1,5 +1,5 @@
 import React from 'react';
-import useOnePostWithCommentAndReactions from '~/mock/useOnePostWithCommentsAndReactions';
+import useOnePostWithCommentAndReactions from '~/v4/mock/useOnePostWithCommentsAndReactions';
 import { PostDetailPage } from './PostDetailPage';
 
 export default {

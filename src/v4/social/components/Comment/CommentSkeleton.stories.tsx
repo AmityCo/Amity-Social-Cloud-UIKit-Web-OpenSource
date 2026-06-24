@@ -1,5 +1,5 @@
 import React from 'react';
-import useOnePost from '~/mock/useOnePost';
+import useOnePost from '~/v4/mock/useOnePost';
 
 import { CommentSkeleton } from './CommentSkeleton';
 

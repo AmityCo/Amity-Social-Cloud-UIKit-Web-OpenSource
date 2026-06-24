@@ -91,6 +91,14 @@ export function ManageProductTagList({
 
   const { online } = useNetworkState();
   const { success, info } = useNotifications();
+  const discardProductSelectionTitle = useString(
+    'amity_social_modal_dialog_title_discard_product_selection',
+  );
+  const unsavedProductsText = useString('amity_social_unsaved_products');
+  const discardText = useString('amity_social_button_discard');
+  const keepEditingText = useString('amity_social_button_keep_editing');
+  const productTagRemovedText = useString('amity_social_label_product_tag_removed');
+  const productTagRemoveFailedText = useString('amity_social_toast_product_tag_remove_failed');
 
   const handleRemove = async (productTag: Amity.ProductTag) => {
     const previousTags = productTags;
@@ -113,13 +121,13 @@ export function ManageProductTagList({
       } else if (onUpdateProductTags && updatedTags) {
         await onUpdateProductTags(updatedTags);
         success({
-          content: useString('amity_social_label_product_tag_removed'),
+          content: productTagRemovedText,
         });
       }
     } catch (error) {
       // Show error message
       info({
-        content: useString('amity_social_toast_product_tag_remove_failed'),
+        content: productTagRemoveFailedText,
       });
       // Rollback UI state on failure
       setProductTags(previousTags);
@@ -147,10 +155,10 @@ export function ManageProductTagList({
       if (hasUnsavedChanges) {
         confirm({
           type: 'confirm',
-          title: useString('amity_social_modal_dialog_title_discard_product_selection'),
-          content: useString('amity_social_unsaved_products'),
-          okText: useString('amity_social_button_discard'),
-          cancelText: useString('amity_social_button_keep_editing'),
+          title: discardProductSelectionTitle,
+          content: unsavedProductsText,
+          okText: discardText,
+          cancelText: keepEditingText,
           okButtonColor: 'alert',
           onOk: () => {
             closePopup();
