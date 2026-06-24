@@ -32,10 +32,18 @@ export interface CreateUserProfilePageProps {
   authToken?: string;
   /**
    * Fired after the profile is successfully created and the user is signed in.
-   * Receives the created userId and the chosen displayName. The client decides
-   * what to render next (e.g. swap to the main UIKit).
+   * Receives the created userId, the chosen displayName, the About text, and the
+   * resolved avatar image URL (the newly uploaded photo's fileUrl if the user
+   * picked one, otherwise the passed `defaultAvatarImageUrl` if left unchanged,
+   * otherwise undefined). The client decides what to render next (e.g. swap to
+   * the main UIKit).
    */
-  onCreated?: (user: { userId: string; displayName: string }) => void;
+  onCreated?: (user: {
+    userId: string;
+    displayName: string;
+    about?: string;
+    imageUrl?: string;
+  }) => void;
   /**
    * Fired when the user dismisses the create-profile flow without creating.
    */
@@ -123,13 +131,19 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
 
       // Now that we are signed in, resolve the avatar (if any). This is the
       // deferred upload — it could not run earlier in visitor mode.
+      //
+      // `avatarImageUrl` is the URL we hand back to the client via onCreated:
+      // the freshly uploaded photo's fileUrl when the user picked one, or the
+      // passed-in default URL when left unchanged.
       let avatarFileId: string | undefined;
+      let avatarImageUrl: string | undefined;
       if (image) {
         // The user picked a new photo: upload the binary (original flow).
         const formData = new FormData();
         formData.append('files', image);
         const { data } = await FileRepository.uploadImage(formData);
         avatarFileId = data[0]?.fileId;
+        avatarImageUrl = data[0]?.fileUrl;
       } else if (defaultAvatarImageUrl) {
         // No new photo, but the client passed an existing image URL: upload it to
         // Social+ via the "upload image from URL" API.
@@ -147,21 +161,26 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
         // `items` object: { items: { fileId, fileUrl, ... } }. Stay defensive
         // about array/top-level wrappings so the fileId is never silently dropped
         // (it must reach updateUser below to actually set the avatar).
-        type UploadedFile = { fileId?: string };
+        type UploadedFile = { fileId?: string; fileUrl?: string };
         const body = data as
           | UploadedFile[]
           | { items?: UploadedFile | UploadedFile[]; data?: UploadedFile[]; fileId?: string };
-        const pickFromArray = (arr?: UploadedFile[]) => arr?.find((f) => f?.fileId)?.fileId;
+        const pickFromArray = (arr?: UploadedFile[]) => arr?.find((f) => f?.fileId);
 
+        let uploaded: UploadedFile | undefined;
         if (Array.isArray(body)) {
-          avatarFileId = pickFromArray(body);
+          uploaded = pickFromArray(body);
         } else {
           const items = body?.items;
-          avatarFileId =
-            (Array.isArray(items) ? pickFromArray(items) : items?.fileId) ??
+          uploaded =
+            (Array.isArray(items) ? pickFromArray(items) : items) ??
             pickFromArray(body?.data) ??
-            body?.fileId;
+            (body as UploadedFile);
         }
+        avatarFileId = uploaded?.fileId;
+        // Prefer the canonical Social+ fileUrl the API returns; fall back to the
+        // client-supplied default URL if the response omits it.
+        avatarImageUrl = uploaded?.fileUrl ?? defaultAvatarImageUrl;
 
         if (!avatarFileId) {
           // Surface the unexpected shape instead of silently creating the
@@ -183,7 +202,12 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
         await UserRepository.updateUser(userId, params);
       }
 
-      return { userId, displayName: displayName || '' };
+      return {
+        userId,
+        displayName: displayName || '',
+        about: description || undefined,
+        imageUrl: avatarImageUrl,
+      };
     },
     // The whole flow (login + image upload + updateUser) can take a while,
     // especially with an image, so show a persistent loading toast for its
