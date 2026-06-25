@@ -54,7 +54,7 @@
   position: absolute;
   z-index: 1;
   padding: 2rem 1rem 1rem;
-  background-color: rgb(from var(--asc-color-black) r g b / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 .videoViewer__closeButton {

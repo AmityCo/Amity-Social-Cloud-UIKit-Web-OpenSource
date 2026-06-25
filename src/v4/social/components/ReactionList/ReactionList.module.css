@@ -266,7 +266,7 @@
     background: linear-gradient(
       270deg,
       var(--asc-color-background-default) 60.43%,
-      rgb(255 255 255 / 0%) 100%
+      rgb(from var(--asc-color-white) r g b / 0%) 100%
     );
   }
 

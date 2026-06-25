@@ -6,7 +6,7 @@
   min-width: 200px;
   background-color: var(--asc-color-background-default);
   border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  box-shadow: 0 4px 12px rgb(from var(--asc-color-black) r g b / 15%);
   overflow: hidden;
 }
 

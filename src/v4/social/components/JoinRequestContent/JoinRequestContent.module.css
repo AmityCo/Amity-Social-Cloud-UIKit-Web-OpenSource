@@ -1,6 +1,6 @@
 .joinRequestContent__container {
   padding: 0.75rem 1rem 0;
-  border-bottom: 0.5rem solid #ebecef;
+  border-bottom: 0.5rem solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-background-default);
 }
 

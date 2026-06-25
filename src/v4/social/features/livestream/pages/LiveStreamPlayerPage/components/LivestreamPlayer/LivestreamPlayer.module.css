@@ -36,7 +36,7 @@
   position: absolute;
   align-items: center;
   justify-content: center;
-  background: rgb(from var(--asc-color-black) r g b / 50%);
+  background: var(--asc-color-transparent-black);
 }
 
 .liveStreamPlayer__slowConnection {

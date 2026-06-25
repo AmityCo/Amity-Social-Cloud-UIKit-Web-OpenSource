@@ -8,5 +8,25 @@
         "ignorePseudoClasses": ["global"]
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/v4/**/*.css"],
+      "rules": {
+        "color-no-hex": true,
+        "color-named": "never",
+        "declaration-property-value-disallowed-list": {
+          "/.*/": ["/rgba?\\(\\s*[0-9.]/"]
+        }
+      }
+    },
+    {
+      "files": ["src/v4/chat/**/*.css", "**/icons/**/*.css", "src/v4/styles/**/*.css"],
+      "rules": {
+        "color-no-hex": null,
+        "color-named": null,
+        "declaration-property-value-disallowed-list": null
+      }
+    }
+  ]
 }

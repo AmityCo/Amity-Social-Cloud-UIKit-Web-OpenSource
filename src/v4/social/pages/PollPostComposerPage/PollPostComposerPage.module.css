@@ -159,9 +159,9 @@
 
 .pollPostComposerPage__pollOptions__input[data-isvalid='false'],
 .pollPostComposerPage__pollOptions__input:focus-within[data-isvalid='false'] {
-  background-color: var(--asc-color-alert-shade2);
+  background-color: rgb(from var(--asc-color-alert-default) r g b / 10%);
   border-radius: 0.25rem;
-  border: 1px solid var(--asc-color-alert-shade1);
+  border: 0.0625rem solid var(--asc-color-alert-default);
 }
 
 .pollPostComposerPage__pollOptions__input::placeholder {

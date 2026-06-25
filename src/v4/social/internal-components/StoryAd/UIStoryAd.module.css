@@ -4,7 +4,7 @@
   height: 2rem;
 
   /* TODO: change to css variable */
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
   border-radius: 50%;
   border: none;
   top: 6rem;
@@ -69,7 +69,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: rgb(0 0 0 / 90%);
+  background: rgb(from var(--asc-color-black) r g b / 90%);
   z-index: 9;
   display: flex;
   justify-content: center;
@@ -162,9 +162,7 @@
   gap: var(--asc-spacing-xxs2);
   border-radius: 50%;
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
-
-  /* TODO: change to css variable */
-  background-color: #292b32;
+  background-color: var(--asc-color-base-divider-line);
 }
 
 .header {

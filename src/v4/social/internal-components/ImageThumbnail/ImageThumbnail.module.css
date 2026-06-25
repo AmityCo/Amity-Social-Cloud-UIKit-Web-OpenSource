@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(from var(--asc-color-black) r g b / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 .icon__status__error {

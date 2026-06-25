@@ -72,9 +72,7 @@
   background-color: var(--asc-color-background-default) !important;
 
   /* Elevation 05 */
-  box-shadow:
-    0 2px 4px 0 rgb(40 41 61 / 4%),
-    0 8px 16px 0 rgb(96 97 112 / 16%);
+  box-shadow: var(--asc-box-shadow-05);
   border: 1px solid var(--asc-color-base-shade4) !important;
 }
 

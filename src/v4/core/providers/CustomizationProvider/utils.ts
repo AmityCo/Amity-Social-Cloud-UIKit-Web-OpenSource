@@ -87,6 +87,7 @@ type BaseThemeValue = {
   host_color_shade1: string;
   primary_pressed_color: string;
   message_overlay_color: string;
+  video_progress_track_color: string;
 };
 
 type GeneratedThemeValue = {
@@ -119,6 +120,7 @@ const defaultBase = {
   host_color_shade1: '#EAE2FF',
   primary_pressed_color: '#1A4499',
   message_overlay_color: 'rgb(41 43 50 / 40%)',
+  video_progress_track_color: '#d9d9d9',
 };
 
 export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
@@ -1098,6 +1100,7 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   host_color: '--asc-color-host-default',
   host_color_shade1: '--asc-color-host-shade1',
   message_overlay_color: '--asc-color-message-overlay',
+  video_progress_track_color: '--asc-color-video-progress-track',
 };
 
 export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {

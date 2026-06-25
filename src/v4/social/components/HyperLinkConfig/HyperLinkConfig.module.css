@@ -13,11 +13,11 @@
 }
 
 .bottomSheet .react-modal-sheet-backdrop {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 .bottomSheet .react-modal-sheet-container {
-  background-color: white;
+  background-color: var(--asc-color-background-default);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   max-height: 80%;
@@ -39,7 +39,7 @@
 .bottomSheet .react-modal-sheet-drag-indicator {
   width: 40px;
   height: 4px;
-  background-color: #ccc;
+  background-color: var(--asc-color-base-shade3);
   border-radius: 2px;
   margin-bottom: 8px;
 }
@@ -203,7 +203,7 @@
     width: 100%;
     padding: 0.62rem 1rem;
     color: var(--asc-color-secondary-default);
-    border: 1px solid var(--asc-color-secondary-shade3, #a5a9b5);
+    border: 0.0625rem solid var(--asc-color-secondary-shade3);
   }
 
   .hyperlinkConfig__footer__editDoneButton {

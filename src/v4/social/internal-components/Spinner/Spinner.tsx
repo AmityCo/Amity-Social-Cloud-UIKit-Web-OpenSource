@@ -18,7 +18,7 @@ export const Spinner = (props: React.SVGProps<SVGSVGElement>) => {
         cy="10.5"
         r="9"
         fill="none"
-        stroke="#1054DE"
+        stroke="currentColor"
         strokeWidth="2"
         strokeDasharray="46.75"
         strokeDashoffset="21"

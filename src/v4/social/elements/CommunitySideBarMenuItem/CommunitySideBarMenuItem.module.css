@@ -13,7 +13,7 @@
 .communitySideBarMenuItem:hover,
 .communitySideBarMenuItem:active {
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-primary-shade3);
+  background-color: var(--asc-color-base-shade4);
 }
 
 .communitySideBarMenuItem:disabled {
@@ -64,6 +64,6 @@
 @media (width >= 48em) {
   .communitySideBarMenuItem[data-focus-visible] {
     color: var(--asc-color-base-default);
-    background-color: var(--asc-color-primary-shade3);
+    background-color: var(--asc-color-base-shade4);
   }
 }
