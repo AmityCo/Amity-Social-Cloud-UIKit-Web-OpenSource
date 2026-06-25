@@ -61,7 +61,7 @@ const preview: Preview = {
     apiRegion: {
       name: 'API Region',
       control: { type: 'select' },
-      options: ['Staging', 'SG', 'EU', 'US'],
+      options: ['staging', 'sg', 'eu', 'us'],
       description: 'API region. Selecting a region auto-fills API Key and Upload URL.',
       table: { category: 'Network' },
     },

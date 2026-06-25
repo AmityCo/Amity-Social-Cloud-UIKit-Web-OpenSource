@@ -27,6 +27,21 @@ jobs:
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
       STORYBOOK_USERS: ${{ secrets.STORYBOOK_USERS }}
       STORYBOOK_VISITOR_AUTH_SIGNATURE_URL: ${{ secrets.STORYBOOK_VISITOR_AUTH_SIGNATURE_URL }}
+      # Per-region config below — all read from Actions Secrets (same as STORYBOOK_API_REGION above).
+      # Secret names must match exactly (case-sensitive) or they resolve to empty.
+      STORYBOOK_DEFAULT_REGION: ${{ secrets.STORYBOOK_DEFAULT_REGION }}
+      STORYBOOK_SDK_REGION_STAGING: ${{ secrets.STORYBOOK_SDK_REGION_STAGING }}
+      STORYBOOK_SDK_REGION_SG: ${{ secrets.STORYBOOK_SDK_REGION_SG }}
+      STORYBOOK_SDK_REGION_EU: ${{ secrets.STORYBOOK_SDK_REGION_EU }}
+      STORYBOOK_SDK_REGION_US: ${{ secrets.STORYBOOK_SDK_REGION_US }}
+      STORYBOOK_UPLOAD_URL_STAGING: ${{ secrets.STORYBOOK_UPLOAD_URL_STAGING }}
+      STORYBOOK_UPLOAD_URL_SG: ${{ secrets.STORYBOOK_UPLOAD_URL_SG }}
+      STORYBOOK_UPLOAD_URL_EU: ${{ secrets.STORYBOOK_UPLOAD_URL_EU }}
+      STORYBOOK_UPLOAD_URL_US: ${{ secrets.STORYBOOK_UPLOAD_URL_US }}
+      STORYBOOK_API_KEY_STAGING: ${{ secrets.STORYBOOK_API_KEY_STAGING }}
+      STORYBOOK_API_KEY_SG: ${{ secrets.STORYBOOK_API_KEY_SG }}
+      STORYBOOK_API_KEY_EU: ${{ secrets.STORYBOOK_API_KEY_EU }}
+      STORYBOOK_API_KEY_US: ${{ secrets.STORYBOOK_API_KEY_US }}
 
     steps:
       - name: git checkout

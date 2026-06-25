@@ -58,7 +58,7 @@ export const REGION_CONFIG: Record<string, RegionConfig> = {
 };
 
 // Public default in code ('SG'). Internal devs set STORYBOOK_DEFAULT_REGION
-// (e.g. 'Staging') in their gitignored .env to default to a private cluster.
+// (e.g. 'staging') in their gitignored .env to default to a private cluster.
 // Looked up case-insensitively by getPreset.
 const DEFAULT_REGION = import.meta.env.STORYBOOK_DEFAULT_REGION || 'SG';
 
