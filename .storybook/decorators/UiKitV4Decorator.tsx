@@ -28,13 +28,16 @@ type RegionConfig = {
   custom?: boolean;
 };
 
-// sdkRegion falls back to the real region string (never '') so the SDK never
-// builds a malformed "apix..amity.co" from an empty region.
+// OSS-safe: public regions (SG/EU/US) fall back to their public region string;
+// Staging is ENV-ONLY (no internal endpoints hardcoded) so this exact file can
+// ship to the open-source repo. The empty-region guard below (sdkRegion || 'sg')
+// prevents a malformed "apix..amity.co" when an env value is missing.
 export const REGION_CONFIG: Record<string, RegionConfig> = {
   Staging: {
-    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_STAGING || 'staging',
+    // Internal cluster — supplied only via the gitignored .env, never in code.
+    sdkRegion: import.meta.env.STORYBOOK_SDK_REGION_STAGING || '',
     defaultApiKey: import.meta.env.STORYBOOK_API_KEY_STAGING || '',
-    uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_STAGING || 'https://upload.staging.amity.co',
+    uploadUrl: import.meta.env.STORYBOOK_UPLOAD_URL_STAGING || '',
     custom: true,
   },
   SG: {
@@ -54,8 +57,10 @@ export const REGION_CONFIG: Record<string, RegionConfig> = {
   },
 };
 
-// Default to the "Staging" label — must match a REGION_CONFIG key.
-const DEFAULT_REGION = import.meta.env.STORYBOOK_DEFAULT_REGION || 'staging';
+// Public default in code ('SG'). Internal devs set STORYBOOK_DEFAULT_REGION
+// (e.g. 'Staging') in their gitignored .env to default to a private cluster.
+// Looked up case-insensitively by getPreset.
+const DEFAULT_REGION = import.meta.env.STORYBOOK_DEFAULT_REGION || 'SG';
 
 const getPreset = (label?: string): RegionConfig | undefined => {
   if (!label) return undefined;
