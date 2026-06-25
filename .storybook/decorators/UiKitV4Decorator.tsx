@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useArgs } from '@storybook/preview-api';
 import { AmityUIKitProvider } from '../../src/v4/core/providers';
 import { Preview } from '@storybook/react';
@@ -88,9 +88,20 @@ const buildApiEndpoint = (
 const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) => {
   const [args, updateArgs] = useArgs();
 
-  // ── Sync apiKey + uploadUrl into the Controls panel when region changes ──────
+  // ── Auto-fill apiKey + uploadUrl ONLY on a genuine region switch ─────────────
+  // Skipping the first run (mount/reload) preserves a user-edited apiKey that
+  // Storybook restores from the URL args — otherwise it gets clobbered back to
+  // the region default on every reload.
+  const prevRegionRef = useRef<string | undefined>(undefined);
   useEffect(() => {
     const regionLabel: string = args.apiRegion || DEFAULT_REGION;
+    if (prevRegionRef.current === undefined) {
+      // First run after mount/reload — remember region, don't overwrite args.
+      prevRegionRef.current = regionLabel;
+      return;
+    }
+    if (prevRegionRef.current === regionLabel) return;
+    prevRegionRef.current = regionLabel;
     const preset = getPreset(regionLabel);
     if (preset) {
       updateArgs({ apiKey: preset.defaultApiKey, uploadUrl: preset.uploadUrl });
@@ -107,7 +118,8 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
   const preset = getPreset(regionLabel);
 
   const sdkRegion = preset?.sdkRegion || import.meta.env.STORYBOOK_API_REGION || 'sg';
-  const resolvedApiKey = preset?.defaultApiKey || args.apiKey || import.meta.env.STORYBOOK_API_KEY;
+  // User-entered key wins; fall back to the region preset, then the env default.
+  const resolvedApiKey = args.apiKey || preset?.defaultApiKey || import.meta.env.STORYBOOK_API_KEY;
   const resolvedUploadUrl = args.uploadUrl || preset?.uploadUrl || undefined;
   const resolvedApiEndpoint = buildApiEndpoint(preset, sdkRegion, resolvedUploadUrl);
 
@@ -116,8 +128,9 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
     !args.userType || args.userType === 'signed-in' ? args.userId || FALLBACK_USER : undefined;
 
   const [userId, setUserId] = useState<string | undefined>(currentUserId);
+  // Empty → undefined so it falls back to the userId (see `displayName` below).
   const [displayNameState, setDisplayNameState] = useState<string | undefined>(
-    args.displayName || args.userId || userId,
+    args.displayName || undefined,
   );
 
   if (args.visitorCanViewClip) {
@@ -134,7 +147,9 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
   useEffect(() => {
     if (!args.submit) return;
     if (args.userId) setUserId(args.userId);
-    if (args.displayName) setDisplayNameState(args.displayName);
+    // Always sync displayName; empty clears it so it falls back to the userId
+    // (prevents a stale displayName when the userId changes).
+    setDisplayNameState(args.displayName || undefined);
   }, [args.submit]);
 
   const displayName = displayNameState || userId;
