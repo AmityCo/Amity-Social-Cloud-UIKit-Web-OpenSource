@@ -7,56 +7,58 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Timestamp } from '~/v4/social/elements/Timestamp';
-import { ReactionButton } from '~/v4/social/elements/ReactionButton';
-import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
-import { Typography } from '~/v4/core/components';
-import { UserAvatar } from '~/v4/social/elements/UserAvatar';
-import { CommentButton } from '~/v4/social/elements/CommentButton';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import FallbackReaction from '~/v4/icons/FallbackReaction';
-import { TextContent } from './TextContent';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
-import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
-import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
-import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
-import millify from 'millify';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
-import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
-import { PinBadge } from '~/v4/social/elements/PinBadge';
+
 import clsx from 'clsx';
-import { Popover } from '~/v4/core/components/AriaPopover';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
-import styles from './PostContent.module.css';
-import { isTextPost } from '~/v4/social/utils/postTypeChecker';
-import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
-import useCommunity from '~/v4/social/hooks/objects/useCommunity';
-import { PostTitle } from './PostTitle';
-import { ChildrenPostContent } from './ChildrenPostContent';
-import { SharableModel } from '~/v4/utils/sharableLink';
-import { CommentList } from '~/v4/social/components/CommentList/CommentList';
-import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
-import useSDK from '~/v4/core/hooks/useSDK';
-import { Divider } from '~/v4/social/elements/Divider';
-import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
-import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
-import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
+import millify from 'millify';
+
+import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
-import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import { Popover } from '~/v4/core/components/AriaPopover';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import useSDK from '~/v4/core/hooks/useSDK';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import FallbackReaction from '~/v4/icons/FallbackReaction';
+import VideoControl from '~/v4/icons/VideoControl';
+import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
+import { CommentList } from '~/v4/social/components/CommentList/CommentList';
+import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { EventHostBadge } from '~/v4/social/elements';
+import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
+import { CommentButton } from '~/v4/social/elements/CommentButton';
+import { Divider } from '~/v4/social/elements/Divider';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
+import { PinBadge } from '~/v4/social/elements/PinBadge';
+import { ReactionButton } from '~/v4/social/elements/ReactionButton';
+import { Timestamp } from '~/v4/social/elements/Timestamp';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
-import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
+import useCommunity from '~/v4/social/hooks/objects/useCommunity';
 import { usePost as usePostById } from '~/v4/social/hooks/posts/usePost';
+import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
+import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
+import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
+import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
+import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
+import type { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
+import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { getRepostedPostId } from '~/v4/social/utils/repost';
 import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
-import VideoControl from '~/v4/icons/VideoControl';
+import { SharableModel } from '~/v4/utils/sharableLink';
+
+import { ChildrenPostContent } from './ChildrenPostContent';
+import styles from './PostContent.module.css';
+import { PostTitle } from './PostTitle';
+import { TextContent } from './TextContent';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -293,6 +295,11 @@ export const PostContent = ({
   const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
   const [replyL0AncestorId, setReplyL0AncestorId] = useState<string | undefined>(undefined);
 
+  // Feed cards hide comments by default; the comment button / "N comments" label toggles
+  // this to reveal the inline CommentList + composer (see design 802-9455). The post detail
+  // page renders its own comment section and is unaffected (disabledInlineComment).
+  const [showInlineComments, setShowInlineComments] = useState(false);
+
   const handleInlineReplyClick = useCallback(
     ({
       comment,
@@ -449,6 +456,24 @@ export const PostContent = ({
     });
   };
 
+  // In the feed, the comment button / "N comments" label toggle the inline comment section
+  // instead of navigating to the post detail page. Routed through the same community/follow
+  // gating as handleCommentClick so non-members/visitors still get the join/follow prompt.
+  const toggleInlineComments = () => {
+    const defaultBehavior = () => setShowInlineComments((prev) => !prev);
+
+    if (targetCommunity)
+      return handleCommunityProfileBehavior({
+        defaultBehavior,
+        allowNonMember: false,
+        isJoined: targetCommunity?.isJoined,
+      });
+
+    return handleUserProfileBehavior({ defaultBehavior, allowNonFollower: true });
+  };
+
+  const isFeedStyle = style === AmityPostContentComponentStyle.FEED;
+
   const openImageViewer = (imageIndex: number) => {
     openPopup({
       id: 'image-viewer',
@@ -567,14 +592,11 @@ export const PostContent = ({
     threshold: 0.6,
     elementRef,
   });
-  // Mount the inline CommentList once the post has scrolled into view and keep it mounted for the rest of this PostContent's lifetime.
-  // Gating on the live `isVisible` flag caused the list to unmount/remount as the post crossed the viewport, refetching comments and shifting layout on every scroll.
-  // Sticky-once-seen still bounds SDK observers (posts the user never sees never subscribe), which is what the rate-limiter fix needs.
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
-  useEffect(() => {
-    if (isVisible) setHasBeenVisible(true);
-  }, [isVisible]);
-  const shouldRenderInlineComments = hasBeenVisible || !!replyTo;
+  // Comments are hidden until the user opts in via the comment button (design 802-9455), so the
+  // inline CommentList only mounts on demand. This also keeps SDK comment observers off posts the
+  // user never expands (the concern the previous sticky-once-visible gate was added for).
+  // `!!replyTo` keeps the section open while an inline reply is in progress.
+  const shouldRenderInlineComments = showInlineComments || !!replyTo;
 
   useEffect(() => {
     if (page.type === PageTypes.PostDetailPage) return;
@@ -820,7 +842,7 @@ export const PostContent = ({
               <Button
                 data-testid={`${pageId}/${componentId}/comment_count`}
                 variant="default"
-                onPress={() => onClick?.()}
+                onPress={() => (isFeedStyle ? toggleInlineComments() : onClick?.())}
               >
                 <Typography.Caption
                   data-testid={`${pageId}/${componentId}/comment_count`}
@@ -833,36 +855,38 @@ export const PostContent = ({
           </div>
 
           {/* Reaction Bar */}
-          <>
-            <div className={styles.postContent__divider} />
-            <div className={styles.postContent__reactionBar}>
-              <div className={styles.postContent__reactionBar__leftPane}>
-                <ReactionButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  reactionsCount={
-                    style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
-                  }
-                  myReaction={reactionByMe}
-                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                  onReactionClick={handleReactionClick}
-                  community={targetCommunity}
-                />
-                <CommentButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  commentsCount={
-                    style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
-                  }
-                  buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
-                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                  onPress={() => handleCommentClick({ isFromCommentClick: true })}
-                />
-              </div>
+          <div className={styles.postContent__divider} />
+          <div className={styles.postContent__reactionBar}>
+            <div className={styles.postContent__reactionBar__leftPane}>
+              <ReactionButton
+                pageId={pageId}
+                componentId={componentId}
+                reactionsCount={
+                  style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                }
+                myReaction={reactionByMe}
+                defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                onReactionClick={handleReactionClick}
+                community={targetCommunity}
+              />
+              <CommentButton
+                pageId={pageId}
+                componentId={componentId}
+                commentsCount={
+                  style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                }
+                buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
+                defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                onPress={() =>
+                  isFeedStyle
+                    ? toggleInlineComments()
+                    : handleCommentClick({ isFromCommentClick: true })
+                }
+              />
             </div>
-          </>
+          </div>
 
           {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
             <VideoViewer
@@ -880,7 +904,7 @@ export const PostContent = ({
       {/*
        * Should not see inline comment in post detail page and pending post page
        */}
-      {!disabledInlineComment && (
+      {!disabledInlineComment && shouldRenderInlineComments && (
         <>
           <Divider className={styles.postContent__inlineComment__divider} />
           {canShowInlineComposer && (
@@ -897,47 +921,45 @@ export const PostContent = ({
               community={targetCommunity}
             />
           )}
-          {shouldRenderInlineComments && (
-            <div className={styles.postContent__inlineComment__container}>
-              <CommentList
-                pageId={pageId}
-                referenceId={post.postId}
-                referenceType="post"
-                limit={3}
-                community={targetCommunity}
-                commentCount={post.commentsCount}
-                eventCreatorId={eventCreatorId}
-                hideEmptyState
-                onClickReply={handleInlineReplyClick}
-                replyTargetCommentId={
-                  isDesktop && replyL0AncestorId
-                    ? replyParentIdOverride ?? replyTo?.commentId
-                    : undefined
+          <div className={styles.postContent__inlineComment__container}>
+            <CommentList
+              pageId={pageId}
+              referenceId={post.postId}
+              referenceType="post"
+              limit={3}
+              community={targetCommunity}
+              commentCount={post.commentsCount}
+              eventCreatorId={eventCreatorId}
+              hideEmptyState
+              onClickReply={handleInlineReplyClick}
+              replyTargetCommentId={
+                isDesktop && replyL0AncestorId
+                  ? replyParentIdOverride ?? replyTo?.commentId
+                  : undefined
+              }
+              renderReplyComment={(comment) => {
+                if (!isDesktop || !canShowInlineComposer) return undefined;
+                const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
+                if (replyTo && comment.commentId === effectiveL0Id) {
+                  const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
+                  return (
+                    <div style={{ marginLeft: composerMarginLeft }}>
+                      <CommentComposer
+                        pageId={pageId}
+                        referenceId={post.postId}
+                        referenceType={'post'}
+                        replyTo={replyTo}
+                        parentIdOverride={replyParentIdOverride}
+                        onCancelReply={handleCancelInlineReply}
+                        community={targetCommunity}
+                      />
+                    </div>
+                  );
                 }
-                renderReplyComment={(comment) => {
-                  if (!isDesktop || !canShowInlineComposer) return undefined;
-                  const effectiveL0Id = replyL0AncestorId ?? replyTo?.commentId;
-                  if (replyTo && comment.commentId === effectiveL0Id) {
-                    const composerMarginLeft = replyTo.parentId ? '2.5rem' : '0';
-                    return (
-                      <div style={{ marginLeft: composerMarginLeft }}>
-                        <CommentComposer
-                          pageId={pageId}
-                          referenceId={post.postId}
-                          referenceType={'post'}
-                          replyTo={replyTo}
-                          parentIdOverride={replyParentIdOverride}
-                          onCancelReply={handleCancelInlineReply}
-                          community={targetCommunity}
-                        />
-                      </div>
-                    );
-                  }
-                  return undefined;
-                }}
-              />
-            </div>
-          )}
+                return undefined;
+              }}
+            />
+          </div>
         </>
       )}
     </div>
