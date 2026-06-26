@@ -46,6 +46,10 @@ type CommentListProps = {
   /** When true, suppress the "No comments yet" placeholder so the list can be embedded
    *  in dense surfaces (e.g. feed cards) without reserving vertical space. */
   hideEmptyState?: boolean;
+  /** When true (feed cards), show only `limit` comments with a "View all N comments" /
+   *  "Hide all comments" toggle on every viewport. When false (detail page, tray, drawer),
+   *  keep the full list + auto infinite-scroll behavior. */
+  collapsible?: boolean;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -71,6 +75,7 @@ export const CommentList = ({
   showReplyCommentAt,
   eventCreatorId,
   hideEmptyState = false,
+  collapsible = false,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -145,10 +150,10 @@ export const CommentList = ({
         !pendingL0CommentIds.has((item as Amity.Comment).commentId)),
   );
 
-  // Collapsed feed cards show only `limit` comments; expanding reveals the rest and switches
-  // the toggle to "Hide all comments". Slice the already-loaded list when collapsed so the
-  // "Hide all comments" action actually shrinks the visible list back down.
-  const displayedItems = expanded ? filteredItems : filteredItems.slice(0, limit);
+  // Collapsible feed cards show only `limit` comments until expanded; slicing the already-loaded
+  // list when collapsed lets "Hide all comments" actually shrink the visible list back down.
+  // Non-collapsible surfaces (detail page, tray, drawer) keep the full list + infinite scroll.
+  const displayedItems = collapsible && !expanded ? filteredItems.slice(0, limit) : filteredItems;
   const hasMoreToShow =
     hasMore ||
     filteredItems.filter((item) => !isAmityAd(item) && !(item as Amity.Comment).isDeleted).length >
@@ -330,33 +335,50 @@ export const CommentList = ({
         );
       })}
 
-      {isDesktop && (expanded || hasMoreToShow) && (
-        <Button
-          className={styles.commentList__viewAllComments__button}
-          variant="text"
-          onPress={() => {
-            if (expanded) {
-              setExpanded(false);
-            } else {
-              loadMore();
-              setExpanded(true);
-            }
-          }}
-        >
-          <Typography.Caption
-            as="span"
-            className={styles.commentList__viewAllComments__button__text}
-          >
-            {expanded ? 'Hide all comments' : `View all ${commentCount} comments`}
-          </Typography.Caption>
-        </Button>
-      )}
+      {collapsible
+        ? (expanded || hasMoreToShow) && (
+            <Button
+              className={styles.commentList__commentsToggle}
+              variant="text"
+              onPress={() => {
+                if (expanded) {
+                  setExpanded(false);
+                } else {
+                  loadMore();
+                  setExpanded(true);
+                }
+              }}
+            >
+              <Typography.Caption as="span" className={styles.commentList__commentsToggle__text}>
+                {expanded ? 'Hide all comments' : `View all ${commentCount} comments`}
+              </Typography.Caption>
+            </Button>
+          )
+        : isDesktop &&
+          hasMore &&
+          !expanded &&
+          filteredItems
+            .filter((item) => !isAmityAd(item))
+            .filter((item) => !(item as Amity.Comment).isDeleted).length < commentCount && (
+            <Button
+              className={styles.commentList__viewAllComments__button}
+              variant="text"
+              onPress={() => {
+                loadMore();
+                setExpanded(true);
+              }}
+            >
+              <Typography.BodyBold className={styles.commentList__viewAllComments__button__text}>
+                View all comments...
+              </Typography.BodyBold>
+            </Button>
+          )}
 
       {isLoading && (
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={1} />
       )}
 
-      {(!isDesktop || (isDesktop && expanded)) && !isLoading && (
+      {(collapsible ? expanded : !isDesktop || expanded) && !isLoading && (
         <div
           ref={(node) => setIntersectionNode(node)}
           className={styles.commentList__container_intersection}

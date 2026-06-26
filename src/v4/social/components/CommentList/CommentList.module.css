@@ -5,6 +5,20 @@
 }
 
 .commentList__viewAllComments__button {
+  width: 100%;
+  padding: var(--asc-spacing-s2) 0;
+  margin: auto;
+  border-top: 0.0625rem solid var(--asc-color-base-shade4);
+  cursor: pointer;
+  text-align: center;
+}
+
+.commentList__viewAllComments__button__text {
+  color: var(--asc-color-base-default);
+}
+
+/* Feed-card comments toggle — design 822:16234 "Text Link" (label/md-caps gold link) */
+.commentList__commentsToggle {
   align-self: flex-start;
   padding: 0;
   cursor: pointer;
@@ -13,8 +27,7 @@
   text-align: left;
 }
 
-/* design 822:16234 "Text Link" — label/md-caps gold link */
-.commentList__viewAllComments__button__text {
+.commentList__commentsToggle__text {
   color: var(--asc-color-primary-default);
   font-size: 0.75rem;
   line-height: 0.9375rem;

@@ -927,6 +927,7 @@ export const PostContent = ({
               referenceId={post.postId}
               referenceType="post"
               limit={3}
+              collapsible
               community={targetCommunity}
               commentCount={post.commentsCount}
               eventCreatorId={eventCreatorId}
