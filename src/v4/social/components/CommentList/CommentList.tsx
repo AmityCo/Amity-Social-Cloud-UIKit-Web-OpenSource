@@ -145,6 +145,15 @@ export const CommentList = ({
         !pendingL0CommentIds.has((item as Amity.Comment).commentId)),
   );
 
+  // Collapsed feed cards show only `limit` comments; expanding reveals the rest and switches
+  // the toggle to "Hide all comments". Slice the already-loaded list when collapsed so the
+  // "Hide all comments" action actually shrinks the visible list back down.
+  const displayedItems = expanded ? filteredItems : filteredItems.slice(0, limit);
+  const hasMoreToShow =
+    hasMore ||
+    filteredItems.filter((item) => !isAmityAd(item) && !(item as Amity.Comment).isDeleted).length >
+      limit;
+
   useIntersectionObserver({
     node: intersectionNode,
     onIntersect: () => {
@@ -298,8 +307,8 @@ export const CommentList = ({
         </div>
       )}
 
-      {/* Render regular comments without the highlighted one */}
-      {filteredItems.map((item, index) => {
+      {/* Render regular comments without the highlighted one (sliced to `limit` when collapsed) */}
+      {displayedItems.map((item, index) => {
         return isAmityAd(item) ? (
           <CommentAd key={item.adId} ad={item} />
         ) : (
@@ -321,25 +330,27 @@ export const CommentList = ({
         );
       })}
 
-      {isDesktop &&
-        hasMore &&
-        !expanded &&
-        filteredItems
-          .filter((item) => !isAmityAd(item))
-          .filter((item) => !(item as Amity.Comment).isDeleted).length < commentCount && (
-          <Button
-            className={styles.commentList__viewAllComments__button}
-            variant="text"
-            onPress={() => {
+      {isDesktop && (expanded || hasMoreToShow) && (
+        <Button
+          className={styles.commentList__viewAllComments__button}
+          variant="text"
+          onPress={() => {
+            if (expanded) {
+              setExpanded(false);
+            } else {
               loadMore();
               setExpanded(true);
-            }}
+            }
+          }}
+        >
+          <Typography.Caption
+            as="span"
+            className={styles.commentList__viewAllComments__button__text}
           >
-            <Typography.BodyBold className={styles.commentList__viewAllComments__button__text}>
-              View all comments...
-            </Typography.BodyBold>
-          </Button>
-        )}
+            {expanded ? 'Hide all comments' : `View all ${commentCount} comments`}
+          </Typography.Caption>
+        </Button>
+      )}
 
       {isLoading && (
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={1} />
