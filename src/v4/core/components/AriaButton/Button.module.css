@@ -90,7 +90,8 @@
 .fill.primary[data-disabled='true'],
 .fill.primary[data-disabled='true']:hover {
   cursor: not-allowed;
-  background-color: var(--asc-color-primary-background-disabled);
+  opacity: 0.3;
+  background-color: var(--asc-color-primary-default);
 }
 
 .fill.alert {
