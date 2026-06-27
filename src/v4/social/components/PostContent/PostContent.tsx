@@ -771,7 +771,34 @@ export const PostContent = ({
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           )}
 
-          <div className={styles.postContent__reactions_and_comments}>
+          {/* Reaction Bar */}
+          <div className={styles.postContent__reactionBar}>
+            <div className={styles.postContent__reactionBar__leftPane}>
+              <ReactionButton
+                pageId={pageId}
+                componentId={componentId}
+                reactionsCount={
+                  style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                }
+                myReaction={reactionByMe}
+                defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                onReactionClick={handleReactionClick}
+                community={targetCommunity}
+              />
+              <CommentButton
+                pageId={pageId}
+                componentId={componentId}
+                commentsCount={
+                  style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                }
+                buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
+                defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                onPress={() => handleCommentClick({ isFromCommentClick: true })}
+              />
+            </div>
+
             {post?.reactionsCount > 0 && (
               <Button
                 data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
@@ -779,6 +806,13 @@ export const PostContent = ({
                 className={styles.postContent__reactionsBar}
                 onPress={handleReactionListClick}
               >
+                <Typography.Caption
+                  data-testid={`${pageId}/${componentId}/like_count`}
+                  className={styles.postContent__reactionsBar__reactions__count}
+                >
+                  {`${millify(post?.reactionsCount || 0)}`}
+                </Typography.Caption>
+
                 {hasReaction ? (
                   <div className={styles.postContent__reactionsBar__reactions}>
                     {sortedReactions
@@ -806,63 +840,9 @@ export const PostContent = ({
                       )}
                   </div>
                 ) : null}
-
-                <Typography.Caption
-                  data-testid={`${pageId}/${componentId}/like_count`}
-                  className={styles.postContent__reactionsBar__reactions__count}
-                >
-                  {`${millify(post?.reactionsCount || 0)}`}
-                </Typography.Caption>
-              </Button>
-            )}
-
-            {post?.commentsCount > 0 && (
-              <Button
-                data-testid={`${pageId}/${componentId}/comment_count`}
-                variant="default"
-                onPress={() => onClick?.()}
-              >
-                <Typography.Caption
-                  data-testid={`${pageId}/${componentId}/comment_count`}
-                  className={styles.postContent__commentsCount}
-                >
-                  {`${millify(post?.commentsCount) || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
-                </Typography.Caption>
               </Button>
             )}
           </div>
-
-          {/* Reaction Bar */}
-          <>
-            <div className={styles.postContent__divider} />
-            <div className={styles.postContent__reactionBar}>
-              <div className={styles.postContent__reactionBar__leftPane}>
-                <ReactionButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  reactionsCount={
-                    style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
-                  }
-                  myReaction={reactionByMe}
-                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                  onReactionClick={handleReactionClick}
-                  community={targetCommunity}
-                />
-                <CommentButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  commentsCount={
-                    style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
-                  }
-                  buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
-                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                  onPress={() => handleCommentClick({ isFromCommentClick: true })}
-                />
-              </div>
-            </div>
-          </>
 
           {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
             <VideoViewer
