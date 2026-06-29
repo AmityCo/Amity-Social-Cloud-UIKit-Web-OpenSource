@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.22.1-99beb6ff.0
-        version: 7.22.1-99beb6ff.0
+        specifier: 7.22.1-fa4a2e0.0
+        version: 7.22.1-fa4a2e0.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -336,8 +336,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.22.1-99beb6ff.0':
-    resolution: {integrity: sha512-HesrNJgAGeDNDIf1NEw7AsZ0OLxSC/xR3WGFf3bs1f2nZl0p0PclymhslwaTioPse5jr3M6aV3v1S6NJ/3o/vw==}
+  '@amityco/ts-sdk@7.22.1-fa4a2e0.0':
+    resolution: {integrity: sha512-veXTw4BBgx/HKPtrv+w7w+13hPBrUMXH/DQuIuCNW6N5o4pwP+HOXGOcgHOEDf2gOJEeK2d0yDSAphHLo1jt4g==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5516,8 +5516,8 @@ packages:
   jpeg-js@0.4.4:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
-  js-base64@3.7.8:
-    resolution: {integrity: sha512-hNngCeKxIUQiEUN3GPJOkz4wF/YvdUdbNL9hsBcMQTkKzboD7T/q3OYOuuPZLUE6dBxSGpwhk5mwuDud7JVAow==}
+  js-base64@3.8.0:
+    resolution: {integrity: sha512-65kvbemyZhj+ExQt1PEFyBEjL5vAHysu1lJdW1AwhhChkO8ZBPizYk/m9GVrpbS2Je1hF+UYZ+6KywqtZV8mHw==}
 
   js-cookie@2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
@@ -7959,13 +7959,13 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.22.1-99beb6ff.0':
+  '@amityco/ts-sdk@7.22.1-fa4a2e0.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
       debug: 4.4.1
       hls.js: 1.5.11
-      js-base64: 3.7.8
+      js-base64: 3.8.0
       jwt-decode: 3.1.2
       mitt: 3.0.1
       mqtt: 4.3.8
@@ -14613,7 +14613,7 @@ snapshots:
 
   jpeg-js@0.4.4: {}
 
-  js-base64@3.7.8: {}
+  js-base64@3.8.0: {}
 
   js-cookie@2.2.1: {}
 
