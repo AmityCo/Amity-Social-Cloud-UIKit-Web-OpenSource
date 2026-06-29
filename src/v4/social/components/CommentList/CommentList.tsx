@@ -44,6 +44,7 @@ type CommentListProps = {
   commentListClassName?: string;
   showReplyCommentAt?: string;
   eventCreatorId?: Amity.Event['userId'];
+  refreshOnNewComment?: boolean;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -68,6 +69,7 @@ export const CommentList = ({
   commentListClassName,
   showReplyCommentAt,
   eventCreatorId,
+  refreshOnNewComment = false,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -163,11 +165,14 @@ export const CommentList = ({
         if (prev.some((p) => p.commentId === detail.comment.commentId)) return prev;
         return [detail.comment, ...prev];
       });
+      if (refreshOnNewComment) {
+        refresh();
+      }
     };
     document.addEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
 
     return () => document.removeEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
-  }, [referenceId]);
+  }, [referenceId, refreshOnNewComment, refresh]);
 
   // Track whether the L0 bounce has already fired to avoid double-bouncing.
   const hasL0BouncedRef = useRef(false);

@@ -45,6 +45,7 @@ export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerPr
             community={community}
             commentCount={post.commentsCount}
             commentListClassName={styles.clipFeedMenu__commentListContainer}
+            refreshOnNewComment
           />
         )}
 
