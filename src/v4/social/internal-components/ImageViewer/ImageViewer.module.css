@@ -6,14 +6,15 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
 
 .imageViewer__fullImage {
   max-width: 100%;
-
-  /* set max-height equal to popup's max-height to avoid cutting off the image */
-  max-height: 80vh;
-  object-fit: cover;
+  max-height: calc(100dvh - 5rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
   display: block;
 }
 
@@ -78,10 +79,12 @@
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 10;
   display: flex;
   position: absolute;
   align-items: center;
-  padding: 2rem 1rem 1rem;
+  padding: max(2rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem
+    max(1rem, env(safe-area-inset-left));
   justify-content: space-between;
   background-color: rgb(from var(--asc-color-black) r g b / 50%);
 }
@@ -89,7 +92,7 @@
 .imageViewer__closeButton {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-base-shade4);
+  fill: var(--asc-color-white);
 }
 
 .imageViewer__closeButton__img {
@@ -120,6 +123,7 @@
 @media only screen and (width >= 48em) {
   .imageViewer__fullImage {
     max-width: 37.5rem;
+    max-height: 80vh;
   }
 
   .imageViewer__itemContainer {
@@ -142,6 +146,17 @@
 
 .imageViewer__imageContainer {
   position: relative;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (width < 48em) {
+  .imageViewer__imageContainer {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .imageViewer__productTagBadge {

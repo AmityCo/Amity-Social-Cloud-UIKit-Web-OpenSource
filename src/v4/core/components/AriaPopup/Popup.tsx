@@ -30,8 +30,9 @@ export function Popup() {
         } = popup;
         const close = () => closePopup(props.id);
         const isLastPopup = index + 1 === popups.length;
+        const shouldUseModalOverlay = isDesktop || media;
 
-        return isDesktop ? (
+        return shouldUseModalOverlay ? (
           <ModalOverlay
             {...props}
             key={props.id}
@@ -40,6 +41,7 @@ export function Popup() {
             isOpen={keepPrevious || isLastPopup}
             className={clsx(styles.overlay, overlayClassName)}
             data-view={keepPrevious && !isLastPopup ? 'none' : view}
+            data-media={!!media}
             aria-label={ariaLabel}
             onOpenChange={(open) => (!open && onClose ? onClose({ close }) : close())}
           >

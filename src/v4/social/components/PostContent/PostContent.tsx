@@ -452,6 +452,7 @@ export const PostContent = ({
   const openImageViewer = (imageIndex: number) => {
     openPopup({
       id: 'image-viewer',
+      media: true,
       disabledAnimation: true,
       isDismissable: isDesktop,
       className: styles.postContent__imageViewer,
