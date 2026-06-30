@@ -129,6 +129,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
               view: 'desktop',
               isDismissable: false,
               onClose: ({ close }) => discardPostCreation({ pageId, onDiscard: close }),
+              headerClassName: styles.eventDiscussion__composerPopupHeader,
               header: (
                 <CommunityDisplayName
                   pageId={pageId}

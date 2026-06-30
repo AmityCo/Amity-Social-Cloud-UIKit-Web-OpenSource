@@ -15,6 +15,7 @@ type PopupContent = Omit<ModalOverlayProps, 'children'> & {
   componentId?: string;
   keepPrevious?: boolean;
   header?: React.ReactNode;
+  headerClassName?: string;
   overlayClassName?: string;
   disabledAnimation?: boolean;
   media?: boolean;
