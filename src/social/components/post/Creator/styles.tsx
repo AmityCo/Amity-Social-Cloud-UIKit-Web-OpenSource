@@ -50,11 +50,15 @@ export const PostInputText = styled(InputText)`
    * styled-components palette (which is frozen at light). Drop the wrapper
    * border (the v4 comment input has no border either) and match the post
    * card's corner radius.
+   *
+   * NOTE: do NOT add overflow:hidden here. react-mentions renders the
+   * mention-autocomplete list as an absolutely-positioned child of this
+   * container, so clipping the overflow cuts the suggestions down to a thin
+   * sliver inside the input field (ENG-701).
    */
   background: var(--asc-color-base-shade4) !important;
   border: none !important;
   border-radius: var(--asc-border-radius-md) !important;
-  overflow: hidden !important;
 
   textarea {
     width: 100%;

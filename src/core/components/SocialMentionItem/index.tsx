@@ -12,6 +12,7 @@ const Item = styled.div<{ focused?: boolean; isBanned?: boolean; maxWidth?: numb
   padding: 5px 15px;
 
   font-weight: 600;
+  color: var(--asc-color-base-default);
 
   pointer-events: ${({ isBanned }) => isBanned && 'none'} !important;
   cursor: ${({ isBanned }) => isBanned && 'no-allowed'} !important;
