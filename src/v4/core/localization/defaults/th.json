@@ -303,7 +303,7 @@
   "amity_social_disable_product_tagging_description": "หากคุณปิดใช้งานตัวเลือกนี้ ผู้ร่วมโฮสต์จะไม่สามารถเพิ่ม ลบ หรือปักหมุดสินค้าในการสตรีมสดนี้ได้",
   "amity_social_modal_dialog_title_discard_story": "ยกเลิกสตอรี่นี้หรือไม่?",
   "amity_social_edit_tags": "แก้ไขแท็ก",
-  "amity_social_empty_feed_no_posts": "ฟีดว่างเปล่า ไม่มีโพสต์",
+  "amity_social_empty_feed_no_posts": "ไม่มีโพสต์",
   "amity_social_empty_state_empty_clip_feed": "ยังไม่มีคลิป",
   "amity_social_empty_state_empty_user_image_feed": "ยังไม่มีรูปภาพ",
   "amity_social_empty_state_empty_user_video_feed": "ยังไม่มีวิดีโอ",
