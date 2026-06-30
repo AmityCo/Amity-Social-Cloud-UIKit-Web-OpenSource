@@ -154,6 +154,18 @@ See: `src/v4/chat/hooks/queries/useMessageDeleteQuery.ts`,
 `src/v4/chat/features/group/create/hooks/useCreateGroupChat.ts`,
 `src/v4/chat/features/shared/hooks/useMessageComposer.ts`.
 
+### Read-query hooks (network settings & one-shot reads)
+
+For a **read** that wraps a one-shot SDK getter (network settings / feature gates — `getSocialSettings`, `getProductCatalogueSetting`, `getForYouFeedSetting`), use a lean `useQuery` hook. **Reference `useSocialSettings` for the shape — don't copy its body verbatim.**
+
+- **Lean return** — return `{ <name>, isLoading, error }` directly. No `XxxResult` interface, and **no `refetch`** unless a caller actually needs it.
+- **Named param type for options** — when the hook needs a conditional-fetch flag, declare a `type UseXxxParam = { shouldCall?: boolean }` (a named type, not an inline object type and not an `Options` interface) and default the arg: `function useXxx({ shouldCall = true }: UseXxxParam = {})`.
+- **Gate with `enabled`** — `enabled: !!client && shouldCall`. Callers pass `shouldCall: !isVisitorOrBot` (etc.) so the visitor/bot case never fires the request.
+- **`staleTime` from the global constant** — `staleTime: STALE_TIME_5_MINUTES`, imported from `~/v4/constants/query`. Do **not** redefine a local `STALE_TIME_*` in the hook file — shared query constants live in `~/v4/constants/query.ts`.
+- **queryKey** — `['asc-uikit', '<SettingName>']`.
+
+See: `src/v4/social/hooks/useForYouFeedSetting.ts`, `src/v4/social/hooks/useSocialSettings.ts`, `src/v4/social/hooks/useProductCatalogueSettings.ts`.
+
 ---
 
 ## Core Components — use before creating new ones
@@ -288,8 +300,11 @@ Accessibility is a hard requirement across the whole tree, not a checklist reser
 - The shimmer animation (`@keyframes pulse`) is baked into `Skeleton.module.css`. **Do not hand-roll skeleton CSS** — no custom `linear-gradient` strips, no local `@keyframes`, no `__skeletonAvatar` / `__skeletonLine` rules. If you find these in a file you're touching, delete them and migrate to the primitives.
 - **Mirror the real row structure.** A skeleton row should reuse the same container class as the real row (same height, padding, gap) so there is no layout shift when the data lands. Replace each piece of real content with the matching primitive: `UserAvatar` → `Skeleton.Circle`, name `Typography` → `Skeleton.Line`, trailing icon → `Skeleton.Circle`.
 - **Wrap every grouping level with `<Skeleton>`, not `<div>`.** The outer row wrapper IS a `<Skeleton>`, AND every inner grouping wrapper (avatar wrapper, name+badge row, trailing slot) is also a `<Skeleton>`. Plain `<div>` only inside leaf primitives that supply their own. The semantic intent is "this whole subtree is loading state" — using `<div>` mid-tree breaks the intent and invites someone to drop a real `Typography` inside a "skeleton" tree later.
+- **Skeletons are compound statics of their parent, in the parent's existing file — never a new `XxxSkeleton.tsx`.** Define the skeleton function alongside the component and attach it via dot notation at the bottom of the file: `SocialHomePage.FeedSkeleton = FeedSkeleton` (matching `ChannelItem.Skeleton`, `MenuItem.Skeleton`). Don't spin up a separate component/file just to host a skeleton — co-locate it on the component that owns the loading region.
+- **A parent may expose more than one skeleton.** When a component owns multiple distinct loading regions (e.g. a page with both a tab-bar shimmer and a content shimmer), attach each as its own descriptively-named static — `SocialHomePage.FeedSkeleton` and `SocialHomePage.TabsSkeleton` — all defined in the parent's file. A skeleton that mirrors a sibling region (e.g. the tab row) may reuse that region's CSS-module class so positioning matches exactly.
+- **Consume via the compound static everywhere — including the parent's own render.** Render `<SocialHomePage.FeedSkeleton />` / `<CommunitySideBar.MenuSkeleton />` (not the bare local `<FeedSkeleton />`) inside the parent body too; with `export function Parent` + `Parent.X = X` below, TS resolves the static fine. Defining *and* using the compound form keeps one consistent reference, internal and external.
 
-See: `src/v4/core/components/Skeleton/Skeleton.tsx`, `src/v4/chat/features/shared/components/MessageReactorListSheet/MessageReactorListSheet.tsx`, `src/v4/chat/features/group/member-list/components/MemberItem/MemberItem.tsx`
+See: `src/v4/core/components/Skeleton/Skeleton.tsx`, `src/v4/chat/features/shared/components/MessageReactorListSheet/MessageReactorListSheet.tsx`, `src/v4/chat/features/group/member-list/components/MemberItem/MemberItem.tsx`, `src/v4/social/pages/SocialHomePage/SocialHomePage.tsx` (multiple named skeleton statics: `.FeedSkeleton` + `.TabsSkeleton`)
 
 ---
 

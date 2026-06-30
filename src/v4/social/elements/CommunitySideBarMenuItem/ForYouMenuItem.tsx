@@ -1,4 +1,3 @@
-import React from 'react';
 import { FeedRepository } from '@amityco/ts-sdk';
 import Home from '~/v4/icons/Home';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -9,6 +8,7 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { CommunitySideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
 import { useForYouFeedCollection } from '~/v4/social/hooks/collections/useForYouFeedCollection';
+import useForYouFeedSetting from '~/v4/social/hooks/useForYouFeedSetting';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 type ForYouMenuItemProps = {
@@ -29,11 +29,16 @@ export function ForYouMenuItem({ pageId = '*', componentId = '*' }: ForYouMenuIt
       elementId,
     });
 
-  const { error: forYouError } = useForYouFeedCollection({ shouldCall: !isVisitorOrBot });
+  const { forYouFeedSetting } = useForYouFeedSetting({ shouldCall: !isVisitorOrBot });
 
-  const forYouEnabled = !(forYouError instanceof FeedRepository.AmityForYouFeedDisabledError);
+  const forYouEnabled = !isVisitorOrBot && forYouFeedSetting?.forYouFeed.enabled;
 
-  if (isExcluded || isVisitorOrBot || !forYouEnabled) return null;
+  const { error: forYouError } = useForYouFeedCollection({ shouldCall: !!forYouEnabled });
+
+  const isForYouVisible =
+    forYouEnabled && !(forYouError instanceof FeedRepository.AmityForYouFeedDisabledError);
+
+  if (isExcluded || !isForYouVisible) return null;
 
   return (
     <CommunitySideBarMenuItem
