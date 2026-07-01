@@ -13,7 +13,7 @@ export default function useForYouFeedSetting({
 
   const {
     error,
-    isLoading,
+    isPending,
     data: forYouFeedSetting,
   } = useQuery({
     queryKey: ['asc-uikit', 'ForYouFeedSetting'],
@@ -25,5 +25,5 @@ export default function useForYouFeedSetting({
     staleTime: STALE_TIME_5_MINUTES,
   });
 
-  return { forYouFeedSetting, isLoading, error };
+  return { forYouFeedSetting, isPending, error };
 }

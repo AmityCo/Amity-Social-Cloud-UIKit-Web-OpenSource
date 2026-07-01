@@ -29,11 +29,11 @@ export function CommunitySideBar({ className, pageId = '*' }: CommunitySideBarPr
   const { searchValue } = useSearchResultContext();
   const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
 
-  const { isLoading: isForYouFeedSettingLoading } = useForYouFeedSetting({
+  const { isPending: isForYouFeedSettingPending } = useForYouFeedSetting({
     shouldCall: !isVisitorOrBot,
   });
 
-  const isResolvingForYou = !isVisitorOrBot && isForYouFeedSettingLoading;
+  const isResolvingForYou = !isVisitorOrBot && isForYouFeedSettingPending;
 
   const handleNotificationTrayButtonClick = () => {
     notificationTray.markTraySeen(new Date().toISOString());

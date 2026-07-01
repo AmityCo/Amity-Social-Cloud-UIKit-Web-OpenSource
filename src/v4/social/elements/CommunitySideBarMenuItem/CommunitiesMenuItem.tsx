@@ -5,6 +5,7 @@ import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { CommunitySideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
+import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
 
 type CommunitiesMenuItemProps = {
   pageId?: string;
@@ -16,6 +17,7 @@ export function CommunitiesMenuItem({ pageId = '*', componentId = '*' }: Communi
 
   const { onChangePage, page } = useNavigation();
   const { activeTab, setActiveTab } = useLayoutContext();
+  const [, setPersistedTab] = useSocialHomePageTab();
   const { accessibilityId, config, isExcluded, defaultConfig, uiReference, resolveText } =
     useAmityElement({
       pageId,
@@ -31,6 +33,7 @@ export function CommunitiesMenuItem({ pageId = '*', componentId = '*' }: Communi
       isActive={page.type === PageTypes.SocialHomePage && activeTab === HomePageTab.Communities}
       onPress={() => {
         setActiveTab(HomePageTab.Communities);
+        setPersistedTab(HomePageTab.Communities);
         onChangePage(PageTypes.SocialHomePage);
       }}
       icon={(props) => (

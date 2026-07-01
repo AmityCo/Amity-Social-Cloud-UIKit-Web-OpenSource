@@ -39,7 +39,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
   const { activeTab, setActiveTab } = useLayoutContext();
   const { AmitySocialHomePageBehavior } = usePageBehavior();
 
-  const { forYouFeedSetting, isLoading: isForYouFeedSettingLoading } = useForYouFeedSetting({
+  const { forYouFeedSetting, isPending: isForYouFeedSettingPending } = useForYouFeedSetting({
     shouldCall: !isVisitorOrBot,
   });
 
@@ -59,7 +59,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
   const [isInitialTabResolved, setIsInitialTabResolved] = useState(false);
 
   const isResolvingForYou =
-    !isVisitorOrBot && (isForYouFeedSettingLoading || !isInitialTabResolved);
+    !isVisitorOrBot && (isForYouFeedSettingPending || !isInitialTabResolved);
 
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -84,7 +84,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
       setIsInitialTabResolved(true);
       return;
     }
-    if (isForYouFeedSettingLoading) return;
+    if (isForYouFeedSettingPending) return;
     initialTabResolved.current = true;
     if (persistedTab && (persistedTab !== HomePageTab.ForYou || isForYouTabVisible)) {
       setActiveTab(persistedTab);
@@ -92,7 +92,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
       setActiveTab(isForYouTabVisible ? HomePageTab.ForYou : HomePageTab.Newsfeed);
     }
     setIsInitialTabResolved(true);
-  }, [isVisitorOrBot, isForYouFeedSettingLoading, isForYouTabVisible, persistedTab, setActiveTab]);
+  }, [isVisitorOrBot, isForYouFeedSettingPending, isForYouTabVisible, persistedTab, setActiveTab]);
 
   useEffect(() => {
     if (isForYouTabVisible) return;

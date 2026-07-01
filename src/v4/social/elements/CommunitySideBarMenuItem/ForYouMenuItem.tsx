@@ -9,6 +9,7 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { CommunitySideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
 import { useForYouFeedCollection } from '~/v4/social/hooks/collections/useForYouFeedCollection';
 import useForYouFeedSetting from '~/v4/social/hooks/useForYouFeedSetting';
+import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 type ForYouMenuItemProps = {
@@ -22,6 +23,7 @@ export function ForYouMenuItem({ pageId = '*', componentId = '*' }: ForYouMenuIt
   const { isVisitorOrBot } = useSDK();
   const { onChangePage, page } = useNavigation();
   const { activeTab, setActiveTab } = useLayoutContext();
+  const [, setPersistedTab] = useSocialHomePageTab();
   const { accessibilityId, config, isExcluded, defaultConfig, uiReference, resolveText } =
     useAmityElement({
       pageId,
@@ -46,6 +48,7 @@ export function ForYouMenuItem({ pageId = '*', componentId = '*' }: ForYouMenuIt
       isActive={page.type === PageTypes.SocialHomePage && activeTab === HomePageTab.ForYou}
       onPress={() => {
         setActiveTab(HomePageTab.ForYou);
+        setPersistedTab(HomePageTab.ForYou);
         onChangePage(PageTypes.SocialHomePage);
       }}
       icon={(props) => (
