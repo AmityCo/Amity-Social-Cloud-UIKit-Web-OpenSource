@@ -11,5 +11,7 @@
 }
 
 .commentButton__text {
+  font-size: 0.75rem;
+  font-weight: 300;
   color: var(--asc-color-base-shade2);
 }

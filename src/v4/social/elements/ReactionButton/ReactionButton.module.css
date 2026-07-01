@@ -16,8 +16,8 @@
 }
 
 .reactButton__icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .reactButton__icon[data-has-my-reaction='false'] {
@@ -25,6 +25,7 @@
 }
 
 .reactButton__reactionsText {
+  font-size: 0.75rem;
   color: var(--asc-color-base-shade2);
   max-width: calc(80vw - 7rem);
   width: 100%;

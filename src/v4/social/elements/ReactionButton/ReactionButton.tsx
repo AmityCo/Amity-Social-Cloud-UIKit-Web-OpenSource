@@ -1,20 +1,24 @@
-import React, { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+
 import clsx from 'clsx';
-import { Typography } from '~/v4/core/components';
-import { IconComponent } from '~/v4/core/IconComponent';
-import FallbackReaction from '~/v4/icons/FallbackReaction';
-import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
-import { ReactionPicker } from '~/v4/social/elements/';
-import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { Button } from '~/v4/core/components/AriaButton';
-import styles from './ReactionButton.module.css';
 import millify from 'millify';
+
+import { Typography } from '~/v4/core/components';
+import { Button } from '~/v4/core/components/AriaButton';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
-import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { IconComponent } from '~/v4/core/IconComponent';
+import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import FallbackReaction from '~/v4/icons/FallbackReaction';
+import { ReactionPicker } from '~/v4/social/elements/';
+
+import styles from './ReactionButton.module.css';
 
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -268,7 +272,7 @@ export function ReactionButton({
       elementId = 'reaction-text';
     }
 
-    const TypographyComponent = isCommentReaction ? Typography.CaptionBold : Typography.BodyBold;
+    const TypographyComponent = isCommentReaction ? Typography.CaptionBold : Typography;
 
     return (
       <TypographyComponent
