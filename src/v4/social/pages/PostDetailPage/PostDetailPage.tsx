@@ -292,6 +292,7 @@ export function PostDetailPage({
                   <PostMenu
                     post={post}
                     pageId={pageId}
+                    community={community}
                     onPostDeleted={handlePostDeleted}
                     onCloseMenu={() => {
                       closePopover();
@@ -306,6 +307,7 @@ export function PostDetailPage({
             <PostMenu
               post={post}
               pageId={pageId}
+              community={community}
               onPostDeleted={handlePostDeleted}
               onCloseMenu={() => {
                 closePopover();
