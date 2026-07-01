@@ -17,6 +17,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { EmptyContent } from '~/v4/social/internal-components/EmptyContent';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
@@ -46,6 +47,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { discardPostCreation } = useDiscardPostCreation();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
+  const { goToLivestreamUnsupportedPage } = useNavigation();
   const { community: discussionCommunity } = useCommunity({
     communityId: event.discussionCommunityId,
   });
@@ -101,10 +103,8 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
       icon: LivestreamFill,
       onPress: () => {
         removeDrawerData();
-        AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
-          targetType: 'community',
-          targetId: event.discussionCommunityId!,
-        });
+
+        goToLivestreamUnsupportedPage();
       },
     },
   ];
