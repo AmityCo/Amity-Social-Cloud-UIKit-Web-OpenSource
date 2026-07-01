@@ -29,7 +29,7 @@
 
 .hyperLink__text {
   text-decoration: none;
-  color: var(--asc-color-secondary-default);
+  color: var(--asc-color-base-default);
   text-align: center;
   font-size: 0.9375rem;
   font-style: normal;

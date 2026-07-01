@@ -13,25 +13,38 @@
   cursor: pointer;
 }
 
-.hyperLinkContainer {
+.ctaWrapper {
   position: absolute;
   bottom: 1.18rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ctaChevron {
+  width: 1.81rem;
+  height: 0.56rem;
+}
+
+.hyperLinkContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.625rem 1rem;
-  left: 50%;
-  transform: translateX(-50%);
   border: 1px solid var(--asc-color-base-shade4);
   border-radius: 1.5rem;
   background-color: var(--asc-color-white);
   box-shadow: var(--asc-box-shadow-03);
+  color: var(--asc-color-base-default);
 }
 
 .hyperLink__text {
   text-decoration: none;
-  color: var(--asc-color-secondary-default);
+  color: var(--asc-color-base-default);
   text-align: center;
   font-size: 0.9375rem;
   font-style: normal;
