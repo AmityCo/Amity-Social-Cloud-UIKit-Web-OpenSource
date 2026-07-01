@@ -7,7 +7,6 @@ import { BackButton, BrandBadge, CloseButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Camera } from '~/v4/icons/Camera';
 import { Avatar, Typography } from '~/v4/core/components';
 import { CommunityCreateButton } from '~/v4/social/elements/CommunityCreateButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -56,6 +55,7 @@ import { TitleForm } from '~/v4/core/components/TitleForm';
 import { Description } from '~/v4/core/components/Description';
 import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
+import { CameraFilled } from '~/v4/icons/CameraFilled';
 
 type CreateCommunityProps = {
   mode: AmityCommunitySetupPageMode;
@@ -370,8 +370,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
               {coverImage.length > 0 && <div className={styles.createCommunity__overlay} />}
               {!uploadLoading && (
                 <IconComponent
-                  imgIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
-                  defaultIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
+                  imgIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
+                  defaultIcon={() => (
+                    <CameraFilled className={styles.createCommunity__cameraIcon} />
+                  )}
                 />
               )}
             </Button>
@@ -418,8 +420,8 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             {coverImage.length > 0 && <div className={styles.createCommunity__overlay} />}
             {!uploadLoading && (
               <IconComponent
-                imgIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
-                defaultIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
+                imgIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
+                defaultIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
               />
             )}
           </Button>
