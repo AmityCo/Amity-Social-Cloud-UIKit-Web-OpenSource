@@ -1,22 +1,36 @@
-import React from 'react';
+import type React from 'react';
+
 import clsx from 'clsx';
+
 import { Typography } from '~/v4/core/components';
-import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { IconComponent } from '~/v4/core/IconComponent';
+import { Button, type ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './CommentButton.module.css';
-import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 const CommentSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
-    width="18"
+    width="16"
     height="16"
-    viewBox="0 0 18 16"
+    viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label="comment"
     {...props}
   >
-    <path d="M9 0.1875C13.6816 0.1875 17.4668 3.30859 17.4668 7.09375C17.4668 10.9121 13.6816 14 9 14C7.9043 14 6.8418 13.834 5.91211 13.5352C4.91602 14.2324 3.32227 15.0625 1.29688 15.0625C0.964844 15.0625 0.666016 14.8965 0.533203 14.5977C0.433594 14.2988 0.466797 13.9668 0.699219 13.7344C0.732422 13.7344 1.76172 12.6055 2.22656 11.3105C1.13086 10.1484 0.5 8.6875 0.5 7.09375C0.5 3.30859 4.28516 0.1875 9 0.1875ZM9 12.4062C12.7852 12.4062 15.9062 10.0488 15.9062 7.09375C15.9062 4.17188 12.7852 1.78125 9 1.78125C5.18164 1.78125 2.09375 4.17188 2.09375 7.09375C2.09375 8.52148 2.79102 9.58398 3.38867 10.2148L4.08594 10.9453L3.7207 11.875C3.55469 12.3398 3.32227 12.8047 3.05664 13.2031C3.85352 12.9375 4.51758 12.5723 4.98242 12.2402L5.61328 11.7754L6.37695 12.0078C7.20703 12.2734 8.10352 12.4062 9 12.4062Z" />
+    <g clip-path="url(#clip0_822_19429)">
+      <path
+        d="M14 4.49349C13.9999 3.65624 13.4155 2.95325 12.6224 2.83659C11.1141 2.61484 9.57046 2.5 8 2.5C6.42947 2.50001 4.88597 2.61481 3.3776 2.83659C2.58455 2.95324 2.00013 3.65626 2 4.49349V8.50651C2.00013 9.34374 2.58455 10.0468 3.3776 10.1634C4.0903 10.2682 4.81093 10.3487 5.53841 10.4049C5.7988 10.4251 5.99994 10.6425 6 10.9036V12.793L7.86393 10.929C8.14035 10.6527 8.51102 10.4983 8.89518 10.4876C10.1577 10.4524 11.4016 10.3429 12.6224 10.1634C13.4155 10.0468 13.9999 9.34377 14 8.50651V4.49349ZM15 8.50651C14.9999 9.80383 14.0864 10.9591 12.7676 11.153C11.508 11.3382 10.2251 11.4507 8.92318 11.487C8.78787 11.4908 8.66204 11.545 8.57096 11.6361L5.85352 14.3535C5.71053 14.4965 5.49542 14.5396 5.30859 14.4622C5.12176 14.3848 5 14.2022 5 14V11.3626C4.40608 11.3083 3.81673 11.2383 3.23242 11.1523C1.91364 10.9584 1.00013 9.80379 1 8.50651V4.49349C1.00013 3.19621 1.91363 2.04156 3.23242 1.84766C4.78876 1.61883 6.38067 1.50001 8 1.5C9.61923 1.5 11.2113 1.61821 12.7676 1.84701C14.0864 2.0409 14.9999 3.19617 15 4.49349V8.50651Z"
+        fill="#888582"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_822_19429">
+        <rect width="16" height="16" fill="white" />
+      </clipPath>
+    </defs>
   </svg>
 );
 
@@ -55,14 +69,17 @@ export function CommentButton({
     <Button onPress={onPress} data-testid={accessibilityId}>
       <IconComponent
         defaultIcon={() => (
-          <div className={(clsx(styles.commentButton), buttonClassName)}>
-            <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
-            <Typography.BodyBold
+          <div className={clsx(styles.commentButton, buttonClassName)}>
+            <Typography
               data-testid={`${pageId}/${componentId}/comment_count`}
               className={clsx(styles.commentButton__text, commentsCountClassName)}
             >
               {commentsCount}
-            </Typography.BodyBold>
+            </Typography>
+            <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
+            <Typography className={clsx(styles.commentButton__text, commentsCountClassName)}>
+              Comment
+            </Typography>
           </div>
         )}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
