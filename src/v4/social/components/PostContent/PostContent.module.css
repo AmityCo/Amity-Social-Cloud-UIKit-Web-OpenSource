@@ -69,17 +69,11 @@
   padding-left: 0;
 }
 
-.postContent__divider {
-  width: 100%;
-  background-color: var(--asc-color-base-shade4);
-  height: 0.0625rem;
-}
-
 .postContent__reactionBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 0.7rem;
+  margin-top: 0.625rem;
 }
 
 .postContent__reactionBar__leftPane {
@@ -152,23 +146,12 @@
   display: grid;
 }
 
-.postContent__reactions_and_comments {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-}
-
 .postContent__reactionsBar {
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   gap: 0.25rem;
-}
-
-.postContent__commentsCount {
-  color: var(--asc-color-base-shade2);
-  cursor: pointer;
 }
 
 .postContent__repostReference {

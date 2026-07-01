@@ -477,6 +477,7 @@ export const PostContent = ({
   const openImageViewer = (imageIndex: number) => {
     openPopup({
       id: 'image-viewer',
+      media: true,
       disabledAnimation: true,
       isDismissable: isDesktop,
       className: styles.postContent__imageViewer,
@@ -793,69 +794,7 @@ export const PostContent = ({
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           )}
 
-          <div className={styles.postContent__reactions_and_comments}>
-            {post?.reactionsCount > 0 && (
-              <Button
-                data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
-                variant="default"
-                className={styles.postContent__reactionsBar}
-                onPress={handleReactionListClick}
-              >
-                {hasReaction ? (
-                  <div className={styles.postContent__reactionsBar__reactions}>
-                    {sortedReactions
-                      .slice(0, 5)
-                      .map((item) =>
-                        item.type === 'configured' ? (
-                          <img
-                            key={item.reaction.name}
-                            src={item.reaction.image}
-                            alt={item.reaction.name}
-                            className={styles.postContent__reactionsBar__reactions__icon}
-                          />
-                        ) : (
-                          <FallbackReaction
-                            key={item.reactionName}
-                            className={clsx(
-                              styles.postContent__reactionsBar__reactions__iconFallback,
-                              styles.postContent__reactionsBar__reactions__icon,
-                            )}
-                            backgroundColor={getComputedStyle(
-                              document.documentElement,
-                            ).getPropertyValue('--asc-color-base-shade3')}
-                          />
-                        ),
-                      )}
-                  </div>
-                ) : null}
-
-                <Typography.Caption
-                  data-testid={`${pageId}/${componentId}/like_count`}
-                  className={styles.postContent__reactionsBar__reactions__count}
-                >
-                  {`${millify(post?.reactionsCount || 0)}`}
-                </Typography.Caption>
-              </Button>
-            )}
-
-            {post?.commentsCount > 0 && (
-              <Button
-                data-testid={`${pageId}/${componentId}/comment_count`}
-                variant="default"
-                onPress={() => (isFeedStyle ? toggleInlineComments() : onClick?.())}
-              >
-                <Typography.Caption
-                  data-testid={`${pageId}/${componentId}/comment_count`}
-                  className={styles.postContent__commentsCount}
-                >
-                  {`${millify(post?.commentsCount) || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
-                </Typography.Caption>
-              </Button>
-            )}
-          </div>
-
           {/* Reaction Bar */}
-          <div className={styles.postContent__divider} />
           <div className={styles.postContent__reactionBar}>
             <div className={styles.postContent__reactionBar__leftPane}>
               <ReactionButton
@@ -886,6 +825,50 @@ export const PostContent = ({
                 }
               />
             </div>
+
+            {post?.reactionsCount > 0 && (
+              <Button
+                data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
+                variant="default"
+                className={styles.postContent__reactionsBar}
+                onPress={handleReactionListClick}
+              >
+                <Typography.Caption
+                  data-testid={`${pageId}/${componentId}/like_count`}
+                  className={styles.postContent__reactionsBar__reactions__count}
+                >
+                  {`${millify(post?.reactionsCount || 0)}`}
+                </Typography.Caption>
+
+                {hasReaction ? (
+                  <div className={styles.postContent__reactionsBar__reactions}>
+                    {sortedReactions
+                      .slice(0, 5)
+                      .map((item) =>
+                        item.type === 'configured' ? (
+                          <img
+                            key={item.reaction.name}
+                            src={item.reaction.image}
+                            alt={item.reaction.name}
+                            className={styles.postContent__reactionsBar__reactions__icon}
+                          />
+                        ) : (
+                          <FallbackReaction
+                            key={item.reactionName}
+                            className={clsx(
+                              styles.postContent__reactionsBar__reactions__iconFallback,
+                              styles.postContent__reactionsBar__reactions__icon,
+                            )}
+                            backgroundColor={getComputedStyle(
+                              document.documentElement,
+                            ).getPropertyValue('--asc-color-base-shade3')}
+                          />
+                        ),
+                      )}
+                  </div>
+                ) : null}
+              </Button>
+            )}
           </div>
 
           {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
