@@ -1,11 +1,13 @@
-import React from 'react';
+import type React from 'react';
+
 import clsx from 'clsx';
+
 import { Typography } from '~/v4/core/components';
-import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { IconComponent } from '~/v4/core/IconComponent';
+import { Button, type ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './CommentButton.module.css';
-import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 const CommentSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -55,13 +57,19 @@ export function CommentButton({
     <Button onPress={onPress} data-testid={accessibilityId}>
       <IconComponent
         defaultIcon={() => (
-          <div className={(clsx(styles.commentButton), buttonClassName)}>
-            <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
+          <div className={clsx(styles.commentButton, buttonClassName)}>
             <Typography.BodyBold
               data-testid={`${pageId}/${componentId}/comment_count`}
               className={clsx(styles.commentButton__text, commentsCountClassName)}
             >
               {commentsCount}
+            </Typography.BodyBold>
+
+            <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
+            <Typography.BodyBold
+              className={clsx(styles.commentButton__text, commentsCountClassName)}
+            >
+              Comment
             </Typography.BodyBold>
           </div>
         )}
