@@ -10,10 +10,9 @@
   color: var(--asc-color-base-default);
 }
 
-.communitySideBarMenuItem:hover,
-.communitySideBarMenuItem:active {
+.communitySideBarMenuItem:hover {
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-base-shade4);
+  background-color: color-mix(in srgb, var(--asc-color-base-shade1) 30%, transparent);
 }
 
 .communitySideBarMenuItem:disabled {
@@ -22,8 +21,8 @@
 }
 
 .communitySideBarMenuItem[data-active='true'] {
-  color: var(--asc-color-primary-default);
-  background-color: var(--asc-color-primary-shade3);
+  color: var(--asc-color-base-default);
+  background-color: color-mix(in srgb, var(--asc-color-primary-shade3) 30%, transparent);
 }
 
 .communitySideBarMenuItem__iconWrapper {
@@ -39,7 +38,7 @@
 }
 
 .communitySideBarMenuItem__iconWrapper[data-active='true'] {
-  background-color: var(--asc-color-primary-default);
+  background-color: var(--asc-color-base-shade4);
 }
 
 .communitySideBarMenuItem__icon {
@@ -49,7 +48,7 @@
 }
 
 .communitySideBarMenuItem__icon[data-active='true'] {
-  fill: var(--asc-color-white);
+  fill: var(--asc-color-base-default);
 }
 
 .communitySideBarMenuItem__label {
@@ -58,7 +57,7 @@
 }
 
 .communitySideBarMenuItem__label[data-active='true'] {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-base-default);
 }
 
 @media (width >= 48em) {
