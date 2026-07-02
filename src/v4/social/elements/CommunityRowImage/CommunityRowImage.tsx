@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './CommunityRowImage.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Img } from '~/v4/core/natives/Img/Img';
-import { CommunityPlaceholderImage } from '~/v4/icons/CommunityPlaceholderImage';
+import { CommunityPlaceholderIcon } from '~/v4/icons/CommunityPlaceholderIcon';
 
 interface CommunityRowImageProps {
   pageId?: string;
@@ -28,7 +28,11 @@ export const CommunityRowImage: React.FC<CommunityRowImageProps> = ({
       style={themeStyles}
       className={styles.communityRowImage__img}
       src={imgSrc}
-      fallBackRenderer={() => <CommunityPlaceholderImage />}
+      fallBackRenderer={() => (
+        <div className={styles.communityRowImage__placeholder} style={themeStyles}>
+          <CommunityPlaceholderIcon className={styles.communityRowImage__placeholderIcon} />
+        </div>
+      )}
     />
   );
 };
