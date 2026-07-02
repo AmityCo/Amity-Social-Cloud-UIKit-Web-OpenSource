@@ -49,8 +49,12 @@ export const StoryReactionButton = ({
     >
       <IconComponent
         defaultIcon={() => (
-          <div className={clsx(styles.storyReactionIcon, defaultIconClassName)}>
-            {hasMyReactions ? <StoryMyReaction /> : <StoryReaction />}
+          <div className={styles.storyReactionIcon}>
+            {hasMyReactions ? (
+              <StoryMyReaction className={defaultIconClassName} />
+            ) : (
+              <StoryReaction />
+            )}
             <Typography.BodyBold>{millify(reactionsCount)}</Typography.BodyBold>
           </div>
         )}

@@ -349,6 +349,7 @@
   "amity_social_button_decline": "Decline",
   "amity_social_button_decline_pending_post_will_permanently_delete_the_select": "Decline pending post will permanently delete the selected post from community.",
   "amity_social_button_delete": "Delete",
+  "amity_social_button_delete_story": "Delete story",
   "amity_social_button_delete_comment": "Delete Comment",
   "amity_social_button_delete_comment_title": "Delete comment",
   "amity_social_button_delete_comment_warning_message": "This comment will be permanently deleted.",

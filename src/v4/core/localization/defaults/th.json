@@ -85,6 +85,7 @@
   "amity_social_button_decline": "ปฏิเสธ",
   "amity_social_button_decline_pending_post_will_permanently_delete_the_select": "การปฏิเสธโพสต์ที่รอดำเนินการจะลบโพสต์ที่เลือกออกจากชุมชนอย่างถาวร",
   "amity_social_button_delete": "ลบ",
+  "amity_social_button_delete_story": "ลบสตอรี่",
   "amity_social_button_delete_comment": "ลบความคิดเห็น",
   "amity_social_button_delete_comment_title": "ลบความคิดเห็น",
   "amity_social_button_delete_comment_warning_message": "ความคิดเห็นนี้จะถูกลบอย่างถาวร",

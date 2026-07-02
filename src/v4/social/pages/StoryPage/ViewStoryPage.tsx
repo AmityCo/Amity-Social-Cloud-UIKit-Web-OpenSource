@@ -18,7 +18,12 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
   const { onBack, goToViewStoryPage, goToDraftStoryPage, onClickCommunity } = useNavigation();
   const { toggleTheme, setDefaultTheme } = useTheme();
 
-  const forcedLightTheme = { currentTheme: 'light' as const, toggleTheme, setDefaultTheme };
+  const forcedLightTheme = {
+    currentTheme: 'light' as const,
+    forcedTheme: 'light' as const,
+    toggleTheme,
+    setDefaultTheme,
+  };
 
   if (type === 'communityFeed')
     return (
@@ -50,6 +55,9 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
               storyType: 'globalFeed',
               targetId,
               targetType: 'community',
+              // Replace instead of push so the viewer keeps a single story page on the stack;
+              // pressing close then exits the viewer instead of stepping back story-by-story.
+              replace: true,
             })
           }
           goToDraftStoryPage={(targetId, targetType, mediaType, storyType) =>

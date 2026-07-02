@@ -10,7 +10,12 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose }) => 
   const [isPaused, setIsPaused] = useState(false);
   const { loader } = config;
   const { toggleTheme, setDefaultTheme } = useTheme();
-  const forcedLightTheme = { currentTheme: 'light' as const, toggleTheme, setDefaultTheme };
+  const forcedLightTheme = {
+    currentTheme: 'light' as const,
+    forcedTheme: 'light' as const,
+    toggleTheme,
+    setDefaultTheme,
+  };
 
   const { ad, currentIndex, storiesCount, increaseIndex, pageId, dragEventTarget } = story;
 

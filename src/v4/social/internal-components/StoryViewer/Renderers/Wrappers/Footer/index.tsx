@@ -154,6 +154,7 @@ const Footer: React.FC<
           myReactions={myReactions}
           reactionsCount={reactionsCount}
           onPress={handleReactionClick}
+          defaultIconClassName={styles.viewStoryReaction}
         />
       </div>
     </div>

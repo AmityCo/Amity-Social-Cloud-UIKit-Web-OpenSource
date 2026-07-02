@@ -373,6 +373,7 @@ type ContextValue = {
     targetId: string;
     targetType: Amity.StoryTargetType;
     storyType: 'communityFeed' | 'globalFeed';
+    replace?: boolean;
   }) => void;
   goToNotificationTrayPage: () => void;
   setNavigationBlocker?: (
@@ -813,6 +814,12 @@ export default function NavigationProvider({
     setPages((prevState) => [...prevState, newPage]);
   }, []);
 
+  const replacePage = useCallback((newPage) => {
+    setPages((prevState) =>
+      prevState.length > 0 ? [...prevState.slice(0, -1), newPage] : [newPage],
+    );
+  }, []);
+
   const setDefaultPage = useCallback((defaultPage) => {
     setPages([defaultPage]);
   }, []);
@@ -1033,7 +1040,7 @@ export default function NavigationProvider({
   );
 
   const goToViewStoryPage = useCallback(
-    ({ targetId, storyType, targetType }) => {
+    ({ targetId, storyType, targetType, replace }) => {
       const next = {
         type: PageTypes.ViewStoryPage,
         context: {
@@ -1043,9 +1050,14 @@ export default function NavigationProvider({
         },
       };
 
+      if (replace) {
+        replacePage(next);
+        return;
+      }
+
       pushPage(next);
     },
-    [onChangePage, pushPage],
+    [onChangePage, pushPage, replacePage],
   );
 
   const goToUserProfilePage = useCallback(
