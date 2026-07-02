@@ -420,6 +420,7 @@
   "amity_social_button_location": "Location",
   "amity_social_button_member_count_plural": "%s members",
   "amity_social_button_member_count_singular": "%s member",
+  "amity_social_button_member": "Member",
   "amity_social_button_members": "Members",
   "amity_social_button_message_deleted": "This message was deleted.",
   "amity_social_button_message_reported": "Message reported.",

@@ -21,7 +21,7 @@ export const CommunityAddMemberTitle = ({
 
   return (
     <Typography.TitleBold style={themeStyles} data-testid={accessibilityId}>
-      {resolveText('amity_social_button_members')}
+      {resolveText('amity_social_button_member')}
     </Typography.TitleBold>
   );
 };

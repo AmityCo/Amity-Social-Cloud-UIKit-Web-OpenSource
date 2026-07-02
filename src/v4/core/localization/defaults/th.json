@@ -148,6 +148,7 @@
   "amity_social_button_location": "ตำแหน่งที่ตั้ง",
   "amity_social_button_member_count_plural": "%s สมาชิก",
   "amity_social_button_member_count_singular": "%s สมาชิก",
+  "amity_social_button_member": "สมาชิก",
   "amity_social_button_members": "สมาชิก",
   "amity_social_button_message_deleted": "ข้อความนี้ถูกลบแล้ว",
   "amity_social_button_message_reported": "รายงานข้อความแล้ว",
