@@ -12,7 +12,7 @@
 
 .communitySideBarMenuItem:hover {
   color: var(--asc-color-base-default);
-  background-color: color-mix(in srgb, var(--asc-color-base-shade1) 30%, transparent);
+  background-color: color-mix(in srgb, var(--asc-color-background-shade1) 30%, transparent);
 }
 
 .communitySideBarMenuItem:disabled {
