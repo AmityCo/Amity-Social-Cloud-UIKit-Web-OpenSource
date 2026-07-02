@@ -22,7 +22,7 @@ export function useChannelModerationQuery() {
     mutationFn: ({ channelId, userIds }) =>
       ChannelRepository.Moderation.addRole(channelId, MemberRoles.CHANNEL_MODERATOR, userIds),
     onError: () => {
-      error({ content: promoteErrorToast });
+      error({ content: promoteErrorToast, alignment: 'fullscreen' });
     },
   });
 
@@ -30,7 +30,7 @@ export function useChannelModerationQuery() {
     mutationFn: ({ channelId, userIds }) =>
       ChannelRepository.Moderation.removeRole(channelId, MemberRoles.CHANNEL_MODERATOR, userIds),
     onError: () => {
-      error({ content: demoteErrorToast });
+      error({ content: demoteErrorToast, alignment: 'fullscreen' });
     },
   });
 

@@ -38,10 +38,13 @@ export function useChannelPushNotificationQuery({
         : Client.notifications().channel(id).disable(),
     onSuccess: (_, variables) => {
       refetch();
-      success({ content: variables.isEnabled ? unmuteSuccess : muteSuccess });
+      success({
+        content: variables.isEnabled ? unmuteSuccess : muteSuccess,
+        alignment: 'fullscreen',
+      });
     },
     onError: (_, variables) => {
-      error({ content: variables.isEnabled ? unmuteError : muteError });
+      error({ content: variables.isEnabled ? unmuteError : muteError, alignment: 'fullscreen' });
     },
   });
 

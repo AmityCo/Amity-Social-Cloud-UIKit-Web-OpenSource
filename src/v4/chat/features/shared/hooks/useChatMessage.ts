@@ -138,7 +138,7 @@ export function useChatMessage({
       if (loadingToastIdRef.current) return;
       const id = `${loadingToastIdPrefix}-${channelId}-${Date.now()}`;
       loadingToastIdRef.current = id;
-      loading({ id, content: loadingToast, duration: 60_000 });
+      loading({ id, content: loadingToast, duration: 60_000, alignment: 'fullscreen' });
       return;
     }
     if (loadingToastIdRef.current) {

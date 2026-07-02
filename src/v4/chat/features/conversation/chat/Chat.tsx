@@ -47,7 +47,7 @@ export function Chat(props: ChatPageProps) {
     handleBubbleReport,
     handleOpenReactorListSheet,
     openFailedSheet,
-    openConversationActions,
+    conversationActions,
     viewerIsMutedInChannel,
     pendingJumpToMessageId,
     clearJumpToMessageId,
@@ -59,7 +59,7 @@ export function Chat(props: ChatPageProps) {
         userId={otherUser.userId}
         userDisplayName={otherUser.userDisplayName}
         onBack={handleBack}
-        onOpenActions={openConversationActions}
+        actions={conversationActions}
       />
       <MessageList
         items={items}

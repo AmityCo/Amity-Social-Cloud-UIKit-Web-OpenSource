@@ -19,20 +19,20 @@ export function useUserBlockQuery() {
   const blockMutation = useMutation<BlockResponse, Error, UserBlockPayload>({
     mutationFn: ({ userId }) => UserRepository.Relationship.blockUser(userId),
     onSuccess: () => {
-      success({ content: resolveString('amity_chat_block_success') });
+      success({ content: resolveString('amity_chat_block_success'), alignment: 'fullscreen' });
     },
     onError: () => {
-      error({ content: resolveString('amity_chat_block_failed') });
+      error({ content: resolveString('amity_chat_block_failed'), alignment: 'fullscreen' });
     },
   });
 
   const unblockMutation = useMutation<UnblockResponse, Error, UserBlockPayload>({
     mutationFn: ({ userId }) => UserRepository.Relationship.unBlockUser(userId),
     onSuccess: () => {
-      success({ content: resolveString('amity_chat_unblock_success') });
+      success({ content: resolveString('amity_chat_unblock_success'), alignment: 'fullscreen' });
     },
     onError: () => {
-      error({ content: resolveString('amity_chat_unblock_failed') });
+      error({ content: resolveString('amity_chat_unblock_failed'), alignment: 'fullscreen' });
     },
   });
 

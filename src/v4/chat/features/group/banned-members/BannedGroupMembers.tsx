@@ -7,7 +7,7 @@ import type { BannedGroupMemberListPageProps } from '~/v4/chat/pages/BannedGroup
 import styles from './BannedGroupMembers.module.css';
 
 export function BannedGroupMembers(props: BannedGroupMemberListPageProps) {
-  const { channelId, searchText, setSearchText, debouncedSearch, handleBack, openUnbanAction } =
+  const { channelId, searchText, setSearchText, debouncedSearch, handleBack, getActionItems } =
     useBannedGroupMembers(props);
   const searchPlaceholder = useString('amity_chat_search_placeholder');
 
@@ -20,7 +20,7 @@ export function BannedGroupMembers(props: BannedGroupMemberListPageProps) {
       <BannedMemberList
         channelId={channelId}
         search={debouncedSearch}
-        onOpenUnbanAction={openUnbanAction}
+        getActionItems={getActionItems}
       />
     </div>
   );

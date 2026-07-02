@@ -4,16 +4,16 @@ import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChan
 import { EmptyState } from '~/v4/chat/features/shared/components/EmptyState/EmptyState';
 import { MemberItem } from '~/v4/chat/features/group/members/components/MemberItem';
 import { LIST_PAGE_LIMIT, LIST_SKELETON_ROW_COUNT } from '~/v4/chat/constants';
-import type { OpenUnbanActionParams } from '~/v4/chat/features/group/banned-members/hooks/useBannedGroupMembers';
+import { ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import styles from './BannedMemberList.module.css';
 
 type BannedMemberListProps = {
   channelId: string;
   search: string;
-  onOpenUnbanAction: (params: OpenUnbanActionParams) => void;
+  getActionItems: (user: Amity.User) => ActionMenuItem[];
 };
 
-export function BannedMemberList({ channelId, search, onOpenUnbanAction }: BannedMemberListProps) {
+export function BannedMemberList({ channelId, search, getActionItems }: BannedMemberListProps) {
   const [sentinelNode, setSentinelNode] = useState<HTMLDivElement | null>(null);
 
   const { members, isLoadingFirstPage, isLoading, hasMore, loadMore } = useChannelMembersCollection(
@@ -45,7 +45,7 @@ export function BannedMemberList({ channelId, search, onOpenUnbanAction }: Banne
             user={member.user}
             isModerator={false}
             isCurrentUser={false}
-            onActionPress={() => onOpenUnbanAction({ user: member.user! })}
+            getActions={() => getActionItems(member.user!)}
           />
         );
       })}

@@ -25,6 +25,7 @@ export function useChannelMembershipQuery() {
       const isMultiple = payload.userIds.length > 1;
       error({
         content: isMultiple ? addMembersErrorToast : addMemberErrorToast,
+        alignment: 'fullscreen',
       });
     },
   });
@@ -33,7 +34,7 @@ export function useChannelMembershipQuery() {
     mutationFn: ({ channelId, userIds }) =>
       ChannelRepository.Membership.removeMembers(channelId, userIds),
     onError: () => {
-      error({ content: removeErrorToast });
+      error({ content: removeErrorToast, alignment: 'fullscreen' });
     },
   });
 

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useDebounce } from 'react-use';
 import { useChatNavigation } from '~/v4/chat/providers/ChatNavigationProvider';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useString } from '~/v4/core/localization';
-import { Menu } from '~/v4/core/components/Menu';
+import type { ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import Banned from '~/v4/icons/Banned';
 import { SEARCH_DEBOUNCE_MS } from '~/v4/chat/constants/search';
 import { useChannelBanQuery } from '~/v4/chat/hooks/queries';
@@ -17,7 +16,6 @@ export type OpenUnbanActionParams = {
 
 export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPageProps) {
   const { pop } = useChatNavigation();
-  const { setDrawerData, removeDrawerData } = useDrawer();
   const { confirm } = useConfirmContext();
   const { success } = useNotifications();
   const { unbanUser } = useChannelBanQuery();
@@ -47,29 +45,19 @@ export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPagePr
       okButtonColor: 'primary',
       onOk: async () => {
         await unbanUser({ channelId, userIds: [user.userId] });
-        success({ content: unbanSuccessToast });
+        success({ content: unbanSuccessToast, alignment: 'fullscreen' });
       },
     });
   }
 
-  function openUnbanAction({ user }: OpenUnbanActionParams) {
-    setDrawerData({
-      ariaLabel: unbanLabel,
-      content: (
-        <Menu container="drawer">
-          <Menu.Item
-            key="unban"
-            icon={Banned}
-            label={unbanLabel}
-            onPress={() => {
-              removeDrawerData();
-              handleUnbanConfirm(user);
-            }}
-          />
-        </Menu>
-      ),
-    });
-  }
+  const getActionItems: (user: Amity.User) => ActionMenuItem[] = (user: Amity.User) => [
+    {
+      key: 'unban',
+      icon: Banned,
+      label: unbanLabel,
+      onPress: () => handleUnbanConfirm(user),
+    },
+  ];
 
   return {
     channelId,
@@ -77,6 +65,6 @@ export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPagePr
     setSearchText,
     debouncedSearch,
     handleBack,
-    openUnbanAction,
+    getActionItems,
   };
 }

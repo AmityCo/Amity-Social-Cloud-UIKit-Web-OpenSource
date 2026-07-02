@@ -5,16 +5,17 @@ import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { Avatar } from '~/v4/chat/elements/Avatar';
 import { IconButton } from '~/v4/chat/elements/IconButton';
+import { ActionMenu, type ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import styles from './Header.module.css';
 
 type HeaderProps = {
   userId?: string;
-  userDisplayName?: string;
   onBack: () => void;
-  onOpenActions?: () => void;
+  userDisplayName?: string;
+  actions: ActionMenuItem[];
 };
 
-export function Header({ userId, userDisplayName, onBack, onOpenActions }: HeaderProps) {
+export function Header({ userId, userDisplayName, onBack, actions }: HeaderProps) {
   const { online } = useNetworkState();
   const isOnline = online !== false;
   const { user } = useUser({ userId, shouldCall: !!userId });
@@ -39,13 +40,8 @@ export function Header({ userId, userDisplayName, onBack, onOpenActions }: Heade
           ) : null}
         </div>
       </div>
-      {onOpenActions && (
-        <IconButton
-          icon="ellipsis-v"
-          variant="transparent"
-          onPress={onOpenActions}
-          aria-label="Open menu actions"
-        />
+      {actions.length > 0 && (
+        <ActionMenu getItems={() => actions} icon="ellipsis-v" ariaLabel="Conversation actions" />
       )}
     </header>
   );

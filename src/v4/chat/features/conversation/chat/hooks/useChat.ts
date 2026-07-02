@@ -15,7 +15,7 @@ export function useChat({
 
   const { channel } = useChannelObject({ channelId });
 
-  const { openConversationActions } = useConversationActions({
+  const { items: conversationActions } = useConversationActions({
     channelId: channelId ?? '',
     otherUserId: userId,
   });
@@ -41,6 +41,6 @@ export function useChat({
     isUserBlocked,
     showMutedBanner,
     mutedVariant,
-    openConversationActions,
+    conversationActions,
   };
 }

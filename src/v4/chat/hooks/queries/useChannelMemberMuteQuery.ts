@@ -25,10 +25,13 @@ export function useChannelMemberMuteQuery() {
     mutationFn: ({ channelId, userId }) =>
       ChannelRepository.Moderation.muteMembers(channelId, [userId]),
     onSuccess: () => {
-      success({ content: resolveString('amity_chat_action_mute_user') });
+      success({ content: resolveString('amity_chat_action_mute_user'), alignment: 'fullscreen' });
     },
     onError: () => {
-      error({ content: resolveString('amity_chat_action_mute_user_failed') });
+      error({
+        content: resolveString('amity_chat_action_mute_user_failed'),
+        alignment: 'fullscreen',
+      });
     },
   });
 
@@ -36,10 +39,13 @@ export function useChannelMemberMuteQuery() {
     mutationFn: ({ channelId, userId }) =>
       ChannelRepository.Moderation.unmuteMembers(channelId, [userId]),
     onSuccess: () => {
-      success({ content: resolveString('amity_chat_action_unmute_user') });
+      success({ content: resolveString('amity_chat_action_unmute_user'), alignment: 'fullscreen' });
     },
     onError: () => {
-      error({ content: resolveString('amity_chat_action_unmute_user_failed') });
+      error({
+        content: resolveString('amity_chat_action_unmute_user_failed'),
+        alignment: 'fullscreen',
+      });
     },
   });
 

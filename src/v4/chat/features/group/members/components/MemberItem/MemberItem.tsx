@@ -2,9 +2,9 @@ import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
 import { Avatar } from '~/v4/chat/elements/Avatar';
-import { IconButton } from '~/v4/chat/elements/IconButton';
 import Muted from '~/v4/icons/Muted';
 import { BrandBadge } from '~/v4/social/elements/BrandBadge/BrandBadge';
+import { ActionMenu, type ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import styles from './MemberItem.module.css';
 
 type MemberItemProps = {
@@ -13,16 +13,16 @@ type MemberItemProps = {
   isCurrentUser: boolean;
   isMuted?: boolean;
   isViewerModerator?: boolean;
-  onActionPress?: () => void;
+  getActions?: () => ActionMenuItem[] | Promise<ActionMenuItem[]>;
 };
 
 export function MemberItem({
   user,
+  getActions,
   isModerator,
   isCurrentUser,
   isMuted = false,
   isViewerModerator = false,
-  onActionPress,
 }: MemberItemProps) {
   const displayName = user.displayName ?? user.userId;
   const youSuffix = useString('amity_chat_member_you_suffix');
@@ -41,12 +41,11 @@ export function MemberItem({
           <Muted className={styles.memberItem__mutedIcon} aria-label="Muted" />
         )}
       </div>
-      {onActionPress && (
-        <IconButton
+      {getActions && (
+        <ActionMenu
           icon="ellipsis"
-          variant="transparent"
-          onPress={onActionPress}
-          aria-label={`Actions for ${displayName}`}
+          getItems={getActions}
+          ariaLabel={`Actions for ${displayName}`}
         />
       )}
     </div>

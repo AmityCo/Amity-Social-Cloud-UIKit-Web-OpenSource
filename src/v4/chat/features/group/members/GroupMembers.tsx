@@ -5,27 +5,16 @@ import type { GroupMemberListPageProps } from '~/v4/chat/pages/GroupMemberListPa
 import styles from './GroupMembers.module.css';
 
 export function GroupMembers(props: GroupMemberListPageProps) {
-  const {
-    channelId,
-    currentUserId,
-    isViewerModerator,
-    handleBack,
-    handleOpenAddMember,
-    openMemberActions,
-  } = useGroupMembers(props);
+  const { channelId, isViewerModerator, handleBack, handleOpenAddMember } = useGroupMembers(props);
 
   return (
     <div className={styles.groupMembers}>
       <Header
-        isViewerModerator={isViewerModerator}
         onBack={handleBack}
+        isViewerModerator={isViewerModerator}
         onAddMember={handleOpenAddMember}
       />
-      <MemberTabs
-        channelId={channelId}
-        currentUserId={currentUserId}
-        onOpenMemberActions={openMemberActions}
-      />
+      <MemberTabs channelId={channelId} />
     </div>
   );
 }

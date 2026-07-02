@@ -21,7 +21,7 @@ export function useChannelBanQuery() {
     mutationFn: ({ channelId, userIds }) =>
       ChannelRepository.Moderation.banMembers(channelId, userIds),
     onError: () => {
-      error({ content: banErrorToast });
+      error({ content: banErrorToast, alignment: 'fullscreen' });
     },
   });
 
@@ -29,7 +29,7 @@ export function useChannelBanQuery() {
     mutationFn: ({ channelId, userIds }) =>
       ChannelRepository.Moderation.unbanMembers(channelId, userIds),
     onError: () => {
-      error({ content: unbanErrorToast });
+      error({ content: unbanErrorToast, alignment: 'fullscreen' });
     },
   });
 

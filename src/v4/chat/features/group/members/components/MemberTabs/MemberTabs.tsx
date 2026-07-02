@@ -6,7 +6,6 @@ import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
 import { useString } from '~/v4/core/localization';
 import { SEARCH_DEBOUNCE_MS } from '~/v4/chat/constants/search';
 import { MemberList } from '~/v4/chat/features/group/members/components/MemberList';
-import type { OpenMemberActionsParams } from '~/v4/chat/features/group/members/hooks/useGroupMembers';
 import styles from './MemberTabs.module.css';
 
 export enum MembershipsTab {
@@ -16,11 +15,9 @@ export enum MembershipsTab {
 
 type MemberTabsProps = {
   channelId: string;
-  currentUserId: string | null | undefined;
-  onOpenMemberActions: (params: OpenMemberActionsParams) => void;
 };
 
-export function MemberTabs({ channelId, currentUserId, onOpenMemberActions }: MemberTabsProps) {
+export function MemberTabs({ channelId }: MemberTabsProps) {
   const [activeTab, setActiveTab] = useState<Key>(MembershipsTab.Members);
   const [searchText, setSearchText] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -51,8 +48,6 @@ export function MemberTabs({ channelId, currentUserId, onOpenMemberActions }: Me
           channelId={channelId}
           search={debouncedSearch}
           onlyModerators={onlyModerators}
-          currentUserId={currentUserId}
-          onOpenMemberActions={onOpenMemberActions}
         />
       </>
     );
