@@ -352,7 +352,7 @@ export const CommentComposer = ({
             mutateAsync({ params: textValue });
           }}
         >
-          <Typography.Body>Post</Typography.Body>
+          <Typography.Body>{replyTo ? 'Reply' : 'Comment'}</Typography.Body>
         </Button>
       </div>
     </div>

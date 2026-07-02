@@ -10,6 +10,7 @@ import { BrandBadge, ReactionButton, SaveButton } from '~/v4/social/elements';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
+import ReplyArrow from '~/v4/icons/ReplyArrow';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
@@ -363,116 +364,125 @@ const PostReplyComment = ({
               <div
                 data-has-reaction={reactionsCount > 0}
                 className={clsx(
-                  styles.postReplyComment__content,
+                  styles.postReplyComment__bubble,
                   isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
                 )}
               >
-                <div className={styles.postReplyComment__userInfo}>
-                  <Typography.BodyBold
-                    data-testid={`${pageId}/${componentId}/username`}
-                    className={styles.postReplyComment__content__username}
-                  >
-                    {comment.creator?.displayName}
-                  </Typography.BodyBold>
-                  {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
-                </div>
-                {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
-                <TextWithMention
-                  pageId={pageId}
-                  componentId={componentId}
-                  data={{
-                    text: localCommentData?.text ?? (comment.data as Amity.ContentDataText).text,
-                  }}
-                  mentionees={
-                    (localCommentData?.mentionees ?? comment.mentionees) as Amity.UserMention[]
-                  }
-                  metadata={localCommentData?.metadata ?? comment.metadata}
-                  links={localCommentData?.links ?? comment.links}
-                  testId={`${pageId}/${componentId}/reply-comment-text`}
-                />
-                <CommentReactionDisplay
-                  pageId={pageId}
-                  componentId={componentId}
-                  comment={comment}
-                  reactionsCount={reactionsCount}
-                  position="replyComment"
-                  onReactionPress={() => {
-                    const reactionList = (
-                      <ReactionList
-                        pageId={pageId}
-                        referenceType="comment"
-                        referenceId={comment.commentId}
-                        customReferenceType="reply"
-                      />
-                    );
-                    isDesktop
-                      ? openPopup({ view: 'desktop', children: reactionList })
-                      : setDrawerData({
-                          content: reactionList,
-                          snapPoints: [0.7, 1],
-                          activeSnapPoint: 0.7,
-                        });
-                  }}
-                />
-              </div>
-              <div className={styles.postReplyComment__secondRow}>
-                <div className={styles.postReplyComment__secondRow__leftPane}>
-                  <Typography.Caption className={styles.postReplyComment__secondRow__timestamp}>
-                    <Timestamp
-                      pageId={pageId}
-                      componentId={componentId}
-                      timestamp={comment.createdAt}
-                    />
-                    <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
-                      {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
-                        ' (edited)'}
-                    </span>
-                  </Typography.Caption>
-                  <ReactionButton
-                    pageId={pageId}
-                    componentId={componentId}
-                    myReaction={reactionByMe}
-                    onReactionClick={handleReactionClick}
-                    buttonClassName={styles.postReplyComment__secondRow__like}
-                    isCommentReaction
-                    referenceType="comment"
-                    community={community}
-                  />
-                  {onClickReply && (
-                    <Button
-                      data-testid={`${pageId}/${componentId}/reply_button`}
-                      variant="default"
-                      onPress={handleReplyClick}
-                      className={styles.postReplyComment__secondRow__replyButton}
-                    >
-                      <Typography.CaptionBold className={styles.postReplyComment__secondRow__reply}>
-                        Reply
-                      </Typography.CaptionBold>
-                    </Button>
-                  )}
-                  <Popover
-                    trigger={{
-                      pageId,
-                      componentId,
-                      onClick: () => setBottomSheetOpen(true),
-                      className: styles.postReplyComment__secondRow__actionButton,
-                      iconClassName: styles.postReplyComment__secondRow__actionButton__icon,
-                    }}
-                  >
-                    {({ closePopover }) => (
-                      <CommentOptions
+                <div className={styles.postReplyComment__content}>
+                  <div className={styles.postReplyComment__header}>
+                    <div className={styles.postReplyComment__userInfo}>
+                      <Typography.BodyBold
+                        data-testid={`${pageId}/${componentId}/username`}
+                        className={styles.postReplyComment__content__username}
+                      >
+                        {comment.creator?.displayName}
+                      </Typography.BodyBold>
+                      {isBrandUser && (
+                        <BrandBadge className={styles.postReplyComment__brandBadge} />
+                      )}
+                    </div>
+                    <Typography.Caption className={styles.postReplyComment__date}>
+                      <Timestamp
                         pageId={pageId}
                         componentId={componentId}
-                        comment={comment}
-                        onCloseMenu={closePopover}
-                        handleEditComment={handleEditComment}
-                        handleDeleteComment={() => {
-                          closePopover();
-                          handleDeleteComment();
-                        }}
+                        timestamp={comment.createdAt}
                       />
+                      <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                        {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
+                          ' (edited)'}
+                      </span>
+                    </Typography.Caption>
+                  </div>
+                  {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
+                  <TextWithMention
+                    pageId={pageId}
+                    componentId={componentId}
+                    data={{
+                      text: localCommentData?.text ?? (comment.data as Amity.ContentDataText).text,
+                    }}
+                    mentionees={
+                      (localCommentData?.mentionees ?? comment.mentionees) as Amity.UserMention[]
+                    }
+                    metadata={localCommentData?.metadata ?? comment.metadata}
+                    links={localCommentData?.links ?? comment.links}
+                    testId={`${pageId}/${componentId}/reply-comment-text`}
+                  />
+                </div>
+                <div className={styles.postReplyComment__secondRow}>
+                  <div className={styles.postReplyComment__secondRow__leftPane}>
+                    <ReactionButton
+                      pageId={pageId}
+                      componentId={componentId}
+                      myReaction={reactionByMe}
+                      onReactionClick={handleReactionClick}
+                      buttonClassName={styles.postReplyComment__secondRow__like}
+                      isCommentReaction
+                      referenceType="comment"
+                      community={community}
+                    />
+                    {onClickReply && (
+                      <Button
+                        data-testid={`${pageId}/${componentId}/reply_button`}
+                        variant="default"
+                        onPress={handleReplyClick}
+                        className={styles.postReplyComment__secondRow__replyButton}
+                      >
+                        <ReplyArrow className={styles.postReplyComment__secondRow__replyIcon} />
+                        <Typography.CaptionBold
+                          className={styles.postReplyComment__secondRow__reply}
+                        >
+                          Reply
+                        </Typography.CaptionBold>
+                      </Button>
                     )}
-                  </Popover>
+                    <Popover
+                      trigger={{
+                        pageId,
+                        componentId,
+                        onClick: () => setBottomSheetOpen(true),
+                        className: styles.postReplyComment__secondRow__actionButton,
+                        iconClassName: styles.postReplyComment__secondRow__actionButton__icon,
+                      }}
+                    >
+                      {({ closePopover }) => (
+                        <CommentOptions
+                          pageId={pageId}
+                          componentId={componentId}
+                          comment={comment}
+                          onCloseMenu={closePopover}
+                          handleEditComment={handleEditComment}
+                          handleDeleteComment={() => {
+                            closePopover();
+                            handleDeleteComment();
+                          }}
+                        />
+                      )}
+                    </Popover>
+                  </div>
+                  <CommentReactionDisplay
+                    pageId={pageId}
+                    componentId={componentId}
+                    comment={comment}
+                    reactionsCount={reactionsCount}
+                    position="inline"
+                    onReactionPress={() => {
+                      const reactionList = (
+                        <ReactionList
+                          pageId={pageId}
+                          referenceType="comment"
+                          referenceId={comment.commentId}
+                          customReferenceType="reply"
+                        />
+                      );
+                      isDesktop
+                        ? openPopup({ view: 'desktop', children: reactionList })
+                        : setDrawerData({
+                            content: reactionList,
+                            snapPoints: [0.7, 1],
+                            activeSnapPoint: 0.7,
+                          });
+                    }}
+                  />
                 </div>
               </div>
 

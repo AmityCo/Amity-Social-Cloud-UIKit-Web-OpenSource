@@ -20,20 +20,15 @@ import { ReactionPicker } from '~/v4/social/elements/';
 
 import styles from './ReactionButton.module.css';
 
+// Heart "react" icon. Fill is omitted so it inherits the `fill` set by the
+// consuming icon class (tertiary for the un-reacted state).
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    width="17"
-    height="17"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+  <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M5.125 3C3.65582 3 2.5 4.13833 2.5 5.5C2.5 7.69697 3.87479 9.57268 5.34094 10.9394C6.06586 11.6152 6.79284 12.1473 7.3393 12.5105C7.61205 12.6919 7.83858 12.8303 7.99574 12.9227C7.99716 12.9236 7.99858 12.9244 8 12.9253C8.00141 12.9244 8.00284 12.9236 8.00426 12.9227C8.16142 12.8303 8.38795 12.6919 8.6607 12.5105C9.20716 12.1473 9.93414 11.6152 10.6591 10.9394C12.1252 9.57268 13.5 7.69697 13.5 5.5C13.5 4.13833 12.3442 3 10.875 3C9.78016 3 8.85257 3.63635 8.4568 4.52559C8.37649 4.70602 8.1975 4.82228 8 4.82228C7.8025 4.82228 7.62351 4.70602 7.5432 4.52559C7.14743 3.63635 6.21984 3 5.125 3ZM8 13.5C7.76549 13.9416 7.76533 13.9415 7.76515 13.9414L7.76331 13.9404L7.75896 13.9381L7.74386 13.9299C7.731 13.9229 7.71261 13.9128 7.68905 13.8997C7.64195 13.8734 7.57416 13.8349 7.48864 13.7846C7.31767 13.684 7.07545 13.5359 6.7857 13.3433C6.20716 12.9587 5.43414 12.3934 4.65906 11.6709C3.12521 10.241 1.5 8.11673 1.5 5.5C1.5 3.54796 3.1424 2 5.125 2C6.29092 2 7.33488 2.53272 8 3.36773C8.66512 2.53273 9.70908 2 10.875 2C12.8576 2 14.5 3.54796 14.5 5.5C14.5 8.11673 12.8748 10.241 11.3409 11.6709C10.5659 12.3934 9.79284 12.9587 9.2143 13.3433C8.92455 13.5359 8.68233 13.684 8.51136 13.7846C8.42584 13.8349 8.35805 13.8734 8.31095 13.8997C8.2874 13.9128 8.269 13.9229 8.25614 13.9299L8.24104 13.9381L8.23669 13.9404L8.23532 13.9412C8.23514 13.9413 8.23451 13.9416 8 13.5ZM8 13.5L8.23451 13.9416C8.08787 14.0195 7.91179 14.0193 7.76515 13.9414L8 13.5Z"
+    />
   </svg>
 );
 
@@ -259,7 +254,7 @@ export function ReactionButton({
     let elementId: string = '';
 
     if (isCommentReaction) {
-      text = displayReaction ?? config.text ?? 'Like';
+      text = displayReaction ?? 'React';
       elementId = 'comment-reaction-text';
     } else if (isClipReaction) {
       text =
@@ -268,7 +263,7 @@ export function ReactionButton({
           : (myReaction || config.text) ?? '';
       elementId = 'clip-reaction-text';
     } else {
-      text = (displayReaction || config.text) ?? '';
+      text = displayReaction || 'React';
       elementId = 'reaction-text';
     }
 
@@ -288,21 +283,15 @@ export function ReactionButton({
   const renderReactionButton = () => {
     return (
       <>
-        {!isCommentReaction && (
-          <>
-            {displayReaction ? (
-              renderMyReaction()
-            ) : (
-              <IconComponent
-                defaultIcon={defaultIcon ?? renderDefaultIcon}
-                imgIcon={() => (
-                  <img src={config.icon} alt={uiReference} className={imgIconClassName} />
-                )}
-                defaultIconName={defaultConfig.icon}
-                configIconName={config.icon}
-              />
-            )}
-          </>
+        {displayReaction ? (
+          renderMyReaction()
+        ) : (
+          <IconComponent
+            defaultIcon={defaultIcon ?? renderDefaultIcon}
+            imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
+            defaultIconName={defaultConfig.icon}
+            configIconName={config.icon}
+          />
         )}
         {renderReactionCountText()}
         {showReactionPicker && !shouldNotShowReactionPicker && (

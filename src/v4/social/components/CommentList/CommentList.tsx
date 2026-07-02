@@ -378,7 +378,11 @@ export const CommentList = ({
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={1} />
       )}
 
-      {(collapsible ? expanded : !isDesktop || expanded) && !isLoading && (
+      {/* Infinite-scroll sentinel — only when there are more comments to fetch.
+       * Rendering it unconditionally left an empty node that still consumed the
+       * list's `gap: 1rem`, adding dead space below the "Hide all comments"
+       * toggle once everything was already loaded. */}
+      {(collapsible ? expanded : !isDesktop || expanded) && !isLoading && hasMore && (
         <div
           ref={(node) => setIntersectionNode(node)}
           className={styles.commentList__container_intersection}
