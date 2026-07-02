@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useString } from '~/v4/core/localization';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import useChannelCollection from '~/v4/chat/hooks/collections/useChannelCollection';
+import useSearchChannelsCollection from '~/v4/chat/hooks/collections/useSearchChannelsCollection';
 import { useArchivedChannelsCollection } from '~/v4/chat/hooks/collections/useArchivedChannelsCollection';
 import { useChannelArchiveQuery } from '~/v4/chat/hooks/queries';
 import { ChannelItem } from '~/v4/chat/features/home/components/ChannelItem/ChannelItem';
@@ -35,17 +35,18 @@ export function SearchChannelList({ query }: SearchChannelListProps) {
     [archivedChannels],
   );
 
-  const { channels, hasMore, loadMore, isLoading, isLoadingFirstPage } = useChannelCollection(
-    {
-      displayName: trimmed,
-      limit: LIST_PAGE_LIMIT,
-      excludeArchives: false,
-      membership: 'member',
-      isDeleted: false,
-      types: ['conversation', 'community'],
-    },
-    { shouldCall },
-  );
+  const { channels, hasMore, loadMore, isLoading, isLoadingFirstPage } =
+    useSearchChannelsCollection(
+      {
+        query: trimmed,
+        limit: LIST_PAGE_LIMIT,
+        isMemberOnly: true,
+        types: ['conversation', 'community'],
+        sortBy: 'lastActivity',
+        orderBy: 'desc',
+      },
+      { shouldCall },
+    );
 
   useIntersectionObserver({
     node: sentinelNode,
