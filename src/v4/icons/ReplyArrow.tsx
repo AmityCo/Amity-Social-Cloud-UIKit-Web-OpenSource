@@ -1,0 +1,11 @@
+import React from 'react';
+
+// Curved u-turn "reply" arrow. Fill is intentionally omitted so it inherits
+// the `fill` set by the consuming icon class (e.g. the comment action row).
+const ReplyArrow = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg width="13" height="13" viewBox="0 0 13 13" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M12 8.49996C12 6.56697 10.433 4.99996 8.49996 4.99996H1.70699L4.85348 8.14645C5.04874 8.34171 5.04874 8.65822 4.85348 8.85348C4.65822 9.04874 4.34171 9.04874 4.14645 8.85348L0.146447 4.85348C-0.0488155 4.65822 -0.0488155 4.34171 0.146447 4.14645L4.14645 0.146447C4.34171 -0.0488155 4.65822 -0.0488155 4.85348 0.146447C5.04874 0.341709 5.04874 0.658216 4.85348 0.853478L1.70699 3.99996H8.49996C10.9852 3.99996 13 6.01468 13 8.49996C13 10.9852 10.9852 13 8.49996 13H6.49996C6.22382 13 5.99996 12.7761 5.99996 12.5C5.99996 12.2238 6.22382 12 6.49996 12H8.49996C10.433 12 12 10.433 12 8.49996Z" />
+  </svg>
+);
+
+export default ReplyArrow;

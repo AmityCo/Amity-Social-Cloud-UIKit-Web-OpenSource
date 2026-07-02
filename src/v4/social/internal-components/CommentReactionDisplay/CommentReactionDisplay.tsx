@@ -13,7 +13,7 @@ interface CommentReactionDisplayProps {
   comment: Amity.Comment;
   reactionsCount: number;
   onReactionPress: () => void;
-  position?: 'comment' | 'replyComment';
+  position?: 'comment' | 'replyComment' | 'inline';
   className?: string;
 }
 
@@ -36,6 +36,18 @@ export const CommentReactionDisplay = ({
     className,
   );
 
+  // Inline (in the action row) mirrors the post reaction bar: count first, then
+  // the stacked reaction icons, right-aligned with no pill chrome.
+  const isInline = position === 'inline';
+  const reactionCount = (
+    <Typography.CaptionBold
+      data-testid={`${pageId}/${componentId}/comment-reaction-count`}
+      className={styles.commentReactionDisplay__reactionCount}
+    >
+      {millify(reactionsCount)}
+    </Typography.CaptionBold>
+  );
+
   return (
     <Button
       data-testid={`${pageId}/${componentId}/comment-reaction-list-button`}
@@ -43,6 +55,7 @@ export const CommentReactionDisplay = ({
       className={containerClassName}
       onPress={onReactionPress}
     >
+      {isInline && reactionCount}
       {hasReaction ? (
         <div className={styles.commentReactionDisplay__reactions}>
           {sortedReactions.map((item) =>
@@ -67,12 +80,7 @@ export const CommentReactionDisplay = ({
           )}
         </div>
       ) : null}
-      <Typography.CaptionBold
-        data-testid={`${pageId}/${componentId}/comment-reaction-count`}
-        className={styles.commentReactionDisplay__reactionCount}
-      >
-        {millify(reactionsCount)}
-      </Typography.CaptionBold>
+      {!isInline && reactionCount}
     </Button>
   );
 };

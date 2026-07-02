@@ -23,6 +23,18 @@
   gap: 0.25rem;
 }
 
+/* Inline in the action row (right-aligned), matching the post reaction bar:
+ * no pill background, border or absolute positioning — just count + icons. */
+.commentReactionDisplay--inline {
+  position: static;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
 /* Reactions container */
 .commentReactionDisplay__reactions {
   display: flex;
