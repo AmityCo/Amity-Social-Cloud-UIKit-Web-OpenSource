@@ -28,7 +28,7 @@ import { ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
 
 export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: HomePageTab }) {
   const pageId = 'social_home_page';
-  const { isVisitorOrBot } = useSDK();
+  const { isVisitorOrBot, currentUserId } = useSDK();
   const { config } = useCustomization();
   const { themeStyles } = useAmityPage({
     pageId,
@@ -54,7 +54,9 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
 
   const [persistedTab, setPersistedTab] = useSocialHomePageTab();
 
-  const initialTabResolved = useRef(false);
+  const hasResolvedRef = useRef(false);
+
+  const resolvedForUserRef = useRef<string | null | undefined>(undefined);
 
   const [isInitialTabResolved, setIsInitialTabResolved] = useState(false);
 
@@ -77,22 +79,31 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
   }, [containerRef.current, activeTab]);
 
   useEffect(() => {
-    if (initialTabResolved.current) return;
+    if (hasResolvedRef.current && resolvedForUserRef.current === currentUserId) return;
     if (isVisitorOrBot) {
-      initialTabResolved.current = true;
+      hasResolvedRef.current = true;
+      resolvedForUserRef.current = currentUserId;
       setActiveTab(HomePageTab.Communities);
       setIsInitialTabResolved(true);
       return;
     }
     if (isForYouFeedSettingPending) return;
-    initialTabResolved.current = true;
+    hasResolvedRef.current = true;
+    resolvedForUserRef.current = currentUserId;
     if (persistedTab && (persistedTab !== HomePageTab.ForYou || isForYouTabVisible)) {
       setActiveTab(persistedTab);
     } else {
       setActiveTab(isForYouTabVisible ? HomePageTab.ForYou : HomePageTab.Newsfeed);
     }
     setIsInitialTabResolved(true);
-  }, [isVisitorOrBot, isForYouFeedSettingPending, isForYouTabVisible, persistedTab, setActiveTab]);
+  }, [
+    currentUserId,
+    isVisitorOrBot,
+    isForYouFeedSettingPending,
+    isForYouTabVisible,
+    persistedTab,
+    setActiveTab,
+  ]);
 
   useEffect(() => {
     if (isForYouTabVisible) return;

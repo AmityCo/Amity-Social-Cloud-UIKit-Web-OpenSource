@@ -8,6 +8,8 @@ import { formatTimestamp } from '~/v4/chat/utils/timestamp';
 import { ConversationChatAvatar } from '~/v4/chat/elements/ConversationChatAvatar/ConversationChatAvatar';
 import { Avatar } from '~/v4/chat/elements/Avatar';
 import { TrashIcon } from '~/v4/icons/Trash';
+import { ImageMessagePreview } from '~/v4/icons/ImageMessagePreview';
+import { VideoMessagePreview } from '~/v4/icons/VideoMessagePreview';
 import Mention from '~/v4/icons/Mention';
 import { ArchivedBadge } from '~/v4/chat/elements/ArchivedBadge';
 import { highlightMatch } from '~/v4/chat/utils/highlightMatch';
@@ -148,8 +150,8 @@ function MessagePreview({
 
   if (preview?.isDeleted) {
     return (
-      <div className={styles.channelItem__previewDeleted}>
-        <TrashIcon className={styles.channelItem__previewDeletedIcon} />
+      <div className={styles.channelItem__previewWithIcon}>
+        <TrashIcon className={styles.channelItem__previewLeadingIcon} />
         <Typography.Body className={styles.channelItem__preview}>
           {previewDeletedLabel}
         </Typography.Body>
@@ -158,6 +160,16 @@ function MessagePreview({
   }
 
   const text = getPreviewText(preview, previewStrings);
+
+  if (preview?.dataType === 'image' || preview?.dataType === 'video') {
+    const MediaIcon = preview.dataType === 'image' ? ImageMessagePreview : VideoMessagePreview;
+    return (
+      <div className={styles.channelItem__previewWithIcon}>
+        <MediaIcon className={styles.channelItem__previewLeadingIcon} />
+        <Typography.Body className={styles.channelItem__preview}>{text}</Typography.Body>
+      </div>
+    );
+  }
 
   if (preview?.dataType !== 'text' || text.length === 0) {
     return <Typography.Body className={styles.channelItem__preview}>{text}</Typography.Body>;

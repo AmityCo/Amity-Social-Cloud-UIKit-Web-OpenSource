@@ -111,7 +111,7 @@
   color: var(--asc-color-base-shade2);
 }
 
-.channelItem__previewDeleted {
+.channelItem__previewWithIcon {
   display: flex;
   flex: 1 1 0;
   align-items: center;
@@ -120,10 +120,10 @@
   overflow: hidden;
 }
 
-.channelItem__previewDeletedIcon {
+.channelItem__previewLeadingIcon {
   flex-shrink: 0;
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 1.25rem;
+  height: 1.25rem;
   color: var(--asc-color-base-shade2);
 }
 
