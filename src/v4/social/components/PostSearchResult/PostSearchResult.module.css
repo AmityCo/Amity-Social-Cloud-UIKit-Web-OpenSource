@@ -4,18 +4,18 @@
   min-height: 20rem;
   align-items: start;
   flex-direction: column;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
 }
 
 .postSearchResult__postContentContainer {
   width: 100%;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
   cursor: pointer;
 }
 
 .postSearchResult__noResultContainer {
   margin: 0 auto;
-  background: var(--asc-color-white);
+  background: var(--asc-color-background-default);
   padding: 1.5rem;
 }
 

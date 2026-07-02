@@ -31,13 +31,13 @@
 }
 
 .textEditor__link {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-shade1);
   text-decoration: none;
   cursor: pointer;
 }
 
 .textEditor__hashtag {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-shade1);
   cursor: pointer;
 }
 
