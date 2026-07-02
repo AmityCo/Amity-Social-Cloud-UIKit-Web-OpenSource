@@ -1,4 +1,11 @@
-import React, { useRef, forwardRef, MutableRefObject, useState, KeyboardEventHandler } from 'react';
+import React, {
+  useRef,
+  forwardRef,
+  MutableRefObject,
+  useState,
+  useCallback,
+  KeyboardEventHandler,
+} from 'react';
 import { Mention, MentionsInput } from 'react-mentions';
 import styled, { css } from 'styled-components';
 import cx from 'clsx';
@@ -68,17 +75,41 @@ const TextArea = styled(TextareaAutosize)`
 `;
 
 // Have to hard code this as we have no way of
-// injecting these styles with styled components
+// injecting these styles with styled components.
+//
+// The suggestions list is rendered into a portal (see `suggestionsPortalHost`
+// below) so it can escape any ancestor `overflow: hidden`. react-mentions
+// positions a portalled overlay with viewport-relative coordinates, so the
+// list must be `fixed` rather than `absolute` — otherwise our style here
+// overrides react-mentions' computed `position` and the list gets clipped to
+// a sliver inside the compose bar (ENG-701).
 const suggestListStyles = {
   suggestions: {
     zIndex: 999,
-    position: 'absolute',
+    position: 'fixed',
     transform: 'translateY(1.25rem)',
+    // Theme via DS tokens so the dropdown matches the app's colour scheme in
+    // both light and dark themes (the kit's styled-components palette is frozen
+    // at light; react-mentions otherwise defaults the panel to white, which
+    // makes the light foreground text unreadable in dark mode).
+    backgroundColor: 'var(--asc-color-background-default)',
+    color: 'var(--asc-color-base-default)',
+    border: '1px solid var(--asc-color-base-shade4)',
+    borderRadius: '0.5rem',
+    boxShadow: '0 0.5rem 1.5rem rgba(0, 0, 0, 0.32), 0 0 0.25rem rgba(0, 0, 0, 0.12)',
+    overflow: 'hidden',
     list: {
       borderRadius: '0.5rem',
       maxHeight: '17.5rem',
-      boxShadow: '0 0 0.3rem #A5A9B5',
       overflow: 'auto',
+      backgroundColor: 'var(--asc-color-background-default)',
+    },
+    item: {
+      // react-mentions toggles `&focused` on keyboard navigation and mouse
+      // hover, so this doubles as the hover highlight.
+      '&focused': {
+        backgroundColor: 'var(--asc-color-base-shade4)',
+      },
     },
   },
   '&multiLine': {
@@ -168,6 +199,18 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
     const [items, setItems] = useState<NonNullable<Awaited<ReturnType<QueryMentioneesFnType>>>>([]);
     const mentionRef = useRef<HTMLDivElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
+    // Hold the `#mention-input` node in state so react-mentions receives a
+    // non-null `suggestionsPortalHost` on the render that opens the suggestions
+    // list. A plain ref isn't enough: it's still null on the render where the
+    // overlay first mounts, so react-mentions would fall back to absolute
+    // (clipped) positioning. Portalling the list into this node also keeps it a
+    // descendant of `mentionRef`, which SocialMentionItem relies on as the
+    // IntersectionObserver root for loadMore.
+    const [mentionPortalHost, setMentionPortalHost] = useState<HTMLDivElement | null>(null);
+    const setMentionHostRef = useCallback((el: HTMLDivElement | null) => {
+      mentionRef.current = el;
+      setMentionPortalHost(el);
+    }, []);
 
     const handleMentionInput: React.ComponentProps<typeof StyledMentionsInput>['onChange'] = (
       e,
@@ -208,13 +251,14 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
     return (
       <Container ref={containerRef} className={classNames}>
         {prepend}
-        <div ref={mentionRef} id="mention-input" />
+        <div ref={setMentionHostRef} id="mention-input" />
         {multiline && mentionAllowed && (
           <StyledMentionsInput
             allowSuggestionsAboveCursor
             inputRef={ref as MutableRefObject<HTMLTextAreaElement>}
             rows={rows}
             style={suggestListStyles}
+            suggestionsPortalHost={mentionPortalHost ?? undefined}
             {...props}
             onKeyDown={(e) => handleKeyDown(e)}
             onChange={handleMentionInput}
