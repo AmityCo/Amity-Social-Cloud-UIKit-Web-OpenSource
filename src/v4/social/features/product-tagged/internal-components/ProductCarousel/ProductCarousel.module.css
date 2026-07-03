@@ -51,7 +51,7 @@
   height: 2rem;
   border-radius: 50%;
   border: none;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
   box-shadow: 0 2px 8px rgb(from var(--asc-color-black) r g b / 15%);
   cursor: pointer;
   display: flex;
