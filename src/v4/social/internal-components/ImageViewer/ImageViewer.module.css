@@ -67,7 +67,7 @@
 .imageViewer__next__icon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-background-default);
+  fill: var(--asc-color-white);
 }
 
 .imageViewer__prev__icon {
@@ -89,7 +89,7 @@
 .imageViewer__closeButton {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-base-shade4);
+  fill: var(--asc-color-white);
 }
 
 .imageViewer__closeButton__img {
