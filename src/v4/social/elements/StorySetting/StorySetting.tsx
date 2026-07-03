@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import React from 'react';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { PlusCircle } from '~/v4/icons/PlusCircle';
 import { useAmityElement } from '~/v4/core/hooks/uikit';

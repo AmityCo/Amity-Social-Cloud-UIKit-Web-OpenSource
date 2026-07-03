@@ -1,0 +1,5 @@
+.selectGroupMember {
+  --empty-state-offset-top: 12.75rem;
+
+  background-color: var(--asc-color-background-default);
+}

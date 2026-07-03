@@ -1,5 +1,4 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
-import { PrimaryButton } from '~/core/components/Button/styles';
 
 export type ConfirmType = {
   onCancel?: () => void;
@@ -47,8 +46,7 @@ export const ConfirmProvider: React.FC = ({ children }) => {
     setConfirmData({ ...confirmData, type: 'confirm' });
   };
 
-  const info = (data: ConfirmType) =>
-    setConfirmData({ ...data, type: 'info', OkButton: PrimaryButton });
+  const info = (data: ConfirmType) => setConfirmData({ ...data, type: 'info' });
 
   return (
     <ConfirmContext.Provider value={{ confirmData, confirm, info, closeConfirm }}>

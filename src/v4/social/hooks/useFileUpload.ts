@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FileRepository, FileType } from '@amityco/ts-sdk';
-import { isNonNullable } from '~/helpers/utils';
+import { isNonNullable } from '~/v4/helpers/utils';
 import { isAmityFile } from '~/v4/utils/checkFileType';
 
 export const getUpdatedTime = (file: File | Amity.File) => {

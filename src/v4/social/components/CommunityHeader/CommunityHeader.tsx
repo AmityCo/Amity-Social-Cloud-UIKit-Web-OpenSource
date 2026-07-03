@@ -90,14 +90,17 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
 
   const joinRequestCount = (joinRequests && joinRequests?.length) ?? 0;
 
+  const requiresPostApproval = community?.postSetting
+    ? community.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED
+    : !!(community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+        .needApprovalOnPostCreation;
+
   const isShowPendingPost =
     community.isJoined &&
     pendingPostsCount > 0 &&
     reviewingPosts.length > 0 &&
     (canReviewCommunityPosts || isPostOwner) &&
-    ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
-      .needApprovalOnPostCreation ||
-      community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED);
+    requiresPostApproval;
 
   const isShowJoinRequest = joinRequestCount > 0 && canReviewCommunityPosts;
 

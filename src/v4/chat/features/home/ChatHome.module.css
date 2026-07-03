@@ -1,0 +1,14 @@
+.chatHome {
+  --chat-home-header-height: 3rem;
+}
+
+.chatHome__tabs {
+  gap: 0;
+}
+
+.chatHome__tabList {
+  position: sticky;
+  top: var(--chat-home-header-height);
+  z-index: 9;
+  background: var(--asc-color-background-default);
+}

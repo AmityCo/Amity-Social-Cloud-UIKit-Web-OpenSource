@@ -2,7 +2,7 @@ import { CommentRepository } from '@amityco/ts-sdk';
 import { useString, resolveString } from '~/v4/core/localization';
 import React from 'react';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
-import { Close, Lock2Icon } from '~/icons';
+import { Close, Lock2Icon } from '~/v4/icons';
 import { CommentComposeBar } from '~/v4/social/internal-components/CommentComposeBar';
 import styles from './StoryCommentComposeBar.module.css';
 

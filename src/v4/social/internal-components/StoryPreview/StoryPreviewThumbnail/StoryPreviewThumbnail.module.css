@@ -50,7 +50,7 @@
 }
 
 .storyPreviewTitle {
-  color: #ebecef;
+  color: var(--asc-color-white);
   font-size: 0.25rem;
 }
 
@@ -73,7 +73,8 @@
 .hyperlink__icon {
   width: 0.5rem;
   height: 0.5rem;
-  color: #1054de;
+  color: var(--asc-color-primary-default);
+  fill: var(--asc-color-primary-default);
 }
 
 .hyperlink {
@@ -86,8 +87,8 @@
   text-align: center;
   align-items: center;
   border-radius: 1.5rem;
-  border: 0.0625rem solid #ebecef;
-  background: rgb(255 255 255 / 80%);
+  border: 0.0625rem solid var(--asc-color-base-shade4);
+  background: var(--asc-color-background-transparent-white);
 }
 
 .storyPreviewContainer::before {
@@ -97,7 +98,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(0 0 0 / 60%);
+  background-color: rgb(from var(--asc-color-black) r g b / 60%);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
@@ -108,7 +109,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ebecef;
+  color: var(--asc-color-white);
   font-size: 0.75rem;
   font-weight: 400;
   text-align: center;
@@ -124,7 +125,7 @@
   opacity: 1;
   z-index: 9999;
   cursor: pointer;
-  background-color: rgb(0 0 0 / 80%);
+  background-color: rgb(from var(--asc-color-black) r g b / 80%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -154,7 +155,8 @@
 .hyperlinkIcon {
   width: 0.75rem;
   height: 0.75rem;
-  color: #1054de;
+  color: var(--asc-color-primary-default);
+  fill: var(--asc-color-primary-default);
   margin-right: 0.13rem;
 }
 
@@ -175,7 +177,7 @@
 }
 
 .skeleton {
-  background-color: #636878;
+  background-color: var(--asc-color-base-shade1);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -197,7 +199,7 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  background-color: #e0e0e0;
+  background-color: var(--asc-color-base-shade4);
   margin-right: 0.5rem;
 }
 
@@ -208,7 +210,7 @@
 .nameSkeleton {
   width: 80%;
   height: 0.25rem;
-  background-color: #e0e0e0;
+  background-color: var(--asc-color-base-shade4);
   margin-bottom: 0.25rem;
   border-radius: 0.25rem;
 }
@@ -216,7 +218,7 @@
 .timeSkeleton {
   width: 40%;
   height: 0.25rem;
-  background-color: #e0e0e0;
+  background-color: var(--asc-color-base-shade4);
   border-radius: 0.25rem;
 }
 
@@ -230,7 +232,11 @@
 .shadowOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(0 0 0 / 16%) 100%, rgb(255 255 255 / 0%) 55.05%);
+  background: linear-gradient(
+    180deg,
+    rgb(from var(--asc-color-black) r g b / 16%) 100%,
+    rgb(from var(--asc-color-white) r g b / 0%) 55.05%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -241,7 +247,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-  color: #666;
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-shade1);
   text-align: center;
 }

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -9,11 +9,14 @@ import { Button } from '~/v4/core/natives/Button';
 interface CameraButtonProps {
   pageId: string;
   componentId?: string;
+  text?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
   isVisibleImage?: boolean;
   isVisibleVideo?: boolean;
   isDisabled?: boolean;
+  layout?: 'row' | 'column';
+  captureMode?: 'environment' | 'user';
   textId?: string;
   onVideoFileChange?: (files: File[]) => void;
   onImageFileChange?: (files: File[]) => void;
@@ -50,11 +53,14 @@ const CameraSvg = (props: React.SVGProps<SVGSVGElement>) => {
 export function CameraButton({
   pageId = '*',
   componentId = '*',
+  text,
   imgIconClassName,
   defaultIconClassName,
   isVisibleImage,
   isVisibleVideo,
   isDisabled,
+  layout = 'row',
+  captureMode,
   textId = 'amity_social_button_community_setup_camera_button',
   onVideoFileChange,
   onImageFileChange,
@@ -70,11 +76,12 @@ export function CameraButton({
     resolveText,
   } = useAmityElement({ pageId, componentId, elementId });
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   if (isExcluded) return null;
 
   const triggerFileInput = () => {
-    const fileInput = document.getElementById('upload') as HTMLInputElement;
-    fileInput.click();
+    inputRef.current?.click();
   };
 
   const onLoadMedia: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -90,14 +97,19 @@ export function CameraButton({
       } else if (isVideo) {
         onVideoFileChange?.(targetFiles);
       }
+      e.target.value = '';
     },
     [onImageFileChange, onVideoFileChange],
   );
+
+  const labelText = resolveText(textId) || text || config.text;
+  const Label = layout === 'column' ? Typography.Caption : Typography.BodyBold;
 
   return (
     <Button
       style={themeStyles}
       data-testid={accessibilityId}
+      data-layout={layout}
       className={styles.cameraButton}
       onPress={triggerFileInput}
       isDisabled={isDisabled}
@@ -113,14 +125,13 @@ export function CameraButton({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-      {(resolveText(textId) || config.text) && (
-        <Typography.BodyBold>{resolveText(textId) || config.text}</Typography.BodyBold>
-      )}
+
+      {labelText && <Label className={styles.cameraButton__label}>{labelText}</Label>}
 
       <input
+        ref={inputRef}
         type="file"
         onChange={onLoadMedia}
-        id="upload"
         accept={
           isVisibleImage && isVisibleVideo
             ? 'video/*,image/*'
@@ -129,7 +140,8 @@ export function CameraButton({
               : 'video/*'
         }
         capture={
-          isVisibleImage && isVisibleVideo ? undefined : isVisibleImage ? 'user' : 'environment'
+          captureMode ??
+          (isVisibleImage && isVisibleVideo ? undefined : isVisibleImage ? 'user' : 'environment')
         }
         className={styles.cameraButton_input}
       />

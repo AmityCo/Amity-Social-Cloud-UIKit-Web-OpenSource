@@ -4,13 +4,13 @@ import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useMention from '~/v4/chat/hooks/useMention';
 
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 import styles from './CommentComposeBar.module.css';
 
-import User, { backgroundImage as UserImage } from '~/icons/User';
-import useImage from '~/core/hooks/useImage';
-import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import User, { backgroundImage as UserImage } from '~/v4/icons/User';
+import useImage from '~/v4/core/hooks/useImage';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import InputText from '~/v4/core/components/InputText';
 import { Avatar } from '~/v4/core/components';
 import Button from '~/v4/core/components/Button/Button';

@@ -85,6 +85,9 @@ type BaseThemeValue = {
   elevation_08_03_color: string;
   host_color: string;
   host_color_shade1: string;
+  primary_pressed_color: string;
+  message_overlay_color: string;
+  video_progress_track_color: string;
 };
 
 type GeneratedThemeValue = {
@@ -115,6 +118,9 @@ const defaultBase = {
   base_divider_line: ' #292B32',
   host_color: '#4B1BD0',
   host_color_shade1: '#EAE2FF',
+  primary_pressed_color: '#1A4499',
+  message_overlay_color: 'rgb(41 43 50 / 40%)',
+  video_progress_track_color: '#d9d9d9',
 };
 
 export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
@@ -306,6 +312,7 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/top_navigation/notification_tray_button': {
       image: 'value',
     },
+    'social_home_page/*/for_you_button': {},
     'social_home_page/*/newsfeed_button': {},
     'social_home_page/*/explore_button': {},
     'social_home_page/*/my_communities_button': {},
@@ -335,6 +342,8 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/my_communities/community_members_count': {},
     'social_home_page/newsfeed_component/*': {},
     'social_home_page/global_feed_component/*': {},
+    'social_home_page/for_you_feed_component/*': {},
+    'social_home_page/feed_caught_up_component/*': {},
     'social_home_page/post_composer/image_button': {
       icon: 'ImageIcon',
     },
@@ -564,8 +573,11 @@ export const defaultConfig: DefaultConfig = {
     'communities_by_category_page/*/community_empty_image': {},
     'communities_by_category_page/*/community_empty_title': {},
     '*/community_sidebar/community_sidebar_title': {},
+    '*/community_sidebar/for_you_sidebar_menu_item': {
+      icon: 'Home',
+    },
     '*/community_sidebar/newsfeed_sidebar_menu_item': {
-      icon: 'Newspaper',
+      icon: 'UserCheck',
     },
     '*/community_sidebar/explore_sidebar_menu_item': {
       icon: 'Global',
@@ -1045,6 +1057,7 @@ export const getCustomizationKeys = ({
 
 const propertyMappings: Record<keyof ThemeValue, string> = {
   primary_color: '--asc-color-primary-default',
+  primary_pressed_color: '--asc-color-primary-pressed',
   primary_shade1_color: '--asc-color-primary-shade1',
   primary_shade2_color: '--asc-color-primary-shade2',
   primary_shade3_color: '--asc-color-primary-shade3',
@@ -1086,6 +1099,8 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   elevation_08_03_color: '--asc-color-elevation-08-03',
   host_color: '--asc-color-host-default',
   host_color_shade1: '--asc-color-host-shade1',
+  message_overlay_color: '--asc-color-message-overlay',
+  video_progress_track_color: '--asc-color-video-progress-track',
 };
 
 export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {

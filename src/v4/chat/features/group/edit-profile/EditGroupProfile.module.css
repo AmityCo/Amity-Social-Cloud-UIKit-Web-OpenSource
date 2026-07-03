@@ -1,0 +1,12 @@
+.editGroupProfile {
+  display: block;
+  width: 100%;
+  background: var(--asc-color-background-default);
+}
+
+.editGroupProfile__avatarWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+}

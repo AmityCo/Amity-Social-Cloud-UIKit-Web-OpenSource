@@ -4,10 +4,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { UIStoryAd } from '~/v4/social/internal-components/StoryAd/UIStoryAd';
 import { useImage } from '~/v4/core/hooks/useImage';
+import { ThemeContext, useTheme } from '~/v4/core/providers/ThemeProvider';
 
 export const renderer: CustomRenderer = ({ story, action, config, onClose }) => {
   const [isPaused, setIsPaused] = useState(false);
   const { loader } = config;
+  const { toggleTheme, setDefaultTheme } = useTheme();
+  const forcedLightTheme = {
+    currentTheme: 'light' as const,
+    forcedTheme: 'light' as const,
+    toggleTheme,
+    setDefaultTheme,
+  };
 
   const { ad, currentIndex, storiesCount, increaseIndex, pageId, dragEventTarget } = story;
 
@@ -70,23 +78,25 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose }) => 
   }
 
   return (
-    <UIStoryAd
-      pageId={pageId}
-      ad={ad}
-      adImageUrl={adImageUrl}
-      avatarUrl={avatarUrl}
-      currentIndex={currentIndex}
-      isPaused={isPaused}
-      storiesCount={storiesCount}
-      renderLoader={() => loader}
-      onComplete={handleProgressComplete}
-      onPauseClick={pause}
-      onPlayClick={play}
-      onClose={onClose}
-      onImageLoaded={onImageLoaded}
-      onAdvertisementInfoOpen={onAdvertisementInfoOpen}
-      onAdvertisementInfoClose={onAdvertisementInfoClose}
-    />
+    <ThemeContext.Provider value={forcedLightTheme}>
+      <UIStoryAd
+        pageId={pageId}
+        ad={ad}
+        adImageUrl={adImageUrl}
+        avatarUrl={avatarUrl}
+        currentIndex={currentIndex}
+        isPaused={isPaused}
+        storiesCount={storiesCount}
+        renderLoader={() => loader}
+        onComplete={handleProgressComplete}
+        onPauseClick={pause}
+        onPlayClick={play}
+        onClose={onClose}
+        onImageLoaded={onImageLoaded}
+        onAdvertisementInfoOpen={onAdvertisementInfoOpen}
+        onAdvertisementInfoClose={onAdvertisementInfoClose}
+      />
+    </ThemeContext.Provider>
   );
 };
 

@@ -20,7 +20,7 @@ import {
 import { WatchingCountBadge } from '~/v4/social/features/livestream/internal-components/WatchingCountBadge';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { FileRepository } from '@amityco/ts-sdk';
+import { AmitySharableContentType, FileRepository } from '@amityco/ts-sdk';
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import { BrandBadge } from '~/v4/social/elements';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar/CommunityAvatar';
@@ -29,7 +29,6 @@ import Lock from '~/v4/icons/Lock';
 import { VerifyBadgeIcon } from '~/v4/icons/VerifyBadge';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
@@ -254,7 +253,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
                             content: (
                               <CopyLinkButton
                                 pageId={pageId}
-                                model={SharableModel.POST}
+                                model={AmitySharableContentType.POST}
                                 referenceId={livestreamPost?.postId}
                                 onDone={removeDrawerData}
                               />
@@ -267,7 +266,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
                 {({ closePopover }) => (
                   <CopyLinkButton
                     pageId={pageId}
-                    model={SharableModel.POST}
+                    model={AmitySharableContentType.POST}
                     referenceId={livestreamPost?.postId}
                     onDone={isDesktop ? closePopover : removeDrawerData}
                   />

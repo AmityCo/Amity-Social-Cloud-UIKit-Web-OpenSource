@@ -1,0 +1,10 @@
+.waitingForNetwork {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.waitingForNetwork__text {
+  color: var(--asc-color-base-shade1);
+}

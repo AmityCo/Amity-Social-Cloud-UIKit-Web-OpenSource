@@ -1,24 +1,11 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
 import { v4 } from 'uuid';
-
-const rotateAnimation = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-`;
-
-const StyledSpinner = styled.svg`
-  animation: ${rotateAnimation} 2s linear infinite;
-`;
 
 const ConnectionSpinner = (props: React.SVGProps<SVGSVGElement>) => {
   const uuid = v4();
   return (
-    <StyledSpinner
+    <svg
+      style={{ animation: 'asc-spin 2s linear infinite' }}
       xmlns="http://www.w3.org/2000/svg"
       width="17"
       height="16"
@@ -45,7 +32,7 @@ const ConnectionSpinner = (props: React.SVGProps<SVGSVGElement>) => {
           <stop offset="0.716307" stopColor="white" stopOpacity="0.01" />
         </radialGradient>
       </defs>
-    </StyledSpinner>
+    </svg>
   );
 };
 

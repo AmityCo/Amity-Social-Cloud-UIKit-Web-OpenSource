@@ -12,7 +12,7 @@ import { StoryRepository } from '@amityco/ts-sdk';
 import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
+import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';

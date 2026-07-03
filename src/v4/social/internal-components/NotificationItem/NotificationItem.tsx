@@ -7,7 +7,7 @@ import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { highlightedText } from '~/v4/social/utils/highlightedText';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { EVENT_TRAY_CATEGORIES } from '~/constants';
+const EVENT_TRAY_CATEGORIES = ['eventCreated', 'eventCancelled', 'eventUpdated', 'eventInvitation'];
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import styles from './NotificationItem.module.css';
 

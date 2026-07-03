@@ -25,3 +25,14 @@
     border-radius: 0;
   }
 }
+
+@media only screen and (width >= 48em) {
+  .eventDiscussion__composerPopupHeader {
+    width: 30rem;
+    box-sizing: border-box;
+  }
+
+  .eventDiscussion__composerPopupHeader > :first-child {
+    min-width: 0;
+  }
+}

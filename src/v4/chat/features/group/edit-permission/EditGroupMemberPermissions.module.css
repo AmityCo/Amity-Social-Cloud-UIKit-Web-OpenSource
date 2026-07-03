@@ -1,0 +1,43 @@
+.editGroupMemberPermissions {
+  width: 100%;
+  display: block;
+  background: var(--asc-color-background-default);
+}
+
+.editGroupMemberPermissions__sectionTitle {
+  display: block;
+  padding: 1rem 1rem 0.5rem;
+  color: var(--asc-color-base-default);
+}
+
+.editGroupMemberPermissions__radios {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.editGroupMemberPermissions__radio {
+  padding: 1rem;
+  cursor: pointer;
+  align-items: flex-start;
+}
+
+.editGroupMemberPermissions__saveButton {
+  padding: 0;
+  border: none;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--asc-color-primary-default);
+}
+
+.editGroupMemberPermissions__saveButton[data-disabled='true'] {
+  cursor: not-allowed;
+  color: var(--asc-color-primary-shade2);
+}
+
+.editGroupMemberPermissions__saveLabel {
+  color: inherit;
+}

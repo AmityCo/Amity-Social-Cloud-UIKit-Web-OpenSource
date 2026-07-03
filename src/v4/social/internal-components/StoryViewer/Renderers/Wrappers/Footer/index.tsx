@@ -2,7 +2,7 @@ import React from 'react';
 import { useString } from '~/v4/core/localization';
 import { ReactionRepository, StoryRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants';
-import Spinner from '~/social/components/Spinner';
+import { Spinner } from '~/v4/social/internal-components/Spinner/Spinner';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 import { StoryCommentButton } from '~/v4/social/elements/StoryCommentButton/StoryCommentButton';
@@ -154,6 +154,7 @@ const Footer: React.FC<
           myReactions={myReactions}
           reactionsCount={reactionsCount}
           onPress={handleReactionClick}
+          defaultIconClassName={styles.viewStoryReaction}
         />
       </div>
     </div>

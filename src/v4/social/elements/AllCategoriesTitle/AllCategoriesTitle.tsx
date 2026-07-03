@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './AllCategoriesTitle.module.css';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -13,7 +12,7 @@ export const AllCategoriesTitle = ({
   componentId = '*',
 }: AllCategoriesTitleProps) => {
   const elementId = 'all_categories_title';
-  const { config, themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
+  const { themeStyles, accessibilityId, isExcluded, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,

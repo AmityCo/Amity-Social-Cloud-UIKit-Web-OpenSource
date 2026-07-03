@@ -29,7 +29,13 @@
   min-height: auto;
   line-height: 1.5;
   font-size: 0.875rem;
+  color: var(--asc-color-base-default);
+  background-color: transparent;
   caret-color: var(--asc-color-primary-default);
+}
+
+.altTextConfig__input::placeholder {
+  color: var(--asc-color-base-shade3);
 }
 
 .altTextConfig__cta {

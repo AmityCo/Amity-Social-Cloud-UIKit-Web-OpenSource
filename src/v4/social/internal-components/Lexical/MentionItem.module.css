@@ -28,7 +28,7 @@
 .allMentionItem__atSign {
   width: 2rem;
   height: 2rem;
-  background-color: var(--asc-color-primary-default);
+  background-color: var(--asc-color-primary-shade1);
   color: var(--asc-color-white);
   display: flex;
   align-items: center;

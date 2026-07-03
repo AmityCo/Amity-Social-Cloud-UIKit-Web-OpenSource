@@ -228,7 +228,7 @@
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
-  background-color: rgb(0 0 0 / 30%);
+  background-color: rgb(from var(--asc-color-black) r g b / 30%);
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,10 +1,10 @@
 import { FileRepository } from '@amityco/ts-sdk';
 import { trim } from 'lodash';
 
-import useUser from '~/core/hooks/useUser';
-import { useSDK } from '~/core/hooks/useSDK';
+import useUser from '~/v4/core/hooks/objects/useUser';
+import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useEffect, useMemo, useState } from 'react';
-import useImage from '~/core/hooks/useImage';
+import useImage from '~/v4/core/hooks/useImage';
 
 const MEMBER_COUNT_PER_CASE = {
   DIRECT_CHAT: 2,

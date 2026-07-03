@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   border: none;
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
   color: var(--base-inverse-default);
   cursor: pointer;
   padding: 0.1875rem 0;

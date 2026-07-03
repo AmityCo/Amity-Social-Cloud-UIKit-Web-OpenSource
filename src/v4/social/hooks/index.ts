@@ -1,4 +1,4 @@
-export * from './collections/useReactionsCollection';
+export { useReactionsCollection } from '~/v4/core/hooks/collections';
 export { useGetActiveStoriesByTarget } from './useGetActiveStories';
 export { useCommentFlaggedByMe } from './useCommentFlaggedByMe';
 export { useCommentReaction } from './useCommentReaction';

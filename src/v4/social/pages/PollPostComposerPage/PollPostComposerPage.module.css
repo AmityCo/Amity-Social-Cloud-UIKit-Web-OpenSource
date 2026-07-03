@@ -74,7 +74,7 @@
   font-size: 0.8125rem;
 }
 
-.pollPostComposerPage__pollQuestion__input {
+.pollPostComposerPage__pollQuestion .pollPostComposerPage__pollQuestion__input {
   padding: 0 0 1rem;
   border-bottom: 1px solid var(--asc-color-base-shade4);
   font-size: 0.9375rem;
@@ -159,9 +159,9 @@
 
 .pollPostComposerPage__pollOptions__input[data-isvalid='false'],
 .pollPostComposerPage__pollOptions__input:focus-within[data-isvalid='false'] {
-  background-color: var(--asc-color-alert-shade2);
+  background-color: rgb(from var(--asc-color-alert-default) r g b / 10%);
   border-radius: 0.25rem;
-  border: 1px solid var(--asc-color-alert-shade1);
+  border: 0.0625rem solid var(--asc-color-alert-default);
 }
 
 .pollPostComposerPage__pollOptions__input::placeholder {
@@ -300,7 +300,7 @@
 .pollPostComposerPage__imagePollOptions__closeIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--asc-color-background-default);
+  color: var(--asc-color-white);
 }
 
 .pollPostComposerPage__imagePollOptions__plusIcon {

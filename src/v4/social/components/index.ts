@@ -11,7 +11,6 @@ export * from './CommunitySearchResult';
 export * from './TopSearchBar';
 export * from './PostContent';
 export * from './MyCommunities';
-export * from './GlobalFeed';
 export * from './EmptyNewsFeed';
 export * from './Newsfeed';
 export * from './TopNavigation';

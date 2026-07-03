@@ -1,0 +1,32 @@
+.channelList__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: calc(100svh - var(--chat-home-header-height, 3rem) - 3.25rem);
+}
+
+.channelList__emptyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.channelList__emptyText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.channelList__emptyTitle {
+  color: var(--asc-color-base-shade3);
+}
+
+.channelList__emptySubtitle {
+  color: var(--asc-color-base-shade3);
+}

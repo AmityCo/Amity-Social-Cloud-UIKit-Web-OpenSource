@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Button, ButtonProps } from '~/v4/core/components/AriaButton';
 import styles from './InviteButton.module.css';
@@ -10,7 +9,7 @@ type InviteButtonProps = ButtonProps & {
 
 export function InviteButton({ pageId = '*', componentId = '*', ...props }: InviteButtonProps) {
   const elementId = 'invite_button';
-  const { config, accessibilityId, resolveText } = useAmityElement({
+  const { accessibilityId, resolveText } = useAmityElement({
     pageId,
     componentId,
     elementId,

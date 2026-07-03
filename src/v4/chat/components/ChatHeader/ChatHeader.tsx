@@ -9,7 +9,7 @@ import { Avatar } from '~/v4/core/components/Avatar/Avatar';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import styles from './ChatHeader.module.css';
 import { useNetworkState } from 'react-use';
-import { useString } from '~/v4/core/localization';
+import { resolveString, useString } from '~/v4/core/localization';
 
 interface ChatHeaderProps {
   channel: Amity.Channel | null;
@@ -31,17 +31,14 @@ export const ChatHeader = ({ channel, pageId = '*' }: ChatHeaderProps) => {
       </div>
       <div>
         <div className={styles.displayName}>
-          <Typography.TitleBold>{chatName || 'Loading...'}</Typography.TitleBold>
+          <Typography.TitleBold>{chatName}</Typography.TitleBold>
         </div>
         <div className={styles.memberCount}>
           {online ? (
             <>
               <UserRegular className={styles.memberIcon} />
               <Typography.Caption>
-                {millify(channel?.memberCount || 0)}{' '}
-                {`${channel?.memberCount || 0} ${
-                  channel?.memberCount === 1 ? 'member' : 'members'
-                }`}
+                {resolveString('amity_chat_group_member_count', millify(channel?.memberCount || 0))}
               </Typography.Caption>
             </>
           ) : (

@@ -9,7 +9,11 @@
   justify-content: space-between;
   width: 100%;
   padding: 1rem 0.75rem;
-  background: linear-gradient(180deg, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 0%) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(from var(--asc-color-black) r g b / 20%) 0%,
+    rgb(from var(--asc-color-black) r g b / 0%) 100%
+  );
 }
 
 .videoHeader__leftContainer {
@@ -42,7 +46,8 @@
 .videoHeader__icon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: white;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
 }
 
 .videoHeader__popoverContainer {

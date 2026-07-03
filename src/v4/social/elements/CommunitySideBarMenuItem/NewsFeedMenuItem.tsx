@@ -1,11 +1,11 @@
-import React from 'react';
-import Newspaper from '~/v4/icons/Newspaper';
+import UserCheck from '~/v4/icons/UserCheck';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { CommunitySideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
+import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
 
 type NewsFeedMenuItemProps = {
   pageId?: string;
@@ -17,6 +17,7 @@ export function NewsFeedMenuItem({ pageId = '*', componentId = '*' }: NewsFeedMe
 
   const { onChangePage, page } = useNavigation();
   const { activeTab, setActiveTab } = useLayoutContext();
+  const [, setPersistedTab] = useSocialHomePageTab();
   const { accessibilityId, config, isExcluded, defaultConfig, uiReference, resolveText } =
     useAmityElement({
       pageId,
@@ -32,13 +33,14 @@ export function NewsFeedMenuItem({ pageId = '*', componentId = '*' }: NewsFeedMe
       isActive={page.type === PageTypes.SocialHomePage && activeTab === HomePageTab.Newsfeed}
       onPress={() => {
         setActiveTab(HomePageTab.Newsfeed);
+        setPersistedTab(HomePageTab.Newsfeed);
         onChangePage(PageTypes.SocialHomePage);
       }}
       icon={(props) => (
         <IconComponent
           configIconName={config.icon}
           defaultIconName={defaultConfig.icon}
-          defaultIcon={() => <Newspaper {...props} />}
+          defaultIcon={() => <UserCheck {...props} />}
           imgIcon={() => <img src={config.icon} alt={uiReference} />}
         />
       )}

@@ -23,7 +23,7 @@
   position: absolute;
   top: -0.15rem;
   right: -0.15rem;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
   padding: 0.15rem;
   border-radius: 50%;
 }

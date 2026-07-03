@@ -45,7 +45,7 @@
 /* Desktop: centered white card on shade background */
 @media (width >= 768px) {
   .visitorUsageLimitPage {
-    background-color: #f6f7f8;
+    background-color: var(--asc-color-background-shade1);
   }
 
   .visitorUsageLimitPage__card {
@@ -53,7 +53,7 @@
     min-width: 25rem;
     padding: 5.3125rem 2rem;
     background-color: var(--asc-color-background-default);
-    border: 1px solid #ebecef;
+    border: 0.0625rem solid var(--asc-color-base-shade4);
     border-radius: 0.5rem;
   }
 }

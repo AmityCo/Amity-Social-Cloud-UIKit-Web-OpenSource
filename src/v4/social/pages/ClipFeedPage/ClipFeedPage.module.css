@@ -4,10 +4,10 @@
   height: 100vh;
   background: linear-gradient(
       180deg,
-      rgb(0 0 0 / 30%) 0%,
-      rgb(0 0 0 / 0%) 10%,
-      rgb(0 0 0 / 0%) 90%,
-      rgb(0 0 0 / 30%) 100%
+      rgb(from var(--asc-color-black) r g b / 30%) 0%,
+      rgb(from var(--asc-color-black) r g b / 0%) 10%,
+      rgb(from var(--asc-color-black) r g b / 0%) 90%,
+      rgb(from var(--asc-color-black) r g b / 30%) 100%
     ),
     var(--asc-color-black);
   overflow: hidden;

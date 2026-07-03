@@ -1,9 +1,10 @@
 import React from 'react';
-import { UISpinner } from './styles';
+import styles from './Spinner.module.css';
 
 export const Spinner = (props: React.SVGProps<SVGSVGElement>) => {
   return (
-    <UISpinner
+    <svg
+      className={styles.spinner}
       xmlns="http://www.w3.org/2000/svg"
       width="21"
       height="21"
@@ -17,13 +18,13 @@ export const Spinner = (props: React.SVGProps<SVGSVGElement>) => {
         cy="10.5"
         r="9"
         fill="none"
-        stroke="#1054DE"
+        stroke="currentColor"
         strokeWidth="2"
         strokeDasharray="46.75"
         strokeDashoffset="21"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </UISpinner>
+    </svg>
   );
 };

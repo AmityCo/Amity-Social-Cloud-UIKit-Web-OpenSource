@@ -215,7 +215,7 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  border: 1px solid var(--asc-color-white);
+  border: 1px solid var(--asc-color-background-default);
   position: relative;
 }
 
@@ -270,26 +270,26 @@
   align-items: center;
   justify-content: center;
   border-radius: 0.375rem;
-  background-color: rgb(0 0 0 / 20%);
+  background-color: rgb(from var(--asc-color-black) r g b / 20%);
   background-clip: padding-box;
-  border: 1px solid rgb(255 255 255 / 20%);
+  border: 1px solid rgb(from var(--asc-color-white) r g b / 20%);
   padding: 0.5rem 0.75rem;
-  color: white;
+  color: var(--asc-color-white);
   cursor: pointer;
   outline: none;
   transition: background-color 0.3s;
 }
 
 .button:hover {
-  background-color: rgb(0 0 0 / 30%);
+  background-color: rgb(from var(--asc-color-black) r g b / 30%);
 }
 
 .button:active {
-  background-color: rgb(0 0 0 / 40%);
+  background-color: rgb(from var(--asc-color-black) r g b / 40%);
 }
 
 .button[data-focus-visible] {
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 75%);
+  box-shadow: 0 0 0 2px rgb(from var(--asc-color-white) r g b / 75%);
 }
 
 .popover {
@@ -297,11 +297,11 @@
   width: 14rem;
   overflow: auto;
   border-radius: 0.375rem;
-  background-color: white;
+  background-color: var(--asc-color-background-default);
   box-shadow:
-    0 10px 15px -3px rgb(0 0 0 / 10%),
-    0 4px 6px -2px rgb(0 0 0 / 5%);
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 5%);
+    0 10px 15px -3px rgb(from var(--asc-color-black) r g b / 10%),
+    0 4px 6px -2px rgb(from var(--asc-color-black) r g b / 5%);
+  box-shadow: 0 0 0 1px rgb(from var(--asc-color-black) r g b / 5%);
 }
 
 .popover[data-entering] {
@@ -334,12 +334,12 @@
 
 .menuItem:focus {
   background-color: var(--asc-color-base-shade1);
-  color: white;
+  color: var(--asc-color-white);
 }
 
 .separator {
-  background-color: #d1d5db;
-  height: 1px;
+  background-color: var(--asc-color-base-shade4);
+  height: 0.0625rem;
   margin: 0.25rem 0.75rem;
 }
 

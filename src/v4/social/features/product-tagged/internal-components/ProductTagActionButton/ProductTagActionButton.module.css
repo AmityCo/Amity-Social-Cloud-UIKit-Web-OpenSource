@@ -23,7 +23,7 @@
 }
 
 .productTagActionButton__amountText {
-  color: var(--asc-color-white);
+  color: var(--asc-color-background-shade1);
 }
 
 .productTagActionButton__productTagList {

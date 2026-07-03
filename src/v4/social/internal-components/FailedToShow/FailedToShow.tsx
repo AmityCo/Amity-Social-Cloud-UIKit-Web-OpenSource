@@ -1,4 +1,3 @@
-import React from 'react';
 import { useString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
@@ -11,11 +10,17 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 type FailedToShowProps = {
   pageId?: string;
+  allowBack?: boolean;
   className?: string;
   onBack?: () => void;
 };
 
-export const FailedToShow = ({ pageId = '*', className, onBack: $onBack }: FailedToShowProps) => {
+export const FailedToShow = ({
+  pageId = '*',
+  className,
+  onBack: $onBack,
+  allowBack = true,
+}: FailedToShowProps) => {
   const componentId = 'failed_to_show';
   const { onBack } = useNavigation();
   const { accessibilityId } = useAmityComponent({
@@ -35,12 +40,14 @@ export const FailedToShow = ({ pageId = '*', className, onBack: $onBack }: Faile
       <Typography.Body className={styles.failedToShow__desc}>
         {useString('amity_social_button_livestream_unavailable_desc')}
       </Typography.Body>
-      <Button
-        onPress={() => ($onBack ? $onBack() : onBack())}
-        className={styles.failedToShow__button}
-      >
-        <Typography.Body>{useString('amity_social_button_go_back')}</Typography.Body>
-      </Button>
+      {allowBack && (
+        <Button
+          onPress={() => ($onBack ? $onBack() : onBack())}
+          className={styles.failedToShow__button}
+        >
+          <Typography.Body>{useString('amity_social_button_go_back')}</Typography.Body>
+        </Button>
+      )}
     </div>
   );
 };

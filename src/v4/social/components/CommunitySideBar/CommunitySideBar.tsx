@@ -3,6 +3,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CommunitySideBarTitle } from '~/v4/social/elements/CommunitySideBarTitle';
 import { NotificationTrayPage, SocialGlobalSearchPage } from '~/v4/social/pages';
 import {
+  ForYouMenuItem,
   NewsFeedMenuItem,
   CommunitiesMenuItem,
   EventsMenuItem,
@@ -13,6 +14,8 @@ import { notificationTray } from '@amityco/ts-sdk';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
+import useForYouFeedSetting from '~/v4/social/hooks/useForYouFeedSetting';
 
 type CommunitySideBarProps = {
   pageId?: string;
@@ -20,11 +23,17 @@ type CommunitySideBarProps = {
   isExploreHidden?: boolean;
 };
 
-export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarProps) => {
+export function CommunitySideBar({ className, pageId = '*' }: CommunitySideBarProps) {
   const componentId = 'community_sidebar';
   const { isVisitorOrBot } = useSDK();
   const { searchValue } = useSearchResultContext();
   const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
+
+  const { isPending: isForYouFeedSettingPending } = useForYouFeedSetting({
+    shouldCall: !isVisitorOrBot,
+  });
+
+  const isResolvingForYou = !isVisitorOrBot && isForYouFeedSettingPending;
 
   const handleNotificationTrayButtonClick = () => {
     notificationTray.markTraySeen(new Date().toISOString());
@@ -66,12 +75,37 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
       </div>
 
       <div className={styles.communitySideBar__menuSection}>
-        {!isVisitorOrBot && <NewsFeedMenuItem pageId={pageId} componentId={componentId} />}
-        <CommunitiesMenuItem pageId={pageId} componentId={componentId} />
-        <EventsMenuItem pageId={pageId} componentId={componentId} />
+        {isResolvingForYou ? (
+          <CommunitySideBar.MenuSkeleton />
+        ) : (
+          <>
+            <ForYouMenuItem pageId={pageId} componentId={componentId} />
+            {!isVisitorOrBot && <NewsFeedMenuItem pageId={pageId} componentId={componentId} />}
+            <CommunitiesMenuItem pageId={pageId} componentId={componentId} />
+            <EventsMenuItem pageId={pageId} componentId={componentId} />
+          </>
+        )}
       </div>
     </div>
   );
-};
+}
+
+function MenuSkeleton() {
+  return (
+    <Skeleton
+      className={styles.communitySideBar__menuSkeleton}
+      data-testid="community_sidebar_menu_skeleton"
+    >
+      {Array.from({ length: 4 }).map((_, index) => (
+        <Skeleton key={`menu-item-${index}`} className={styles.communitySideBar__menuSkeletonItem}>
+          <Skeleton.Circle width="2rem" height="2rem" />
+          <Skeleton.Line width="11.25rem" height="0.5rem" />
+        </Skeleton>
+      ))}
+    </Skeleton>
+  );
+}
+
+CommunitySideBar.MenuSkeleton = MenuSkeleton;
 
 export default CommunitySideBar;

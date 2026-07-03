@@ -15,18 +15,18 @@
   cursor: pointer;
   display: inline;
   background-color: transparent;
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-shade1);
 }
 
 .textWithMention__mention[data-focus-visible] {
-  outline: 2px solid var(--asc-color-primary-default);
+  outline: 2px solid var(--asc-color-primary-shade1);
 }
 
 .textWithMention__link {
   display: inline;
   cursor: pointer;
   text-decoration: none;
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-shade1);
 }
 
 .textWithMention__seeMore,
@@ -36,7 +36,12 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-shade1);
+}
+
+.textWithMention__seeMore p,
+.textWithMention__seeLess p {
+  color: var(--asc-color-primary-shade1);
 }
 
 .textWithMention__seeLess {
@@ -46,7 +51,7 @@
 
 .textWithMention__hashtag {
   display: inline;
-  color: var(--asc-color-highlight-default);
+  color: var(--asc-color-primary-shade1);
   cursor: pointer;
 }
 
@@ -56,10 +61,10 @@
   cursor: pointer;
   display: inline;
   background-color: transparent;
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-shade1);
 }
 
 .textWithMention__highlight {
-  background-color: rgb(from var(--asc-color-primary-shade1) r g b / 10%);
-  font-weight: 700;
+  background-color: color-mix(in srgb, var(--asc-color-primary-shade1) 10%, transparent);
+  font-weight: 600;
 }

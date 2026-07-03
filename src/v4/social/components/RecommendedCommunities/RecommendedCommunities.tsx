@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
-import useImage from '~/core/hooks/useImage';
+import { useImage } from '~/v4/core/hooks/useImage';
 import { Button } from '~/v4/core/components/AriaButton';
 import { Carousel } from '~/v4/core/components/Carousel';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';

@@ -51,8 +51,8 @@
   height: 2rem;
   border-radius: 50%;
   border: none;
-  background-color: var(--asc-color-white);
-  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+  background-color: var(--asc-color-background-default);
+  box-shadow: 0 2px 8px rgb(from var(--asc-color-black) r g b / 15%);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -72,7 +72,7 @@
 .productCarousel__navButton_left:hover,
 .productCarousel__navButton_right:hover {
   background-color: var(--asc-color-base-shade4);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+  box-shadow: 0 4px 12px rgb(from var(--asc-color-black) r g b / 20%);
 }
 
 .productCarousel__navButton_left:active,

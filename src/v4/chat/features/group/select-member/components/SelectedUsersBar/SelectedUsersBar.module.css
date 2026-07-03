@@ -1,0 +1,15 @@
+.selectedUsersBar {
+  background-color: var(--asc-color-background-default);
+}
+
+.selectedUsersBar__list {
+  display: flex;
+  gap: 0.25rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.selectedUsersBar__divider {
+  height: 0.0625rem;
+  background-color: var(--asc-color-base-shade4);
+}

@@ -11,10 +11,12 @@ const CustomReactionContext = createContext<{
   reactions: AmityReactionType[];
   socialReactions: AmityReactionType[];
   getReactionLabel: (reactionName: string) => string;
+  getChatReactionLabel: (reactionName: string) => string;
 }>({
   reactions: [],
   socialReactions: [],
   getReactionLabel: (reactionName) => reactionName,
+  getChatReactionLabel: (reactionName) => reactionName,
 });
 
 export const useCustomReaction = () => {
@@ -49,8 +51,17 @@ export const CustomReactionProvider: React.FC = ({ children }) => {
     return resolveString(`amity_social_button_reaction_${name}`) || reactionName;
   };
 
+  const getChatReactionLabel = (reactionName: string): string => {
+    const name = reactionName.toLowerCase();
+    const key = `amity_chat_reaction_label_${name}`;
+    const localized = resolveString(key);
+    return localized === key ? reactionName : localized;
+  };
+
   return (
-    <CustomReactionContext.Provider value={{ reactions, socialReactions, getReactionLabel }}>
+    <CustomReactionContext.Provider
+      value={{ reactions, socialReactions, getReactionLabel, getChatReactionLabel }}
+    >
       {children}
     </CustomReactionContext.Provider>
   );

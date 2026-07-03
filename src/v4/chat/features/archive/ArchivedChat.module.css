@@ -1,0 +1,6 @@
+.archivedChat {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-background-default);
+  min-height: 100svh;
+}

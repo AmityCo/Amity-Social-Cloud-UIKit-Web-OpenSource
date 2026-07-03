@@ -1,4 +1,3 @@
-import React from 'react';
 import { Plus } from '~/v4/icons/Plus';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';

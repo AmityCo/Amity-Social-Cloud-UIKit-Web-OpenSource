@@ -4,8 +4,13 @@
   background-color: var(--asc-color-primary-default);
 }
 
+.saveButton:hover {
+  background-color: var(--asc-color-primary-shade1);
+}
+
 .saveButton:disabled {
-  cursor: pointer;
+  cursor: not-allowed;
+  opacity: 0.3;
   color: var(--asc-color-white);
-  background-color: var(--asc-color-primary-shade2);
+  background-color: var(--asc-color-primary-default);
 }
