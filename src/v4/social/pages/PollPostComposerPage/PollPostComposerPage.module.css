@@ -300,7 +300,7 @@
 .pollPostComposerPage__imagePollOptions__closeIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--asc-color-background-default);
+  color: var(--asc-color-white);
 }
 
 .pollPostComposerPage__imagePollOptions__plusIcon {
