@@ -74,7 +74,7 @@
   font-size: 0.8125rem;
 }
 
-.pollPostComposerPage__pollQuestion__input {
+.pollPostComposerPage__pollQuestion .pollPostComposerPage__pollQuestion__input {
   padding: 0 0 1rem;
   border-bottom: 1px solid var(--asc-color-base-shade4);
   font-size: 0.9375rem;
