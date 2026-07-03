@@ -1,0 +1,5 @@
+/* The verified badge's outer ring should match the surface behind it (white in light mode,
+   #191919 in dark mode) so it follows the theme. (PDT-3576) */
+.verified__border {
+  fill: var(--asc-color-background-default);
+}

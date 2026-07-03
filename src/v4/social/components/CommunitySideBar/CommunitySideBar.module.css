@@ -25,15 +25,6 @@
   display: grid;
   grid-gap: 0.5rem;
   padding: 0.5rem 0;
-  border-top: 1px solid var(--asc-color-base-shade4);
-}
-
-.communitySideBar__myCommunitiesSection {
-  display: grid;
-  grid-gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-top: 1px solid var(--asc-color-base-shade4);
-  overflow-y: auto;
 }
 
 .sideBar__content {
@@ -42,11 +33,22 @@
   padding-bottom: 1rem;
 }
 
+.communitySideBar__menuSkeleton {
+  display: grid;
+  grid-gap: 0.5rem;
+}
+
+.communitySideBar__menuSkeletonItem {
+  gap: 1rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
 .communitySideBar__notificationTray {
   border-radius: 0.5rem;
   padding-bottom: 0.5rem;
   background-color: var(--asc-color-background-default);
-  box-shadow:
-    0 0 2px 0 rgb(40 41 61 / 10%),
-    0 4px 8px 0 rgb(96 97 112 / 20%);
+  box-shadow: var(--asc-box-shadow-04);
 }

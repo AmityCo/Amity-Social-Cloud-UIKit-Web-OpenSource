@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
-import { CloseIcon, ExclamationCircle, Play } from '~/icons';
+import { CloseIcon, ExclamationCircle, Play } from '~/v4/icons';
 import { Button } from '~/v4/core/natives/Button';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner';
 import { isAmityFile } from '~/v4/utils/checkFileType';

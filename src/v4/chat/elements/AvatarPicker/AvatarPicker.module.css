@@ -1,0 +1,46 @@
+.avatarPicker {
+  position: relative;
+  width: 7.5rem;
+  height: 7.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 1.5rem;
+  background-color: var(--asc-color-primary-shade2);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.avatarPicker__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarPicker__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.avatarPicker__placeholderIcon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--asc-color-white);
+}
+
+.avatarPicker__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--asc-color-background-transparent-black);
+}
+
+.avatarPicker__cameraIcon {
+  width: 3rem;
+  height: 3rem;
+  fill: var(--asc-color-white);
+}

@@ -14,3 +14,10 @@ _temporary
 
 .claude/
 CLAUDE.md
+# claude
+.claude/plans
+.claude/specs
+settings.local.json
+
+# git
+.worktrees/

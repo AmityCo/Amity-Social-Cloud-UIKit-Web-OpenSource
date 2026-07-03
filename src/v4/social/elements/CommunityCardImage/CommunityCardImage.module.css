@@ -11,11 +11,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--asc-color-base-shade3);
+  background-color: var(--asc-color-secondary-shade3);
 }
 
 .communityCardImage__placeholderImageIcon {
   width: 4rem;
   height: 2.364rem;
-  fill: var(--asc-color-background-default);
+  fill: var(--asc-color-white);
 }

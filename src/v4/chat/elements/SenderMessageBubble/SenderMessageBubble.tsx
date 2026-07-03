@@ -1,6 +1,6 @@
 import React from 'react';
-import useUser from '~/core/hooks/useUser';
-import useImage from '~/core/hooks/useImage';
+import useUser from '~/v4/core/hooks/objects/useUser';
+import useImage from '~/v4/core/hooks/useImage';
 import LiveChatMessageContent from '~/v4/chat/internal-components/LiveChatMessageContent';
 import { MessageActionType } from '~/v4/chat/internal-components/LiveChatMessageContent/MessageAction';
 

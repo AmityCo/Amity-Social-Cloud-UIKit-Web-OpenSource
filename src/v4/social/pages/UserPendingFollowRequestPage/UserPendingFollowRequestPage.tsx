@@ -10,7 +10,7 @@ import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PendingUserItem } from './PendingUserItem/PendingUserItem';
 import { EmptyContent } from '~/v4/social/internal-components/EmptyContent/EmptyContent';
-import PartyHorn from '~/icons/PartyHorn';
+import PartyHorn from '~/v4/icons/PartyHorn';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 export const UserPendingFollowRequestPage = () => {

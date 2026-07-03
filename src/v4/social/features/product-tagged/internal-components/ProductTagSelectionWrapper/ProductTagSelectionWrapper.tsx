@@ -68,6 +68,10 @@ export function ProductTagSelectionWrapper({
   taggedProductIds = [],
 }: ProductTagSelectionWrapperProps) {
   const { confirm } = useConfirmContext();
+  const discardProductTagsTitle = useString('amity_social_modal_dialog_title_discard_product_tags');
+  const unsavedTaggedProductsText = useString('amity_social_unsaved_tagged_products');
+  const discardText = useString('amity_social_button_discard');
+  const keepEditingText = useString('amity_social_button_keep_editing');
 
   // Merge and deduplicate initialProductTags with alreadyTaggedProducts
   const mergedTags = useMemo(
@@ -107,10 +111,10 @@ export function ProductTagSelectionWrapper({
       if (hasUnsavedChanges) {
         confirm({
           type: 'confirm',
-          title: useString('amity_social_modal_dialog_title_discard_product_tags'),
-          content: useString('amity_social_unsaved_tagged_products'),
-          okText: useString('amity_social_button_discard'),
-          cancelText: useString('amity_social_button_keep_editing'),
+          title: discardProductTagsTitle,
+          content: unsavedTaggedProductsText,
+          okText: discardText,
+          cancelText: keepEditingText,
           okButtonColor: 'alert',
           onOk: () => {
             onClose(mergedTags, false);

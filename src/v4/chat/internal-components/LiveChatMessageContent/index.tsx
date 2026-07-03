@@ -5,7 +5,7 @@ import { Typography } from '~/v4/core/components';
 import { MessageAction, MessageActionType } from './MessageAction';
 import MessageBubbleContainer from './MessageBubbleContainer';
 import Bin from '~/v4/icons/Bin';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 import MessageBubble from './MessageBubble';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import Flag from '~/v4/icons/Flag';

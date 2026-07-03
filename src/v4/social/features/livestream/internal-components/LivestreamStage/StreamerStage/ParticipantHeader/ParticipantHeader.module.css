@@ -22,7 +22,7 @@
   gap: 0.25rem;
   align-items: center;
   border-radius: 50rem;
-  background: rgb(0 0 0 / 20%);
+  background: rgb(from var(--asc-color-black) r g b / 20%);
 }
 
 .participantHeader__displayName__text {
@@ -34,7 +34,7 @@
 }
 
 .participantHeader__optionButton {
-  background: rgb(0 0 0 / 20%);
+  background: rgb(from var(--asc-color-black) r g b / 20%);
   display: flex;
   width: 2rem;
   height: 2rem;

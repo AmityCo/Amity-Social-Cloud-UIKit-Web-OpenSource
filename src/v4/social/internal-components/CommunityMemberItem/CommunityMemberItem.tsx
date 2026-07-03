@@ -201,6 +201,7 @@ export const CommunityMemberItem = ({
             userId={user?.userId}
             isShowModeratorBadge={memberHasModeratorRole}
             className={styles.communityMemberItem__memberAvatar}
+            onPressAvatar={onClick}
           />
         </div>
 

@@ -7,7 +7,6 @@ import { BackButton, BrandBadge, CloseButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Camera } from '~/v4/icons/Camera';
 import { Avatar, Typography } from '~/v4/core/components';
 import { CommunityCreateButton } from '~/v4/social/elements/CommunityCreateButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -28,6 +27,9 @@ import { Clear } from '~/v4/icons/Clear';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Category } from '~/v4/icons/Category';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useSDK } from '~/v4/core/hooks/useSDK';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
 import { CommunityAddCategoryPage, CommunityAddMemberPage } from '~/v4/social/pages';
 import { Popover } from '~/v4/core/components/AriaPopover';
@@ -53,6 +55,7 @@ import { TitleForm } from '~/v4/core/components/TitleForm';
 import { Description } from '~/v4/core/components/Description';
 import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
+import { CameraFilled } from '~/v4/icons/CameraFilled';
 
 type CreateCommunityProps = {
   mode: AmityCommunitySetupPageMode;
@@ -102,6 +105,12 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
 
   const isInvitation =
     socialSettings?.membershipAcceptance === MembershipAcceptanceTypeEnum.INVITATION;
+
+  // When membership acceptance is direct add (not invitation), the creator is added as a
+
+  const { currentUserId } = useSDK();
+  const { user: currentUser } = useUser({ userId: currentUserId });
+  const youLabel = useString('amity_chat_member_you');
 
   const handleCoverPhotoChange = (file: File[]) => {
     removeDrawerData();
@@ -361,8 +370,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
               {coverImage.length > 0 && <div className={styles.createCommunity__overlay} />}
               {!uploadLoading && (
                 <IconComponent
-                  imgIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
-                  defaultIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
+                  imgIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
+                  defaultIcon={() => (
+                    <CameraFilled className={styles.createCommunity__cameraIcon} />
+                  )}
                 />
               )}
             </Button>
@@ -409,8 +420,8 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             {coverImage.length > 0 && <div className={styles.createCommunity__overlay} />}
             {!uploadLoading && (
               <IconComponent
-                imgIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
-                defaultIcon={() => <Camera className={styles.createCommunity__cameraIcon} />}
+                imgIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
+                defaultIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
               />
             )}
           </Button>
@@ -676,6 +687,39 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
               <CommunityAddMemberTitle pageId={pageId} />
             </label>
             <div className={styles.createCommunity__selectedUserWrap}>
+              <CommunityAddMemberButton
+                pageId={pageId}
+                onPress={() => {
+                  isDesktop
+                    ? openPopup({
+                        children: ({ close }) => (
+                          <CommunityAddMemberPage closePopup={close} member={members} />
+                        ),
+                      })
+                    : AmityCommunitySetupPageBehavior?.goToAddMemberPage?.({ members });
+                }}
+              />
+              {currentUser && (
+                <div key={currentUser.userId} className={styles.createCommunity__selectedUser}>
+                  <div className={styles.createCommunity__selectedUserAvatar}>
+                    <UserAvatar
+                      userId={currentUser.userId}
+                      className={styles.createCommunity__selectedUserAvatarImage}
+                      imageContainerClassName={styles.createCommunity__selectedUserAvatarImage}
+                      textPlaceholderClassName={styles.createCommunity__selectedUserAvatarImage}
+                    />
+                    <ModeratorBadge
+                      variant="iconOnly"
+                      className={styles.createCommunity__moderatorBadge}
+                    />
+                  </div>
+                  <div className={styles.createCommunity__selectedUserDisplayNameWrapper}>
+                    <Typography.Body className={styles.createCommunity__selectedUserDisplayName}>
+                      {youLabel}
+                    </Typography.Body>
+                  </div>
+                </div>
+              )}
               {members.map((user) => (
                 <div key={user.userId} className={styles.createCommunity__selectedUser}>
                   <div className={styles.createCommunity__selectedUserAvatar}>
@@ -707,18 +751,6 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                   </div>
                 </div>
               ))}
-              <CommunityAddMemberButton
-                pageId={pageId}
-                onPress={() => {
-                  isDesktop
-                    ? openPopup({
-                        children: ({ close }) => (
-                          <CommunityAddMemberPage closePopup={close} member={members} />
-                        ),
-                      })
-                    : AmityCommunitySetupPageBehavior?.goToAddMemberPage?.({ members });
-                }}
-              />
             </div>
           </div>
         )}

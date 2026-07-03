@@ -84,7 +84,7 @@
   position: absolute;
   inset: 0;
   border-radius: 0 0 0.5rem;
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
   color: var(--asc-color-white);
   text-align: center;
   display: flex;

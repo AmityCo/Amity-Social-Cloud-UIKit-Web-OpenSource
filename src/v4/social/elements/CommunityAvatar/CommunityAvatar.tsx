@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import useImage from '~/core/hooks/useImage';
+import useImage from '~/v4/core/hooks/useImage';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CommunityAvatar.module.css';
 import clsx from 'clsx';

@@ -1,0 +1,7 @@
+.groupChat {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  background: var(--asc-color-background-default);
+  overflow: hidden;
+}

@@ -1,0 +1,36 @@
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  height: 3.625rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.topBar__leftAction {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  min-width: 0;
+}
+
+.topBar__rightAction {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.topBar__title {
+  flex-shrink: 0;
+  max-width: 16rem;
+  color: var(--asc-color-base-default);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

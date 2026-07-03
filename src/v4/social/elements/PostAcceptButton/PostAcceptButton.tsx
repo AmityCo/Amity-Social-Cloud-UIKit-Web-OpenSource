@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styles from './PostAcceptButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';

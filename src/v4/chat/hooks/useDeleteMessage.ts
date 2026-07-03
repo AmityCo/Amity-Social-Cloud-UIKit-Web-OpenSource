@@ -1,8 +1,9 @@
 import { MessageRepository } from '@amityco/ts-sdk';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useString } from '~/v4/core/localization/useString';
 
-// Extract parameter and response types
 type DeleteMessageParams = Parameters<typeof MessageRepository.deleteMessage>[0];
+
 type DeleteMessageResponse = Awaited<ReturnType<typeof MessageRepository.deleteMessage>>;
 
 type UseDeleteMessageReturn = {
@@ -20,6 +21,7 @@ export const useDeleteMessage: ({
   onSuccess?: () => void;
   onError?: (errorMsg: string) => void;
 }) => UseDeleteMessageReturn = ({ onSuccess, onError } = {}) => {
+  const deleteErrorToast = useString('amity_chat_toast_delete_error');
   const { mutateAsync } = useMutation<DeleteMessageResponse, Error, DeleteMessageParams>({
     mutationFn: (params) => {
       return MessageRepository.deleteMessage(params);
@@ -29,10 +31,7 @@ export const useDeleteMessage: ({
     },
     onError: (error) => {
       const { message } = error;
-      const errorMessage = 'Failed to delete message. Please try again.';
-
-      console.error(message);
-      onError?.(errorMessage);
+      onError?.(deleteErrorToast);
     },
   });
 

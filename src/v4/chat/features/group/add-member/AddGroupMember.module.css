@@ -1,0 +1,14 @@
+.addGroupMember {
+  --empty-state-offset-top: 12.75rem;
+
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-background-default);
+  height: 100dvh;
+}
+
+.addGroupMember__list {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}

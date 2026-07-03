@@ -1,6 +1,13 @@
 import React, { useRef, useMemo, useEffect, useCallback, ForwardedRef, useState } from 'react';
-import useFile from '~/core/hooks/useFile';
-import { VideoFileStatus } from '~/social/constants';
+import useFile from '~/v4/core/hooks/useFile';
+
+enum VideoFileStatus {
+  Uploading = 'uploading',
+  Uploaded = 'uploaded',
+  Transcoding = 'transcoding',
+  Transcoded = 'transcoded',
+  TranscodeFailed = 'transcodeFailed',
+}
 import styles from './VideoPlayer.module.css';
 import {
   VideoPlayerControls,

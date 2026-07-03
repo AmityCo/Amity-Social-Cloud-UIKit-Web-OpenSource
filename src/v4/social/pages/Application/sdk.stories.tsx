@@ -2,23 +2,17 @@ import React from 'react';
 import UiKitSocialApplication from '.';
 
 export default {
-  title: 'V4/Social',
+  title: 'Social',
 };
 
 export const SDKCommunityAppV4 = {
   render: (props) => {
     return <UiKitSocialApplication {...props} />;
   },
-  name: 'Application',
+  name: 'Social',
 
   args: {
-    shouldHideExplore: false,
+    hideExplore: false,
     socialCommunityCreationButtonVisible: true,
-  },
-
-  argTypes: {
-    shouldHideExplore: { control: { type: 'boolean' } },
-    socialCommunityCreationButtonVisible: { control: { type: 'boolean' } },
-    onMemberClick: { action: 'onMemberClick()' },
   },
 };

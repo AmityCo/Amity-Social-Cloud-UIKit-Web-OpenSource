@@ -30,7 +30,7 @@ export const usePreviewLink = ({ url }: { url: string }): UsePreviewLinkReturnTy
     retry: false,
     enabled: !!debouncedUrl,
     staleTime: 24 * 60 * 60 * 1000, // 24 hours
-    gcTime: 24 * 60 * 60 * 1000, // 24 hours (previously cacheTime)
+    gcTime: 24 * 60 * 60 * 1000, // 24 hours
   });
 
   return {

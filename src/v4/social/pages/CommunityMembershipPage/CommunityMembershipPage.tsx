@@ -13,7 +13,7 @@ import { CommunityRepository, MembershipAcceptanceTypeEnum } from '@amityco/ts-s
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ModeratorList } from '~/v4/social/internal-components/ModeratorList';
 import { useSDK } from '~/v4/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
+import useUser from '~/v4/core/hooks/objects/useUser';
 import useModerator from '~/v4/social/hooks/useModerator';
 import { SecondaryTab } from '~/v4/core/components/SecondaryTab';
 import { Key } from 'react-aria';
@@ -34,7 +34,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   const { onBack } = useNavigation();
 
   const { currentUserId } = useSDK();
-  const user = useUser(currentUserId);
+  const { user } = useUser({ userId: currentUserId });
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();

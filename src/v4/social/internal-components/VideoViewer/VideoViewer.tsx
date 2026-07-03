@@ -3,7 +3,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import useSwiper from '~/v4/social/hooks/useSwiper';
-import usePostByIds from '~/social/hooks/usePostByIds';
+import usePostByIds from '~/v4/core/hooks/usePostByIds';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ClearButton } from '~/v4/social/elements/ClearButton/ClearButton';
 import { memo, useCallback, useMemo, useState } from 'react';

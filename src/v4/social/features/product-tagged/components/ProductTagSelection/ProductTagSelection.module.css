@@ -61,7 +61,7 @@
   background-color: var(--asc-color-base-inverse);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 0.125rem 0.5rem rgb(0 0 0 / 15%);
+  box-shadow: 0 0.125rem 0.5rem rgb(from var(--asc-color-black) r g b / 15%);
 }
 
 .productTagSelection__scrollArrow:active {

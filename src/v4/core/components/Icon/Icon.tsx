@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Icons from '~/icons';
+import * as Icons from '~/v4/icons';
 
 type IconName = keyof typeof Icons;
 

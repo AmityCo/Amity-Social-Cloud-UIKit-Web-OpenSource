@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { resolveString, useString } from '~/v4/core/localization';
 import { Label } from 'react-aria-components';
 import { Typography } from '~/v4/core/components';

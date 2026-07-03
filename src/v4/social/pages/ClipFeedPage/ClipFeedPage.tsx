@@ -26,12 +26,12 @@ import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection
 import { useQueryClipGlobalFeed } from '~/v4/social/hooks/useQueryClipGlobalFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
 import styles from './ClipFeedPage.module.css';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 type ClipFeedPageProps = {
   currentPostId?: string;
@@ -422,7 +422,7 @@ export const ClipFeedPage = ({
             {isShowCopyLinkButton && (
               <CopyLinkButton
                 pageId={pageId}
-                model={SharableModel.POST}
+                model={AmitySharableContentType.POST}
                 referenceId={postId || currentVisiblePost?.postId}
                 onDone={removeDrawerData}
                 textId="amity_social_label_copy_clip_link"

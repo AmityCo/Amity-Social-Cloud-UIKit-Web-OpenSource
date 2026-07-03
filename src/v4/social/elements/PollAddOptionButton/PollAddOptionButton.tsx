@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './PollAddOptionButton.module.css';
 import { Plus } from '~/v4/icons/Plus';
 import { Button } from '~/v4/core/components/AriaButton';

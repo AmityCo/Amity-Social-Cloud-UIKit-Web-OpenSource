@@ -1,0 +1,13 @@
+.searchChannel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background-color: var(--asc-color-background-default);
+}
+
+.searchChannel__tabList {
+  position: sticky;
+  top: 3.5rem;
+  z-index: 9;
+  background-color: var(--asc-color-background-default);
+}

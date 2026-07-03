@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import React from 'react';
 import { Plus } from '~/v4/icons/Plus';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';

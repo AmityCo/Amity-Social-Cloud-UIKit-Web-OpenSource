@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useString } from '~/v4/core/localization';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import useCommentPermission from '~/social/hooks/useCommentPermission';
-import useSDK from '~/v4/core/hooks/useSDK';
+import useCommentPermission from '~/v4/social/hooks/useCommentPermission';
 import { Typography } from '~/v4/core/components';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { FlagIcon, TrashIcon } from '~/v4/social/icons';
@@ -39,7 +38,6 @@ export const CommentOptions = ({
   onCloseMenu,
   onlyShowDelete = false,
 }: CommentOptionsProps) => {
-  const { userRoles } = useSDK();
   const [reasonReport, setReasonReport] = useState<Amity.ContentFlagReason>(
     ContentFlagReasonEnum.Others,
   );
@@ -60,8 +58,7 @@ export const CommentOptions = ({
     isReplyComment,
   });
 
-  // TODO: change to useCommentPermission v4 - remove readonly
-  const { canDelete, canEdit, canReport } = useCommentPermission(comment, false, userRoles);
+  const { canDelete, canEdit, canReport } = useCommentPermission({ comment, community });
   useNotifications();
 
   const editReplyText = useString('amity_social_button_edit_reply');

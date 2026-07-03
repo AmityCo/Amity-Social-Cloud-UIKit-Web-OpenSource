@@ -15,7 +15,8 @@ import styles from './ContentReportReason.module.css';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
-import { useMessageFlaggedByMe } from '~/v4/chat/hooks/useMessageFlaggedByMe';
+import { useFlagMessageQuery } from '~/v4/chat/hooks/queries';
+import { useMessageObject } from '~/v4/chat/hooks/objects';
 import { useNetworkState } from 'react-use';
 
 type ContentReportReasonProps = {
@@ -26,6 +27,7 @@ type ContentReportReasonProps = {
   post?: Amity.Post;
   comment?: Amity.Comment;
   message?: Amity.Message;
+  messageType?: 'live-chat' | 'chat';
   showReportPostButton: boolean;
 };
 
@@ -37,6 +39,7 @@ export const ContentReportReason = ({
   post,
   comment,
   message,
+  messageType = 'chat',
   showReportPostButton,
 }: ContentReportReasonProps) => {
   const MAX_LENGTH_DESCRIBE = 300;
@@ -79,9 +82,10 @@ export const ContentReportReason = ({
     if (post) return mutateReportPost();
     if (comment) return mutateReportComment();
     if (message)
-      return mutateReportMessage(
-        selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
-      );
+      return reportMessage({
+        reason: selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
+        onSuccess: handleCloseReportReason,
+      });
     return;
   };
 
@@ -148,11 +152,20 @@ export const ContentReportReason = ({
     isReplyComment: comment?.parentId != null,
   });
 
-  const { mutateReportMessage, isPending: isMessageReportLoading } = useMessageFlaggedByMe({
+  const {
+    report: reportMessage,
+    isPending: isMessageReportLoading,
+    isMessageDeleted: isMessageDeletedFromReport,
+  } = useFlagMessageQuery({
     messageId: message?.messageId as string,
-    onCloseMenu: handleCloseReportReason,
-    type: 'live-chat',
+    enabled: !!message,
+    toastAlignment: messageType === 'live-chat' ? 'live-chat' : undefined,
   });
+
+  const { message: liveMessage } = useMessageObject({
+    messageId: message?.messageId,
+  });
+  const isMessageDeleted = isMessageDeletedFromReport || !!liveMessage?.isDeleted;
 
   const isDisabledSubmitButton =
     !selectedReason ||
@@ -216,37 +229,35 @@ export const ContentReportReason = ({
 
   return (
     <div
-      data-iserror={isError || isCommentDeleted}
+      data-iserror={isError || isCommentDeleted || isMessageDeleted}
       className={clsx(styles.contentReportReason__container, className)}
     >
-      {isError || isCommentDeleted ? (
-        <FailedToShow className={styles.contentReportReason__failed} />
+      {isError || isCommentDeleted || isMessageDeleted ? (
+        <FailedToShow allowBack={false} className={styles.contentReportReason__failed} />
       ) : (
         <>
           <div className={styles.contentReportReason__titleContainer}>
-            <div
-              data-options={!isDesktop && isShowOthersOption}
-              className={styles.contentReportReason__titleContainer__leftMenu}
-            >
-              {isShowOthersOption ? (
+            <div className={styles.contentReportReason__titleContainer__leftSlot}>
+              {isShowOthersOption && (
                 <BackButton
                   onPress={() => {
                     setSelectedReason(undefined);
                     setIsShowOthersOption(false);
                   }}
                 />
-              ) : (
-                <div className={styles.contentReportReason__leftSpace} />
               )}
+            </div>
+            <div className={styles.contentReportReason__titleContainer__centerSlot}>
               <Typography.TitleBold className={styles.contentReportReason__title}>
                 {isShowOthersOption ? othersTitle : reportReasonTitle}
               </Typography.TitleBold>
             </div>
-
-            <CloseButton
-              onPress={handleCloseReportReason}
-              defaultClassName={styles.contentReportReason__closeButton}
-            />
+            <div className={styles.contentReportReason__titleContainer__rightSlot}>
+              <CloseButton
+                onPress={handleCloseReportReason}
+                defaultClassName={styles.contentReportReason__closeButton}
+              />
+            </div>
           </div>
 
           <div className={styles.contentReportReason__content}>
@@ -305,7 +316,7 @@ export const ContentReportReason = ({
       )}
 
       <div className={styles.contentReportReason__bottomContainer}>
-        {isError || isCommentDeleted ? (
+        {isError || isCommentDeleted || isMessageDeleted ? (
           <Button
             data-testid={`${pageId}/${componentId}/close_button`}
             className={styles.contentReportReason__submitButton}

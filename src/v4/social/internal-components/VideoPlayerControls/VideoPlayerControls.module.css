@@ -7,7 +7,11 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1rem 2.5rem;
-  background: linear-gradient(to bottom, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 50%) 80%);
+  background: linear-gradient(
+    to bottom,
+    rgb(from var(--asc-color-black) r g b / 0%) 0%,
+    var(--asc-color-transparent-black) 80%
+  );
   backdrop-filter: blur(1px);
   transition: opacity 0.3s ease;
   z-index: 2;
@@ -51,7 +55,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background-color: rgb(217 217 217 / 100%);
+  background-color: var(--asc-color-video-progress-track);
   border-radius: 1.25rem;
   opacity: 0.4;
 }

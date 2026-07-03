@@ -124,7 +124,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background-color: rgb(255 255 255 / 30%);
+  background-color: rgb(from var(--asc-color-white) r g b / 30%);
 }
 
 .progressFill {

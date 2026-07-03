@@ -14,9 +14,9 @@ import { VideoPlayer } from '~/v4/social/internal-components/VideoPlayer/VideoPl
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { DisplayModeEnum } from '~/v4/social/types';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 interface LivestreamPlayerProps {
   themeStyles?: React.CSSProperties;
@@ -96,7 +96,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
                   <>
                     <CopyLinkButton
                       pageId={pageId}
-                      model={SharableModel.POST}
+                      model={AmitySharableContentType.POST}
                       referenceId={livestreamPost?.postId}
                       onDone={removeDrawerData}
                     />

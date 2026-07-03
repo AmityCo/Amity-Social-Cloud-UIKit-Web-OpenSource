@@ -1,5 +1,6 @@
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useQuery } from '@tanstack/react-query';
+import { STALE_TIME_5_MINUTES } from '~/v4/constants/query';
 
 type SocialSettings = Amity.SocialSettings & {
   story?: {

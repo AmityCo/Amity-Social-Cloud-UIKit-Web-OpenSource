@@ -22,7 +22,8 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
-import { CommentRepository, PostStructureType } from '@amityco/ts-sdk';
+import { AmitySharableContentType, CommentRepository, PostStructureType } from '@amityco/ts-sdk';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
@@ -63,7 +64,7 @@ export function PostDetailPage({
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
-  const { removeItem } = useGlobalFeedContext();
+  const { removeNewPost } = useGlobalFeedContext();
   const { isVisitorOrBot } = useSDK();
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
@@ -104,6 +105,11 @@ export function PostDetailPage({
   const { community } = useCommunity({
     communityId: post?.targetId,
     shouldCall: post?.targetType === 'community' && !!post?.targetId,
+  });
+
+  const { link: sharableLink } = useSharableLink({
+    model: AmitySharableContentType.POST,
+    referenceId: post?.postId,
   });
 
   const isJoinedCommunity = post?.targetType === 'community' && community?.isJoined;
@@ -244,10 +250,10 @@ export function PostDetailPage({
 
   const handlePostDeleted = useCallback(
     (post: Amity.Post) => {
-      removeItem(post.postId);
+      removeNewPost(post.postId);
       handleBack();
     },
-    [handleBack],
+    [handleBack, removeNewPost],
   );
 
   if (isPostLoading) {
@@ -292,6 +298,8 @@ export function PostDetailPage({
                   <PostMenu
                     post={post}
                     pageId={pageId}
+                    community={community}
+                    sharableLink={sharableLink}
                     onPostDeleted={handlePostDeleted}
                     onCloseMenu={() => {
                       closePopover();
@@ -306,6 +314,8 @@ export function PostDetailPage({
             <PostMenu
               post={post}
               pageId={pageId}
+              community={community}
+              sharableLink={sharableLink}
               onPostDeleted={handlePostDeleted}
               onCloseMenu={() => {
                 closePopover();

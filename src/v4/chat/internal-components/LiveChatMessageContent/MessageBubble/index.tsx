@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './styles.module.css';
-import useUser from '~/core/hooks/useUser';
-import useMessage from '~/chat/hooks/useMessage';
+import useUser from '~/v4/core/hooks/objects/useUser';
+import { useMessageObject } from '~/v4/chat/hooks/objects/useMessageObject';
 import MessageTextWithMention from '~/v4/chat/internal-components/LiveChatMessageContent/MessageTextWithMention';
 import { Typography } from '~/v4/core/components';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 interface MessageBubbleProps {
   message: Amity.Message<'text'>;
@@ -17,11 +17,12 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
       mention.userId === userId || mention.type === 'channel',
   );
 
-  if (message && message.parentId) {
-    const parentMessage = useMessage(message.parentId) as Amity.Message<'text'>;
-    const parentUser = useUser(parentMessage?.creatorId);
+  const { message: parentMessage } = useMessageObject({ messageId: message.parentId ?? null });
+  const parentUser = useUser((parentMessage as Amity.Message<'text'> | undefined)?.creatorId);
 
-    if (!parentMessage || !parentUser) return null;
+  if (message && message.parentId) {
+    const typedParentMessage = parentMessage as Amity.Message<'text'> | undefined;
+    if (!typedParentMessage || !parentUser) return null;
 
     return (
       <div className={styles.messageRepliedBubble}>
@@ -30,7 +31,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
             <Typography.BodyBold>{parentUser.displayName}</Typography.BodyBold>
           </div>
           <Typography.Body className={styles.messageParentText}>
-            {parentMessage.data?.text}
+            {typedParentMessage.data?.text}
           </Typography.Body>
         </div>
         <div className={styles.messageChildContainer}>

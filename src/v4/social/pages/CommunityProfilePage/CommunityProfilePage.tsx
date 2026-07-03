@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { resolveString } from '~/v4/core/localization';
 import styles from './CommunityProfilePage.module.css';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { useAmityElement, useAmityPage } from '~/v4/core/hooks/uikit';
 import { CommunityHeader } from '~/v4/social/components/CommunityHeader';
 import { CommunityFeed } from '~/v4/social/components/CommunityFeed';
 import { CommunityProfileSkeleton } from '~/v4/social/pages/CommunityProfilePage/CommunityProfilePageSkeleton';
@@ -29,6 +29,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useConfig } from '~/v4/social/providers/ConfigProvider';
 import { useDiscardPostCreation, useGetInvitation } from '~/v4/social/hooks';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
@@ -63,6 +64,14 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { isExcluded: isCreatePostButtonExcluded } = useAmityElement({
+    pageId,
+    componentId: '*',
+    elementId: 'community_create_post_button',
+  });
+  const { socialCommunityCreationButtonVisible } = useConfig();
+  const hideCreatePost = isCreatePostButtonExcluded || !socialCommunityCreationButtonVisible;
+
   const { community, isLoading, refresh, error } = useCommunity({
     communityId,
     shouldCall: !!communityId,
@@ -201,7 +210,8 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       {!isShowFailed &&
         activeTab === 'community_feed' &&
         checkPostPermission() &&
-        !community?.isDeleted && (
+        !community?.isDeleted &&
+        !hideCreatePost && (
           <div className={styles.communityProfilePage__poseComposer}>
             <PostComposer
               pageId={pageId}
@@ -262,71 +272,78 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
           </div>
         )}
       {!isShowFailed && !community?.isDeleted && <div key={refreshKey}>{renderTabContent()}</div>}
-      {!isShowFailed && community?.isJoined && !community?.isDeleted && checkPostPermission() && (
-        <div className={styles.communityProfilePage__createPostButton}>
-          <CommunityCreatePostButton
-            pageId={pageId}
-            onPress={() =>
-              setDrawerData({
-                content: (
-                  <>
-                    <CreatePostButton
-                      pageId={pageId}
-                      onClick={() => {
-                        AmityCommunityProfilePageBehavior?.goToPostComposerPage?.({
-                          mode: Mode.CREATE,
-                          targetId: communityId,
-                          targetType: 'community',
-                          community: community as Amity.Community,
-                        });
-                        removeDrawerData();
-                      }}
-                    />
-                    <CreatePollButton
-                      pageId={pageId}
-                      componentId={communityId}
-                      onClick={() => {
-                        setDrawerData({
-                          content: (
-                            <PollTypeSelection
-                              targetId={communityId}
-                              targetType="community"
-                              onClickNext={removeDrawerData}
-                            />
-                          ),
-                        });
-                      }}
-                    />
-                    {hasStoryPermission && (
-                      <FileTrigger onSelect={handleFileSelect}>
-                        <CreateStoryButton pageId={pageId} />
-                      </FileTrigger>
-                    )}
-                    {!isDesktop && (
-                      <FileTrigger onSelect={handleClipFileSelect} acceptedFileTypes={['video/*']}>
-                        <CreateClipButton pageId={pageId} componentId={communityId} />
-                      </FileTrigger>
-                    )}
-                    {hasCreateEventPermission && (
-                      <CreateEventButton
+      {!isShowFailed &&
+        community?.isJoined &&
+        !community?.isDeleted &&
+        checkPostPermission() &&
+        !hideCreatePost && (
+          <div className={styles.communityProfilePage__createPostButton}>
+            <CommunityCreatePostButton
+              pageId={pageId}
+              onPress={() =>
+                setDrawerData({
+                  content: (
+                    <>
+                      <CreatePostButton
                         pageId={pageId}
-                        onPress={() => {
-                          removeDrawerData();
-                          AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
+                        onClick={() => {
+                          AmityCommunityProfilePageBehavior?.goToPostComposerPage?.({
+                            mode: Mode.CREATE,
                             targetId: communityId,
-                            mode: EventSetupMode.CREATE,
-                            targetName: community?.displayName ?? '',
+                            targetType: 'community',
+                            community: community as Amity.Community,
+                          });
+                          removeDrawerData();
+                        }}
+                      />
+                      <CreatePollButton
+                        pageId={pageId}
+                        componentId={communityId}
+                        onClick={() => {
+                          setDrawerData({
+                            content: (
+                              <PollTypeSelection
+                                targetId={communityId}
+                                targetType="community"
+                                onClickNext={removeDrawerData}
+                              />
+                            ),
                           });
                         }}
                       />
-                    )}
-                  </>
-                ),
-              })
-            }
-          />
-        </div>
-      )}
+                      {hasStoryPermission && (
+                        <FileTrigger onSelect={handleFileSelect}>
+                          <CreateStoryButton pageId={pageId} />
+                        </FileTrigger>
+                      )}
+                      {!isDesktop && (
+                        <FileTrigger
+                          onSelect={handleClipFileSelect}
+                          acceptedFileTypes={['video/*']}
+                        >
+                          <CreateClipButton pageId={pageId} componentId={communityId} />
+                        </FileTrigger>
+                      )}
+                      {hasCreateEventPermission && (
+                        <CreateEventButton
+                          pageId={pageId}
+                          onPress={() => {
+                            removeDrawerData();
+                            AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
+                              targetId: communityId,
+                              mode: EventSetupMode.CREATE,
+                              targetName: community?.displayName ?? '',
+                            });
+                          }}
+                        />
+                      )}
+                    </>
+                  ),
+                })
+              }
+            />
+          </div>
+        )}
     </PullToRefresh>
   );
 };

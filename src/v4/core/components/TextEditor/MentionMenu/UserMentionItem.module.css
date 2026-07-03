@@ -9,6 +9,7 @@
   background-color: var(--asc-color-background-default);
   color: var(--asc-color-base-default);
   cursor: pointer;
+  border: none;
 }
 
 .userMentionItem__item[data-hovered='true'] {
@@ -43,4 +44,46 @@
 .userMentionItem__brandIcon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+.userMentionItem__allRow {
+  background-color: transparent;
+  grid-template-columns: 2rem 1fr;
+}
+
+.userMentionItem__allRow[data-hovered='true'],
+.userMentionItem__allRow[data-is-selected='true'] {
+  background-color: var(--asc-color-background-shade1) !important;
+}
+
+.userMentionItem__allIconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--asc-color-primary-default);
+  border-radius: 9999px;
+}
+
+.userMentionItem__allIconGlyph {
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+  font-size: 0.925rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.userMentionItem__allRightPane {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.userMentionItem__allDescription {
+  color: var(--asc-color-base-shade3);
+  flex-shrink: 0;
 }
