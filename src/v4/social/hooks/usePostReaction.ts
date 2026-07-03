@@ -53,6 +53,11 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
       if (!reactionByMe) {
         setReactionsCount(reactionsCount + 1);
       }
+      // Optimistically record the viewer's reaction. onReactionClick's toggle (add / swap /
+      // remove) keys off reactionByMe; on feeds whose post is a static snapshot post.myReactions
+      // never updates, so without this a second tap re-adds instead of removing (count only ever
+      // goes up), and the summary pill can't show the viewer's own reaction icon.
+      setReactionByMe(reactionKey);
     },
 
     onError: () => {
