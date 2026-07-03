@@ -14,7 +14,7 @@ import { CommunityInfo } from '~/v4/social/elements/CommunityInfo';
 import { CommunityCategories } from '~/v4/social/internal-components/CommunityCategories/CommunityCategories';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
-import { InvitationStatusEnum } from '@amityco/ts-sdk';
+import { CommunityPostSettings, InvitationStatusEnum } from '@amityco/ts-sdk';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge/CommunityPrivateBadge';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { useNetworkState } from 'react-use';
@@ -90,11 +90,17 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
 
   const joinRequestCount = (joinRequests && joinRequests?.length) ?? 0;
 
+  const requiresPostApproval = community?.postSetting
+    ? community.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED
+    : !!(community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+        .needApprovalOnPostCreation;
+
   const isShowPendingPost =
     community.isJoined &&
     pendingPostsCount > 0 &&
     reviewingPosts.length > 0 &&
-    (canReviewCommunityPosts || isPostOwner);
+    (canReviewCommunityPosts || isPostOwner) &&
+    requiresPostApproval;
 
   const isShowJoinRequest = joinRequestCount > 0 && canReviewCommunityPosts;
 
