@@ -223,6 +223,7 @@ const PostReplyComment = ({
   const { handleDeleteComment: deleteComment } = useDeleteComment({
     commentId: comment.commentId,
     parentId: comment.parentId ?? undefined,
+    referenceId: comment.referenceId,
   });
 
   const handleEditComment = () => {

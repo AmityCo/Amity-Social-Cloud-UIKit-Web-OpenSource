@@ -12,10 +12,18 @@ interface UseDeleteCommentParams {
    *  Included in the dispatched 'comment-deleted' event so consumers can
    *  scope their reaction to comments belonging to a specific parent. */
   parentId?: string;
+  /** referenceId (post/story id) of the comment being deleted — included in the
+   *  'comment-deleted' event so a feed card can decrement its optimistic comment count. */
+  referenceId?: string;
   onSuccess?: () => void;
 }
 
-export const useDeleteComment = ({ commentId, parentId, onSuccess }: UseDeleteCommentParams) => {
+export const useDeleteComment = ({
+  commentId,
+  parentId,
+  referenceId,
+  onSuccess,
+}: UseDeleteCommentParams) => {
   const { online } = useNetworkState();
   const { info } = useNotifications();
 
@@ -40,7 +48,9 @@ export const useDeleteComment = ({ commentId, parentId, onSuccess }: UseDeleteCo
     onSuccess: () => {
       if (commentId) {
         document.dispatchEvent(
-          new CustomEvent(EVENT_LISTENER.COMMENT_DELETED, { detail: { commentId, parentId } }),
+          new CustomEvent(EVENT_LISTENER.COMMENT_DELETED, {
+            detail: { commentId, parentId, referenceId },
+          }),
         );
       }
       onSuccess?.();

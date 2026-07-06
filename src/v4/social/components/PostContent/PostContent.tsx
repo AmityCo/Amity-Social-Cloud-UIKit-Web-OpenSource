@@ -30,6 +30,7 @@ import VideoControl from '~/v4/icons/VideoControl';
 import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentList } from '~/v4/social/components/CommentList/CommentList';
 import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
+import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import { EventHostBadge } from '~/v4/social/elements';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
@@ -299,6 +300,52 @@ export const PostContent = ({
   // this to reveal the inline CommentList + composer (see design 802-9455). The post detail
   // page renders its own comment section and is unaffected (disabledInlineComment).
   const [showInlineComments, setShowInlineComments] = useState(false);
+
+  // Optimistic comment count for feed cards. The feed's post objects are one-time snapshots
+  // (useRankedFeedPosts → getPostByIds) and the SDK does not locally increment commentsCount on
+  // the same client's createComment, so the static prop never reflects the user's own
+  // comment/reply/delete. Mirror usePostReaction: seed from the prop, resync when it changes, and
+  // apply +/-1 deltas from the existing comment CustomEvents. The detail page is unaffected — it
+  // passes the count as undefined via the FEED-style gate where these are consumed.
+  const [commentsCount, setCommentsCount] = useState(post?.commentsCount ?? 0);
+
+  useEffect(() => {
+    setCommentsCount(post?.commentsCount ?? 0);
+  }, [post?.commentsCount]);
+
+  useEffect(() => {
+    if (!post?.postId) return;
+
+    const onCommentCreated = (e: Event) => {
+      const detail = (e as CustomEvent<{ referenceId?: string; comment?: Amity.Comment }>).detail;
+      // L0 comments carry referenceId directly; replies carry the full comment (with referenceId).
+      const refId = detail?.referenceId ?? detail?.comment?.referenceId;
+      if (refId !== post.postId) return;
+      setCommentsCount((count) => count + 1);
+    };
+
+    const onReplyCreated = (e: Event) => {
+      const detail = (e as CustomEvent<{ parentId?: string; comment?: Amity.Comment }>).detail;
+      // Replies also increment the post's total comment count.
+      if (detail?.comment?.referenceId !== post.postId) return;
+      setCommentsCount((count) => count + 1);
+    };
+
+    const onCommentDeleted = (e: Event) => {
+      const detail = (e as CustomEvent<{ referenceId?: string }>).detail;
+      if (detail?.referenceId !== post.postId) return;
+      setCommentsCount((count) => Math.max(0, count - 1));
+    };
+
+    document.addEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, onCommentCreated);
+    document.addEventListener(EVENT_LISTENER.REPLY_CREATED, onReplyCreated);
+    document.addEventListener(EVENT_LISTENER.COMMENT_DELETED, onCommentDeleted);
+    return () => {
+      document.removeEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, onCommentCreated);
+      document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, onReplyCreated);
+      document.removeEventListener(EVENT_LISTENER.COMMENT_DELETED, onCommentDeleted);
+    };
+  }, [post?.postId]);
 
   const handleInlineReplyClick = useCallback(
     ({
@@ -579,7 +626,26 @@ export const PostContent = ({
     });
   }, [configuredReactions, unknownReactions, post?.reactions]);
 
-  const hasReaction = sortedReactions.length > 0;
+  // Optimistically surface the viewer's own reaction in the summary pill's icon row. On feeds
+  // whose post is a static snapshot, post.reactions won't include a just-added reaction, so the
+  // pill would show the (optimistic) count with no icon. Prepend the viewer's reaction when it
+  // isn't already represented.
+  const displayedReactions = useMemo(() => {
+    if (!reactionByMe) return sortedReactions;
+    const alreadyPresent = sortedReactions.some((item) =>
+      item.type === 'configured'
+        ? item.reaction.name === reactionByMe
+        : item.reactionName === reactionByMe,
+    );
+    if (alreadyPresent) return sortedReactions;
+    const config = displaySocialReactions.find((reaction) => reaction.name === reactionByMe);
+    const mine = config
+      ? { type: 'configured' as const, reaction: config, count: 1 }
+      : { type: 'unknown' as const, reactionName: reactionByMe, count: 1 };
+    return [mine, ...sortedReactions];
+  }, [sortedReactions, reactionByMe, displaySocialReactions]);
+
+  const hasDisplayedReaction = displayedReactions.length > 0;
 
   //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
   const shouldShowConfirmEdit =
@@ -812,9 +878,7 @@ export const PostContent = ({
               <CommentButton
                 pageId={pageId}
                 componentId={componentId}
-                commentsCount={
-                  style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
-                }
+                commentsCount={commentsCount}
                 buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
                 defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
                 imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
@@ -826,7 +890,7 @@ export const PostContent = ({
               />
             </div>
 
-            {post?.reactionsCount > 0 && (
+            {reactionsCount > 0 && (
               <Button
                 data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
                 variant="default"
@@ -837,12 +901,12 @@ export const PostContent = ({
                   data-testid={`${pageId}/${componentId}/like_count`}
                   className={styles.postContent__reactionsBar__reactions__count}
                 >
-                  {`${millify(post?.reactionsCount || 0)}`}
+                  {`${millify(reactionsCount || 0)}`}
                 </Typography.Caption>
 
-                {hasReaction ? (
+                {hasDisplayedReaction ? (
                   <div className={styles.postContent__reactionsBar__reactions}>
-                    {sortedReactions
+                    {displayedReactions
                       .slice(0, 5)
                       .map((item) =>
                         item.type === 'configured' ? (
@@ -912,7 +976,7 @@ export const PostContent = ({
               limit={3}
               collapsible
               community={targetCommunity}
-              commentCount={post.commentsCount}
+              commentCount={commentsCount}
               eventCreatorId={eventCreatorId}
               hideEmptyState
               onClickReply={handleInlineReplyClick}
