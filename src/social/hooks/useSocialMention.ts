@@ -31,13 +31,13 @@ const useSocialMention = ({
   const community = useCommunity(targetId);
 
   const [text, setText] = useState(remoteText ?? '');
-  const [markup, setMarkup] = useState(remoteMarkup ?? remoteText);
+  const [markup, setMarkup] = useState(remoteMarkup ?? remoteText ?? '');
   const [mentions, setMentions] =
     useState<{ plainTextIndex: number; id: string; display: string }[]>(remoteMentions);
 
   useEffect(() => {
     setText(remoteText || '');
-    setMarkup(remoteMarkup ?? '');
+    setMarkup(remoteMarkup ?? remoteText ?? '');
   }, [remoteText, remoteMarkup]);
 
   const onChange = ({
@@ -62,7 +62,7 @@ const useSocialMention = ({
 
   const resetState = () => {
     setText(remoteText || '');
-    setMarkup(remoteMarkup);
+    setMarkup(remoteMarkup ?? remoteText ?? '');
     setMentions([]);
   };
 

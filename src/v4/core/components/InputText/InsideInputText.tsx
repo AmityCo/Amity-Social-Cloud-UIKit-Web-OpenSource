@@ -144,6 +144,7 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
           >
             <Mention
               trigger="@"
+              markup="@[__display__](__id__)"
               className={clsx(styles.mentions_mention, mentionColor)}
               data={(queryValue, callback) => {
                 if (!queryMentionees) return callback([]);

@@ -2,7 +2,7 @@ import React, { ComponentPropsWithoutRef } from 'react';
 import styles from './Typography.module.css';
 import clsx from 'clsx';
 
-type TypographyElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+type TypographyElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
 
 export type TypographyProps = ComponentPropsWithoutRef<TypographyElement> & {
   as?: TypographyElement;

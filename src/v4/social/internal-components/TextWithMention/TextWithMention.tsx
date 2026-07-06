@@ -522,7 +522,14 @@ export const TextWithMention = ({
   }, [seeMoreIsOpen]);
 
   return (
-    <Component testId={testId} className={clsx(styles.textWithMention__container, textClassName)}>
+    // Render as a div (not the default <p>): the Truncate branch below nests a
+    // <div>, and a <div> inside a <p> is invalid HTML (React 19 hydration error).
+    // Typography styling is class-based, so appearance is unchanged.
+    <Component
+      as="div"
+      testId={testId}
+      className={clsx(styles.textWithMention__container, textClassName)}
+    >
       {isExpanded ? (
         <>
           {renderText(editorState.root.children)}
@@ -536,7 +543,8 @@ export const TextWithMention = ({
               }}
               data-testid="see-less-button"
             >
-              <Typography.BodyBold>See less</Typography.BodyBold>
+              {/* span, not the default <p>: this sits inside a <button> (phrasing content only) */}
+              <Typography.BodyBold as="span">See less</Typography.BodyBold>
             </Button>
           )}
         </>
@@ -555,7 +563,8 @@ export const TextWithMention = ({
                 }}
                 data-testid="see-more-button"
               >
-                <Typography.BodyBold> See more</Typography.BodyBold>
+                {/* span, not the default <p>: this sits inside a <button> (phrasing content only) */}
+                <Typography.BodyBold as="span"> See more</Typography.BodyBold>
               </Button>
             </>
           }
