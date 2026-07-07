@@ -104,36 +104,3 @@
 .replyCommentList__highlightedComment {
   transition: background-color 0.3s ease;
 }
-
-.replyCommentList__bounceAnimation {
-  animation: bounce 1s ease;
-}
-
-@keyframes highlight-reply {
-  0%,
-  70% {
-    background-color: var(--asc-color-primary-shade2);
-  }
-
-  100% {
-    background-color: var(--asc-color-base-shade4);
-  }
-}
-
-@keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateX(0);
-  }
-
-  40% {
-    transform: translateX(-10px);
-  }
-
-  60% {
-    transform: translateX(-5px);
-  }
-}

@@ -282,6 +282,9 @@ export type AmityUIKitConfig = Config;
 export type AmityRoute = {
   route: string;
   id?: string;
+  /** Deep-link comment target carried alongside a post route so the host app can build
+   *  /social/posts/:id?commentId=:id and scroll to + highlight the comment. */
+  commentId?: string;
 };
 
 interface AmityUIKitProviderProps {

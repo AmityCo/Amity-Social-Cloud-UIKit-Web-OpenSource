@@ -1,42 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Typography, BottomSheet } from '~/v4/core/components';
-import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
-import { Timestamp } from '~/v4/social/elements/Timestamp';
-import { UserAvatar } from '~/v4/social/elements/UserAvatar';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import ReplyArrow from '~/v4/icons/ReplyArrow';
-import { ReplyCommentList } from '~/v4/social/components/ReplyCommentList/ReplyCommentList';
-import { MinusCircleIcon } from '~/v4/social/icons';
-import { Mentionees } from '~/v4/helpers/utils';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import { CommentRepository } from '@amityco/ts-sdk';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { EditCancelButton } from '~/v4/social/elements/EditCancelButton/EditCancelButton';
-import { SaveButton } from '~/v4/social/elements/SaveButton/SaveButton';
 import clsx from 'clsx';
+import { useNetworkState } from 'react-use';
+
+import { BottomSheet, Typography } from '~/v4/core/components';
+import { Button } from '~/v4/core/components/AriaButton';
+import { Popover } from '~/v4/core/components/AriaPopover';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import type { Mentionees } from '~/v4/helpers/utils';
+import ReplyArrow from '~/v4/icons/ReplyArrow';
+import type { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
-import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
-import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
-import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { Popover } from '~/v4/core/components/AriaPopover';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { ReactionList } from '~/v4/social/components/ReactionList';
-import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { useNetworkState } from 'react-use';
-import { Button } from '~/v4/core/components/AriaButton';
-import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
-import { useDeleteComment } from '~/v4/social/hooks/useDeleteComment';
-import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
-import { ReactionButton } from '~/v4/social/elements/ReactionButton';
-import styles from './Comment.module.css';
-import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
-import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
-import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
-import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
+import { ReplyCommentList } from '~/v4/social/components/ReplyCommentList/ReplyCommentList';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
+import { EditCancelButton } from '~/v4/social/elements/EditCancelButton/EditCancelButton';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
+import { ReactionButton } from '~/v4/social/elements/ReactionButton';
+import { SaveButton } from '~/v4/social/elements/SaveButton/SaveButton';
+import { Timestamp } from '~/v4/social/elements/Timestamp';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
+import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
+import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
+import { useDeleteComment } from '~/v4/social/hooks/useDeleteComment';
+import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
+import { MinusCircleIcon } from '~/v4/social/icons';
+import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
+import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
+
+import styles from './Comment.module.css';
 
 interface CommentProps {
   pageId?: string;
@@ -102,12 +106,11 @@ export const Comment = ({
   const { setDrawerData } = useDrawer();
   const { openPopup, closePopup } = usePopupContext();
   const { confirm } = useConfirmContext();
-  const { goToUserProfilePage } = useNavigation();
+  const { goToUserProfilePage, goToPostDetailPage } = useNavigation();
   const mentionRef = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
-  const [isHighlighted, setIsHighlighted] = useState(false);
   const isHighlightedComment = highlightedCommentId === comment.commentId && !parentId;
   const [commentData, setCommentData] = useState<CreateCommentParams>();
   const [highlightedReplyComment, setHighlightedReplyComment] = useState<Amity.Comment | undefined>(
@@ -123,8 +126,6 @@ export const Comment = ({
   });
 
   const isBrandUser = comment.creator?.isBrand ?? false;
-
-  const { onClickUser } = useNavigation();
 
   const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
 
@@ -161,46 +162,8 @@ export const Comment = ({
     return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
   }, [comment.commentId]);
 
-  // Bounce the L0 comment bubble when it is the direct notification target.
-  const hasL0CommentBouncedRef = useRef(false);
-
-  useEffect(() => {
-    hasL0CommentBouncedRef.current = false;
-  }, [highlightedCommentId]);
-
-  useEffect(() => {
-    if (!isHighlightedComment) return;
-    const handleScrollComplete = (e: CustomEvent) => {
-      if (e.detail.commentId === comment.commentId && !hasL0CommentBouncedRef.current) {
-        hasL0CommentBouncedRef.current = true;
-        setIsHighlighted(true);
-        setTimeout(() => setIsHighlighted(false), 1000);
-      }
-    };
-    document.addEventListener(
-      EVENT_LISTENER.SCROLL_COMPLETE,
-      handleScrollComplete as EventListener,
-    );
-    return () =>
-      document.removeEventListener(
-        EVENT_LISTENER.SCROLL_COMPLETE,
-        handleScrollComplete as EventListener,
-      );
-  }, [isHighlightedComment, comment.commentId]);
-
-  // L0 fallback: trigger bounce if SCROLL_COMPLETE was already dispatched before
-  // this Comment mounted (e.g. comment data loaded after the scroll completed).
-  useEffect(() => {
-    if (!isHighlightedComment) return;
-    const fallback = setTimeout(() => {
-      if (!hasL0CommentBouncedRef.current) {
-        hasL0CommentBouncedRef.current = true;
-        setIsHighlighted(true);
-        setTimeout(() => setIsHighlighted(false), 1000);
-      }
-    }, 3000);
-    return () => clearTimeout(fallback);
-  }, [isHighlightedComment, comment.commentId]);
+  // The deep-link highlight (glow fill + accent edge) is applied persistently via
+  // `isHighlightedComment` for the whole time this comment is the target — no timed animation.
 
   useEffect(() => {
     highlightedCommentId &&
@@ -438,10 +401,7 @@ export const Comment = ({
           </div>
         </div>
       ) : (
-        <div
-          className={clsx(styles.postComment, isHighlighted && styles.postComment__bounce)}
-          data-testid={testId}
-        >
+        <div className={styles.postComment} data-testid={testId}>
           <UserAvatar
             pageId={pageId}
             componentId={componentId}
@@ -449,12 +409,25 @@ export const Comment = ({
             shouldRedirectToUserProfile
           />
           <div className={styles.postComment__details} data-testid="post-comment-details">
-            <div className={styles.postComment__bubble}>
+            <div
+              className={clsx(
+                styles.postComment__bubble,
+                isHighlightedComment && styles.postComment__bubbleHighlighted,
+              )}
+            >
               <Button
                 data-testid="post-comment-button-content"
                 variant="default"
                 className={styles.postComment__content}
-                onPress={() => onClickUser(comment.creator?.userId ?? '')}
+                // Clicking the comment body deep-links to the post at this comment (scroll +
+                // highlight). The nested username button below still routes to the member
+                // profile — react-aria stops press propagation so it wins its own clicks.
+                onPress={() =>
+                  goToPostDetailPage({
+                    postId: comment.referenceId,
+                    commentId: comment.commentId,
+                  })
+                }
               >
                 <div className={styles.postComment__header}>
                   <Button

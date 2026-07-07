@@ -90,7 +90,6 @@ export const CommentList = ({
   const highlightedCommentRef = useRef<HTMLDivElement>(null);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState(false);
-  const [isHighlighted, setIsHighlighted] = useState(false);
   const [pendingL0Comments, setPendingL0Comments] = useState<Amity.Comment[]>([]);
 
   // Do not call refresh() on mount: usePaginator already fetches, and a manual refresh on every CommentList mount re-opens the SDK live observer (this component renders per feed post, so it trips the rate limiter fast).
@@ -132,22 +131,22 @@ export const CommentList = ({
     }
   }, [items, highlightedCommentId]);
 
-  // Find highlighted comment from items if highlightedCommentId is provided
-  const highlightedComment = highlightedCommentId
-    ? (items.find(
-        (item) =>
-          !isAmityAd(item) &&
-          (item as Amity.Comment).commentId === (parentId ? parentId : highlightedCommentId),
-      ) as Amity.Comment | undefined)
+  // The deep-link target's L0 ancestor: for reply targets (parentId set) it's the L0 root,
+  // otherwise the highlighted comment itself. This comment is rendered in its natural list
+  // position (not pinned) and scrolled to once it is present.
+  const targetL0Id = highlightedCommentId
+    ? parentId
+      ? parentId
+      : highlightedCommentId
     : undefined;
 
-  // Filter out highlighted comment and pending L0 comments from items to avoid duplication
+  const isTargetLoaded =
+    !!targetL0Id &&
+    items.some((item) => !isAmityAd(item) && (item as Amity.Comment).commentId === targetL0Id);
+
+  // Filter out only the optimistic pending L0 comments (rendered separately at the top).
   const filteredItems = items.filter(
-    (item) =>
-      isAmityAd(item) ||
-      ((!highlightedCommentId ||
-        (item as Amity.Comment).commentId !== (parentId ? parentId : highlightedCommentId)) &&
-        !pendingL0CommentIds.has((item as Amity.Comment).commentId)),
+    (item) => isAmityAd(item) || !pendingL0CommentIds.has((item as Amity.Comment).commentId),
   );
 
   // Collapsible feed cards show only `limit` comments until expanded; slicing the already-loaded
@@ -182,68 +181,29 @@ export const CommentList = ({
     return () => document.removeEventListener(EVENT_LISTENER.L0_COMMENT_CREATED, handler);
   }, [referenceId]);
 
-  // Track whether the L0 bounce has already fired to avoid double-bouncing.
-  const hasL0BouncedRef = useRef(false);
-
+  // Deep-link target may be beyond the first loaded page. Keep loading until it is present so it
+  // can render in its natural position and be scrolled to (bounded by the total comment count).
   useEffect(() => {
-    hasL0BouncedRef.current = false;
-  }, [highlightedCommentId]);
+    if (!targetL0Id || isTargetLoaded) return;
+    if (hasMore && !isLoading) loadMore();
+  }, [targetL0Id, isTargetLoaded, hasMore, isLoading, loadMore]);
 
-  // Effect to scroll to highlighted comment with animation
+  // Scroll the target comment into view once (per target) after it renders. The <Comment> below
+  // owns the persistent highlight treatment (glow fill + accent edge); we only handle scrolling.
+  const hasScrolledToTargetRef = useRef(false);
   useEffect(() => {
-    if (!parentId && highlightedComment && highlightedCommentRef.current) {
-      // Create event listener for the scroll complete event
-      const handleScrollComplete = (e: CustomEvent) => {
-        if (
-          e.detail.commentId === highlightedComment.commentId &&
-          !showReplyCommentAt &&
-          !hasL0BouncedRef.current
-        ) {
-          hasL0BouncedRef.current = true;
-          // Only start the bounce animation after the scroll is complete
-          setIsHighlighted(true);
-
-          // Reset the animation after it completes
-          const timer = setTimeout(() => {
-            setIsHighlighted(false);
-          }, 1000); // Animation duration
-
-          return () => clearTimeout(timer);
-        }
-      };
-
-      // Add event listener for the custom scroll complete event
-      document.addEventListener(
-        EVENT_LISTENER.SCROLL_COMPLETE,
-        handleScrollComplete as EventListener,
-      );
-
-      // Clean up the event listener when component unmounts
-      return () => {
-        document.removeEventListener(
-          EVENT_LISTENER.SCROLL_COMPLETE,
-          handleScrollComplete as EventListener,
-        );
-      };
-    }
-  }, [highlightedComment, highlightedCommentId, parentId, showReplyCommentAt]);
-
-  // L0 fallback: trigger bounce directly once the highlighted comment renders.
-  // Handles the case where SCROLL_COMPLETE was already dispatched before the comment
-  // data loaded and the listener was registered.
+    hasScrolledToTargetRef.current = false;
+  }, [targetL0Id]);
   useEffect(() => {
-    if (!parentId && highlightedComment && highlightedCommentRef.current && !showReplyCommentAt) {
-      const fallback = setTimeout(() => {
-        if (!hasL0BouncedRef.current) {
-          hasL0BouncedRef.current = true;
-          setIsHighlighted(true);
-          setTimeout(() => setIsHighlighted(false), 1000);
-        }
-      }, 1200);
-
-      return () => clearTimeout(fallback);
-    }
-  }, [parentId, highlightedComment, showReplyCommentAt]);
+    if (!targetL0Id || !isTargetLoaded || hasScrolledToTargetRef.current) return;
+    const timer = setTimeout(() => {
+      if (highlightedCommentRef.current && !hasScrolledToTargetRef.current) {
+        hasScrolledToTargetRef.current = true;
+        highlightedCommentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [targetL0Id, isTargetLoaded]);
 
   if (!online) {
     return (
@@ -287,47 +247,30 @@ export const CommentList = ({
         </div>
       ))}
 
-      {/* Render highlighted comment at the top if it exists */}
-      {highlightedComment && (
-        <div
-          className={`${styles.commentList__highlightedComment} ${isHighlighted ? styles.commentList__bounceAnimation : ''}`}
-          ref={highlightedCommentRef}
-        >
-          <Comment
-            pageId={pageId}
-            comment={highlightedComment}
-            isHost={eventCreatorId === highlightedComment.userId}
-            onClickReply={(params) => onClickReply?.(params)}
-            componentId={componentId}
-            community={community}
-            shouldAllowInteraction={shouldAllowInteraction}
-            highlightedCommentId={highlightedCommentId}
-            parentId={parentId}
-            parantId={parantId}
-            showReply={highlightedComment.commentId === showReplyCommentAt}
-            testId={`comment-highlighted`}
-            renderReplyComment={renderReplyComment}
-            replyTargetCommentId={replyTargetCommentId}
-          />
-        </div>
-      )}
-
-      {/* Render regular comments without the highlighted one (sliced to `limit` when collapsed) */}
+      {/* Render comments in their natural order (sliced to `limit` when collapsed). The deep-link
+          target renders in place — not pinned — and receives the highlight props + a ref so it
+          gets the glow treatment, expands its reply thread, and can be scrolled into view. */}
       {displayedItems.map((item, index) => {
-        return isAmityAd(item) ? (
-          <CommentAd key={item.adId} ad={item} />
-        ) : (
-          <div key={(item as Amity.Comment).commentId}>
+        if (isAmityAd(item)) {
+          return <CommentAd key={item.adId} ad={item} />;
+        }
+        const comment = item as Amity.Comment;
+        const isTarget = !!targetL0Id && comment.commentId === targetL0Id;
+        return (
+          <div key={comment.commentId} ref={isTarget ? highlightedCommentRef : undefined}>
             <Comment
               pageId={pageId}
-              isHost={eventCreatorId === item.userId}
-              comment={item as Amity.Comment}
+              isHost={eventCreatorId === comment.userId}
+              comment={comment}
               onClickReply={(params) => onClickReply?.(params)}
               componentId={componentId}
               community={community}
               shouldAllowInteraction={shouldAllowInteraction}
-              showReply={item.commentId === showReplyCommentAt}
-              testId={`comment-${index}`}
+              highlightedCommentId={isTarget ? highlightedCommentId : undefined}
+              parentId={isTarget ? parentId : undefined}
+              parantId={isTarget ? parantId : undefined}
+              showReply={comment.commentId === showReplyCommentAt}
+              testId={isTarget ? 'comment-highlighted' : `comment-${index}`}
               renderReplyComment={renderReplyComment}
               replyTargetCommentId={replyTargetCommentId}
             />

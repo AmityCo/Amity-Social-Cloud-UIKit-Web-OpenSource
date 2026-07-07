@@ -6,26 +6,12 @@
   align-items: start;
 }
 
-.postComment__bounce {
-  animation: comment-bounce 1s ease;
-}
-
-@keyframes comment-bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateX(0);
-  }
-
-  40% {
-    transform: translateX(-10px);
-  }
-
-  60% {
-    transform: translateX(-5px);
-  }
+/* Deep-link / notification highlight (per Figma "Highlight a comment"): the target
+ * bubble keeps the glow-primary fill + accent edge for the whole time it is the target.
+ * Compound selector so it wins over `.postComment__bubble` regardless of source order. */
+.postComment__bubble.postComment__bubbleHighlighted {
+  background-color: var(--color-glow-primary);
+  border-color: var(--color-edge-accent);
 }
 
 .postComment__deleteComment {
