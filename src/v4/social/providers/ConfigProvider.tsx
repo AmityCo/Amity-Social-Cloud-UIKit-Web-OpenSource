@@ -2,6 +2,7 @@ import React, { PropsWithChildren, createContext, useContext, useMemo } from 're
 
 const defaultConfig = {
   socialCommunityCreationButtonVisible: true,
+  hideExplore: false,
 };
 
 const ConfigContext = createContext(defaultConfig);

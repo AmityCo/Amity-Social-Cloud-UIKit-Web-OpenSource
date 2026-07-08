@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useString } from '~/v4/core/localization';
-import { ChevronDown } from '~/icons';
+import { ChevronDown } from '~/v4/icons';
 import { getTimeZones } from '@vvo/tzdb';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';

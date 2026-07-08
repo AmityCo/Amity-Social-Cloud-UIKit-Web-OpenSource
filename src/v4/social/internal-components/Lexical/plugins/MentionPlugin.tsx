@@ -157,6 +157,8 @@ export function MentionPlugin<
   anchorClassName,
   maxMentions,
   maxUniqueProductMentions,
+  mentionLimitTitle,
+  mentionLimitMessage,
 }: {
   suggestions: TData[];
   getSuggestionId: (suggestion: TData) => string;
@@ -167,6 +169,8 @@ export function MentionPlugin<
   anchorClassName?: string;
   maxMentions?: number;
   maxUniqueProductMentions?: number;
+  mentionLimitTitle?: string;
+  mentionLimitMessage?: string;
 }) {
   const [editor] = useLexicalComposerContext();
   const { info } = useConfirmContext();
@@ -198,10 +202,13 @@ export function MentionPlugin<
           const currentMentionCount = countMentions();
           if (currentMentionCount >= maxMentions) {
             info({
-              title: useString('amity_social_too_many_users_mentioned'),
-              content: useString(
-                'amity_social_modal_dialog_content_too_many_users_mentioned',
-              ).replace('%d', String(maxMentions)),
+              title: mentionLimitTitle ?? useString('amity_social_too_many_users_mentioned'),
+              content:
+                mentionLimitMessage ??
+                useString('amity_social_modal_dialog_content_too_many_users_mentioned').replace(
+                  '%d',
+                  String(maxMentions),
+                ),
             });
             closeMenu();
             return;

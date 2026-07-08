@@ -161,7 +161,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
       });
     };
 
-    const handleMouseUp = () => {
+    const handleSelectionFinalized = () => {
       // When user finishes selecting, check if there's a valid selection
       const nativeSelection = window.getSelection();
       if (nativeSelection && !nativeSelection.isCollapsed) {
@@ -176,6 +176,36 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
           });
         }, 100);
       }
+    };
+
+    const handleMouseUp = () => {
+      handleSelectionFinalized();
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      // Only trigger for keys that can change/finalize a text selection.
+      // This covers Cmd/Ctrl+A (select all), Shift+Arrow (extend selection),
+      // Shift+Home/End, Cmd+Shift+Arrow, etc.
+      const isSelectionKey =
+        event.key === 'a' ||
+        event.key === 'A' ||
+        event.key === 'ArrowLeft' ||
+        event.key === 'ArrowRight' ||
+        event.key === 'ArrowUp' ||
+        event.key === 'ArrowDown' ||
+        event.key === 'Home' ||
+        event.key === 'End' ||
+        event.key === 'Shift' ||
+        event.key === 'Meta' ||
+        event.key === 'Control';
+
+      if (!isSelectionKey) return;
+
+      // Only react to selections inside the editor
+      const target = event.target as Node | null;
+      if (!target || !rootElement?.contains(target)) return;
+
+      handleSelectionFinalized();
     };
 
     const handleClick = (event: MouseEvent) => {
@@ -254,6 +284,8 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
     document.addEventListener('click', handleClick);
     // Listen to mouseup on document to catch selections that end outside the editor
     document.addEventListener('mouseup', handleMouseUp);
+    // Listen to keyup to catch keyboard-driven selections (Cmd+A, Shift+Arrow, etc.)
+    document.addEventListener('keyup', handleKeyUp);
 
     if (scrollerElem) {
       scrollerElem.addEventListener('scroll', update);
@@ -264,6 +296,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('click', handleClick);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('keyup', handleKeyUp);
 
       if (scrollerElem) {
         scrollerElem.removeEventListener('scroll', update);

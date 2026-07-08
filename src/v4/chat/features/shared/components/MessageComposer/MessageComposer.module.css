@@ -1,0 +1,151 @@
+.messageComposer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--asc-color-background-default);
+  border-top: 0.0625rem solid var(--asc-color-base-shade4);
+  flex-shrink: 0;
+}
+
+.messageComposer__mentionSlot {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.messageComposer__editPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  background: var(--asc-color-base-shade4);
+}
+
+.messageComposer__editPanelTitle {
+  flex: 1 0 0;
+  min-width: 0;
+  color: var(--asc-color-base-default);
+}
+
+.messageComposer__editPanelClose.messageComposer__editPanelClose,
+.messageComposer__editPanelClose.messageComposer__editPanelClose:hover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.messageComposer__editPanelCloseIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--asc-color-base-shade2);
+  fill: var(--asc-color-base-shade2);
+}
+
+.messageComposer__inputRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  min-height: 3.5rem;
+}
+
+.messageComposer__iconButton.messageComposer__iconButton,
+.messageComposer__iconButton.messageComposer__iconButton:hover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background: var(--asc-color-base-shade4);
+  flex-shrink: 0;
+}
+
+.messageComposer__iconButton[data-disabled='true'] {
+  opacity: 0.6;
+}
+
+.messageComposer__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-shade1);
+  fill: var(--asc-color-base-shade1);
+}
+
+.messageComposer__sendButton.messageComposer__sendButton,
+.messageComposer__sendButton.messageComposer__sendButton:hover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background: var(--asc-color-base-shade4);
+  flex-shrink: 0;
+}
+
+.messageComposer__sendButton.messageComposer__sendButton[data-enabled='true'],
+.messageComposer__sendButton.messageComposer__sendButton[data-enabled='true']:hover {
+  background: var(--asc-color-primary-default);
+}
+
+.messageComposer__sendIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-shade3);
+}
+
+.messageComposer__sendButton[data-enabled='true'] .messageComposer__sendIcon {
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.messageComposer__inputWrapper {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  background: var(--asc-color-base-shade4);
+  border-radius: 1.25rem;
+  padding: 0.625rem 0.75rem;
+  min-height: 2.5rem;
+  max-height: 7.5rem;
+  overflow: hidden;
+}
+
+.messageComposer__editor {
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.messageComposer__editor :global([contenteditable]) {
+  outline: none;
+  min-height: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
+
+.messageComposer__placeholder {
+  color: var(--asc-color-base-shade2);
+  font-size: 1rem;
+  line-height: 1.25rem;
+}

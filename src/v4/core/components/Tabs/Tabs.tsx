@@ -16,14 +16,24 @@ type TabsProps = ($TabsProps & {
   labelClassName?: string;
   tabListClassName?: string;
   tabPanelClassName?: string;
+  fullWidth?: boolean;
   onChange: (key: Key) => void;
 }) &
   (
     | {
-        variant: 'underlined' | 'chip';
+        variant: 'chip';
         tabs: {
           value: Key;
           label: string;
+          accessibilityId?: string;
+          content: () => ReactNode;
+        }[];
+      }
+    | {
+        variant: 'underlined';
+        tabs: {
+          value: Key;
+          label: ReactNode;
           accessibilityId?: string;
           content: () => ReactNode;
         }[];
@@ -55,6 +65,7 @@ export const Tabs = forwardRef<TabsRef, TabsProps>(
       tabListClassName,
       tabPanelClassName,
       variant = 'underlined',
+      fullWidth = true,
       ...props
     }: TabsProps,
     ref,
@@ -78,6 +89,7 @@ export const Tabs = forwardRef<TabsRef, TabsProps>(
         <TabList
           ref={tabListRef}
           data-variant={variant}
+          data-full-width={fullWidth}
           aria-label={props['aria-label']}
           className={clsx(styles.tabList, tabListClassName)}
         >
@@ -87,15 +99,32 @@ export const Tabs = forwardRef<TabsRef, TabsProps>(
               key={tab.value}
               className={styles.tab}
               data-variant={variant}
+              data-full-width={fullWidth}
               data-testid={tab.accessibilityId}
             >
               {variant === 'icon' || variant === 'iconSmall' ? (
-                createElement(tab.label, {
-                  className: styles.tabIcon,
-                  'data-variant': variant,
-                } as React.SVGProps<SVGSVGElement>)
-              ) : (
+                createElement(
+                  tab.label as (props: React.SVGProps<SVGSVGElement>) => JSX.Element,
+                  {
+                    className: styles.tabIcon,
+                    'data-variant': variant,
+                  } as React.SVGProps<SVGSVGElement>,
+                )
+              ) : variant === 'chip' ? (
+                ({ isSelected }: { isSelected: boolean }) =>
+                  isSelected ? (
+                    <Typography.TitleBold className={labelClassName}>
+                      {tab.label as ReactNode}
+                    </Typography.TitleBold>
+                  ) : (
+                    <Typography.Title className={labelClassName}>
+                      {tab.label as ReactNode}
+                    </Typography.Title>
+                  )
+              ) : typeof tab.label === 'string' ? (
                 <Typography.BodyBold className={labelClassName}>{tab.label}</Typography.BodyBold>
+              ) : (
+                (tab.label as ReactNode)
               )}
             </Tab>
           ))}

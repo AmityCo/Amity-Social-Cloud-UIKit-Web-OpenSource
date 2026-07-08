@@ -1,0 +1,68 @@
+.privacySection {
+  display: flex;
+  flex-direction: column;
+}
+
+.privacySection__heading {
+  padding: 1.5rem 1rem 0.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.privacySection__options {
+  display: flex;
+  flex-direction: column;
+}
+
+.privacySection__optionRow {
+  padding: 1rem;
+}
+
+.privacySection__row {
+  display: flex;
+  flex: 1 1 0;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.privacySection__iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.privacySection__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.privacySection__text {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.privacySection__title {
+  color: var(--asc-color-base-default);
+}
+
+.privacySection__description {
+  color: var(--asc-color-base-shade1);
+}
+
+.privacySection__banner {
+  padding: 0.75rem 1rem;
+  background-color: var(--asc-color-background-shade1);
+}
+
+.privacySection__bannerText {
+  color: var(--asc-color-base-shade1);
+}

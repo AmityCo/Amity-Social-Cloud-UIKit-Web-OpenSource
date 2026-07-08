@@ -1,0 +1,18 @@
+.memberGrid {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+}
+
+.memberGrid__heading {
+  padding: 1.5rem 0 0.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.memberGrid__list {
+  display: grid;
+  grid-template-columns: repeat(4, 4rem);
+  row-gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem 0;
+}

@@ -5,7 +5,7 @@
   align-items: center;
   gap: var(--asc-spacing-xxs3);
   border-radius: var(--asc-border-radius-full);
-  background: var(--asc-color-secondary-default);
+  background: var(--asc-color-base-default);
   color: var(--asc-color-white);
   cursor: pointer;
 }

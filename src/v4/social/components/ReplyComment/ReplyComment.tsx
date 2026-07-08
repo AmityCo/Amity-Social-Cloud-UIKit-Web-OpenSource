@@ -149,6 +149,20 @@ const PostReplyComment = ({
     return () => document.removeEventListener(EVENT_LISTENER.REPLY_CREATED, handler);
   }, [comment.commentId, isL2]);
 
+  // Remove a pending L2 comment when it is deleted so the trunk line disappears.
+  useEffect(() => {
+    if (isL2) return;
+    const handler = (e: Event) => {
+      const { commentId, parentId: deletedParentId } = (
+        e as CustomEvent<{ commentId: string; parentId?: string }>
+      ).detail;
+      if (deletedParentId !== comment.commentId) return;
+      setPendingL2Comments((prev) => prev.filter((p) => p.commentId !== commentId));
+    };
+    document.addEventListener(EVENT_LISTENER.COMMENT_DELETED, handler);
+    return () => document.removeEventListener(EVENT_LISTENER.COMMENT_DELETED, handler);
+  }, [comment.commentId, isL2]);
+
   const { isModerator: isModeratorUser } = useCommunityPostPermission({
     community,
     userId: comment.creator?.userId,

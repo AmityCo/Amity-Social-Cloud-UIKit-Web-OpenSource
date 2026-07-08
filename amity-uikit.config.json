@@ -28,10 +28,10 @@
   },
   "excludes": [],
   "message_reactions": [
-    { "name": "heart", "image": "message_reaction_heart.png" },
     { "name": "like", "image": "message_reaction_like.png" },
+    { "name": "love", "image": "message_reaction_heart.png" },
     { "name": "fire", "image": "message_reaction_fire.png" },
-    { "name": "grinning", "image": "message_reaction_grinning.png" },
+    { "name": "happy", "image": "message_reaction_grinning.png" },
     { "name": "sad", "image": "message_reaction_sad.png" }
   ],
   "social_reactions": [
@@ -253,6 +253,14 @@
       "clip": {
         "can_view_tab": "singed_in_user_only"
       }
+    },
+    "chat": {
+      "enabled_channel_types": ["conversation", "community"],
+      "conversation_chat_user_actions": [
+        { "name": "mute", "enabled": true },
+        { "name": "report", "enabled": true },
+        { "name": "block", "enabled": true }
+      ]
     }
   }
 }

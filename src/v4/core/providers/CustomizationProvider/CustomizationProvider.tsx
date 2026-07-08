@@ -53,6 +53,10 @@ export interface Config {
         can_view_tab: UserAccess;
       };
     };
+    chat?: {
+      enabled_channel_types?: ('conversation' | 'community')[];
+      conversation_chat_user_actions?: { name: 'mute' | 'report' | 'block'; enabled: boolean }[];
+    };
   };
 }
 

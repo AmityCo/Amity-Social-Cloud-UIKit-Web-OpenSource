@@ -260,7 +260,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       !isModerator &&
       !isAdmin(user?.roles));
 
-  const { updateGlobalFeaturedPosts } = useGlobalFeedContext();
+  const { updateNewPost } = useGlobalFeedContext();
 
   const useMutateUpdatePost = () =>
     useMutation({
@@ -314,7 +314,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
-        updateGlobalFeaturedPosts(updatedPost, isPostNeedsApproval);
+        updateNewPost(updatedPost);
 
         if (isPostNeedsApproval) {
           success({

@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 import CheckCircle from '~/v4/icons/CheckCircle';
-import Remove from '~/v4/icons/Remove';
+import FailedOutlined from '~/v4/icons/FailedOutlined';
 import styles from './NotificationProvider.module.css';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
@@ -111,7 +111,7 @@ export const NotificationProvider: React.FC = ({ children }) => {
       error: (data: Omit<NotificationInput, 'icon'>) =>
         addNotifications({
           ...data,
-          icon: <Remove className={styles.icon} />,
+          icon: <FailedOutlined className={styles.icon} />,
           alignment: data.alignment,
         }),
       loading: (data: Omit<NotificationInput, 'icon'>) =>

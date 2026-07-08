@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import React from 'react';
 import { CheckTag } from '~/v4/icons/CheckTag';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { useAmityElement } from '~/v4/core/hooks/uikit';

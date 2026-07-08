@@ -40,7 +40,7 @@
   height: 1.5rem;
   border-radius: 50%;
   border: 2px solid var(--asc-color-base-shade3);
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
   transition: background 0.3s;
   padding: 0.25rem;
 }

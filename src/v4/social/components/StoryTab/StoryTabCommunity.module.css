@@ -59,7 +59,7 @@
 .storyTitle {
   font-size: 0.75rem;
   line-height: 1rem;
-  color: #626262;
+  color: var(--asc-color-base-shade1);
   cursor: pointer;
 }
 

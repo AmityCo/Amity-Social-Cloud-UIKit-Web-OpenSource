@@ -19,6 +19,9 @@ const ignores = [
   '**/node_modules',
 ];
 
+// eslint-plugin-jest doesn't type `configs`, so cast to satisfy `@ts-check`.
+const jestFlatRecommended = /** @type {any} */ (jest.configs)['flat/recommended'];
+
 export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -42,9 +45,9 @@ export default [
   {
     files: ['**/*.{test,spec}.{ts,tsx}'],
     ignores,
-    ...jest.configs['flat/recommended'],
+    ...jestFlatRecommended,
     rules: {
-      ...jest.configs['flat/recommended'].rules,
+      ...jestFlatRecommended.rules,
       'jest/prefer-expect-assertions': 'off',
     },
   },
@@ -65,6 +68,26 @@ export default [
               message: 'index imports are not allowed.',
             },
           ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/v4/**/*.{ts,tsx}'],
+    ignores: [...ignores, '**/*.stories.{ts,tsx}', 'src/v4/chat/**', '**/icons/**'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            'JSXAttribute[name.name=/^(fill|stroke|stopColor|floodColor|lightingColor|color)$/] Literal[value=/^(#|rgb|hsl)/i]',
+          message:
+            'Hardcoded color in a JSX color attribute. Use "currentColor" (controlled via CSS) or a theme token, not a color literal.',
+        },
+        {
+          selector: 'JSXAttribute[name.name="style"] Property[value.value=/^(#|rgb|hsl)/i]',
+          message:
+            'Hardcoded color in an inline style. Use a CSS class with an --asc-color-* token instead.',
         },
       ],
     },

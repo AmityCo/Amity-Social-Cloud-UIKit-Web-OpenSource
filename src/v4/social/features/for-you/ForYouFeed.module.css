@@ -1,0 +1,34 @@
+.forYouFeed {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.forYouFeed__postContainer {
+  width: 100%;
+}
+
+.forYouFeed__sentinel {
+  height: 1px;
+}
+
+.forYouFeed__caughtUp {
+  min-height: 4rem;
+}
+
+@media (width >= 48em) {
+  .forYouFeed {
+    background-color: var(--asc-color-background-shade1);
+  }
+
+  .forYouFeed__storyTab {
+    margin-bottom: 0.75rem;
+  }
+
+  .forYouFeed__postContainer {
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    margin-bottom: 0.75rem;
+  }
+}

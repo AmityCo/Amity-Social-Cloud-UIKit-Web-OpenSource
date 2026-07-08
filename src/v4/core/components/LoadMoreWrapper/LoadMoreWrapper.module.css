@@ -24,7 +24,7 @@
   border: none;
   margin-top: 1rem;
   padding: 0 0 1rem;
-  border-bottom: 1px solid #e3e4e8;
+  border-bottom: 0.0625rem solid var(--asc-color-base-shade4);
 }
 
 .loadMoreButton.replyButton {

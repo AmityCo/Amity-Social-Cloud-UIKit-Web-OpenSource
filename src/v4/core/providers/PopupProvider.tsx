@@ -15,6 +15,7 @@ type PopupContent = Omit<ModalOverlayProps, 'children'> & {
   componentId?: string;
   keepPrevious?: boolean;
   header?: React.ReactNode;
+  headerClassName?: string;
   overlayClassName?: string;
   disabledAnimation?: boolean;
   media?: boolean;
@@ -48,16 +49,27 @@ export const PopupProvider: React.FC<PopupProviderProps> = ({ children }) => {
   const [popups, setPopups] = useState<PopupContent[]>([]);
 
   const scrollYRef = React.useRef(0);
+  // Tracks whether we actually locked the body for an open popup. Without this,
+  // the `else` branch runs on initial mount (popups.length === 0) and calls
+  // window.scrollTo(0, 0), which yanks the host page to the top — harmless when
+  // the UIKit owns the viewport, but disruptive when a single component (e.g.
+  // AmityCommentTrayComponent) is embedded in a scrollable host page that never
+  // opens a popup. We only restore scroll after a real open -> close cycle.
+  const didLockScrollRef = React.useRef(false);
 
   // Prevent body scroll when popups are open
   useEffect(() => {
     if (popups.length > 0) {
       // Store original scroll position in ref to restore later
+      didLockScrollRef.current = true;
       scrollYRef.current = window.scrollY;
       // Add class to prevent scroll
       document.body.classList.add('popup-no-scroll');
       document.body.style.top = `-${scrollYRef.current}px`;
-    } else {
+    } else if (didLockScrollRef.current) {
+      // Only restore if we previously locked the body for an open popup, so that
+      // mounting the provider (with no popup) never moves the host page.
+      didLockScrollRef.current = false;
       // Remove class and restore scroll position
       document.body.classList.remove('popup-no-scroll');
       document.body.style.top = '';

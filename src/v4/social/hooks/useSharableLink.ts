@@ -1,13 +1,15 @@
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 import { useEffect, useState } from 'react';
-import { getShareableLink, SharableModel } from '~/v4/utils/sharableLink';
+import { getShareableLinkConfiguration } from '~/v4/utils/sharableLink';
 
 interface UseSharableLinkParams {
-  model: SharableModel;
+  model: AmitySharableContentType;
   referenceId?: string;
 }
 
 interface UseSharableLinkResult {
   link: string | undefined;
+  isEnabled: boolean;
   isLoading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -18,6 +20,7 @@ export const useSharableLink = ({
   referenceId,
 }: UseSharableLinkParams): UseSharableLinkResult => {
   const [link, setLink] = useState<string>();
+  const [isEnabled, setIsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -28,10 +31,9 @@ export const useSharableLink = ({
     setError(null);
 
     try {
-      const result = await getShareableLink({
-        model,
-        referenceId,
-      });
+      const config = await getShareableLinkConfiguration();
+      setIsEnabled(config.isEnabled(model));
+      const result = config.generateLink(model, referenceId) ?? undefined;
       setLink(result);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to get shareable link'));
@@ -50,6 +52,7 @@ export const useSharableLink = ({
 
   return {
     link,
+    isEnabled,
     isLoading,
     error,
     refetch,

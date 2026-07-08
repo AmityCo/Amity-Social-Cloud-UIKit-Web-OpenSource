@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
 import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
@@ -24,10 +24,8 @@ import {
   UpcomingEventsPage,
 } from '..';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
-import CommunityFeed from '~/social/pages/CommunityFeed';
 import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
 import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
-import CommunityEditPage from '~/social/pages/CommunityEdit';
 import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
 import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
 import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
@@ -60,10 +58,8 @@ import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
-  const [open, setOpen] = useState(false);
   const { page, goToSocialHomePage, handleVisitorUsageLimitSignIn } = useNavigation();
   const { liveStreamPlayer } = useLayoutContext();
-  const toggleOpen = () => setOpen((open) => !open);
 
   useEffect(() => {
     if (
@@ -203,18 +199,6 @@ const Application = () => {
         {page.type === PageTypes.EventDetailPage && <EventDetailPage {...page.context} />}
         {page.type === PageTypes.EventAttendeesPage && <EventAttendeesPage {...page.context} />}
 
-        {/* V3 */}
-        {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeed
-            communityId={page.context.communityId}
-            isNewCommunity={page.context.isNewCommunity}
-            isOpen={open}
-            toggleOpen={toggleOpen}
-          />
-        )}
-        {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.context.communityId} tab={page.context.tab} />
-        )}
         {page.type === PageTypes.PollTargetSelectionPage && <PollTargetSelectionPage />}
         {page.type === PageTypes.PollPostComposerPage && (
           <PollPostComposerPage
@@ -238,7 +222,6 @@ const Application = () => {
             targetId={page.context.targetId}
           />
         )}
-        {/*End of V3 */}
       </MainLayout>
     </div>
   );

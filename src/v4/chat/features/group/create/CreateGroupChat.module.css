@@ -1,0 +1,10 @@
+.createGroupChat {
+  background-color: var(--asc-color-background-default);
+}
+
+.createGroupChat__avatarWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}

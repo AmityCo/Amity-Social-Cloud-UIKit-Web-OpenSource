@@ -1,7 +1,7 @@
 import { FileRepository } from '@amityco/ts-sdk';
 import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
-import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { ERROR_CODE, ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 type UploadImageResponse = Awaited<ReturnType<typeof FileRepository.uploadImage>>;
@@ -40,7 +40,10 @@ export default function useImageUpload() {
       },
       {
         onError: (error) => {
-          if (error.message.includes(ERROR_RESPONSE.INVALID_IMAGE)) {
+          const isInappropriate =
+            error.message.includes(ERROR_RESPONSE.INVALID_IMAGE) ||
+            error.message.includes(ERROR_CODE.VIOLENT_CONTENT);
+          if (isInappropriate) {
             info({
               title: resolveString('amity_social_button_inappropriate_image'),
               content: resolveString('amity_social_modal_dialog_image_upload_error'),

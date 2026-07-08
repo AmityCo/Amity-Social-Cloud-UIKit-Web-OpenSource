@@ -6,7 +6,6 @@ import { BackButton, CloseButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Camera } from '~/v4/icons/Camera';
 import { Avatar, Typography } from '~/v4/core/components';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
@@ -46,6 +45,7 @@ import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import useJoinRequestsCollection from '~/v4/social/hooks/collections/useJoinRequestsCollection';
+import { CameraFilled } from '~/v4/icons/CameraFilled';
 
 type EditCommunityProps = {
   community: Amity.Community;
@@ -360,8 +360,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                 (community?.avatarFileId && <div className={styles.editCommunity__overlay} />)}
               {!uploadLoading && (
                 <IconComponent
-                  imgIcon={() => <Camera className={styles.editCommunity__cameraIcon} />}
-                  defaultIcon={() => <Camera className={styles.editCommunity__cameraIcon} />}
+                  imgIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
+                  defaultIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
                 />
               )}
             </Button>
@@ -411,8 +411,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
               (community?.avatarFileId && <div className={styles.editCommunity__overlay} />)}
             {!uploadLoading && (
               <IconComponent
-                imgIcon={() => <Camera className={styles.editCommunity__cameraIcon} />}
-                defaultIcon={() => <Camera className={styles.editCommunity__cameraIcon} />}
+                imgIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
+                defaultIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
               />
             )}
           </Button>

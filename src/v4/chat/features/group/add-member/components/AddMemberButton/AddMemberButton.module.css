@@ -1,0 +1,14 @@
+.addMemberButton__container {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 1rem;
+  background-color: var(--asc-color-background-default);
+  border-top: 0.0625rem solid var(--asc-color-base-shade4);
+}
+
+.addMemberButton {
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+}

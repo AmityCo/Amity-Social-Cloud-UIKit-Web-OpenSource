@@ -5,7 +5,7 @@ import Flag from '~/v4/icons/Flag';
 import UnFlag from '~/v4/icons/UnFlag';
 import Bin from '~/v4/icons/Bin';
 import styles from './MessageOptions.module.css';
-import { useMessageFlaggedByMe } from '~/v4/chat/hooks/useMessageFlaggedByMe';
+import { useFlagMessageQuery } from '~/v4/chat/hooks/queries';
 import { Skeleton } from '~/v4/core/components/Skeleton';
 import { useDeleteMessage } from '~/v4/chat/hooks/useDeleteMessage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
@@ -42,9 +42,9 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
 
-  const { isLoading, isFlaggedByMe, mutateUnreportMessage } = useMessageFlaggedByMe({
+  const { isLoading, isFlaggedByMe, unreport } = useFlagMessageQuery({
     messageId: message.messageId,
-    type: 'live-chat',
+    toastAlignment: 'live-chat',
   });
 
   const handleReportMessage = () => {
@@ -61,6 +61,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
             componentId={componentId}
             onCloseMenu={closePopup}
             message={message}
+            messageType="live-chat"
             showReportPostButton={false}
           />
         ),
@@ -74,6 +75,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
               componentId={componentId}
               onCloseMenu={onCloseMenu}
               message={message}
+              messageType="live-chat"
               showReportPostButton={false}
             />
           ),
@@ -84,7 +86,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
 
   const handleUnreportMessage = () => {
     onCloseMenu();
-    mutateUnreportMessage();
+    unreport();
   };
 
   const handleClickReportMessage = () =>

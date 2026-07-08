@@ -1,23 +1,7 @@
 export { default as AmityUiKitProvider } from '~/v4/core/providers/AmityUIKitProvider';
-export { default as AmityUiKitFeed } from '~/social/components/Feed';
 export { default as AmityUiKitSocial } from '~/v4/social/pages/Application';
-export { default as AmityUiKitChat } from '~/chat/pages/Application';
+export { ChatUIKit as AmityUiKitChatV4 } from '~/v4/chat/pages';
 export { PageRenderer as AmityPageRenderer } from '~/v4/core/providers';
-
-// Export helper
-export {
-  addChatMembers as amityAddChatMembers,
-  removeChatMembers as amityRemoveChatMembers,
-} from '~/chat/helpers';
-
-export { default as useAmityUser } from '~/core/hooks/useUser';
-export { useNavigation as useAmityNavigation } from '~/social/providers/NavigationProvider';
-
-export { default as AmityAvatar } from '~/core/components/Avatar';
-export { PostContainer as AmityPostContainer } from '~/social/components/post/Post/styles';
-export { default as AmityPostEngagementBar } from '~/social/components/EngagementBar';
-export { default as AmityExpandableText } from '~/social/components/Comment/CommentText';
-export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
 export { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
@@ -38,7 +22,24 @@ import type { ReactionListProps } from '~/v4/social/components/ReactionList';
 export type { MessageActionType as AmityMessageActionType };
 export type { ReactionListProps as AmityReactionListProps };
 
-export { LiveChat as AmityLiveChatPage } from '~/v4/chat/pages/LiveChat';
+export {
+  LiveChat as AmityLiveChatPage,
+  ChatHomePage as AmityChatHomePage,
+  ChannelCreateConversationPage as AmityChannelCreateConversationPage,
+  SelectGroupMemberPage as AmitySelectGroupMemberPage,
+  CreateGroupChatPage as AmityCreateGroupChatPage,
+  ChatPage as AmityChatPage,
+  GroupChatPage as AmityGroupChatPage,
+  GroupSettingPage as AmityGroupSettingPage,
+  EditGroupProfilePage as AmityEditGroupProfilePage,
+  EditGroupNotificationPage as AmityEditGroupNotificationPage,
+  EditGroupMemberPermissionsPage as AmityEditGroupMemberPermissionsPage,
+  GroupNotificationPreferencePage as AmityGroupNotificationPreferencePage,
+  GroupMemberListPage as AmityGroupMemberListPage,
+  AddGroupMemberPage as AmityAddGroupMemberPage,
+  BannedGroupMemberListPage as AmityBannedGroupMemberListPage,
+  ArchivedChatPage as AmityArchivedChatPage,
+} from '~/v4/chat/pages';
 
 // v4 internal use only (Amity Console)
 export {
@@ -106,7 +107,6 @@ export {
 export {
   MyCommunities as AmityMyCommunitiesComponent,
   EmptyNewsfeed as AmityEmptyNewsFeedComponent,
-  GlobalFeed as AmityGlobalFeedComponent,
   PostContent as AmityPostContentComponent,
   TopSearchBar as AmityTopSearchBarComponent,
   Newsfeed as AmityNewsFeedComponent,
@@ -135,6 +135,10 @@ export {
   InvitationBanner as AmityInvitationBannerComponent,
   InvitationSection as AmityInvitationSectionComponent,
 } from '~/v4/social/components/';
+
+export { Feed as AmityGlobalFeedComponent } from '~/v4/social/features/shared/components/Feed';
+export { ForYouFeed as AmityForYouFeedComponent } from '~/v4/social/features/for-you';
+export { FeedCaughtUp as AmityFeedCaughtUpComponent } from '~/v4/social/components/FeedCaughtUp';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
 

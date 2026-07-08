@@ -105,7 +105,11 @@ export const MessageAction = ({
                 onClick={isFlagged ? onUnFlagMessage : onFlagMessage}
               >
                 <div className={styles.messageDangerActionButtonText}>
-                  <Typography.Body>{isFlagged ? 'Unreport' : 'Report'}</Typography.Body>
+                  <Typography.Body>
+                    {isFlagged
+                      ? resolveString('amity_chat_option_unreport')
+                      : resolveString('amity_chat_option_report')}
+                  </Typography.Body>
                 </div>
                 <Flag className={styles.flagIcon} />
               </div>

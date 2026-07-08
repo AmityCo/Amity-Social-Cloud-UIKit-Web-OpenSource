@@ -11,7 +11,7 @@ import { Typography } from '~/v4/core/components/Typography';
 import mentionStyles from '~/v4/core/components/InputText/styles.module.css';
 import CommentAltExclamation from '~/v4/icons/CommentAltExclamation';
 import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { useNetworkState } from 'react-use';
 import { useString } from '~/v4/core/localization';

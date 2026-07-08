@@ -35,7 +35,7 @@
   top: 0;
   left: 0;
   text-align: center;
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 .editUserProfilePage__icon {
@@ -103,7 +103,7 @@
     flex: 0;
     background-color: var(--asc-color-background-default);
     border-radius: 0.5rem;
-    border: 1px solid var(--asc-color-base-shade4, #ebecef);
+    border: 0.0625rem solid var(--asc-color-base-shade4);
   }
 
   .editUserProfilePage__topSection {

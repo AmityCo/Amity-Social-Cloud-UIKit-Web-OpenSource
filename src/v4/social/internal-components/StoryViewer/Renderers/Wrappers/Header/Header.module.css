@@ -37,7 +37,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: rgb(var(--asc-color-black) 0.9);
+  background: rgb(from var(--asc-color-black) r g b / 90%);
   z-index: 9;
   display: flex;
   justify-content: center;

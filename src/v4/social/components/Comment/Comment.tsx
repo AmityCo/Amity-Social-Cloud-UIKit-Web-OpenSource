@@ -39,7 +39,6 @@ import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBe
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
 import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
-import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 interface CommentProps {
@@ -147,25 +146,6 @@ export const Comment = ({
   } = useCommentReaction({ comment });
 
   const replyAmount = comment.childrenNumber;
-
-  const isL0Comment = !comment.parentId;
-
-  // Silently fetch L1 replies with includeDeleted=true for non-deleted L0 comments whose
-  // visible childrenNumber is 0. This includes both comments that never had replies and
-  // comments whose replies were deleted; the extra request is intentional so we can detect
-  // and display deleted-reply tags without requiring user interaction.
-  const shouldFetchSilentDeletedReplies = isL0Comment && !comment.isDeleted && replyAmount === 0;
-  const { comments: silentDeletedReplies } = useCommentsCollection({
-    referenceId: comment.referenceId,
-    referenceType: comment.referenceType as Amity.CommentReferenceType,
-    parentId: comment.commentId,
-    pageSize: 5,
-    sortBy: 'lastCreated',
-    shouldCall: shouldFetchSilentDeletedReplies,
-    includeDeleted: true,
-  });
-  const hasOnlyDeletedReplies =
-    silentDeletedReplies.length > 0 && silentDeletedReplies.every((c) => c.isDeleted);
 
   // Pending L1 comments captured before ReplyCommentList is even mounted (first reply case).
   const [pendingL1Comments, setPendingL1Comments] = useState<Amity.Comment[]>([]);
@@ -368,10 +348,17 @@ export const Comment = ({
   const isShowReplyList =
     (hasClickLoadMore && !parentId) ||
     (isHighlightedReply && replyAmount > 0) ||
-    highlightedReplyComment?.isDeleted ||
-    hasOnlyDeletedReplies;
+    highlightedReplyComment?.isDeleted;
 
   const showThread = isShowReplyList || !!showReply || !!replyComposer;
+
+  // Once the L1 thread is visible, persist the expanded state so it doesn't collapse
+  // when the reply composer closes after creating an L2 comment.
+  useEffect(() => {
+    if (showThread) {
+      setHasClickLoadMore(true);
+    }
+  }, [showThread]);
 
   // Once the L1 thread is visible, persist the expanded state so it doesn't collapse
   // when the reply composer closes after creating an L2 comment.
@@ -731,12 +718,7 @@ export const Comment = ({
             highlightedL2CommentId={effectiveIsL2Target ? highlightedCommentId : undefined}
             renderInlineComposer={replyComposer ? () => replyComposer : undefined}
             inlineComposerAfterCommentId={replyTargetCommentId}
-            initialPendingComments={
-              hasOnlyDeletedReplies && !hasClickLoadMore ? silentDeletedReplies : pendingL1Comments
-            }
-            shouldFetch={
-              comment.isDeleted ? hasClickLoadMore : hasOnlyDeletedReplies ? false : undefined
-            }
+            initialPendingComments={pendingL1Comments}
             onEmpty={() => setHasClickLoadMore(false)}
           />
         </div>

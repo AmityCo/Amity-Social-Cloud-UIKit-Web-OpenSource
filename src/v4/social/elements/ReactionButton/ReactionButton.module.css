@@ -93,7 +93,7 @@
   align-items: center;
   gap: 0.0625rem;
   border-radius: 1.25rem;
-  background: rgb(0 0 0 / 50%);
+  background: var(--asc-color-transparent-black);
   color: var(--asc-color-white);
   text-align: center;
   font-size: 0.625rem;

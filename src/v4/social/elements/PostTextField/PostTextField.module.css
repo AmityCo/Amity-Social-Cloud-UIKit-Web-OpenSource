@@ -1,5 +1,5 @@
 .editorPlaceholder {
-  color: #999;
+  color: var(--asc-color-base-shade2);
   overflow: hidden;
   margin-top: -1rem;
   user-select: none;

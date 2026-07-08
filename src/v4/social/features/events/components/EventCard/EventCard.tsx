@@ -9,7 +9,6 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { EventTypeBadge } from '~/v4/social/features/events/EventHub/elements';
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import { useString } from '~/v4/core/localization';
-import useGlobalBehavior from '~/v4/core/hooks/useGlobalBehavior';
 import styles from './EventCard.module.css';
 
 type EventCardProps = {
@@ -22,16 +21,13 @@ export function EventCard({ event, variant = 'card', size = 'lg' }: EventCardPro
   const { currentUserId } = useSDK();
   const [errorImage, setErrorImage] = useState(false);
   const { goToEventDetailPage } = useNavigation();
-  const { handleGlobalBehavior } = useGlobalBehavior();
   const byCreatorLabel = useString(
     'amity_social_button_by_creator',
     event.creator?.displayName ?? event.creator?.userPublicId ?? '',
   );
 
   const handleClick = () => {
-    handleGlobalBehavior({
-      defaultBehavior: () => goToEventDetailPage({ eventId: event.eventId }),
-    });
+    goToEventDetailPage({ eventId: event.eventId });
   };
 
   return (

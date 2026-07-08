@@ -22,10 +22,10 @@
   height: 100%;
   background: linear-gradient(
     180deg,
-    rgb(0 0 0 / 30%) 0%,
-    rgb(0 0 0 / 0%) 10%,
-    rgb(0 0 0 / 0%) 0%,
-    rgb(0 0 0 / 30%) 100%
+    rgb(from var(--asc-color-black) r g b / 30%) 0%,
+    rgb(from var(--asc-color-black) r g b / 0%) 10%,
+    rgb(from var(--asc-color-black) r g b / 0%) 0%,
+    rgb(from var(--asc-color-black) r g b / 30%) 100%
   );
   pointer-events: none;
   z-index: 1;
@@ -48,7 +48,7 @@
   width: 2.5rem;
   height: 2.5rem;
   padding: 0.5rem;
-  background: rgb(0 0 0 / 60%);
+  background: rgb(from var(--asc-color-black) r g b / 60%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@
 }
 
 .videoFullScreen__playButton:hover {
-  background: rgb(0 0 0 / 80%);
+  background: rgb(from var(--asc-color-black) r g b / 80%);
   transform: scale(1.1);
 }
 

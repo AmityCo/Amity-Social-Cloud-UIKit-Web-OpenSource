@@ -3,12 +3,12 @@ import { useString, resolveString } from '~/v4/core/localization';
 
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
-import { Trash2Icon } from '~/icons';
+import { TrashIcon as Trash2Icon } from '~/v4/icons/Trash';
 import { isNonNullable } from '~/v4/helpers/utils';
 
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
-import { checkStoryPermission } from '~/utils';
+import { checkStoryPermission } from '~/v4/social/utils';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -62,7 +62,7 @@ export const CommunityFeedStory = ({
   onClickCommunity,
   goToDraftStoryPage,
 }: CommunityFeedStoryProps) => {
-  const { accessibilityId } = useAmityPage({
+  const { accessibilityId, themeStyles } = useAmityPage({
     pageId,
   });
   const { confirm } = useConfirmContext();
@@ -279,15 +279,9 @@ export const CommunityFeedStory = ({
         actions: [
           isStoryCreator || isModerator
             ? {
-                name: resolveString('amity_common_button_delete'),
+                name: resolveString('amity_social_button_delete_story'),
                 action: () => deleteStory(story),
-                icon: (
-                  <Trash2Icon
-                    fill={getComputedStyle(document.documentElement).getPropertyValue(
-                      '--asc-color-base-default',
-                    )}
-                  />
-                ),
+                icon: <Trash2Icon className={styles.deleteIcon} />,
               }
             : null,
         ].filter(isNonNullable),
@@ -354,7 +348,7 @@ export const CommunityFeedStory = ({
   if (!stories || stories.length === 0) return null;
 
   return (
-    <div className={clsx(styles.storyWrapper)}>
+    <div className={clsx(styles.storyWrapper)} style={themeStyles}>
       {currentIndex > 0 ? (
         <ArrowLeftButton onClick={previousStory} />
       ) : (

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
+import { resolveString } from '~/v4/core/localization/resolveString';
 
 export const useChannelMentionSuggestion = (channelId?: string | null) => {
   const [queryString, setQueryString] = useState<string | null>(null);
@@ -25,7 +26,7 @@ export const useChannelMentionSuggestion = (channelId?: string | null) => {
     }));
 
     return isModerator && (queryString === '' || /^al*l*$/i.test(queryString || ''))
-      ? [{ userId: 'all', displayName: 'All' }, ...baseSuggestion]
+      ? [{ userId: 'all', displayName: resolveString('amity_chat_tab_all') }, ...baseSuggestion]
       : baseSuggestion;
   }, [isModerator, channelMembers]);
 

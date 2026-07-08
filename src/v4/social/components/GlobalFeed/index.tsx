@@ -1,1 +1,0 @@
-export { GlobalFeed } from './GlobalFeed';

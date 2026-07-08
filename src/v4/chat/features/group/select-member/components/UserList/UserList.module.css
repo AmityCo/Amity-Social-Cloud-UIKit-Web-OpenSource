@@ -1,0 +1,14 @@
+.userList {
+  display: flex;
+  flex-direction: column;
+}
+
+.userList__row {
+  padding: 0.5rem 1rem;
+  height: 3.5rem;
+  cursor: pointer;
+}
+
+.userList__row:hover {
+  background-color: var(--asc-color-base-shade4);
+}

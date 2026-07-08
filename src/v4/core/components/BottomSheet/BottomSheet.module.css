@@ -23,5 +23,5 @@ which have higher specificity.
 }
 
 .bottomSheet__backdrop {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
 }

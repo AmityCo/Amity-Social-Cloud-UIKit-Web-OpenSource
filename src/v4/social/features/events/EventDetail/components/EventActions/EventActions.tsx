@@ -1,12 +1,14 @@
 import { Pencil } from '~/v4/icons/Pencil';
 import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import Trash from '~/v4/social/icons/trash';
 import { Typography } from '~/v4/core/components';
 import { EventSetupMode } from '~/v4/social/features';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { checkIsWithinMinutes } from '~/v4/social/utils/timezone';
-import { BackButton, MenuButton, Menu } from '~/v4/social/elements';
+import { BackButton, MenuButton } from '~/v4/social/elements';
+import { Menu } from '~/v4/core/components/Menu';
 import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -15,8 +17,15 @@ import { useEventActions } from '~/v4/social/features/events/EventDetail/hooks';
 import styles from './EventActions.module.css';
 import { AddCalendar } from '~/v4/icons/AddCalendar';
 import { downloadICS } from '~/v4/social/utils/downloadICS';
-import { AmityEventResponseStatus } from '@amityco/ts-sdk';
+import {
+  AmityEventResponseStatus,
+  AmityEventStatus,
+  AmitySharableContentType,
+} from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
+import { CopyToClipboard } from '~/v4/icons/CopyToClipboard';
 
 export type EventActionsProps = {
   event: Amity.Event;
@@ -36,10 +45,31 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
 
   const isHostEvent = event.creator?.userId === currentUserId;
 
+  const notification = useNotifications();
+
+  const {
+    link: shareableLink,
+    isEnabled: isSharableLinkEnabled,
+    isLoading: isSharableLinkLoading,
+  } = useSharableLink({
+    model: AmitySharableContentType.EVENT,
+    referenceId: event.eventId,
+  });
+
+  const isPublicCommunity = event.targetCommunity?.isPublic ?? false;
+  const isShareableStatus = event.status !== AmityEventStatus.Cancelled;
+  const showCopyLink =
+    isSharableLinkEnabled &&
+    !!shareableLink &&
+    !isSharableLinkLoading &&
+    event.isOriginPublic &&
+    isPublicCommunity &&
+    isShareableStatus;
+
   const actions = [
     {
       key: 'edit',
-      Icon: Pencil,
+      icon: Pencil,
       label: useString('amity_social_button_edit_event'),
       condition: isHostEvent,
       onPress: () => {
@@ -61,7 +91,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     },
     {
       key: 'add-to-calendar',
-      Icon: AddCalendar,
+      icon: AddCalendar,
       label: useString('amity_social_modal_add_calendar_sheet_add_button'),
       condition:
         (isHostEvent || myRSVP?.status === AmityEventResponseStatus.Going) &&
@@ -71,8 +101,32 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       },
     },
     {
-      Icon: Trash,
-      danger: true,
+      key: 'copy-event-link',
+      icon: CopyToClipboard,
+      label: useString('amity_social_button_copy_event_link'),
+      condition: showCopyLink,
+      onPress: async () => {
+        if (!shareableLink) {
+          notification.info({
+            content: resolveString('amity_social_failed_to_copy_link'),
+          });
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(shareableLink);
+          notification.success({
+            content: resolveString('amity_social_button_link_copied'),
+          });
+        } catch {
+          notification.info({
+            content: resolveString('amity_social_failed_to_copy_link'),
+          });
+        }
+      },
+    },
+    {
+      icon: Trash,
+      destructive: true,
       key: 'delete',
       label: useString('amity_social_button_delete_event'),
       condition: hasDeleteEventPermission || isHostEvent,

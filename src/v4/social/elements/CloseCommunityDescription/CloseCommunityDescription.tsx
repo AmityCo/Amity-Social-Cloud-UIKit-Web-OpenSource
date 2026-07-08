@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './CloseCommunityDescription.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';

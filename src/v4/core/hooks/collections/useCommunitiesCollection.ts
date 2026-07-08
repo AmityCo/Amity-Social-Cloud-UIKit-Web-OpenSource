@@ -1,5 +1,5 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
 export default function useCommunitiesCollection(
   queryParams?: Parameters<typeof CommunityRepository.getCommunities>[0],

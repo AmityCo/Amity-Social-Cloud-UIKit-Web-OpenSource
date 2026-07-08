@@ -4,3 +4,9 @@
   min-width: 1.1433rem;
   fill: var(--asc-color-primary-default);
 }
+
+/* The badge's outer ring should match the surface behind it, not be hardcoded white,
+   so it renders correctly in dark mode. (PDT-3555) */
+.communityOfficialBadge__border {
+  stroke: var(--asc-color-background-default);
+}

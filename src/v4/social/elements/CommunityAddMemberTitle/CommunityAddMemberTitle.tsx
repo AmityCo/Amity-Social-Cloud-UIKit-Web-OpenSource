@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 
@@ -22,7 +21,7 @@ export const CommunityAddMemberTitle = ({
 
   return (
     <Typography.TitleBold style={themeStyles} data-testid={accessibilityId}>
-      {resolveText('amity_social_button_members')}
+      {resolveText('amity_social_button_member')}
     </Typography.TitleBold>
   );
 };

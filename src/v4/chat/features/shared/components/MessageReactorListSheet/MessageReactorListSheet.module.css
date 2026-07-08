@@ -1,0 +1,133 @@
+.messageReactorListSheet {
+  display: flex;
+  flex-direction: column;
+  background: var(--asc-color-background-default);
+  margin: 0 -1rem;
+  max-height: 90vh;
+  min-height: 90vh;
+}
+
+.messageReactorListSheet__tabs {
+  flex: 1;
+  min-height: 0;
+}
+
+@media (width >= 48em) {
+  .messageReactorListSheet {
+    margin: 0;
+    width: 30rem;
+  }
+}
+
+.messageReactorListSheet__tabList {
+  padding: 0;
+  gap: 1.25rem;
+}
+
+.messageReactorListSheet__tabPanel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.messageReactorListSheet__tabLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.messageReactorListSheet__tabIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.messageReactorListSheet__list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-height: 0;
+  max-height: calc(var(--asc-drawer-visible-height, 90vh) - 5rem);
+  padding-top: 0.5rem;
+  padding-bottom: 3rem;
+}
+
+.messageReactorListSheet__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  height: 3.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.messageReactorListSheet__rowAvatar {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.messageReactorListSheet__rowText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  text-align: left;
+  min-width: 0;
+}
+
+.messageReactorListSheet__rowTitle {
+  color: var(--asc-color-base-default);
+  fill: var(--asc-color-base-default);
+}
+
+.messageReactorListSheet__rowCaption {
+  color: var(--asc-color-base-shade1);
+  fill: var(--asc-color-base-shade1);
+}
+
+.messageReactorListSheet__rowReactionIcon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.messageReactorListSheet__emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1.5rem 1.5rem;
+  width: 100%;
+}
+
+.messageReactorListSheet__emptyStateIcon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--asc-color-secondary-shade4);
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.messageReactorListSheet__emptyStateText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.messageReactorListSheet__emptyStateTitle {
+  color: var(--asc-color-base-shade3);
+}
+
+.messageReactorListSheet__emptyStateDescription {
+  color: var(--asc-color-base-shade3);
+}
