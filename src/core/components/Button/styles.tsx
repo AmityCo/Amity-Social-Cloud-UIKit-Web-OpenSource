@@ -23,14 +23,21 @@ export const DefaultButton = styled.button.withConfig({
   shouldForwardProp: (prop) => prop !== 'fullWidth',
 })<{ fullWidth?: boolean }>`
   ${commonButtonStyles};
-  background-color: #fff;
-  border: 1px solid #e3e4e8;
-  color: ${({ theme }) => theme.palette.neutral.main};
+  background-color: transparent;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  color: color-mix(
+    in srgb,
+    var(--color-foreground-primary) calc(var(--tw-text-opacity) * 100%),
+    transparent
+  );
   &:hover {
-    color: ${({ theme }) => theme.palette.neutral.shade1};
-  }
-  &:disabled {
-    color: ${({ theme }) => theme.palette.neutral.shade2};
+    color: color-mix(
+      in srgb,
+      var(--color-foreground-primary) calc(var(--tw-text-opacity) * 100%),
+      transparent
+    );
   }
 `;
 
