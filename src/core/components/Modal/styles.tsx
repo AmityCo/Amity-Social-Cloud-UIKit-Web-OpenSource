@@ -39,12 +39,13 @@ export const Overlay = styled.div`
 
 export const ModalWindow = styled.div`
   margin: auto;
-  background: ${({ theme }) => theme.palette.system.background};
+  background: var(--asc-color-background-default);
+  border-color: var(--asc-color-base-shade4);
   border-radius: 6px;
   max-width: 520px;
   min-width: 360px;
   ${({ theme }) => theme.typography.body}
-  color: ${({ theme }) => theme.palette.neutral.main};
+  color: var(--asc-color-base-default);
 
   &:focus {
     outline: none;
@@ -72,11 +73,6 @@ export const StyledModalWindow = ({
 
 export const Header = styled.div<{ clean?: boolean }>`
   padding: 16px 16px 12px 16px;
-  ${({ clean, theme }) =>
-    !clean &&
-    css`
-      border-bottom: 1px solid ${theme.palette.base.shade4};
-    `};
   ${({ theme }) => theme.typography.title};
   display: flex;
   align-items: center;
