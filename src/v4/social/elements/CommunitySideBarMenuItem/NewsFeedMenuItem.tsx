@@ -1,4 +1,4 @@
-import UserCheck from '~/v4/icons/UserCheck';
+import Newspaper from '~/v4/icons/Newspaper';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
@@ -40,7 +40,7 @@ export function NewsFeedMenuItem({ pageId = '*', componentId = '*' }: NewsFeedMe
         <IconComponent
           configIconName={config.icon}
           defaultIconName={defaultConfig.icon}
-          defaultIcon={() => <UserCheck {...props} />}
+          defaultIcon={() => <Newspaper {...props} />}
           imgIcon={() => <img src={config.icon} alt={uiReference} />}
         />
       )}
