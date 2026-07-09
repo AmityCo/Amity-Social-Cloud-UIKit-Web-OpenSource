@@ -3,6 +3,7 @@ import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 
 export const useCommunityActions = (
   {
@@ -45,6 +46,7 @@ export const useCommunityActions = (
 } => {
   const { success, info } = useNotifications();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { refetch: refetchGlobalFeed } = useGlobalFeedContext();
 
   const { mutate: joinCommunity } = useMutation({
     mutationFn: async (community: Amity.Community) => await community.join(),
@@ -55,6 +57,13 @@ export const useCommunityActions = (
             ? resolveString('amity_social_label_joined_community', community.displayName)
             : resolveString('amity_social_modal_dialog_join_request_sent'),
       });
+      // Refresh the newsfeed so posts from the newly joined community show up
+      // immediately without requiring a manual page refresh. Only do this when
+      // the join actually succeeded (a pending join request does not grant feed
+      // access yet).
+      if (data.status === 'success') {
+        refetchGlobalFeed?.();
+      }
       onJoinSuccess?.({ data, communityId: community.communityId });
     },
     onError: (error) => {
@@ -69,6 +78,9 @@ export const useCommunityActions = (
     mutationFn: (community: Amity.Community) =>
       CommunityRepository.leaveCommunity(community.communityId),
     onSuccess: () => {
+      // Refresh the newsfeed so posts from the community the user just left are
+      // removed immediately without requiring a manual page refresh.
+      refetchGlobalFeed?.();
       onLeaveSuccess?.()
         ? onLeaveSuccess?.()
         : success({
