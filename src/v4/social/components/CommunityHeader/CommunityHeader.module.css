@@ -22,7 +22,7 @@
 .moreButton {
   position: absolute;
   top: 0.625rem;
-  background: rgb(0 0 0 / 50%);
+  background: var(--asc-color-transparent-black);
   color: var(--asc-color-white);
   border: none;
   border-radius: 50%;

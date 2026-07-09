@@ -1,7 +1,7 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import { useString } from '~/v4/core/localization';
 import clsx from 'clsx';
-import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
+import { useReactionsCollection } from '~/v4/core/hooks/collections';
 import { Typography } from '~/v4/core/components';
 import { useCustomReaction, AmityReactionType } from '~/v4/core/providers/CustomReactionProvider';
 import { abbreviateCount } from '~/v4/utils/abbreviateCount';
@@ -96,14 +96,7 @@ export const ReactionList = ({
     componentId,
   });
 
-  const {
-    reactions,
-    error,
-    loading: isLoading,
-    hasMore,
-    loadMore,
-    refresh,
-  } = useReactionsCollection({
+  const { reactions, error, isLoading, hasMore, loadMore, refresh } = useReactionsCollection({
     referenceId,
     referenceType,
     limit: 25,

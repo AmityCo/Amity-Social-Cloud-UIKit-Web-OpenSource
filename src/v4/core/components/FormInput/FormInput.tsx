@@ -20,6 +20,7 @@ type FormInputProps = Omit<TextFieldProps, 'onChange'> &
     label?: string;
     error?: boolean;
     optional?: boolean;
+    required?: boolean;
     maxLength?: number;
     helperText?: string;
     multiLine?: boolean;
@@ -42,6 +43,7 @@ export const FormInput = forwardRef(function (
     className,
     multiLine = false,
     optional = false,
+    required = false,
     variant = 'underlined',
     pageId = PAGE_ID.WILD_CARD,
     elementId = ELEMENT_ID.WILD_CARD,
@@ -68,6 +70,7 @@ export const FormInput = forwardRef(function (
           label={label}
           pageId={pageId}
           optional={optional}
+          required={required}
           elementId={elementId}
           componentId={componentId}
         />

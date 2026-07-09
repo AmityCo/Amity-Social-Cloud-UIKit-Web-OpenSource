@@ -1,0 +1,1 @@
+export { AvatarPicker } from './AvatarPicker';

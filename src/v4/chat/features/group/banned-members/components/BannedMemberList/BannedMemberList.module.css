@@ -1,0 +1,4 @@
+.bannedMemberList {
+  display: flex;
+  flex-direction: column;
+}

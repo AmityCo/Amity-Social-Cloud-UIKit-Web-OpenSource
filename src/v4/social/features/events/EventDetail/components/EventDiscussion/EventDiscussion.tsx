@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useString } from '~/v4/core/localization';
 import { Plus } from '~/v4/icons/Plus';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { Menu } from '~/v4/social/elements';
+import { Menu } from '~/v4/core/components/Menu';
 import EmptyPost from '~/v4/icons/EmptyPost';
 import CreatePoll from '~/v4/icons/CreatePoll';
 import { Typography } from '~/v4/core/components';
@@ -17,6 +17,8 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { EmptyContent } from '~/v4/social/internal-components/EmptyContent';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -45,6 +47,10 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { discardPostCreation } = useDiscardPostCreation();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
+  const { goToLivestreamUnsupportedPage } = useNavigation();
+  const { community: discussionCommunity } = useCommunity({
+    communityId: event.discussionCommunityId,
+  });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({ pageId, componentId });
 
@@ -61,7 +67,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     {
       id: useString('amity_social_label_community_post_label'),
       label: useString('amity_social_label_community_post_label'),
-      Icon: CreatePost,
+      icon: CreatePost,
       onPress: () => {
         removeDrawerData();
         AmityEventDetailPageBehavior?.goToPostComposerPage?.({
@@ -69,13 +75,14 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
           targetName: event.title,
           targetType: 'community',
           targetId: event.discussionCommunityId!,
+          community: discussionCommunity as Amity.Community,
         });
       },
     },
     {
       id: 'poll',
       label: useString('amity_social_button_poll'),
-      Icon: CreatePoll,
+      icon: CreatePoll,
       onPress: () => {
         setDrawerData({
           content: (
@@ -93,13 +100,11 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     {
       id: 'livestream',
       label: useString('amity_social_status_live_stream'),
-      Icon: LivestreamFill,
+      icon: LivestreamFill,
       onPress: () => {
         removeDrawerData();
-        AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
-          targetType: 'community',
-          targetId: event.discussionCommunityId!,
-        });
+
+        goToLivestreamUnsupportedPage();
       },
     },
   ];
@@ -124,6 +129,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
               view: 'desktop',
               isDismissable: false,
               onClose: ({ close }) => discardPostCreation({ pageId, onDiscard: close }),
+              headerClassName: styles.eventDiscussion__composerPopupHeader,
               header: (
                 <CommunityDisplayName
                   pageId={pageId}
@@ -135,7 +141,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
                 <PostComposerPage
                   mode={Mode.CREATE}
                   targetType="community"
-                  community={event.targetCommunity}
+                  community={discussionCommunity as Amity.Community}
                   targetId={event.discussionCommunityId!}
                 />
               ),

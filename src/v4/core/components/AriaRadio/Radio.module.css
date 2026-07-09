@@ -30,6 +30,7 @@
 .radio[data-selected]::before {
   border-width: 0.475rem;
   border-color: var(--asc-color-primary-default);
+  background-color: var(--asc-color-white);
 }
 
 .radio[data-selected][data-pressed]::before {

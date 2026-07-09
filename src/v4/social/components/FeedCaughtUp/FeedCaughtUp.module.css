@@ -1,0 +1,34 @@
+.feedCaughtUp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem;
+  gap: 0.5rem;
+  border-radius: 0;
+  border: none;
+  background-color: var(--asc-color-background-default);
+}
+
+.feedCaughtUp__icon {
+  width: 2.625rem;
+  height: 2.625rem;
+  color: var(--asc-color-base-shade4);
+  fill: var(--asc-color-base-shade4);
+}
+
+.feedCaughtUp__title {
+  margin: 0;
+  color: var(--asc-color-base-shade2);
+  text-align: center;
+}
+
+.feedCaughtUp__cta {
+  margin-top: 0.5rem;
+}
+
+@media only screen and (width >= 48em) {
+  .feedCaughtUp {
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+}

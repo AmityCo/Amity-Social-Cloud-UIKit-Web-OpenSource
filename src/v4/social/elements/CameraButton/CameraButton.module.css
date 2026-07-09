@@ -27,3 +27,25 @@
 .cameraButton_input {
   display: none;
 }
+
+.cameraButton[data-layout='column'] {
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: 0.25rem;
+  width: 3.75rem;
+  background: transparent;
+  border: none;
+}
+
+.cameraButton[data-layout='column'] .cameraButton__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  background: var(--asc-color-background-shade1);
+}
+
+.cameraButton[data-layout='column'] .cameraButton__label {
+  color: var(--asc-color-base-shade1);
+  text-align: center;
+}

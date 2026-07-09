@@ -11,10 +11,11 @@
   width: 2.5rem;
   height: 2.5rem;
   margin-bottom: 1rem;
-  fill: var(--asc-color-background-neutral-400);
+  color: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-shade3);
 }
 
 .globalBan__text {
   text-align: center;
-  color: var(--asc-color-border);
+  color: var(--asc-color-base-shade3);
 }

@@ -1,0 +1,14 @@
+.mutedBanner {
+  display: flex;
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+  align-items: flex-start;
+  background: var(--asc-color-background-shade1);
+}
+
+.mutedBanner__text {
+  flex: 1 0 0;
+  min-width: 0;
+  text-align: center;
+  color: var(--asc-color-base-shade1);
+}

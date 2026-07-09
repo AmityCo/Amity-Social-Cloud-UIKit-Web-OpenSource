@@ -28,7 +28,7 @@
 .rsvpButton__status {
   width: 100%;
   border: 1px solid var(--asc-color-secondary-shade3);
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
   color: var(--asc-color-base-default);
 }
 
@@ -87,7 +87,7 @@
   color: var(--asc-color-base-default);
   width: 100%;
   margin-top: 0.75rem;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-background-default);
   border: 1px solid var(--asc-color-secondary-shade3);
 }
 

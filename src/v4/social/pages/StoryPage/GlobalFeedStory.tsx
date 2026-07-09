@@ -4,7 +4,7 @@ import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
-import { checkStoryPermission } from '~/utils';
+import { checkStoryPermission } from '~/v4/social/utils';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -61,7 +61,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   onSwipeDown,
   onClickCommunity,
 }) => {
-  const { accessibilityId } = useAmityPage({ pageId });
+  const { accessibilityId, themeStyles } = useAmityPage({ pageId });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
   const { client, currentUserId } = useSDK();
@@ -273,7 +273,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         actions: [
           isStoryCreator || isModerator
             ? {
-                name: resolveString('amity_social_button_delete'),
+                name: resolveString('amity_social_button_delete_story'),
                 action: () => deleteStory(story?.storyId as string),
                 icon: <TrashIcon className={styles.deleteIcon} />,
               }
@@ -365,7 +365,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   };
 
   return (
-    <div className={clsx(styles.storyWrapper)} data-testid={accessibilityId}>
+    <div className={clsx(styles.storyWrapper)} data-testid={accessibilityId} style={themeStyles}>
       <ArrowLeftButton onClick={previousStory} />
       <motion.div
         id={targetRootId}

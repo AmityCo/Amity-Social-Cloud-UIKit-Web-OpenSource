@@ -7,7 +7,6 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import millify from 'millify';
-import useSDK from '~/v4/core/hooks/useSDK';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 interface UserFollowingProps {

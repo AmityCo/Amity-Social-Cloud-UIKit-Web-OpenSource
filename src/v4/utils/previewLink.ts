@@ -18,7 +18,7 @@ export const getLinkPreviewMetadata = async (url: string): Promise<PreviewMetada
     title: data.title || '',
     imageUrl: data.image || '',
     url,
-    domain: data.domain,
+    domain: data.domain || '',
     timestamp: new Date(),
   };
 };

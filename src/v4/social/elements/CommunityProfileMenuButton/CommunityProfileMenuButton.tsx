@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Menu } from '~/v4/icons/Menu';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -15,7 +15,7 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import Users from '~/v4/icons/Users';
 import useSDK from '~/v4/core/hooks/useSDK';
 import Setting from '~/v4/icons/Setting';
-import { SharableModel } from '~/v4/utils/sharableLink';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 export type CommunityProfileMenuButtonProps = ButtonProps & {
   pageId?: string;
@@ -38,7 +38,7 @@ export function CommunityProfileMenuButton({
   const { isDesktop } = useResponsive();
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { currentUserId, isVisitorOrBot } = useSDK();
+  const { currentUserId } = useSDK();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const {
     isExcluded,
@@ -64,8 +64,6 @@ export function CommunityProfileMenuButton({
 
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
   const isMember = community?.isJoined;
-
-  if (isVisitorOrBot) return null;
 
   const shouldShowCopyButton =
     community?.isPublic || community?.isDiscoverable || isCommunityModerator;
@@ -104,7 +102,7 @@ export function CommunityProfileMenuButton({
             <CopyLinkButton
               pageId={pageId}
               componentId={componentId}
-              model={SharableModel.COMMUNITY}
+              model={AmitySharableContentType.COMMUNITY}
               referenceId={community?.communityId}
               onDone={isDesktop ? removeDrawerData : closePopover}
               textId="amity_social_label_copy_profile_link"

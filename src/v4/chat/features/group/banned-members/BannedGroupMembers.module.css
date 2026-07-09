@@ -1,0 +1,14 @@
+.bannedGroupMembers {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-background-default);
+  min-height: 100svh;
+}
+
+.bannedGroupMembers__searchBar {
+  position: sticky;
+  top: 3.625rem;
+  z-index: 9;
+  padding: 0.5rem 1rem;
+  background-color: var(--asc-color-background-default);
+}

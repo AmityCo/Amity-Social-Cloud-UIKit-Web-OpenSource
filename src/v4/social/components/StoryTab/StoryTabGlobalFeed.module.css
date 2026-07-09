@@ -18,7 +18,7 @@
   border-radius: 50%;
   overflow: hidden;
   border: 0.125rem solid var(--asc-color-white);
-  box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 10%);
+  box-shadow: 0 0.125rem 0.25rem rgb(from var(--asc-color-black) r g b / 10%);
 }
 
 .storyTabContent {
@@ -65,7 +65,7 @@
   width: 4.5rem;
   height: 0.75rem;
   border-radius: 0.25rem;
-  background-color: #f0f0f0;
+  background-color: var(--asc-color-base-shade4);
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 

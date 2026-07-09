@@ -34,7 +34,6 @@ import useCommunity from '~/v4/social/hooks/objects/useCommunity';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { PostTitle } from './PostTitle';
 import { ChildrenPostContent } from './ChildrenPostContent';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import { Comment, CommentSkeleton } from '~/v4/social/components/Comment';
 import { Divider } from '~/v4/social/elements/Divider';
 import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
@@ -50,6 +49,7 @@ import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-co
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -219,7 +219,7 @@ export const PostContent = ({
   });
 
   const { link: sharableLink } = useSharableLink({
-    model: SharableModel.POST,
+    model: AmitySharableContentType.POST,
     referenceId: post.postId,
   });
 
@@ -723,7 +723,7 @@ export const PostContent = ({
                                   <CopyLinkButton
                                     pageId={pageId}
                                     componentId={componentId}
-                                    model={SharableModel.POST}
+                                    model={AmitySharableContentType.POST}
                                     referenceId={post.postId}
                                     onDone={removeDrawerData}
                                   />
@@ -737,7 +737,7 @@ export const PostContent = ({
                       <CopyLinkButton
                         pageId={pageId}
                         componentId={componentId}
-                        model={SharableModel.POST}
+                        model={AmitySharableContentType.POST}
                         referenceId={post.postId}
                         onDone={isDesktop ? closePopover : removeDrawerData}
                       />

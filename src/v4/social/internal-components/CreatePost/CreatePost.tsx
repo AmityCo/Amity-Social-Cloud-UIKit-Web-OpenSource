@@ -50,6 +50,7 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { TextArea } from '~/v4/core/components/TextField';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
 import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
@@ -68,6 +69,7 @@ export function CreatePost({
   const drawerContentRef = useRef<HTMLDivElement>(null);
 
   const { currentUserId, client } = useSDK();
+  const { prependNewPost } = useGlobalFeedContext();
   const { user } = useUser({ userId: currentUserId });
   const { handleSubmit } = useForm();
   const { info, confirm } = useConfirmContext();
@@ -177,6 +179,8 @@ export function CreatePost({
 
     onSuccess: (response) => {
       const post = response.data;
+
+      prependNewPost(post);
 
       // Calculate expected product tags count (what we sent)
       const expectedTextProductTagsCount = productTags?.length || 0;

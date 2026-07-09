@@ -81,11 +81,11 @@
 }
 
 .productImageThumbnail__overlayBackground[data-theme='light'] {
-  background-color: rgb(255 255 255 / 80%);
+  background-color: var(--asc-color-background-transparent-white);
 }
 
 .productImageThumbnail__overlayBackground[data-theme='dark'] {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 /* Pinned banner */
@@ -99,14 +99,19 @@
   justify-content: center;
   gap: 0.25rem; /* 4px */
   height: 1.5rem; /* 24px */
-  background: linear-gradient(to bottom, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 80%) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgb(from var(--asc-color-black) r g b / 20%) 0%,
+    rgb(from var(--asc-color-black) r g b / 80%) 100%
+  );
   overflow: hidden;
 }
 
 .productImageThumbnail__pinnedIcon {
   width: 0.75rem; /* 12px */
   height: 0.75rem; /* 12px */
-  color: var(--asc-color-base-white);
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
   flex-shrink: 0;
 }
 

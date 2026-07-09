@@ -16,6 +16,7 @@ export function Popup() {
         const {
           style,
           header,
+          headerClassName,
           onClose,
           children,
           className,
@@ -55,7 +56,11 @@ export function Popup() {
                 {({ close }) => {
                   return (
                     <Fragment>
-                      {header && <Popup.Header onClose={close}>{header}</Popup.Header>}
+                      {header && (
+                        <Popup.Header onClose={close} className={headerClassName}>
+                          {header}
+                        </Popup.Header>
+                      )}
                       {typeof children === 'function' ? children({ close }) : children}
                     </Fragment>
                   );
@@ -83,7 +88,11 @@ export function Popup() {
                 {({ close }) => {
                   return (
                     <Fragment>
-                      {header && <Popup.Header onClose={close}>{header}</Popup.Header>}
+                      {header && (
+                        <Popup.Header onClose={close} className={headerClassName}>
+                          {header}
+                        </Popup.Header>
+                      )}
                       {typeof children === 'function' ? children({ close }) : children}
                     </Fragment>
                   );
@@ -99,12 +108,13 @@ export function Popup() {
 
 type PopupHeaderProps = PropsWithChildren<{
   pageId?: string;
+  className?: string;
   onClose?: () => void;
 }>;
 
-function PopupHeader({ onClose, children, pageId = '*' }: PopupHeaderProps) {
+function PopupHeader({ onClose, children, className, pageId = '*' }: PopupHeaderProps) {
   return (
-    <div className={clsx(styles.popup__header)}>
+    <div className={clsx(styles.popup__header, className)}>
       {children}
       <CloseButton
         pageId={pageId}

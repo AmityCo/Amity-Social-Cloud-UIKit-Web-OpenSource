@@ -3,17 +3,16 @@ import { useString, resolveString } from '~/v4/core/localization';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { LiveChatLoadingIndicator } from './LiveChatLoadingIndicator';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { SenderMessageBubble } from '~/v4/chat/elements/SenderMessageBubble';
 import { ReceiverMessageBubble } from '~/v4/chat/elements/ReceiverMessageBubble';
 import { deleteMessage, flagMessage } from '~/v4/utils';
-import useMessagesCollection from '~/chat/hooks/collections/useMessagesCollection';
+import useMessagesCollection from '~/v4/chat/hooks/collections/useMessagesCollection';
 import { Typography } from '~/v4/core/components';
 import Redo from '~/v4/icons/Redo';
 import { unFlagMessage } from '~/v4/utils/unFlagMessage';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
-import { useCopyMessage } from '~/v4/core/hooks';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 import styles from './MessageList.module.css';
@@ -36,22 +35,23 @@ export const MessageList = ({
   const [height, setHeight] = useState<number | undefined>(undefined);
   const { confirm } = useConfirmContext();
   const notification = useLiveChatNotifications();
-  const copyMessage = useCopyMessage();
-
   const { themeStyles } = useAmityComponent({ pageId, componentId });
 
   const {
     messages: rawMessages,
     hasMore,
     loadMore,
-    isLoading,
+    loading: isLoading,
     error,
-  } = useMessagesCollection({
-    subChannelId: channel.channelId,
-    sortBy: 'segmentDesc',
-    limit: 10,
-    includeDeleted: true,
-  });
+  } = useMessagesCollection(
+    {
+      subChannelId: channel.channelId,
+      sortBy: 'segmentDesc',
+      limit: 10,
+      includeDeleted: true,
+    },
+    true,
+  );
 
   const messages = rawMessages as Amity.Message<'text'>[];
 
@@ -108,7 +108,7 @@ export const MessageList = ({
           className={styles.infiniteScrollInner}
           scrollableTarget={containerRef.current}
           scrollThreshold={0.7}
-          hasMore={hasMore}
+          hasMore={hasMore ?? false}
           next={loadMore}
           loader={
             isLoading ? (
@@ -131,7 +131,8 @@ export const MessageList = ({
                       ? {
                           onReply: () => replyMessage(message),
                           onDelete: () => onDeleteMessage(message.messageId),
-                          onCopy: () => message.data?.text && copyMessage(message.data?.text),
+                          onCopy: () =>
+                            message.data?.text && navigator.clipboard.writeText(message.data.text),
                         }
                       : undefined
                   }
@@ -148,7 +149,8 @@ export const MessageList = ({
                 action={{
                   onReply: () => replyMessage(message),
                   onDelete: () => onDeleteMessage(message.messageId),
-                  onCopy: () => message.data?.text && copyMessage(message.data?.text),
+                  onCopy: () =>
+                    message.data?.text && navigator.clipboard.writeText(message.data.text),
                   onFlag: () =>
                     flagMessage(
                       message.messageId,

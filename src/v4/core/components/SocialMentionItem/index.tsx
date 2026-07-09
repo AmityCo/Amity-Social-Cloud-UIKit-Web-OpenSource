@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import BanIcon from '~/icons/Ban';
-import useObserver from '~/core/hooks/useObserver';
-import useUser from '~/core/hooks/useUser';
-import useImage from '~/core/hooks/useImage';
+import BanIcon from '~/v4/icons/Banned';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import useUser from '~/v4/core/hooks/objects/useUser';
+import useImage from '~/v4/core/hooks/useImage';
 import styles from './styles.module.css';
-import { MentionIcon } from '~/icons';
+import { MentionIcon } from '~/v4/icons';
 import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { Avatar } from '~/v4/core/components/Avatar';
@@ -22,33 +22,23 @@ interface SocialMentionItemProps {
 
 interface UserMentionItemProps {
   id: string;
-  entry: IntersectionObserverEntry | null;
   onMouseEnter: (e: React.MouseEvent, isBanned: boolean | undefined) => void;
   focused: boolean;
   isLastItem: boolean;
-  loadMore?: () => void;
   targetRef: React.RefObject<HTMLDivElement>;
   containerRef: React.RefObject<HTMLDivElement>;
 }
 
 const UserMentionItem = ({
   id,
-  entry,
   onMouseEnter,
   focused,
   isLastItem,
-  loadMore,
   targetRef,
   containerRef,
 }: UserMentionItemProps) => {
   const user = useUser(id);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
-
-  useEffect(() => {
-    if (targetRef && entry?.isIntersecting) {
-      loadMore?.();
-    }
-  }, [targetRef, entry?.isIntersecting, loadMore]);
 
   return (
     <div
@@ -107,8 +97,17 @@ const SocialMentionItem = ({
   containerRef,
 }: SocialMentionItemProps) => {
   const targetRef = useRef<HTMLDivElement>(null);
-  const entry = useObserver(targetRef?.current, {
-    root: rootEl?.current?.childNodes[0] as Element,
+
+  const handleIntersect = useCallback(() => {
+    if (isLastItem) {
+      loadMore?.();
+    }
+  }, [isLastItem, loadMore]);
+
+  useIntersectionObserver({
+    node: targetRef.current,
+    onIntersect: handleIntersect,
+    options: { root: rootEl?.current?.childNodes[0] as Element },
   });
 
   // Slow performance, need more pristine approach
@@ -135,11 +134,9 @@ const SocialMentionItem = ({
   return (
     <UserMentionItem
       id={id}
-      entry={entry}
       onMouseEnter={onMouseEnter}
       focused={focused}
       isLastItem={isLastItem}
-      loadMore={loadMore}
       targetRef={targetRef}
       containerRef={containerRef}
     />

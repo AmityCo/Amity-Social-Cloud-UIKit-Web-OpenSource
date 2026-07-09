@@ -43,6 +43,15 @@
   border-bottom: 2px solid var(--border-color);
 }
 
+.tabList[data-full-width='false'] {
+  justify-content: flex-start;
+}
+
+.tab[data-full-width='false'] {
+  width: auto;
+  flex: 0 0 auto;
+}
+
 .tab[data-variant='icon'],
 .tab[data-variant='underlined'] {
   padding-bottom: 1rem;
@@ -99,6 +108,50 @@
 
 .tabPanel::-webkit-scrollbar {
   display: none;
+}
+
+.tabList[data-variant='chip'] {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabList[data-variant='chip']::-webkit-scrollbar {
+  display: none;
+}
+
+.tab[data-variant='chip'] {
+  outline: none;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-base-background);
+  color: var(--asc-color-base-shade1);
+  transition:
+    background-color 200ms,
+    border-color 200ms,
+    color 200ms;
+  white-space: nowrap;
+}
+
+.tab[data-variant='chip'][data-hovered] {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.tab[data-variant='chip'][data-selected] {
+  background-color: var(--asc-color-primary-default);
+  border-color: var(--asc-color-primary-default);
+  color: var(--asc-color-white);
+}
+
+.tab[data-variant='chip'][data-disabled] {
+  color: var(--asc-color-base-shade3);
+  cursor: not-allowed;
 }
 
 @media only screen and (width < 48em) {

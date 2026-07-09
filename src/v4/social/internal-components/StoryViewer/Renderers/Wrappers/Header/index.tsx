@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 import Truncate from 'react-truncate-markup';
-import { PauseIcon, PlayIcon } from '~/icons';
+import { PauseIcon, PlayIcon } from '~/v4/icons';
 import Verified from '~/v4/social/icons/verified';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { CloseButton, OverflowMenuButton } from '~/v4/social/elements';

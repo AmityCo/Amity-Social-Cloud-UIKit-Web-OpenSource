@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  background-color: var(--asc-color-background-default-sh);
+  background-color: var(--asc-color-background-default);
 }
 
 .innerContainer {

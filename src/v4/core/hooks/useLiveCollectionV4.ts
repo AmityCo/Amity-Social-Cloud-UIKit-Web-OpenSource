@@ -29,6 +29,8 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;
+  hasPrev: boolean;
+  loadPrev: () => void;
   error: Error | null;
   loadMoreHasBeenCalled: boolean;
   refresh: () => void;
@@ -41,7 +43,9 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
   const [items, setItems] = useState<TCallback[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
+  const [hasPrev, setHasPrev] = useState(false);
   const loadMoreFnRef = useRef<(() => void) | null>(null);
+  const loadPrevFnRef = useRef<(() => void) | null>(null);
   const unsubscribeRef = useRef<Amity.Unsubscriber | null>(null);
 
   const loadMore = useCallback(() => {
@@ -50,6 +54,12 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
       loadMoreFnRef.current?.();
     }
   }, [loadMoreFnRef]);
+
+  const loadPrev = useCallback(() => {
+    if (loadPrevFnRef.current) {
+      loadPrevFnRef.current?.();
+    }
+  }, [loadPrevFnRef]);
 
   const callbackFn = useCallback(
     (response) => {
@@ -63,8 +73,10 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
       }
       loadingCountRef.current += 1;
       setHasMore(response.hasNextPage);
+      setHasPrev(!!response.hasPrevPage);
       setError(response.error);
       loadMoreFnRef.current = response.onNextPage;
+      loadPrevFnRef.current = response.onPrevPage ?? null;
       callback(response);
     },
     [shouldCall],
@@ -98,6 +110,8 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
     hasMore,
     isLoading,
     loadMore,
+    hasPrev,
+    loadPrev,
     refresh,
     isLoadingFirstPage,
     loadMoreHasBeenCalled,

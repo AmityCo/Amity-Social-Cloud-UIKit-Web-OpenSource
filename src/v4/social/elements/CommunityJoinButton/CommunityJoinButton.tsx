@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, ButtonProps } from '~/v4/core/components/AriaButton';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';

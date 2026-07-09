@@ -86,7 +86,7 @@
 }
 
 .manageProductTag__thumbnailOverlay {
-  background-color: rgb(0 0 0 / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 .manageProductTag__pinButtonText {

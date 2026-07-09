@@ -36,7 +36,7 @@ export const generateShades = (hexColor?: string, isDarkMode = false): string[] 
 };
 
 export function useGenerateStylesShadeColors(config: GetConfigReturnValue) {
-  const { currentTheme } = useTheme();
+  const { currentTheme, forcedTheme } = useTheme();
 
   const preferredTheme = useMemo(() => {
     if (config?.preferred_theme && config?.preferred_theme !== 'default') {
@@ -46,7 +46,9 @@ export function useGenerateStylesShadeColors(config: GetConfigReturnValue) {
     return 'default';
   }, [config?.preferred_theme, currentTheme]);
 
-  const computedTheme = preferredTheme === 'default' ? currentTheme : preferredTheme;
+  // A forced theme (e.g. the story viewer which is always light) must win over both the
+  const computedTheme =
+    forcedTheme ?? (preferredTheme === 'default' ? currentTheme : preferredTheme);
 
   const generatedColors = useMemo(() => {
     const themeConfig = config?.theme?.[computedTheme] || {};
@@ -88,6 +90,8 @@ type Theme = 'light' | 'dark';
 
 export const ThemeContext = createContext<{
   currentTheme: Theme;
+  /** When set, overrides both preferred_theme and currentTheme for style generation. */
+  forcedTheme?: Theme;
   toggleTheme: (theme: Theme) => void;
   setDefaultTheme: () => void;
 }>({
@@ -149,7 +153,7 @@ export const ThemeProvider: React.FC<PropsWithChildren<{ config?: Config }>> = (
 };
 
 export const useTheme = () => {
-  const { currentTheme, toggleTheme, setDefaultTheme } = useContext(ThemeContext);
+  const { currentTheme, forcedTheme, toggleTheme, setDefaultTheme } = useContext(ThemeContext);
 
-  return { currentTheme, toggleTheme, setDefaultTheme };
+  return { currentTheme, forcedTheme, toggleTheme, setDefaultTheme };
 };

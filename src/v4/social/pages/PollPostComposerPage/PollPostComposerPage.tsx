@@ -872,7 +872,7 @@ export const PollPostComposerPage = ({
                 pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
               }
             >
-              {useString('amity_social_label_community_post_label')}
+              {useString('amity_social_button_post_composer_create_button')}
             </AriaButton>
           </div>
         )}

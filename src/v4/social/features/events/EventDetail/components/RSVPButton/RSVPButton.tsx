@@ -7,7 +7,7 @@ import { MemberBottomSheet } from './MemberBottomSheet';
 import { NonMemberBottomSheet } from './NonMemberBottomSheet';
 import { AmityEventResponseStatus, AmityEventStatus } from '@amityco/ts-sdk';
 import { Dispatch, SetStateAction } from 'react';
-import { Check } from '~/icons';
+import { Check } from '~/v4/icons';
 import CloseIcon from '~/v4/icons/Close';
 import { UpdateStatusBottomSheet } from './UpdateStatusBottomSheet';
 import { useSDK } from '~/v4/core/hooks/useSDK';

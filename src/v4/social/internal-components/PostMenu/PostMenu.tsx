@@ -1,6 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
-import { ContentFlagReasonEnum, PollRepository, PostRepository } from '@amityco/ts-sdk';
+import {
+  AmitySharableContentType,
+  ContentFlagReasonEnum,
+  PollRepository,
+  PostRepository,
+} from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -22,7 +27,6 @@ import { ContentReportReason } from '~/v4/core/internal-components/ContentReport
 import useSDK from '~/v4/core/hooks/useSDK';
 import { checkDeleteCommunityPostPermission } from '~/v4/social/utils';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
-import { SharableModel } from '~/v4/utils/sharableLink';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import { Pencil } from '~/v4/icons/Pencil';
@@ -369,7 +373,7 @@ export const PostMenu = ({
         <CopyLinkButton
           pageId={pageId}
           componentId={componentId}
-          model={SharableModel.POST}
+          model={AmitySharableContentType.POST}
           referenceId={post.postId}
           onDone={onCloseMenu}
         />

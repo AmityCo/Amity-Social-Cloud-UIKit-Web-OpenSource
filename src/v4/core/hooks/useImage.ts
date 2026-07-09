@@ -27,3 +27,5 @@ export const useImage = ({ fileId, imageSize = 'medium' }: UseImageProps) => {
 
   return imageUrl;
 };
+
+export default useImage;

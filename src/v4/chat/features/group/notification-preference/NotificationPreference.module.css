@@ -1,0 +1,5 @@
+.notificationPreference {
+  display: block;
+  width: 100%;
+  background: var(--asc-color-background-default);
+}

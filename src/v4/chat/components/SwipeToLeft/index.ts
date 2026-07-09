@@ -1,0 +1,1 @@
+export { SwipeToLeft } from './SwipeToLeft';

@@ -386,7 +386,7 @@ export const TextWithMention = ({
           onPointerDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
-          {child.text}
+          {isSearchPost ? getHighlightedText(child.text, [keyword]) : child.text}
         </span>
       );
     }

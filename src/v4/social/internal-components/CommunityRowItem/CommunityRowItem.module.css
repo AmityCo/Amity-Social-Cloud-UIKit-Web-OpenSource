@@ -14,6 +14,7 @@
   max-width: 5rem;
   position: relative;
   border-radius: var(--asc-border-radius-sm);
+  background-color: var(--asc-color-secondary-shade3);
 }
 
 .communityRowItem__order {

@@ -3,7 +3,10 @@ import type { EditorContentType } from '~/v4/core/components/TextEditor/TextEdit
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
-import { SEARCH_USER_MINIMUM_CHARACTER } from '~/social/constants';
+import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChannelMembersCollection';
+import { useMentionAllConfig } from '~/v4/chat/hooks/useMentionAllConfig';
+import { TEXT } from '~/v4/chat/constants';
+const SEARCH_USER_MINIMUM_CHARACTER = 2;
 
 export interface SuggestionData {
   userId: string;
@@ -30,12 +33,22 @@ export const useSuggestions = (
 
   const { community, isLoading: isCommunityLoading } = useCommunity({ communityId });
 
-  const isSearchCommunityMembers = useMemo(() => {
-    if (editorContentType === 'message') {
-      return true; // Always search channel members for messages
-    }
-    return !!communityId && !isCommunityLoading && !community?.isPublic;
-  }, [editorContentType, communityId, isCommunityLoading, community]);
+  const isChatMode = editorContentType === 'message';
+  const isSearchChannelMembers = isChatMode && !!channelId;
+  const isSearchCommunityMembers =
+    !isChatMode && !!communityId && !isCommunityLoading && !community?.isPublic;
+
+  const {
+    members: channelMembers,
+    hasMore: hasMoreChannelMember,
+    isLoading: isLoadingChannelMember,
+    loadMore: loadMoreChannelMember,
+  } = useChannelMembersCollection({
+    channelId: isSearchChannelMembers ? channelId! : '',
+    memberships: ['member', 'muted'],
+    search: queryString ?? undefined,
+    limit: 10,
+  });
 
   const {
     members,
@@ -43,7 +56,7 @@ export const useSuggestions = (
     isLoading: isLoadingMember,
     loadMore: loadMoreMember,
   } = useMemberQueryByDisplayName({
-    communityId: editorContentType === 'message' ? channelId || '' : communityId || '',
+    communityId: communityId || '',
     displayName: queryString || '',
     limit: 10,
     enabled: isSearchCommunityMembers,
@@ -57,53 +70,64 @@ export const useSuggestions = (
   } = useUserQueryByDisplayName({
     displayName: effectiveUserQuery,
     limit: 10,
-    enabled: !isSearchCommunityMembers,
+    enabled: !isChatMode && !isSearchCommunityMembers,
   });
 
   const onQueryChange = (newQuery: string | null) => {
     setQueryString(newQuery);
   };
 
-  const suggestions = useMemo(() => {
-    if (!!communityId && isCommunityLoading) return [];
+  const isMentionAllEnabled = useMentionAllConfig();
 
-    if (isSearchCommunityMembers) {
-      return members.map(({ user, userId }) => ({
-        userId: user?.userId || userId,
-        displayName: user?.displayName,
-      }));
-    }
+  const baseSuggestions: { userId: string; displayName?: string }[] = isSearchChannelMembers
+    ? channelMembers
+        .filter((member) => !member.user?.isGlobalBanned)
+        .map((member) => ({
+          userId: member.user?.userId ?? member.userId,
+          displayName: member.user?.displayName,
+        }))
+        .filter((s) => !!s.userId)
+    : !!communityId && isCommunityLoading
+      ? []
+      : isSearchCommunityMembers
+        ? members.map(({ user, userId }) => ({
+            userId: user?.userId || userId,
+            displayName: user?.displayName,
+          }))
+        : users.map(({ displayName, userId }) => ({
+            userId: userId,
+            displayName: displayName,
+          }));
 
-    return users.map(({ displayName, userId }) => ({
-      userId: userId,
-      displayName: displayName,
-    }));
-  }, [users, members, isSearchCommunityMembers, isCommunityLoading, communityId]);
+  const isEmptyQuery = (queryString ?? '').trim().length === 0;
+  const shouldShowAll = isChatMode && isEmptyQuery && isMentionAllEnabled;
 
-  const hasMore = useMemo(() => {
-    if (isSearchCommunityMembers) {
-      return hasMoreMember;
-    } else {
-      return hasMoreUser;
-    }
-  }, [isSearchCommunityMembers, hasMoreMember, hasMoreUser]);
+  const suggestions = shouldShowAll
+    ? [{ userId: 'all', displayName: TEXT.MENTION.PICKER.ALL_LABEL }, ...baseSuggestions]
+    : baseSuggestions;
+
+  const hasMore = isSearchChannelMembers
+    ? hasMoreChannelMember
+    : isSearchCommunityMembers
+      ? hasMoreMember
+      : hasMoreUser;
+
+  const isLoading = isSearchChannelMembers
+    ? isLoadingChannelMember
+    : isSearchCommunityMembers
+      ? isLoadingMember
+      : isLoadingUser;
 
   const loadMore = () => {
     if (isLoading || !hasMore) return;
-    if (isSearchCommunityMembers) {
+    if (isSearchChannelMembers) {
+      loadMoreChannelMember();
+    } else if (isSearchCommunityMembers) {
       loadMoreMember();
     } else {
       loadMoreUser();
     }
   };
-
-  const isLoading = useMemo(() => {
-    if (isSearchCommunityMembers) {
-      return isLoadingMember;
-    } else {
-      return isLoadingUser;
-    }
-  }, [isLoadingMember, isLoadingUser, isSearchCommunityMembers]);
 
   return { suggestions, queryString, onQueryChange, loadMore, hasMore, isLoading };
 };

@@ -1,0 +1,38 @@
+.groupSetting {
+  display: block;
+  width: 100%;
+  background: var(--asc-color-background-default);
+}
+
+.groupSetting__avatarWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.groupSetting__avatar {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.groupSetting__section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.groupSetting__sectionTitle {
+  padding: 1.5rem 1rem 0.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.groupSetting__divider {
+  width: calc(100% - 2rem);
+  height: 0.0625rem;
+  margin: 0 1rem;
+  border: none;
+  background: var(--asc-color-base-shade4);
+}

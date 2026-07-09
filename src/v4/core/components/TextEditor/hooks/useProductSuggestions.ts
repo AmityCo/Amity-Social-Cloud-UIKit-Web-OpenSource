@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { SEARCH_PRODUCT_MINIMUM_CHARACTER } from '~/social/constants';
+const SEARCH_PRODUCT_MINIMUM_CHARACTER = 3;
 import { useSearchProducts } from '~/v4/social/features/product-tagged/hooks';
 
 export interface ProductSuggestionData {

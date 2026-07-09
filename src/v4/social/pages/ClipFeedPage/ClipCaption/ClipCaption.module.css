@@ -23,7 +23,11 @@
   left: 0;
   right: 0;
   height: 0; /* Will be set dynamically by JavaScript */
-  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 80%) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(from var(--asc-color-black) r g b / 0%) 0%,
+    rgb(from var(--asc-color-black) r g b / 80%) 100%
+  );
   z-index: 0;
   pointer-events: none;
 }

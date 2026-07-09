@@ -1,4 +1,4 @@
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
 
 const useCurrentUserChannelMembership = (channelId: Amity.Channel['channelId']) => {

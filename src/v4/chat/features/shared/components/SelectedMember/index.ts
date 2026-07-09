@@ -1,0 +1,1 @@
+export { SelectedMember } from './SelectedMember';

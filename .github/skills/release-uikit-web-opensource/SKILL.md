@@ -97,8 +97,32 @@ git checkout -b release/v<VERSION>
 
 ```sh
 git fetch upstream
-git merge upstream/develop --allow-unrelated-histories
 ```
+
+**Choose the correct upstream source branch before merging:**
+
+| Situation | Merge from |
+|-----------|------------|
+| Upstream `develop` is clean and everything on it is ready to ship | `upstream/develop` |
+| Upstream `develop` contains staging / in-progress features that must NOT ship in this release | the matching `upstream/release/v<VERSION>` branch (a curated cut that excludes unfinished work) |
+
+Check whether a matching upstream release branch exists for this version:
+
+```sh
+git branch -r | grep "upstream/release/v<VERSION>"
+```
+
+If it exists and `develop` has unshippable work in flight, prefer the release branch:
+
+```sh
+# Default — upstream develop is clean:
+git merge upstream/develop --allow-unrelated-histories
+
+# OR, when develop has staging features that must not ship:
+git merge upstream/release/v<VERSION> --allow-unrelated-histories
+```
+
+When unsure which branch to use, **ask the user** — they know whether `develop` currently holds features being staged.
 
 This will produce conflicts. Resolve them following these rules — **accept all incoming changes EXCEPT:**
 
@@ -107,6 +131,26 @@ This will produce conflicts. Resolve them following these rules — **accept all
 | `package.json` | Keep `name` and `version` from **current** (OpenSource). Take all `dependencies`, `devDependencies`, `peerDependencies` from **incoming** (upstream). |
 | `pnpm-lock.yaml` | Accept **all current changes**, then run `pnpm install` to regenerate. |
 | `CHANGELOG.md` | Keep **current** changes only. |
+
+#### ⚠️ Watch for OpenSource-only removals being reverted
+
+Accepting "all incoming" for source files can silently **re-introduce code this fork intentionally removed** (it lives in upstream but was deleted here). The known case is bundled translations — e.g. PR #145 removed the bundled **TH** language (`src/v4/core/localization/defaults/th.*` and the `th` entry in `defaultLocaleMap.ts`), and merging upstream re-adds it.
+
+After resolving conflicts, check for any re-introduced TH (or other deliberately-removed) localization files:
+
+```sh
+git status --short | grep -i 'localization/defaults/' || echo "no new locale files"
+grep -rn "defaults/th\b\|thLocaleBundle" src/v4/core/localization/ || echo "no TH references"
+```
+
+If TH was re-added, re-remove it to preserve the fork's decision:
+
+```sh
+git rm -f src/v4/core/localization/defaults/th.json src/v4/core/localization/defaults/th.ts
+git checkout HEAD -- src/v4/core/localization/defaultLocaleMap.ts src/v4/core/localization/index.ts
+```
+
+Then re-run the build (step 7) to confirm nothing imports the removed files. When in doubt about whether a re-added file is intentional upstream content or a reverted removal, check `git log` for a prior "remove"/"fix: remove ... language" commit and confirm with the user.
 
 Before running `pnpm install`, check whether `@amityco/ts-sdk` in `package.json` matches the `latest` tag on NPM and is not a dev/nightly pre-release version. Upgrade if either condition fails:
 
@@ -147,11 +191,14 @@ git commit -m "chore: upgrade @amityco/ts-sdk to >=$LATEST_SDK"
 
 ### 7 — Run build to verify no errors after merge
 
+Run both the library build and the Storybook build — Storybook catches story/import errors the library build alone can miss:
+
 ```sh
 pnpm run build
+pnpm run storybook:build
 ```
 
-If the build fails, fix the errors before proceeding. Do **not** continue to the next step with a broken build.
+If either build fails, fix the errors before proceeding. Do **not** continue to the next step with a broken build.
 
 ### 8 — Human review: confirm upstream changes look correct
 
@@ -189,6 +236,14 @@ gh pr create \
 ```
 
 ### 10 — Trigger the GitHub Actions production pipeline via GitHub CLI
+
+> **Always pass `--repo AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource` explicitly.** `gh` resolves the default repo from local config and frequently points at the **internal** repo `AmityCo/Amity-Social-Cloud-UIKit-Web`. Dispatching there fails with:
+>
+> ```
+> HTTP 422: No ref found for: release/v<VERSION>
+> ```
+>
+> If you hit this, the ref is fine — you dispatched against the wrong repo. Confirm with `gh repo view --json nameWithOwner -q .nameWithOwner` and re-run with the explicit `--repo` flag below. Also ensure the branch is pushed first (the workflow runs on the branch ref).
 
 **For a normal release** (patch / minor / major / stable), use:
 

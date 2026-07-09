@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import useSDK from '~/core/hooks/useSDK';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export const useChannelPermission = (subChannelId?: Amity.SubChannel['subChannelId']) => {
   const { client } = useSDK();

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Typography } from '~/v4/core/components';
-import Spinner from '~/social/components/Spinner';
+import { Spinner } from '~/v4/social/internal-components/Spinner/Spinner';
 import { HomeIndicator } from '~/v4/chat/internal-components/HomeIndicator';
 import { useString } from '~/v4/core/localization';
 import styles from './styles.module.css';
 
 const ChatLoadingState = ({ children }: { children?: React.ReactNode }) => {
-  const loadingChatLabel = useString('amity_chat_label_loading_chat');
+  const loadingChatLabel = useString('amity_chat_loading_label');
 
   return (
     <>

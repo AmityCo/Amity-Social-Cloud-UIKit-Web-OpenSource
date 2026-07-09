@@ -1,6 +1,4 @@
 import clsx from 'clsx';
-import React from 'react';
-
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -12,6 +10,7 @@ import { FileTrigger } from 'react-aria-components';
 type ImageButtonProps = {
   pageId: string;
   componentId?: string;
+  text?: string;
   onPress?: () => void;
   isSingleUpload?: boolean;
   imgIconClassName?: string;
@@ -24,6 +23,7 @@ type ImageButtonProps = {
 export function ImageButton({
   onPress,
   pageId = '*',
+  text,
   imgIconClassName,
   componentId = '*',
   onImageFileChange,
@@ -71,8 +71,8 @@ export function ImageButton({
           />
         )}
       />
-      {(resolveText(textId) || config.text) && (
-        <Typography.BodyBold>{resolveText(textId) || config.text}</Typography.BodyBold>
+      {(resolveText(textId) || text || config.text) && (
+        <Typography.BodyBold>{resolveText(textId) || text || config.text}</Typography.BodyBold>
       )}
     </Button>
   );

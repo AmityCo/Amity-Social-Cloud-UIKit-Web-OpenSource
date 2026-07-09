@@ -1,0 +1,48 @@
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  height: 3.5rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.memberItem__nameRow {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  min-width: 0;
+}
+
+.memberItem__name {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--asc-color-base-default);
+  text-align: left;
+}
+
+.memberItem__brandBadge {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.125rem;
+}
+
+.memberItem__youSuffix {
+  flex-shrink: 0;
+  margin-left: 0.25rem;
+  white-space: nowrap;
+  color: var(--asc-color-base-default);
+}
+
+.memberItem__mutedIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-left: 0.25rem;
+  color: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-shade3);
+}

@@ -17,7 +17,7 @@
   align-items: center;
   padding: 2rem 1rem 1rem;
   justify-content: space-between;
-  background-color: rgb(from var(--asc-color-black) r g b / 50%);
+  background-color: var(--asc-color-transparent-black);
 }
 
 .unavailableMediaViewer__closeButton {

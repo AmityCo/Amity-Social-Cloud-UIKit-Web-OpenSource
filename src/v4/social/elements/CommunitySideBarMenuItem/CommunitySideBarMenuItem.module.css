@@ -10,10 +10,9 @@
   color: var(--asc-color-base-default);
 }
 
-.communitySideBarMenuItem:hover,
-.communitySideBarMenuItem:active {
+.communitySideBarMenuItem:hover {
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-primary-shade3);
+  background-color: color-mix(in srgb, var(--asc-color-background-shade1) 30%, transparent);
 }
 
 .communitySideBarMenuItem:disabled {
@@ -64,6 +63,6 @@
 @media (width >= 48em) {
   .communitySideBarMenuItem[data-focus-visible] {
     color: var(--asc-color-base-default);
-    background-color: var(--asc-color-primary-shade3);
+    background-color: var(--asc-color-base-shade4);
   }
 }
