@@ -115,6 +115,7 @@
 }
 
 .liveStreamPlayer__videoSection__wrapper {
+  position: relative;
   height: 100%;
 }
 

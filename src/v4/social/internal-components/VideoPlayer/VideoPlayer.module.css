@@ -20,23 +20,63 @@
   cursor: pointer;
 }
 
-.playButton {
+.mobileControlsRow {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  pointer-events: auto;
+}
+
+.playButton {
   width: 2.5rem;
   height: 2.5rem;
   padding: 0.5rem;
   background: var(--asc-color-transparent-black);
   border-radius: 50%;
-  pointer-events: auto;
 }
 
 .playButtonIcon {
   width: 1.5rem;
   height: 1.5rem;
+  color: var(--asc-color-white);
+}
+
+.skipButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  background: var(--asc-color-transparent-black);
+  border-radius: 50%;
+}
+
+.skipButtonIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-white);
+}
+
+.desktopCenterPlayButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4rem;
+  height: 4rem;
+  padding: 1rem;
+  border-radius: 50%;
+  background: rgb(from var(--asc-color-black) r g b / 50%);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.desktopCenterPlayButtonIcon {
+  width: 2rem;
+  height: 2rem;
   color: var(--asc-color-white);
 }
 

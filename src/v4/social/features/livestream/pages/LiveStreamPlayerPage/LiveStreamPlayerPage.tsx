@@ -162,6 +162,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     plyrContainer,
     resetLiveStreamPlayerRef,
     reloadPlayer,
+    isPaused,
+    showControls,
+    togglePlayPause,
+    toggleControls,
   } = useLiveStreamPlayer({ videoRef, room });
 
   // Only request device permissions when not in player mode
@@ -611,6 +615,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                         onClickProductTagBadge={onClickProductTagBadge}
                         onClose={onClose}
                         canShowProductTags={canShowProductTags}
+                        isPaused={isPaused}
+                        showControls={showControls}
+                        onToggleControls={toggleControls}
+                        onTogglePlayPause={togglePlayPause}
                       />
                       {isDesktop && !isLive && hasTaggedProductsToDisplay && (
                         <div className={styles.liveStreamPlayer__taggedProductsModal__wrapper}>
