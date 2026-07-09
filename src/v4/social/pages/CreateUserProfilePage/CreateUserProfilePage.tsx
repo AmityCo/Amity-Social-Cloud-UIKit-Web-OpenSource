@@ -58,6 +58,14 @@ export interface CreateUserProfilePageProps {
     imageUrl?: string;
   }) => void;
   /**
+   * Fired when profile creation fails at any step of the save transaction —
+   * resolving/minting the userId, `Client.login`, the avatar upload, or
+   * `updateUser`. Receives the thrown error so the host can react (log it,
+   * show its own UI, retry, etc.). The UIKit still shows its own failure toast
+   * in addition to calling this. Mirrors `onCreated` for the failure path.
+   */
+  onError?: (error: Error) => void;
+  /**
    * Fired when the user dismisses the create-profile flow without creating.
    */
   onCancel?: () => void;
@@ -79,6 +87,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
   generateUserId,
   authToken,
   onCreated,
+  onError,
   onCancel,
   defaultAvatarImageUrl,
 }) => {
@@ -261,6 +270,10 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
       onCreated?.(createdUser);
     },
     onError: (error) => {
+      // Hand the failure back to the host so it can react (log, retry, show its
+      // own UI). Fires for every failure path, alongside the UIKit's own toast.
+      onError?.(error instanceof Error ? error : new Error(String(error)));
+
       if (error instanceof Error && error.message.includes(ERROR_RESPONSE.IMAGE_NUDITY)) {
         notification.info({
           content: resolveString('amity_social_modal_dialog_image_upload_error'),
