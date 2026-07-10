@@ -153,6 +153,8 @@ export const VideoFullScreen = ({
         showDurationOnDragOnly={true}
         showHeader={false}
         hidePlayButton={seeMoreIsOpen || !isActive || isClipLoading || isLoading}
+        hideSkipButtons={true}
+        showPauseButton={false}
         onClickVideo={handleClickVideo}
       />
 

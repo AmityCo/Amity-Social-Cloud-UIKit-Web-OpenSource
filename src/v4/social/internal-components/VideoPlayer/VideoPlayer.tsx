@@ -49,6 +49,8 @@ export interface VideoPlayerProps {
   showDurationOnDragOnly?: boolean;
   showHeader?: boolean;
   hidePlayButton?: boolean;
+  hideSkipButtons?: boolean;
+  showPauseButton?: boolean;
   isLive?: boolean;
   onTouchEnd?: React.TouchEventHandler<HTMLVideoElement>;
   onTouchMove?: React.TouchEventHandler<HTMLVideoElement>;
@@ -91,6 +93,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   showDurationOnDragOnly = false,
   showHeader = true,
   hidePlayButton = false,
+  hideSkipButtons = false,
+  showPauseButton = true,
   isLive = false,
   onClose,
   onClickMute,
@@ -403,38 +407,41 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           )}
 
           {/* Play + skip controls for mobile mode */}
-          {!hidePlayButton && showMobileControls && !isDragging && (
-            <div className={styles.mobileControlsRow}>
-              {!isLive && (
+          {!hidePlayButton &&
+            showMobileControls &&
+            (showPauseButton || isPaused) &&
+            !isDragging && (
+              <div className={styles.mobileControlsRow}>
+                {!isLive && !hideSkipButtons && (
+                  <Button
+                    variant="default"
+                    className={styles.skipButton}
+                    onPress={handleSkipBackward}
+                    icon={<Backward10 />}
+                    iconClassName={styles.skipButtonIcon}
+                    aria-label="Skip back 10 seconds"
+                  />
+                )}
                 <Button
                   variant="default"
-                  className={styles.skipButton}
-                  onPress={handleSkipBackward}
-                  icon={<Backward10 />}
-                  iconClassName={styles.skipButtonIcon}
-                  aria-label="Skip back 10 seconds"
+                  className={styles.playButton}
+                  onPress={handlePlayButtonClick}
+                  icon={isPaused ? <Play /> : <Pause fill="white" />}
+                  iconClassName={styles.playButtonIcon}
+                  aria-label={isPaused ? 'Play' : 'Pause'}
                 />
-              )}
-              <Button
-                variant="default"
-                className={styles.playButton}
-                onPress={handlePlayButtonClick}
-                icon={isPaused ? <Play /> : <Pause fill="white" />}
-                iconClassName={styles.playButtonIcon}
-                aria-label={isPaused ? 'Play' : 'Pause'}
-              />
-              {!isLive && (
-                <Button
-                  variant="default"
-                  className={styles.skipButton}
-                  onPress={handleSkipForward}
-                  icon={<Forward10 />}
-                  iconClassName={styles.skipButtonIcon}
-                  aria-label="Skip forward 10 seconds"
-                />
-              )}
-            </div>
-          )}
+                {!isLive && !hideSkipButtons && (
+                  <Button
+                    variant="default"
+                    className={styles.skipButton}
+                    onPress={handleSkipForward}
+                    icon={<Forward10 />}
+                    iconClassName={styles.skipButtonIcon}
+                    aria-label="Skip forward 10 seconds"
+                  />
+                )}
+              </div>
+            )}
 
           <VideoProgressBar
             video={videoElement}
