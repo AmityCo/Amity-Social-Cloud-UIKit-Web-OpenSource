@@ -253,7 +253,20 @@ export interface PageBehavior {
     goToCommunityProfilePage?(context: { communityId: string }): void;
   };
   AmityGlobalBehavior?: {
-    handleVisitorUserAction?(context: { alignment: NotificationAlignment }): void;
+    /**
+     * Called when a visitor attempts a restricted action (join, comment, react,
+     * follow…). The default shows a "create an account or sign in" toast;
+     * override to open your own sign-in / create-profile flow.
+     *
+     * When the gated action is joining a community, the tapped `communityId` is
+     * passed so the host can, for example, take the visitor straight into a
+     * sign-in flow for that community. The UIKit also records the id internally
+     * and auto-joins that community once the visitor finishes signing in.
+     */
+    handleVisitorUserAction?(context: {
+      alignment: NotificationAlignment;
+      communityId?: string;
+    }): void;
     handleNonMemberAction?(context: { alignment: NotificationAlignment }): void;
     handleNonFollowerAction?(context: { alignment: NotificationAlignment }): void;
     onPostProductTagClick?(context: { product: Amity.Product }): void;
@@ -981,7 +994,10 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
     },
     AmityGlobalBehavior: {
-      handleVisitorUserAction: (context: { alignment: NotificationAlignment }) => {
+      handleVisitorUserAction: (context: {
+        alignment: NotificationAlignment;
+        communityId?: string;
+      }) => {
         if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction) {
           return pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction(context);
         }

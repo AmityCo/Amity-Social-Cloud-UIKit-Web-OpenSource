@@ -3,7 +3,12 @@ import React, { createContext, ReactNode, useCallback, useContext, useMemo, useS
 import CheckCircle from '~/v4/icons/CheckCircle';
 import FailedOutlined from '~/v4/icons/FailedOutlined';
 import styles from './NotificationProvider.module.css';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
+// Use the "white" spinner variant on toasts: its base ring is translucent and
+// its arc is opaque white, so the rotating arc reads clearly against the dark
+// toast background. The plain Spinner draws a fully-opaque white base ring, so
+// with the toast's white icon color the moving arc is the same white as the
+// ring and the rotation looks static even though it animates.
+import { Spinner } from '~/v4/social/internal-components/Spinner/SpinnerWhite';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 import Info from '~/v4/icons/Info';
 
@@ -117,7 +122,9 @@ export const NotificationProvider: React.FC = ({ children }) => {
       loading: (data: Omit<NotificationInput, 'icon'>) =>
         addNotifications({
           ...data,
-          icon: <Spinner className={styles.icon} />,
+          // Square inline size (inline style wins over the shared, non-square
+          // `.icon` CSS) so the circular spinner is not squashed into an ellipse.
+          icon: <Spinner style={{ width: '1.125rem', height: '1.125rem' }} />,
           alignment: data.alignment,
         }),
       show: (data: Omit<NotificationInput, 'icon'>) => addNotifications(data),

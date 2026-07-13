@@ -65,11 +65,18 @@ export function Feed({
     () => new Set((globalFeaturedPosts ?? []).map((item) => item.post?.postId).filter(Boolean)),
     [globalFeaturedPosts],
   );
-  const newPostIds = useMemo(() => new Set(newPosts.map((p) => p.postId)), [newPosts]);
+  const newPostIds = useMemo(
+    () => new Set(newPosts.filter(Boolean).map((p) => p.postId)),
+    [newPosts],
+  );
 
   const filteredItems = useMemo(
     () =>
       itemWithAds.filter((item) => {
+        // Live collections can transiently yield undefined entries (a
+        // referenced post id not yet resolved in cache). Drop them so we never
+        // read `.postId` off undefined further down.
+        if (!item) return false;
         if (isAmityAd(item)) return true;
         return !featuredPostIds.has(item.postId) && !newPostIds.has(item.postId);
       }),
@@ -113,19 +120,21 @@ export function Feed({
         ) : null,
       )}
 
-      {newPosts.map((post, index) => (
-        <React.Fragment key={post.postId}>
-          <Divider isShown={index !== 0} />
-          <Feed.Post
-            pageId={pageId}
-            post={post}
-            renderIndex={index}
-            withAnalytics={withAnalytics}
-            onPostDeleted={onPostDeleted}
-            onClick={handlePostClick(post)}
-          />
-        </React.Fragment>
-      ))}
+      {newPosts
+        .filter((post) => !!post?.postId)
+        .map((post, index) => (
+          <React.Fragment key={post.postId}>
+            <Divider isShown={index !== 0} />
+            <Feed.Post
+              pageId={pageId}
+              post={post}
+              renderIndex={index}
+              withAnalytics={withAnalytics}
+              onPostDeleted={onPostDeleted}
+              onClick={handlePostClick(post)}
+            />
+          </React.Fragment>
+        ))}
 
       {filteredItems.map((item, index) => (
         <React.Fragment key={isAmityAd(item) ? `ad-${item.adId}-${index}` : item.postId}>

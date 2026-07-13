@@ -117,6 +117,9 @@ export const useCommunityActions = (
         allowNonMember: true,
         isJoined: community.isJoined,
         defaultBehavior: () => joinCommunity(community),
+        // Forward the id so a visitor's join intent is recorded and auto-joined
+        // after they sign in.
+        communityId: community.communityId,
       }),
     leaveCommunity,
     cancelJoinCommunity,

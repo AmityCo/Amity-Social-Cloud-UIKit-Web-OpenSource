@@ -46,9 +46,14 @@ import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider
 import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
 import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
-import { Client, UserTypeEnum } from '@amityco/ts-sdk';
+import { Client, CommunityRepository, UserTypeEnum } from '@amityco/ts-sdk';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { UserCacheProvider } from '~/v4/core/providers/UserCacheProvider';
+import {
+  consumePendingVisitorJoin,
+  beginVisitorAutoJoin,
+  completeVisitorAutoJoin,
+} from '~/v4/core/stores/pendingVisitorJoin';
 
 const InternalComponent = ({
   apiKey,
@@ -62,6 +67,7 @@ const InternalComponent = ({
   hideExplore,
   pageBehavior,
   onConnectionStatusChange,
+  onConnected,
   onDisconnected,
   getAuthToken,
   getAuthSignature,
@@ -145,6 +151,54 @@ const InternalComponent = ({
     }
   };
 
+  // Auto-join the community a visitor tapped "Join" on before signing in.
+  //
+  // A visitor's join intent is recorded (module-level, so it survives the
+  // provider remount that the visitor -> signed-in transition triggers) in
+  // useCommunityProfileGlobalBehavior. Once we connect as a signed-in user, we
+  // consume that intent and join on their behalf. The newsfeed watches the
+  // auto-join status and holds a loading state until it settles, so it renders
+  // ONCE with the just-joined community included instead of flashing an empty /
+  // pre-join feed and re-fetching. Runs on every connect (via onConnected) but
+  // is a no-op unless there is a pending id AND the session is now signed-in —
+  // so a reconnect as a visitor never triggers it.
+  const autoJoinPendingCommunity = () => {
+    const isSignedIn = Client.getCurrentUserType() === UserTypeEnum.SIGNED_IN;
+    if (!isSignedIn) return;
+
+    const pendingCommunityId = consumePendingVisitorJoin();
+    if (!pendingCommunityId) return;
+
+    // Enter the loading state before the network call so a newsfeed mounting
+    // during the transition waits rather than rendering the pre-join feed.
+    beginVisitorAutoJoin();
+
+    // We only have the communityId here (the intent is stored by id so it can
+    // survive the visitor -> signed-in provider remount). The live community
+    // object's `.join()` is not available without first observing it, so we use
+    // the id-based repository call. It is marked "will be deprecated" but is the
+    // supported way to join purely by id and matches the React Native UIKit.
+    CommunityRepository.joinCommunity(pendingCommunityId)
+      .then(() => {
+        // The join request has resolved, but the global feed's server-side view
+        // of the new membership can lag a beat behind. Wait briefly before
+        // releasing the newsfeed so its first (and only) query already includes
+        // the joined community's posts — no empty-then-populated flicker.
+        return new Promise<void>((resolve) => setTimeout(resolve, 1200));
+      })
+      .catch((autoJoinError: unknown) => {
+        // Best-effort: if the auto-join fails (e.g. private community requiring
+        // approval, or a transient network error) we simply drop it — the user
+        // can still join manually now that they are signed in.
+        console.error('Auto-join community failed:', autoJoinError);
+      })
+      .finally(() => {
+        // Release the newsfeed whether the join succeeded or failed, so it never
+        // stays stuck in a loading state.
+        completeVisitorAutoJoin();
+      });
+  };
+
   useEffect(() => {
     const setup = async () => {
       let authToken;
@@ -194,6 +248,13 @@ const InternalComponent = ({
           authToken,
           authSignatureParams,
           onConnectionStatusChange,
+          onConnected: () => {
+            // Auto-join any community a visitor tapped Join on before signing in
+            // (no-op unless there is a pending id and the session is signed-in),
+            // then forward to the host's onConnected callback.
+            autoJoinPendingCommunity();
+            onConnected?.();
+          },
           onDisconnected,
           onGlobalBanned,
           onUserDeleted,
@@ -220,7 +281,7 @@ const InternalComponent = ({
     };
 
     setup();
-  }, [userId, displayName, onConnectionStatusChange, onDisconnected]);
+  }, [userId, displayName, onConnectionStatusChange, onConnected, onDisconnected]);
 
   if (isGlobalBanned) return <GlobalBan />;
 

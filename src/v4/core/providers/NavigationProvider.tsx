@@ -453,7 +453,10 @@ type ContextValue = {
     targetId?: string[],
   ) => void;
 
-  handleVisitorUserAction: (context: { alignment: NotificationAlignment }) => void;
+  handleVisitorUserAction: (context: {
+    alignment: NotificationAlignment;
+    communityId?: string;
+  }) => void;
   handleNonMemberAction: (context: { alignment: NotificationAlignment }) => void;
   handleNonFollowerAction: (context: { alignment: NotificationAlignment }) => void;
   handleVisitorUsageLimitSignIn: (context: { alignment: NotificationAlignment }) => void;
@@ -1534,7 +1537,10 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const handleVisitorUserAction = (context: { alignment: NotificationAlignment }) => {
+  const handleVisitorUserAction = (context: {
+    alignment: NotificationAlignment;
+    communityId?: string;
+  }) => {
     notification.info({
       content: resolveString('amity_social_label_create_account_or_sign_in'),
       alignment: context.alignment,
