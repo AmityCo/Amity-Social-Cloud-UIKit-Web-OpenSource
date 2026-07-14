@@ -74,7 +74,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { isLoading: isInvitationLoading } = useGetInvitation(community as Amity.Community);
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
-  const { goToCreateLivestreamPage } = useNavigation();
   const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
   const { hasCreateEventPermission } = useEventPermission(communityId);
@@ -236,13 +235,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                   ),
                 });
               }}
-              onClickLivestream={() =>
-                community?.communityId &&
-                goToCreateLivestreamPage?.({
-                  targetId: community?.communityId,
-                  targetType: 'community',
-                })
-              }
             />
           </div>
         )}

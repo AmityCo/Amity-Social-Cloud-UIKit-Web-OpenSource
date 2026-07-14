@@ -61,7 +61,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { onScroll, scrollPosition } = useFeedScrollContext();
   const { themeStyles } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
-  const { onBack, goToCreateLivestreamPage } = useNavigation();
+  const { onBack } = useNavigation();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { currentUserId } = useSDK();
   const { discardPostCreation } = useDiscardPostCreation();
@@ -180,12 +180,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   ),
                 });
               }}
-              onClickLivestream={() =>
-                goToCreateLivestreamPage?.({
-                  targetId: userId,
-                  targetType: 'user',
-                })
-              }
             />
           )}
           <UserFeed

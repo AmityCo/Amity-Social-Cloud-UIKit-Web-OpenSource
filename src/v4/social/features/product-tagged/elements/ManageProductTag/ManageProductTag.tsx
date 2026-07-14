@@ -59,7 +59,8 @@ export function ManageProductTag({
 
   const handlePress = () => {
     if (!isLinkable) return;
-    AmityGlobalBehavior?.onLivestreamProductTagClick?.({ product });
+    // Livestream removed: route product-tag clicks through the post handler.
+    AmityGlobalBehavior?.onPostProductTagClick?.({ product });
   };
 
   const linkContent = (

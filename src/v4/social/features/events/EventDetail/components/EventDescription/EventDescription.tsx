@@ -30,14 +30,6 @@ export function EventDescription({ event }: EventDescriptionProps) {
   const eventTypeLabel = useString('amity_social_button_event_type');
   const attendeesLabel = useString('amity_social_button_attendees');
   const hostedByLabel = useString('amity_social_button_hosted_by');
-  const setUpLiveStreamLabel = useString('amity_social_status_set_up_live_stream');
-
-  const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
-
-  const canSetupLiveStream =
-    (isWithin15Minutes || event.status === AmityEventStatus.Live) &&
-    event.room?.status === 'idle' &&
-    event.userId === currentUserId;
 
   return (
     <div className={styles.eventDescription}>
@@ -166,24 +158,6 @@ export function EventDescription({ event }: EventDescriptionProps) {
           </div>
         </Button>
       </div>
-      {canSetupLiveStream && (
-        <div className={styles.eventDescription__setUpLiveStreamButton}>
-          <Button
-            variant="fill"
-            icon={Record}
-            fullWidth
-            onPress={() => {
-              AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
-                targetId: event.discussionCommunityId!,
-                targetType: 'community',
-                event,
-              });
-            }}
-          >
-            {setUpLiveStreamLabel}
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

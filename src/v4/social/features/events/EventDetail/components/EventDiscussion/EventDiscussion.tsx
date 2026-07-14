@@ -9,7 +9,6 @@ import { Typography } from '~/v4/core/components';
 import { PostContent } from '~/v4/social/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { Mode, PostComposerPage } from '~/v4/social/pages';
-import { LivestreamFill } from '~/v4/icons/LivestreamFill';
 import { useDiscardPostCreation } from '~/v4/social/hooks';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -17,7 +16,6 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { EmptyContent } from '~/v4/social/internal-components/EmptyContent';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
@@ -47,7 +45,6 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { discardPostCreation } = useDiscardPostCreation();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
-  const { goToLivestreamUnsupportedPage } = useNavigation();
   const { community: discussionCommunity } = useCommunity({
     communityId: event.discussionCommunityId,
   });
@@ -95,16 +92,6 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
             />
           ),
         });
-      },
-    },
-    {
-      id: 'livestream',
-      label: useString('amity_social_status_live_stream'),
-      icon: LivestreamFill,
-      onPress: () => {
-        removeDrawerData();
-
-        goToLivestreamUnsupportedPage();
       },
     },
   ];
@@ -161,12 +148,6 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
                   targetId={event.discussionCommunityId!}
                 />
               ),
-            });
-          }}
-          onClickLivestream={() => {
-            AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
-              targetType: 'community',
-              targetId: event.discussionCommunityId!,
             });
           }}
         />

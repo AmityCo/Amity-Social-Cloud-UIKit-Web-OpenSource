@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
-import { EventDetailProps, EventSetupProps, LiveStreamPlayerPageProps } from '~/v4/social/features';
+import { EventDetailProps, EventSetupProps } from '~/v4/social/features';
 import {
   AmityCommunitySetupPageMode,
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
-import { CreateLivestreamPageProps } from '~/v4/social/features/livestream/pages/CreateLivestreamPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { type GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
@@ -60,7 +59,6 @@ export interface PageBehavior {
     goToSelectPostTargetPage?(): void;
     goToSelectClipPostTargetPage?(context: { isClipPost: boolean }): void;
     goToSelectPollPostTargetPage?(): void;
-    goToLivestreamUnsupportedPage?(): void;
     goToSelectEventTargetPage?(): void;
   };
   AmityPostTargetSelectionPage?: {
@@ -205,7 +203,6 @@ export interface PageBehavior {
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToUserProfilePage?(context: { userId: string }): void;
     goToEventDetailPage?(context: EventDetailProps): void;
-    goToLivestreamPlayerPage?(context: LiveStreamPlayerPageProps): void;
     goToEditProfilePage?(): void;
   };
   AmityDraftClipPageBehavior?: {
@@ -241,7 +238,6 @@ export interface PageBehavior {
     handleNonMemberAction?(context: { alignment: NotificationAlignment }): void;
     handleNonFollowerAction?(context: { alignment: NotificationAlignment }): void;
     onPostProductTagClick?(context: { product: Amity.Product }): void;
-    onLivestreamProductTagClick?(context: { product: Amity.Product }): void;
     handleVisitorUsageLimitReached?(): void;
     handleVisitorUsageLimitSignIn?(context: { alignment: NotificationAlignment }): void;
   };
@@ -266,7 +262,6 @@ export interface PageBehavior {
     goToCommunityProfilePage?(context: { communityId: string }): void;
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToEventSetupPage?(context: EventSetupProps): void;
-    goToCreateLivestreamPage?(context: CreateLivestreamPageProps): void;
     goToPostComposerPage?(context: {
       mode: Mode.CREATE;
       targetName?: string;
@@ -312,7 +307,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToSelectPostTargetPage,
     goToSelectClipPostTargetPage,
     goToSelectPollPostTargetPage,
-    goToLivestreamUnsupportedPage,
     goToSelectEventTargetPage,
     goToPostComposerPage,
     goToDraftClipPage,
@@ -342,9 +336,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToUpcomingEventsPage,
     goToPastEventsPage,
     goToEventAttendeesPage,
-    goToCreateLivestreamPage,
     goToEventDetailPage,
-    goToLiveStreamPlayerPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     onClickHyperLink: () => {},
@@ -456,13 +448,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectPollPostTargetPage();
         }
         goToSelectPollPostTargetPage();
-      },
-
-      goToLivestreamUnsupportedPage() {
-        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToLivestreamUnsupportedPage) {
-          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToLivestreamUnsupportedPage();
-        }
-        goToLivestreamUnsupportedPage();
       },
 
       goToSelectEventTargetPage() {
@@ -834,12 +819,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToEventDetailPage(context);
       },
-      goToLivestreamPlayerPage: (context: LiveStreamPlayerPageProps) => {
-        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage)
-          return pageBehavior.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage(context);
-
-        goToLiveStreamPlayerPage?.(context);
-      },
       goToEditProfilePage: () => {
         if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEditProfilePage) {
           return pageBehavior.AmityNotificationTrayPageBehavior.goToEditProfilePage();
@@ -918,13 +897,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         context.product?.productUrl &&
           window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
       },
-      onLivestreamProductTagClick: (context: { product: Amity.Product }) => {
-        if (pageBehavior?.AmityGlobalBehavior?.onLivestreamProductTagClick) {
-          return pageBehavior.AmityGlobalBehavior.onLivestreamProductTagClick(context);
-        }
-        context.product?.productUrl &&
-          window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
-      },
       handleVisitorUsageLimitReached: () => {
         if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUsageLimitReached) {
           return pageBehavior.AmityGlobalBehavior.handleVisitorUsageLimitReached();
@@ -996,12 +968,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventDetailPageBehavior.goToEventSetupPage(context);
         }
         goToEventSetupPage(context);
-      },
-      goToCreateLivestreamPage(context: CreateLivestreamPageProps) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToCreateLivestreamPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToCreateLivestreamPage(context);
-        }
-        goToCreateLivestreamPage?.(context);
       },
       goToPostComposerPage(context: {
         mode: Mode.CREATE;

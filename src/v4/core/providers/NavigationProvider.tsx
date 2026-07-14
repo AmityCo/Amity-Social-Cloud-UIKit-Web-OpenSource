@@ -16,11 +16,8 @@ import {
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { resolveString } from '~/v4/core/localization';
 import { AmityRoute } from './AmityUIKitProvider';
-import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useNotifications } from './NotificationProvider';
-import { CreateLivestreamPageProps } from '~/v4/social/features/livestream/pages/CreateLivestreamPage';
 import { EventSetupProps } from '~/v4/social/features';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
@@ -60,12 +57,6 @@ export enum PageTypes {
   CommunityPendingInvitationPage = 'CommunityPendingInvitationPage',
   CommunityCreatePage = 'CommunityCreatePage',
   PollPostComposerPage = 'PollPostComposerPage',
-  LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
-  LiveStreamBannedPage = 'LiveStreamBannedPage',
-  LiveStreamPlayerPage = 'LiveStreamPlayerPage',
-  LivestreamUnsupportedPage = 'LivestreamUnsupportedPage',
-  LivestreamTargetSelectionPage = 'LivestreamTargetSelectionPage',
-  CreateLivestreamPage = 'CreateLivestreamPage',
   NotificationTrayPage = 'NotificationTrayPage',
   PendingRequestPage = 'PendingRequestPage',
   DraftClipPage = 'DraftClipPage',
@@ -228,26 +219,6 @@ type Page =
       type: PageTypes.PollTargetSelectionPage;
     }
   | {
-      type: PageTypes.LiveStreamTerminatedPage;
-    }
-  | {
-      type: PageTypes.LiveStreamBannedPage;
-    }
-  | {
-      type: PageTypes.LiveStreamPlayerPage;
-      context: LiveStreamPlayerPageProps;
-    }
-  | {
-      type: PageTypes.LivestreamUnsupportedPage;
-    }
-  | {
-      type: PageTypes.CreateLivestreamPage;
-      context: CreateLivestreamPageProps;
-    }
-  | {
-      type: PageTypes.LivestreamTargetSelectionPage;
-    }
-  | {
       type: PageTypes.NotificationTrayPage;
     }
   | {
@@ -376,11 +347,6 @@ type ContextValue = {
   goToPendingInvitationPage?: (community: Amity.Community) => void;
   goToPostPermissionPage?: (community: Amity.Community) => void;
   goToPendingPostPage?: (communityId: string) => void;
-  goToLiveStreamTerminatedPage?: () => void;
-  goToLiveStreamBannedPage?: () => void;
-  goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
-  goToLivestreamUnsupportedPage: () => void;
-  goToCreateLivestreamPage?: (context: CreateLivestreamPageProps) => void;
   goToPendingRequestPage?: (community: Amity.Community) => void;
   goToDraftClipPage?: (context: {
     targetId: string | null;
@@ -453,11 +419,6 @@ let defaultValue: ContextValue = {
   goToPendingInvitationPage: (community: Amity.Community) => {},
   goToPostPermissionPage: (community: Amity.Community) => {},
   goToPendingPostPage: (communityId: string) => {},
-  goToLiveStreamTerminatedPage: () => {},
-  goToLiveStreamBannedPage: () => {},
-  goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
-  goToLivestreamUnsupportedPage: () => {},
-  goToCreateLivestreamPage: (context: CreateLivestreamPageProps) => {},
   goToNotificationTrayPage: () => {},
   goToClipFeedPage: (context: {
     currentPostId?: string;
@@ -548,15 +509,6 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingInvitationPage: () => console.log('NavigationContext goToPendingInvitationsPage()'),
     goToCommunitySettingPage: (community) =>
       console.log(`NavigationContext goToCommunitySettingPage(${community})`),
-    goToLiveStreamTerminatedPage: () =>
-      console.log('NavigationContext goToLiveStreamTerminatedPage()'),
-    goToLiveStreamBannedPage: () => console.log('NavigationContext goToLiveStreamBannedPage()'),
-    goToLiveStreamPlayerPage: (context) =>
-      console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
-    goToLivestreamUnsupportedPage: () =>
-      console.log('NavigationContext goToLivestreamUnsupportedPage()'),
-    goToCreateLivestreamPage: (context) =>
-      console.log(`NavigationContext goToCreateLivestreamPage(${JSON.stringify(context)})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
     goToPendingRequestPage: (context) =>
       console.log(`NavigationContext goToPendingRequestPage(${context})`),
@@ -704,8 +656,6 @@ export default function NavigationProvider({
   >();
 
   const confirmation = askForConfirmation ?? confirm;
-
-  const { setStreamPlayer } = useLayoutContext();
 
   const pushPage = useCallback(async (newPage) => {
     setPages((prevState) => [...prevState, newPage]);
@@ -1244,52 +1194,6 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const goToLiveStreamTerminatedPage = useCallback(() => {
-    const next = {
-      type: PageTypes.LiveStreamTerminatedPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToLiveStreamBannedPage = useCallback(() => {
-    const next = {
-      type: PageTypes.LiveStreamBannedPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToLiveStreamPlayerPage = useCallback(
-    (context: LiveStreamPlayerPageProps) => {
-      setStreamPlayer(context); // modal as page
-    },
-    [setStreamPlayer],
-  );
-
-  const goToLivestreamUnsupportedPage = useCallback(() => {
-    const next = {
-      type: PageTypes.LivestreamUnsupportedPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToCreateLivestreamPage = useCallback(
-    (context: CreateLivestreamPageProps) => {
-      const next = {
-        type: PageTypes.CreateLivestreamPage,
-        context,
-      };
-
-      pushPage(next);
-    },
-    [pushPage],
-  );
-
   const goToNotificationTrayPage = useCallback(() => {
     const next = {
       type: PageTypes.NotificationTrayPage,
@@ -1490,11 +1394,6 @@ export default function NavigationProvider({
         goToUserRelationshipPage,
         goToPendingFollowRequestPage,
         goToBlockedUsersPage,
-        goToLiveStreamTerminatedPage,
-        goToLiveStreamBannedPage,
-        goToLiveStreamPlayerPage,
-        goToLivestreamUnsupportedPage,
-        goToCreateLivestreamPage,
         goToNotificationTrayPage,
         goToPendingRequestPage,
         goToClipFeedPage,

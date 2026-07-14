@@ -3,7 +3,6 @@ import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
-import { CreateLivestreamButton } from '~/v4/social/elements/CreateLivestreamButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { CreateEventButton } from '~/v4/social/elements/CreateEventButton';
 import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events/hooks';
@@ -44,11 +43,6 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
           }
         />
       )}
-      <CreateLivestreamButton
-        pageId={pageId}
-        componentId={componentId}
-        onClick={() => AmityCreatePostMenuComponentBehavior?.goToLivestreamUnsupportedPage?.()}
-      />
       {hasCreateEventPermission && (
         <CreateEventButton
           pageId={pageId}

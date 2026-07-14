@@ -38,15 +38,6 @@ import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
 import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
-import {
-  CreateLivestreamPage,
-  LivestreamTerminatedPage,
-  LiveStreamBannedPage,
-  LiveStreamPlayerPage,
-  LivestreamTargetSelectionPage,
-  LivestreamUnsupportedPage,
-} from '~/v4/social/features/livestream/pages';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
@@ -55,7 +46,6 @@ import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 const Application = () => {
   const { isDesktop } = useResponsive();
   const { page, goToSocialHomePage, handleVisitorUsageLimitSignIn } = useNavigation();
-  const { liveStreamPlayer } = useLayoutContext();
 
   useEffect(() => {
     if (
@@ -161,18 +151,10 @@ const Application = () => {
         )}
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
-        {page.type === PageTypes.CreateLivestreamPage && <CreateLivestreamPage {...page.context} />}
-        {page.type === PageTypes.LivestreamTargetSelectionPage && <LivestreamTargetSelectionPage />}
-        {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
-        {page.type === PageTypes.LivestreamUnsupportedPage && <LivestreamUnsupportedPage />}
-        {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
         {page.type === PageTypes.PendingRequestPage && (
           <PendingRequestPage community={page.context.community} />
         )}
-
-        {/* modal as page */}
-        {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
 
         {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
         {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}

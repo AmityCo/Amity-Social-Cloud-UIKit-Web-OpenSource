@@ -4,7 +4,7 @@ import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePost from '~/v4/core/hooks/objects/usePost';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -90,7 +90,7 @@ export function PostDetailPage({
   const COMMENT_LIST_LIMIT = 20;
 
   const { isDesktop } = useResponsive();
-  const { onBack, prevPage } = useNavigation();
+  const { onBack } = useNavigation();
   const notification = useNotifications();
   const { themeStyles } = useAmityPage({ pageId });
   const replyNoLongerAvailableText = useString(
@@ -225,9 +225,8 @@ export function PostDetailPage({
   }, [commentId, post, commentListRef.current]);
 
   const handleBack = useCallback(() => {
-    if (prevPage?.type === PageTypes.CreateLivestreamPage) onBack(2);
-    else onBack();
-  }, [prevPage?.type, onBack]);
+    onBack();
+  }, [onBack]);
 
   const handleReplyClick = useCallback(
     ({

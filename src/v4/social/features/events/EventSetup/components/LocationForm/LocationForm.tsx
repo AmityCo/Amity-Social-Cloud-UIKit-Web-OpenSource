@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Record } from '~/v4/icons/Record';
 import { AmityEventType } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components';
-import { LivestreamFill } from '~/v4/icons/LivestreamFill';
 import { ChevronDown } from '~/v4/icons/ChevronDown';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
@@ -30,7 +29,7 @@ type LocationFormProps = {
 const schema = z
   .object({
     type: z.enum([AmityEventType.Virtual, AmityEventType.InPerson]).default(AmityEventType.Virtual),
-    platform: z.enum([Platform.Livestream, Platform.External]).default(Platform.Livestream),
+    platform: z.enum([Platform.External]).default(Platform.External),
     externalUrl: z.string().trim(),
     location: z.string().trim(),
   })
@@ -69,7 +68,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
     mode: 'onChange',
     values: {
       type: value.type,
-      platform: value.externalUrl ? Platform.External : Platform.Livestream,
+      platform: Platform.External,
       externalUrl: value.externalUrl || '',
       location: value.location || '',
     },
@@ -216,24 +215,6 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                 value={value}
                 onChange={onChange}
                 radios={[
-                  {
-                    value: Platform.Livestream,
-                    label: (
-                      <div className={styles.locationForm__radioItem}>
-                        <div className={styles.locationForm__radioIconContainer}>
-                          <LivestreamFill className={styles.locationForm__radioIcon} />
-                        </div>
-                        <div className={styles.locationForm__radioLabel}>
-                          <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                            {useString('amity_social_status_live_stream')}
-                          </Typography.BodyBold>
-                          <Typography.Caption className={styles.locationForm__radioDescription}>
-                            {useString('amity_social_label_event_platform_livestream_description')}
-                          </Typography.Caption>
-                        </div>
-                      </div>
-                    ),
-                  },
                   {
                     value: Platform.External,
                     label: (

@@ -3,7 +3,6 @@ import { PollContent } from '~/v4/social/components/PostContent/PollContent';
 import { ImageContent } from '~/v4/social/components/PostContent/ImageContent';
 import { VideoContent } from '~/v4/social/components/PostContent/VideoContent';
 import { ClipContent } from '~/v4/social/components/PostContent/ClipContent';
-import { LiveStreamContent } from '~/v4/social/components/PostContent/LiveStreamContent';
 
 type ChildrenPostContentProps = {
   pageId?: string;
@@ -61,12 +60,6 @@ export const ChildrenPostContent = ({
         posts={post.childrenPosts as Amity.Post<'video'>[]}
         onVideoClick={onVideoClick}
         parentPostId={post.postId}
-      />
-      <LiveStreamContent
-        pageId={pageId}
-        posts={post.childrenPosts as Amity.Post<'room'>[]}
-        goToPostDetail={goToPostDetail}
-        parentPost={post}
       />
       <ClipContent
         pageId={pageId}

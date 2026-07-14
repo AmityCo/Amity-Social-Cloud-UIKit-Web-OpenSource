@@ -9,7 +9,6 @@ import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
-import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { useString } from '~/v4/core/localization';
 
 interface ChatFeedProps {
@@ -49,8 +48,6 @@ const ChatFeed: FC<ChatFeedProps> = ({
     },
     joined && !isVisitorOrBot && !!liveChannel,
   );
-
-  const { parentPost } = useLivestreamData();
 
   const noMessagesTitle = useString('amity_chat_empty_state_no_messages_title');
   const pendingPostDescription = useString('amity_chat_empty_state_pending_post_description');
@@ -112,7 +109,8 @@ const ChatFeed: FC<ChatFeedProps> = ({
 
   const isEmpty = !loading && messages?.length === 0;
 
-  const isPendingPost = parentPost?.feedType === 'reviewing';
+  // Livestream removed: chat is never a livestream "reviewing" pending post.
+  const isPendingPost = false;
 
   return (
     <div className={styles.chatFeed__container}>

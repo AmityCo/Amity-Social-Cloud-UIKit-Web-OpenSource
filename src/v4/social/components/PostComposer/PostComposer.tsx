@@ -14,8 +14,6 @@ import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events/hooks';
 import styles from './PostComposer.module.css';
-import { LivestreamButton } from '~/v4/social/elements/LivestreamButton';
-import { LivestreamTargetSelectionPage } from '~/v4/social/features/livestream/pages/LivestreamTargetSelectionPage';
 import { useString } from '~/v4/core/localization/useString';
 
 type PostComposerProps = {
@@ -24,7 +22,6 @@ type PostComposerProps = {
   isDisableEvent?: boolean;
   onClickPost?: () => void;
   onClickPoll?: () => void;
-  onClickLivestream?: () => void;
   onClickEvent?: () => void;
 };
 
@@ -33,7 +30,6 @@ export function PostComposer({
   communityId,
   onClickPost,
   onClickPoll,
-  onClickLivestream,
   onClickEvent,
   isDisableEvent = false,
 }: PostComposerProps) {
@@ -84,23 +80,6 @@ export function PostComposer({
     });
   };
 
-  const handleLivestreamClick = () => {
-    if (onClickLivestream) return onClickLivestream();
-    openPopup({
-      pageId,
-      componentId,
-      view: 'desktop',
-      header: (
-        <Title
-          pageId="select_livestream_target_page"
-          titleClassName={styles.postComposer__title}
-          textKey="amity_social_status_select_livestream_target_title"
-        />
-      ),
-      children: <LivestreamTargetSelectionPage />,
-    });
-  };
-
   const renderEventButton = () => {
     const isExcludedPage = pageId === 'user_profile_page';
     const isFromCommunityPage = pageId === 'community_profile_page';
@@ -143,7 +122,6 @@ export function PostComposer({
         defaultIconClassName={styles.postComposer__button}
         textId=""
       />
-      <LivestreamButton onPress={handleLivestreamClick} pageId="post_composer_page" />
       <PollButton onPress={handlePollClick} pageId="post_composer_page" componentId="poll_button" />
       {renderEventButton()}
     </div>
