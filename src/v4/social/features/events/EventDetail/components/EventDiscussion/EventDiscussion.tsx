@@ -121,7 +121,6 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     <section data-testid={accessibilityId} style={themeStyles} className={styles.eventDiscussion}>
       {event?.targetCommunity?.isJoined && !isVisitorOrBot && isDesktop && (
         <PostComposer
-          isDisableStory
           isDisableEvent
           onClickPost={() => {
             openPopup({

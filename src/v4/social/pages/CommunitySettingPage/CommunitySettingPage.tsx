@@ -8,7 +8,6 @@ import { BackButton, PendingInvitations } from '~/v4/social/elements';
 import { Typography } from '~/v4/core/components';
 import { Members } from '~/v4/social/elements/Members';
 import { PostPermission } from '~/v4/social/elements/PostPermission';
-import { StorySetting } from '~/v4/social/elements/StorySetting';
 import { LeaveCommunity } from '~/v4/social/elements/LeaveCommunity';
 import { CloseCommunity } from '~/v4/social/elements/CloseCommunity';
 import { CloseCommunityDescription } from '~/v4/social/elements/CloseCommunityDescription';
@@ -189,14 +188,6 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
                 pageId={pageId}
                 onClick={() => {
                   AmityCommunitySettingPageBehavior?.goToPostPermissionPage?.({ community });
-                }}
-              />
-            )}
-            {checkEditCommunityPermission(client, community?.communityId) && (
-              <StorySetting
-                pageId={pageId}
-                onClick={() => {
-                  AmityCommunitySettingPageBehavior?.goToStorySettingPage?.({ community });
                 }}
               />
             )}

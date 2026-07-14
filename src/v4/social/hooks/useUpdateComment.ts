@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { resolveString } from '~/v4/core/localization';
 import { CommentRepository } from '@amityco/ts-sdk';
 import { useNetworkState } from 'react-use';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
@@ -22,13 +21,12 @@ export const useUpdateComment = ({
 }: UseUpdateCommentParams) => {
   const { online } = useNetworkState();
   const notification = useNotifications();
-  const { page } = useNavigation();
 
   const handleSaveComment = useCallback(async () => {
     if (!online) {
       notification.info({
         content: resolveString('amity_social_toast_failed_generic'),
-        alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
+        alignment: 'withSidebar',
       });
       return;
     }
@@ -62,7 +60,7 @@ export const useUpdateComment = ({
     // for API errors and won't trigger misleading notifications.
     setIsEditing(false);
     onSuccess?.(commentData);
-  }, [commentData, commentId, online, notification, page.type, setIsEditing, onSuccess]);
+  }, [commentData, commentId, online, notification, setIsEditing, onSuccess]);
 
   return { handleSaveComment };
 };

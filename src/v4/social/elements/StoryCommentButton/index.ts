@@ -1,1 +1,0 @@
-export { StoryCommentButton } from './StoryCommentButton';

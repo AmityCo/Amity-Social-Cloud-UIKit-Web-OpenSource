@@ -4,17 +4,14 @@ import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
-import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 import styles from './Application.module.css';
 import {
-  AmityDraftStoryPage,
   ClipFeedPage,
   CommunityAddCategoryPage,
   CommunityMembershipPage,
   CommunityPostPermissionPage,
-  CommunityStorySettingPage,
   DraftClipPage,
   EventAttendeesPage,
   EventDetailPage,
@@ -23,7 +20,6 @@ import {
   PendingRequestPage,
   UpcomingEventsPage,
 } from '..';
-import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
 import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
 import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
@@ -93,21 +89,10 @@ const Application = () => {
             // change only postId to be id and pass the rest context fields as props
             return <PostDetailPage id={postId} {...rest} />;
           })()}
-        {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.CommunityProfilePage && (
           <CommunityTabProvider>
             <CommunityProfilePage communityId={page.context.communityId} page={page.context.page} />
           </CommunityTabProvider>
-        )}
-        {page.type === PageTypes.ViewStoryPage && (
-          <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
-        )}
-        {page.type === PageTypes.DraftPage && (
-          <AmityDraftStoryPage
-            targetId={page.context?.targetId}
-            targetType={page.context?.targetType}
-            mediaType={page.context?.mediaType}
-          />
         )}
         {page.type === PageTypes.PostComposerPage && (
           <PostComposerPage
@@ -155,9 +140,6 @@ const Application = () => {
         )}
         {page.type === PageTypes.CommunityPostPermissionPage && (
           <CommunityPostPermissionPage community={page.context.community} />
-        )}
-        {page.type === PageTypes.CommunityStorySettingPage && (
-          <CommunityStorySettingPage community={page.context.community} />
         )}
         {page.type === PageTypes.PendingPostsPage && (
           <PendingPostsPage communityId={page.context.communityId} />

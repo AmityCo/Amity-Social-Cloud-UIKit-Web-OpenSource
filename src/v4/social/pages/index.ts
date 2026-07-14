@@ -1,6 +1,3 @@
-export { AmityDraftStoryPage } from './DraftsPage';
-export { ViewStoryPage } from './StoryPage';
-export { StoryTargetSelectionPage } from './StoryTargetSelectionPage';
 export { SocialHomePage } from './SocialHomePage';
 export { PostComposerPage, Mode } from './PostComposerPage';
 export { SelectPostTargetPage } from './SelectPostTargetPage';
@@ -23,7 +20,6 @@ export { CommunityInviteMemberPage } from './CommunityInviteMemberPage';
 export { CommunityProfilePage } from './CommunityProfilePage';
 export { CommunitySettingPage } from './CommunitySettingPage';
 export { CommunityPostPermissionPage } from './CommunityPostPermissionPage';
-export { CommunityStorySettingPage } from './CommunityStorySettingPage';
 export { PendingPostsPage } from './PendingPostsPage';
 export { CommunityMembershipPage } from './CommunityMembershipPage';
 export { CommunityPendingInvitationPage } from './CommunityPendingInvitationPage';

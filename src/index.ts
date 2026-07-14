@@ -41,18 +41,9 @@ export {
   ArchivedChatPage as AmityArchivedChatPage,
 } from '~/v4/chat/pages';
 
-// v4 internal use only (Amity Console)
-export {
-  StoryPreview as AmityStoryPreview,
-  StoryPreviewThumbnail as AmityStoryPreviewThumbnail,
-} from './v4/social/internal-components/StoryPreview';
-
 // v4 Social
 export {
   SocialHomePage as AmitySocialHomePage,
-  AmityDraftStoryPage,
-  ViewStoryPage as AmityViewStoryPage,
-  StoryTargetSelectionPage as AmityStoryTargetSelectionPage,
   PostDetailPage as AmityPostDetailPage,
   SocialGlobalSearchPage as AmitySocialGlobalSearchPage,
   MyCommunitiesSearchPage as AmityMyCommunitiesSearchPage,
@@ -75,7 +66,6 @@ export {
   PendingPostsPage as AmityPendingPostsPage,
   CommunitySettingPage as AmityCommunitySettingPage,
   CommunityPostPermissionPage as AmityCommunityPostPermissionPage,
-  CommunityStorySettingPage as AmityCommunityStorySettingPage,
   CommunityMembershipPage as AmityCommunityMembershipPage,
   DraftClipPage as AmityDraftClipPage,
   ClipFeedPage as AmityClipFeedPage,
@@ -118,7 +108,6 @@ export {
   ReactionList as AmityReactionListComponent,
   TopNavigation as AmitySocialHomeTopNavigationComponent,
   CommentTray as AmityCommentTrayComponent,
-  StoryTab as AmityStoryTabComponent,
   CommunityHeader as AmityCommunityHeaderComponent,
   CommunityFeed as AmityCommunityFeedComponent,
   CommunityImageFeed as AmityCommunityImageFeedComponent,

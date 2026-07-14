@@ -19,7 +19,6 @@ import { Communities } from '~/v4/social/internal-components/Communities/Communi
 import { Events } from '~/v4/social/features';
 import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
 import { PostContentSkeleton } from '~/v4/social/components/PostContent';
-import { GlobalFeedStorySkeleton } from '~/v4/social/internal-components/Skeleton/GlobalFeedStorySkeleton/GlobalFeedStorySkeleton';
 import { Divider } from '~/v4/social/elements/Divider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './SocialHomePage.module.css';
@@ -259,11 +258,6 @@ function FeedSkeleton({ pageId }: { pageId?: string }) {
       className={styles.socialHomePage__feedSkeleton}
       data-testid="social_home_feed_skeleton"
     >
-      <Skeleton className={styles.socialHomePage__feedSkeletonStories}>
-        {Array.from({ length: 7 }).map((_, index) => (
-          <GlobalFeedStorySkeleton key={`story-${index}`} />
-        ))}
-      </Skeleton>
       <Skeleton className={styles.socialHomePage__feedSkeletonComposer}>
         <Skeleton.Circle width="2.5rem" height="2.5rem" />
         <Skeleton.Square

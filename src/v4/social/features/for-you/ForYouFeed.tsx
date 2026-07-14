@@ -1,6 +1,5 @@
 import { Divider } from '~/v4/social/elements/Divider';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { StoryTab } from '~/v4/social/components/StoryTab';
 import { Feed } from '~/v4/social/features/shared/components/Feed';
 import { FeedCaughtUp } from '~/v4/social/components/FeedCaughtUp';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
@@ -44,9 +43,6 @@ export function ForYouFeed({ pageId }: ForYouFeedProps) {
 
   return (
     <PullToRefresh className={styles.forYouFeed} style={themeStyles} onTouchEndCallback={refresh}>
-      <div className={styles.forYouFeed__storyTab}>
-        <StoryTab type="globalFeed" pageId={pageId} />
-      </div>
       <Divider isShown={!isDesktop} />
       <PostComposer pageId={pageId} />
       <Feed

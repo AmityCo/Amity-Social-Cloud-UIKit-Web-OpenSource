@@ -12,7 +12,6 @@ import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import clsx from 'clsx';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Notification } from '~/v4/core/components/Notification';
 import { useNetworkState } from 'react-use';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
@@ -109,7 +108,6 @@ export const CommentComposer = ({
   const composerInputRef = useRef<HTMLDivElement | null>(null);
   const componentId = 'comment_composer_bar';
   const mentionContainerRef = useRef<HTMLDivElement | null>(null);
-  const { page } = useNavigation();
 
   const { post } = usePost(referenceId);
 
@@ -251,14 +249,6 @@ export const CommentComposer = ({
       )}
       data-testid={`${pageId}/${componentId}/comment_composer`}
     >
-      {!online && isPending && page.type == PageTypes.ViewStoryPage && (
-        <Notification
-          icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}
-          content={useString('amity_social_toast_failed_generic')}
-          alignment="fixed"
-          duration={3000}
-        />
-      )}
       <div className={styles.commentComposer__top}>
         {!isDesktop && inlineError && (
           <div className={styles.commentComposer__inlineError}>

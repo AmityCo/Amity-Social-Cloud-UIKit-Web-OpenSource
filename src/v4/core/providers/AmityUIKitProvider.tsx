@@ -36,7 +36,6 @@ import { GlobalFeedProvider } from '~/v4/social/providers/GlobalFeedProvider';
 import { PopupProvider } from '~/v4/core/providers/PopupProvider';
 import { Popup } from '~/v4/core/components/AriaPopup';
 import { CommunitySetupProvider } from '~/v4/social/providers/CommunitySetupProvider';
-import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
@@ -327,21 +326,19 @@ const InternalComponent = ({
                         >
                           <PageBehaviorProvider pageBehavior={pageBehavior}>
                             <SearchResultProvider>
-                              <StoryProvider>
-                                <ClipProvider>
-                                  <CommunitySetupProvider>
-                                    <DrawerProvider>
-                                      <GlobalFeedProvider>
-                                        <PopupProvider>
-                                          <Popup />
-                                          {children}
-                                        </PopupProvider>
-                                      </GlobalFeedProvider>
-                                      <DrawerContainer />
-                                    </DrawerProvider>
-                                  </CommunitySetupProvider>
-                                </ClipProvider>
-                              </StoryProvider>
+                              <ClipProvider>
+                                <CommunitySetupProvider>
+                                  <DrawerProvider>
+                                    <GlobalFeedProvider>
+                                      <PopupProvider>
+                                        <Popup />
+                                        {children}
+                                      </PopupProvider>
+                                    </GlobalFeedProvider>
+                                    <DrawerContainer />
+                                  </DrawerProvider>
+                                </CommunitySetupProvider>
+                              </ClipProvider>
                             </SearchResultProvider>
                           </PageBehaviorProvider>
                         </NavigationProvider>

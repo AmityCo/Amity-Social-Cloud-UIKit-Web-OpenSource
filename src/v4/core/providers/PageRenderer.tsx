@@ -9,11 +9,9 @@ import {
   LiveStreamBannedPage,
 } from '~/v4/social/features/livestream/pages';
 import {
-  AmityDraftStoryPage,
   CommunityAddCategoryPage,
   CommunityMembershipPage,
   CommunityPostPermissionPage,
-  CommunityStorySettingPage,
   NotificationTrayPage,
   AllCategoriesPage,
   CommunitiesByCategoryPage,
@@ -31,12 +29,10 @@ import {
   PostDetailPage,
   SelectPostTargetPage,
   SocialGlobalSearchPage,
-  StoryTargetSelectionPage,
   SocialHomePage,
   UserPendingFollowRequestPage,
   UserProfilePage,
   UserRelationshipPage,
-  ViewStoryPage,
   CommunityInviteMemberPage,
   Mode,
   DraftClipPage,
@@ -85,23 +81,11 @@ const PageRenderer = ({ children }: PageRendererProps) => {
           rootId={page.context?.rootId}
         />
       );
-    case PageTypes.StoryTargetSelectionPage:
-      return <StoryTargetSelectionPage />;
     case PageTypes.CommunityProfilePage:
       return (
         <CommunityTabProvider>
           <CommunityProfilePage communityId={page.context.communityId} page={page.context.page} />
         </CommunityTabProvider>
-      );
-    case PageTypes.ViewStoryPage:
-      return <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />;
-    case PageTypes.DraftPage:
-      return (
-        <AmityDraftStoryPage
-          targetId={page.context?.targetId}
-          targetType={page.context?.targetType}
-          mediaType={page.context?.mediaType}
-        />
       );
     case PageTypes.PostComposerPage:
       return (
@@ -146,8 +130,6 @@ const PageRenderer = ({ children }: PageRendererProps) => {
       return <CommunitySettingPage community={page.context.community} />;
     case PageTypes.CommunityPostPermissionPage:
       return <CommunityPostPermissionPage community={page.context.community} />;
-    case PageTypes.CommunityStorySettingPage:
-      return <CommunityStorySettingPage community={page.context.community} />;
     case PageTypes.PendingPostsPage:
       return <PendingPostsPage communityId={page.context.communityId} />;
     case PageTypes.CommunityMembershipPage:

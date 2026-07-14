@@ -2,8 +2,6 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
-import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
-import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButton';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
 import { CreateLivestreamButton } from '~/v4/social/elements/CreateLivestreamButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
@@ -19,7 +17,6 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
   const componentId = 'create_post_menu';
 
   const { isDesktop } = useResponsive();
-  const { hasStoryPermission } = useStoryPermission();
   const { hasCreateEventPermission } = useEventPermission();
   const { AmityCreatePostMenuComponentBehavior } = usePageBehavior();
   const { redirectEventTargetSelectionPage } = useRedirectEventTargetSelectionPage();
@@ -36,13 +33,6 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
         componentId={componentId}
         onClick={() => AmityCreatePostMenuComponentBehavior?.goToSelectPollPostTargetPage?.()}
       />
-      {hasStoryPermission && (
-        <CreateStoryButton
-          pageId={pageId}
-          componentId={componentId}
-          onClick={() => AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage?.()}
-        />
-      )}
       {!isDesktop && (
         <CreateClipButton
           pageId={pageId}

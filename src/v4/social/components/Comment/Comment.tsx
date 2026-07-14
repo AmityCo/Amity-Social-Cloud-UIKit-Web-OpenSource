@@ -237,7 +237,7 @@ export const Comment = ({
     if (!online) {
       notification.info({
         content: resolveString('amity_social_label_no_internet_connection'),
-        alignment: `${page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar'}`,
+        alignment: 'withSidebar',
       });
       return;
     }

@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './LiveRoomTarget.module.css';
-import { LivestreamStoryRing } from '~/v4/social/features/livestream/internal-components/LivestreamStoryRing';
 import useLiveRoomPosts from '~/v4/social/hooks/collections/useLiveRoomPosts';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
@@ -35,9 +34,8 @@ export function LiveRoomTarget({
     <div className={clsx(styles.liveRoomTarget, className)}>
       <div className={styles.liveRoomTarget__rings}>
         {posts.map((post) => (
-          <LivestreamStoryRing
+          <div
             key={post.postId}
-            post={post}
             onClick={() =>
               goToLiveStreamPlayerPage?.({
                 post,
