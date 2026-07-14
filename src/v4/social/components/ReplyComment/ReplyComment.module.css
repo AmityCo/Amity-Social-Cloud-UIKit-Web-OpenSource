@@ -105,19 +105,12 @@
   flex-shrink: 0;
 }
 
-.postReplyComment__contentHighlighted {
-  animation: highlight-reply 3s ease forwards;
-}
-
-@keyframes highlight-reply {
-  0%,
-  70% {
-    background-color: var(--asc-color-primary-shade2);
-  }
-
-  100% {
-    background-color: var(--asc-color-background-shade1);
-  }
+/* Same treatment as the L0 comment highlight (Figma "Highlight a comment"): glow-primary
+ * fill + accent edge, kept for the whole time the reply is the deep-link target. Compound
+ * selector so it wins over `.postReplyComment__bubble` regardless of source order. */
+.postReplyComment__bubble.postReplyComment__contentHighlighted {
+  background-color: var(--color-glow-primary);
+  border-color: var(--color-edge-accent);
 }
 
 .postReplyComment__content__username {

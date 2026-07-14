@@ -24,7 +24,6 @@ import { isPollPost } from '~/v4/social/utils/postTypeChecker';
 import { CommentRepository, PostStructureType } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import { SharableModel } from '~/v4/utils/sharableLink';
 
@@ -74,17 +73,58 @@ export function PostDetailPage({
   const [failedToShow, setFailedToShow] = useState(false);
   const [deletedReplyError, setDeletedReplyError] = useState<string | null>(null);
   const commentListRef = useRef<HTMLDivElement>(null);
-  const hasScrolledRef = useRef(false);
+
+  // Deep-link resolution: an external comment link (/social/posts/:id?commentId=:id) carries
+  // only the target commentId — no parentId/rootId. In-app navigation, by contrast, passes all
+  // three. When only commentId is present, fetch the comment once and read its parentId/rootId
+  // (both are native fields on the Amity comment model) so the rest of this page — hierarchy
+  // computation, deleted-check, scroll/highlight — behaves identically to an in-app click.
+  const isDeepLinkTarget = !!commentId && !parentId && !rootId;
+  const [resolvedTarget, setResolvedTarget] = useState<{
+    parentId?: string;
+    rootId?: string;
+  } | null>(null);
+  const [isResolvingTarget, setIsResolvingTarget] = useState(isDeepLinkTarget);
+
+  useEffect(() => {
+    if (!isDeepLinkTarget || !commentId) {
+      setIsResolvingTarget(false);
+      return;
+    }
+    setIsResolvingTarget(true);
+    setResolvedTarget(null);
+    let unsubscribe: (() => void) | undefined;
+    unsubscribe = CommentRepository.getComment(commentId, (resp) => {
+      if (!resp.loading) {
+        const target = resp.data as (Amity.Comment & { rootId?: string }) | null;
+        if (target) {
+          // For an L0 comment rootId equals its own id and parentId is undefined; the effective
+          // computation below correctly treats that as a top-level target.
+          setResolvedTarget({ parentId: target.parentId, rootId: target.rootId });
+        }
+        // Missing/deleted targets are surfaced by the checkDeleted effect below; either way we
+        // stop resolving so the page falls back to post-top gracefully.
+        setIsResolvingTarget(false);
+        unsubscribe?.();
+        unsubscribe = undefined;
+      }
+    });
+    return () => unsubscribe?.();
+  }, [isDeepLinkTarget, commentId]);
+
+  // Prefer explicit props (in-app navigation); fall back to resolved deep-link values.
+  const effectiveDirectParentId = parentId ?? resolvedTarget?.parentId;
+  const effectiveRootId = rootId ?? resolvedTarget?.rootId;
 
   // Compute synchronously so CommentList gets the correct parentId on the very first render,
   // before the scroll/bounce timers fire.
   const effectiveParentId = !commentId
     ? undefined
-    : !parentId
+    : !effectiveDirectParentId
       ? undefined // lv0: top-level comment
-      : rootId && parentId !== rootId
-        ? rootId // lv2: reply-to-reply — anchor to L0
-        : parentId; // lv1 (or fallback when no rootId): direct reply to L0
+      : effectiveRootId && effectiveDirectParentId !== effectiveRootId
+        ? effectiveRootId // lv2: reply-to-reply — anchor to L0
+        : effectiveDirectParentId; // lv1 (or fallback when no rootId): direct reply to L0
 
   const hasShownReplyNotificationRef = useRef(false);
 
@@ -120,7 +160,6 @@ export function PostDetailPage({
   }, []);
 
   useEffect(() => {
-    hasScrolledRef.current = false;
     hasShownReplyNotificationRef.current = false;
   }, [commentId]);
 
@@ -128,8 +167,12 @@ export function PostDetailPage({
   // Always checks commentId; for L2 notifications also checks parentId (the L1 parent).
   useEffect(() => {
     if (!commentId) return;
+    // For deep links, wait until the hierarchy is resolved so the message wording (comment vs
+    // reply) and the L2 parent check use the correct effective parent/root.
+    if (isResolvingTarget) return;
 
-    const isL2Notification = !!rootId && !!parentId && parentId !== rootId;
+    const isL2Notification =
+      !!effectiveRootId && !!effectiveDirectParentId && effectiveDirectParentId !== effectiveRootId;
 
     const checkDeleted = (id: string, message: string): (() => void) | undefined => {
       if (community && !community?.isPublic && !community?.isJoined) return;
@@ -155,69 +198,25 @@ export function PostDetailPage({
       return () => unsubscribe?.();
     };
 
-    const isL0Comment = !parentId;
+    const isL0Comment = !effectiveDirectParentId;
     const commentMessage = isL0Comment
       ? 'This comment is no longer available.'
       : 'This reply is no longer available.';
 
     const cleanupComment = checkDeleted(commentId, commentMessage);
-    const cleanupParent = isL2Notification
-      ? checkDeleted(parentId, 'This reply is no longer available.')
-      : undefined;
+    const cleanupParent =
+      isL2Notification && effectiveDirectParentId
+        ? checkDeleted(effectiveDirectParentId, 'This reply is no longer available.')
+        : undefined;
 
     return () => {
       cleanupComment?.();
       cleanupParent?.();
     };
-  }, [commentId, parentId, rootId]);
+  }, [commentId, effectiveDirectParentId, effectiveRootId, isResolvingTarget]);
 
-  useEffect(() => {
-    // Only scroll if we haven't already and the comment list is available
-    if (commentId && commentListRef.current && !hasScrolledRef.current) {
-      // Mark that we're processing this scroll
-      hasScrolledRef.current = true;
-
-      // Create a custom event to signal when scrolling is complete
-      const scrollCompleteEvent = new CustomEvent(EVENT_LISTENER.SCROLL_COMPLETE, {
-        bubbles: true,
-        detail: { commentId },
-      });
-
-      // Wait for post content to load and DOM to fully update
-      const outerTimeout = setTimeout(() => {
-        if (commentListRef.current) {
-          // First make sure the container is scrolled to the top
-          const container = document.querySelector(`.${styles.postDetailPage__container}`);
-          if (container) {
-            container.scrollTo({
-              top: 0,
-              behavior: 'auto',
-            });
-          }
-
-          // Then scroll to the comment with a small delay to ensure proper positioning
-          const innerTimeout = setTimeout(() => {
-            commentListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            // Wait for the smooth scroll animation to complete (approximately 500ms is typical)
-            // before dispatching the event for the bounce animation
-            const bounceTimeout = setTimeout(() => {
-              document.dispatchEvent(scrollCompleteEvent);
-            }, 500);
-
-            // Clean up timeout if component unmounts
-            return () => clearTimeout(bounceTimeout);
-          }, 150);
-
-          // Clear inner timeout when we're done scrolling or if the component unmounts
-          return () => clearTimeout(innerTimeout);
-        }
-      }, 300);
-
-      // Clear outer timeout if the component unmounts
-      return () => clearTimeout(outerTimeout);
-    }
-  }, [commentId, post, commentListRef.current]);
+  // Scrolling to the deep-link target is owned by CommentList, which renders the comment in its
+  // natural position and scrolls to it once loaded (no pinning here).
 
   const handleBack = useCallback(() => {
     if (prevPage?.type === PageTypes.CreateLivestreamPage) onBack(2);
@@ -363,9 +362,9 @@ export function PostDetailPage({
               community={community}
               limit={COMMENT_LIST_LIMIT}
               commentCount={post.commentsCount}
-              highlightedCommentId={commentId}
+              highlightedCommentId={isResolvingTarget ? undefined : commentId}
               parentId={effectiveParentId}
-              parantId={parentId}
+              parantId={effectiveDirectParentId}
               showReplyCommentAt={showReplyCommentAt}
               replyTargetCommentId={
                 replyL0AncestorId ? replyParentIdOverride ?? replyComment?.commentId : undefined

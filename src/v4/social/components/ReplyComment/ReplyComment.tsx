@@ -366,7 +366,7 @@ const PostReplyComment = ({
                 data-has-reaction={reactionsCount > 0}
                 className={clsx(
                   styles.postReplyComment__bubble,
-                  isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
+                  isHighlighted && styles.postReplyComment__contentHighlighted,
                 )}
               >
                 <div className={styles.postReplyComment__content}>

@@ -1595,7 +1595,11 @@ export default function NavigationProvider({
     } else if (currentPage.type === PageTypes.UserProfilePage) {
       onRouteChange?.({ route: 'user', id: currentPage.context.userId });
     } else if (currentPage.type === PageTypes.PostDetailPage) {
-      onRouteChange?.({ route: 'post', id: currentPage.context.postId });
+      onRouteChange?.({
+        route: 'post',
+        id: currentPage.context.postId,
+        commentId: currentPage.context.commentId,
+      });
     } else {
       onRouteChange?.({ route: '', id: undefined });
     }

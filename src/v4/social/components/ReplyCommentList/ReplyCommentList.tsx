@@ -78,11 +78,9 @@ export const ReplyCommentList = ({
   const [showFilteredComments, setShowFilteredComments] = useState(
     isL2List ? !highlightedCommentId : !highlightedCommentId && !highlightLatestL2,
   );
-  const [isHighlighted, setIsHighlighted] = useState(false);
   const [pendingComments, setPendingComments] = useState<Amity.Comment[]>(initialPendingComments);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const highlightedCommentRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { comments, hasMore, isLoading, loadMore } = useCommentsCollection({
     referenceId,
@@ -248,89 +246,15 @@ export const ReplyCommentList = ({
     return () => document.removeEventListener(EVENT_LISTENER.COMMENT_DELETED, handler);
   }, [parentId]);
 
-  // L2: trigger blue-highlight directly once the comment appears in the DOM.
-  // L2 lists mount after SCROLL_COMPLETE has already fired so we can't rely on that event.
-  useEffect(() => {
-    if (!isL2List || !parentId || !effectiveHighlightedCommentId || highlightedComment.length === 0)
-      return;
-
-    timerRef.current = setTimeout(() => {
-      setIsHighlighted(true);
-      timerRef.current = setTimeout(() => {
-        setIsHighlighted(false);
-      }, 3000);
-    }, 100);
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [isL2List, highlightedComment.length, effectiveHighlightedCommentId, parentId]);
-
-  // L1: register SCROLL_COMPLETE listener immediately on mount so it never misses the event,
-  // regardless of whether comments have loaded yet.
-  const hasBouncedRef = useRef(false);
-
-  useEffect(() => {
-    hasBouncedRef.current = false;
-  }, [effectiveHighlightedCommentId]);
-
-  useEffect(() => {
-    if (isL2List || !parentId || !effectiveHighlightedCommentId) return;
-
-    const handleScrollComplete = (e: CustomEvent) => {
-      if (e.detail.commentId === effectiveHighlightedCommentId && !hasBouncedRef.current) {
-        hasBouncedRef.current = true;
-        setIsHighlighted(true);
-        timerRef.current = setTimeout(() => {
-          setIsHighlighted(false);
-        }, 3000);
-      }
-    };
-    document.addEventListener(
-      EVENT_LISTENER.SCROLL_COMPLETE,
-      handleScrollComplete as EventListener,
-    );
-    return () => {
-      document.removeEventListener(
-        EVENT_LISTENER.SCROLL_COMPLETE,
-        handleScrollComplete as EventListener,
-      );
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [isL2List, effectiveHighlightedCommentId, parentId]);
-
-  // L1 fallback: trigger bounce directly once the highlighted comment loads.
-  // Handles the case where SCROLL_COMPLETE was already dispatched before this list mounted
-  // (e.g. L0 parent was deleted and the reply list auto-expanded late).
-  // Skip when highlightedL2CommentId is set — the L1 is only pinned for context, not the target.
-  useEffect(() => {
-    if (
-      isL2List ||
-      !parentId ||
-      !effectiveHighlightedCommentId ||
-      highlightedComment.length === 0 ||
-      highlightedL2CommentId
-    )
-      return;
-
-    const fallback = setTimeout(() => {
-      if (!hasBouncedRef.current) {
-        hasBouncedRef.current = true;
-        setIsHighlighted(true);
-        timerRef.current = setTimeout(() => {
-          setIsHighlighted(false);
-        }, 3000);
-      }
-    }, 800);
-
-    return () => clearTimeout(fallback);
-  }, [isL2List, parentId, effectiveHighlightedCommentId, highlightedComment.length]);
+  // Persistent deep-link highlight (Figma "Highlight a comment"): the pinned "highlighted"
+  // slot below renders the target reply, and we keep the glow fill + accent edge on it the
+  // whole time it is the target — no timed animation. Exclude the L1-pinned-for-context case
+  // (the real target is a deeper L2, flagged by highlightedL2CommentId) and the "latest L2 just
+  // posted" affordance, matching the previous trigger conditions.
+  const isHighlighted =
+    !!effectiveHighlightedCommentId &&
+    highlightedComment.length > 0 &&
+    (isL2List || (!highlightLatestL2 && !highlightedL2CommentId));
 
   return (
     <div
@@ -419,10 +343,6 @@ export const ReplyCommentList = ({
               className={clsx(
                 styles.replyCommentList__item,
                 styles.replyCommentList__highlightedComment,
-                isHighlighted &&
-                  !isL2List &&
-                  !highlightLatestL2 &&
-                  styles.replyCommentList__bounceAnimation,
               )}
               data-testid="highlighted-comment"
               data-is-deleted={comment.isDeleted ? 'true' : 'false'}
@@ -437,7 +357,9 @@ export const ReplyCommentList = ({
                 isL2={isL2List}
                 l0AncestorId={l0AncestorId}
                 onClickReply={onClickReply}
-                isHighlighted={isHighlighted && isL2List}
+                // Persistent highlight for the actual target reply (L1 or L2); the
+                // L1-pinned-for-context case is already excluded by `isHighlighted`.
+                isHighlighted={isHighlighted}
                 showReply={!!(showReplyCommentAt && comment.commentId === showReplyCommentAt)}
                 renderL2ReplyList={
                   !isL2List
