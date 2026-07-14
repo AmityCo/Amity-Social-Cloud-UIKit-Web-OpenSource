@@ -160,7 +160,17 @@ export class AmityUIKitManager {
     };
 
     if (userId) {
-      await ASCClient.login({ userId, displayName, authToken }, bindedSessionHandlder);
+      // Only send displayName when the host actually supplied one. login() is
+      // create-or-authenticate: for a NEW user an omitted displayName is seeded
+      // from the userId server-side; for an EXISTING user the server-side
+      // displayName is preserved when the field is absent, but may be overwritten
+      // if a value (even the userId) is passed. So we must OMIT the key entirely
+      // when it wasn't provided — not pass undefined or an empty string.
+      const loginParams: Parameters<typeof ASCClient.login>[0] = { userId, authToken };
+      if (displayName) {
+        loginParams.displayName = displayName;
+      }
+      await ASCClient.login(loginParams, bindedSessionHandlder);
     } else if (!userId && isBotUser) {
       await ASCClient.loginAsBot({
         sessionHandler: bindedSessionHandlder,
