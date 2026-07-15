@@ -848,7 +848,7 @@
   "amity_social_label_you_can_no_longer_edit_this_event_changes_are_restricte": "You can no longer edit this event. Changes are restricted 15 minutes before the start time.",
   "amity_social_label_you_have_been_muted": "You have been muted.",
   "amity_social_label_you_re_in_the_backstage": "You’re in the backstage",
-  "amity_social_leave_as_cohost_message": "Leave As Cohost Message",
+  "amity_social_leave_as_cohost_message": "Are you sure you want to cancel this invitation? They’ll no longer be invited as a co-host and will remain as a viewer.",
   "amity_social_leave_backstage": "Leave backstage",
   "amity_social_leave_community": "Leave community",
   "amity_social_leave_live_stream": "Leave live stream",
