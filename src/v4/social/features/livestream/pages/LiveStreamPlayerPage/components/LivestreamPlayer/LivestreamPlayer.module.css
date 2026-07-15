@@ -44,7 +44,14 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+
+  /* On mobile the chat feed is portaled inside the Plyr container, which forms
+     its own stacking context (position: relative; z-index: 0). The chat can
+     therefore never out-rank this overlay, a sibling of .plyr at z-index: 2,
+     so the overlay was swallowing taps on the chat (e.g. a message's 3-dot
+     menu). Stop the overlay above the chat feed band (bottom: 4.5rem;
+     height: 40%) so chat taps reach the messages. See PDT-3883. */
+  bottom: calc(40% + 4.5rem);
   z-index: 2;
   background: transparent;
   cursor: pointer;
@@ -144,5 +151,11 @@
 
   .liveStreamPlayer__video[data-is-hidden='true'] {
     display: none;
+  }
+
+  /* On desktop the chat is rendered in a separate column (not over the video),
+     so the tap overlay can safely cover the whole player again. */
+  .liveStreamPlayer__tapCatcher {
+    bottom: 0;
   }
 }
