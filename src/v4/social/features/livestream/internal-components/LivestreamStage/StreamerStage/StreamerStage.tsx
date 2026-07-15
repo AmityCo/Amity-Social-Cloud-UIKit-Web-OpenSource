@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import {
   isTrackReference,
   LiveKitRoom,
@@ -228,11 +228,11 @@ const Stage = ({
       type: 'confirm',
       okButtonColor: 'alert',
       onOk: () => handleLeaveAsCoHost(),
-      okText: useString('amity_social_modal_dialog_leave_button'),
-      cancelText: useString('amity_social_button_cancel'),
-      title: useString('amity_social_button_leave_as_co_host'),
+      okText: resolveString('amity_social_modal_dialog_leave_button'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      title: resolveString('amity_social_button_leave_as_co_host'),
       pageId: '*',
-      content: useString('amity_social_leave_as_cohost_message'),
+      content: resolveString('amity_social_leave_as_cohost_message'),
     });
   }, [confirm, handleLeaveAsCoHost]);
 
@@ -397,7 +397,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Approved) {
       success({
-        content: useString('amity_social_label_cohost_accepted_invitation'),
+        content: resolveString('amity_social_label_cohost_accepted_invitation'),
         alignment: notificationAlignment,
       });
       liveChannel?.channelId &&
@@ -417,7 +417,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   useEffect(() => {
     if (invitationByMe?.status === InvitationStatusEnum.Rejected) {
       success({
-        content: useString('amity_social_label_cohost_declined_invitation'),
+        content: resolveString('amity_social_label_cohost_declined_invitation'),
         alignment: notificationAlignment,
       });
       setInvitationByMe?.(undefined);
