@@ -91,6 +91,15 @@ export function ProductTagSelection({
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { online } = useNetworkState();
 
+  // useString is a hook — resolve every label unconditionally at the top. These used to be
+  // called inline inside conditional JSX (`{!online && …}`, the selected-products block, the
+  // submit button), so a render that toggled those conditions changed the number of hooks and
+  // triggered React's "change in the order of Hooks" warning (PDT-3913).
+  const waitingForNetworkText = useString('amity_social_label_waiting_for_network');
+  const taggedProductsText = useString('amity_social_button_tagged_products');
+  const addProductsText = useString('amity_social_button_add_products');
+  const doneText = useString('amity_social_button_done');
+
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
@@ -390,11 +399,7 @@ export function ProductTagSelection({
       data-display={displayMode}
     >
       {!online && (
-        <Notification
-          icon={<Spinner />}
-          content={useString('amity_social_label_waiting_for_network')}
-          alignment="fixed"
-        />
+        <Notification icon={<Spinner />} content={waitingForNetworkText} alignment="fixed" />
       )}
       <ProductTagSelectionHeader
         mode={mode}
@@ -422,7 +427,7 @@ export function ProductTagSelection({
       {selectedProductTagsToShow && selectedProductTagsToShow?.length > 0 && (
         <>
           <Typography.BodyBold className={styles.productTagSelection__selectedProduct__title}>
-            {useString('amity_social_button_tagged_products')}
+            {taggedProductsText}
           </Typography.BodyBold>
           <div className={styles.productTagSelection__selectedProductWrapper}>
             {selectedProductTagsToShow?.length > 5 && showLeftArrow && (
@@ -589,11 +594,7 @@ export function ProductTagSelection({
       {!isShowNoProductsTagYet && (
         <div data-mode={mode} className={styles.productTagSelection__submitButton}>
           <SubmitButton
-            textButton={
-              mode === 'livestream'
-                ? useString('amity_social_button_add_products')
-                : useString('amity_social_button_done')
-            }
+            textButton={mode === 'livestream' ? addProductsText : doneText}
             isDisabled={
               (mode === 'livestream'
                 ? localSelectedProduct.length === 0 || isSubmitting
