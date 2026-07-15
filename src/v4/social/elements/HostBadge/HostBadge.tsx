@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './HostBadge.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
-import { LivestreamOutlined } from '~/v4/icons/LivestreamOutlined';
+import { Host } from '~/v4/icons/Host';
 import { Typography } from '~/v4/core/components';
 
 interface HostBadgeProps {
@@ -35,7 +35,7 @@ export function HostBadge({ pageId = '*', componentId = '*', className }: HostBa
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      <LivestreamOutlined className={styles.hostBadge__icon} />
+      <Host className={styles.hostBadge__icon} />
       <Typography.CaptionSmall className={styles.hostBadge__text}>
         {resolveText('amity_social_button_host')}
       </Typography.CaptionSmall>

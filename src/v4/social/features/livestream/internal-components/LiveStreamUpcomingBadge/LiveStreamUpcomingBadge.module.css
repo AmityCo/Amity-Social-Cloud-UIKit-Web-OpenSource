@@ -1,8 +1,0 @@
-.liveStreamUpcomingBadge {
-  border-radius: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  text-transform: uppercase;
-  backdrop-filter: blur(5px);
-  color: var(--asc-color-white);
-  background-color: var(--asc-color-transparent-black);
-}

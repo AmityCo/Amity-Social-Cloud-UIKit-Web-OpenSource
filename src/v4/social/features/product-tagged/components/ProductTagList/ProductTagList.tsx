@@ -53,9 +53,7 @@ export function ProductTagList({
 
   const handleClickProductLink = (productTag: Amity.ProductTag) => {
     if (!productTag.product) return;
-    if (renderMode === ProductTagListRenderModeEnum.LIVESTREAM) {
-      return AmityGlobalBehavior?.onLivestreamProductTagClick?.({ product: productTag.product });
-    }
+    // Livestream removed: all product-tag clicks route through the post handler.
     return AmityGlobalBehavior?.onPostProductTagClick?.({ product: productTag.product });
   };
 

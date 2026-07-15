@@ -152,18 +152,22 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
       // Logging in with a userId creates the user on the network if it does
       // not exist yet, and sets the initial display name. This is the
       // transition from visitor -> signed-in user.
-      await Client.login(
-        {
-          userId: resolvedUserId,
-          displayName: displayName || undefined,
-          authToken,
+      //
+      // Only include displayName when one was actually entered — omit the key
+      // entirely otherwise (do not send undefined/"") so an existing user's
+      // server-side displayName is never overwritten.
+      const loginParams: Parameters<typeof Client.login>[0] = {
+        userId: resolvedUserId,
+        authToken,
+      };
+      if (displayName) {
+        loginParams.displayName = displayName;
+      }
+      await Client.login(loginParams, {
+        sessionWillRenewAccessToken: (renewal) => {
+          renewal.renew();
         },
-        {
-          sessionWillRenewAccessToken: (renewal) => {
-            renewal.renew();
-          },
-        },
-      );
+      });
 
       // Now that we are signed in, resolve the avatar (if any). This is the
       // deferred upload — it could not run earlier in visitor mode.

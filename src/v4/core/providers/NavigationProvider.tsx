@@ -7,7 +7,6 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react';
-import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
@@ -17,11 +16,8 @@ import {
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { resolveString } from '~/v4/core/localization';
 import { AmityRoute } from './AmityUIKitProvider';
-import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useNotifications } from './NotificationProvider';
-import { CreateLivestreamPageProps } from '~/v4/social/features/livestream/pages/CreateLivestreamPage';
 import { EventSetupProps } from '~/v4/social/features';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
@@ -34,7 +30,6 @@ export enum PageTypes {
   CommunityFeed = 'communityFeed',
   CommunityEdit = 'communityEdit',
   Category = 'category',
-  ViewStoryPage = 'ViewStoryPage',
   SocialHomePage = 'SocialHomePage',
   PostDetailPage = 'PostDetailPage',
   CommunityProfilePage = 'CommunityProfilePage',
@@ -46,10 +41,8 @@ export enum PageTypes {
   UserPendingFollowRequestPage = 'UserPendingFollowRequestPage',
   SocialGlobalSearchPage = 'SocialGlobalSearchPage',
   SelectPostTargetPage = 'SelectPostTargetPage',
-  DraftPage = 'DraftPage',
   PostComposerPage = 'PostComposerPage',
   MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
-  StoryTargetSelectionPage = 'StoryTargetSelectionPage',
   PollTargetSelectionPage = 'PollTargetSelectionPage',
   EventTargetSelectionPage = 'EventTargetSelectionPage',
   AllCategoriesPage = 'AllCategoriesPage',
@@ -59,18 +52,11 @@ export enum PageTypes {
   CommunityInviteMemberPage = 'CommunityInviteMemberPage',
   CommunitySettingPage = 'CommunitySettingPage',
   CommunityPostPermissionPage = 'CommunityPostPermissionPage',
-  CommunityStorySettingPage = 'CommunityStorySettingPage',
   PendingPostsPage = 'PendingPostsPage',
   CommunityMembershipPage = 'CommunityMembershipPage',
   CommunityPendingInvitationPage = 'CommunityPendingInvitationPage',
   CommunityCreatePage = 'CommunityCreatePage',
   PollPostComposerPage = 'PollPostComposerPage',
-  LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
-  LiveStreamBannedPage = 'LiveStreamBannedPage',
-  LiveStreamPlayerPage = 'LiveStreamPlayerPage',
-  LivestreamUnsupportedPage = 'LivestreamUnsupportedPage',
-  LivestreamTargetSelectionPage = 'LivestreamTargetSelectionPage',
-  CreateLivestreamPage = 'CreateLivestreamPage',
   NotificationTrayPage = 'NotificationTrayPage',
   PendingRequestPage = 'PendingRequestPage',
   DraftClipPage = 'DraftClipPage',
@@ -110,14 +96,6 @@ type Page =
       };
     }
   | {
-      type: PageTypes.ViewStoryPage;
-      context: {
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        storyType: 'communityFeed' | 'globalFeed';
-      };
-    }
-  | {
       type: PageTypes.PostDetailPage;
       context: {
         postId: string;
@@ -148,16 +126,6 @@ type Page =
   | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
   | { type: PageTypes.SelectPostTargetPage; context?: { isClipPost?: boolean } }
   | {
-      type: PageTypes.DraftPage;
-      context: {
-        communityId?: string;
-        mediaType: AmityStoryMediaType;
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        storyType: 'communityFeed' | 'globalFeed';
-      };
-    }
-  | {
       type: PageTypes.PostComposerPage;
       context: {
         targetId: string | null;
@@ -168,9 +136,6 @@ type Page =
         isClipPost?: boolean;
         targetName?: string;
       };
-    }
-  | {
-      type: PageTypes.StoryTargetSelectionPage;
     }
   | {
       type: PageTypes.EventTargetSelectionPage;
@@ -233,12 +198,6 @@ type Page =
       };
     }
   | {
-      type: PageTypes.CommunityStorySettingPage;
-      context: {
-        community: Amity.Community;
-      };
-    }
-  | {
       type: PageTypes.PendingPostsPage;
       context: {
         communityId: string;
@@ -258,26 +217,6 @@ type Page =
     }
   | {
       type: PageTypes.PollTargetSelectionPage;
-    }
-  | {
-      type: PageTypes.LiveStreamTerminatedPage;
-    }
-  | {
-      type: PageTypes.LiveStreamBannedPage;
-    }
-  | {
-      type: PageTypes.LiveStreamPlayerPage;
-      context: LiveStreamPlayerPageProps;
-    }
-  | {
-      type: PageTypes.LivestreamUnsupportedPage;
-    }
-  | {
-      type: PageTypes.CreateLivestreamPage;
-      context: CreateLivestreamPageProps;
-    }
-  | {
-      type: PageTypes.LivestreamTargetSelectionPage;
     }
   | {
       type: PageTypes.NotificationTrayPage;
@@ -356,24 +295,11 @@ type ContextValue = {
   goToSelectPostTargetPage: () => void;
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => void;
   goToSelectPollPostTargetPage: () => void;
-  goToStoryTargetSelectionPage: () => void;
   goToSelectEventTargetPage: () => void;
   goToPollPostComposerPage: (context: {
     targetId: string | null;
     targetType: 'community' | 'user';
     pollType?: 'text' | 'image';
-  }) => void;
-  goToDraftStoryPage: (
-    targetId: string,
-    targetType: string,
-    mediaType: AmityStoryMediaType,
-    storyType: 'communityFeed' | 'globalFeed',
-  ) => void;
-  goToViewStoryPage: (context: {
-    targetId: string;
-    targetType: Amity.StoryTargetType;
-    storyType: 'communityFeed' | 'globalFeed';
-    replace?: boolean;
   }) => void;
   goToNotificationTrayPage: () => void;
   setNavigationBlocker?: (
@@ -397,12 +323,6 @@ type ContextValue = {
         }
       | { mode: Mode.EDIT; post: Amity.Post; isClipPost?: boolean },
   ) => void;
-  goToStoryCreationPage: (context: {
-    targetId: string;
-    targetType: Amity.StoryTargetType;
-    mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => void;
   goToSocialHomePage: () => void;
   goToAllCategoriesPage: () => void;
   goToCommunitiesByCategoryPage: (context: { categoryId: string }) => void;
@@ -426,13 +346,7 @@ type ContextValue = {
   goToMembershipPage?: (community: Amity.Community) => void;
   goToPendingInvitationPage?: (community: Amity.Community) => void;
   goToPostPermissionPage?: (community: Amity.Community) => void;
-  goToStorySettingPage?: (community: Amity.Community) => void;
   goToPendingPostPage?: (communityId: string) => void;
-  goToLiveStreamTerminatedPage?: () => void;
-  goToLiveStreamBannedPage?: () => void;
-  goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
-  goToLivestreamUnsupportedPage: () => void;
-  goToCreateLivestreamPage?: (context: CreateLivestreamPageProps) => void;
   goToPendingRequestPage?: (community: Amity.Community) => void;
   goToDraftClipPage?: (context: {
     targetId: string | null;
@@ -446,13 +360,6 @@ type ContextValue = {
     targetId?: string;
   }) => void;
   onProductTagClick?: (context: { productTag: Amity.ProductTag }) => void;
-  //V3 functions
-  onClickStory: (
-    storyId: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetId?: string[],
-  ) => void;
-
   handleVisitorUserAction: (context: {
     alignment: NotificationAlignment;
     communityId?: string;
@@ -486,26 +393,13 @@ let defaultValue: ContextValue = {
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
   goToPostDetailPage: (context: GoToPostDetailPageParams) => {},
-  goToViewStoryPage: (context: {
-    targetId: string;
-    targetType: Amity.StoryTargetType;
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => {},
-  goToDraftStoryPage: (
-    targetId: string,
-    targetType: string,
-    mediaType: AmityStoryMediaType,
-    storyType: 'communityFeed' | 'globalFeed',
-  ) => {},
   goToCommunityProfilePage: (communityId: string, page?: number) => {},
   goToSocialGlobalSearchPage: (tab?: string, keyword?: string) => {},
   goToSelectPostTargetPage: () => {},
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => {},
-  goToStoryTargetSelectionPage: () => {},
   goToSelectPollPostTargetPage: () => {},
   goToPollPostComposerPage: () => {},
   goToPostComposerPage: () => {},
-  goToStoryCreationPage: () => {},
   goToDraftClipPage: (context: {
     targetId: string | null;
     targetType: 'community' | 'user';
@@ -524,13 +418,7 @@ let defaultValue: ContextValue = {
   goToMembershipPage: (community: Amity.Community) => {},
   goToPendingInvitationPage: (community: Amity.Community) => {},
   goToPostPermissionPage: (community: Amity.Community) => {},
-  goToStorySettingPage: (community: Amity.Community) => {},
   goToPendingPostPage: (communityId: string) => {},
-  goToLiveStreamTerminatedPage: () => {},
-  goToLiveStreamBannedPage: () => {},
-  goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
-  goToLivestreamUnsupportedPage: () => {},
-  goToCreateLivestreamPage: (context: CreateLivestreamPageProps) => {},
   goToNotificationTrayPage: () => {},
   goToClipFeedPage: (context: {
     currentPostId?: string;
@@ -542,12 +430,6 @@ let defaultValue: ContextValue = {
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
-  //V3 functions
-  onClickStory: (
-    storyId: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetId?: string[],
-  ) => {},
   handleVisitorUserAction: () => {},
   handleNonMemberAction: () => {},
   handleNonFollowerAction: () => {},
@@ -572,8 +454,6 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
-    goToViewStoryPage: ({ targetId, storyType, targetType }) =>
-      console.log(`NavigationContext goToViewStoryPage(${targetId}, ${storyType}, ${targetType})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -612,12 +492,8 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToSelectPollPostTargetPage()`),
     goToPollPostComposerPage: (context) =>
       console.log(`NavigationContext goToPollPostComposerPage(${context})`),
-    goToStoryTargetSelectionPage: () =>
-      console.log('NavigationContext goToStoryTargetSelectionPage()'),
     goToSelectEventTargetPage: () => console.log('NavigationContext goToSelectEventTargetPage()'),
-    goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
     goToPostComposerPage: () => console.log(`NavigationContext goToPostComposerPage()`),
-    goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
     goToDraftClipPage: (context) => console.log(`NavigationContext goToDraftClipPage(${context})`),
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
     goToMyCommunitiesSearchPage: () =>
@@ -633,25 +509,12 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingInvitationPage: () => console.log('NavigationContext goToPendingInvitationsPage()'),
     goToCommunitySettingPage: (community) =>
       console.log(`NavigationContext goToCommunitySettingPage(${community})`),
-    goToLiveStreamTerminatedPage: () =>
-      console.log('NavigationContext goToLiveStreamTerminatedPage()'),
-    goToLiveStreamBannedPage: () => console.log('NavigationContext goToLiveStreamBannedPage()'),
-    goToLiveStreamPlayerPage: (context) =>
-      console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
-    goToLivestreamUnsupportedPage: () =>
-      console.log('NavigationContext goToLivestreamUnsupportedPage()'),
-    goToCreateLivestreamPage: (context) =>
-      console.log(`NavigationContext goToCreateLivestreamPage(${JSON.stringify(context)})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
     goToPendingRequestPage: (context) =>
       console.log(`NavigationContext goToPendingRequestPage(${context})`),
     goToClipFeedPage: (context) => console.log(`NavigationContext goToClipFeedPage(${context})`),
     onProductTagClick: (context: { productTag: Amity.ProductTag }) =>
       console.log(`NavigationContext onProductTagClick(${JSON.stringify(context)})`),
-    //V3 functions
-    onClickStory: (storyId, storyType, targetIds) =>
-      console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
-
     handleVisitorUserAction: () => console.log('NavigationContext handleVisitorUserAction()'),
     handleNonMemberAction: () => console.log('NavigationContext handleNonMemberAction()'),
     handleNonFollowerAction: () => console.log('NavigationContext handleNonFollowerAction()'),
@@ -697,17 +560,6 @@ interface NavigationProviderProps {
   onClickCategory?: (categoryId: string) => void;
   onClickCommunity?: (communityId: string) => void;
   onClickUser?: (userId: string) => void;
-  goToViewStoryPage?: (context: {
-    storyId: string;
-    storyType: 'communityFeed' | 'globalFeed';
-    targetType: Amity.StoryTargetType;
-  }) => void;
-  goToDraftStoryPage?: (
-    targetId: string,
-    targetType: string,
-    mediaType: AmityStoryMediaType,
-    storyType: 'communityFeed' | 'globalFeed',
-  ) => void;
   goToAllCategoriesPage?: () => void;
   goToCommunitiesByCategoryPage?: (context: { categoryId: string }) => void;
   goToCreateCommunityPage?: (context: { mode: AmityCommunitySetupPageMode }) => void;
@@ -729,12 +581,6 @@ interface NavigationProviderProps {
   onEditUser?: (userId: string) => void;
   onMessageUser?: (userId: string) => void;
   onBack?: (page?: number) => void;
-  //V3 functions
-  onClickStory?: (
-    storyId: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetId?: string[],
-  ) => void;
   activeRoute?: AmityRoute;
   onRouteChange?: (route: AmityRoute) => void;
   onEmptyNavigationStack?: () => void;
@@ -811,16 +657,8 @@ export default function NavigationProvider({
 
   const confirmation = askForConfirmation ?? confirm;
 
-  const { setStreamPlayer } = useLayoutContext();
-
   const pushPage = useCallback(async (newPage) => {
     setPages((prevState) => [...prevState, newPage]);
-  }, []);
-
-  const replacePage = useCallback((newPage) => {
-    setPages((prevState) =>
-      prevState.length > 0 ? [...prevState.slice(0, -1), newPage] : [newPage],
-    );
   }, []);
 
   const setDefaultPage = useCallback((defaultPage) => {
@@ -1042,27 +880,6 @@ export default function NavigationProvider({
     [onChangePage, onBack, popPage],
   );
 
-  const goToViewStoryPage = useCallback(
-    ({ targetId, storyType, targetType, replace }) => {
-      const next = {
-        type: PageTypes.ViewStoryPage,
-        context: {
-          targetId,
-          storyType,
-          targetType,
-        },
-      };
-
-      if (replace) {
-        replacePage(next);
-        return;
-      }
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage, replacePage],
-  );
-
   const goToUserProfilePage = useCallback(
     (userId) => {
       const next = {
@@ -1136,14 +953,6 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const goToStoryTargetSelectionPage = useCallback(() => {
-    const next = {
-      type: PageTypes.StoryTargetSelectionPage,
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
   const goToSelectEventTargetPage = useCallback(() => {
     const next = {
       type: PageTypes.EventTargetSelectionPage,
@@ -1160,23 +969,6 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
-  const goToStoryCreationPage = useCallback(
-    ({ targetId, targetType, mediaType, storyType }) => {
-      const next = {
-        type: PageTypes.DraftPage,
-        context: {
-          targetId,
-          targetType,
-          mediaType,
-          storyType,
-        },
-      };
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
   const goToDraftClipPage = useCallback(
     ({ targetId, targetType, community }) => {
       const next = {
@@ -1185,23 +977,6 @@ export default function NavigationProvider({
           targetId,
           targetType,
           community,
-        },
-      };
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
-  const goToDraftStoryPage = useCallback(
-    (targetId, targetType, mediaType, storyType) => {
-      const next = {
-        type: PageTypes.DraftPage,
-        context: {
-          targetId,
-          targetType,
-          mediaType,
-          storyType,
         },
       };
 
@@ -1337,24 +1112,6 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const handleClickStory = useCallback(
-    (targetId, storyType, targetIds) => {
-      const next = {
-        type: PageTypes.ViewStoryPage,
-        context: {
-          targetId,
-          storyType,
-          targetIds,
-        },
-      };
-
-      if (onChangePage) return onChangePage(next);
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
   const goToCommunitySettingPage = useCallback(
     (community) => {
       const next = {
@@ -1373,20 +1130,6 @@ export default function NavigationProvider({
     (community) => {
       const next = {
         type: PageTypes.CommunityPostPermissionPage,
-        context: {
-          community,
-        },
-      };
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
-  const goToStorySettingPage = useCallback(
-    (community) => {
-      const next = {
-        type: PageTypes.CommunityStorySettingPage,
         context: {
           community,
         },
@@ -1449,52 +1192,6 @@ export default function NavigationProvider({
       pushPage(next);
     },
     [onChangePage, pushPage],
-  );
-
-  const goToLiveStreamTerminatedPage = useCallback(() => {
-    const next = {
-      type: PageTypes.LiveStreamTerminatedPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToLiveStreamBannedPage = useCallback(() => {
-    const next = {
-      type: PageTypes.LiveStreamBannedPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToLiveStreamPlayerPage = useCallback(
-    (context: LiveStreamPlayerPageProps) => {
-      setStreamPlayer(context); // modal as page
-    },
-    [setStreamPlayer],
-  );
-
-  const goToLivestreamUnsupportedPage = useCallback(() => {
-    const next = {
-      type: PageTypes.LivestreamUnsupportedPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToCreateLivestreamPage = useCallback(
-    (context: CreateLivestreamPageProps) => {
-      const next = {
-        type: PageTypes.CreateLivestreamPage,
-        context,
-      };
-
-      pushPage(next);
-    },
-    [pushPage],
   );
 
   const goToNotificationTrayPage = useCallback(() => {
@@ -1672,15 +1369,11 @@ export default function NavigationProvider({
         goToEditUserPage,
         goToSocialGlobalSearchPage,
         goToCommunityProfilePage,
-        goToViewStoryPage,
         goToSelectPostTargetPage,
         goToSelectClipPostTargetPage,
-        goToStoryTargetSelectionPage,
         goToSelectPollPostTargetPage,
         goToSelectEventTargetPage,
-        goToStoryCreationPage,
         goToDraftClipPage,
-        goToDraftStoryPage,
         goToPostComposerPage,
         goToSocialHomePage,
         goToMyCommunitiesSearchPage,
@@ -1693,7 +1386,6 @@ export default function NavigationProvider({
         goToInviteMemberPage,
         goToCommunitySettingPage,
         goToPostPermissionPage,
-        goToStorySettingPage,
         goToPendingPostPage,
         goToMembershipPage,
         goToPendingInvitationPage,
@@ -1702,12 +1394,6 @@ export default function NavigationProvider({
         goToUserRelationshipPage,
         goToPendingFollowRequestPage,
         goToBlockedUsersPage,
-        goToLiveStreamTerminatedPage,
-        goToLiveStreamBannedPage,
-        goToLiveStreamPlayerPage,
-        goToLivestreamUnsupportedPage,
-        goToCreateLivestreamPage,
-        onClickStory: handleClickStory,
         goToNotificationTrayPage,
         goToPendingRequestPage,
         goToClipFeedPage,

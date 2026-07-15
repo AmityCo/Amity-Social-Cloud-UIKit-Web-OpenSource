@@ -1,7 +1,6 @@
 import React from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
 import { JoinRequestStatusEnum, JoinResultStatusEnum } from '@amityco/ts-sdk';
-import { StoryTab } from '~/v4/social/components/StoryTab';
 import { CommunityPendingPost } from '~/v4/social/elements/CommunityPendingPost';
 import { CommunityCover } from '~/v4/social/elements/CommunityCover';
 import { CommunityJoinButton } from '~/v4/social/elements/CommunityJoinButton';
@@ -227,12 +226,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               typographyVariant="bodyBold"
               className={styles.communityProfile__cancelJoinButton}
             />
-          </div>
-        )}
-
-        {(community.isJoined || community.isPublic) && (
-          <div>
-            <StoryTab type="communityFeed" pageId={pageId} communityId={community.communityId} />
           </div>
         )}
 

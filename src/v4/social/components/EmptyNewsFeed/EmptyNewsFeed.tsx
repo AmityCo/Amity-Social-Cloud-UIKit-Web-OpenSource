@@ -9,7 +9,6 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { Divider } from '~/v4/social/elements/Divider';
-import { StoryTab } from '~/v4/social/components/StoryTab';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 
@@ -33,10 +32,6 @@ export function EmptyNewsfeed({ pageId = '*' }: EmptyNewsfeedProps) {
 
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
-      <Divider isShown={!isDesktop} />
-      <div className={styles.emptyNewsfeed__storyTab}>
-        <StoryTab type="globalFeed" pageId={pageId} />
-      </div>
       <Divider isShown={!isDesktop} />
       <PostComposer pageId={pageId} />
       <div className={styles.emptyNewsfeed}>

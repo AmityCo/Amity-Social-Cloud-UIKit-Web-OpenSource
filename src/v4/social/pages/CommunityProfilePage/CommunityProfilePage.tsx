@@ -14,8 +14,6 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
-import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButton';
-import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { FileTrigger } from 'react-aria-components';
 import { CommunityProfileTab } from '~/v4/social/elements/CommunityProfileTab';
 import { PostComposer } from '~/v4/social/components/PostComposer';
@@ -23,7 +21,6 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
-import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
@@ -53,7 +50,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { openPopup } = usePopupContext();
   const { discardPostCreation } = useDiscardPostCreation();
   const { currentUserId } = useSDK();
-  const { file, setFile } = useStoryContext();
   const { file: clipFile, setFile: setClipFile } = useClipContext();
   const [isSticky, setIsSticky] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -61,7 +57,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const profileTabRef = useRef<HTMLDivElement>(null);
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { activeTab, setActiveTab } = useCommunityTabContext();
-  const { hasStoryPermission } = useStoryPermission(communityId);
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { isExcluded: isCreatePostButtonExcluded } = useAmityElement({
@@ -79,7 +74,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { isLoading: isInvitationLoading } = useGetInvitation(community as Amity.Community);
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
-  const { goToCreateLivestreamPage } = useNavigation();
   const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
   const { hasCreateEventPermission } = useEventPermission(communityId);
@@ -102,11 +96,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const handleTabChange = (tab: CommunityTab) => setActiveTab(tab);
 
   const handleRefresh = async () => setRefreshKey((prevKey) => prevKey + 1);
-
-  const handleFileSelect = (files: FileList | null) => {
-    if (files && files.length > 0) setFile(files[0]);
-    removeDrawerData();
-  };
 
   const handleClipFileSelect = (files: FileList | null) => {
     if (files && files.length > 0) setClipFile(files[0]);
@@ -141,20 +130,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   useEffect(() => {
     !linkToPost && setActiveTab('community_feed');
   }, [communityId]);
-
-  useEffect(() => {
-    if (file) {
-      AmityCommunityProfilePageBehavior?.goToStoryCreationPage?.({
-        targetId: communityId,
-        targetType: 'community',
-        mediaType:
-          file && file?.type.includes('image')
-            ? { type: 'image', url: URL.createObjectURL(file) }
-            : { type: 'video', url: URL.createObjectURL(file!) },
-        storyType: 'communityFeed',
-      });
-    }
-  }, [file]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -216,7 +191,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
             <PostComposer
               pageId={pageId}
               communityId={communityId}
-              onSelectFile={handleFileSelect}
               onClickEvent={() => {
                 AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
                   targetId: communityId,
@@ -261,13 +235,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                   ),
                 });
               }}
-              onClickLivestream={() =>
-                community?.communityId &&
-                goToCreateLivestreamPage?.({
-                  targetId: community?.communityId,
-                  targetType: 'community',
-                })
-              }
             />
           </div>
         )}
@@ -311,11 +278,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                           });
                         }}
                       />
-                      {hasStoryPermission && (
-                        <FileTrigger onSelect={handleFileSelect}>
-                          <CreateStoryButton pageId={pageId} />
-                        </FileTrigger>
-                      )}
                       {!isDesktop && (
                         <FileTrigger
                           onSelect={handleClipFileSelect}

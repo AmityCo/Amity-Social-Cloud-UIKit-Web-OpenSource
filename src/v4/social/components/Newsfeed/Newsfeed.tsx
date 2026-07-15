@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Divider } from '~/v4/social/elements/Divider';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { StoryTab } from '~/v4/social/components/StoryTab';
 import { Feed } from '~/v4/social/features/shared/components/Feed';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 import { PostComposer } from '~/v4/social/components/PostComposer';
@@ -71,9 +70,6 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   if (isAutoJoinInProgress) {
     return (
       <PullToRefresh className={styles.newsfeed} style={themeStyles} onTouchEndCallback={refresh}>
-        <div className={styles.newsfeed__storyTab}>
-          <StoryTab type="globalFeed" pageId={pageId} />
-        </div>
         <Divider isShown={!isDesktop} />
         <PostComposer pageId={pageId} />
         <Feed
@@ -106,9 +102,6 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
 
   return (
     <PullToRefresh className={styles.newsfeed} style={themeStyles} onTouchEndCallback={refresh}>
-      <div className={styles.newsfeed__storyTab}>
-        <StoryTab type="globalFeed" pageId={pageId} />
-      </div>
       <Divider isShown={!isDesktop} />
       <PostComposer pageId={pageId} />
       <Feed

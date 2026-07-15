@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
-import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
 import {
   useInvitationNotificationTray,
   InvitationNotificationTray,
@@ -29,8 +28,6 @@ type LayoutContextType = {
   activeTab: HomePageTab;
   prevActiveTab: HomePageTab;
   setActiveTab: (tab: HomePageTab) => void;
-  liveStreamPlayer: LiveStreamPlayerPageProps | null;
-  setStreamPlayer: (props: LiveStreamPlayerPageProps | null) => void;
   acceptedInvitation: Amity.Invitation | null;
   setAcceptedInvitation: (invitation: Amity.Invitation) => void;
   invitationNotificationTray: InvitationNotificationTray;
@@ -46,8 +43,6 @@ const LayoutContext = createContext<LayoutContextType>({
   activeTab: HomePageTab.Newsfeed,
   prevActiveTab: HomePageTab.Newsfeed,
   setActiveTab: () => {},
-  liveStreamPlayer: null,
-  setStreamPlayer: () => {},
   acceptedInvitation: null,
   setAcceptedInvitation: () => {},
   invitationNotificationTray: initialInvitationNotificationTray,
@@ -94,7 +89,6 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
     setActiveTabState(tab);
   };
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
-  const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();
   const { linkToPost, setLinkToPost } = useLinkToPost();
   const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
@@ -106,8 +100,6 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
         activeTab,
         prevActiveTab,
         setActiveTab,
-        liveStreamPlayer,
-        setStreamPlayer,
         acceptedInvitation,
         setAcceptedInvitation,
         invitationNotificationTray,

@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
-import { EventDetailProps, EventSetupProps, LiveStreamPlayerPageProps } from '~/v4/social/features';
+import { EventDetailProps, EventSetupProps } from '~/v4/social/features';
 import {
   AmityCommunitySetupPageMode,
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
-import { CreateLivestreamPageProps } from '~/v4/social/features/livestream/pages/CreateLivestreamPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { type GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
@@ -15,13 +14,6 @@ import { NotificationAlignment } from '~/v4/core/components/Notification';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface PageBehavior {
-  AmityStoryViewPageBehavior?: {
-    onCloseAction?(): void;
-    hyperLinkAction?(context: Record<string, unknown>): void;
-  };
-  AmityDraftStoryPageBehavior?: {
-    closeAction?(): void;
-  };
   onClickHyperLink?(): void;
   AmitySocialHomePageBehavior?: {
     goToNotificationTrayPage?: () => void;
@@ -29,12 +21,6 @@ export interface PageBehavior {
   };
   AmityGlobalFeedComponentBehavior?: {
     goToPostDetailPage?: (context: GoToPostDetailPageParams) => void;
-    goToViewStoryPage?: (context: {
-      targetId: string;
-      targetType: Amity.StoryTargetType;
-      storyType: 'communityFeed' | 'globalFeed';
-      targetIds?: string[];
-    }) => void;
     goToCreateCommunityPage?(context: { mode: AmityCommunitySetupPageMode }): void;
   };
   AmityPostDetailPageBehavior?: {
@@ -72,9 +58,7 @@ export interface PageBehavior {
   AmityCreatePostMenuComponentBehavior?: {
     goToSelectPostTargetPage?(): void;
     goToSelectClipPostTargetPage?(context: { isClipPost: boolean }): void;
-    goToStoryTargetSelectionPage?(): void;
     goToSelectPollPostTargetPage?(): void;
-    goToLivestreamUnsupportedPage?(): void;
     goToSelectEventTargetPage?(): void;
   };
   AmityPostTargetSelectionPage?: {
@@ -90,14 +74,6 @@ export interface PageBehavior {
       community?: Amity.Community;
     }) => void;
   };
-  AmityStoryTargetSelectionPage?: {
-    goToStoryCreationPage?(context: {
-      targetId: string | null;
-      targetType: Amity.StoryTargetType;
-      mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-      storyType: 'communityFeed' | 'globalFeed';
-    }): void;
-  };
   AmityPostComposerPageBehavior?: {
     goToSocialHomePage?(): void;
   };
@@ -111,12 +87,6 @@ export interface PageBehavior {
       isClipPost?: boolean;
     }): void;
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
-    goToStoryCreationPage?(context: {
-      targetId: string | null;
-      targetType: Amity.StoryTargetType;
-      mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-      storyType: 'communityFeed' | 'globalFeed';
-    }): void;
     goToCommunitySettingPage?(context: { community: Amity.Community }): void;
     goToEditCommunityPage?(context: {
       mode: AmityCommunitySetupPageMode;
@@ -166,7 +136,6 @@ export interface PageBehavior {
     goToMembershipPage?(context: { community: Amity.Community }): void;
     goToPendingInvitationPage?(context: { community: Amity.Community }): void;
     goToPostPermissionPage?(context: { community: Amity.Community }): void;
-    goToStorySettingPage?(context: { community: Amity.Community }): void;
     goToSocialHomePage?(): void;
   };
   AmityCommunityMembershipPageBehavior?: {
@@ -234,7 +203,6 @@ export interface PageBehavior {
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToUserProfilePage?(context: { userId: string }): void;
     goToEventDetailPage?(context: EventDetailProps): void;
-    goToLivestreamPlayerPage?(context: LiveStreamPlayerPageProps): void;
     goToEditProfilePage?(): void;
   };
   AmityDraftClipPageBehavior?: {
@@ -270,7 +238,6 @@ export interface PageBehavior {
     handleNonMemberAction?(context: { alignment: NotificationAlignment }): void;
     handleNonFollowerAction?(context: { alignment: NotificationAlignment }): void;
     onPostProductTagClick?(context: { product: Amity.Product }): void;
-    onLivestreamProductTagClick?(context: { product: Amity.Product }): void;
     handleVisitorUsageLimitReached?(): void;
     handleVisitorUsageLimitSignIn?(context: { alignment: NotificationAlignment }): void;
   };
@@ -295,7 +262,6 @@ export interface PageBehavior {
     goToCommunityProfilePage?(context: { communityId: string }): void;
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToEventSetupPage?(context: EventSetupProps): void;
-    goToCreateLivestreamPage?(context: CreateLivestreamPageProps): void;
     goToPostComposerPage?(context: {
       mode: Mode.CREATE;
       targetName?: string;
@@ -333,20 +299,15 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
   const { currentUserId } = useSDK();
   const {
     page,
-    onBack,
     goToPostDetailPage,
     goToCommunityProfilePage,
     goToUserProfilePage,
     goToEditUserPage,
-    goToViewStoryPage,
     onChangePage,
     goToSelectPostTargetPage,
     goToSelectClipPostTargetPage,
     goToSelectPollPostTargetPage,
-    goToStoryTargetSelectionPage,
-    goToLivestreamUnsupportedPage,
     goToSelectEventTargetPage,
-    goToStoryCreationPage,
     goToPostComposerPage,
     goToDraftClipPage,
     goToClipFeedPage,
@@ -360,7 +321,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToEditCommunityPage,
     goToMembershipPage,
     goToPostPermissionPage,
-    goToStorySettingPage,
     goToPendingPostPage,
     goToPollPostComposerPage,
     goToInviteMemberPage,
@@ -376,32 +336,9 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToUpcomingEventsPage,
     goToPastEventsPage,
     goToEventAttendeesPage,
-    goToCreateLivestreamPage,
     goToEventDetailPage,
-    goToLiveStreamPlayerPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
-    AmityStoryViewPageBehavior: {
-      onCloseAction: () => {
-        if (pageBehavior?.AmityStoryViewPageBehavior?.onCloseAction) {
-          return pageBehavior.AmityStoryViewPageBehavior.onCloseAction();
-        }
-        onBack();
-      },
-      hyperLinkAction: (context: Record<string, unknown>) => {
-        if (pageBehavior?.AmityStoryViewPageBehavior?.hyperLinkAction) {
-          return pageBehavior.AmityStoryViewPageBehavior.hyperLinkAction(context);
-        }
-      },
-    },
-    AmityDraftStoryPageBehavior: {
-      closeAction: () => {
-        if (pageBehavior?.AmityDraftStoryPageBehavior?.closeAction) {
-          return pageBehavior.AmityDraftStoryPageBehavior.closeAction();
-        }
-        onBack();
-      },
-    },
     onClickHyperLink: () => {},
     AmitySocialHomePageBehavior: {
       goToNotificationTrayPage: () => {
@@ -423,20 +360,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior?.AmityGlobalFeedComponentBehavior.goToPostDetailPage(context);
         }
         goToPostDetailPage(context);
-      },
-      goToViewStoryPage: (context: {
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        storyType: 'communityFeed' | 'globalFeed';
-      }) => {
-        if (pageBehavior?.AmityGlobalFeedComponentBehavior?.goToViewStoryPage) {
-          return pageBehavior?.AmityGlobalFeedComponentBehavior.goToViewStoryPage(context);
-        }
-        goToViewStoryPage({
-          targetId: context.targetId,
-          targetType: context.targetType,
-          storyType: context.storyType,
-        });
       },
     },
     AmityPostDetailPageBehavior: {
@@ -520,24 +443,11 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToSelectClipPostTargetPage(context);
       },
-      goToStoryTargetSelectionPage() {
-        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage) {
-          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToStoryTargetSelectionPage();
-        }
-        goToStoryTargetSelectionPage();
-      },
       goToSelectPollPostTargetPage() {
         if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToSelectPollPostTargetPage) {
           return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectPollPostTargetPage();
         }
         goToSelectPollPostTargetPage();
-      },
-
-      goToLivestreamUnsupportedPage() {
-        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToLivestreamUnsupportedPage) {
-          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToLivestreamUnsupportedPage();
-        }
-        goToLivestreamUnsupportedPage();
       },
 
       goToSelectEventTargetPage() {
@@ -569,19 +479,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityPostTargetSelectionPage.goToDraftClipPage(context);
         }
         goToDraftClipPage?.(context);
-      },
-    },
-    AmityStoryTargetSelectionPage: {
-      goToStoryCreationPage: (context: {
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-        storyType: 'communityFeed' | 'globalFeed';
-      }) => {
-        if (pageBehavior?.AmityStoryTargetSelectionPage?.goToStoryCreationPage) {
-          return pageBehavior.AmityStoryTargetSelectionPage.goToStoryCreationPage(context);
-        }
-        goToStoryCreationPage(context);
       },
     },
     AmityPollTargetSelectionPageBehavior: {
@@ -643,17 +540,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCommunityProfilePageBehavior.goToMembershipPage(context);
         }
         goToMembershipPage?.(context.community);
-      },
-      goToStoryCreationPage: (context: {
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-        storyType: 'communityFeed' | 'globalFeed';
-      }) => {
-        if (pageBehavior?.AmityStoryTargetSelectionPage?.goToStoryCreationPage) {
-          return pageBehavior.AmityStoryTargetSelectionPage.goToStoryCreationPage(context);
-        }
-        goToStoryCreationPage(context);
       },
       goToPollPostComposerPage: (context: {
         targetId: string | null;
@@ -758,12 +644,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCommunitySettingPageBehavior.goToPostPermissionPage(context);
         }
         goToPostPermissionPage?.(context.community);
-      },
-      goToStorySettingPage(context: { community: Amity.Community }) {
-        if (pageBehavior?.AmityCommunitySettingPageBehavior?.goToStorySettingPage) {
-          return pageBehavior.AmityCommunitySettingPageBehavior.goToStorySettingPage(context);
-        }
-        goToStorySettingPage?.(context.community);
       },
       goToSocialHomePage() {
         if (pageBehavior?.AmityCommunitySettingPageBehavior?.goToSocialHomePage) {
@@ -939,12 +819,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToEventDetailPage(context);
       },
-      goToLivestreamPlayerPage: (context: LiveStreamPlayerPageProps) => {
-        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage)
-          return pageBehavior.AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage(context);
-
-        goToLiveStreamPlayerPage?.(context);
-      },
       goToEditProfilePage: () => {
         if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEditProfilePage) {
           return pageBehavior.AmityNotificationTrayPageBehavior.goToEditProfilePage();
@@ -1023,13 +897,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         context.product?.productUrl &&
           window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
       },
-      onLivestreamProductTagClick: (context: { product: Amity.Product }) => {
-        if (pageBehavior?.AmityGlobalBehavior?.onLivestreamProductTagClick) {
-          return pageBehavior.AmityGlobalBehavior.onLivestreamProductTagClick(context);
-        }
-        context.product?.productUrl &&
-          window.open(context.product.productUrl, '_blank', 'noopener,noreferrer');
-      },
       handleVisitorUsageLimitReached: () => {
         if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUsageLimitReached) {
           return pageBehavior.AmityGlobalBehavior.handleVisitorUsageLimitReached();
@@ -1101,12 +968,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventDetailPageBehavior.goToEventSetupPage(context);
         }
         goToEventSetupPage(context);
-      },
-      goToCreateLivestreamPage(context: CreateLivestreamPageProps) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToCreateLivestreamPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToCreateLivestreamPage(context);
-        }
-        goToCreateLivestreamPage?.(context);
       },
       goToPostComposerPage(context: {
         mode: Mode.CREATE;

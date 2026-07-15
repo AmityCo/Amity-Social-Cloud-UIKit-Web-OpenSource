@@ -1,1 +1,0 @@
-export { TaggedProductIcon } from './TaggedProductIcon';

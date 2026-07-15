@@ -21,7 +21,6 @@ import {
 } from '~/v4/social/utils/timezone';
 
 export enum Platform {
-  Livestream = 'livestream',
   External = 'external',
 }
 
@@ -110,10 +109,7 @@ export function useEventSetup(props: EventSetupProps) {
         startOn: convertToTimezoneDate(props.event.startTime, props.event.metadata?.timezone),
         endOn: convertToTimezoneDate(props.event.endTime, props.event.metadata?.timezone),
         type: props.event.type,
-        platform:
-          props.event.type === AmityEventType.Virtual && props.event.externalUrl
-            ? Platform.External
-            : Platform.Livestream,
+        platform: Platform.External,
         externalUrl:
           props.event.type === AmityEventType.Virtual ? props.event.externalUrl || '' : '',
         location: props.event.type === AmityEventType.InPerson ? props.event.location || '' : '',

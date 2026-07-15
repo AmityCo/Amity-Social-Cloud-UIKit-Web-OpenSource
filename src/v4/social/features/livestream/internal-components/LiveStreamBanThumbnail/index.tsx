@@ -1,1 +1,0 @@
-export { LiveStreamBanThumbnail } from './LiveStreamBanThumbnail';

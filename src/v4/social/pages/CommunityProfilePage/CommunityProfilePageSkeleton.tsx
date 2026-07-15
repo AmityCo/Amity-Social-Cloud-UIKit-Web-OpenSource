@@ -1,5 +1,4 @@
 import React from 'react';
-import { CommunityFeedStorySkeleton } from '~/v4/social/internal-components/Skeleton';
 import styles from './CommunityProfileSkeleton.module.css';
 
 export const CommunityProfileSkeleton: React.FC = () => {
@@ -18,11 +17,6 @@ export const CommunityProfileSkeleton: React.FC = () => {
         <div className={styles.communityProfileSkeleton__communityInfo__container}>
           <div className={styles.communityProfileSkeleton__communityInfo__info}></div>
           <div className={styles.communityProfileSkeleton__communityInfo__info}></div>
-        </div>
-        <div className={styles.communityProfileSkeleton__storyTab}>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <CommunityFeedStorySkeleton key={index} />
-          ))}
         </div>
       </div>
     </div>

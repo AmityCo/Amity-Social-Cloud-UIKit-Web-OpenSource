@@ -62,10 +62,6 @@ export const NotificationItem = ({
       return AmityNotificationTrayPageBehavior?.goToEventDetailPage?.({
         eventId: item.actionReferenceId!,
       });
-    } else if (item.trayItemCategory === 'room_cohost_invite') {
-      return AmityNotificationTrayPageBehavior?.goToLivestreamPlayerPage?.({
-        roomId: item.targetId,
-      });
     } else if (item.actionType === 'user') {
       return AmityNotificationTrayPageBehavior?.goToEditProfilePage?.();
     } else {

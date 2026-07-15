@@ -1,1 +1,0 @@
-export { LiveStreamTerminatedThumbnail } from './LiveStreamTerminatedThumbnail';

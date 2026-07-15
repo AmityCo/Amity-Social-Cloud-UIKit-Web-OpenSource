@@ -4,17 +4,14 @@ import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
-import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 import styles from './Application.module.css';
 import {
-  AmityDraftStoryPage,
   ClipFeedPage,
   CommunityAddCategoryPage,
   CommunityMembershipPage,
   CommunityPostPermissionPage,
-  CommunityStorySettingPage,
   DraftClipPage,
   EventAttendeesPage,
   EventDetailPage,
@@ -23,7 +20,6 @@ import {
   PendingRequestPage,
   UpcomingEventsPage,
 } from '..';
-import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
 import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
 import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
@@ -42,15 +38,6 @@ import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
 import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
-import {
-  CreateLivestreamPage,
-  LivestreamTerminatedPage,
-  LiveStreamBannedPage,
-  LiveStreamPlayerPage,
-  LivestreamTargetSelectionPage,
-  LivestreamUnsupportedPage,
-} from '~/v4/social/features/livestream/pages';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
@@ -59,7 +46,6 @@ import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 const Application = () => {
   const { isDesktop } = useResponsive();
   const { page, goToSocialHomePage, handleVisitorUsageLimitSignIn } = useNavigation();
-  const { liveStreamPlayer } = useLayoutContext();
 
   useEffect(() => {
     if (
@@ -93,21 +79,10 @@ const Application = () => {
             // change only postId to be id and pass the rest context fields as props
             return <PostDetailPage id={postId} {...rest} />;
           })()}
-        {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.CommunityProfilePage && (
           <CommunityTabProvider>
             <CommunityProfilePage communityId={page.context.communityId} page={page.context.page} />
           </CommunityTabProvider>
-        )}
-        {page.type === PageTypes.ViewStoryPage && (
-          <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
-        )}
-        {page.type === PageTypes.DraftPage && (
-          <AmityDraftStoryPage
-            targetId={page.context?.targetId}
-            targetType={page.context?.targetType}
-            mediaType={page.context?.mediaType}
-          />
         )}
         {page.type === PageTypes.PostComposerPage && (
           <PostComposerPage
@@ -156,9 +131,6 @@ const Application = () => {
         {page.type === PageTypes.CommunityPostPermissionPage && (
           <CommunityPostPermissionPage community={page.context.community} />
         )}
-        {page.type === PageTypes.CommunityStorySettingPage && (
-          <CommunityStorySettingPage community={page.context.community} />
-        )}
         {page.type === PageTypes.PendingPostsPage && (
           <PendingPostsPage communityId={page.context.communityId} />
         )}
@@ -179,18 +151,10 @@ const Application = () => {
         )}
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
-        {page.type === PageTypes.CreateLivestreamPage && <CreateLivestreamPage {...page.context} />}
-        {page.type === PageTypes.LivestreamTargetSelectionPage && <LivestreamTargetSelectionPage />}
-        {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
-        {page.type === PageTypes.LivestreamUnsupportedPage && <LivestreamUnsupportedPage />}
-        {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
         {page.type === PageTypes.PendingRequestPage && (
           <PendingRequestPage community={page.context.community} />
         )}
-
-        {/* modal as page */}
-        {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
 
         {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
         {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}

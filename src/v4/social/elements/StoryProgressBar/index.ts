@@ -1,1 +1,0 @@
-export { StoryProgressBar } from './StoryProgressBar';

@@ -2,7 +2,6 @@ export * from './CommentEdition';
 export * from './CommentTray';
 export * from './HyperLinkConfig';
 export * from './ReactionList';
-export * from './StoryTab';
 export * from './CreatePostMenu';
 export * from './MediaAttachment';
 export * from './DetailedMediaAttachment';

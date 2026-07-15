@@ -98,12 +98,12 @@ export const CommentOptions = ({
         defaultBehavior: () => onClickReportComment(),
         defaultCallback: onCloseMenu,
         allowNonMember: false,
-        alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
+        alignment: 'withSidebar',
         isJoined: community?.isJoined,
       });
 
     handleUserProfileBehavior({
-      alignment: page.type === PageTypes.ViewStoryPage ? 'fullscreen' : 'withSidebar',
+      alignment: 'withSidebar',
       defaultCallback: onCloseMenu,
       defaultBehavior: () => onClickReportComment(),
       allowNonFollower: true,
