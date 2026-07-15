@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { ChannelRepository, RoomRepository } from '@amityco/ts-sdk';
+import { ChannelRepository } from '@amityco/ts-sdk';
+import { useChannel } from '~/v4/chat/hooks/useChannel';
 
 export interface UseReadOnlySettingReturn {
   readOnly: boolean;
@@ -9,64 +10,53 @@ export interface UseReadOnlySettingReturn {
 }
 
 export interface UseReadOnlySettingProps {
-  room?: Amity.Room | null;
   channel?: Amity.Channel<'live'> | null;
 }
 
 export const useReadOnlySetting = ({
-  room,
   channel,
 }: UseReadOnlySettingProps): UseReadOnlySettingReturn => {
-  const [readOnly, setReadOnlyState] = useState(false);
+  const channelId = channel?.channelId;
 
-  // Initialize readOnly state based on room's liveChatEnabled property
+  // Subscribe to the live channel so `isMuted` reflects mute/unmute as it
+  // propagates. Read-only is enforced purely by muting the channel; the room's
+  // liveChatEnabled flag is left untouched (the live chat stays enabled).
+  const { channel: liveChannel } = useChannel({ channelId });
+  const isMuted = ((liveChannel ?? channel)?.isMuted ?? false) as boolean;
+
+  // Optimistic override for immediate UI feedback and the creation-preview case
+  // (no channel exists yet). `null` means "follow the channel's real isMuted".
+  const [optimisticReadOnly, setOptimisticReadOnly] = useState<boolean | null>(null);
+  const readOnly = optimisticReadOnly ?? isMuted;
+
+  // Once the channel reflects the optimistic value, stop overriding it.
   useEffect(() => {
-    if (room) {
-      // If liveChatEnabled is false, then it's read-only (inverted logic)
-      setReadOnlyState(!room.liveChatEnabled);
+    if (optimisticReadOnly !== null && isMuted === optimisticReadOnly) {
+      setOptimisticReadOnly(null);
     }
-  }, [room?.liveChatEnabled]);
+  }, [isMuted, optimisticReadOnly]);
 
   const { mutate: updateReadOnlySetting, isPending } = useMutation({
     mutationFn: async (newReadOnly: boolean) => {
-      if (!room?.roomId) {
-        throw new Error('Room ID is required to update read-only setting');
-      }
-
-      // Update room's liveChatEnabled setting
-      const roomUpdatePromise = RoomRepository.updateRoom(room.roomId, {
-        liveChatEnabled: !newReadOnly, // Invert: readOnly=true means liveChatEnabled=false
-      });
-
-      // Update channel mute/unmute setting if channel is available
-      let channelUpdatePromise: Promise<any> | null = null;
-      if (channel?.channelId) {
-        if (newReadOnly) {
-          // If setting to read-only, mute the channel
-          channelUpdatePromise = ChannelRepository.muteChannel(channel.channelId);
-        } else {
-          // If setting to interactive, unmute the channel
-          channelUpdatePromise = ChannelRepository.unmuteChannel(channel.channelId);
-        }
-      }
-
-      // Wait for both operations to complete
-      const results = await Promise.all([
-        roomUpdatePromise,
-        channelUpdatePromise || Promise.resolve(null),
-      ]);
-
-      return results[0]; // Return room update result
-    },
-    onSuccess: (_, newReadOnly) => {
-      setReadOnlyState(newReadOnly);
+      if (!channelId) return null;
+      // Mute to enable read-only, unmute to make the chat interactive again.
+      return newReadOnly
+        ? ChannelRepository.muteChannel(channelId)
+        : ChannelRepository.unmuteChannel(channelId);
     },
     onError: (error: unknown) => {
+      // Revert the optimistic state so the toggle reflects the real channel.
+      setOptimisticReadOnly(null);
       console.error('❌ Failed to update read-only setting:', error);
     },
   });
 
   const setReadOnly = async (newReadOnly: boolean): Promise<void> => {
+    setOptimisticReadOnly(newReadOnly);
+    // No channel yet (e.g. during livestream creation preview): keep the
+    // optimistic state only. The choice is applied at creation time by
+    // useCreateLivestream, which mutes the channel once it exists.
+    if (!channelId) return;
     return new Promise((resolve, reject) => {
       updateReadOnlySetting(newReadOnly, {
         onSuccess: () => resolve(),

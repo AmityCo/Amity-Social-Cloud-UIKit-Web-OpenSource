@@ -79,7 +79,7 @@ export function CreateLivestreamPage({
     event,
   });
 
-  const { readOnly, setReadOnly } = useReadOnlySetting({ room, channel });
+  const { readOnly, setReadOnly } = useReadOnlySetting({ channel });
   const isShowLivestreamChat = channel && livestreamPost && community && room;
   const notificationAlignment = isShowLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
   const { post: childPost } = usePostSubscription(livestreamPost?.childrenPosts[0]?.postId);
@@ -132,7 +132,7 @@ export function CreateLivestreamPage({
                   setLivestreamTitle={setLivestreamTitle}
                   setLivestreamDescription={setLivestreamDescription}
                   setReadOnly={setReadOnly}
-                  onGoLive={handleGoLive}
+                  onGoLive={() => handleGoLive({ readOnly })}
                   onThumbnailFileIdChanged={(fileId) => setThumbnailFileId(fileId ?? '')}
                   productTags={productTags}
                   onProductTagsChange={setProductTags}

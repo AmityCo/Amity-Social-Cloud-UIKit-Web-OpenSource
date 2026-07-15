@@ -17,6 +17,7 @@ import Liked from '~/v4/icons/Liked';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import { ReactionBar } from '~/v4/chat/components/ReactionBar/ReactionBar';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
@@ -227,6 +228,7 @@ export const LivestreamChatMessageComposer = ({
 
   const isHost = hostId === currentUserId;
   const isCoHost = coHostId === currentUserId;
+  const { isModerator } = useChannelPermission(channel?.channelId);
 
   const isHostOrCoHostWithProductManagement = isHost || (isCoHost && coHost?.canManageProductTags);
 
@@ -504,7 +506,7 @@ export const LivestreamChatMessageComposer = ({
         </div>
       );
 
-    if (channel?.isMuted)
+    if (channel?.isMuted && !isHost && !isCoHost && !isModerator)
       return renderReadOnlyState({
         allowReaction: !isHost,
         message: resolveString('amity_social_status_livestream_read_only'),
@@ -760,6 +762,7 @@ export const LivestreamChatMessageComposer = ({
     isHostOrCoHostWithProductManagement,
     isHost,
     isCoHost,
+    isModerator,
     isPlayer,
     room,
     hasProductTags,

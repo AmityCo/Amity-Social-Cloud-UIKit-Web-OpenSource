@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { ChannelRepository } from '@amityco/ts-sdk';
 import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -65,7 +66,7 @@ export interface UseCreateLivestreamReturn {
   stopRoom: () => void;
   handleTargetSelection: () => void;
   handleStopRoom: (roomId: string) => void;
-  handleGoLive: () => void;
+  handleGoLive: (params?: { readOnly?: boolean }) => void;
 }
 
 export interface UseCreateLivestreamProps {
@@ -96,6 +97,8 @@ export const useCreateLivestream = ({
   const [targetType, setTargetType] = useState<'community' | 'user'>(initialTargetType);
   const [targetId, setTargetId] = useState<string>(initialTargetId);
   const [uiState, setUiState] = useState<CreateLivestreamUiState>('preview');
+  const readOnlyRef = useRef(false);
+  const hasMutedRef = useRef(false);
   const [livestreamTitle, setLivestreamTitle] = useState('');
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
@@ -145,6 +148,21 @@ export const useCreateLivestream = ({
       setUiState('broadcast');
     }
   }, [broadcasterData, room?.roomId]);
+
+  // Apply the read-only choice once broadcasting has actually started. Muting at
+  // channel-creation time does not stick — broadcast-start re-provisions the
+  // channel un-muted — so mute here (after uiState === 'broadcast') and only once.
+  useEffect(() => {
+    if (
+      uiState === 'broadcast' &&
+      channel?.channelId &&
+      readOnlyRef.current &&
+      !hasMutedRef.current
+    ) {
+      hasMutedRef.current = true;
+      ChannelRepository.muteChannel(channel.channelId);
+    }
+  }, [uiState, channel?.channelId]);
 
   // Computed states
   const isTargetEvent = !!event;
@@ -328,7 +346,8 @@ export const useCreateLivestream = ({
     }
   };
 
-  const handleGoLive = () => {
+  const handleGoLive = ({ readOnly }: { readOnly?: boolean } = {}) => {
+    readOnlyRef.current = readOnly ?? false;
     isTargetEvent ? goLiveOnEvent(event.room) : checkAvailableProductTags();
   };
 
