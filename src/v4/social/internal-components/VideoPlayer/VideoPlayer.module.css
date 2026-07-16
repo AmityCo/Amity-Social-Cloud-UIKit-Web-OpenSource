@@ -39,10 +39,3 @@
   height: 1.5rem;
   color: var(--asc-color-white);
 }
-
-@media only screen and (width >= 48em) {
-  .videoViewer__fullImage {
-    max-width: 37.5rem;
-    max-height: 37.5rem;
-  }
-}

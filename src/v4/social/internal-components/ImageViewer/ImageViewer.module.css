@@ -78,15 +78,14 @@
 .imageViewer__close {
   top: 0;
   left: 0;
-  width: 100%;
-  z-index: 10;
+  right: 0;
+  z-index: 1002;
   display: flex;
-  position: absolute;
+  position: fixed;
   align-items: center;
-  padding: max(2rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem
-    max(1rem, env(safe-area-inset-left));
   justify-content: space-between;
-  background-color: rgb(from var(--asc-color-black) r g b / 50%);
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1rem
+    max(1rem, env(safe-area-inset-left));
 }
 
 .imageViewer__closeButton {
@@ -112,10 +111,11 @@
 }
 
 .imageViewer__count {
-  top: 2rem;
+  top: max(1rem, env(safe-area-inset-top));
   left: 50%;
+  z-index: 1002;
   font-weight: 400;
-  position: absolute;
+  position: fixed;
   transform: translateX(-50%);
   color: var(--asc-color-background-default);
 }
@@ -137,10 +137,6 @@
   .imageViewer__prev,
   .imageViewer__next {
     display: flex;
-  }
-
-  .imageViewer__close {
-    background-color: transparent;
   }
 }
 

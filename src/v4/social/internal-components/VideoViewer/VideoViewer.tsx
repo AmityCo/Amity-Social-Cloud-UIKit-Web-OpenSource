@@ -32,8 +32,6 @@ export function VideoViewer({
   componentId = '*',
   initialVideoIndex,
 }: VideoViewerProps) {
-  useKeyPressEvent('Escape', onClose);
-  const { isDesktop } = useResponsive();
   const { removeDrawerData } = useDrawer();
 
   const posts = usePostByIds(post?.children || []);
@@ -58,19 +56,19 @@ export function VideoViewer({
     onClose();
   }, [onClose, removeDrawerData]);
 
+  useKeyPressEvent('Escape', handleClose);
+
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.videoViewer__modal}>
-      {isDesktop && (
-        <span className={styles.videoViewer__close}>
-          <ClearButton
-            pageId={pageId}
-            onPress={onClose}
-            componentId={componentId}
-            defaultClassName={styles.videoViewer__closeButton}
-            imgClassName={styles.videoViewer__closeButton__img}
-          />
-        </span>
-      )}
+      <span className={styles.videoViewer__close}>
+        <ClearButton
+          pageId={pageId}
+          onPress={handleClose}
+          componentId={componentId}
+          defaultClassName={styles.videoViewer__closeButton}
+          imgClassName={styles.videoViewer__closeButton__img}
+        />
+      </span>
       {videoPosts.length > 1 && (
         <Typography.TitleBold className={styles.videoViewer__count}>
           {selectedVideoIndex + 1} / {videoPosts.length}
@@ -142,29 +140,32 @@ const VideoPlayer = memo(
     }, [videoPost?.productTags, showProductTagList]);
 
     return (
-      <CustomVideoPlayer
-        displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
-        autoPlay={true}
-        onTouchEnd={handleTouchEnd}
-        onTouchMove={handleTouchMove}
-        fileId={videoFileId}
-        thumbnailFileId={videoPost?.data?.thumbnailFileId ?? ''}
-        productTags={videoPost?.productTags}
-        onTouchStart={handleTouchStart}
-        onVolumeChange={(e) => {
-          if (
-            videoPost?.dataType === 'clip' &&
-            (videoPost?.data as Amity.ContentDataClip)?.isMuted
-          ) {
-            e.currentTarget.muted = true;
-          }
-        }}
-        className={styles.videoViewer__fullImage}
-        onClickProductTagBadge={handleProductTagClick}
-        isDragging={isDragging}
-        onDragging={(isDragging) => setIsDragging(isDragging)}
-        onClose={onClose}
-      />
+      <div className={styles.videoViewer__player}>
+        <CustomVideoPlayer
+          displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
+          autoPlay={true}
+          showHeader={false}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
+          fileId={videoFileId}
+          thumbnailFileId={videoPost?.data?.thumbnailFileId ?? ''}
+          productTags={videoPost?.productTags}
+          onTouchStart={handleTouchStart}
+          onVolumeChange={(e) => {
+            if (
+              videoPost?.dataType === 'clip' &&
+              (videoPost?.data as Amity.ContentDataClip)?.isMuted
+            ) {
+              e.currentTarget.muted = true;
+            }
+          }}
+          className={styles.videoViewer__fullImage}
+          onClickProductTagBadge={handleProductTagClick}
+          isDragging={isDragging}
+          onDragging={(isDragging) => setIsDragging(isDragging)}
+          onClose={onClose}
+        />
+      </div>
     );
   },
 );

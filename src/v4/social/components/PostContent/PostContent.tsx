@@ -382,9 +382,6 @@ export const PostContent = ({
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
-  const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
-  const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
-
   const { page, goToClipFeedPage, goToPostDetailPage } = useNavigation();
 
   const elementRef = useRef<HTMLDivElement>(null);
@@ -540,13 +537,21 @@ export const PostContent = ({
   };
 
   const openVideoViewer = (imageIndex: number) => {
-    setIsVideoViewerOpen(true);
-    setClickedVideoIndex(imageIndex);
+    openPopup({
+      id: 'video-viewer',
+      media: true,
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      className: styles.postContent__imageViewer,
+      overlayClassName: styles.postContent__imageViewerOverlay,
+      children: (
+        <VideoViewer post={post} onClose={closeVideoViewer} initialVideoIndex={imageIndex} />
+      ),
+    });
   };
 
   const closeVideoViewer = () => {
-    setIsVideoViewerOpen(false);
-    setClickedVideoIndex(null);
+    closePopup('video-viewer');
   };
 
   const onEditFeaturePost = ({ onConfirm }: { onConfirm: () => void }) => {
@@ -934,14 +939,6 @@ export const PostContent = ({
               </Button>
             )}
           </div>
-
-          {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
-            <VideoViewer
-              post={post}
-              onClose={closeVideoViewer}
-              initialVideoIndex={clickedVideoIndex}
-            />
-          ) : null}
         </div>
       </div>
       {disabledInlineComment &&

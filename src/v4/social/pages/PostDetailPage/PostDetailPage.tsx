@@ -260,9 +260,7 @@ export function PostDetailPage({
     community?.isDeleted ||
     post?.isDeleted ||
     failedToShow ||
-    post?.structureType === PostStructureType.AUDIO ||
-    post?.structureType === PostStructureType.FILE ||
-    post?.structureType === PostStructureType.MIXED
+    post?.structureType === PostStructureType.AUDIO
   )
     return <FailedToShow pageId={pageId} />;
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import styles from './PendingPostContent.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
@@ -54,9 +54,6 @@ export const PendingPostContent = ({
   const { isDesktop } = useResponsive();
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
-
-  const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
-  const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
   const post = useMemo(() => {
     if (initialPost != null && postData != null) {
@@ -148,13 +145,22 @@ export const PendingPostContent = ({
   };
 
   const openVideoViewer = (imageIndex: number) => {
-    setIsVideoViewerOpen(true);
-    setClickedVideoIndex(imageIndex);
+    if (!post) return;
+    openPopup({
+      id: 'video-viewer',
+      media: true,
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      className: styles.pendingPostContent__imageViewer,
+      overlayClassName: styles.pendingPostContent__imageViewerOverlay,
+      children: (
+        <VideoViewer post={post} onClose={closeVideoViewer} initialVideoIndex={imageIndex} />
+      ),
+    });
   };
 
   const closeVideoViewer = () => {
-    setIsVideoViewerOpen(false);
-    setClickedVideoIndex(null);
+    closePopup('video-viewer');
   };
 
   if (!post) return null;
@@ -297,13 +303,6 @@ export const PendingPostContent = ({
             />
           </div>
         )}
-        {isVideoViewerOpen && post && typeof clickedVideoIndex === 'number' ? (
-          <VideoViewer
-            post={post}
-            onClose={closeVideoViewer}
-            initialVideoIndex={clickedVideoIndex}
-          />
-        ) : null}
       </div>
     </>
   );
