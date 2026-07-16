@@ -8,6 +8,7 @@ import {
   useCreateLivestream,
   useReadOnlySetting,
   useCoHostParticipantEvents,
+  useAssignCoHostModerator,
   usePostSubscription,
 } from '~/v4/social/features/livestream/hooks';
 import { LivestreamStage } from '~/v4/social/features/livestream/internal-components/LivestreamStage';
@@ -85,6 +86,10 @@ export function CreateLivestreamPage({
   const { post: childPost } = usePostSubscription(livestreamPost?.childrenPosts[0]?.postId);
 
   useCoHostParticipantEvents({ room, notificationAlignment, mode: 'host' });
+
+  // As the host, grant the co-host the channel-moderator role on the live chat
+  // so their moderation actions (promote/demote/mute/delete) don't 403 (PDT-3908).
+  useAssignCoHostModerator({ room, channel });
 
   return (
     <LivestreamDataProvider
