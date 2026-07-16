@@ -42,7 +42,10 @@ export interface UseCreateLivestreamReturn {
 
   // Livestream data
   room?: Amity.Room | null;
-  livestreamPost?: Amity.Post | null;
+  // The post the room links to: parent feed post (community) or room post (event).
+  roomLinkedPost?: Amity.Post | null;
+  // The room/video post that carries product tags & room info.
+  roomPost?: Amity.Post<'room'> | null;
   channel?: Amity.Channel<'live'>;
   broadcasterData?: Amity.BroadcasterData;
 
@@ -121,9 +124,23 @@ export const useCreateLivestream = ({
     }
   }, [productCatalogueSettings?.product.enabled]);
 
-  const { post: livestreamPost } = usePostSubscription(
+  // The parent feed post the room links to. Both community livestreams and
+  // events use a 2-level topology: this parent (dataType 'text') has a child
+  // 'room' post that carries the roomId and product tags.
+  const { post: roomLinkedPost } = usePostSubscription(
     event?.room?.post?.postId ?? room?.post?.postId,
   );
+  // The child 'room' post that carries product tags & room info — the only valid
+  // product-tag target. Prefer the child object the SDK already hydrated on the
+  // parent (community livestreams); only when it's missing — e.g. event.room.post
+  // exposes child ids in `children` but no hydrated `childrenPosts` — do we fetch
+  // it by id, to avoid an extra request. Guard against null downstream rather than
+  // falling back to the parent ('text') post, which is never a valid target.
+  const hydratedChildPost = roomLinkedPost?.childrenPosts?.[0] ?? null;
+  const { post: fetchedChildPost } = usePostSubscription(
+    hydratedChildPost ? undefined : roomLinkedPost?.children?.[0],
+  );
+  const roomPost = (hydratedChildPost ?? fetchedChildPost ?? null) as Amity.Post<'room'> | null;
 
   const [channel, setChannel] = useState<Amity.Channel<'live'>>();
 
@@ -176,13 +193,13 @@ export const useCreateLivestream = ({
     stopStream(roomId, {
       onSuccess: () => {
         if (!isTargetEvent)
-          livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId });
+          roomLinkedPost?.postId && goToPostDetailPage({ postId: roomLinkedPost?.postId });
         else onBack();
       },
       onError: (error) => {
         if (error.message.includes('Room is already ended')) {
           if (!isTargetEvent)
-            livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId });
+            roomLinkedPost?.postId && goToPostDetailPage({ postId: roomLinkedPost?.postId });
           else onBack();
         }
       },
@@ -264,10 +281,29 @@ export const useCreateLivestream = ({
     },
   });
 
-  const goLiveOnEvent = (room?: Amity.Room) => {
+  const goLiveOnEvent = async () => {
     if (!room) return;
     getBroadcasterData(room.roomId);
+
+    // Fetch the live chat immediately at go-live (awaited) on the event's room
+    // object, so the chat channel is ready as the broadcast starts — matching the
+    // iOS UIKit. The event's room is provisioned server-side with live chat.
+    try {
+      const liveChat = await event?.room?.getLiveChat?.();
+      if (liveChat) setChannel(liveChat);
+    } catch {
+      // Ignore — the fallback effect below retries once the room is live.
+    }
   };
+
+  // Fallback: if the immediate call above returned undefined (e.g. the chat isn't
+  // exposed until the room is live), poll until it resolves. Guarded by !channel
+  // so it no-ops once the channel is already set.
+  useEffect(() => {
+    if (isTargetEvent && room && room.status === 'live' && !channel && !isGettingLiveChat) {
+      getLiveChat(room);
+    }
+  }, [isTargetEvent, room, room?.status, channel, isGettingLiveChat]);
 
   const confirmGoLive = () => {
     setProductTags([]);
@@ -348,7 +384,7 @@ export const useCreateLivestream = ({
 
   const handleGoLive = ({ readOnly }: { readOnly?: boolean } = {}) => {
     readOnlyRef.current = readOnly ?? false;
-    isTargetEvent ? goLiveOnEvent(event.room) : checkAvailableProductTags();
+    isTargetEvent ? goLiveOnEvent() : checkAvailableProductTags();
   };
 
   return {
@@ -372,7 +408,8 @@ export const useCreateLivestream = ({
 
     // Livestream data
     room,
-    livestreamPost,
+    roomLinkedPost,
+    roomPost,
     channel,
     broadcasterData,
 

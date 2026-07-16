@@ -55,7 +55,8 @@ export function CreateLivestreamPage({
     isEnding,
     // Livestream data from consolidated hook
     room,
-    livestreamPost,
+    roomLinkedPost,
+    roomPost,
     channel,
     broadcasterData,
     // Handlers
@@ -81,9 +82,15 @@ export function CreateLivestreamPage({
   });
 
   const { readOnly, setReadOnly } = useReadOnlySetting({ channel });
-  const isShowLivestreamChat = channel && livestreamPost && community && room;
-  const notificationAlignment = isShowLivestreamChat ? 'livestreamWithChat' : 'fullscreen';
-  const { post: childPost } = usePostSubscription(livestreamPost?.childrenPosts[0]?.postId);
+  const isShowLivestreamChat = channel && roomLinkedPost && community && room;
+
+  // For events the live chat is fetched only once the room goes live, so it
+  // arrives a moment after the broadcast view. Reserve the chat column and show
+  // a loading state while it loads, so the stage and chat appear together
+  // instead of the chat popping in after the video.
+  const isWaitingForEventChat = isTargetEvent && uiState === 'broadcast' && !channel;
+  const isShowChatColumn = isShowLivestreamChat || isWaitingForEventChat;
+  const notificationAlignment = isShowChatColumn ? 'livestreamWithChat' : 'fullscreen';
 
   useCoHostParticipantEvents({ room, notificationAlignment, mode: 'host' });
 
@@ -95,15 +102,15 @@ export function CreateLivestreamPage({
     <LivestreamDataProvider
       room={room}
       channel={channel}
-      parentPost={livestreamPost}
-      livestreamPost={childPost as Amity.Post<'room'>}
+      parentPost={roomLinkedPost}
+      livestreamPost={roomPost}
       notificationAlignment={notificationAlignment}
     >
       <ModalOverlay className={styles.createLivestream__overlay} style={themeStyles} isOpen={true}>
         <Modal className={styles.createLivestream}>
           <Dialog
             className={styles.createLivestream__dialog}
-            data-no-chat={uiState === 'broadcast' && !channel}
+            data-no-chat={uiState === 'broadcast' && !isShowChatColumn}
           >
             <LivestreamStage
               pageId={pageId}
@@ -146,11 +153,11 @@ export function CreateLivestreamPage({
                 />
               ) : (
                 <>
-                  {isShowLivestreamChat && (
+                  {isShowChatColumn && (
                     <LivestreamChat
                       pageId={pageId}
                       community={community}
-                      isLoading={isCreating || isGettingLiveChat}
+                      isLoading={isCreating || isGettingLiveChat || isWaitingForEventChat}
                       disabled={isEnding}
                     />
                   )}

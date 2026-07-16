@@ -44,6 +44,12 @@ interface LivestreamChatMessageComposerProps {
   community?: Amity.Community | null;
   isPendingPost?: boolean;
   isPlayer?: boolean;
+  /**
+   * The channel is still being fetched (e.g. event live chat loads after the
+   * stage). Render the compose bar in a disabled placeholder state so the UI
+   * matches the loaded layout instead of collapsing to nothing.
+   */
+  isChannelPending?: boolean;
 }
 
 const LIVESTREAM_MESSAGE_MAX_CHARACTOR = 200;
@@ -197,6 +203,7 @@ export const LivestreamChatMessageComposer = ({
   community,
   isPendingPost = false,
   isPlayer = false,
+  isChannelPending = false,
 }: LivestreamChatMessageComposerProps) => {
   // Get values from context
   const {
@@ -491,7 +498,9 @@ export const LivestreamChatMessageComposer = ({
   }, [refetchProductCatalogueSettings, warning]);
 
   const renderContent = useCallback(() => {
-    if (isChannelLoading || isLoadingMembership) return null;
+    // While the channel is still being fetched there is no membership to load,
+    // so render the compose bar as a disabled placeholder rather than bailing.
+    if (!isChannelPending && (isChannelLoading || isLoadingMembership)) return null;
 
     if (isDesktop && isPendingPost) return null;
 
@@ -548,7 +557,9 @@ export const LivestreamChatMessageComposer = ({
                 <ProductTaggingButton
                   pageId={pageId}
                   componentId={componentId}
-                  isDisabled={disabled}
+                  // Disable until the room post resolves so tags can't be written
+                  // to the wrong post (the 'room' child can lag behind the parent).
+                  isDisabled={disabled || !subscribedPost?.postId}
                   badgeCount={
                     productCatalogueSettings?.product.enabled
                       ? subscribedPost?.productTags?.length
@@ -769,6 +780,7 @@ export const LivestreamChatMessageComposer = ({
     canReact,
     isFocused,
     handleProductCatalogueDisabled,
+    isChannelPending,
   ]);
 
   return (
