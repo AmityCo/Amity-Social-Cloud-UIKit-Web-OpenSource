@@ -403,7 +403,18 @@ export const StreamerStage: FC<StreamerStageProps> = ({
       liveChannel?.channelId &&
         moderateChat({
           channelId: liveChannel?.channelId,
-          moderators: liveChannel?.metadata?.moderators,
+          // Add the accepted co-host to the channel `moderators` metadata (iOS
+          // does the same in promoteModerator). moderateChat writes metadata as
+          // given, so we must append the co-host here — otherwise the metadata
+          // never lists them and other clients keyed on it don't treat the
+          // web-invited co-host as a moderator.
+          moderators: Array.from(
+            new Set(
+              [...(liveChannel?.metadata?.moderators ?? []), invitationByMe?.invitedUserId].filter(
+                Boolean,
+              ),
+            ),
+          ) as string[],
           mutedMembers:
             channel?.metadata?.mutedMembers?.filter(
               (id: string) => id !== invitationByMe?.invitedUserId,
