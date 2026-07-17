@@ -28,10 +28,11 @@ import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { InvitationStatusEnum } from '@amityco/ts-sdk';
+import { InvitationStatusEnum, RoomRepository } from '@amityco/ts-sdk';
 import { PAGE_ID } from '~/v4/constants/customization';
 import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
 import MuteMic from '~/v4/icons/MutedMic';
 
 interface StreamerStageProps {
@@ -46,19 +47,14 @@ interface StreamerStageProps {
 const Stage = ({
   pageId,
   onLeaveStreamStage,
-  onLeaveByKickout,
   deviceManagement,
   onCoHostLeaveRequest,
 }: {
   pageId?: string;
   onLeaveStreamStage?: (isSessionEnded?: boolean) => void;
-  onLeaveByKickout?: () => void;
   deviceManagement: ReturnType<typeof useDeviceManagement>;
   onCoHostLeaveRequest?: (handler: () => void) => void;
 }) => {
-  // Get values from context
-  const [isLeaving, setIsLeaving] = useState(false);
-
   const { room, hostId, invitationByMe, coHost } = useLivestreamData();
 
   const { currentUserId } = useSDK();
@@ -247,11 +243,6 @@ const Stage = ({
     }
   }, [hostId, currentUserId, onCoHostLeaveRequest, leaveRoomHandler]);
 
-  const onLeaveByKickoutByHost = useCallback(() => {
-    disconnectRef.current();
-    onLeaveByKickout?.();
-  }, [onLeaveByKickout]);
-
   const allTracks = useTracks([
     {
       source: Track.Source.Camera,
@@ -297,13 +288,6 @@ const Stage = ({
 
   const isCoHostView =
     tracks.length === 2 || (tracks.length === 1 && (!!invitationByMe || !!coHost));
-
-  useEffect(() => {
-    if (hostId !== currentUserId && !coHost && tracks?.length === 2 && !isLeaving) {
-      setIsLeaving(true);
-      onLeaveByKickoutByHost();
-    }
-  }, [coHost, tracks?.length, currentUserId, hostId, isLeaving, onLeaveByKickoutByHost]);
 
   return (
     <>
@@ -382,6 +366,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
 
   const { room, invitationByMe, setInvitationByMe, channel, notificationAlignment } =
     useLivestreamData();
+  const { currentUserId } = useSDK();
   const { channel: liveChannel } = useChannel({ channelId: channel?.channelId });
   const { success } = useNotifications();
   const { moderateChat } = useChatModeration();
@@ -449,13 +434,31 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   }, []);
 
   const handleConnected = useCallback(() => {
-    console.log('connected');
     setConnected(true);
   }, []);
 
   const handleError = useCallback((e: any) => {
     console.error('LiveKitRoom Error:', e);
   }, []);
+
+  // When the host removes this co-host, revert them to the player view. We
+  // subscribe here in the outer StreamerStage (which stays mounted) rather than
+  // in <Stage> — <Stage> is gated on `connected` and unmounts on the LiveKit
+  // disconnect before the SDK dispatches the event, tearing down the listener.
+  // `onRoomParticipantRemoved` fires on every device that receives the event
+  // (no per-user filter), so we confirm it was us: after the removal we're no
+  // longer the host nor the co-host on the room.
+  useEffect(() => {
+    if (!currentUserId) return;
+    const unsubscribe = RoomRepository.onRoomParticipantRemoved(({ room: eventRoom }) => {
+      const hostUserId = getRoomParticipant(eventRoom, 'host')?.userId;
+      const coHostUserId = getRoomParticipant(eventRoom, 'coHost')?.userId;
+      if (currentUserId !== hostUserId && currentUserId !== coHostUserId) {
+        onLeaveByKickout?.();
+      }
+    });
+    return () => unsubscribe();
+  }, [currentUserId, onLeaveByKickout]);
 
   return (
     <div className={styles.streamerStage}>
@@ -478,7 +481,6 @@ export const StreamerStage: FC<StreamerStageProps> = ({
             deviceManagement={deviceManagement}
             pageId={pageId}
             onCoHostLeaveRequest={onCoHostLeaveRequest}
-            onLeaveByKickout={onLeaveByKickout}
           />
         )}
       </LiveKitRoomComponent>
