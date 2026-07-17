@@ -16,6 +16,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useRoom } from './useRoom';
 
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
 import { usePostSubscription } from './usePostSubscription';
 
@@ -102,6 +103,10 @@ export const useCreateLivestream = ({
   const [uiState, setUiState] = useState<CreateLivestreamUiState>('preview');
   const readOnlyRef = useRef(false);
   const hasMutedRef = useRef(false);
+  // Set when an event goes live with product tags selected in setup. State (not a
+  // ref) so flipping it re-runs the effect below even when `roomPost` already
+  // resolved before go-live — which it does for events, since the room pre-exists.
+  const [shouldApplyEventTags, setShouldApplyEventTags] = useState(false);
   const [livestreamTitle, setLivestreamTitle] = useState('');
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
@@ -113,6 +118,8 @@ export const useCreateLivestream = ({
 
   const { productCatalogueSettings, refetchProductCatalogueSettings } =
     useProductCatalogueSettings();
+
+  const { updateProductTags, pinProduct } = useTaggingProduct();
 
   const [isEnabledProductTag, setIsEnabledProductTag] = useState(
     productCatalogueSettings?.product.enabled,
@@ -285,6 +292,12 @@ export const useCreateLivestream = ({
     if (!room) return;
     getBroadcasterData(room.roomId);
 
+    // Unlike community livestreams, the event's room post already exists, so the
+    // tags selected in setup are not committed via post creation. Flag them and
+    // let the effect below write them — it also covers the case where `roomPost`
+    // is still loading at click time (the event Go Live button is not gated).
+    if (productTags.length > 0) setShouldApplyEventTags(true);
+
     // Fetch the live chat immediately at go-live (awaited) on the event's room
     // object, so the chat channel is ready as the broadcast starts — matching the
     // iOS UIKit. The event's room is provisioned server-side with live chat.
@@ -295,6 +308,30 @@ export const useCreateLivestream = ({
       // Ignore — the fallback effect below retries once the room is live.
     }
   };
+
+  // Apply the product tags selected in setup to the event's room post, once the
+  // post has resolved. Clearing the flag first makes this fire-once. Mirrors how
+  // the community flow commits tags at post-creation, but the event room post
+  // pre-exists so we patch it with `updateProductTags` (+ pin) instead.
+  useEffect(() => {
+    if (!shouldApplyEventTags || !roomPost?.postId || productTags.length === 0) return;
+    setShouldApplyEventTags(false);
+
+    const postId = roomPost.postId;
+    (async () => {
+      await updateProductTags({ postId, productTags, action: 'add' });
+      if (pinnedProductId) {
+        await pinProduct({ postId, productId: pinnedProductId });
+      }
+    })();
+  }, [
+    shouldApplyEventTags,
+    roomPost?.postId,
+    productTags,
+    pinnedProductId,
+    updateProductTags,
+    pinProduct,
+  ]);
 
   // Fallback: if the immediate call above returned undefined (e.g. the chat isn't
   // exposed until the room is live), poll until it resolves. Guarded by !channel
