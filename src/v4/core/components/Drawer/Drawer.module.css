@@ -1,5 +1,9 @@
 .drawer__content {
-  padding: 1rem;
+  /* Bottom padding = a small fixed clearance, or the device safe-area inset when
+     it's larger (iOS home indicator / Android gesture bar on viewport-fit=cover
+     webviews). Kept modest on purpose: this space is fixed even while the keyboard
+     is open, so an oversized value squeezes the visible content of input sheets. */
+  padding: 1rem 1rem max(1.5rem, env(safe-area-inset-bottom));
   background-color: var(--asc-color-background-default);
   max-height: 96%;
   position: fixed;
@@ -21,8 +25,16 @@
   background-color: var(--asc-color-background-default);
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
+
+  /* Propagate the flex height-chain to the drawer content so children that opt
+     into flex:1 + min-height:0 (e.g. ManageProductTagList) are bounded by the
+     drawer height and scroll internally. Without this, a tall list overflows
+     below the drawer's visible edge, dragging the absolute-positioned footer
+     (the "Add Product" button) off-screen where the device UI hides it. */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   flex: 1;
-  margin-bottom: 3rem;
 }
 
 .drawer__placeholder {

@@ -7,6 +7,7 @@ import {
   LiveStreamEndThumbnail,
   LiveStreamBanThumbnail,
 } from '~/v4/social/features/livestream/internal-components';
+import { PlayIcon, PauseIcon } from '~/v4/icons';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
@@ -34,6 +35,10 @@ interface LivestreamPlayerProps {
   onClickProductTagBadge: () => void;
   onClose?: () => void;
   canShowProductTags?: boolean;
+  isPaused?: boolean;
+  showControls?: boolean;
+  onToggleControls?: () => void;
+  onTogglePlayPause?: () => void;
 }
 
 export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerProps>(
@@ -54,6 +59,10 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
       onClickProductTagBadge,
       onClose,
       canShowProductTags = false,
+      isPaused = false,
+      showControls = false,
+      onToggleControls,
+      onTogglePlayPause,
     },
     ref,
   ) => {
@@ -112,14 +121,50 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
             }
           />
         ) : (
-          <video
-            id={room?.roomId}
-            playsInline={true}
-            className={styles.liveStreamPlayer__video}
-            data-is-live={isLive}
-            data-is-hidden={isHidden}
-            ref={ref}
-          />
+          <>
+            <video
+              id={room?.roomId}
+              playsInline={true}
+              className={styles.liveStreamPlayer__video}
+              data-is-live={isLive}
+              data-is-hidden={isHidden}
+              ref={ref}
+            />
+            {isLive && (
+              <div
+                className={styles.liveStreamPlayer__tapCatcher}
+                onClick={isDesktop ? onTogglePlayPause : onToggleControls}
+                role="presentation"
+              />
+            )}
+            {isLive && showControls && (
+              <button
+                type="button"
+                aria-label={isPaused ? 'Play' : 'Pause'}
+                className={styles.liveStreamPlayer__playPauseButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTogglePlayPause?.();
+                }}
+              >
+                {isPaused ? (
+                  <PlayIcon className={styles.liveStreamPlayer__playPauseIcon} />
+                ) : (
+                  <PauseIcon className={styles.liveStreamPlayer__playPauseIcon} fill="white" />
+                )}
+              </button>
+            )}
+            {isLive && isPaused && !isDesktop && (
+              <div
+                className={styles.liveStreamPlayer__pauseIndicator}
+                role="status"
+                aria-label="Paused"
+              >
+                <PauseIcon className={styles.liveStreamPlayer__pauseIndicatorIcon} />
+                <span className={styles.liveStreamPlayer__pauseIndicatorLabel}>Paused</span>
+              </div>
+            )}
+          </>
         )}
         {showWaitingApprovalBanner && <LivestreamOverlay.WaitForApproval view="moderator" />}
         {isLoading && !isPoorConnection && isLive && !isEnded && !isUserBanned && (

@@ -86,6 +86,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
   const shareWhatPlaceholder = useString('amity_social_share_what_this_live_is_all_about');
   const liveSettingLabel = useString('amity_social_live_setting');
   const goLiveLabel = useString('amity_social_status_go_live');
+  const joinLiveLabel = useString('amity_social_status_join_live');
   const changeThumbnailLabel = useString('amity_social_button_change_thumbnail');
   const deleteThumbnailLabel = useString('amity_social_button_delete_thumbnail');
   const cohostBackstageTitleLabel = useString('amity_social_label_cohost_backstage_title');
@@ -388,7 +389,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
             onPress={onGoLive}
           >
             <LivestreamOutlined className={styles.livestreamSetup__goLive__buttonIcon} />
-            <Typography.BodyBold>{goLiveLabel}</Typography.BodyBold>
+            <Typography.BodyBold>{isCoHost ? joinLiveLabel : goLiveLabel}</Typography.BodyBold>
           </Button>
         </div>
       </div>

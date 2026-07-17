@@ -3,14 +3,20 @@ import Plyr from 'plyr';
 import Hls from 'hls.js';
 import useSDK from '~/v4/core/hooks/useSDK';
 import styles from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage/components/LivestreamPlayer/LivestreamPlayer.module.css';
+import { VIDEO_CONTROLS_AUTO_HIDE_MS } from '~/v4/social/constants';
 
 interface UseLiveStreamPlayerParams {
   post?: Amity.Post;
   room?: Amity.Room | null;
   videoRef?: React.RefObject<HTMLVideoElement>;
+  controlsAutoHideMs?: number;
 }
 
-export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParams) => {
+export const useLiveStreamPlayer = ({
+  room,
+  videoRef,
+  controlsAutoHideMs,
+}: UseLiveStreamPlayerParams) => {
   const { client } = useSDK();
   const [muted, setMuted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,10 +24,66 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
   const [playerInitialized, setPlayerInitialized] = useState(false);
   const [authorizedRecordedUrl, setAuthorizedRecordedUrl] = useState<string>('');
   const [videoReady, setVideoReady] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [showControls, setShowControls] = useState(false);
 
   const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const controlsHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const plyrRef = useRef<Plyr | null>(null);
   const hlsRef = useRef<Hls | null>(null);
+
+  const CONTROLS_AUTO_HIDE_MS = controlsAutoHideMs ?? VIDEO_CONTROLS_AUTO_HIDE_MS;
+
+  const scheduleHideControls = useCallback(() => {
+    if (controlsHideTimerRef.current) clearTimeout(controlsHideTimerRef.current);
+    controlsHideTimerRef.current = setTimeout(() => setShowControls(false), CONTROLS_AUTO_HIDE_MS);
+  }, [CONTROLS_AUTO_HIDE_MS]);
+
+  const cancelHideControls = useCallback(() => {
+    if (controlsHideTimerRef.current) {
+      clearTimeout(controlsHideTimerRef.current);
+      controlsHideTimerRef.current = null;
+    }
+  }, []);
+
+  const seekToLiveEdge = useCallback(() => {
+    const video = videoRef?.current;
+    if (!video) return;
+    const liveSync = hlsRef.current?.liveSyncPosition;
+    const seekableEnd =
+      video.seekable.length > 0 ? video.seekable.end(video.seekable.length - 1) : null;
+    const target =
+      typeof liveSync === 'number' && Number.isFinite(liveSync) ? liveSync : seekableEnd;
+    if (target != null && Number.isFinite(target)) {
+      try {
+        video.currentTime = target;
+      } catch {
+        // ignore seek errors
+      }
+    }
+  }, [videoRef]);
+
+  const togglePlayPause = useCallback(() => {
+    const video = videoRef?.current;
+    if (!video) return;
+    if (video.paused) {
+      if (room?.status === 'live' || room?.status === 'waitingReconnect') {
+        seekToLiveEdge();
+      }
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [videoRef, room?.status, seekToLiveEdge]);
+
+  const toggleControls = useCallback(() => {
+    setShowControls((prev) => {
+      const next = !prev;
+      if (next && !isPaused) scheduleHideControls();
+      else cancelHideControls();
+      return next;
+    });
+  }, [scheduleHideControls, cancelHideControls, isPaused]);
 
   const setUpHLS = (
     player: HTMLVideoElement,
@@ -80,9 +142,9 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
       // Initialize Plyr for live videos only, not for recorded
       if (!isRecorded) {
         plyrRef.current = new Plyr(player, {
-          controls: ['pause', 'play'],
+          controls: [],
           fullscreen: { enabled: false },
-          clickToPlay: true,
+          clickToPlay: false,
         });
       }
     });
@@ -139,6 +201,8 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
     player.addEventListener('waiting', handleWaiting);
     player.addEventListener('playing', handlePlaying);
     player.addEventListener('canplay', handleCanPlay);
+    player.addEventListener('play', handlePlay);
+    player.addEventListener('pause', handlePause);
 
     // Handle video source based on room status
     if ((room?.status === 'live' || room?.status === 'waitingReconnect') && room?.livePlaybackUrl) {
@@ -184,6 +248,17 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
     setIsPoorConnection(false);
   };
 
+  const handlePlay = () => {
+    setIsPaused(false);
+    scheduleHideControls();
+  };
+
+  const handlePause = () => {
+    setIsPaused(true);
+    setShowControls(true);
+    cancelHideControls();
+  };
+
   const resetLiveStreamPlayerRef = () => {
     if (videoRef?.current) {
       // Reset video element state
@@ -222,6 +297,8 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
     video.removeEventListener('waiting', handleWaiting);
     video.removeEventListener('playing', handlePlaying);
     video.removeEventListener('canplay', handleCanPlay);
+    video.removeEventListener('play', handlePlay);
+    video.removeEventListener('pause', handlePause);
 
     // Reset video state
     video.pause();
@@ -266,9 +343,14 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
         currentVideo.removeEventListener('canplay', handleCanPlay);
         currentVideo.removeEventListener('canplaythrough', handleCanPlay);
         currentVideo.removeEventListener('progress', handleCanPlay);
+        currentVideo.removeEventListener('play', handlePlay);
+        currentVideo.removeEventListener('pause', handlePause);
       }
       if (loadingTimerRef.current) {
         clearTimeout(loadingTimerRef.current);
+      }
+      if (controlsHideTimerRef.current) {
+        clearTimeout(controlsHideTimerRef.current);
       }
       if (plyrRef.current) {
         plyrRef.current.destroy();
@@ -318,5 +400,9 @@ export const useLiveStreamPlayer = ({ room, videoRef }: UseLiveStreamPlayerParam
     resetLiveStreamPlayerRef,
     reloadPlayer,
     setVideoReady,
+    isPaused,
+    showControls,
+    togglePlayPause,
+    toggleControls,
   };
 };

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { ChannelRepository } from '@amityco/ts-sdk';
 import { resolveString } from '~/v4/core/localization';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -15,6 +16,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useRoom } from './useRoom';
 
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
+import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
 import { usePostSubscription } from './usePostSubscription';
 
@@ -41,7 +43,10 @@ export interface UseCreateLivestreamReturn {
 
   // Livestream data
   room?: Amity.Room | null;
-  livestreamPost?: Amity.Post | null;
+  // The post the room links to: parent feed post (community) or room post (event).
+  roomLinkedPost?: Amity.Post | null;
+  // The room/video post that carries product tags & room info.
+  roomPost?: Amity.Post<'room'> | null;
   channel?: Amity.Channel<'live'>;
   broadcasterData?: Amity.BroadcasterData;
 
@@ -65,7 +70,7 @@ export interface UseCreateLivestreamReturn {
   stopRoom: () => void;
   handleTargetSelection: () => void;
   handleStopRoom: (roomId: string) => void;
-  handleGoLive: () => void;
+  handleGoLive: (params?: { readOnly?: boolean }) => void;
 }
 
 export interface UseCreateLivestreamProps {
@@ -96,6 +101,12 @@ export const useCreateLivestream = ({
   const [targetType, setTargetType] = useState<'community' | 'user'>(initialTargetType);
   const [targetId, setTargetId] = useState<string>(initialTargetId);
   const [uiState, setUiState] = useState<CreateLivestreamUiState>('preview');
+  const readOnlyRef = useRef(false);
+  const hasMutedRef = useRef(false);
+  // Set when an event goes live with product tags selected in setup. State (not a
+  // ref) so flipping it re-runs the effect below even when `roomPost` already
+  // resolved before go-live — which it does for events, since the room pre-exists.
+  const [shouldApplyEventTags, setShouldApplyEventTags] = useState(false);
   const [livestreamTitle, setLivestreamTitle] = useState('');
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
@@ -108,6 +119,8 @@ export const useCreateLivestream = ({
   const { productCatalogueSettings, refetchProductCatalogueSettings } =
     useProductCatalogueSettings();
 
+  const { updateProductTags, pinProduct } = useTaggingProduct();
+
   const [isEnabledProductTag, setIsEnabledProductTag] = useState(
     productCatalogueSettings?.product.enabled,
   );
@@ -118,9 +131,23 @@ export const useCreateLivestream = ({
     }
   }, [productCatalogueSettings?.product.enabled]);
 
-  const { post: livestreamPost } = usePostSubscription(
+  // The parent feed post the room links to. Both community livestreams and
+  // events use a 2-level topology: this parent (dataType 'text') has a child
+  // 'room' post that carries the roomId and product tags.
+  const { post: roomLinkedPost } = usePostSubscription(
     event?.room?.post?.postId ?? room?.post?.postId,
   );
+  // The child 'room' post that carries product tags & room info — the only valid
+  // product-tag target. Prefer the child object the SDK already hydrated on the
+  // parent (community livestreams); only when it's missing — e.g. event.room.post
+  // exposes child ids in `children` but no hydrated `childrenPosts` — do we fetch
+  // it by id, to avoid an extra request. Guard against null downstream rather than
+  // falling back to the parent ('text') post, which is never a valid target.
+  const hydratedChildPost = roomLinkedPost?.childrenPosts?.[0] ?? null;
+  const { post: fetchedChildPost } = usePostSubscription(
+    hydratedChildPost ? undefined : roomLinkedPost?.children?.[0],
+  );
+  const roomPost = (hydratedChildPost ?? fetchedChildPost ?? null) as Amity.Post<'room'> | null;
 
   const [channel, setChannel] = useState<Amity.Channel<'live'>>();
 
@@ -146,6 +173,21 @@ export const useCreateLivestream = ({
     }
   }, [broadcasterData, room?.roomId]);
 
+  // Apply the read-only choice once broadcasting has actually started. Muting at
+  // channel-creation time does not stick — broadcast-start re-provisions the
+  // channel un-muted — so mute here (after uiState === 'broadcast') and only once.
+  useEffect(() => {
+    if (
+      uiState === 'broadcast' &&
+      channel?.channelId &&
+      readOnlyRef.current &&
+      !hasMutedRef.current
+    ) {
+      hasMutedRef.current = true;
+      ChannelRepository.muteChannel(channel.channelId);
+    }
+  }, [uiState, channel?.channelId]);
+
   // Computed states
   const isTargetEvent = !!event;
 
@@ -158,13 +200,13 @@ export const useCreateLivestream = ({
     stopStream(roomId, {
       onSuccess: () => {
         if (!isTargetEvent)
-          livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId });
+          roomLinkedPost?.postId && goToPostDetailPage({ postId: roomLinkedPost?.postId });
         else onBack();
       },
       onError: (error) => {
         if (error.message.includes('Room is already ended')) {
           if (!isTargetEvent)
-            livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId });
+            roomLinkedPost?.postId && goToPostDetailPage({ postId: roomLinkedPost?.postId });
           else onBack();
         }
       },
@@ -246,10 +288,59 @@ export const useCreateLivestream = ({
     },
   });
 
-  const goLiveOnEvent = (room?: Amity.Room) => {
+  const goLiveOnEvent = async () => {
     if (!room) return;
     getBroadcasterData(room.roomId);
+
+    // Unlike community livestreams, the event's room post already exists, so the
+    // tags selected in setup are not committed via post creation. Flag them and
+    // let the effect below write them — it also covers the case where `roomPost`
+    // is still loading at click time (the event Go Live button is not gated).
+    if (productTags.length > 0) setShouldApplyEventTags(true);
+
+    // Fetch the live chat immediately at go-live (awaited) on the event's room
+    // object, so the chat channel is ready as the broadcast starts — matching the
+    // iOS UIKit. The event's room is provisioned server-side with live chat.
+    try {
+      const liveChat = await event?.room?.getLiveChat?.();
+      if (liveChat) setChannel(liveChat);
+    } catch {
+      // Ignore — the fallback effect below retries once the room is live.
+    }
   };
+
+  // Apply the product tags selected in setup to the event's room post, once the
+  // post has resolved. Clearing the flag first makes this fire-once. Mirrors how
+  // the community flow commits tags at post-creation, but the event room post
+  // pre-exists so we patch it with `updateProductTags` (+ pin) instead.
+  useEffect(() => {
+    if (!shouldApplyEventTags || !roomPost?.postId || productTags.length === 0) return;
+    setShouldApplyEventTags(false);
+
+    const postId = roomPost.postId;
+    (async () => {
+      await updateProductTags({ postId, productTags, action: 'add' });
+      if (pinnedProductId) {
+        await pinProduct({ postId, productId: pinnedProductId });
+      }
+    })();
+  }, [
+    shouldApplyEventTags,
+    roomPost?.postId,
+    productTags,
+    pinnedProductId,
+    updateProductTags,
+    pinProduct,
+  ]);
+
+  // Fallback: if the immediate call above returned undefined (e.g. the chat isn't
+  // exposed until the room is live), poll until it resolves. Guarded by !channel
+  // so it no-ops once the channel is already set.
+  useEffect(() => {
+    if (isTargetEvent && room && room.status === 'live' && !channel && !isGettingLiveChat) {
+      getLiveChat(room);
+    }
+  }, [isTargetEvent, room, room?.status, channel, isGettingLiveChat]);
 
   const confirmGoLive = () => {
     setProductTags([]);
@@ -328,8 +419,9 @@ export const useCreateLivestream = ({
     }
   };
 
-  const handleGoLive = () => {
-    isTargetEvent ? goLiveOnEvent(event.room) : checkAvailableProductTags();
+  const handleGoLive = ({ readOnly }: { readOnly?: boolean } = {}) => {
+    readOnlyRef.current = readOnly ?? false;
+    isTargetEvent ? goLiveOnEvent() : checkAvailableProductTags();
   };
 
   return {
@@ -353,7 +445,8 @@ export const useCreateLivestream = ({
 
     // Livestream data
     room,
-    livestreamPost,
+    roomLinkedPost,
+    roomPost,
     channel,
     broadcasterData,
 

@@ -9,8 +9,8 @@ import React, {
 import styles from './VideoPlayerControls.module.css';
 import { Play } from '~/v4/icons/Play';
 import { Pause } from '~/v4/icons/Pause';
-import { Backward15 } from '~/v4/icons/Backward15';
-import { Forward15 } from '~/v4/icons/Forward15';
+import { Backward10 } from '~/v4/icons/Backward10';
+import { Forward10 } from '~/v4/icons/Forward10';
 import { Fullscreen } from '~/v4/icons/Fullscreen';
 import UnMuted from '~/v4/icons/UnMuted';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -21,6 +21,7 @@ import Kebub from '~/v4/icons/Kebub';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { VideoMenu } from './VideoMenu';
 import MutedFilled from '~/v4/icons/MutedFilled';
+import { VIDEO_CONTROLS_AUTO_HIDE_MS } from '~/v4/social/constants';
 
 export interface VideoPlayerControlsRef {
   showControls: () => void;
@@ -66,7 +67,7 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
         if (isPlaying) {
           setIsVisible(false);
         }
-      }, 3000);
+      }, VIDEO_CONTROLS_AUTO_HIDE_MS);
     }, [isPlaying]);
 
     useImperativeHandle(
@@ -139,7 +140,7 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
       const video = videoRef.current;
       if (!video) return;
 
-      video.currentTime = Math.max(0, video.currentTime - 15);
+      video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
     }, [videoRef, showControls]);
 
@@ -147,7 +148,7 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
       const video = videoRef.current;
       if (!video) return;
 
-      video.currentTime = Math.min(video.duration, video.currentTime + 15);
+      video.currentTime = Math.min(video.duration, video.currentTime + 10);
       showControls();
     }, [videoRef, showControls]);
 
@@ -236,14 +237,14 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
               onPress={skipBackward}
               variant="default"
             >
-              <Backward15 className={styles.videoPlayerControls__icon} />
+              <Backward10 className={styles.videoPlayerControls__icon} />
             </Button>
             <Button
               className={styles.videoPlayerControls__button}
               onPress={skipForward}
               variant="default"
             >
-              <Forward15 className={styles.videoPlayerControls__icon} />
+              <Forward10 className={styles.videoPlayerControls__icon} />
             </Button>
           </div>
 

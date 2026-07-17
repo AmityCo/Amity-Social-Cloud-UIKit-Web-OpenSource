@@ -9,7 +9,7 @@ const DefaultEventThumbnail = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g clip-path="url(#clip0_647_5785)">
+    <g clipPath="url(#clip0_647_5785)">
       <rect width="64" height="64" rx="32" fill="#EBECEF" />
       <rect x="7.44189" y="29.2465" width="49.8605" height="48.7622" rx="5.27159" fill="#BDC1CF" />
       <rect x="13.5916" y="44.8411" width="7.90739" height="7.90739" rx="0.878598" fill="#EBECEF" />

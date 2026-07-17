@@ -294,7 +294,10 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   return (
     <div className={styles.messageBubble__container}>
       <div className={styles.messageBubble__topSectionWrap}>
-        <div className={styles.messageBubble__displayName__container}>
+        <div
+          className={styles.messageBubble__displayName__container}
+          data-muted={showMutedIndicator ? 'true' : 'false'}
+        >
           {disableModerationPopup ? (
             <div className={styles.messageBubble__displayName__container}>
               <Typography.CaptionSmall className={styles.messageBubble__displayName}>

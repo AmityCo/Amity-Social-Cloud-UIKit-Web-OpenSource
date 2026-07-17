@@ -11,3 +11,5 @@ export const MAX_OPTION_LENGTH = 60;
 export const MAX_OPTIONS = 10;
 
 export const MILLISECONDS_IN_DAY = 86400000;
+
+export const VIDEO_CONTROLS_AUTO_HIDE_MS = 1000;

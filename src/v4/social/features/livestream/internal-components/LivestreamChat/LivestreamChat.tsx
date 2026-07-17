@@ -7,6 +7,7 @@ import styles from './LivestreamChat.module.css';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
+import { MessageBubbleSkeleton } from '~/v4/chat/internal-components/MessageBubbleSkeleton/MessageBubbleSkeleton';
 
 export interface LivestreamChatProps {
   pageId: string;
@@ -32,6 +33,32 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
   const componentId = COMPONENT_ID.LIVESTREAM_CHAT;
 
   if (!channel || !post) {
+    // The channel can arrive after the stage is already visible (e.g. event
+    // livestreams fetch the live chat only once the room goes live). Show a
+    // loading skeleton with a disabled composer so the chat column matches the
+    // loaded layout instead of popping in once the channel resolves.
+    if (isLoading) {
+      return (
+        <div className={styles.livestreamChat__container}>
+          <div className={styles.livestreamChat__container__inner}>
+            <div className={styles.livestreamChat__chatFeedWrapper}>
+              <div className={styles.livestreamChat__loadingSkeleton}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <MessageBubbleSkeleton key={index} />
+                ))}
+              </div>
+            </div>
+            <LivestreamChatMessageComposer
+              pageId={pageId}
+              community={community}
+              disabled
+              isChannelPending
+              isPlayer={isPlayer}
+            />
+          </div>
+        </div>
+      );
+    }
     return null;
   }
 

@@ -26,6 +26,17 @@
   padding: 0 1rem 0.75rem;
 }
 
+/* Matches ChatFeed's skeleton layout so the pre-channel and message-loading
+   phases look consistent. */
+.livestreamChat__loadingSkeleton {
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0.125rem;
+  overflow: hidden;
+}
+
 /* Responsive adjustments */
 @media (width <= 768px) {
   .livestreamChat__container {

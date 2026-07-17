@@ -99,6 +99,17 @@ export function ManageProductTagList({
   const keepEditingText = useString('amity_social_button_keep_editing');
   const productTagRemovedText = useString('amity_social_label_product_tag_removed');
   const productTagRemoveFailedText = useString('amity_social_toast_product_tag_remove_failed');
+  // useString is a hook — resolve every label unconditionally here. Some of these were called
+  // inside drawer/popup callbacks and inside conditionally-rendered JSX, which is illegal and
+  // caused React's "change in the order of Hooks" warning (PDT-3913).
+  const taggedProductsEmptyActionText = useString(
+    'amity_social_button_tagged_products_empty_action',
+  );
+  const waitingForNetworkText = useString('amity_social_label_waiting_for_network');
+  const taggedProductsText = useString('amity_social_button_tagged_products');
+  const pinnedProductLabel = useString('amity_social_label_pinned_product_label');
+  const otherProductsLabel = useString('amity_social_label_other_products_label');
+  const addProductsText = useString('amity_social_button_add_products');
 
   const handleRemove = async (productTag: Amity.ProductTag) => {
     const previousTags = productTags;
@@ -220,7 +231,7 @@ export function ManageProductTagList({
       // Mobile: show in drawer
       setDrawerData({
         content: productTagSelectionContent(() => removeDrawerData()),
-        ariaLabel: useString('amity_social_button_tagged_products_empty_action'),
+        ariaLabel: taggedProductsEmptyActionText,
       });
     }
   };
@@ -269,7 +280,7 @@ export function ManageProductTagList({
     } else {
       setDrawerData({
         content: productTagSelectionContent(() => removeDrawerData()),
-        ariaLabel: useString('amity_social_button_tagged_products_empty_action'),
+        ariaLabel: taggedProductsEmptyActionText,
       });
     }
   }, [
@@ -299,17 +310,13 @@ export function ManageProductTagList({
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.manageProductTagList}>
       {!online && (
-        <Notification
-          icon={<Spinner />}
-          content={useString('amity_social_label_waiting_for_network')}
-          alignment="fixed"
-        />
+        <Notification icon={<Spinner />} content={waitingForNetworkText} alignment="fixed" />
       )}
       <div className={styles.manageProductTagList__header}>
         <div className={styles.manageProductTagList__headerContent}>
           {!isDesktop && <div className={styles.manageProductTagList__emptySpace} />}
           <Typography.TitleBold as="h2" className={styles.manageProductTagList__title}>
-            {useString('amity_social_button_tagged_products')}
+            {taggedProductsText}
           </Typography.TitleBold>
           <Typography.Caption as="p" className={styles.manageProductTagList__description}>
             {productTags?.length}/{maxCount}
@@ -355,9 +362,7 @@ export function ManageProductTagList({
                 {pinnedProducts.length > 0 && (
                   <div className={styles.manageProductTagList__pinnedSection}>
                     <div className={styles.manageProductTagList__sectionTitle}>
-                      <Typography.TitleBold as="h3">
-                        {useString('amity_social_label_pinned_product_label')}
-                      </Typography.TitleBold>
+                      <Typography.TitleBold as="h3">{pinnedProductLabel}</Typography.TitleBold>
                     </div>
 
                     <div className={styles.manageProductTagList__pinnedContent}>
@@ -385,9 +390,7 @@ export function ManageProductTagList({
                 {otherProducts.length > 0 && (
                   <div className={styles.manageProductTagList__otherSection}>
                     <div className={styles.manageProductTagList__sectionTitle}>
-                      <Typography.TitleBold as="h3">
-                        {useString('amity_social_label_other_products_label')}
-                      </Typography.TitleBold>
+                      <Typography.TitleBold as="h3">{otherProductsLabel}</Typography.TitleBold>
                     </div>
                     <div className={styles.manageProductTagList__scrollableContent}>
                       <div className={styles.manageProductTagList__list}>
@@ -421,9 +424,7 @@ export function ManageProductTagList({
                 fullWidth
                 isDisabled={productTags?.length === maxCount || !online}
               >
-                <Typography.BodyBold as="span">
-                  {useString('amity_social_button_add_products')}
-                </Typography.BodyBold>
+                <Typography.BodyBold as="span">{addProductsText}</Typography.BodyBold>
               </Button>
             </div>
           </>
