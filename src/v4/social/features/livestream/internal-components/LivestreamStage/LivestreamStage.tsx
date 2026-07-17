@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import {
   LivestreamHeader,
   LivestreamHeaderProps,
@@ -99,11 +99,11 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
         // In case of co-host is leaving the back stage, the ui will be changed back to player
         onLeaveStreamStage?.();
       },
-      okText: useString('amity_social_modal_dialog_leave_button'),
-      cancelText: useString('amity_social_modal_dialog_cancel_button'),
-      title: useString('amity_social_leave_backstage'),
+      okText: resolveString('amity_social_modal_dialog_leave_button'),
+      cancelText: resolveString('amity_social_modal_dialog_cancel_button'),
+      title: resolveString('amity_social_leave_backstage'),
       pageId,
-      content: useString('amity_social_leave_backstage'),
+      content: resolveString('amity_social_leave_backstage'),
     });
   };
 
@@ -116,11 +116,11 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
         onLeaveStreamStage?.(true);
         onClose();
       },
-      okText: useString('amity_social_modal_dialog_leave_button'),
-      cancelText: useString('amity_social_modal_dialog_cancel_button'),
-      title: useString('amity_social_leave_live_stream'),
+      okText: resolveString('amity_social_modal_dialog_leave_button'),
+      cancelText: resolveString('amity_social_modal_dialog_cancel_button'),
+      title: resolveString('amity_social_leave_live_stream'),
       pageId,
-      content: useString('amity_social_modal_alert_cohost_leave_message'),
+      content: resolveString('amity_social_modal_alert_cohost_leave_message'),
     });
   };
 

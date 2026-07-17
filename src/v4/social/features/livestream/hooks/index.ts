@@ -21,3 +21,4 @@ export { useRoomWatchTracking } from './useRoomWatchTracking';
 export { useUpdateCohostPermission } from './useUpdateCohostPermission';
 export { useCoHostPermissionNotification } from './useCoHostPermissionNotification';
 export { useCoHostParticipantEvents } from './useCoHostParticipantEvents';
+export { useAssignCoHostModerator } from './useAssignCoHostModerator';

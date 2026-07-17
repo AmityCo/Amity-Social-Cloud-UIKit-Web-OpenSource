@@ -1,6 +1,8 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString, useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { InviteButton } from '~/v4/social/elements/InviteButton';
 import styles from './InviteCoHostList.module.css';
@@ -129,6 +131,8 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
   const { cancelInvitation, isPending: isPendingCancelInvitation } = useCancelInvitation({
     pageId,
   });
+  const { success, error } = useNotifications();
+  const { notificationAlignment } = useLivestreamData();
 
   const { handleRemoveParticipant } = useRemoveParticipant({ room });
 
@@ -141,7 +145,19 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
   const onCancelInvitation = (invitationId?: string) =>
     invitationId &&
     cancelInvitation(invitationId, {
-      onSuccess: onAction,
+      onSuccess: () => {
+        success({
+          content: resolveString('amity_social_status_invitation_cancelled'),
+          alignment: notificationAlignment,
+        });
+        onAction?.();
+      },
+      onError: () => {
+        error({
+          content: resolveString('amity_social_toast_cancel_invitation_failed_toast'),
+          alignment: notificationAlignment,
+        });
+      },
     });
 
   const onRemoveCoHost = () => coHost?.userId && handleRemoveParticipant(coHost?.userId);
@@ -219,7 +235,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
             user={pendingInvitation?.user}
             pageId={pageId}
             componentId={componentId}
-            onCancelInvite={() => cancelInvitation(pendingInvitation.invitationId)}
+            onCancelInvite={() => onCancelInvitation(pendingInvitation.invitationId)}
             isInvited={true}
           />
         </>

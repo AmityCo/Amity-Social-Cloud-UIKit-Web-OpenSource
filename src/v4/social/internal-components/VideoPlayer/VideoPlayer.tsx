@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useCallback, ForwardedRef, useState } from 'react';
+import React, { useRef, useMemo, useEffect, useCallback, useState } from 'react';
 import useFile from '~/v4/core/hooks/useFile';
 
 enum VideoFileStatus {
@@ -20,7 +20,11 @@ import Hls from 'hls.js';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { DisplayMode, DisplayModeEnum } from '~/v4/social/types';
 import { Play } from '~/v4/icons/Play';
+import { Pause } from '~/v4/icons/Pause';
+import { Backward10 } from '~/v4/icons/Backward10';
+import { Forward10 } from '~/v4/icons/Forward10';
 import { Button } from '~/v4/core/components/AriaButton';
+import { VIDEO_CONTROLS_AUTO_HIDE_MS } from '~/v4/social/constants';
 
 export interface VideoPlayerProps {
   fileId?: string;
@@ -45,6 +49,9 @@ export interface VideoPlayerProps {
   showDurationOnDragOnly?: boolean;
   showHeader?: boolean;
   hidePlayButton?: boolean;
+  hideSkipButtons?: boolean;
+  showPauseButton?: boolean;
+  isLive?: boolean;
   onTouchEnd?: React.TouchEventHandler<HTMLVideoElement>;
   onTouchMove?: React.TouchEventHandler<HTMLVideoElement>;
   onTouchStart?: React.TouchEventHandler<HTMLVideoElement>;
@@ -86,13 +93,16 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   showDurationOnDragOnly = false,
   showHeader = true,
   hidePlayButton = false,
+  hideSkipButtons = false,
+  showPauseButton = true,
+  isLive = false,
   onClose,
   onClickMute,
   onClickMenu,
   onClickVideo,
 }) => {
   const { client } = useSDK();
-  const file: Amity.File<'video'> | undefined = useFile<Amity.File<'video'>>(fileId);
+  const file: Amity.File<'video'> | undefined = useFile<'video'>(fileId);
   const posterUrlFile = useFile(thumbnailFileId);
   const internalVideoRef = useRef<HTMLVideoElement | null>(null);
   const videoRef = externalVideoRef || internalVideoRef;
@@ -102,6 +112,24 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [internalMuted, setInternalMuted] = useState(isMuted);
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(!autoPlay);
+  const [desktopCenterIcon, setDesktopCenterIcon] = useState<'play' | 'pause' | null>(null);
+  const [showMobileControls, setShowMobileControls] = useState(true);
+  const desktopIconTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mobileHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearMobileHideTimer = useCallback(() => {
+    if (mobileHideTimerRef.current) {
+      clearTimeout(mobileHideTimerRef.current);
+      mobileHideTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleMobileHide = useCallback(() => {
+    clearMobileHideTimer();
+    mobileHideTimerRef.current = setTimeout(() => {
+      setShowMobileControls(false);
+    }, VIDEO_CONTROLS_AUTO_HIDE_MS);
+  }, [clearMobileHideTimer]);
 
   // Callback ref to capture video element and trigger re-render
   const videoCallbackRef = useCallback(
@@ -125,8 +153,32 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
-    const handlePlay = () => setIsPaused(false);
-    const handlePause = () => setIsPaused(true);
+    const clearDesktopIconTimer = () => {
+      if (desktopIconTimerRef.current) {
+        clearTimeout(desktopIconTimerRef.current);
+        desktopIconTimerRef.current = null;
+      }
+    };
+    const handlePlay = () => {
+      setIsPaused(false);
+      clearDesktopIconTimer();
+      setDesktopCenterIcon('pause');
+      desktopIconTimerRef.current = setTimeout(() => {
+        setDesktopCenterIcon(null);
+      }, VIDEO_CONTROLS_AUTO_HIDE_MS);
+      if (displayMode === DisplayModeEnum.MOBILE) {
+        scheduleMobileHide();
+      }
+    };
+    const handlePause = () => {
+      setIsPaused(true);
+      clearDesktopIconTimer();
+      setDesktopCenterIcon('play');
+      if (displayMode === DisplayModeEnum.MOBILE) {
+        setShowMobileControls(true);
+        clearMobileHideTimer();
+      }
+    };
 
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
@@ -137,8 +189,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return () => {
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
+      clearDesktopIconTimer();
+      clearMobileHideTimer();
     };
-  }, [videoElement]);
+  }, [videoElement, displayMode, scheduleMobileHide, clearMobileHideTimer]);
 
   // Prioritize direct URLs over fetched files
   const url = useMemo(() => {
@@ -185,7 +239,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     hlsRef.current = hls;
 
     // Add error handling
-    hls.on(Hls.Events.ERROR, (event, data) => {
+    hls.on(Hls.Events.ERROR, (_event, data) => {
       console.error('❌ HLS Error:', {
         type: data.type,
         details: data.details,
@@ -240,6 +294,20 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       const video = videoRef.current;
       if (!video) return;
+
+      if (displayMode === DisplayModeEnum.MOBILE) {
+        setShowMobileControls((prev) => {
+          const next = !prev;
+          if (next && !video.paused) {
+            scheduleMobileHide();
+          } else {
+            clearMobileHideTimer();
+          }
+          return next;
+        });
+        return;
+      }
+
       controlsRef.current?.showControls();
       if (video.paused) {
         video.play();
@@ -247,7 +315,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         video.pause();
       }
     },
-    [displayMode, onClickVideo],
+    [displayMode, onClickVideo, scheduleMobileHide, clearMobileHideTimer],
   );
 
   const handleMouseMove = useCallback(() => {
@@ -275,6 +343,25 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       video.pause();
     }
   }, [displayMode]);
+
+  const handleSkipBackward = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = Math.max(0, video.currentTime - 10);
+    if (displayMode === DisplayModeEnum.MOBILE && !video.paused) {
+      scheduleMobileHide();
+    }
+  }, [displayMode, scheduleMobileHide]);
+
+  const handleSkipForward = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const target = video.currentTime + 10;
+    video.currentTime = isFinite(video.duration) ? Math.min(video.duration, target) : target;
+    if (displayMode === DisplayModeEnum.MOBILE && !video.paused) {
+      scheduleMobileHide();
+    }
+  }, [displayMode, scheduleMobileHide]);
 
   if (url == null) return null;
 
@@ -310,7 +397,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {displayMode === DisplayModeEnum.MOBILE ? (
         <>
-          {showHeader && (
+          {showHeader && showMobileControls && (
             <VideoHeader
               onClose={onClose}
               onClickMute={handleClickMute}
@@ -319,20 +406,46 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             />
           )}
 
-          {/* Play button for mobile mode */}
-          {!hidePlayButton && isPaused && !isDragging && (
-            <Button
-              variant="default"
-              className={styles.playButton}
-              onPress={handlePlayButtonClick}
-              icon={<Play />}
-              iconClassName={styles.playButtonIcon}
-            />
-          )}
+          {/* Play + skip controls for mobile mode */}
+          {!hidePlayButton &&
+            showMobileControls &&
+            (showPauseButton || isPaused) &&
+            !isDragging && (
+              <div className={styles.mobileControlsRow}>
+                {!isLive && !hideSkipButtons && (
+                  <Button
+                    variant="default"
+                    className={styles.skipButton}
+                    onPress={handleSkipBackward}
+                    icon={<Backward10 />}
+                    iconClassName={styles.skipButtonIcon}
+                    aria-label="Skip back 10 seconds"
+                  />
+                )}
+                <Button
+                  variant="default"
+                  className={styles.playButton}
+                  onPress={handlePlayButtonClick}
+                  icon={isPaused ? <Play /> : <Pause fill="white" />}
+                  iconClassName={styles.playButtonIcon}
+                  aria-label={isPaused ? 'Play' : 'Pause'}
+                />
+                {!isLive && !hideSkipButtons && (
+                  <Button
+                    variant="default"
+                    className={styles.skipButton}
+                    onPress={handleSkipForward}
+                    icon={<Forward10 />}
+                    iconClassName={styles.skipButtonIcon}
+                    aria-label="Skip forward 10 seconds"
+                  />
+                )}
+              </div>
+            )}
 
           <VideoProgressBar
             video={videoElement}
-            isVisible={showProgressBar}
+            isVisible={showProgressBar && showMobileControls}
             isDragging={isDragging}
             onDragging={onDragging}
             showDurationOnDragOnly={showDurationOnDragOnly}
@@ -341,14 +454,26 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           />
         </>
       ) : (
-        <VideoPlayerControls
-          ref={controlsRef}
-          videoRef={videoRef}
-          pageId={pageId}
-          productTags={productTags}
-          postId={postId}
-          onClickProductTagBadge={onClickProductTagBadge}
-        />
+        <>
+          {!hidePlayButton && desktopCenterIcon && !isDragging && (
+            <Button
+              variant="default"
+              className={styles.desktopCenterPlayButton}
+              onPress={handlePlayButtonClick}
+              icon={desktopCenterIcon === 'play' ? <Play /> : <Pause fill="white" />}
+              iconClassName={styles.desktopCenterPlayButtonIcon}
+              aria-label={desktopCenterIcon === 'play' ? 'Play' : 'Pause'}
+            />
+          )}
+          <VideoPlayerControls
+            ref={controlsRef}
+            videoRef={videoRef}
+            pageId={pageId}
+            productTags={productTags}
+            postId={postId}
+            onClickProductTagBadge={onClickProductTagBadge}
+          />
+        </>
       )}
     </div>
   );

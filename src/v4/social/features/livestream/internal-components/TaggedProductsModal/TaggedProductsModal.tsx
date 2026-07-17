@@ -67,6 +67,14 @@ export function TaggedProductsModal({
   const { isDesktop } = useResponsive();
   const { online } = useNetworkState();
 
+  // useString is a hook, so every label must be resolved unconditionally at the top of the
+  // component. Previously these were called inline in the "list" return path, which is skipped
+  // by the early `screen === 'selection'` return below — toggling the screen changed the number
+  // of hooks called and triggered React's "change in the order of Hooks" warning (PDT-3913).
+  const taggedProductsTitle = useString('amity_social_button_tagged_products');
+  const productsTaggedTitle = useString('amity_social_button_products_tagged');
+  const addProductsLabel = useString('amity_social_button_add_products');
+
   const [screen, setScreen] = useState<DrawerScreen>('list');
 
   const totalCount = productTags.length;
@@ -144,9 +152,7 @@ export function TaggedProductsModal({
           {!isDesktop && <div className={styles.taggedProductsModal__spacer} />}
           <div className={styles.taggedProductsModal__header__tileContainer}>
             <Typography.TitleBold className={styles.taggedProductsModal__title}>
-              {isHost
-                ? useString('amity_social_button_tagged_products')
-                : useString('amity_social_button_products_tagged')}
+              {isHost ? taggedProductsTitle : productsTaggedTitle}
             </Typography.TitleBold>
             {isHost && (
               <Typography.Caption className={styles.taggedProductsModal__description}>
@@ -238,9 +244,7 @@ export function TaggedProductsModal({
               data-isDisabled={totalCount === MAX_COUNT || !online}
               isDisabled={totalCount === MAX_COUNT || !online}
             >
-              <Typography.BodyBold>
-                {useString('amity_social_button_add_products')}
-              </Typography.BodyBold>
+              <Typography.BodyBold>{addProductsLabel}</Typography.BodyBold>
             </Button>
           </div>
         </>

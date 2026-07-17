@@ -17,6 +17,7 @@ import Liked from '~/v4/icons/Liked';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import { ReactionBar } from '~/v4/chat/components/ReactionBar/ReactionBar';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
@@ -43,6 +44,12 @@ interface LivestreamChatMessageComposerProps {
   community?: Amity.Community | null;
   isPendingPost?: boolean;
   isPlayer?: boolean;
+  /**
+   * The channel is still being fetched (e.g. event live chat loads after the
+   * stage). Render the compose bar in a disabled placeholder state so the UI
+   * matches the loaded layout instead of collapsing to nothing.
+   */
+  isChannelPending?: boolean;
 }
 
 const LIVESTREAM_MESSAGE_MAX_CHARACTOR = 200;
@@ -196,6 +203,7 @@ export const LivestreamChatMessageComposer = ({
   community,
   isPendingPost = false,
   isPlayer = false,
+  isChannelPending = false,
 }: LivestreamChatMessageComposerProps) => {
   // Get values from context
   const {
@@ -227,6 +235,7 @@ export const LivestreamChatMessageComposer = ({
 
   const isHost = hostId === currentUserId;
   const isCoHost = coHostId === currentUserId;
+  const { isModerator } = useChannelPermission(channel?.channelId);
 
   const isHostOrCoHostWithProductManagement = isHost || (isCoHost && coHost?.canManageProductTags);
 
@@ -489,7 +498,9 @@ export const LivestreamChatMessageComposer = ({
   }, [refetchProductCatalogueSettings, warning]);
 
   const renderContent = useCallback(() => {
-    if (isChannelLoading || isLoadingMembership) return null;
+    // While the channel is still being fetched there is no membership to load,
+    // so render the compose bar as a disabled placeholder rather than bailing.
+    if (!isChannelPending && (isChannelLoading || isLoadingMembership)) return null;
 
     if (isDesktop && isPendingPost) return null;
 
@@ -504,7 +515,7 @@ export const LivestreamChatMessageComposer = ({
         </div>
       );
 
-    if (channel?.isMuted)
+    if (channel?.isMuted && !isHost && !isCoHost && !isModerator)
       return renderReadOnlyState({
         allowReaction: !isHost,
         message: resolveString('amity_social_status_livestream_read_only'),
@@ -546,7 +557,9 @@ export const LivestreamChatMessageComposer = ({
                 <ProductTaggingButton
                   pageId={pageId}
                   componentId={componentId}
-                  isDisabled={disabled}
+                  // Disable until the room post resolves so tags can't be written
+                  // to the wrong post (the 'room' child can lag behind the parent).
+                  isDisabled={disabled || !subscribedPost?.postId}
                   badgeCount={
                     productCatalogueSettings?.product.enabled
                       ? subscribedPost?.productTags?.length
@@ -760,12 +773,14 @@ export const LivestreamChatMessageComposer = ({
     isHostOrCoHostWithProductManagement,
     isHost,
     isCoHost,
+    isModerator,
     isPlayer,
     room,
     hasProductTags,
     canReact,
     isFocused,
     handleProductCatalogueDisabled,
+    isChannelPending,
   ]);
 
   return (

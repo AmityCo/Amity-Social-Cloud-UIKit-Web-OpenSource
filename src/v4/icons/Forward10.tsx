@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Forward15 = (props: React.SVGProps<SVGSVGElement>) => {
+export const Forward10 = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="100%"
@@ -12,21 +12,23 @@ export const Forward15 = (props: React.SVGProps<SVGSVGElement>) => {
     >
       <path
         d="M11 19V12L9 13.3125"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
-        d="M14 18.5627C14.3134 18.8373 14.7029 19 15.125 19C16.1605 19 17 18.0206 17 16.8125C17 15.6044 16.1605 14.625 15.125 14.625C14.7029 14.625 14.3134 14.7877 14 15.0623L14.375 12H17"
-        stroke="white"
+      <ellipse
+        cx="15.5"
+        cy="15.5"
+        rx="1.75"
+        ry="3.5"
+        stroke="currentColor"
         strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fill="none"
       />
       <path
         d="M21.1839 6.80412C26.0309 11.1977 26.2961 18.579 21.7762 23.2905C17.2563 28.0021 9.66302 28.2599 4.81605 23.8663C-0.0309169 19.4726 -0.296081 12.0914 4.22379 7.37984C6.7947 4.69988 10.36 3.46089 13.8486 3.69923M12.1429 1L15.1992 3.83294L12.1429 6.87098"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

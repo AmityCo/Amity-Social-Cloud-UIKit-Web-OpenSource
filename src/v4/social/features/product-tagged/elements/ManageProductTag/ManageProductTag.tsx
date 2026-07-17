@@ -52,6 +52,9 @@ export function ManageProductTag({
   const unavailable = product?.status === 'archived';
   const price = product ? formatPrice(product.price, product.currency) : undefined;
   const { online } = useNetworkState();
+  // useString is a hook — resolve unconditionally. This label used to be called inside the
+  // `{unavailable && …}` block, so toggling availability changed the hook count (PDT-3913).
+  const archivedInfoText = useString('amity_social_button_tagged_products_archived_info');
 
   if (!product) return null;
 
@@ -77,7 +80,7 @@ export function ManageProductTag({
         <div className={styles.manageProductTag__top}>
           {unavailable && (
             <Typography.Caption as="p" className={styles.manageProductTag__unavailableLabel}>
-              {useString('amity_social_button_tagged_products_archived_info')}
+              {archivedInfoText}
             </Typography.Caption>
           )}
           <Typography.BodyBold
