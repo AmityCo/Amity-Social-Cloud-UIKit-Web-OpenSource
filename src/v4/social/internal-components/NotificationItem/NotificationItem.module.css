@@ -27,31 +27,9 @@
   height: 2rem;
 }
 
-.notificationItem__userInfo .notificationItem__avatar {
-  width: 2rem;
-  height: 2rem;
-}
-
-.notificationItem__content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .notificationItem__text {
+  flex: 1;
   word-break: break-word;
-}
-
-.notificationItem__eventContext {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.notificationItem__eventDateTime {
-  color: var(--asc-color-base-shade2);
-  white-space: nowrap;
 }
 
 .notificationItem__eventCover {
