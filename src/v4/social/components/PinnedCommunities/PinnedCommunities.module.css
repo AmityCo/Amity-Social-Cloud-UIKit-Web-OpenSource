@@ -1,0 +1,120 @@
+.pinnedCommunities {
+  width: 100%;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+  display: inline-flex;
+  scrollbar-width: none;
+  overflow: scroll hidden;
+  -ms-overflow-style: none;
+}
+
+/* ---- Carousel card (multiple pinned communities) — mirrors Recommended ---- */
+.pinnedCommunityCard {
+  cursor: pointer;
+  width: 15.625rem;
+  height: calc(8.4rem + 5.7rem);
+  border-radius: var(--asc-border-radius-sm);
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.pinnedCommunityCard__imageWrapper {
+  width: 100%;
+  height: 8.4rem;
+  overflow: hidden;
+}
+
+.pinnedCommunityCard__image {
+  border-radius: var(--asc-border-radius-sm) var(--asc-border-radius-sm) 0 0;
+}
+
+.pinnedCommunityCard__content {
+  width: 100%;
+  gap: 0.25rem;
+  display: flex;
+  height: 5.7rem;
+  padding: 0.75rem;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.pinnedCommunityCard__title {
+  width: 100%;
+  gap: 0.12rem;
+  display: flex;
+  align-items: center;
+}
+
+.pinnedCommunityCard__category {
+  overflow: hidden;
+  max-width: 9.5rem;
+}
+
+/* ---- Hero card (exactly one pinned community) — full-width banner, text below,
+   no bordered frame. All four corners rounded, taller than carousel cards. ---- */
+.pinnedCommunityCard__hero {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+}
+
+.pinnedCommunityCard__imageWrapper__hero {
+  width: 100%;
+  height: 11.25rem; /* ~180px */
+  overflow: hidden;
+  border-radius: 0.75rem; /* ~12px, all four corners */
+}
+
+.pinnedCommunityCard__image__hero {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  object-fit: cover;
+}
+
+.pinnedCommunityCard__content__hero {
+  width: 100%;
+  height: auto;
+  gap: 0.25rem;
+  padding: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* ---- Carousel arrows (desktop) — mirrors Recommended ---- */
+.pinnedCommunityCard__arrowIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.pinnedCommunityCard__arrow {
+  top: -2.4rem;
+  z-index: 100;
+  display: none;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+}
+
+.left {
+  right: 2.2rem;
+}
+
+.right {
+  right: 0;
+}
+
+.left[data-shown='false'] .pinnedCommunityCard__arrowIcon,
+.right[data-shown='false'] .pinnedCommunityCard__arrowIcon {
+  cursor: not-allowed;
+  fill: var(--asc-color-base-shade3);
+}
+
+@media (width >= 48em) {
+  .pinnedCommunityCard__arrow {
+    display: flex;
+  }
+}
