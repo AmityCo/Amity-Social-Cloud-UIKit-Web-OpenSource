@@ -38,7 +38,7 @@ import styles from './Comment.module.css';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
-import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
+import { BrandBadge } from '~/v4/social/elements';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 
 interface CommentProps {
@@ -504,11 +504,7 @@ export const Comment = ({
                   )}
                 </Button>
 
-                {isHost ? (
-                  <EventHostBadge withLabel />
-                ) : (
-                  isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
-                )}
+                {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
 
                 <TextWithMention
                   pageId={pageId}

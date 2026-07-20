@@ -23,9 +23,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.28.14
         version: 5.45.1(react@18.3.1)
-      '@vvo/tzdb':
-        specifier: ^6.187.0
-        version: 6.187.0
       clsx:
         specifier: ^2.1.0
         version: 2.1.1
@@ -3314,9 +3311,6 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
-
-  '@vvo/tzdb@6.187.0':
-    resolution: {integrity: sha512-SkGZLQyHT3dYxv0HyUHX+h1lDwTMfJs/nXT6BrLdl1nXdpcCEeGJPGiVf/9uv8uD8mCeMok1MM5CcG67VoEypQ==}
 
   '@webassemblyjs/ast@1.14.1':
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -11769,8 +11763,6 @@ snapshots:
       vite: 4.5.3(@types/node@20.14.4)(less@4.2.0)(sass@1.77.6)(stylus@0.62.0)(terser@5.40.0)
     transitivePeerDependencies:
       - supports-color
-
-  '@vvo/tzdb@6.187.0': {}
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:

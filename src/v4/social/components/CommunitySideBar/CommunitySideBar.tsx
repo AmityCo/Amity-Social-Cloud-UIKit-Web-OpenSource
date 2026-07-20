@@ -6,7 +6,6 @@ import {
   ForYouMenuItem,
   NewsFeedMenuItem,
   CommunitiesMenuItem,
-  EventsMenuItem,
 } from '~/v4/social/elements/CommunitySideBarMenuItem';
 import { NotificationTrayButton } from '~/v4/social/elements';
 import styles from './CommunitySideBar.module.css';
@@ -98,7 +97,6 @@ export const CommunitySideBar = ({
             <ForYouMenuItem pageId={pageId} componentId={componentId} />
             {!isVisitorOrBot && <NewsFeedMenuItem pageId={pageId} componentId={componentId} />}
             <CommunitiesMenuItem pageId={pageId} componentId={componentId} />
-            <EventsMenuItem pageId={pageId} componentId={componentId} />
           </>
         )}
       </div>

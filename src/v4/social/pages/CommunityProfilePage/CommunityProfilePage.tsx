@@ -32,12 +32,8 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
 import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
-import { EventSetupMode } from '~/v4/social/features';
-import { CreateEventButton } from '~/v4/social/elements/CreateEventButton';
-import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { Typography } from '~/v4/core/components';
 import { CommunityMediaFeed } from '~/v4/social/features/communities/profile/components/MediaFeed';
-import { CommunityEventFeed } from '~/v4/social/features/communities/profile/components/EventFeed';
 interface CommunityProfileProps {
   communityId: string;
   page?: number;
@@ -76,7 +72,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
-  const { hasCreateEventPermission } = useEventPermission(communityId);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -84,8 +79,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
         return <CommunityFeed pageId={pageId} communityId={communityId} />;
       case 'community_pin':
         return <CommunityPin pageId={pageId} communityId={communityId} />;
-      case 'community_event_feed':
-        return <CommunityEventFeed pageId={pageId} communityId={communityId} />;
       case 'community_media_feed':
         return <CommunityMediaFeed pageId={pageId} communityId={communityId} />;
       default:
@@ -191,13 +184,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
             <PostComposer
               pageId={pageId}
               communityId={communityId}
-              onClickEvent={() => {
-                AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
-                  targetId: communityId,
-                  mode: EventSetupMode.CREATE,
-                  targetName: community?.displayName ?? '',
-                });
-              }}
               onClickPost={() => {
                 openPopup({
                   pageId,
@@ -285,19 +271,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                         >
                           <CreateClipButton pageId={pageId} componentId={communityId} />
                         </FileTrigger>
-                      )}
-                      {hasCreateEventPermission && (
-                        <CreateEventButton
-                          pageId={pageId}
-                          onPress={() => {
-                            removeDrawerData();
-                            AmityCommunityProfilePageBehavior?.goToEventSetupPage?.({
-                              targetId: communityId,
-                              mode: EventSetupMode.CREATE,
-                              targetName: community?.displayName ?? '',
-                            });
-                          }}
-                        />
                       )}
                     </>
                   ),

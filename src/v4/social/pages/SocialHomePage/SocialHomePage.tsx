@@ -16,7 +16,6 @@ import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { ForYouFeed } from '~/v4/social/features/for-you';
 import { Communities } from '~/v4/social/internal-components/Communities/Communities';
-import { Events } from '~/v4/social/features';
 import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
 import { PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { Divider } from '~/v4/social/elements/Divider';
@@ -178,13 +177,6 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
           onPress={() => handleTabClick(HomePageTab.Communities)}
           textId="amity_social_button_social_home_communities_button"
         />
-        <ChipButton
-          pageId={PAGE_ID.SOCIAL_HOME_PAGE}
-          elementId={ELEMENT_ID.EVENTS_BUTTON}
-          isActive={activeTab === HomePageTab.Events}
-          onPress={() => handleTabClick(HomePageTab.Events)}
-          textId="amity_social_button_social_home_events_button"
-        />
         {!hideClipFeedTab && (
           <ChipButton
             pageId={PAGE_ID.SOCIAL_HOME_PAGE}
@@ -219,7 +211,6 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
               {activeTab === HomePageTab.ForYou && <ForYouFeed pageId={pageId} />}
               {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
               {activeTab === HomePageTab.Communities && <Communities pageId={pageId} />}
-              {activeTab === HomePageTab.Events && <Events pageId={pageId} />}
             </>
           )}
         </div>

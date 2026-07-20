@@ -5,5 +5,4 @@ export enum HomePageTab {
   MyCommunities = 'My communities',
   Clips = 'Clips',
   Communities = 'Communities',
-  Events = 'Events',
 }

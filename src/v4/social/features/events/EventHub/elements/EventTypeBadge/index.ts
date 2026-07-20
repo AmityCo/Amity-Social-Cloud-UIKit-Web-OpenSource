@@ -1,1 +1,0 @@
-export { EventTypeBadge } from './EventTypeBadge';

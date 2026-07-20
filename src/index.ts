@@ -72,12 +72,6 @@ export {
   PendingRequestPage as AmityPendingRequestPage,
   CommunityInviteMemberPage as AmityCommunityInviteMemberPage,
   CommunityPendingInvitationPage as AmityCommunityPendingInvitationPage,
-  EventTargetSelectionPage as AmityEventTargetSelectionPage,
-  EventSetupPage as AmityEventSetupPage,
-  UpcomingEventsPage as AmityUpcomingEventsPage,
-  PastEventsPage as AmityPastEventsPage,
-  EventDetailPage as AmityEventDetailPage,
-  EventAttendeesPage as AmityEventAttendeesPage,
 } from '~/v4/social/pages';
 
 export {
@@ -122,16 +116,7 @@ export { FeedCaughtUp as AmityFeedCaughtUpComponent } from '~/v4/social/componen
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
 
-export { EventSetupMode as AmityEventSetupPageMode } from './v4/social/features';
-
-export {
-  CommunityEventFeed as AmityCommunityEventFeedComponent,
-  CommunityMediaFeed as AmityCommunityMediaFeedComponent,
-} from './v4/social/features/communities/profile/components';
-
-export { ExploreEvent as AmityExploreEventFeedComponent } from './v4/social/features/events/EventHub/components/Explore';
-export { MyEvents as AmityMyEventFeedComponent } from './v4/social/features/events/EventHub/components/MyEvents';
-export { EventInfo as AmityEventInfoComponent } from './v4/social/features/events';
+export { CommunityMediaFeed as AmityCommunityMediaFeedComponent } from './v4/social/features/communities/profile/components';
 
 export {
   ManageProductTagList as AmityManageProductTagListComponent,
