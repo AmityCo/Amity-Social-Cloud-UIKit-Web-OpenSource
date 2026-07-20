@@ -83,6 +83,21 @@ export function formatEventDuration(start: string, end?: string): string {
     : formatDateTimeLocal(start);
 }
 
+export function formatEventStartDate(start: string): string {
+  return new Intl.DateTimeFormat(getLocale(), {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(start));
+}
+
+export function formatEventStartTime(start: string): string {
+  return new Intl.DateTimeFormat(getLocale(), {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(new Date(start));
+}
+
 export function checkIsWithinMinutes(date: string, minutes = 15) {
   const timeDifferenceMs = dayjs(date).toDate().getTime() - new Date().getTime();
   const fifteenMinutesMs = minutes * 60 * 1000;
