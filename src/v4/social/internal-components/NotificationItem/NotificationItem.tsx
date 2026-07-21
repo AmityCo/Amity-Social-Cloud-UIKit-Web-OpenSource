@@ -11,6 +11,8 @@ import { formatEventStartDate, formatEventStartTime } from '~/v4/social/utils/ti
 import { highlightedText } from '~/v4/social/utils/highlightedText';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useRoom } from '~/v4/social/features/livestream/hooks';
+import LiveIndicator from '~/v4/icons/LiveIndicator';
 const EVENT_TRAY_CATEGORIES = ['event_created', 'event_reminder', 'event_started'];
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import styles from './NotificationItem.module.css';
@@ -97,6 +99,12 @@ export const NotificationItem = ({
     shouldCall: !!eventCommunityId,
   });
 
+  // Show the LIVE badge on a co-host invitation only while the room is
+  // actually live — otherwise the badge lingers past the stream (PDT-3896).
+  const isCoHostInvite = item.trayItemCategory === 'room_cohost_invite';
+  const { room: coHostInviteRoom } = useRoom(isCoHostInvite ? item.targetId : undefined);
+  const showCoHostLiveBadge = isCoHostInvite && coHostInviteRoom?.status === 'live';
+
   const renderLeadingAvatar = () => {
     if (isEventCreated) {
       return (
@@ -126,7 +134,7 @@ export const NotificationItem = ({
       );
     }
 
-    return (
+    const avatar = (
       <UserAvatar
         shouldRedirectToUserProfile={false}
         onPressAvatar={onClickItem}
@@ -136,6 +144,17 @@ export const NotificationItem = ({
         className={styles.notificationItem__avatar}
       />
     );
+
+    if (showCoHostLiveBadge) {
+      return (
+        <div className={styles.notificationItem__avatarWithBadge}>
+          {avatar}
+          <LiveIndicator className={styles.notificationItem__liveBadge} />
+        </div>
+      );
+    }
+
+    return avatar;
   };
 
   return (

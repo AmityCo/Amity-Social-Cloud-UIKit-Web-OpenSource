@@ -60,3 +60,19 @@
   border-radius: 0.375rem;
   object-fit: cover;
 }
+
+.notificationItem__avatarWithBadge {
+  position: relative;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+}
+
+.notificationItem__liveBadge {
+  position: absolute;
+  right: -0.25rem;
+  bottom: -0.25rem;
+  width: 1rem;
+  height: 1rem;
+  border: var(--asc-color-background-default);
+}
