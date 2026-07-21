@@ -2,7 +2,7 @@
   position: sticky;
   top: 3.625rem;
   z-index: 9;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-list-default-default);
 }
 
 .memberTabs__panel {
@@ -16,5 +16,5 @@
   top: 7rem;
   z-index: 8;
   padding: 0.5rem 1rem;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-page-background-default);
 }

@@ -3,8 +3,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1rem;
-  background: var(--asc-color-background-default);
-  border-bottom: 0.0625rem solid var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-list-default-default);
+  border-bottom: 0.0625rem solid var(--asc-color-line-divider-post-default);
   flex-shrink: 0;
 }
 
@@ -41,7 +41,7 @@
   line-height: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.0256rem;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-header-default-default);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -55,7 +55,7 @@
 }
 
 .header__subtitleText {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-list-textdescription-default-default);
 }
 
 .header__identity[data-variant='banned'] {
@@ -66,11 +66,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--asc-color-base-shade2);
+  background: var(--asc-color-surface-avatar-profile-default);
   border-radius: 0.625rem;
   overflow: hidden;
 }
 
 .header__name[data-variant='banned'] {
-  color: var(--asc-color-base-shade2);
+  color: var(--asc-color-text-list-textdescription-default-default);
 }

@@ -1,8 +1,9 @@
-import { useState, type ComponentType, type SVGProps } from 'react';
+import { useState, type ComponentType, type ReactNode, type SVGProps } from 'react';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { Popover } from '~/v4/core/components/AriaPopover';
-import { Menu } from '~/v4/core/components/Menu';
-import { IconButton, type IconName } from '~/v4/chat/elements/IconButton';
+import { Popover } from '~/v4/core/design/components/Popover';
+import { Menu } from '~/v4/core/design/components/Menu';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { EllipsisV } from '~/v4/core/design/icons/EllipsisV';
 
 export type ActionMenuItem = {
   key: string;
@@ -13,14 +14,14 @@ export type ActionMenuItem = {
 };
 
 type ActionMenuProps = {
-  icon?: IconName;
+  icon?: ReactNode;
   ariaLabel?: string;
   getItems: () => ActionMenuItem[] | Promise<ActionMenuItem[]>;
 };
 
 export function ActionMenu({
   getItems,
-  icon = 'ellipsis-v',
+  icon = <EllipsisV />,
   ariaLabel = 'Actions',
 }: ActionMenuProps) {
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -43,9 +44,11 @@ export function ActionMenu({
   return (
     <Popover
       trigger={({ isDesktop, openPopover }) => (
-        <IconButton
+        <Button.Icon
           icon={icon}
-          variant="transparent"
+          styleType="ghost"
+          hierarchy="secondary"
+          size={32}
           aria-label={ariaLabel}
           onPress={async () => {
             const list = await getItems();

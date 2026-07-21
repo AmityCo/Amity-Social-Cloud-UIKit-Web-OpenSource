@@ -1,5 +1,5 @@
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import BellSlash from '~/v4/icons/BellSlash';
+import { BellSlash } from '~/v4/core/design/icons/BellSlash';
 import { useString } from '~/v4/core/localization';
 import styles from './DisabledByModeratorBanner.module.css';
 

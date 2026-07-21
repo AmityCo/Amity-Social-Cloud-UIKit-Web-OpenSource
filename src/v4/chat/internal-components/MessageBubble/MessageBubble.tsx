@@ -1,8 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Popover } from '~/v4/core/components/AriaPopover/Popover';
+import { Button } from '~/v4/core/design/components/Button/Button';
+import { Popover } from '~/v4/core/design/components/Popover/Popover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';

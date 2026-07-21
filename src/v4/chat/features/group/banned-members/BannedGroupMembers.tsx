@@ -1,4 +1,4 @@
-import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
+import { SearchInput } from '~/v4/core/design/molecules/SearchInput';
 import { useString } from '~/v4/core/localization';
 import { Header } from '~/v4/chat/features/group/banned-members/components/Header';
 import { BannedMemberList } from '~/v4/chat/features/group/banned-members/components/BannedMemberList';
@@ -15,7 +15,12 @@ export function BannedGroupMembers(props: BannedGroupMemberListPageProps) {
     <div className={styles.bannedGroupMembers}>
       <Header onBack={handleBack} />
       <div className={styles.bannedGroupMembers__searchBar}>
-        <SearchInput value={searchText} onChange={setSearchText} placeholder={searchPlaceholder} />
+        <SearchInput
+          value={searchText}
+          onChange={setSearchText}
+          placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
+        />
       </div>
       <BannedMemberList
         channelId={channelId}

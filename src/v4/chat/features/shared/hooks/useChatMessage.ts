@@ -31,7 +31,7 @@ export function useChatMessage({
 }: UseChatMessageParams) {
   const { pop } = useChatNavigation();
   const { online: isOnline } = useNetworkState();
-  const { loading, remove, error: errorToast } = useNotifications();
+  const { loading, remove, error: errorToast } = useNotifications('chat');
   const { currentUserId } = useSDK();
   const loadingToast = useString('amity_chat_loading_label');
   const loadErrorToast = useString('amity_chat_load_error');
@@ -138,7 +138,7 @@ export function useChatMessage({
       if (loadingToastIdRef.current) return;
       const id = `${loadingToastIdPrefix}-${channelId}-${Date.now()}`;
       loadingToastIdRef.current = id;
-      loading({ id, content: loadingToast, duration: 60_000, alignment: 'fullscreen' });
+      loading({ id, content: loadingToast, duration: 60_000, alignment: 'with-composer' });
       return;
     }
     if (loadingToastIdRef.current) {

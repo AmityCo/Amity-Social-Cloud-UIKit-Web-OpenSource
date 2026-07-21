@@ -25,7 +25,7 @@ const flaggedByMeQueryKey = (userId?: UserReportPayload['userId']) => [
 
 export function useUserReportQuery({ userId, enabled = true }: UseUserReportQueryParams = {}) {
   const queryClient = useQueryClient();
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
 
   const { data: isFlaggedByMe, isLoading } = useQuery<boolean>({
     queryKey: flaggedByMeQueryKey(userId),

@@ -6,7 +6,7 @@ import { useChannelArchiveQuery } from '~/v4/chat/hooks/queries';
 import { ChannelItem } from '~/v4/chat/features/home/components/ChannelItem/ChannelItem';
 import { EmptyState } from '~/v4/chat/features/shared/components/EmptyState/EmptyState';
 import { SwipeToLeft } from '~/v4/chat/components/SwipeToLeft';
-import { Unarchive } from '~/v4/icons/Unarchive';
+import { Unarchive } from '~/v4/core/design/icons/Unarchive';
 import { LIST_PAGE_LIMIT, LIST_SKELETON_ROW_COUNT } from '~/v4/chat/constants';
 import styles from './ArchivedChannelList.module.css';
 

@@ -1,9 +1,10 @@
 import { useNetworkState } from 'react-use';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { ChevronLeft } from '~/v4/core/design/icons/ChevronLeft';
+import { Loader } from '~/v4/core/design/atoms/Loader';
 import { Avatar } from '~/v4/chat/elements/Avatar';
-import { IconButton } from '~/v4/chat/elements/IconButton';
 import { useString } from '~/v4/core/localization';
 import styles from './Header.module.css';
 
@@ -31,7 +32,14 @@ export function Header({
 
   return (
     <header className={styles.header} data-variant={variant}>
-      <IconButton icon="chevron-left" variant="transparent" onPress={onBack} aria-label="Back" />
+      <Button.Icon
+        icon={<ChevronLeft />}
+        styleType="ghost"
+        hierarchy="secondary"
+        size={32}
+        onPress={onBack}
+        aria-label="Back"
+      />
       {isBanned ? (
         <div className={styles.header__identity} data-variant="banned">
           <div className={styles.header__avatar} data-variant="banned">
@@ -44,9 +52,8 @@ export function Header({
           </div>
         </div>
       ) : (
-        <Button
+        <AriaButton
           type="button"
-          variant="default"
           onPress={onOpenSettings}
           className={styles.header__identity}
           aria-label="Open group settings"
@@ -60,14 +67,14 @@ export function Header({
             </Typography.TitleBold>
             {!isOnline ? (
               <div className={styles.header__subtitle}>
-                <Spinner />
+                <Loader.Spinner size="sm" />
                 <Typography.Caption className={styles.header__subtitleText}>
                   {waitingForNetworkLabel}
                 </Typography.Caption>
               </div>
             ) : null}
           </div>
-        </Button>
+        </AriaButton>
       )}
     </header>
   );

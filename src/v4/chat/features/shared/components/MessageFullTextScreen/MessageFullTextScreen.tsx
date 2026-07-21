@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import Linkify from 'linkify-react';
-import ChevronLeft from '~/v4/icons/ChevronLeft';
+import { Typography } from '~/v4/core/components/Typography/Typography';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { ChevronLeft } from '~/v4/core/design/icons/ChevronLeft';
 import styles from './MessageFullTextScreen.module.css';
 
 type MessageFullTextScreenProps = {
@@ -29,15 +31,18 @@ export function MessageFullTextScreen({ text, title, onClose }: MessageFullTextS
       aria-label={title ?? 'Full message text'}
     >
       <div className={styles.fullTextScreen__header}>
-        <button
-          type="button"
-          className={styles.fullTextScreen__backButton}
+        <Button.Icon
+          icon={<ChevronLeft />}
+          styleType="ghost"
+          hierarchy="secondary"
+          size={32}
+          onPress={onClose}
           aria-label="Back"
-          onClick={onClose}
-        >
-          <ChevronLeft className={styles.fullTextScreen__backIcon} />
-        </button>
-        {title ? <div className={styles.fullTextScreen__title}>{title}</div> : null}
+        />
+        <Typography.TitleBold className={styles.fullTextScreen__title}>
+          {title}
+        </Typography.TitleBold>
+        <span className={styles.fullTextScreen__headerSpacer} aria-hidden="true" />
       </div>
       <div className={styles.fullTextScreen__body}>
         <p className={styles.fullTextScreen__text}>

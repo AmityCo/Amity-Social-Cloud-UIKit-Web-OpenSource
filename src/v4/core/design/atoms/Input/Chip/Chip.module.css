@@ -1,0 +1,124 @@
+.chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+
+  --chip-icon: var(--asc-color-icon-input-chipinput-default);
+  --chip-line: var(--asc-color-line-input-chipinput-underlined-default);
+  --chip-placeholder: var(--asc-color-text-input-chipinput-placeholder-enabled);
+  --chip-title: var(--asc-color-text-input-chipinput-title-default);
+  --chip-indicator: var(--asc-color-text-input-chipinput-indicator-default);
+  --chip-hint: var(--asc-color-text-input-chipinput-hinttext-default);
+}
+
+.chip[data-disabled] {
+  --chip-icon: var(--asc-color-icon-input-chipinput-disabled);
+  --chip-line: var(--asc-color-line-input-chipinput-underlined-disabled);
+  --chip-placeholder: var(--asc-color-text-input-chipinput-placeholder-disabled);
+  --chip-title: var(--asc-color-text-input-chipinput-title-disabled);
+  --chip-indicator: var(--asc-color-text-input-chipinput-indicator-disabled);
+}
+
+.chip[data-invalid] {
+  --chip-icon: var(--asc-color-icon-input-chipinput-error);
+  --chip-line: var(--asc-color-line-input-chipinput-underlined-error);
+  --chip-placeholder: var(--asc-color-text-input-chipinput-placeholder-error);
+  --chip-title: var(--asc-color-text-input-chipinput-title-error);
+  --chip-indicator: var(--asc-color-text-input-chipinput-indicator-error);
+  --chip-hint: var(--asc-color-text-input-chipinput-hinttext-error);
+}
+
+.chip__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--chip-title);
+}
+
+.chip__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--chip-icon);
+}
+
+.chip__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentcolor;
+}
+
+.chip__tags {
+  display: contents;
+}
+
+.chip__tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  outline: none;
+  color: var(--chip-title);
+}
+
+.chip__tagLabel {
+  font-size: 0.875rem;
+}
+
+.chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--chip-indicator);
+}
+
+.chip__removeIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentcolor;
+}
+
+.chip__input {
+  flex: 1 1 4rem;
+  min-width: 4rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--chip-placeholder);
+  caret-color: var(--asc-color-text-input-chipinput-textcursor-default);
+}
+
+.chip__input::placeholder {
+  color: var(--chip-placeholder);
+}
+
+.chip__underline {
+  width: 100%;
+  height: 0.0625rem;
+  background: var(--chip-line);
+}
+
+.chip__hint {
+  font-size: 0.75rem;
+  color: var(--chip-hint);
+}

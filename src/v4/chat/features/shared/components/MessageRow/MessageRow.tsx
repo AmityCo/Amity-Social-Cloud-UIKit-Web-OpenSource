@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button } from '~/v4/core/design/atoms/Button';
 import { useString } from '~/v4/core/localization';
-import { Failed } from '~/v4/icons/Failed';
+import { Exclamation } from '~/v4/core/design/icons/Exclamation';
+import { Redo } from '~/v4/core/design/icons/Redo';
+import { isSyntheticPendingMessage } from '~/v4/chat/features/shared/hooks/useMessageComposer';
 import { formatMessageTime } from '~/v4/chat/utils/formatMessageTime';
 import { MessageReplyQuote } from '~/v4/chat/features/shared/components/MessageReplyQuote';
 import { MessageReactionBadge } from '~/v4/chat/features/shared/components/MessageReactionBadge';
@@ -39,6 +41,8 @@ export function MessageRow({
   const sendingLabel = useString('amity_chat_sending_status');
   const syncState = message.syncState;
   const isFailed = syncState === ('error' as Amity.SyncState);
+  const isViolation =
+    isSyntheticPendingMessage(message) && message.__failureReason === 'moderation';
   const isSynced = syncState === ('synced' as Amity.SyncState);
   const isDeleted = !!message.isDeleted;
   const createdAt = message.createdAt ? new Date(message.createdAt) : null;
@@ -99,15 +103,29 @@ export function MessageRow({
             {ownTimestamp}
             {ownSending}
             {isUser && isFailed ? (
-              <Button
-                type="button"
-                variant="text"
-                className={styles.messageRow__errorButton}
-                onPress={() => onOpenFailedSheet(message)}
-                aria-label="Message failed to send"
-              >
-                <Failed className={styles.messageRow__errorIcon} />
-              </Button>
+              isViolation ? (
+                <Button.Icon
+                  styleType="transparent"
+                  hierarchy="primary"
+                  size={24}
+                  icon={<Exclamation />}
+                  iconClassName={styles.messageRow__errorIcon}
+                  className={styles.messageRow__errorButton}
+                  onPress={() => onOpenFailedSheet(message)}
+                  aria-label="Message failed to send"
+                />
+              ) : (
+                <Button.Icon
+                  styleType="filled"
+                  hierarchy="secondary"
+                  size={24}
+                  icon={<Redo />}
+                  iconClassName={styles.messageRow__errorIcon}
+                  className={styles.messageRow__errorButton}
+                  onPress={() => onOpenFailedSheet(message)}
+                  aria-label="Retry sending message"
+                />
+              )
             ) : null}
             {bubble}
             {otherTimestamp}

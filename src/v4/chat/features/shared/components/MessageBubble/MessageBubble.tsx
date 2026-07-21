@@ -2,11 +2,12 @@ import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode
 import { mergeProps, useLongPress, usePress } from 'react-aria';
 import Linkify from 'linkify-react';
 import { FileRepository } from '@amityco/ts-sdk';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
-import VideoControl from '~/v4/icons/VideoControl';
-import AngleRight from '~/v4/icons/AngleRight';
+import { Loader } from '~/v4/core/design/atoms/Loader';
+import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
+import { ChevronRight } from '~/v4/core/design/icons/ChevronRight';
+import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import { MediaUploadOverlay } from '~/v4/chat/elements/MediaUploadOverlay';
 import { DeletedMessagePill } from '~/v4/chat/features/shared/components/DeletedMessagePill/DeletedMessagePill';
 import { MessageLinkPreview } from '~/v4/chat/features/shared/components/MessageLinkPreview';
@@ -159,9 +160,8 @@ function TextBubble({
       {isOverflowing && (
         <>
           <div className={styles.textBubble__divider} />
-          <Button
+          <AriaButton
             type="button"
-            variant="text"
             className={styles.textBubble__seeMore}
             onPress={() => onSeeMore(text)}
             aria-label={seeMoreLabel}
@@ -169,8 +169,8 @@ function TextBubble({
             <Typography.Caption className={styles.textBubble__seeMoreLabel}>
               {seeMoreLabel}
             </Typography.Caption>
-            <AngleRight className={styles.textBubble__seeMoreIcon} />
-          </Button>
+            <ChevronRight className={styles.textBubble__seeMoreIcon} />
+          </AriaButton>
         </>
       )}
       {firstUrl && (
@@ -217,6 +217,7 @@ function ImageBubble({
   const isFailed = message.syncState === ('error' as Amity.SyncState);
   const isSyncing = message.syncState === 'syncing';
   const isSynthetic = isSyntheticPendingMessage(message);
+  const [hasLoadError, setHasLoadError] = useState(false);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -238,7 +239,15 @@ function ImageBubble({
   if (!displaySrc) {
     return (
       <div className={styles.mediaBubble__placeholder}>
-        <Spinner className={styles.mediaBubble__spinner} />
+        <Loader.Upload size="medium" className={styles.mediaBubble__spinner} />
+      </div>
+    );
+  }
+
+  if (hasLoadError && !localPreviewUrl) {
+    return (
+      <div className={styles.mediaBubble__broken} aria-label="Image unavailable">
+        <ImageSlash className={styles.mediaBubble__brokenIcon} />
       </div>
     );
   }
@@ -255,7 +264,12 @@ function ImageBubble({
       data-active={isActive ? 'true' : 'false'}
       {...mergeProps(longPressProps, pressProps)}
     >
-      <img src={displaySrc} alt={altText} className={styles.imageBubble__img} />
+      <img
+        src={displaySrc}
+        alt={altText}
+        className={styles.imageBubble__img}
+        onError={() => setHasLoadError(true)}
+      />
       {showUploadOverlay ? (
         <MediaUploadOverlay
           onCancel={
@@ -323,6 +337,16 @@ function VideoBubble({
     onPress: () => onOpenVideo(message),
   });
 
+  const hasSource = !!(localPreviewUrl || videoUrl);
+
+  if (!hasSource) {
+    return (
+      <div className={styles.mediaBubble__placeholder}>
+        <Loader.Upload size="medium" className={styles.mediaBubble__spinner} />
+      </div>
+    );
+  }
+
   const bubble = (
     <div
       ref={rootRef}
@@ -373,10 +397,9 @@ function VideoBubble({
           }
         />
       ) : (
-        <>
-          <div className={styles.videoBubble__overlay} />
-          <VideoControl className={styles.videoBubble__playIcon} />
-        </>
+        <span className={styles.videoBubble__playChip} aria-hidden="true">
+          <VideoPlay className={styles.videoBubble__playIcon} />
+        </span>
       )}
     </div>
   );
@@ -421,7 +444,9 @@ function wrapWithFailedCaption(
   isFailed: boolean,
   message: Amity.Message,
 ): ReactElement {
-  if (!isFailed) return bubble;
+  const isViolation =
+    isSyntheticPendingMessage(message) && message.__failureReason === 'moderation';
+  if (!isFailed || !isViolation) return bubble;
   return (
     <div className={styles.mediaBubble__failedWrapper}>
       {bubble}

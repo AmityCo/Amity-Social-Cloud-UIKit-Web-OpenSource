@@ -1,5 +1,5 @@
 .createConversation {
   --empty-state-offset-top: 7.125rem;
 
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-page-background-default);
 }

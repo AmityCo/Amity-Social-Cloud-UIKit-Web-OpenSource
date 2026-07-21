@@ -1,7 +1,7 @@
 .messageReactorListSheet {
   display: flex;
   flex-direction: column;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-page-background-default);
   margin: 0 -1rem;
   max-height: 90vh;
   min-height: 90vh;
@@ -41,7 +41,6 @@
 .messageReactorListSheet__tabIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--asc-color-base-shade3);
 }
 
 .messageReactorListSheet__list {
@@ -84,20 +83,19 @@
 }
 
 .messageReactorListSheet__rowTitle {
-  color: var(--asc-color-base-default);
-  fill: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-header-default-default);
+  fill: var(--asc-color-text-list-header-default-default);
 }
 
 .messageReactorListSheet__rowCaption {
-  color: var(--asc-color-base-shade1);
-  fill: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-list-textdescription-default-default);
+  fill: var(--asc-color-text-list-textdescription-default-default);
 }
 
 .messageReactorListSheet__rowReactionIcon {
   flex-shrink: 0;
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-shade3);
 }
 
 .messageReactorListSheet__emptyState {
@@ -113,8 +111,8 @@
 .messageReactorListSheet__emptyStateIcon {
   width: 3rem;
   height: 3rem;
-  color: var(--asc-color-secondary-shade4);
-  fill: var(--asc-color-secondary-shade4);
+  color: var(--asc-color-icon-emptystate-icon-default);
+  fill: var(--asc-color-icon-emptystate-icon-default);
 }
 
 .messageReactorListSheet__emptyStateText {
@@ -125,9 +123,9 @@
 }
 
 .messageReactorListSheet__emptyStateTitle {
-  color: var(--asc-color-base-shade3);
+  color: var(--asc-color-text-emptystate-title-default);
 }
 
 .messageReactorListSheet__emptyStateDescription {
-  color: var(--asc-color-base-shade3);
+  color: var(--asc-color-text-emptystate-description-default);
 }

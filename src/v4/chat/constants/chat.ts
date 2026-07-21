@@ -18,4 +18,4 @@ export const MAX_REACTION_BADGE_ICONS = 3;
 
 export const LIST_PAGE_LIMIT = 20;
 
-export const LIST_SKELETON_ROW_COUNT = 3;
+export const LIST_SKELETON_ROW_COUNT = 9;

@@ -5,9 +5,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 0.75rem;
-  height: 3.625rem;
-  background-color: var(--asc-color-background-default);
+  padding: 0.75rem 1rem;
+  height: 3.5rem;
+  background-color: var(--asc-color-surface-page-background-default);
 }
 
 .topBar__leftAction {
@@ -28,7 +28,7 @@
 .topBar__title {
   flex-shrink: 0;
   max-width: 16rem;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-sheets-header-title-default);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;

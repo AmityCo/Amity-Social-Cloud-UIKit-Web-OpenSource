@@ -1,12 +1,12 @@
 import React from 'react';
 import { useString } from '~/v4/core/localization';
-import { MenuOptionButton } from '~/v4/core/internal-components/MenuOptionButton';
+import { MenuOptionButton } from '~/v4/core/design/components/MenuOptionButton';
 import Flag from '~/v4/icons/Flag';
 import UnFlag from '~/v4/icons/UnFlag';
 import Bin from '~/v4/icons/Bin';
 import styles from './MessageOptions.module.css';
 import { useFlagMessageQuery } from '~/v4/chat/hooks/queries';
-import { Skeleton } from '~/v4/core/components/Skeleton';
+import { Skeleton } from '~/v4/core/design/components/Skeleton';
 import { useDeleteMessage } from '~/v4/chat/hooks/useDeleteMessage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';

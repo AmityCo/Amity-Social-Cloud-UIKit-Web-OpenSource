@@ -4,7 +4,7 @@
 }
 
 .notificationTrayButton__icon {
-  background-color: var(--asc-color-secondary-shade4);
+  background-color: var(--asc-color-base-shade4);
   display: flex;
   justify-content: center;
   align-items: center;

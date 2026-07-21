@@ -1,0 +1,66 @@
+.menu {
+  padding: 0.5rem 0;
+}
+
+.menu[data-container='drawer'] {
+  padding: 0;
+}
+
+.menu[data-variant='chat'][data-container='popover'] {
+  padding: 0;
+}
+
+.menuItem {
+  gap: 0.75rem;
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  justify-content: flex-start;
+}
+
+.menuItem:hover {
+  background-color: var(--asc-color-surface-popover-lists-hover);
+}
+
+.menuItem[data-destructive='false'] {
+  color: var(--asc-color-text-list-header-default-default);
+}
+
+.menuItem[data-destructive='true'] {
+  color: var(--asc-color-text-list-header-destructive-default);
+}
+
+.menu[data-container='drawer'] .menuItem {
+  padding: 0.875rem 0;
+}
+
+.menu[data-variant='chat'][data-container='popover'] .menuItem {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.menu[data-variant='social'][data-container='popover'] .menuItem {
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.menuItem__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentcolor;
+  color: currentcolor;
+}
+
+.menu[data-variant='chat'][data-container='popover'] .menuItem__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.menuItem__label {
+  color: currentcolor;
+}
+
+.menuItem--skeleton {
+  cursor: default;
+  pointer-events: none;
+}

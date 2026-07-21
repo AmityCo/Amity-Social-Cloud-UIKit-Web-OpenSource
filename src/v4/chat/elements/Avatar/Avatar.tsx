@@ -1,12 +1,13 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import { FileRepository } from '@amityco/ts-sdk';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { ImageViewer } from '~/v4/chat/features/shared/components/ImageViewer';
-import BadgeIcon from '~/v4/icons/Badge';
-import { GroupChatBubble } from '~/v4/icons/GroupChatBubble';
-import LockFilled from '~/v4/icons/LockFilled';
+import { ModeratorBadge } from '~/v4/core/design/elements/ModeratorBadge';
+import { CommentsAlt } from '~/v4/core/design/icons/CommentsAlt';
+import { User as UserIcon } from '~/v4/core/design/icons/User';
+import { PrivateBadge } from '~/v4/core/design/elements/PrivateBadge';
 import styles from './Avatar.module.css';
 
 type AvatarUserProps = {
@@ -25,11 +26,13 @@ function User({
   fullscreen = false,
 }: AvatarUserProps) {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const isDeleted = !!user.isDeleted;
   const displayName = user.displayName ?? user.userId ?? '';
   const firstChar = displayName.trim().charAt(0).toUpperCase() || '?';
-  const imageUrl = user.avatar?.fileUrl
-    ? FileRepository.fileUrlWithSize(user.avatar.fileUrl, 'large')
-    : undefined;
+  const imageUrl =
+    !isDeleted && user.avatar?.fileUrl
+      ? FileRepository.fileUrlWithSize(user.avatar.fileUrl, 'large')
+      : undefined;
 
   const content = (
     <>
@@ -37,15 +40,17 @@ function User({
         <img src={imageUrl} alt={displayName} className={styles.avatar__userImg} />
       ) : (
         <div className={styles.avatar__userPlaceholder}>
-          <Typography.TitleBold className={styles.avatar__userPlaceholderText}>
-            {firstChar}
-          </Typography.TitleBold>
+          {isDeleted ? (
+            <UserIcon.Solid className={styles.avatar__userDeletedIcon} />
+          ) : (
+            <Typography.TitleBold className={styles.avatar__userPlaceholderText}>
+              {firstChar}
+            </Typography.TitleBold>
+          )}
         </div>
       )}
-      {isModerator && (
-        <div className={styles.avatar__userModeratorBadge}>
-          <BadgeIcon className={styles.avatar__userModeratorBadgeIcon} />
-        </div>
+      {isModerator && !isDeleted && (
+        <ModeratorBadge className={styles.avatar__userModeratorBadge} />
       )}
     </>
   );
@@ -53,15 +58,14 @@ function User({
   if (fullscreen && imageUrl) {
     return (
       <>
-        <Button
-          variant="default"
+        <AriaButton
           data-size={size}
           aria-label="View profile picture"
           onPress={() => setIsViewerOpen(true)}
           className={clsx(styles.avatar__user, className)}
         >
           {content}
-        </Button>
+        </AriaButton>
         {isViewerOpen && <ImageViewer src={imageUrl} onClose={() => setIsViewerOpen(false)} />}
       </>
     );
@@ -103,14 +107,16 @@ function GroupChat({
           <img src={imageUrl} alt="Group chat" className={styles.avatar__groupChatImage} />
         ) : (
           <div className={styles.avatar__groupChatPlaceholder} data-variant={variant}>
-            <GroupChatBubble className={styles.avatar__groupChatPlaceholderIcon} />
+            <CommentsAlt.Solid className={styles.avatar__groupChatPlaceholderIcon} />
           </div>
         )}
       </div>
       {isPrivate && (
-        <div className={styles.avatar__groupChatPrivateBadge}>
-          <LockFilled className={styles.avatar__groupChatPrivateBadgeIcon} />
-        </div>
+        <PrivateBadge
+          className={styles.avatar__groupChatPrivateBadge}
+          size={size === 'lg' ? 32 : 16}
+          border
+        />
       )}
     </div>
   );

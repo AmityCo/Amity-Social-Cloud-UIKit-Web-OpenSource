@@ -10,5 +10,5 @@
   position: sticky;
   top: var(--chat-home-header-height);
   z-index: 9;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-list-default-default);
 }

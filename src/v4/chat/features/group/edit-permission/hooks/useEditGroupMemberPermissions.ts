@@ -20,7 +20,7 @@ type EditGroupMemberPermissionsForm = z.infer<typeof schema>;
 export function useEditGroupMemberPermissions({ channelId }: EditGroupMemberPermissionsPageProps) {
   const { pop } = useChatNavigation();
   const { channel, isLoading } = useChannelObject({ channelId });
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const successToast = useString('amity_chat_edit_group_perm_toast_success');
   const { updateChannelMutePermission } = useUpdateChannelMutePermissionQuery();
 

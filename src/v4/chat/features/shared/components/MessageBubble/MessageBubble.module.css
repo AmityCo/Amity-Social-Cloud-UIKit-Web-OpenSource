@@ -14,23 +14,23 @@
 }
 
 .textBubble[data-user='own'] {
-  background: var(--asc-color-primary-default);
-  color: var(--asc-color-white);
+  background: var(--asc-color-surface-chatbubble-message-outbound-default);
+  color: var(--asc-color-text-chatbubble-outbound-messages-default);
 }
 
 .textBubble[data-user='own']:active,
 .textBubble[data-user='own'][data-active='true'] {
-  background: var(--asc-color-primary-pressed);
+  background: var(--asc-color-surface-chatbubble-message-outbound-pressed);
 }
 
 .textBubble[data-user='other'] {
-  background: var(--asc-color-base-shade4);
-  color: var(--asc-color-base-default);
+  background: var(--asc-color-surface-chatbubble-message-inbound-default);
+  color: var(--asc-color-text-chatbubble-inbound-messages-default);
 }
 
 .textBubble[data-user='other']:active,
 .textBubble[data-user='other'][data-active='true'] {
-  background: var(--asc-color-base-shade3);
+  background: var(--asc-color-surface-chatbubble-message-inbound-pressed);
 }
 
 .textBubble__text {
@@ -51,26 +51,37 @@
 }
 
 .textBubble[data-user='other'] .textBubble__text a {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-text-chatbubble-inbound-link-default);
 }
 
 .textBubble__mention {
   font-weight: 500;
-  color: var(--asc-color-primary-default);
-  fill: var(--asc-color-primary-default);
+  color: var(--asc-color-text-chatbubble-inbound-mentioned-default);
+  fill: var(--asc-color-text-chatbubble-inbound-mentioned-default);
 }
 
 .textBubble[data-user='own'] .textBubble__mention {
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  color: var(--asc-color-text-chatbubble-outbound-mentioned-default);
+  fill: var(--asc-color-text-chatbubble-outbound-mentioned-default);
 }
 
 .textBubble__divider {
   height: 0.0625rem;
-  background: rgb(193 193 193 / 40%);
+}
+
+.textBubble[data-user='other'] .textBubble__divider {
+  background: var(--asc-color-line-chatbubble-inbound-divider-default);
+}
+
+.textBubble[data-user='own'] .textBubble__divider {
+  background: var(--asc-color-line-chatbubble-outbound-divider-default);
 }
 
 .textBubble__seeMore {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,23 +90,23 @@
 }
 
 .textBubble__seeMoreLabel {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-chatbubble-inbound-seemore-default);
 }
 
 .textBubble[data-user='own'] .textBubble__seeMoreLabel {
-  color: var(--asc-color-primary-shade2);
+  color: var(--asc-color-text-chatbubble-outbound-seemore-default);
 }
 
 .textBubble__seeMoreIcon {
-  width: 0.75rem;
-  height: 0.75rem;
-  color: var(--asc-color-base-shade1);
-  fill: var(--asc-color-base-shade1);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--asc-color-icon-chatbubble-inbound-seemore-default);
+  fill: var(--asc-color-icon-chatbubble-inbound-seemore-default);
 }
 
 .textBubble[data-user='own'] .textBubble__seeMoreIcon {
-  color: var(--asc-color-primary-shade2);
-  fill: var(--asc-color-primary-shade2);
+  color: var(--asc-color-icon-chatbubble-outbound-seemore-default);
+  fill: var(--asc-color-icon-chatbubble-outbound-seemore-default);
 }
 
 .textBubble__editedCaption {
@@ -107,12 +118,12 @@
 }
 
 .textBubble[data-user='own'] .textBubble__editedCaption {
-  color: var(--asc-color-primary-shade2);
+  color: var(--asc-color-text-chatbubble-outbound-editedlabel-default);
   text-align: right;
 }
 
 .textBubble[data-user='other'] .textBubble__editedCaption {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-chatbubble-inbound-editedlabel-default);
   text-align: left;
 }
 
@@ -125,7 +136,7 @@
   overflow: hidden;
   max-width: 20rem;
   padding: 0;
-  background: var(--asc-color-base-shade3);
+  background: var(--asc-color-surface-media-image-loading);
   outline: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -160,7 +171,24 @@
   width: 15rem;
   height: 15rem;
   border-radius: 1.25rem;
-  background: var(--asc-color-background-shade1);
+  background: var(--asc-color-surface-media-image-loading);
+}
+
+.mediaBubble__broken {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15rem;
+  height: 15rem;
+  border-radius: 1.25rem;
+  background: var(--asc-color-surface-media-image-broken);
+}
+
+.mediaBubble__brokenIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--asc-color-icon-media-image-broken);
+  fill: var(--asc-color-icon-media-image-broken);
 }
 
 .mediaBubble__preload {
@@ -176,16 +204,6 @@
   height: 2.5rem;
 }
 
-.mediaBubble__spinner circle:nth-of-type(1) {
-  stroke: var(--asc-color-base-shade3);
-  stroke-width: 1;
-}
-
-.mediaBubble__spinner circle:nth-of-type(2) {
-  stroke: var(--asc-color-white);
-  stroke-width: 1;
-}
-
 .videoBubble {
   position: relative;
   display: inline-block;
@@ -195,7 +213,7 @@
   border-radius: 1.25rem;
   overflow: hidden;
   padding: 0;
-  background: var(--asc-color-base-shade3);
+  background: var(--asc-color-surface-media-image-loading);
   outline: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -223,39 +241,34 @@
   object-fit: cover;
 }
 
-.videoBubble__overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--asc-color-message-overlay);
-  pointer-events: none;
-  border-radius: 1.25rem;
-}
-
-.videoBubble__playIcon {
+.videoBubble__playChip {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 2.5rem;
-  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
   pointer-events: none;
 }
 
-.videoBubble__playIcon svg {
-  width: 2.5rem;
-  height: 2.5rem;
+.videoBubble__playIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
+  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
 }
 
 .customBubble {
   padding: 0.75rem;
   border-radius: 1.25rem;
-  background: var(--asc-color-base-shade3);
-  color: var(--asc-color-base-default);
+  background: var(--asc-color-surface-chatbubble-message-inbound-default);
+  color: var(--asc-color-text-chatbubble-inbound-messages-default);
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -277,7 +290,7 @@
 }
 
 .mediaBubble__failedCaption {
-  color: var(--asc-color-alert-default);
+  color: var(--asc-color-text-chatbubble-outbound-helper-text-default);
   font-size: 0.625rem;
   line-height: 0.8125rem;
   letter-spacing: 0;

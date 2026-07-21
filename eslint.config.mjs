@@ -74,7 +74,13 @@ export default [
   },
   {
     files: ['src/v4/**/*.{ts,tsx}'],
-    ignores: [...ignores, '**/*.stories.{ts,tsx}', 'src/v4/chat/**', '**/icons/**'],
+    ignores: [
+      ...ignores,
+      '**/*.stories.{ts,tsx}',
+      'src/v4/chat/**',
+      '**/icons/**',
+      '**/design/illustrations/**',
+    ],
     rules: {
       'no-restricted-syntax': [
         'error',

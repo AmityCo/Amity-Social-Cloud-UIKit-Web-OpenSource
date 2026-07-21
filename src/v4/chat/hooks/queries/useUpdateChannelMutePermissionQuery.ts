@@ -16,7 +16,7 @@ export type UpdateChannelMutePermissionPayload = {
 const INDEFINITE_MUTE_PERIOD = -1;
 
 export function useUpdateChannelMutePermissionQuery() {
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const errorToast = useString('amity_chat_edit_group_perm_toast_failed');
 
   const { mutateAsync } = useMutation<boolean, Error, UpdateChannelMutePermissionPayload>({

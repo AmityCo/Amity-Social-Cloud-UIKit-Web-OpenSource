@@ -9,15 +9,15 @@
 }
 
 .emptyState__icon {
-  width: 3.75rem;
-  height: 3.75rem;
-  color: var(--asc-color-base-shade4);
-  fill: var(--asc-color-base-shade4);
+  width: 4rem;
+  height: 4rem;
+  color: var(--asc-color-icon-emptystate-icon-default);
+  fill: var(--asc-color-icon-emptystate-icon-default);
 }
 
 .emptyState__text {
   max-width: 15.75rem;
   text-align: center;
   white-space: pre-line;
-  color: var(--asc-color-base-shade3);
+  color: var(--asc-color-text-emptystate-title-default);
 }

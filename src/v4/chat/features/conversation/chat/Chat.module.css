@@ -2,6 +2,6 @@
   display: flex;
   flex-direction: column;
   height: 100svh;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-page-background-default);
   overflow: hidden;
 }

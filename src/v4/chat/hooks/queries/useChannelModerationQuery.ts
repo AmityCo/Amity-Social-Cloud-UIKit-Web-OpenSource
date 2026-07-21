@@ -14,7 +14,7 @@ export type ChannelModerationPayload = {
 type Response = Awaited<ReturnType<typeof ChannelRepository.Moderation.addRole>>;
 
 export function useChannelModerationQuery() {
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const promoteErrorToast = useString('amity_chat_action_promote_member_failed');
   const demoteErrorToast = useString('amity_chat_action_demote_member_failed');
 

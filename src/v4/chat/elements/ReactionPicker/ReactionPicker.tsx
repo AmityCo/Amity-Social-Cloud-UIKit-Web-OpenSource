@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { AmityReactionType, useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { Typography } from '~/v4/core/components';
+import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
 import styles from './ReactionPicker.module.css';
 
 export interface ReactionPickerProps {
@@ -24,6 +26,7 @@ export const ReactionPicker = ({
   hoveredReaction,
 }: ReactionPickerProps) => {
   const { reactions: config, getChatReactionLabel } = useCustomReaction();
+  const [erroredReactions, setErroredReactions] = useState<Set<string>>(new Set());
 
   const onClickReaction = (reactionName: AmityReactionType['name']) => {
     onReactionClick(reactionName);
@@ -65,13 +68,22 @@ export const ReactionPicker = ({
               >
                 {getChatReactionLabel(reaction.name)}
               </Typography.Caption>
-              <img
-                data-active={myReaction === reaction.name}
-                src={reaction.image}
-                alt={reaction.name}
-                className={styles.reactionButton__icon}
-                data-testid={`${pageId}/${componentId}/reaction-picker-icon-${index}`}
-              />
+              {reaction.image && !erroredReactions.has(reaction.name) ? (
+                <img
+                  data-active={myReaction === reaction.name}
+                  src={reaction.image}
+                  alt={reaction.name}
+                  className={styles.reactionButton__icon}
+                  onError={() => setErroredReactions((prev) => new Set(prev).add(reaction.name))}
+                  data-testid={`${pageId}/${componentId}/reaction-picker-icon-${index}`}
+                />
+              ) : (
+                <FallbackReaction
+                  data-active={myReaction === reaction.name}
+                  className={styles.reactionButton__icon}
+                  data-testid={`${pageId}/${componentId}/reaction-picker-icon-${index}`}
+                />
+              )}
             </div>
           </button>
         );

@@ -1,0 +1,34 @@
+.spinner {
+  transform-origin: center;
+  animation: loader-spin 0.9s linear infinite;
+}
+
+.spinner[data-size='sm'] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.spinner[data-size='lg'] {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.spinner__track {
+  fill: none;
+  stroke: var(--asc-color-surface-loaders-spinner-background);
+  stroke-width: 4;
+}
+
+.spinner__arc {
+  fill: none;
+  stroke: var(--asc-color-surface-loaders-spinner-icon);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 25 100;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,5 +1,5 @@
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { Menu } from '~/v4/core/components/Menu';
+import { Menu } from '~/v4/core/design/components/Menu';
 import { useDeleteMessageQuery, useResendMessageQuery } from '~/v4/chat/hooks/queries';
 import { useString } from '~/v4/core/localization';
 import { isSyntheticPendingMessage } from './useMessageComposer';

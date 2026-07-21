@@ -1,0 +1,89 @@
+.userMentionItem__item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2rem auto;
+  align-items: center;
+  justify-content: start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--asc-color-surface-popover-lists-default);
+  color: var(--asc-color-text-list-header-default-default);
+  cursor: pointer;
+  border: none;
+}
+
+.userMentionItem__item[data-hovered='true'] {
+  background-color: var(--asc-color-surface-popover-lists-hover) !important;
+}
+
+.userMentionItem__item:focus {
+  background-color: var(--asc-color-surface-popover-lists-hover);
+}
+
+.userMentionItem__avatar {
+  width: 2rem;
+  height: 2rem;
+}
+
+.userMentionItem__displayName {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--asc-color-text-list-header-default-default);
+}
+
+.userMentionItem__rightPane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.userMentionItem__brandIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.userMentionItem__allRow {
+  background-color: transparent;
+  grid-template-columns: 2rem 1fr;
+}
+
+.userMentionItem__allRow[data-hovered='true'],
+.userMentionItem__allRow[data-is-selected='true'] {
+  background-color: var(--asc-color-surface-popover-lists-hover) !important;
+}
+
+.userMentionItem__allIconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--asc-color-surface-featuredicon-solid);
+  border-radius: 9999px;
+}
+
+.userMentionItem__allIconGlyph {
+  color: var(--asc-color-icon-featuredicon-solid);
+  fill: var(--asc-color-icon-featuredicon-solid);
+  font-size: 0.925rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.userMentionItem__allRightPane {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.userMentionItem__allDescription {
+  color: var(--asc-color-text-list-trailing-text-general);
+  flex-shrink: 0;
+}

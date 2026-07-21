@@ -6,13 +6,13 @@
 
 .memberGrid__heading {
   padding: 1.5rem 0 0.25rem;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-input-userinput-title-default);
 }
 
 .memberGrid__list {
   display: grid;
   grid-template-columns: repeat(4, 4rem);
-  row-gap: 1rem;
   justify-content: space-between;
+  gap: 1rem 1.75rem;
   padding: 1rem 0;
 }

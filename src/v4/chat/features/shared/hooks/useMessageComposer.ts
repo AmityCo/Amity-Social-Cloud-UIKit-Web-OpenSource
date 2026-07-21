@@ -75,10 +75,39 @@ function toFormData(file: File): FormData {
   return formData;
 }
 
+function buildPendingText(
+  text: string,
+  failureReason: FailureReason,
+  options: { parentId?: string; metadata?: PendingText['metadata']; mentionees?: Mentionees },
+): PendingText {
+  return {
+    clientId: createClientId(),
+    text,
+    ...(options.parentId ? { parentId: options.parentId } : {}),
+    ...(options.metadata ? { metadata: options.metadata } : {}),
+    ...(options.mentionees ? { mentionees: options.mentionees } : {}),
+    status: 'failed',
+    failureReason,
+    createdAt: new Date().toISOString(),
+  };
+}
+
 function isLinkNotAllowedError(error: unknown): boolean {
   return (
     error instanceof Error && error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)
   );
+}
+
+function isBannedWordError(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    (error.message.includes(ERROR_CODE.BLOCKED_WORD) ||
+      error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD))
+  );
+}
+
+function isTextModerationRejection(error: unknown): boolean {
+  return isLinkNotAllowedError(error) || isBannedWordError(error);
 }
 
 function isModerationError(error: unknown): boolean {
@@ -97,7 +126,7 @@ export function useMessageComposer({
   onMessageCreated,
   onEditCompleted,
 }: UseMessageComposerParams) {
-  const { error: errorToast } = useNotifications();
+  const { error: errorToast } = useNotifications('chat');
   const { info } = useConfirmContext();
   const queryClient = useQueryClient();
   const { currentUserId } = useSDK();
@@ -210,16 +239,7 @@ export function useMessageComposer({
     setReplyTo(null);
 
     if (!isOnline) {
-      const pending: PendingText = {
-        clientId: createClientId(),
-        text: trimmed,
-        ...(parentId ? { parentId } : {}),
-        ...(metadata ? { metadata } : {}),
-        ...(mentionees ? { mentionees } : {}),
-        status: 'failed',
-        failureReason: 'generic',
-        createdAt: new Date().toISOString(),
-      };
+      const pending = buildPendingText(trimmed, 'generic', { parentId, metadata, mentionees });
       setPendingTexts((prev) => [...prev, pending]);
       onMessageCreated?.();
       return;
@@ -240,6 +260,15 @@ export function useMessageComposer({
         },
         onError: (err) => {
           handleTextMessageError(err, { errorToast, info });
+          if (isTextModerationRejection(err)) {
+            const pending = buildPendingText(trimmed, 'generic', {
+              parentId,
+              metadata,
+              mentionees,
+            });
+            setPendingTexts((prev) => [...prev, pending]);
+            onMessageCreated?.();
+          }
         },
       },
     );

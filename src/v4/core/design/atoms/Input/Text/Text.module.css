@@ -1,0 +1,138 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+
+  --input-text: var(--asc-color-text-input-textinput-placeholder-enabled);
+  --input-icon: var(--asc-color-icon-input-textinput-default);
+  --input-line: var(--asc-color-line-input-textinput-underlined-default);
+  --input-hint: var(--asc-color-text-input-textinput-hinttext-default);
+}
+
+/* ── placeholder/value content modifiers (0,2,0) ── */
+.field[data-filled] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-enabled-filled);
+}
+
+.field[data-highlight] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-enabled-highlight);
+}
+
+.field:focus-within {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-focused);
+}
+
+.field[data-invalid] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-error);
+  --input-icon: var(--asc-color-icon-input-textinput-error);
+  --input-line: var(--asc-color-line-input-textinput-underlined-error);
+  --input-hint: var(--asc-color-text-input-textinput-hinttext-error);
+}
+
+.field[data-disabled] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-disabled);
+  --input-icon: var(--asc-color-icon-input-textinput-disabled);
+  --input-line: var(--asc-color-line-input-textinput-underlined-disabled);
+}
+
+/* ── state × modifier combinations (0,3,0) ── */
+.field:focus-within[data-filled] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-focused-filled);
+}
+
+.field:focus-within[data-highlight] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-focused-highlight);
+}
+
+.field[data-invalid][data-filled] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-error-filled);
+}
+
+.field[data-invalid][data-highlight] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-error-highlight);
+}
+
+.field[data-disabled][data-filled] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-disabled-filled);
+}
+
+.field[data-disabled][data-highlight] {
+  --input-text: var(--asc-color-text-input-textinput-placeholder-disabled-highlight);
+}
+
+/* ── parts ── */
+.field__titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.field__title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  color: var(--asc-color-text-input-textinput-title-default);
+}
+
+.field__optional {
+  color: var(--asc-color-text-input-textinput-indicator-default);
+}
+
+.field__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-bottom: 0.0625rem solid var(--input-line);
+}
+
+.field__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--input-icon);
+}
+
+.field__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentcolor;
+}
+
+.field__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  color: var(--input-text);
+  caret-color: var(--asc-color-text-input-textinput-textcursor-default);
+}
+
+.field__input::placeholder {
+  color: var(--input-text);
+}
+
+.field[data-multiline] .field__row {
+  align-items: flex-start;
+}
+
+.field[data-multiline] .field__input {
+  field-sizing: content;
+  resize: none;
+}
+
+.field__count {
+  flex-shrink: 0;
+  color: var(--asc-color-text-input-textinput-textcount-default);
+}
+
+.field__hint {
+  color: var(--input-hint);
+}

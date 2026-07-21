@@ -1,7 +1,7 @@
 import { useNetworkState } from 'react-use';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { Loader } from '~/v4/core/design/atoms/Loader';
 import styles from './WaitingForNetwork.module.css';
 
 export function WaitingForNetwork() {
@@ -12,7 +12,7 @@ export function WaitingForNetwork() {
 
   return (
     <div className={styles.waitingForNetwork}>
-      <Spinner />
+      <Loader.Spinner size="sm" />
       <Typography.Caption className={styles.waitingForNetwork__text}>{label}</Typography.Caption>
     </div>
   );

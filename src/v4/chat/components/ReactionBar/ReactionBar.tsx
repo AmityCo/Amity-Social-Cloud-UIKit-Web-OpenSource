@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Button } from '~/v4/core/components/AriaButton';
+import { Button } from '~/v4/core/design/components/Button';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
 import styles from './styles.module.css';

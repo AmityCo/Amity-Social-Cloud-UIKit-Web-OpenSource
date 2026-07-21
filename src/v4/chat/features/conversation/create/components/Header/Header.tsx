@@ -1,5 +1,5 @@
-import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
 import { TopBar } from '~/v4/chat/elements/TopBar';
+import { SearchInput } from '~/v4/core/design/molecules/SearchInput';
 import { useString } from '~/v4/core/localization';
 import styles from './Header.module.css';
 
@@ -12,6 +12,7 @@ type HeaderProps = {
 export function Header({ onClose, searchValue, onSearchChange }: HeaderProps) {
   const title = useString('amity_chat_create_conversation_title');
   const searchPlaceholder = useString('amity_chat_search_placeholder');
+
   return (
     <header className={styles.header}>
       <TopBar title={title} leadingType="close" onLeading={onClose} />
@@ -20,6 +21,7 @@ export function Header({ onClose, searchValue, onSearchChange }: HeaderProps) {
           value={searchValue}
           onChange={onSearchChange}
           placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
         />
       </div>
     </header>

@@ -4,7 +4,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
+import { ContentReportReason } from '~/v4/core/design/components/ContentReportReason';
 import { MessageReactorListSheet } from '~/v4/chat/features/shared/components/MessageReactorListSheet';
 import { useString } from '~/v4/core/localization';
 import { getClipboardPayload } from '~/v4/chat/utils/getClipboardPayload';
@@ -41,7 +41,7 @@ export function useBubbleMenu({
 }: UseBubbleMenuParams): UseBubbleMenuReturn {
   const { requestDelete } = useDeleteMessageQuery();
   const { requestSave } = useSaveMediaMessageQuery();
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
   const copiedToast = useString('amity_chat_toast_copied');
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -85,7 +85,7 @@ export function useBubbleMenu({
     const payload = getClipboardPayload(message);
     if (payload) {
       await navigator.clipboard.writeText(payload);
-      success({ content: copiedToast });
+      success({ content: copiedToast, alignment: 'with-composer' });
     }
   }
 
@@ -131,7 +131,7 @@ export function useBubbleMenu({
         id: 'message_reactor_list',
         view: 'desktop',
         isDismissable: true,
-        children: <MessageReactorListSheet message={message} onClose={closePopup} />,
+        children: <MessageReactorListSheet messageId={message.messageId} onClose={closePopup} />,
       });
       return;
     }
@@ -139,7 +139,7 @@ export function useBubbleMenu({
     setDrawerData({
       snapPoints: [0.5, 1],
       ariaLabel: 'Reactions',
-      content: <MessageReactorListSheet message={message} onClose={removeDrawerData} />,
+      content: <MessageReactorListSheet messageId={message.messageId} onClose={removeDrawerData} />,
     });
   }
 

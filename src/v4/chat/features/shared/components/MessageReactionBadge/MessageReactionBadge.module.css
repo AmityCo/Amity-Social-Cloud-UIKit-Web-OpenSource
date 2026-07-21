@@ -5,16 +5,16 @@
   height: 1.75rem;
   margin-top: -0.375rem;
   padding: 0.25rem 0.375rem;
-  border: 0.0625rem solid var(--asc-color-base-shade4);
+  border: 0.0625rem solid var(--asc-color-border-reaction-reactioncount-default);
   border-radius: 1.5rem;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-reactions-reactioncount-default);
   cursor: pointer;
   z-index: 1;
 }
 
 .messageReactionBadge[data-contains-my-reaction='true'] {
-  background: var(--asc-color-primary-default);
-  border-color: var(--asc-color-background-default);
+  background: var(--asc-color-surface-reactions-reactioncount-active);
+  border-color: var(--asc-color-border-reaction-reactioncount-active);
 }
 
 .messageReactionBadge__stack {
@@ -31,21 +31,22 @@
   height: 1.25rem;
   margin-right: -0.5rem;
   border-radius: 9999px;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-border-reaction-reactionatom-default);
 }
 
 .messageReactionBadge__iconSvg {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--asc-color-base-shade3);
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 .messageReactionBadge__count {
-  color: var(--asc-color-base-default);
-  fill: var(--asc-color-base-default);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--asc-color-text-reactions-chat-reactioncount-default);
+  fill: var(--asc-color-text-reactions-chat-reactioncount-default);
 }
 
 .messageReactionBadge[data-contains-my-reaction='true'] .messageReactionBadge__count {
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  color: var(--asc-color-text-reactions-chat-reactioncount-active);
+  fill: var(--asc-color-text-reactions-chat-reactioncount-active);
 }

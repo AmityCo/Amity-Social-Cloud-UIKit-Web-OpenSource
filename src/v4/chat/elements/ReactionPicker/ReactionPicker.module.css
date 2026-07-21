@@ -61,18 +61,20 @@
 
 .reactionButton__activeBackground {
   display: none;
-}
-
-.reactionButton__activeBackground[data-active='true'] {
-  display: block;
   position: absolute;
   top: 52%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
-  background-color: var(--asc-color-base-shade4);
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--asc-color-surface-reactions-reactionpopover-reactionstate-active);
+}
+
+.reactionButton__activeBackground[data-active='true'],
+.reactionButton:hover .reactionButton__activeBackground,
+.reactionButton[data-touch-hovered='true'] .reactionButton__activeBackground {
+  display: block;
 }
 
 .reactionButton__text {
@@ -84,8 +86,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: var(--asc-color-white);
-  background-color: rgb(0 0 0 / 50%);
+  color: var(--asc-color-text-reactions-reactionpopover-reactionname-general);
+  background-color: var(--asc-color-surface-reactions-reactionpopover-reactionname-active);
   padding: 0.125rem 0.375rem;
   border-radius: 1.75rem;
   opacity: 0;

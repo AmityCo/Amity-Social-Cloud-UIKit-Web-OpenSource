@@ -1,5 +1,6 @@
 .notificationPreference {
   display: block;
   width: 100%;
-  background: var(--asc-color-background-default);
+  min-height: 100svh;
+  background: var(--asc-color-surface-page-background-default);
 }

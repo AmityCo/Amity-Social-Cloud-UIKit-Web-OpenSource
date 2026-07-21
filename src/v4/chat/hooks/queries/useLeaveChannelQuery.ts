@@ -12,7 +12,7 @@ export type ChannelLeavePayload = {
 type Response = Awaited<ReturnType<typeof ChannelRepository.leaveChannel>>;
 
 export function useLeaveChannelQuery() {
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const errorToast = useString('amity_chat_action_leave_group_failed');
 
   const leaveMutation = useMutation<Response, Error, ChannelLeavePayload>({

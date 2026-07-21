@@ -45,6 +45,39 @@
   color: var(--asc-color-white);
 }
 
+.toastItem {
+  margin-bottom: var(--asc-spacing-m1);
+  pointer-events: auto;
+  animation-duration: 0.3s;
+  animation-name: appear;
+}
+
+.toastItem[data-alignment='fullscreen'] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.chatToast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  pointer-events: auto;
+  animation-duration: 0.3s;
+  animation-name: appear;
+}
+
+.chatToast[data-alignment='with-composer'] {
+  bottom: calc(3.5rem + 1rem);
+}
+
+.chatToast__toast {
+  width: 100%;
+}
+
 .notificationContainer[data-alignment='fullscreen'] {
   position: relative;
   left: -9rem;

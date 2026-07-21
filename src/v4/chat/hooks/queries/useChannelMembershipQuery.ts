@@ -13,7 +13,7 @@ export type ChannelMembershipPayload = {
 type Response = Awaited<ReturnType<typeof ChannelRepository.Membership.addMembers>>;
 
 export function useChannelMembershipQuery() {
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const addMembersErrorToast = useString('amity_chat_toast_members_add_error');
   const addMemberErrorToast = useString('amity_chat_add_group_member_toast_failed');
   const removeErrorToast = useString('amity_chat_action_remove_member_failed');

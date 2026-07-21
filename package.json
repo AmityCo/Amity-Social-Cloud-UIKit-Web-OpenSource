@@ -38,16 +38,17 @@
     "stylelint": "stylelint",
     "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
     "tsc": "tsc",
+    "verify:tokens": "node ./governance/design/check-tokens.mjs",
     "gist": "node ./code-snippets/scripts/create-gist.mjs",
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "^7.24.0",
+    "@amityco/ts-sdk": "7.24.1-7932a80.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "7.24.0",
+    "@amityco/ts-sdk": "7.24.1-7932a80.0",
     "@eslint/js": "^9.4.0",
     "@octokit/core": "^6.1.4",
     "@storybook/addon-a11y": "^7.6.7",
@@ -160,7 +161,8 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{json,css}": "prettier --write",
-    "*.{css}": "stylelint --fix"
+    "*.{css}": "stylelint --fix",
+    "{amity-uikit.config.json,src/v4/core/design/tokens/amity-uikit-design-tokens.json,src/v4/core/providers/CustomizationProvider/utils.ts}": "node ./governance/design/check-tokens.mjs"
   },
   "postcss": {
     "plugins": {

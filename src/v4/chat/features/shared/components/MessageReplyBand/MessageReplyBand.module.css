@@ -5,7 +5,7 @@
   width: 100%;
   height: 3.875rem;
   padding: 0.625rem 0.75rem 0.625rem 1rem;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-list-default-hover);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -28,7 +28,7 @@
   display: flex;
   gap: 0.125rem;
   width: 100%;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-overline-default-default);
   white-space: nowrap;
   overflow: hidden;
 }
@@ -42,7 +42,7 @@
 
 .replyBand__body {
   width: 100%;
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-list-textdescription-default-default);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -100,8 +100,8 @@
 }
 
 .replyBand__closeIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--asc-color-base-shade2);
-  fill: var(--asc-color-base-shade2);
+  width: 1rem;
+  height: 1rem;
+  color: var(--asc-color-icon-iconbutton-ghost-secondary-default);
+  fill: var(--asc-color-icon-iconbutton-ghost-secondary-default);
 }

@@ -18,7 +18,7 @@ type UseUpdateChannelQueryParams = {
 };
 
 export function useUpdateChannelQuery({ errorToast }: UseUpdateChannelQueryParams = {}) {
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const defaultErrorToast = useString('amity_chat_group_edit_profile_failed');
   const resolvedErrorToast = errorToast ?? defaultErrorToast;
 

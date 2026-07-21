@@ -13,7 +13,7 @@ export type ChannelArchivePayload = {
 type Response = Awaited<ReturnType<typeof ChannelRepository.archiveChannel>>;
 
 export function useChannelArchiveQuery() {
-  const { error, success } = useNotifications();
+  const { error, success } = useNotifications('chat');
   const { info } = useConfirmContext();
   const archiveLimitTitle = useString('amity_chat_archive_limit_title');
   const archiveLimitMessage = useString('amity_chat_archive_limit_message');

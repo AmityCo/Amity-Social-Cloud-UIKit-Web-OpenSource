@@ -19,7 +19,7 @@ type EditGroupProfileForm = z.infer<typeof schema>;
 export function useEditGroupProfile({ channelId }: EditGroupProfilePageProps) {
   const { pop } = useChatNavigation();
   const { channel, isLoading } = useChannelObject({ channelId });
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const { updateChannel } = useUpdateChannelQuery();
   const updateSuccessToast = useString('amity_chat_group_edit_profile');
 

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { ReactNode, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { useNotificationData } from '~/v4/core/providers/NotificationProvider';
+import { Toast } from '~/v4/core/design/atoms/Toast';
 import styles from './Notification.module.css';
 
 export type NotificationAlignment =
@@ -9,7 +10,8 @@ export type NotificationAlignment =
   | 'withSidebar'
   | 'fixed'
   | 'live-chat'
-  | 'livestreamWithChat';
+  | 'livestreamWithChat'
+  | 'with-composer';
 
 interface NotificationProps {
   alignment?: NotificationAlignment;
@@ -75,6 +77,22 @@ export const NotificationsContainer = () => {
   return (
     <div className={styles.notifications} data-testid="toast-notifications-container">
       {notifications.map((notificationData) => {
+        if (notificationData.module === 'chat' && typeof notificationData.content === 'string') {
+          return (
+            <div
+              key={notificationData.id}
+              className={styles.chatToast}
+              data-alignment={notificationData.alignment}
+            >
+              <Toast
+                message={notificationData.content}
+                variant={notificationData.variant}
+                showIcon={!!notificationData.variant}
+                className={styles.chatToast__toast}
+              />
+            </div>
+          );
+        }
         return <Notification {...notificationData} key={notificationData.id} />;
       })}
     </div>

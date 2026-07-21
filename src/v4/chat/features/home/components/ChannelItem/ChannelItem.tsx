@@ -1,16 +1,18 @@
 import type { ReactNode } from 'react';
-import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
+import { Skeleton } from '~/v4/core/design/components/Skeleton/Skeleton';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useChatNavigation, ChatPageTypes } from '~/v4/chat/providers/ChatNavigationProvider';
 import { formatTimestamp } from '~/v4/chat/utils/timestamp';
-import { ConversationChatAvatar } from '~/v4/chat/elements/ConversationChatAvatar/ConversationChatAvatar';
 import { Avatar } from '~/v4/chat/elements/Avatar';
-import { TrashIcon } from '~/v4/icons/Trash';
-import { ImageMessagePreview } from '~/v4/icons/ImageMessagePreview';
-import { VideoMessagePreview } from '~/v4/icons/VideoMessagePreview';
-import Mention from '~/v4/icons/Mention';
+import { ConversationChatAvatar } from '~/v4/chat/elements/ConversationChatAvatar/ConversationChatAvatar';
+import { hasModeratorRole } from '~/v4/chat/utils/isModerator';
+import { Badge } from '~/v4/core/design/atoms/Badge';
+import { Trash } from '~/v4/core/design/icons/Trash';
+import { Image } from '~/v4/core/design/icons/Image';
+import { CirclePlay } from '~/v4/core/design/icons/CirclePlay';
+import { At } from '~/v4/core/design/icons/At';
 import { ArchivedBadge } from '~/v4/chat/elements/ArchivedBadge';
 import { highlightMatch } from '~/v4/chat/utils/highlightMatch';
 import styles from './ChannelItem.module.css';
@@ -66,7 +68,14 @@ function ChannelAvatar({ channel }: { channel: Amity.Channel }) {
     const otherMember = channel.previewMembers?.find((m) => m.userId !== currentUserId);
     const isDeleted = (otherMember?.user as (Amity.RawUser & { isDeleted?: boolean }) | undefined)
       ?.isDeleted;
-    return <ConversationChatAvatar user={otherMember?.user} isDeleted={isDeleted} />;
+    const isModerator = hasModeratorRole(otherMember?.roles);
+    return (
+      <ConversationChatAvatar
+        user={otherMember?.user}
+        isDeleted={isDeleted}
+        isModerator={isModerator}
+      />
+    );
   }
 
   return <Avatar.GroupChat avatar={channel.avatar} isPublic={channel.isPublic} />;
@@ -151,7 +160,7 @@ function MessagePreview({
   if (preview?.isDeleted) {
     return (
       <div className={styles.channelItem__previewWithIcon}>
-        <TrashIcon className={styles.channelItem__previewLeadingIcon} />
+        <Trash className={styles.channelItem__previewLeadingIcon} />
         <Typography.Body className={styles.channelItem__preview}>
           {previewDeletedLabel}
         </Typography.Body>
@@ -162,7 +171,7 @@ function MessagePreview({
   const text = getPreviewText(preview, previewStrings);
 
   if (preview?.dataType === 'image' || preview?.dataType === 'video') {
-    const MediaIcon = preview.dataType === 'image' ? ImageMessagePreview : VideoMessagePreview;
+    const MediaIcon = preview.dataType === 'image' ? Image.Solid : CirclePlay.Solid;
     return (
       <div className={styles.channelItem__previewWithIcon}>
         <MediaIcon className={styles.channelItem__previewLeadingIcon} />
@@ -202,21 +211,17 @@ function MessagePreview({
 }
 
 function MentionBadge() {
-  return (
-    <div className={styles.channelItem__mentionBadge}>
-      <Mention className={styles.channelItem__mentionBadgeIcon} />
-    </div>
-  );
+  return <Badge.Icon icon={<At.Solid />} preset={{ family: 'chat', case: 'mention' }} size={20} />;
 }
 
 function UnreadBadge({ count }: { count: number }) {
   if (count <= 0) return null;
   return (
-    <div className={styles.channelItem__badge}>
-      <Typography.CaptionBold className={styles.channelItem__badgeText}>
-        {count > 99 ? '99+' : String(count)}
-      </Typography.CaptionBold>
-    </div>
+    <Badge.Label
+      label={count > 99 ? '99+' : String(count)}
+      preset={{ family: 'general', case: 'notification' }}
+      size={20}
+    />
   );
 }
 
@@ -224,10 +229,7 @@ function ChannelItemSkeleton() {
   return (
     <div className={styles.channelItem__skeletonRow}>
       <Skeleton.Circle width="2.5rem" height="2.5rem" />
-      <div className={styles.channelItem__skeletonLines}>
-        <Skeleton.Line width="8.75rem" height="0.625rem" />
-        <Skeleton.Line width="12.5rem" height="0.625rem" />
-      </div>
+      <Skeleton.Line width="8.75rem" height="0.625rem" />
     </div>
   );
 }

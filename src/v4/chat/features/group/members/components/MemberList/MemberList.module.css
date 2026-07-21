@@ -18,6 +18,6 @@
 .memberList__ellipsisIcon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-default);
-  fill: var(--asc-color-base-default);
+  color: var(--asc-color-icon-list-leading-default-default);
+  fill: var(--asc-color-icon-list-leading-default-default);
 }

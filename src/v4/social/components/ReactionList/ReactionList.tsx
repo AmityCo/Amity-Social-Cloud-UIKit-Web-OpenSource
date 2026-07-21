@@ -17,6 +17,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { MessageReactorListSheet } from '~/v4/chat/features/shared/components/MessageReactorListSheet';
 import styles from './ReactionList.module.css';
 
 interface ReactionListProps {
@@ -84,7 +85,7 @@ const RenderCondition = ({
   );
 };
 
-export const ReactionList = ({
+const SocialReactionList = ({
   pageId = '*',
   referenceId,
   referenceType,
@@ -308,4 +309,14 @@ export const ReactionList = ({
       </div>
     </div>
   );
+};
+
+export const ReactionList = (props: ReactionListProps) => {
+  const { closePopup } = usePopupContext();
+
+  if (props.referenceType === 'message') {
+    return <MessageReactorListSheet messageId={props.referenceId} onClose={closePopup} />;
+  }
+
+  return <SocialReactionList {...props} />;
 };

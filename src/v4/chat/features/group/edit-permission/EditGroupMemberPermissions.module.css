@@ -1,13 +1,15 @@
 .editGroupMemberPermissions {
   width: 100%;
   display: block;
-  background: var(--asc-color-background-default);
+  min-height: 100svh;
+  background: var(--asc-color-surface-page-background-default);
 }
 
 .editGroupMemberPermissions__sectionTitle {
   display: block;
   padding: 1rem 1rem 0.5rem;
-  color: var(--asc-color-base-default);
+  background: var(--asc-color-surface-list-default-default);
+  color: var(--asc-color-text-list-header-default-default);
 }
 
 .editGroupMemberPermissions__radios {
@@ -18,26 +20,7 @@
 
 .editGroupMemberPermissions__radio {
   padding: 1rem;
+  background: var(--asc-color-surface-list-default-default);
   cursor: pointer;
   align-items: flex-start;
-}
-
-.editGroupMemberPermissions__saveButton {
-  padding: 0;
-  border: none;
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--asc-color-primary-default);
-}
-
-.editGroupMemberPermissions__saveButton[data-disabled='true'] {
-  cursor: not-allowed;
-  color: var(--asc-color-primary-shade2);
-}
-
-.editGroupMemberPermissions__saveLabel {
-  color: inherit;
 }

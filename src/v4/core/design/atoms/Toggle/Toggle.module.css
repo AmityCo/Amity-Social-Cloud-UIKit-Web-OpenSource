@@ -1,0 +1,137 @@
+.toggle {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  width: 3.25rem;
+  height: 2rem;
+  padding: 0.125rem;
+  border-radius: 9999px;
+  border: 0.0625rem solid var(--tg-track-border);
+  outline: none;
+  cursor: pointer;
+  background: var(--tg-track-surface);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+
+  --tg-thumb-border: transparent;
+}
+
+.toggle__thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 0.0625rem solid var(--tg-thumb-border);
+  background: var(--tg-thumb-surface);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  transform: translateX(0);
+}
+
+.toggle--icon {
+  padding: 0.25rem;
+}
+
+.toggle--icon .toggle__thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.toggle[data-selected] .toggle__thumb {
+  transform: translateX(1.125rem);
+}
+
+.toggle__icon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  color: var(--tg-icon);
+}
+
+.toggle__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentcolor;
+}
+
+/* ── on/off base surfaces (Enabled) ── */
+.toggle[data-disabled] {
+  cursor: not-allowed;
+}
+
+.toggle[data-selected] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-active-enabled);
+  --tg-track-border: var(--asc-color-border-toggle-background-active-enabled);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-active-enabled);
+  --tg-icon: var(--asc-color-icon-toggle-active-general);
+}
+
+.toggle:not([data-selected]) {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-inactive-enabled);
+  --tg-track-border: var(--asc-color-border-toggle-background-inactive-enabled);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-inactive-enabled);
+  --tg-icon: var(--asc-color-icon-toggle-inactive-general);
+}
+
+/* ── Active (on) interaction states ── */
+.toggle[data-selected][data-focus-visible] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-active-focused);
+  --tg-track-border: var(--asc-color-border-toggle-background-active-focused);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-active-focused);
+  --tg-thumb-border: var(--asc-color-border-toggle-thumb-active-focused);
+}
+
+.toggle[data-selected][data-hovered] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-active-hovered);
+  --tg-track-border: var(--asc-color-border-toggle-background-active-hovered);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-active-hovered);
+  --tg-thumb-border: var(--asc-color-border-toggle-thumb-active-hovered);
+}
+
+.toggle[data-selected][data-pressed] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-active-pressed);
+  --tg-track-border: var(--asc-color-border-toggle-background-active-pressed);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-active-pressed);
+  --tg-thumb-border: var(--asc-color-border-toggle-thumb-active-pressed);
+}
+
+.toggle[data-selected][data-disabled] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-active-disabled);
+  --tg-track-border: var(--asc-color-border-toggle-background-active-disabled);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-active-disabled);
+}
+
+/* ── Inactive (off) interaction states ── */
+.toggle:not([data-selected])[data-focus-visible] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-inactive-focused);
+  --tg-track-border: var(--asc-color-border-toggle-background-inactive-focused);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-inactive-focused);
+  --tg-thumb-border: var(--asc-color-border-toggle-thumb-inactive-focused);
+}
+
+.toggle:not([data-selected])[data-hovered] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-inactive-hovered);
+  --tg-track-border: var(--asc-color-border-toggle-background-inactive-hovered);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-inactive-hovered);
+  --tg-thumb-border: var(--asc-color-border-toggle-thumb-inactive-hovered);
+}
+
+.toggle:not([data-selected])[data-pressed] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-inactive-pressed);
+  --tg-track-border: var(--asc-color-border-toggle-background-inactive-pressed);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-inactive-pressed);
+  --tg-thumb-border: var(--asc-color-border-toggle-thumb-inactive-pressed);
+}
+
+.toggle:not([data-selected])[data-disabled] {
+  --tg-track-surface: var(--asc-color-surface-toggle-background-inactive-disabled);
+  --tg-track-border: var(--asc-color-border-toggle-background-inactive-disabled);
+  --tg-thumb-surface: var(--asc-color-surface-toggle-thumb-inactive-disabled);
+}

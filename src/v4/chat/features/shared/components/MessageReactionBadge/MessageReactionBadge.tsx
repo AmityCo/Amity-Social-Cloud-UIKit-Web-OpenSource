@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import type { ComponentType, SVGProps } from 'react';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { abbreviateCount } from '~/v4/utils/abbreviateCount';
 import { MAX_REACTION_BADGE_ICONS } from '~/v4/chat/constants';
 import { REACTION_ICON_MAP } from '~/v4/chat/utils/reactionIcons';
-import FallbackReaction from '~/v4/icons/FallbackReaction';
+import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
 import styles from './MessageReactionBadge.module.css';
 
 type MessageReactionBadgeProps = {
@@ -29,9 +29,8 @@ export function MessageReactionBadge({ message, onTap }: MessageReactionBadgePro
   if (totalCount === 0 || message.isDeleted) return null;
 
   return (
-    <Button
+    <AriaButton
       type="button"
-      variant="default"
       className={styles.messageReactionBadge}
       data-contains-my-reaction={containsMyReaction ? 'true' : 'false'}
       onPress={onTap}
@@ -55,6 +54,6 @@ export function MessageReactionBadge({ message, onTap }: MessageReactionBadgePro
       <Typography.CaptionBold className={styles.messageReactionBadge__count}>
         {abbreviateCount(totalCount)}
       </Typography.CaptionBold>
-    </Button>
+    </AriaButton>
   );
 }

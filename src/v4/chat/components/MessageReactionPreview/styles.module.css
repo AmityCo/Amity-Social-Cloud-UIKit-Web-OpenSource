@@ -46,5 +46,6 @@
 }
 
 .fallbackIcon {
-  color: var(--asc-color-base-shade1);
+  width: 1.25rem;
+  height: 1.25rem;
 }

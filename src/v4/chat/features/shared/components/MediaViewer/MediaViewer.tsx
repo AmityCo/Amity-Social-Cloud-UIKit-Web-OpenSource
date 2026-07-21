@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react';
-import { ModalOverlay, Modal, Dialog } from 'react-aria-components';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import Close from '~/v4/icons/Close';
-import { Save } from '~/v4/icons/Save';
-import { TrashIcon } from '~/v4/icons/Trash';
+import { ModalOverlay, Modal, Dialog, Button as AriaButton } from 'react-aria-components';
+import { Cross } from '~/v4/core/design/icons/Cross';
+import { ArrowDownToBracket } from '~/v4/core/design/icons/ArrowDownToBracket';
+import { Trash } from '~/v4/core/design/icons/Trash';
 import { resolveString } from '~/v4/core/localization/resolveString';
 import styles from './MediaViewer.module.css';
 
@@ -45,42 +44,39 @@ export function MediaViewer({
           <div className={styles.mediaViewer__stage}>{children}</div>
 
           <div className={styles.mediaViewer__topBar}>
-            <Button
+            <AriaButton
               type="button"
-              variant="default"
               className={styles.mediaViewer__closeButton}
               onPress={onClose}
               aria-label="Close"
             >
-              <Close className={styles.mediaViewer__closeIcon} />
-            </Button>
+              <Cross className={styles.mediaViewer__closeIcon} />
+            </AriaButton>
           </div>
 
           <div className={styles.mediaViewer__bottomBar}>
             {canDelete ? (
-              <Button
+              <AriaButton
                 type="button"
-                variant="default"
                 className={styles.mediaViewer__bottomIconButton}
                 onPress={onDelete}
                 aria-label={deleteAriaLabel}
               >
-                <TrashIcon className={styles.mediaViewer__bottomIcon} />
-              </Button>
+                <Trash className={styles.mediaViewer__bottomIcon} />
+              </AriaButton>
             ) : (
               <span />
             )}
 
             {canSave ? (
-              <Button
+              <AriaButton
                 type="button"
-                variant="text"
                 className={styles.mediaViewer__bottomIconButton}
                 onPress={onSave}
                 aria-label={saveAriaLabel}
               >
-                <Save className={styles.mediaViewer__bottomIcon} />
-              </Button>
+                <ArrowDownToBracket className={styles.mediaViewer__bottomIcon} />
+              </AriaButton>
             ) : (
               <span />
             )}

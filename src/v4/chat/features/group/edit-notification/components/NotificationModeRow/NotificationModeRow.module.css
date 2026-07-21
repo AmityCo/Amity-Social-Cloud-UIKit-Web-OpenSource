@@ -7,9 +7,9 @@
 }
 
 .notificationModeRow__title {
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-header-default-default);
 }
 
 .notificationModeRow__description {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-list-textdescription-default-default);
 }

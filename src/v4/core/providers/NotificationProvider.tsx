@@ -6,26 +6,27 @@ import styles from './NotificationProvider.module.css';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 import Info from '~/v4/icons/Info';
+import type { ToastVariant } from '~/v4/core/design/atoms/Toast';
+
+export type NotificationModule = 'chat';
 
 interface Notification {
   id?: number | string;
   content: ReactNode;
   icon?: ReactNode;
   duration?: number;
-}
-
-type NotificationInput = Notification & {
-  duration?: number;
+  variant?: ToastVariant;
+  module?: NotificationModule;
   alignment?: NotificationAlignment;
-};
+}
 
 type NotificationFunction = {
   remove: (id: Notification['id']) => void;
-  success: (data: Omit<NotificationInput, 'icon'>) => void;
-  info: (data: Omit<NotificationInput, 'icon'>) => void;
-  error: (data: Omit<NotificationInput, 'icon'>) => void;
-  show: (data: Omit<NotificationInput, 'icon'>) => void;
-  loading: (data: Omit<NotificationInput, 'icon'>) => void;
+  success: (data: Omit<Notification, 'icon'>) => void;
+  info: (data: Omit<Notification, 'icon'>) => void;
+  error: (data: Omit<Notification, 'icon'>) => void;
+  show: (data: Omit<Notification, 'icon'>) => void;
+  loading: (data: Omit<Notification, 'icon'>) => void;
 };
 
 interface NotificationContextProps {
@@ -78,7 +79,7 @@ export const NotificationProvider: React.FC = ({ children }) => {
     [],
   );
 
-  const addNotifications = useCallback((data: NotificationInput) => {
+  const addNotifications = useCallback((data: Notification) => {
     const id = Date.now();
     setNotifications((prevNotifications) => [
       ...prevNotifications,
@@ -96,31 +97,35 @@ export const NotificationProvider: React.FC = ({ children }) => {
   const notificationFunction = useMemo<NotificationFunction>(
     () => ({
       remove: removeNotification,
-      success: (data: Omit<NotificationInput, 'icon'>) =>
+      success: (data: Omit<Notification, 'icon'>) =>
         addNotifications({
           ...data,
+          variant: 'success',
           icon: <CheckCircle className={styles.icon} />,
           alignment: data.alignment,
         }),
-      info: (data: Omit<NotificationInput, 'icon'>) =>
+      info: (data: Omit<Notification, 'icon'>) =>
         addNotifications({
           ...data,
+          variant: 'informative',
           icon: <Info className={styles.icon} />,
           alignment: data.alignment,
         }),
-      error: (data: Omit<NotificationInput, 'icon'>) =>
+      error: (data: Omit<Notification, 'icon'>) =>
         addNotifications({
           ...data,
+          variant: 'error',
           icon: <FailedOutlined className={styles.icon} />,
           alignment: data.alignment,
         }),
-      loading: (data: Omit<NotificationInput, 'icon'>) =>
+      loading: (data: Omit<Notification, 'icon'>) =>
         addNotifications({
           ...data,
+          variant: 'loading',
           icon: <Spinner className={styles.icon} />,
           alignment: data.alignment,
         }),
-      show: (data: Omit<NotificationInput, 'icon'>) => addNotifications(data),
+      show: (data: Omit<Notification, 'icon'>) => addNotifications(data),
     }),
     [removeNotification, addNotifications],
   );
@@ -138,6 +143,23 @@ export const useNotificationData = () => {
   return useContext(NotificationDataContext);
 };
 
-export const useNotifications = () => {
-  return useContext(NotificationFunctionContext);
+export const useNotifications = (module?: NotificationModule) => {
+  const notificationFunction = useContext(NotificationFunctionContext);
+
+  return useMemo(() => {
+    if (!module) return notificationFunction;
+
+    const withModule =
+      (fn: (data: Omit<Notification, 'icon'>) => void) => (data: Omit<Notification, 'icon'>) =>
+        fn({ ...data, module });
+
+    return {
+      remove: notificationFunction.remove,
+      success: withModule(notificationFunction.success),
+      info: withModule(notificationFunction.info),
+      error: withModule(notificationFunction.error),
+      loading: withModule(notificationFunction.loading),
+      show: withModule(notificationFunction.show),
+    };
+  }, [notificationFunction, module]);
 };

@@ -14,11 +14,11 @@ function formatDateLabel(date: Date): string {
   const year = date.getFullYear();
   const currentYear = new Date().getFullYear();
   const locale = typeof navigator !== 'undefined' ? navigator.language : 'en';
-  const options: Intl.DateTimeFormatOptions =
-    year === currentYear
-      ? { weekday: 'short', day: 'numeric', month: 'short' }
-      : { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
-  return new Intl.DateTimeFormat(locale, options).format(date);
+  const weekday = new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date);
+  const day = new Intl.DateTimeFormat(locale, { day: '2-digit' }).format(date);
+  const month = new Intl.DateTimeFormat(locale, { month: 'short' }).format(date);
+  const datePart = year === currentYear ? `${day} ${month}` : `${day} ${month} ${year}`;
+  return `${weekday}, ${datePart}`;
 }
 
 export function groupMessagesByDate(messages: Amity.Message[]): ChatItem[] {

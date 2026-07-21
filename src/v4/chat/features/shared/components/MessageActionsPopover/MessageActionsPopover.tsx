@@ -1,12 +1,16 @@
 import type { RefObject } from 'react';
 import { Popover, Dialog } from 'react-aria-components';
-import { Menu, type MenuIcon } from '~/v4/core/components/Menu';
+import { Menu, type MenuIcon } from '~/v4/core/design/components/Menu';
 import { resolveString } from '~/v4/core/localization';
 import { useFlagMessageQuery, useMessageReactionQuery } from '~/v4/chat/hooks/queries';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { ReactionPicker } from '~/v4/chat/elements/ReactionPicker';
-import Flag from '~/v4/icons/Flag';
-import UnFlag from '~/v4/icons/UnFlag';
+import { Pen } from '~/v4/core/design/icons/Pen';
+import { ShareLeft } from '~/v4/core/design/icons/ShareLeft';
+import { Copy } from '~/v4/core/design/icons/Copy';
+import { ArrowDownToBracket } from '~/v4/core/design/icons/ArrowDownToBracket';
+import { Trash } from '~/v4/core/design/icons/Trash';
+import { Flag } from '~/v4/core/design/icons/Flag';
 import styles from './MessageActionsPopover.module.css';
 import { TypographyVariant } from '~/v4/core/components';
 
@@ -69,28 +73,28 @@ export function buildBubbleMenuItems(
   const items: (MessageActionItem & { visible: boolean })[] = [
     {
       key: 'edit',
-      icon: 'pen',
+      icon: <Pen />,
       label: resolveString('amity_chat_option_edit'),
       onPress: handlers.onEdit,
       visible: isOwn && isText && isActive,
     },
     {
       key: 'reply',
-      icon: 'reply',
+      icon: <ShareLeft />,
       label: resolveString('amity_chat_option_reply'),
       onPress: handlers.onReply,
       visible: isActive,
     },
     {
       key: 'copy',
-      icon: 'copy',
+      icon: <Copy />,
       label: resolveString('amity_chat_option_copy'),
       onPress: handlers.onCopy,
       visible: (isText || isCustom) && isActive,
     },
     {
       key: 'save',
-      icon: 'save',
+      icon: <ArrowDownToBracket />,
       label: resolveString('amity_chat_action_save'),
       onPress: handlers.onSave,
       visible: (isImage || isVideo) && isActive,
@@ -105,7 +109,7 @@ export function buildBubbleMenuItems(
     },
     {
       key: 'unreport',
-      icon: UnFlag,
+      icon: <Flag />,
       label: resolveString('amity_chat_option_unreport'),
       onPress: handlers.onUnreport,
       visible: !isOwn && !flagState.isLoading && flagState.isFlaggedByMe,
