@@ -1138,7 +1138,7 @@
       "dark": "{Signal/Alert/500}"
     },
     "Line/Divider/Post/Default": {
-      "light": "{Secondary/White}",
+      "light": "{Secondary/200}",
       "dark": "{Secondary/700}"
     },
     "Line/Divider/Content/Default": {
@@ -1841,6 +1841,14 @@
       "light": "#F5F5F5",
       "dark": "{Secondary/750}"
     },
+    "Surface/Media/Overlay/TransparentBlack": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/Media/Overlay/TransparentWhite": {
+      "light": "{Background/Transparent/White/600}",
+      "dark": "{Background/Transparent/White/600}"
+    },
     "Surface/Progress/Bar/Filled": {
       "light": "{Secondary/White}",
       "dark": "{Secondary/White}"
@@ -1935,7 +1943,7 @@
     },
     "Surface/SkeletonEffect/Default": {
       "light": "{Secondary/200}",
-      "dark": "{Secondary/700}"
+      "dark": "{Secondary/500}"
     },
     "Text/Avatar/Atomic/General": {
       "light": "{Information/White}",
