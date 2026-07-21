@@ -829,7 +829,7 @@
   "amity_social_label_unpin_label": "Unpin",
   "amity_social_label_upload_new_image": "Upload new image",
   "amity_social_label_user_block_message_format": "%s won't be able to see posts and comments that you've created. They won't be notified that you've blocked them.",
-  "amity_social_label_user_demoted": "Successfully demoted to member!",
+  "amity_social_label_user_demoted": "User demoted.",
   "amity_social_label_user_profile_feed_option_community": "Public community posts",
   "amity_social_label_view_more_replies": "View more replies",
   "amity_social_label_view_replies": "View %d replies",
