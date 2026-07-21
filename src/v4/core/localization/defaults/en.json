@@ -357,7 +357,7 @@
   "amity_social_button_delete_message_failed": "Unable to delete message. Please try again.",
   "amity_social_button_delete_post": "Delete post",
   "amity_social_button_delete_post_title": "Delete this post?",
-  "amity_social_button_delete_post_warning_message": "This post will be permanently deleted.",
+  "amity_social_button_delete_post_warning_message": "This post will be permanently deleted. You'll no longer see and find this post.",
   "amity_social_button_delete_reply": "Delete reply",
   "amity_social_button_delete_reply_title": "Delete reply",
   "amity_social_button_delete_reply_warning_message": "This reply will be permanently deleted.",
