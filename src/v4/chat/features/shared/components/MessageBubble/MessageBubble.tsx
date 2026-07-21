@@ -157,6 +157,16 @@ function TextBubble({
       <div ref={textRef} className={styles.textBubble__text} style={{ WebkitLineClamp: maxLines }}>
         {renderTextWithMentions(text, message.metadata as MessageMetadata | undefined)}
       </div>
+      {firstUrl && (
+        <div className={styles.textBubble__preview}>
+          <MessageLinkPreview url={firstUrl} isOwnMessage={isUser} />
+        </div>
+      )}
+      {isEdited && (
+        <Typography.Caption className={styles.textBubble__editedCaption}>
+          {editedLabel}
+        </Typography.Caption>
+      )}
       {isOverflowing && (
         <>
           <div className={styles.textBubble__divider} />
@@ -172,16 +182,6 @@ function TextBubble({
             <ChevronRight className={styles.textBubble__seeMoreIcon} />
           </AriaButton>
         </>
-      )}
-      {firstUrl && (
-        <div className={styles.textBubble__preview}>
-          <MessageLinkPreview url={firstUrl} isOwnMessage={isUser} />
-        </div>
-      )}
-      {isEdited && (
-        <Typography.Caption className={styles.textBubble__editedCaption}>
-          {editedLabel}
-        </Typography.Caption>
       )}
     </div>
   );
