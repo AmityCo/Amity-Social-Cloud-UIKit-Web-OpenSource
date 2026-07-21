@@ -217,15 +217,14 @@ export const LivestreamChatMessageComposer = ({
   } = useLivestreamData();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
 
-  const { info } = useNotifications();
-
   const componentId = 'livestream_chat_compose_bar';
   const editorRef = useRef<LexicalEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
 
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
-  const { currentUserId } = useSDK();
+  const { currentUserId, isVisitorOrBot } = useSDK();
+  const { info } = useNotifications();
 
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -451,11 +450,19 @@ export const LivestreamChatMessageComposer = ({
   const sendMessage = () => {
     if (!channel) return;
     if (!editorRef.current) return;
+    if (isVisitorOrBot) {
+      info({
+        content: resolveString('amity_social_label_create_account_or_sign_in'),
+        alignment: 'fullscreen',
+      });
+      return;
+    }
     if (!community?.isJoined) {
-      return info({
+      info({
         content: resolveString('amity_common_label_join_community_to_interact'),
         alignment: 'fullscreen',
       });
+      return;
     }
 
     const { mentioned, mentionees, text } = editorToText(editorRef.current);
@@ -531,15 +538,6 @@ export const LivestreamChatMessageComposer = ({
         message: resolveString('amity_social_label_you_have_been_muted'),
         channel,
       });
-    if (community && !community.isJoined)
-      return (
-        <div className={styles.livestreamChatMessageComposer__unJoined__container}>
-          <Typography.Body className={styles.livestreamChatMessageComposer__unJoined__text}>
-            {resolveString('amity_social_label_join_community_to_interact_with_live_stream')}
-          </Typography.Body>
-        </div>
-      );
-
     return (
       <div className={styles.livestreamChatMessageComposer__composeBar__outer}>
         <div
