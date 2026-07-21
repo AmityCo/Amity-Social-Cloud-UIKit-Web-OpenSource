@@ -62,7 +62,7 @@
   }
 
   .postComposer__avatarPlaceholder {
-    background-color: var(--asc-color-primary-shade2);
+    background-color: var(--asc-color-primary-shade1);
     border-radius: 50%;
   }
 }
