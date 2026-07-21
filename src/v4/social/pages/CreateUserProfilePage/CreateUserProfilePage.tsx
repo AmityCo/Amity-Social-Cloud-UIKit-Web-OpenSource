@@ -52,6 +52,11 @@ export interface CreateUserProfilePageProps {
    * `generateUserId` runs) to mint a short-lived auth token from your backend's
    * Server Key. Passed to `Client.login` and used again on session renewal.
    * Omit for unsecure mode. Takes precedence over the static `authToken` prop.
+   *
+   * If omitted, the page falls back to the `getAuthToken` configured on
+   * `AmityUIKitProvider` (surfaced via SDKContext), so secure mode can be set up
+   * in a single place. Set this page-level prop only when you need different
+   * token logic for the create-profile login than for the main app session.
    */
   getAuthToken?: (userId: string) => Promise<string> | string;
   /**
@@ -97,7 +102,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
   userId,
   generateUserId,
   authToken,
-  getAuthToken,
+  getAuthToken: getAuthTokenProp,
   onCreated,
   onError,
   onCancel,
@@ -109,7 +114,13 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
 
   const { themeStyles } = useAmityPage({ pageId });
   const { online } = useNetworkState();
-  const { client } = useSDK();
+  const { client, getAuthToken: providerGetAuthToken } = useSDK();
+
+  // Prefer the page-level getAuthToken prop; otherwise fall back to the one
+  // configured on AmityUIKitProvider (surfaced via SDKContext), so secure mode
+  // can be set up in a single place. The provider callback optionally accepts
+  // the resolved userId, matching the page-level signature.
+  const getAuthToken = getAuthTokenProp ?? providerGetAuthToken;
 
   const [displayName, setDisplayName] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string | undefined>(undefined);

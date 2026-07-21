@@ -98,8 +98,9 @@ const InternalComponent = ({
       userRoles: currentUser?.roles || [],
       currentUser,
       isVisitorOrBot: userType !== UserTypeEnum.SIGNED_IN,
+      getAuthToken,
     };
-  }, [client, userId]);
+  }, [client, userId, getAuthToken]);
 
   const initialConfig = useMemo(() => {
     let initialConfig = { ...defaultConfig };
@@ -390,7 +391,11 @@ interface AmityUIKitProviderProps {
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
-  getAuthToken?: () => Promise<string>;
+  // Optionally receives the resolved userId, so flows that mint the userId at
+  // login time (e.g. CreateUserProfilePage) can request a token keyed to it.
+  // The argument is optional and unused by the provider's own login, so existing
+  // arg-less callers remain valid.
+  getAuthToken?: (userId?: string) => Promise<string>;
   authSignatureExpiresAt?: string;
   getAuthSignature?: ({
     deviceId,
