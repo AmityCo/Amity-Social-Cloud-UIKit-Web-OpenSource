@@ -736,9 +736,9 @@ export const LivestreamChatMessageComposer = ({
                 size="large"
                 defaultIcon={<ArrowTop />}
                 isDisabled={disabled}
-                color={!disabled && isFocused ? 'primary' : 'secondary'}
+                color={!disabled && !isEmpty ? 'primary' : 'secondary'}
                 iconClassName={
-                  disabled || !isFocused
+                  disabled || isEmpty
                     ? styles.livestreamChatMessageComposer__sendButton__inactiveIcon
                     : undefined
                 }
