@@ -35,3 +35,42 @@ export const CreateUserProfilePageStories = {
     userId: 'Web-Test-Create-Profile',
   },
 };
+
+/**
+ * Secure-mode example: the userId is minted at Save time via `generateUserId`,
+ * then `getAuthToken(userId)` is called to mint a short-lived auth token for
+ * that id. In a real app `getAuthToken` would call your backend (Server Key);
+ * here it just returns a mock string. `getAuthToken` takes precedence over the
+ * static `authToken` prop, and is re-invoked on session renewal.
+ */
+export const CreateUserProfilePageSecureMode = {
+  render: (args: { userId?: string }) => {
+    const props: CreateUserProfilePageProps = {
+      // No static userId: generate it at Save, then key the token to it.
+      generateUserId: async ({ displayName } = {}) => {
+        const minted = `${(displayName || 'user').toLowerCase().replace(/\s+/g, '-')}-${args.userId}`;
+        console.log('[CreateUserProfilePage] generateUserId ->', minted);
+        return minted;
+      },
+      getAuthToken: async (resolvedUserId) => {
+        // Real apps: POST to your backend to mint a token for resolvedUserId.
+        console.log('[CreateUserProfilePage] getAuthToken for', resolvedUserId);
+        return `mock-auth-token-for-${resolvedUserId}`;
+      },
+      onCreated: (user) => {
+        console.log('[CreateUserProfilePage] onCreated', user);
+      },
+      onError: (error) => {
+        console.log('[CreateUserProfilePage] onError', error);
+      },
+      onCancel: () => {
+        console.log('[CreateUserProfilePage] onCancel');
+      },
+    };
+    return <CreateUserProfilePage {...props} />;
+  },
+  args: {
+    userType: 'visitor',
+    userId: 'secure-demo',
+  },
+};

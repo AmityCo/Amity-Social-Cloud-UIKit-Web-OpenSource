@@ -37,15 +37,3 @@ export { PendingRequestPage } from './PendingRequestPage';
 export { DraftClipPage } from './DraftClipPage';
 
 export { ClipFeedPage } from './ClipFeedPage';
-
-export { EventTargetSelectionPage } from './EventTargetSelectionPage';
-
-export { EventSetupPage } from './EventSetupPage';
-
-export { UpcomingEventsPage } from './UpcomingEventsPage';
-
-export { PastEventsPage } from './PastEventsPage';
-
-export { EventDetailPage } from './EventDetailPage';
-
-export { EventAttendeesPage } from './EventAttendeesPage';

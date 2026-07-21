@@ -7,13 +7,7 @@ export const useSocialHomePageTab = (): [HomePageTab | null, (tab: HomePageTab) 
   const { currentUserId } = useSDK();
 
   const PERSISTED_TABS = useMemo(
-    () =>
-      new Set([
-        HomePageTab.ForYou,
-        HomePageTab.Newsfeed,
-        HomePageTab.Communities,
-        HomePageTab.Events,
-      ]),
+    () => new Set([HomePageTab.ForYou, HomePageTab.Newsfeed, HomePageTab.Communities]),
     [],
   );
 

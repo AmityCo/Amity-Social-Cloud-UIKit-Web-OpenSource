@@ -44,7 +44,6 @@ import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { isEqual } from 'lodash';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
-import { EventHostBadge } from '~/v4/social/elements';
 import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -455,14 +454,7 @@ export const PostContent = ({
               />
             </div>
             <div className={styles.postContent__bar__information__subtitle}>
-              {eventCreatorId === post?.postedUserId ? (
-                <div className={styles.postContent__bar__information__subtitle__moderator}>
-                  <EventHostBadge withLabel />
-                  <span className={styles.postContent__bar__information__subtitle__separator}>
-                    •
-                  </span>
-                </div>
-              ) : isCommunityModerator ? (
+              {isCommunityModerator ? (
                 <div className={styles.postContent__bar__information__subtitle__moderator}>
                   <ModeratorBadge pageId={pageId} componentId={componentId} />
                   <span className={styles.postContent__bar__information__subtitle__separator}>

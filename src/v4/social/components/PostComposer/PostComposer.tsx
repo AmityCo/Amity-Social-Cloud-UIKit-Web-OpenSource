@@ -8,21 +8,16 @@ import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useEventPermission } from '~/v4/social/features/events/hooks';
-import { EventButton } from '~/v4/social/elements/EventButton/EventButton';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
-import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events/hooks';
 import styles from './PostComposer.module.css';
 import { useString } from '~/v4/core/localization/useString';
 
 type PostComposerProps = {
   pageId?: string;
   communityId?: string;
-  isDisableEvent?: boolean;
   onClickPost?: () => void;
   onClickPoll?: () => void;
-  onClickEvent?: () => void;
 };
 
 export function PostComposer({
@@ -30,17 +25,13 @@ export function PostComposer({
   communityId,
   onClickPost,
   onClickPoll,
-  onClickEvent,
-  isDisableEvent = false,
 }: PostComposerProps) {
   const componentId = 'post_composer';
 
   const { currentUserId, isVisitorOrBot } = useSDK();
   const { openPopup } = usePopupContext();
   const { user } = useUser({ userId: currentUserId, shouldCall: !isVisitorOrBot });
-  const { hasCreateEventPermission } = useEventPermission(communityId);
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
-  const { redirectEventTargetSelectionPage } = useRedirectEventTargetSelectionPage();
 
   const handlePostClick = () => {
     if (onClickPost) return onClickPost();
@@ -80,20 +71,6 @@ export function PostComposer({
     });
   };
 
-  const renderEventButton = () => {
-    const isExcludedPage = pageId === 'user_profile_page';
-    const isFromCommunityPage = pageId === 'community_profile_page';
-
-    if (!hasCreateEventPermission || isExcludedPage || isDisableEvent) return null;
-
-    return (
-      <EventButton
-        pageId="post_composer_page"
-        onPress={isFromCommunityPage ? onClickEvent : redirectEventTargetSelectionPage}
-      />
-    );
-  };
-
   return (
     <div className={styles.postComposer} data-testid={accessibilityId} style={themeStyles}>
       <UserAvatar
@@ -123,7 +100,6 @@ export function PostComposer({
         textId=""
       />
       <PollButton onPress={handlePollClick} pageId="post_composer_page" componentId="poll_button" />
-      {renderEventButton()}
     </div>
   );
 }

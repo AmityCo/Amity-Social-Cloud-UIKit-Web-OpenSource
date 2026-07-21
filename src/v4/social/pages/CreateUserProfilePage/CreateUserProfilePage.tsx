@@ -41,8 +41,19 @@ export interface CreateUserProfilePageProps {
   /**
    * Optional auth token to use for the signed-in login, when the network uses
    * secure mode. Mirrors `getAuthToken` on AmityUIKitProvider.
+   *
+   * This is the static form. Prefer `getAuthToken` when the userId is minted
+   * at Save time (via `generateUserId`), since a static string cannot be keyed
+   * to a freshly generated userId and cannot be renewed.
    */
   authToken?: string;
+  /**
+   * Secure-mode auth-token provider. Called with the resolved userId (after
+   * `generateUserId` runs) to mint a short-lived auth token from your backend's
+   * Server Key. Passed to `Client.login` and used again on session renewal.
+   * Omit for unsecure mode. Takes precedence over the static `authToken` prop.
+   */
+  getAuthToken?: (userId: string) => Promise<string> | string;
   /**
    * Fired after the profile is successfully created and the user is signed in.
    * Receives the created userId, the chosen displayName, the About text, and the
@@ -86,6 +97,7 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
   userId,
   generateUserId,
   authToken,
+  getAuthToken,
   onCreated,
   onError,
   onCancel,
@@ -149,23 +161,42 @@ export const CreateUserProfilePage: React.FC<CreateUserProfilePageProps> = ({
         );
       }
 
+      // In secure mode, mint the auth token now that the userId is resolved.
+      // getAuthToken (keyed by the resolved userId) takes precedence over the
+      // static authToken; a static token is the fallback. This ordering matters
+      // because generateUserId may have just created the userId, so the token
+      // can only be minted after this point.
+      const resolvedAuthToken = getAuthToken ? await getAuthToken(resolvedUserId) : authToken;
+
       // Logging in with a userId creates the user on the network if it does
       // not exist yet, and sets the initial display name. This is the
       // transition from visitor -> signed-in user.
       //
       // Only include displayName when one was actually entered — omit the key
       // entirely otherwise (do not send undefined/"") so an existing user's
-      // server-side displayName is never overwritten.
+      // server-side displayName is never overwritten. Likewise only attach
+      // authToken when non-empty, so unsecure mode still logs in.
       const loginParams: Parameters<typeof Client.login>[0] = {
         userId: resolvedUserId,
-        authToken,
       };
       if (displayName) {
         loginParams.displayName = displayName;
       }
+      if (resolvedAuthToken && resolvedAuthToken.length > 0) {
+        loginParams.authToken = resolvedAuthToken;
+      }
       await Client.login(loginParams, {
+        // Re-mint the token on renewal in secure mode, mirroring
+        // AmityUIKitProvider's session handler. Falls back to renew() when
+        // getAuthToken is absent or a mint fails.
         sessionWillRenewAccessToken: (renewal) => {
-          renewal.renew();
+          if (getAuthToken) {
+            Promise.resolve(getAuthToken(resolvedUserId))
+              .then((token) => (token ? renewal.renewWithAuthToken(token) : renewal.renew()))
+              .catch(() => renewal.renew());
+          } else {
+            renewal.renew();
+          }
         },
       });
 

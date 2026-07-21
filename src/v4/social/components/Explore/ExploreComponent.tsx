@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { ExploreCommunityCategories } from '~/v4/social/components/ExploreCommunityCategories';
 import { RecommendedCommunities } from '~/v4/social/components/RecommendedCommunities';
 import { TrendingCommunities } from '~/v4/social/components/TrendingCommunities';
+import { PinnedCommunities } from '~/v4/social/components/PinnedCommunities';
 import { useExplore } from '~/v4/social/providers/ExploreProvider';
 import styles from './ExploreComponent.module.css';
 import { ExploreError } from './ExploreError';
@@ -9,6 +10,7 @@ import { ExploreEmpty } from '~/v4/social/components/ExploreEmpty';
 import { ExploreCommunityEmpty } from '~/v4/social/components/ExploreCommunityEmpty';
 import { ExploreTrendingTitle } from '~/v4/social/elements/ExploreTrendingTitle';
 import { ExploreRecommendedTitle } from '~/v4/social/elements/ExploreRecommendedTitle';
+import { ExplorePinnedTitle } from '~/v4/social/elements/ExplorePinnedTitle';
 import { Divider } from '~/v4/social/elements/Divider';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -28,6 +30,8 @@ export function Explore({ pageId = '*' }: ExploreProps) {
     isNoCategory,
     noRecommendedCommunities,
     noTrendingCommunities,
+    noPinnedCommunities,
+    pinnedCommunities,
     error,
   } = useExplore();
 
@@ -78,6 +82,17 @@ export function Explore({ pageId = '*' }: ExploreProps) {
           <ExploreCommunityCategories pageId={pageId} />
         </div>
       )}
+      <Divider className={styles.explore__divider} />
+      {!noPinnedCommunities ? (
+        <div className={styles.explore__pinnedCommunities}>
+          {isLoading ? (
+            <div className={styles.explore__trendingTitleSkeleton} />
+          ) : (
+            <ExplorePinnedTitle pageId={pageId} isSingle={pinnedCommunities.length === 1} />
+          )}
+          <PinnedCommunities pageId={pageId} />
+        </div>
+      ) : null}
       <Divider className={styles.explore__divider} />
       {!noRecommendedCommunities ? (
         <div className={styles.explore__recommendedForYou} data-is-loading={!!isLoading}>

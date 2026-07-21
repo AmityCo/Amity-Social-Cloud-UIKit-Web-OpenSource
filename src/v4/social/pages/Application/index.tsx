@@ -13,12 +13,8 @@ import {
   CommunityMembershipPage,
   CommunityPostPermissionPage,
   DraftClipPage,
-  EventAttendeesPage,
-  EventDetailPage,
   NotificationTrayPage,
-  PastEventsPage,
   PendingRequestPage,
-  UpcomingEventsPage,
 } from '..';
 import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
 import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
@@ -40,7 +36,6 @@ import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPa
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
-import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
 import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 
 const Application = () => {
@@ -155,13 +150,6 @@ const Application = () => {
         {page.type === PageTypes.PendingRequestPage && (
           <PendingRequestPage community={page.context.community} />
         )}
-
-        {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
-        {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}
-        {page.type === PageTypes.UpcomingEventsPage && <UpcomingEventsPage {...page.context} />}
-        {page.type === PageTypes.PastEventsPage && <PastEventsPage />}
-        {page.type === PageTypes.EventDetailPage && <EventDetailPage {...page.context} />}
-        {page.type === PageTypes.EventAttendeesPage && <EventAttendeesPage {...page.context} />}
 
         {page.type === PageTypes.PollTargetSelectionPage && <PollTargetSelectionPage />}
         {page.type === PageTypes.PollPostComposerPage && (

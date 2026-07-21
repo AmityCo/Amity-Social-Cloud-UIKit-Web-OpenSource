@@ -18,10 +18,6 @@ import { resolveString } from '~/v4/core/localization';
 import { AmityRoute } from './AmityUIKitProvider';
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useNotifications } from './NotificationProvider';
-import { EventSetupProps } from '~/v4/social/features';
-import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
-import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
-import { EventAttendeesPageProps } from '~/v4/social/pages/EventAttendeesPage/EventAttendeesPage';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 export enum PageTypes {
@@ -44,7 +40,6 @@ export enum PageTypes {
   PostComposerPage = 'PostComposerPage',
   MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
   PollTargetSelectionPage = 'PollTargetSelectionPage',
-  EventTargetSelectionPage = 'EventTargetSelectionPage',
   AllCategoriesPage = 'AllCategoriesPage',
   CommunitiesByCategoryPage = 'CommunitiesByCategoryPage',
   CommunityAddCategoryPage = 'CommunityAddCategoryPage',
@@ -61,11 +56,6 @@ export enum PageTypes {
   PendingRequestPage = 'PendingRequestPage',
   DraftClipPage = 'DraftClipPage',
   ClipFeedPage = 'ClipFeedPage',
-  EventSetupPage = 'EventSetupPage',
-  UpcomingEventsPage = 'UpcomingEventsPage',
-  PastEventsPage = 'PastEventsPage',
-  EventDetailPage = 'EventDetailPage',
-  EventAttendeesPage = 'EventAttendeesPage',
   VisitorUsageLimitPage = 'VisitorUsageLimitPage',
 }
 
@@ -136,9 +126,6 @@ type Page =
         isClipPost?: boolean;
         targetName?: string;
       };
-    }
-  | {
-      type: PageTypes.EventTargetSelectionPage;
     }
   | {
       type: PageTypes.AllCategoriesPage;
@@ -245,25 +232,6 @@ type Page =
       };
     }
   | {
-      type: PageTypes.EventSetupPage;
-      context: EventSetupProps;
-    }
-  | {
-      type: PageTypes.UpcomingEventsPage;
-      context: UpcomingEventsPageProps;
-    }
-  | {
-      type: PageTypes.PastEventsPage;
-    }
-  | {
-      type: PageTypes.EventDetailPage;
-      context: EventDetailPageProps;
-    }
-  | {
-      type: PageTypes.EventAttendeesPage;
-      context: EventAttendeesPageProps;
-    }
-  | {
       type: PageTypes.VisitorUsageLimitPage;
     };
 
@@ -295,7 +263,6 @@ type ContextValue = {
   goToSelectPostTargetPage: () => void;
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => void;
   goToSelectPollPostTargetPage: () => void;
-  goToSelectEventTargetPage: () => void;
   goToPollPostComposerPage: (context: {
     targetId: string | null;
     targetType: 'community' | 'user';
@@ -367,11 +334,6 @@ type ContextValue = {
   handleNonMemberAction: (context: { alignment: NotificationAlignment }) => void;
   handleNonFollowerAction: (context: { alignment: NotificationAlignment }) => void;
   handleVisitorUsageLimitSignIn: (context: { alignment: NotificationAlignment }) => void;
-  goToEventSetupPage: (context: EventSetupProps) => void;
-  goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => void;
-  goToPastEventsPage: () => void;
-  goToEventDetailPage: (context: EventDetailPageProps) => void;
-  goToEventAttendeesPage?: (context: EventAttendeesPageProps) => void;
   goToVisitorUsageLimitPage: () => void;
 };
 
@@ -426,7 +388,6 @@ let defaultValue: ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => {},
-  goToSelectEventTargetPage: () => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -434,11 +395,6 @@ let defaultValue: ContextValue = {
   handleNonMemberAction: () => {},
   handleNonFollowerAction: () => {},
   handleVisitorUsageLimitSignIn: () => {},
-  goToEventSetupPage: (context: EventSetupProps) => {},
-  goToUpcomingEventsPage: () => {},
-  goToPastEventsPage: () => {},
-  goToEventDetailPage: (context: EventDetailPageProps) => {},
-  goToEventAttendeesPage: (context: EventAttendeesPageProps) => {},
   goToVisitorUsageLimitPage: () => {},
 };
 
@@ -492,7 +448,6 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToSelectPollPostTargetPage()`),
     goToPollPostComposerPage: (context) =>
       console.log(`NavigationContext goToPollPostComposerPage(${context})`),
-    goToSelectEventTargetPage: () => console.log('NavigationContext goToSelectEventTargetPage()'),
     goToPostComposerPage: () => console.log(`NavigationContext goToPostComposerPage()`),
     goToDraftClipPage: (context) => console.log(`NavigationContext goToDraftClipPage(${context})`),
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
@@ -521,15 +476,6 @@ if (process.env.NODE_ENV !== 'production') {
     handleVisitorUsageLimitSignIn: () =>
       console.log('NavigationContext handleVisitorUsageLimitSignIn()'),
 
-    goToEventSetupPage: (context) =>
-      console.log(`NavigationContext goToEventSetupPage(${context.mode})`),
-    goToUpcomingEventsPage: (context) =>
-      console.log(`NavigationContext goToUpcomingEventsPage()`, context),
-    goToPastEventsPage: () => console.log('NavigationContext goToPastEventsPage()'),
-    goToEventDetailPage: (context) =>
-      console.log('NavigationContext goToEventDetailPage()', context),
-    goToEventAttendeesPage: (context) =>
-      console.log('NavigationContext goToEventAttendeesPage()', context),
     goToVisitorUsageLimitPage: () => console.log('NavigationContext goToVisitorUsageLimitPage()'),
   };
 }
@@ -953,14 +899,6 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const goToSelectEventTargetPage = useCallback(() => {
-    const next = {
-      type: PageTypes.EventTargetSelectionPage,
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
   const goToSelectPollPostTargetPage = useCallback(() => {
     const next = {
       type: PageTypes.PollTargetSelectionPage,
@@ -1265,61 +1203,6 @@ export default function NavigationProvider({
     });
   };
 
-  const goToEventSetupPage = useCallback(
-    (context: EventSetupProps) => {
-      const next = {
-        type: PageTypes.EventSetupPage,
-        context,
-      };
-      pushPage(next);
-    },
-    [pushPage],
-  );
-
-  const goToUpcomingEventsPage = useCallback(
-    (context) => {
-      const next = {
-        type: PageTypes.UpcomingEventsPage,
-        context,
-      };
-
-      pushPage(next);
-    },
-    [pushPage],
-  );
-
-  const goToPastEventsPage = useCallback(() => {
-    const next = {
-      type: PageTypes.PastEventsPage,
-    };
-
-    pushPage(next);
-  }, [pushPage]);
-
-  const goToEventDetailPage = useCallback(
-    (context: EventDetailPageProps) => {
-      const next = {
-        type: PageTypes.EventDetailPage,
-        context,
-      };
-
-      pushPage(next);
-    },
-    [pushPage],
-  );
-
-  const goToEventAttendeesPage = useCallback(
-    (context: EventAttendeesPageProps) => {
-      const next = {
-        type: PageTypes.EventAttendeesPage,
-        context,
-      };
-
-      pushPage(next);
-    },
-    [pushPage],
-  );
-
   const goToVisitorUsageLimitPage = useCallback(() => {
     const next = {
       type: PageTypes.VisitorUsageLimitPage,
@@ -1372,7 +1255,6 @@ export default function NavigationProvider({
         goToSelectPostTargetPage,
         goToSelectClipPostTargetPage,
         goToSelectPollPostTargetPage,
-        goToSelectEventTargetPage,
         goToDraftClipPage,
         goToPostComposerPage,
         goToSocialHomePage,
@@ -1401,11 +1283,6 @@ export default function NavigationProvider({
         handleNonMemberAction,
         handleNonFollowerAction,
         handleVisitorUsageLimitSignIn,
-        goToEventSetupPage,
-        goToUpcomingEventsPage,
-        goToPastEventsPage,
-        goToEventDetailPage,
-        goToEventAttendeesPage,
         goToVisitorUsageLimitPage,
         onProductTagClick,
       }}

@@ -23,6 +23,20 @@
   padding: 1rem;
 }
 
+.explore__pinnedCommunities {
+  gap: 1rem;
+  width: 100%;
+  display: flex;
+  padding: 0 1rem;
+  scrollbar-width: none;
+  flex-direction: column;
+  -ms-overflow-style: none;
+}
+
+.explore__pinnedCommunities::-webkit-scrollbar {
+  display: none;
+}
+
 .explore__trendingNow {
   gap: 0.5rem;
   padding: 1rem;

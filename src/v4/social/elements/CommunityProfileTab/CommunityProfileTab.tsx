@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
 import MediaIcon from '~/v4/icons/Media';
-import EventIcon from '~/v4/icons/Events';
 import { Pin as PinIcon } from '~/v4/icons/Pin';
 import { Button } from '~/v4/core/natives/Button';
 import { Feed as FeedIcon } from '~/v4/icons/Feed';
@@ -51,15 +50,6 @@ export const CommunityProfileTab = forwardRef<HTMLDivElement, CommunityTabsProps
           onPress={() => onTabChange('community_pin')}
         >
           <PinIcon className={styles.communityTabs__pinIcon} />
-        </Button>
-        <Button
-          aria-label="Community Event Feed"
-          className={styles.communityTabs__tab}
-          data-testid={`${accessibilityId}_event_feed`}
-          data-is-active={activeTab === 'community_event_feed'}
-          onPress={() => onTabChange('community_event_feed')}
-        >
-          <EventIcon className={styles.communityTabs__icon} />
         </Button>
         <Button
           aria-label="Community Media Feed"

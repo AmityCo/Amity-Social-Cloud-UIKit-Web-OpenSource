@@ -36,7 +36,6 @@ export function TopNavigation({
     switch (selectedTab) {
       case HomePageTab.ForYou:
       case HomePageTab.Newsfeed:
-      case HomePageTab.Events:
       case HomePageTab.Communities:
         goToSocialGlobalSearchPage();
     }

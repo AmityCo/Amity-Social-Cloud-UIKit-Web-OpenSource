@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
-import { EventDetailProps, EventSetupProps } from '~/v4/social/features';
 import {
   AmityCommunitySetupPageMode,
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { type GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
-import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -59,7 +57,6 @@ export interface PageBehavior {
     goToSelectPostTargetPage?(): void;
     goToSelectClipPostTargetPage?(context: { isClipPost: boolean }): void;
     goToSelectPollPostTargetPage?(): void;
-    goToSelectEventTargetPage?(): void;
   };
   AmityPostTargetSelectionPage?: {
     goToPostComposerPage?: (context: {
@@ -111,7 +108,6 @@ export interface PageBehavior {
       targetType?: 'community' | 'user';
       targetId?: string;
     }) => void;
-    goToEventSetupPage?(context: EventSetupProps): void;
   };
   AmitySocialHomeTopNavigationComponentBehavior?: {
     goToCreateCommunityPage?(context: { mode: AmityCommunitySetupPageMode }): void;
@@ -202,7 +198,6 @@ export interface PageBehavior {
     goToCommunityProfilePage?(context: { communityId: string }): void;
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToUserProfilePage?(context: { userId: string }): void;
-    goToEventDetailPage?(context: EventDetailProps): void;
     goToEditProfilePage?(): void;
   };
   AmityDraftClipPageBehavior?: {
@@ -241,47 +236,8 @@ export interface PageBehavior {
     handleVisitorUsageLimitReached?(): void;
     handleVisitorUsageLimitSignIn?(context: { alignment: NotificationAlignment }): void;
   };
-  AmityEventTargetSelectionPageBehavior?: {
-    goToEventSetupPage?(context: EventSetupProps): void;
-  };
-
   AmityMyCommunitiesComponentBehavior?: {
     goToCommunitySetupPage?(context: { mode: AmityCommunitySetupPageMode }): void;
-  };
-
-  AmityExploreEventFeedComponentBehavior?: {
-    goToUpcomingEventsPage?(context: UpcomingEventsPageProps): void;
-  };
-
-  AmityMyEventFeedComponentBehavior?: {
-    goToUpcomingEventsPage?(context: UpcomingEventsPageProps): void;
-    goToPastEventsPage?(): void;
-  };
-
-  AmityEventDetailPageBehavior?: {
-    goToCommunityProfilePage?(context: { communityId: string }): void;
-    goToPostDetailPage?(context: GoToPostDetailPageParams): void;
-    goToEventSetupPage?(context: EventSetupProps): void;
-    goToPostComposerPage?(context: {
-      mode: Mode.CREATE;
-      targetName?: string;
-      targetId: string | null;
-      targetType: 'community' | 'user';
-      community?: Amity.Community;
-    }): void;
-    goToPollPostComposerPage?(context: {
-      targetId: string | null;
-      targetType: 'community' | 'user';
-      pollType?: 'text' | 'image';
-    }): void;
-    goToEventAttendeesPage?(context: { event: Amity.Event }): void;
-    goToUserProfilePage?(context: { userId: string }): void;
-  };
-  AmityEventSetupPageBehavior?: {
-    goToEventDetailPage?(context: EventDetailProps): void;
-  };
-  AmityEventAttendeesPageBehavior?: {
-    goToUserProfilePage?(context: { userId: string }): void;
   };
 }
 
@@ -307,7 +263,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToSelectPostTargetPage,
     goToSelectClipPostTargetPage,
     goToSelectPollPostTargetPage,
-    goToSelectEventTargetPage,
     goToPostComposerPage,
     goToDraftClipPage,
     goToClipFeedPage,
@@ -331,12 +286,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     handleNonMemberAction,
     handleNonFollowerAction,
     handleVisitorUsageLimitSignIn,
-    goToEventSetupPage,
     goToCreateCommunityPage,
-    goToUpcomingEventsPage,
-    goToPastEventsPage,
-    goToEventAttendeesPage,
-    goToEventDetailPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     onClickHyperLink: () => {},
@@ -448,13 +398,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectPollPostTargetPage();
         }
         goToSelectPollPostTargetPage();
-      },
-
-      goToSelectEventTargetPage() {
-        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToSelectEventTargetPage) {
-          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectEventTargetPage();
-        }
-        goToSelectEventTargetPage();
       },
     },
     AmityPostTargetSelectionPage: {
@@ -579,12 +522,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCommunityProfilePageBehavior.goToClipFeedPage(context);
         }
         goToClipFeedPage?.(context);
-      },
-      goToEventSetupPage(context: EventSetupProps) {
-        if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToEventSetupPage) {
-          return pageBehavior.AmityCommunityProfilePageBehavior.goToEventSetupPage(context);
-        }
-        goToEventSetupPage(context);
       },
     },
     AmityCommunitySetupPageBehavior: {
@@ -813,12 +750,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToUserProfilePage(context.userId);
       },
-      goToEventDetailPage: (context: EventDetailProps) => {
-        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEventDetailPage) {
-          return pageBehavior.AmityNotificationTrayPageBehavior.goToEventDetailPage(context);
-        }
-        goToEventDetailPage(context);
-      },
       goToEditProfilePage: () => {
         if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEditProfilePage) {
           return pageBehavior.AmityNotificationTrayPageBehavior.goToEditProfilePage();
@@ -916,107 +847,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityMyCommunitiesComponentBehavior.goToCommunitySetupPage(context);
         }
         goToCreateCommunityPage?.(context);
-      },
-    },
-    AmityEventTargetSelectionPageBehavior: {
-      goToEventSetupPage: (context: EventSetupProps) => {
-        if (pageBehavior?.AmityEventTargetSelectionPageBehavior?.goToEventSetupPage) {
-          return pageBehavior.AmityEventTargetSelectionPageBehavior.goToEventSetupPage(context);
-        }
-        goToEventSetupPage(context);
-      },
-    },
-    AmityExploreEventFeedComponentBehavior: {
-      goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => {
-        if (pageBehavior?.AmityExploreEventFeedComponentBehavior?.goToUpcomingEventsPage) {
-          return pageBehavior.AmityExploreEventFeedComponentBehavior.goToUpcomingEventsPage(
-            context,
-          );
-        }
-        goToUpcomingEventsPage(context);
-      },
-    },
-    AmityMyEventFeedComponentBehavior: {
-      goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => {
-        if (pageBehavior?.AmityMyEventFeedComponentBehavior?.goToUpcomingEventsPage) {
-          return pageBehavior.AmityMyEventFeedComponentBehavior.goToUpcomingEventsPage(context);
-        }
-        goToUpcomingEventsPage(context);
-      },
-      goToPastEventsPage: () => {
-        if (pageBehavior?.AmityMyEventFeedComponentBehavior?.goToPastEventsPage) {
-          return pageBehavior.AmityMyEventFeedComponentBehavior.goToPastEventsPage();
-        }
-        goToPastEventsPage();
-      },
-    },
-    AmityEventDetailPageBehavior: {
-      goToCommunityProfilePage(context: { communityId: string }) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToCommunityProfilePage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToCommunityProfilePage(context);
-        }
-        goToCommunityProfilePage(context.communityId);
-      },
-      goToPostDetailPage(context: GoToPostDetailPageParams) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToPostDetailPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToPostDetailPage(context);
-        }
-        goToPostDetailPage(context);
-      },
-      goToEventSetupPage(context: EventSetupProps) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToEventSetupPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToEventSetupPage(context);
-        }
-        goToEventSetupPage(context);
-      },
-      goToPostComposerPage(context: {
-        mode: Mode.CREATE;
-        targetId: string | null;
-        targetType: 'community' | 'user';
-        community?: Amity.Community;
-      }) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToPostComposerPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToPostComposerPage(context);
-        }
-        goToPostComposerPage(context);
-      },
-      goToPollPostComposerPage(context: {
-        targetId: string | null;
-        targetType: 'community' | 'user';
-        pollType?: 'text' | 'image';
-      }) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToPollPostComposerPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToPollPostComposerPage(context);
-        }
-        goToPollPostComposerPage(context);
-      },
-      goToEventAttendeesPage(context: { event: Amity.Event }) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToEventAttendeesPage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToEventAttendeesPage(context);
-        }
-        goToEventAttendeesPage?.({ event: context.event });
-      },
-      goToUserProfilePage(context: { userId: string }) {
-        if (pageBehavior?.AmityEventDetailPageBehavior?.goToUserProfilePage) {
-          return pageBehavior.AmityEventDetailPageBehavior.goToUserProfilePage(context);
-        }
-        goToUserProfilePage(context.userId);
-      },
-    },
-    AmityEventSetupPageBehavior: {
-      goToEventDetailPage: (context: EventDetailProps) => {
-        if (pageBehavior?.AmityEventSetupPageBehavior?.goToEventDetailPage) {
-          return pageBehavior.AmityEventSetupPageBehavior.goToEventDetailPage(context);
-        }
-        goToEventDetailPage(context);
-      },
-    },
-    AmityEventAttendeesPageBehavior: {
-      goToUserProfilePage: (context: { userId: string }) => {
-        if (pageBehavior?.AmityEventAttendeesPageBehavior?.goToUserProfilePage) {
-          return pageBehavior.AmityEventAttendeesPageBehavior.goToUserProfilePage(context);
-        }
-        goToUserProfilePage(context.userId);
       },
     },
   };
