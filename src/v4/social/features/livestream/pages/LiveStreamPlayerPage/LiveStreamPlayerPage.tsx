@@ -81,9 +81,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   const { post: subscribedPost } = usePostSubscription(post?.childrenPosts[0]?.postId);
 
-  const { room, isLoading: isLoadingRoom } = useRoom(
-    subscribedPost?.getRoomInfo()?.roomId ?? roomId,
-  );
+  const {
+    room,
+    isLoading: isLoadingRoom,
+    refresh: refreshRoom,
+  } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
 
   const { post: parentPost, isLoading: isLoadingParentPost } = usePostSubscription(
     (room?.referenceType === 'post' ? room?.referenceId : room?.post?.postId) ?? post?.postId,
@@ -124,6 +126,11 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     onSettled: () => {
       setUiState('player');
       reloadPlayer();
+      // Re-fetch the room so `participants` drops the departing co-host —
+      // otherwise the cached LiveObject keeps them as `type: 'coHost'` and
+      // their previous chat messages keep the badge after they rejoin as a
+      // viewer (PDT-3981).
+      refreshRoom();
       if (!coHostEndSessionRef.current)
         success({
           content: leftStageText,
