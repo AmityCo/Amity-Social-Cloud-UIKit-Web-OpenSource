@@ -4,7 +4,10 @@ import { defineConfig } from 'tsup';
 import pkg from './package.json';
 
 export default defineConfig((options) => ({
-  entry: ['src/index.ts'],
+  // `~/constants` is a standalone SSR-safe entry (pure data, no component graph)
+  // exposed via the `./constants` subpath export. Keeping it a separate entry
+  // means server consumers never evaluate the client-only barrel.
+  entry: ['src/index.ts', 'src/constants/index.ts'],
   format: ['cjs', 'esm'],
   // `.d.ts` emission disabled: monorepo consumers do not import the fork's
   // types directly (they wrap the dynamic imports with local structural types

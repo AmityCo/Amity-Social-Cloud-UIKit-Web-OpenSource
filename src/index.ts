@@ -156,3 +156,10 @@ export {
   ProductTagList as AmityProductTagListComponent,
   ProductTagSelection as AmityProductTagSelectionComponent,
 } from '~/v4/social/features/product-tagged';
+
+// meetperry custom reactions
+export {
+  MEETPERRY_LEGACY_REACTIONS,
+  MEETPERRY_REACTIONS,
+  withLegacyReactions,
+} from '~/v4/core/constants/meetperryReactions';
