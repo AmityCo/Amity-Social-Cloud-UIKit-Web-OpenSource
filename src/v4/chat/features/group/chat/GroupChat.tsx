@@ -8,6 +8,7 @@ import { MessageFullTextScreen } from '~/v4/chat/features/shared/components/Mess
 import { Header } from '~/v4/chat/features/group/chat/components/Header/Header';
 import { BannedEmptyState } from '~/v4/chat/features/group/chat/components/BannedEmptyState';
 import { useGroupChat } from '~/v4/chat/features/group/chat/hooks/useGroupChat';
+import { useVisualViewportHeight } from '~/v4/chat/features/shared/hooks';
 import type { GroupChatPageProps } from '~/v4/chat/pages/GroupChatPage';
 import styles from './GroupChat.module.css';
 
@@ -57,9 +58,14 @@ export function GroupChat(props: GroupChatPageProps) {
     clearJumpToMessageId,
   } = useGroupChat(props);
 
+  const viewport = useVisualViewportHeight();
+  const viewportStyle = viewport
+    ? { height: `${viewport.height}px`, top: `${viewport.offsetTop}px` }
+    : undefined;
+
   if (isBanned) {
     return (
-      <div className={styles.groupChat}>
+      <div className={styles.groupChat} style={viewportStyle}>
         <Header
           variant="banned"
           channel={channel}
@@ -73,7 +79,7 @@ export function GroupChat(props: GroupChatPageProps) {
   }
 
   return (
-    <div className={styles.groupChat}>
+    <div className={styles.groupChat} style={viewportStyle}>
       <Header
         channel={channel}
         onBack={handleBack}

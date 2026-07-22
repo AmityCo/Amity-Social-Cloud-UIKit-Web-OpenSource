@@ -62,7 +62,7 @@
 .chatToast {
   position: fixed;
   left: 50%;
-  bottom: 1.5rem;
+  bottom: calc(3.5rem + 1rem);
   transform: translateX(-50%);
   width: calc(100% - 2rem);
   pointer-events: auto;

@@ -8,3 +8,4 @@ export { useFailedMessageSheet } from './useFailedMessageSheet';
 export type { UseFailedMessageSheetReturn } from './useFailedMessageSheet';
 export { useMediaViewer } from './useMediaViewer';
 export type { UseMediaViewerReturn } from './useMediaViewer';
+export { useVisualViewportHeight } from './useVisualViewportHeight';

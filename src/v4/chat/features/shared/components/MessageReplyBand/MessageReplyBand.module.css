@@ -51,8 +51,8 @@
 .replyBand__thumbWrap {
   position: relative;
   flex-shrink: 0;
-  width: 2.375rem;
-  height: 2.375rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 0.25rem;
   overflow: hidden;
 }
@@ -66,8 +66,13 @@
 
 .replyBand__videoOverlay {
   position: absolute;
-  inset: 0;
-  background: rgb(0 0 0 / 40%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,10 +80,10 @@
 }
 
 .replyBand__videoIcon {
-  width: 0.875rem;
-  height: 0.875rem;
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  width: 1rem;
+  height: 1rem;
+  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
+  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
 }
 
 .replyBand__close {

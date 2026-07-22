@@ -7,6 +7,7 @@ import { MutedBanner } from '~/v4/chat/features/shared/components/MutedBanner/Mu
 import { MessageActionsPopover } from '~/v4/chat/features/shared/components/MessageActionsPopover';
 import { MessageFullTextScreen } from '~/v4/chat/features/shared/components/MessageFullTextScreen';
 import { useChat } from '~/v4/chat/features/conversation/chat/hooks/useChat';
+import { useVisualViewportHeight } from '~/v4/chat/features/shared/hooks';
 import type { ChatPageProps } from '~/v4/chat/pages/ChatPage';
 import styles from './Chat.module.css';
 
@@ -53,8 +54,13 @@ export function Chat(props: ChatPageProps) {
     clearJumpToMessageId,
   } = useChat(props);
 
+  const viewport = useVisualViewportHeight();
+  const viewportStyle = viewport
+    ? { height: `${viewport.height}px`, top: `${viewport.offsetTop}px` }
+    : undefined;
+
   return (
-    <div className={styles.chat}>
+    <div className={styles.chat} style={viewportStyle}>
       <Header
         userId={otherUser.userId}
         userDisplayName={otherUser.userDisplayName}
