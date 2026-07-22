@@ -48,7 +48,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
     ) : variant === 'text' && initials ? (
       <span className={styles.avatar__initials}>{initials}</span>
     ) : (
-      <User.Regular className={styles.avatar__glyph} />
+      <User.Solid className={styles.avatar__glyph} />
     );
 
   return (
