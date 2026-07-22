@@ -98,18 +98,6 @@ function isLinkNotAllowedError(error: unknown): boolean {
   );
 }
 
-function isBannedWordError(error: unknown): boolean {
-  return (
-    error instanceof Error &&
-    (error.message.includes(ERROR_CODE.BLOCKED_WORD) ||
-      error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD))
-  );
-}
-
-function isTextModerationRejection(error: unknown): boolean {
-  return isLinkNotAllowedError(error) || isBannedWordError(error);
-}
-
 function isModerationError(error: unknown): boolean {
   return error instanceof Error && error.message.includes(ERROR_CODE.IMAGE_NUDITY);
 }
@@ -260,15 +248,6 @@ export function useMessageComposer({
         },
         onError: (err) => {
           handleTextMessageError(err, { errorToast, info });
-          if (isTextModerationRejection(err)) {
-            const pending = buildPendingText(trimmed, 'generic', {
-              parentId,
-              metadata,
-              mentionees,
-            });
-            setPendingTexts((prev) => [...prev, pending]);
-            onMessageCreated?.();
-          }
         },
       },
     );

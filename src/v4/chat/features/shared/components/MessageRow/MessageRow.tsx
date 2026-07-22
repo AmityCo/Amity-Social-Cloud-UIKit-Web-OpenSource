@@ -41,8 +41,9 @@ export function MessageRow({
   const sendingLabel = useString('amity_chat_sending_status');
   const syncState = message.syncState;
   const isFailed = syncState === ('error' as Amity.SyncState);
-  const isViolation =
-    isSyntheticPendingMessage(message) && message.__failureReason === 'moderation';
+  const isSynthetic = isSyntheticPendingMessage(message);
+  const isViolation = isSynthetic && message.__failureReason === 'moderation';
+  const isText = message.dataType === 'text';
   const isSynced = syncState === ('synced' as Amity.SyncState);
   const isDeleted = !!message.isDeleted;
   const createdAt = message.createdAt ? new Date(message.createdAt) : null;
@@ -103,7 +104,7 @@ export function MessageRow({
             {ownTimestamp}
             {ownSending}
             {isUser && isFailed ? (
-              isViolation ? (
+              (isText && !isSynthetic) || isViolation ? (
                 <Button.Icon
                   styleType="transparent"
                   hierarchy="primary"

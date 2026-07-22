@@ -61,6 +61,12 @@ export function MessageLinkPreview({ url, isOwnMessage, className }: MessageLink
             alt=""
             className={styles.messageLinkPreview__thumbnailImg}
             onError={() => setImageBroken(true)}
+            onLoad={(e) => {
+              const img = e.currentTarget;
+              if (img.naturalWidth <= 1 || img.naturalHeight <= 1) {
+                setImageBroken(true);
+              }
+            }}
           />
         ) : (
           <span className={styles.messageLinkPreview__thumbnailIcon} aria-hidden="true">
