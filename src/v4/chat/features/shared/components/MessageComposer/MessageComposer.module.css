@@ -54,7 +54,7 @@
 
 .messageComposer__inputRow {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;

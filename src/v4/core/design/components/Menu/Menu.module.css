@@ -34,14 +34,19 @@
   padding: 0.875rem 0;
 }
 
-.menu[data-variant='chat'][data-container='popover'] .menuItem {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-}
-
 .menu[data-variant='social'][data-container='popover'] .menuItem {
   gap: 0.5rem;
   padding: 1rem;
+}
+
+.menu[data-variant='chat'][data-container='popover'] .menuItem {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.menu[data-variant='chat'][data-container='popover'] .menuItem:hover,
+.menu[data-variant='chat'][data-container='popover'] .menuItem:active {
+  border-radius: 0;
 }
 
 .menuItem__icon {
