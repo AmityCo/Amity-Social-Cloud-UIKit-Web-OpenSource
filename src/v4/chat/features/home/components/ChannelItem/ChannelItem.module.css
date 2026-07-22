@@ -16,9 +16,14 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  height: 3.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   background: var(--asc-color-surface-list-skeleton-skeleton);
+}
+
+.channelItem__skeletonLines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .channelItem {
