@@ -62,7 +62,7 @@
 .chatToast {
   position: fixed;
   left: 50%;
-  bottom: calc(3.5rem + 1rem);
+  bottom: calc(var(--asc-keyboard-inset, 0px) + 3.5rem + 1rem);
   transform: translateX(-50%);
   width: calc(100% - 2rem);
   pointer-events: auto;
@@ -71,7 +71,7 @@
 }
 
 .chatToast[data-alignment='with-composer'] {
-  bottom: calc(3.5rem + 1rem);
+  bottom: calc(var(--asc-keyboard-inset, 0px) + 3.5rem + 1rem);
 }
 
 .chatToast__toast {

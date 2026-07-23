@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { ReactNode, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { useNotificationData } from '~/v4/core/providers/NotificationProvider';
+import { useKeyboardInset } from '~/v4/core/hooks/useKeyboardInset';
 import { Toast } from '~/v4/core/design/atoms/Toast';
 import styles from './Notification.module.css';
 
@@ -73,6 +74,7 @@ export const Notification = ({
 
 export const NotificationsContainer = () => {
   const notifications = useNotificationData();
+  const keyboardInset = useKeyboardInset();
 
   return (
     <div className={styles.notifications} data-testid="toast-notifications-container">
@@ -83,6 +85,7 @@ export const NotificationsContainer = () => {
               key={notificationData.id}
               className={styles.chatToast}
               data-alignment={notificationData.alignment}
+              style={{ '--asc-keyboard-inset': `${keyboardInset}px` } as React.CSSProperties}
             >
               <Toast
                 message={notificationData.content}
