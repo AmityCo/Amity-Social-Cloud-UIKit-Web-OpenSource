@@ -15,13 +15,13 @@
 
 .spinner__track {
   fill: none;
-  stroke: var(--asc-color-surface-loaders-spinner-background);
+  stroke: var(--asc-color-surface-loaders-spinner-primary-background);
   stroke-width: 4;
 }
 
 .spinner__arc {
   fill: none;
-  stroke: var(--asc-color-surface-loaders-spinner-icon);
+  stroke: var(--asc-color-surface-loaders-spinner-primary-icon);
   stroke-width: 4;
   stroke-linecap: round;
   stroke-dasharray: 25 100;

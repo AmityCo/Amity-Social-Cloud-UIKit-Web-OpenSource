@@ -33,6 +33,7 @@
     "Primary/600": "{theme.primary_color}",
     "Primary/700": "{theme.primary_color}",
     "Primary/800": "{theme.primary_color}",
+    "Primary/Pressed": "{theme.primary_pressed_color}",
     "Primary/White": "{theme.white_color}",
     "Secondary/200": "{theme.neutral_grey_shade1_color}",
     "Secondary/250": "{theme.neutral_grey_shade1_color}",
@@ -1290,8 +1291,8 @@
       "dark": "{Secondary/800}"
     },
     "Surface/ChatBubble/Message/Inbound/Pressed": {
-      "light": "{Secondary/300}",
-      "dark": "{Secondary/700}"
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/750}"
     },
     "Surface/ChatBubble/Message/Inbound/Deleted": {
       "light": "{Secondary/200}",
@@ -1302,8 +1303,8 @@
       "dark": "{Primary/500}"
     },
     "Surface/ChatBubble/Message/Outbound/Pressed": {
-      "light": "{Primary/700}",
-      "dark": "{Primary/700}"
+      "light": "{Primary/Pressed}",
+      "dark": "{Primary/Pressed}"
     },
     "Surface/ChatBubble/Message/Outbound/Deleted": {
       "light": "{Secondary/White}",
@@ -1657,11 +1658,11 @@
       "light": "{Secondary/750}",
       "dark": "{Secondary/750}"
     },
-    "Surface/Loaders/Spinner/Icon": {
+    "Surface/Loaders/Spinner/Primary/Icon": {
       "light": "{Primary/600}",
       "dark": "{Primary/500}"
     },
-    "Surface/Loaders/Spinner/Background": {
+    "Surface/Loaders/Spinner/Primary/Background": {
       "light": "{Primary/White}",
       "dark": "{Secondary/White}"
     },
@@ -1675,7 +1676,7 @@
     },
     "Surface/Loaders/UploadController/Background": {
       "light": "{Background/Transparent/White/800}",
-      "dark": "{Primary/White}"
+      "dark": "{Background/Transparent/White/800}"
     },
     "Surface/Selection/RadioAtomic/Inactive/Default": {
       "light": "{Secondary/White}",
