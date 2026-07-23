@@ -114,6 +114,7 @@ export function useBubbleMenu({
     }
 
     setDrawerData({
+      fullHeight: true,
       content: (
         <ContentReportReason
           onCloseMenu={removeDrawerData}

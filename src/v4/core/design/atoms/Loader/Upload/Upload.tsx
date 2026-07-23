@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { Cross } from '~/v4/core/design/icons/Cross';
 import styles from './Upload.module.css';
 
-export type UploadSize = 'medium' | 'large';
+export type UploadSize = 'sm' | 'medium' | 'large';
 
 export type UploadProps = {
   size?: UploadSize;

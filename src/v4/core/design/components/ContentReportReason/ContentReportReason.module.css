@@ -1,6 +1,6 @@
 .contentReportReason__container {
-  height: 100vh;
-  max-height: 100vh;
+  flex: 1;
+  min-height: 0;
   background-color: var(--asc-color-surface-sheets-background-default);
   position: relative;
   display: flex;
@@ -81,10 +81,7 @@
   border-top: 0.0625rem solid var(--asc-color-line-divider-post-default);
   background-color: var(--asc-color-surface-sheets-background-default);
   z-index: 1;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
 }
 
 .contentReportReason__submitButton {
@@ -93,8 +90,9 @@
 
 .contentReportReason__content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 0 0 3rem;
+  padding: 0;
   width: 100%;
   -webkit-overflow-scrolling: touch; /* Add smooth scrolling on iOS */
 }

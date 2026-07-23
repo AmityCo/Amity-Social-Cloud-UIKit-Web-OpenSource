@@ -6,6 +6,7 @@ interface DrawerData {
   activeSnapPoint?: string | number;
   onSnapPointChange?: (snapPoint: string | number | null) => void;
   ariaLabel?: string;
+  fullHeight?: boolean;
 }
 
 interface DrawerContextProps {

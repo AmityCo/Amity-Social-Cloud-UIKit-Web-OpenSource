@@ -8,7 +8,8 @@ export const DrawerContainer = () => {
   const { removeDrawerData } = useDrawer();
 
   const isOpen = drawerData != null;
-  const { snapPoints, activeSnapPoint, onSnapPointChange, ariaLabel } = drawerData || {};
+  const { snapPoints, activeSnapPoint, onSnapPointChange, ariaLabel, fullHeight } =
+    drawerData || {};
 
   const [internalSnap, setInternalSnap] = useState<string | number | null>(
     activeSnapPoint ?? snapPoints?.[0] ?? null,
@@ -48,6 +49,7 @@ export const DrawerContainer = () => {
         <Drawer.Content
           aria-label={ariaLabel || 'Drawer'}
           className={styles.drawer__content}
+          data-full-height={fullHeight ? 'true' : undefined}
           style={contentStyle}
         >
           <Drawer.Title className={styles.drawer__title}>{ariaLabel || 'Drawer'}</Drawer.Title>

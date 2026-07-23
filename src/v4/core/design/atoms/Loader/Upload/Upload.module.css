@@ -5,6 +5,11 @@
   justify-content: center;
 }
 
+.upload[data-size='sm'] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .upload[data-size='medium'] {
   width: 2.5rem;
   height: 2.5rem;

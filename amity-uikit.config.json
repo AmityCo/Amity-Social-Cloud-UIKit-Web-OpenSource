@@ -124,7 +124,7 @@
     }
   },
   "message_reactions": [
-    { "name": "likes", "image": "message_reaction_likes.png" },
+    { "name": "like", "image": "message_reaction_like.png" },
     { "name": "love", "image": "message_reaction_heart.png" },
     { "name": "fire", "image": "message_reaction_fire.png" },
     { "name": "happy", "image": "message_reaction_grinning.png" },
