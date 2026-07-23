@@ -76,5 +76,7 @@
   position: absolute;
   font-weight: 700;
   font-size: 2rem;
+  line-height: 3rem;
+  letter-spacing: -0.025rem;
   color: var(--asc-color-text-loaders-uploadcontroller-default);
 }

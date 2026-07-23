@@ -26,18 +26,21 @@
 }
 
 .user__title {
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
   font-weight: 600;
   color: var(--user-title);
 }
 
 .user__username {
   font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: var(--user-username);
 }
 
 .user__description {
   font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: var(--user-description);
 }
 
@@ -48,7 +51,8 @@
   outline: none;
   background: transparent;
   cursor: pointer;
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.125rem;
   color: var(--user-action);
 }

@@ -73,10 +73,15 @@
   display: inline-flex;
   align-items: baseline;
   gap: 0.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 600;
   color: var(--asc-color-text-input-textinput-title-default);
 }
 
 .field__optional {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: var(--asc-color-text-input-textinput-indicator-default);
 }
 
@@ -130,9 +135,13 @@
 
 .field__count {
   flex-shrink: 0;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: var(--asc-color-text-input-textinput-textcount-default);
 }
 
 .field__hint {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: var(--input-hint);
 }

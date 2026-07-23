@@ -85,7 +85,8 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
   resize: none;
   color: var(--input-text);
   caret-color: var(--asc-color-text-input-textinput-textcursor-default);

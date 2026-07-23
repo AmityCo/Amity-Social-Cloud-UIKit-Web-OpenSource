@@ -445,9 +445,9 @@ function wrapWithFailedCaption(
   isFailed: boolean,
   message: Amity.Message,
 ): ReactElement {
-  const isViolation =
-    isSyntheticPendingMessage(message) && message.__failureReason === 'moderation';
-  if (!isFailed || !isViolation) return bubble;
+  const isCancelledUpload =
+    isSyntheticPendingMessage(message) && message.__failureReason === 'cancelled';
+  if (!isFailed || isCancelledUpload) return bubble;
   return (
     <div className={styles.mediaBubble__failedWrapper}>
       {bubble}

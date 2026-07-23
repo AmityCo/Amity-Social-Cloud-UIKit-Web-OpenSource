@@ -42,8 +42,7 @@ export function MessageRow({
   const syncState = message.syncState;
   const isFailed = syncState === ('error' as Amity.SyncState);
   const isSynthetic = isSyntheticPendingMessage(message);
-  const isViolation = isSynthetic && message.__failureReason === 'moderation';
-  const isText = message.dataType === 'text';
+  const isCancelledUpload = isSynthetic && message.__failureReason === 'cancelled';
   const isSynced = syncState === ('synced' as Amity.SyncState);
   const isDeleted = !!message.isDeleted;
   const createdAt = message.createdAt ? new Date(message.createdAt) : null;
@@ -104,18 +103,7 @@ export function MessageRow({
             {ownTimestamp}
             {ownSending}
             {isUser && isFailed ? (
-              (isText && !isSynthetic) || isViolation ? (
-                <Button.Icon
-                  styleType="transparent"
-                  hierarchy="primary"
-                  size={24}
-                  icon={<Exclamation />}
-                  iconClassName={styles.messageRow__errorIcon}
-                  className={styles.messageRow__errorButton}
-                  onPress={() => onOpenFailedSheet(message)}
-                  aria-label="Message failed to send"
-                />
-              ) : (
+              isCancelledUpload ? (
                 <Button.Icon
                   styleType="filled"
                   hierarchy="secondary"
@@ -125,6 +113,17 @@ export function MessageRow({
                   className={styles.messageRow__errorButton}
                   onPress={() => onOpenFailedSheet(message)}
                   aria-label="Retry sending message"
+                />
+              ) : (
+                <Button.Icon
+                  styleType="transparent"
+                  hierarchy="primary"
+                  size={24}
+                  icon={<Exclamation />}
+                  iconClassName={styles.messageRow__errorIcon}
+                  className={styles.messageRow__errorButton}
+                  onPress={() => onOpenFailedSheet(message)}
+                  aria-label="Message failed to send"
                 />
               )
             ) : null}

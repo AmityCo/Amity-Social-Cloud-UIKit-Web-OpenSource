@@ -30,7 +30,8 @@
 }
 
 .chip__title {
-  font-size: 0.8125rem;
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
   font-weight: 600;
   color: var(--chip-title);
 }
@@ -76,7 +77,9 @@
 }
 
 .chip__tagLabel {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 600;
 }
 
 .chip__remove {
@@ -103,7 +106,8 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
   color: var(--chip-placeholder);
   caret-color: var(--asc-color-text-input-chipinput-textcursor-default);
 }
@@ -119,6 +123,7 @@
 }
 
 .chip__hint {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
   color: var(--chip-hint);
 }

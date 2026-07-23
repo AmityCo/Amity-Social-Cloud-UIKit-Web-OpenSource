@@ -17,7 +17,7 @@ type CreateMessageParams = Parameters<typeof MessageRepository.createMessage>[0]
 
 type CreateMessageResponse = Awaited<ReturnType<typeof MessageRepository.createMessage>>;
 
-export type FailureReason = 'moderation' | 'generic';
+export type FailureReason = 'moderation' | 'generic' | 'cancelled';
 
 export type PendingUpload = {
   clientId: string;
@@ -432,7 +432,7 @@ export function useMessageComposer({
     cancelledClientIdsRef.current.add(clientId);
     setPendingUploads((prev) =>
       prev.map((p) =>
-        p.clientId === clientId ? { ...p, status: 'failed', failureReason: 'generic' } : p,
+        p.clientId === clientId ? { ...p, status: 'failed', failureReason: 'cancelled' } : p,
       ),
     );
   }
