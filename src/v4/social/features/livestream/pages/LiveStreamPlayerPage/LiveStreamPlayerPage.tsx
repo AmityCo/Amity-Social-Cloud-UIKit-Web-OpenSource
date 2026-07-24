@@ -11,6 +11,7 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useDrawer, useDrawerData } from '~/v4/core/providers/DrawerProvider';
 import {
   getCommunityTopic,
+  RoomRepository,
   subscribeTopic,
   SubscriptionLevels,
   InvitationStatusEnum,
@@ -86,6 +87,29 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     isLoading: isLoadingRoom,
     refresh: refreshRoom,
   } = useRoom(subscribedPost?.getRoomInfo()?.roomId ?? roomId);
+
+  // The room LiveObject's `participants` array is not reliably re-emitted when
+  // a co-host leaves the stage / room. Without this, `coHostId` stays pointing
+  // at the departed user on the co-host's rejoin session (and on other
+  // viewers' sessions), and the CoHostBadge sticks on the departed user's old
+  // messages (PDT-3981). Force a re-fetch on every leave/stage-left/removed
+  // event so every subscribed client's `room.participants` reflects reality.
+  useEffect(() => {
+    const unsubscribers: Amity.Unsubscriber[] = [
+      RoomRepository.onRoomParticipantLeft(() => refreshRoom()),
+      RoomRepository.onRoomParticipantStageLeft(() => refreshRoom()),
+      RoomRepository.onRoomParticipantRemoved(() => refreshRoom()),
+    ];
+    return () => unsubscribers.forEach((fn) => fn());
+  }, [refreshRoom]);
+
+  // Also refresh on mount so a rejoin session that came back to a stale room
+  // (participantLeft fired while unmounted, so the local cache never saw it)
+  // is corrected on the way in. refreshRoom is stable (useCallback([])), so
+  // this effectively runs once.
+  useEffect(() => {
+    refreshRoom();
+  }, [refreshRoom]);
 
   const { post: parentPost, isLoading: isLoadingParentPost } = usePostSubscription(
     (room?.referenceType === 'post' ? room?.referenceId : room?.post?.postId) ?? post?.postId,
@@ -206,7 +230,33 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   const myMembership = members.find((member) => member.userId === currentUserId);
 
-  const onClose = useCallback(() => setStreamPlayer(null), []);
+  const onClose = useCallback(() => {
+    // If the current user is a co-host, close-livestream must run the same
+    // leave flow as "Leave as co-host" — otherwise `room.participants` keeps
+    // them as `type: 'coHost'` and on rejoin their old messages keep the
+    // CoHostBadge until the server session ends (PDT-3981).
+    //
+    // Prefer `uiState` (authoritative locally for the current user's role)
+    // over inspecting `room.participants` — the room LiveObject on the
+    // co-host's own client does not always list them, so a room-only check
+    // false-negatives.
+    //
+    // We reuse the `leaveRoom` mutation from useLeaveRoom (same as the
+    // menu's "Leave as co-host" path) so the SDK call, refreshRoom(), and
+    // uiState reset all run through the same code path.
+    const isCurrentUserCoHost =
+      uiState === 'broadcast' ||
+      uiState === 'backStage' ||
+      (!!currentUserId &&
+        !!room?.participants?.some(
+          (participant) => participant.type === 'coHost' && participant.userId === currentUserId,
+        ));
+    if (isCurrentUserCoHost) {
+      coHostEndSessionRef.current = true;
+      leaveRoom();
+    }
+    setStreamPlayer(null);
+  }, [setStreamPlayer, room, currentUserId, uiState, leaveRoom]);
 
   // Handle Go Live functionality
   const handleGoLive = useCallback(() => {
