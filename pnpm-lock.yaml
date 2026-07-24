@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.24.1-7932a80.0
-        version: 7.24.1-7932a80.0
+        specifier: 7.24.1-2edf817a.0
+        version: 7.24.1-2edf817a.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -336,8 +336,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.24.1-7932a80.0':
-    resolution: {integrity: sha512-rFeuAz6xy6XoLLQRaF/yoxH+YQRWqoVC1+hjRIkhP6dfM866Y5b+ecYgTXagZOvNIg/PDxLjn4c1ilBiggpEqg==}
+  '@amityco/ts-sdk@7.24.1-2edf817a.0':
+    resolution: {integrity: sha512-9ts0DLDOPRxV2/UKryBPBTQvk/U0hO3FsPwpfy36qYr3c4rK1F8Pm6JrxzoK9S1Hy7XFhGFK4MoW8aAUMIDSsQ==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7931,18 +7931,6 @@ packages:
       utf-8-validate:
         optional: true
 
-  ws@8.18.2:
-    resolution: {integrity: sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-
   ws@8.21.1:
     resolution: {integrity: sha512-+0NTnW77fFN/DjQi6k/Sq/Yvk4Sgajw7urW8V+asjXnRgDs9gyGkdb7EzgfhA4goXsRIZKE28fzIXBHEzhuiWw==}
     engines: {node: '>=10.0.0'}
@@ -8016,7 +8004,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.24.1-7932a80.0':
+  '@amityco/ts-sdk@7.24.1-2edf817a.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
@@ -9302,7 +9290,7 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       jest-mock: 29.7.0
 
   '@jest/expect-utils@29.7.0':
@@ -9320,7 +9308,7 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       jest-message-util: 29.7.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
@@ -9965,7 +9953,7 @@ snapshots:
 
   '@radix-ui/react-select@1.2.2(@types/react-dom@18.3.0)(@types/react@17.0.80)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@babel/runtime': 7.25.6
+      '@babel/runtime': 7.29.7
       '@radix-ui/number': 1.0.1
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-collection': 1.0.3(@types/react-dom@18.3.0)(@types/react@17.0.80)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -10048,7 +10036,7 @@ snapshots:
 
   '@radix-ui/react-toolbar@1.0.4(@types/react-dom@18.3.0)(@types/react@17.0.80)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@babel/runtime': 7.25.6
+      '@babel/runtime': 7.29.7
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-context': 1.0.1(@types/react@17.0.80)(react@18.3.1)
       '@radix-ui/react-direction': 1.0.1(@types/react@17.0.80)(react@18.3.1)
@@ -11549,7 +11537,7 @@ snapshots:
       util: 0.12.5
       util-deprecate: 1.0.2
       watchpack: 2.4.1
-      ws: 8.18.2
+      ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -11813,7 +11801,7 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
 
   '@types/connect@3.4.38':
     dependencies:
@@ -11870,7 +11858,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.3':
     dependencies:
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -11887,11 +11875,11 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
 
   '@types/graceful-fs@4.1.9':
     dependencies:
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
 
   '@types/hoist-non-react-statics@3.3.5':
     dependencies:
@@ -12012,7 +12000,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       '@types/send': 0.17.4
 
   '@types/stack-utils@2.0.3': {}
@@ -14398,7 +14386,7 @@ snapshots:
       '@jest/expect': 29.7.0
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       chalk: 4.1.2
       co: 4.6.0
       dedent: 1.5.3
@@ -14491,7 +14479,7 @@ snapshots:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
@@ -14540,7 +14528,7 @@ snapshots:
   jest-mock@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       jest-util: 29.7.0
 
   jest-pnp-resolver@1.2.3(jest-resolve@29.7.0):
@@ -14683,7 +14671,7 @@ snapshots:
 
   jest-worker@29.7.0:
     dependencies:
-      '@types/node': 20.14.4
+      '@types/node': 22.15.23
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -16210,7 +16198,7 @@ snapshots:
 
   rtl-css-js@1.16.1:
     dependencies:
-      '@babel/runtime': 7.25.6
+      '@babel/runtime': 7.29.7
 
   run-parallel@1.2.0:
     dependencies:
@@ -17289,8 +17277,6 @@ snapshots:
   ws@6.2.3:
     dependencies:
       async-limiter: 1.0.1
-
-  ws@8.18.2: {}
 
   ws@8.21.1: {}
 
