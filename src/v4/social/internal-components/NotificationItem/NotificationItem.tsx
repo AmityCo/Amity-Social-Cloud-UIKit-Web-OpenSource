@@ -92,11 +92,16 @@ export const NotificationItem = ({
 
   const isEventCreated = item.trayItemCategory === 'event_created' && item.event != null;
 
+  const isEventDeleted =
+    EVENT_TRAY_CATEGORIES.includes(item.trayItemCategory as string) && item.event == null;
+
   const eventCommunityId =
     isEventCreated && item.event?.originType === 'community' ? item.event?.originId : undefined;
+  const deletedEventCommunityId =
+    isEventDeleted && item.targetType === 'community' ? item.targetId : undefined;
   const { community: eventCommunity } = useCommunity({
-    communityId: eventCommunityId,
-    shouldCall: !!eventCommunityId,
+    communityId: eventCommunityId ?? deletedEventCommunityId,
+    shouldCall: !!(eventCommunityId ?? deletedEventCommunityId),
   });
 
   // Show the LIVE badge on a co-host invitation only while the room is
@@ -112,6 +117,17 @@ export const NotificationItem = ({
           pageId={pageId}
           componentId={componentId}
           community={eventCommunity ?? item.event?.targetCommunity}
+          className={styles.notificationItem__avatar}
+        />
+      );
+    }
+
+    if (isEventDeleted) {
+      return (
+        <CommunityAvatar
+          pageId={pageId}
+          componentId={componentId}
+          community={eventCommunity}
           className={styles.notificationItem__avatar}
         />
       );
