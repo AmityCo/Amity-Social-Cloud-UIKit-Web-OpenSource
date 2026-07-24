@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useNetworkState } from 'react-use';
 import { Button as AriaButton } from 'react-aria-components';
 import { FileRepository } from '@amityco/ts-sdk';
-import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { Loader } from '~/v4/core/design/atoms/Loader';
 import { Avatar } from '~/v4/core/design/atoms/Avatar';
 import { Button } from '~/v4/core/design/atoms/Button';
+import { Banner } from '~/v4/core/design/atoms/Banner';
 import { ChevronLeft } from '~/v4/core/design/icons/ChevronLeft';
 import { ImageViewer } from '~/v4/chat/features/shared/components/ImageViewer';
 import { ActionMenu, type ActionMenuItem } from '~/v4/chat/components/ActionMenu';
@@ -33,56 +33,50 @@ export function Header({ userId, userDisplayName, onBack, actions }: HeaderProps
     ? FileRepository.fileUrlWithSize(user.avatar.fileUrl, 'large')
     : undefined;
 
+  const leading = user ? (
+    imageUrl ? (
+      <AriaButton
+        className={styles.header__avatarButton}
+        onPress={() => setIsViewerOpen(true)}
+        aria-label="View profile picture"
+      >
+        <Avatar variant="image" shape="rounded" size={40} imageUrl={imageUrl} alt={displayName} />
+      </AriaButton>
+    ) : (
+      <Avatar variant="text" shape="rounded" size={40} initials={initials} alt={displayName} />
+    )
+  ) : undefined;
+
   return (
     <header className={styles.header}>
-      <Button.Icon
-        icon={<ChevronLeft />}
-        styleType="ghost"
-        hierarchy="secondary"
-        size={32}
-        onPress={onBack}
-        aria-label="Back"
+      <Banner
+        className={styles.header__banner}
+        leadingController={
+          <Button.Icon
+            icon={<ChevronLeft />}
+            styleType="ghost"
+            hierarchy="secondary"
+            size={32}
+            onPress={onBack}
+            aria-label="Back"
+          />
+        }
+        leading={leading}
+        header={displayName}
+        description={isOnline ? undefined : waitingForNetwork}
+        descriptionIcon={isOnline ? undefined : <Loader.Spinner size="sm" />}
+        trailing={
+          actions.length > 0
+            ? [
+                <ActionMenu
+                  key="actions"
+                  getItems={() => actions}
+                  ariaLabel="Conversation actions"
+                />,
+              ]
+            : undefined
+        }
       />
-      <div className={styles.header__identity}>
-        {user &&
-          (imageUrl ? (
-            <AriaButton
-              className={styles.header__avatarButton}
-              onPress={() => setIsViewerOpen(true)}
-              aria-label="View profile picture"
-            >
-              <Avatar
-                variant="image"
-                shape="rounded"
-                size={40}
-                imageUrl={imageUrl}
-                alt={displayName}
-              />
-            </AriaButton>
-          ) : (
-            <Avatar
-              variant="text"
-              shape="rounded"
-              size={40}
-              initials={initials}
-              alt={displayName}
-            />
-          ))}
-        <div className={styles.header__title}>
-          <Typography.TitleBold className={styles.header__name}>{displayName}</Typography.TitleBold>
-          {!isOnline ? (
-            <div className={styles.header__subtitle}>
-              <Loader.Spinner size="sm" />
-              <Typography.Caption className={styles.header__subtitleText}>
-                {waitingForNetwork}
-              </Typography.Caption>
-            </div>
-          ) : null}
-        </div>
-      </div>
-      {actions.length > 0 && (
-        <ActionMenu getItems={() => actions} ariaLabel="Conversation actions" />
-      )}
       {isViewerOpen && imageUrl ? (
         <ImageViewer src={imageUrl} onClose={() => setIsViewerOpen(false)} />
       ) : null}

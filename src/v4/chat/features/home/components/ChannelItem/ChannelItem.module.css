@@ -104,9 +104,12 @@
 .channelItem__preview {
   flex: 1 1 0;
   min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
   color: var(--asc-color-text-list-textdescription-default-default);
 }
 

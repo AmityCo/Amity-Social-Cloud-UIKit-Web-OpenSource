@@ -253,7 +253,7 @@
   height: 2.5rem;
   padding: 0.25rem;
   border-radius: 9999px;
-  background: var(--asc-color-surface-media-overlay-transparentblack);
+  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
   pointer-events: none;
 }
 
