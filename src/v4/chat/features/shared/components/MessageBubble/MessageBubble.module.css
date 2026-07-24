@@ -41,6 +41,7 @@
   overflow: hidden;
   white-space: pre-wrap;
   word-break: break-word;
+  overflow-wrap: anywhere;
   font-size: 0.875rem;
   line-height: 1.3;
 }

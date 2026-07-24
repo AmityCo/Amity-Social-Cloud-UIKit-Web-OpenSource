@@ -1,6 +1,5 @@
 export const MARK_READ_DEBOUNCE_MS = 500;
 export const TEXT_MAX_LINES = 10;
-export const TEXT_MAX_LINES_WITH_LINK = 5;
 export const AT_BOTTOM_TOLERANCE_PX = 16;
 export const PAGE_TOP_TRIGGER_INDEX = 5;
 export const LONG_PRESS_THRESHOLD_MS = 500;

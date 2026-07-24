@@ -15,13 +15,8 @@ import {
   isSyntheticPendingMessage,
   type SyntheticPendingMessage,
 } from '~/v4/chat/features/shared/hooks/useMessageComposer';
-import {
-  LONG_PRESS_THRESHOLD_MS,
-  TEXT_MAX_LINES,
-  TEXT_MAX_LINES_WITH_LINK,
-} from '~/v4/chat/constants';
+import { LONG_PRESS_THRESHOLD_MS, TEXT_MAX_LINES } from '~/v4/chat/constants';
 import { extractFirstPreviewUrl } from '~/v4/chat/utils/previewLink';
-import { URL_REGEX } from '~/v4/social/constants/post';
 import useFile from '~/v4/core/hooks/useFile';
 import { useString } from '~/v4/core/localization';
 import { resolveString } from '~/v4/core/localization/resolveString';
@@ -118,8 +113,7 @@ function TextBubble({
   const seeMoreLabel = useString('amity_chat_see_more');
   const editedLabel = useString('amity_chat_status_edited');
   const text = ((message.data as { text?: string } | undefined)?.text ?? '').toString();
-  const hasLink = new RegExp(URL_REGEX.source, 'i').test(text);
-  const maxLines = hasLink ? TEXT_MAX_LINES_WITH_LINK : TEXT_MAX_LINES;
+  const maxLines = TEXT_MAX_LINES;
   const isFailed = message.syncState === ('error' as Amity.SyncState);
   const isSyncing = message.syncState === 'syncing';
   const isEdited = message.editedAt != null;

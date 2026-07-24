@@ -65,7 +65,6 @@ export function buildBubbleMenuItems(
   const isText = message.dataType === 'text';
   const isCustom = message.dataType === 'custom';
   const isImage = message.dataType === 'image';
-  const isVideo = message.dataType === 'video';
   const isSynced = message.syncState === ('synced' as Amity.SyncState);
   const isDeleted = message.isDeleted === true;
   const isActive = isSynced && !isDeleted;
@@ -97,7 +96,7 @@ export function buildBubbleMenuItems(
       icon: <ArrowDownToBracket />,
       label: resolveString('amity_chat_action_save'),
       onPress: handlers.onSave,
-      visible: (isImage || isVideo) && isActive,
+      visible: isImage && isActive,
     },
     {
       key: 'report-loading',
