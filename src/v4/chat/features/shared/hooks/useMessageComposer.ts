@@ -7,7 +7,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { COMPOSER_MAX_FILE_SIZE, ERROR_CODE, ERROR_RESPONSE } from '~/v4/chat/constants';
-import { resolveString, useString } from '~/v4/core/localization';
+import { useString } from '~/v4/core/localization';
 
 import { handleTextMessageError } from '~/v4/chat/utils/handleTextMessageError';
 import { useEditMessageQuery } from '~/v4/chat/hooks/queries';
@@ -293,6 +293,17 @@ export function useMessageComposer({
 
   const runMediaUpload = useCallback(
     async (pending: PendingUpload) => {
+      if (pending.file.size > COMPOSER_MAX_FILE_SIZE) {
+        setPendingUploads((prev) =>
+          prev.map((p) =>
+            p.clientId === pending.clientId
+              ? { ...p, status: 'failed', failureReason: 'generic' }
+              : p,
+          ),
+        );
+        return;
+      }
+
       try {
         const formData = toFormData(pending.file);
         const uploaded =
@@ -355,11 +366,6 @@ export function useMessageComposer({
       const isVideo = file.type.startsWith('video/');
       if (!isImage && !isVideo) return;
 
-      if (file.size > COMPOSER_MAX_FILE_SIZE) {
-        errorToast({ content: resolveString('amity_social_label_file_exceeds_max_upload') });
-        return;
-      }
-
       const previewUrl = URL.createObjectURL(file);
       previewUrlsRef.current.add(previewUrl);
       const parentId = replyTo?.messageId;
@@ -380,7 +386,7 @@ export function useMessageComposer({
 
       await runMediaUpload(pending);
     },
-    [errorToast, runMediaUpload, onMessageCreated, replyTo],
+    [runMediaUpload, onMessageCreated, replyTo],
   );
 
   const handleRetryUpload = useCallback(
