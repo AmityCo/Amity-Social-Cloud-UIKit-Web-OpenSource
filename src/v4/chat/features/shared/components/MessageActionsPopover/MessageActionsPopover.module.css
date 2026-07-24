@@ -1,13 +1,17 @@
 .messageActionsPopover {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
   background: transparent;
   outline: none;
 }
 
+.messageActionsPopover[data-own='true'] {
+  align-items: flex-end;
+}
+
 .messageActionsPopover__reactionPicker {
-  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   padding: 0.5rem;
@@ -17,7 +21,7 @@
 }
 
 .messageActionsPopover__menu {
-  min-width: 10rem;
+  width: 10rem;
   padding: 0.5rem 0;
   background: var(--asc-color-surface-popover-background-default);
   border-radius: 0.75rem;

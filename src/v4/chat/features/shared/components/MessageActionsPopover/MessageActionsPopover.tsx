@@ -175,9 +175,13 @@ export function MessageActionsPopover({
       onOpenChange={(open) => {
         if (!open) onDismiss();
       }}
-      placement="bottom right"
+      placement={isOwn ? 'bottom right' : 'bottom left'}
     >
-      <Dialog aria-label="Message actions" className={styles.messageActionsPopover}>
+      <Dialog
+        aria-label="Message actions"
+        className={styles.messageActionsPopover}
+        data-own={isOwn ? 'true' : undefined}
+      >
         <div className={styles.messageActionsPopover__reactionPicker}>
           <ReactionPicker
             myReaction={myReaction}

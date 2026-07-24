@@ -18,7 +18,8 @@
   justify-content: flex-start;
 }
 
-.menuItem:hover {
+.menuItem:hover,
+.menuItem:active {
   background-color: var(--asc-color-surface-popover-lists-hover);
 }
 

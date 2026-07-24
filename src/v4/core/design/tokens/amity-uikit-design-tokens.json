@@ -31,9 +31,8 @@
     "Primary/400": "{theme.primary_shade1_color}",
     "Primary/500": "{theme.primary_color}",
     "Primary/600": "{theme.primary_color}",
-    "Primary/700": "{theme.primary_color}",
-    "Primary/800": "{theme.primary_color}",
-    "Primary/Pressed": "{theme.primary_pressed_color}",
+    "Primary/700": "{theme.primary_shade4_color}",
+    "Primary/800": "{theme.primary_shade4_color}",
     "Primary/White": "{theme.white_color}",
     "Secondary/200": "{theme.neutral_grey_shade1_color}",
     "Secondary/250": "{theme.neutral_grey_shade1_color}",
@@ -1303,8 +1302,8 @@
       "dark": "{Primary/500}"
     },
     "Surface/ChatBubble/Message/Outbound/Pressed": {
-      "light": "{Primary/Pressed}",
-      "dark": "{Primary/Pressed}"
+      "light": "{Primary/700}",
+      "dark": "{Primary/700}"
     },
     "Surface/ChatBubble/Message/Outbound/Deleted": {
       "light": "{Secondary/White}",

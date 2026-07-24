@@ -4,6 +4,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--asc-color-message-overlay);
+  background: var(--asc-color-surface-media-overlay-transparentblack);
   pointer-events: none;
 }
