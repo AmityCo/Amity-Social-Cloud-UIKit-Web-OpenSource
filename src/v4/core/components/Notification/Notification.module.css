@@ -74,6 +74,14 @@
   bottom: calc(var(--asc-keyboard-inset, 0px) + 3.5rem + 1rem);
 }
 
+.chatToast[data-alignment='live-chat'] {
+  left: auto;
+  right: 2.5rem;
+  bottom: 7.25rem;
+  transform: none;
+  width: var(--asc-livestream-chat-toast-width, 23.4375rem);
+}
+
 .chatToast__toast {
   width: 100%;
 }
