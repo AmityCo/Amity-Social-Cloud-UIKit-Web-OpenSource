@@ -52,6 +52,12 @@ export const MentionTextInput = styled(InputText)`
 
   textarea {
     ${shadowFocus}
+
+    color: color-mix(
+      in srgb,
+      var(--color-foreground-primary) calc(var(--tw-text-opacity) * 100%),
+      transparent
+    );
   }
 `;
 
