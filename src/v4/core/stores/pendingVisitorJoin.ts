@@ -92,3 +92,48 @@ export const subscribeVisitorAutoJoinStatus = (listener: Listener): (() => void)
     statusListeners.delete(listener);
   };
 };
+
+// A monotonic counter that increments on every "refresh the feed now" pulse.
+// Unlike the `status` value (which drives the newsfeed skeleton and can get
+// stuck at 'completed'), this always changes, so a listener re-runs on EVERY
+// signal — needed for auto-joins that happen while already signed-in (e.g. the
+// Explore pinned-community auto-join) and for propagation-lag retry pulses.
+let feedRefreshSignal = 0;
+// The last signal value the newsfeed has already acted on. When a pulse fires
+// while the newsfeed is UNMOUNTED (e.g. the user is on the Explore tab — tabs
+// are conditionally rendered, so the newsfeed subscriber does not exist yet),
+// there is no live listener to catch it. Tracking the consumed value lets the
+// newsfeed detect, on its next mount, that a refresh is pending and act on it.
+let feedRefreshConsumed = 0;
+const feedRefreshListeners = new Set<Listener>();
+
+/**
+ * Pulse "a community was just auto-joined — refresh the global feed". Safe to
+ * call repeatedly; each call re-notifies live subscribers AND bumps the signal
+ * so a not-yet-mounted newsfeed can catch it on mount. Does NOT touch the
+ * newsfeed skeleton status.
+ */
+export const signalFeedRefresh = (): void => {
+  feedRefreshSignal += 1;
+  feedRefreshListeners.forEach((listener) => listener());
+};
+
+/**
+ * True if a feed-refresh pulse has fired that the newsfeed has not consumed yet
+ * (e.g. it was unmounted when the Explore pinned auto-join completed). The
+ * newsfeed checks this on mount and refreshes if so.
+ */
+export const hasPendingFeedRefresh = (): boolean => feedRefreshSignal > feedRefreshConsumed;
+
+/** Mark all outstanding feed-refresh pulses as consumed. */
+export const consumeFeedRefresh = (): void => {
+  feedRefreshConsumed = feedRefreshSignal;
+};
+
+/** Subscribe to feed-refresh pulses. Returns an unsubscribe function. */
+export const subscribeFeedRefresh = (listener: Listener): (() => void) => {
+  feedRefreshListeners.add(listener);
+  return () => {
+    feedRefreshListeners.delete(listener);
+  };
+};

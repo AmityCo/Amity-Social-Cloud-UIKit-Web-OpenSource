@@ -74,3 +74,46 @@ export const CreateUserProfilePageSecureMode = {
     userId: 'secure-demo',
   },
 };
+
+/**
+ * Server-to-server enrollment example: on Save the page calls `enrollProfile`
+ * (which in a real app POSTs to your backend's `/community/enrollment` → Amity
+ * `/api/v4/sessions` to create the user) and uses the returned communityId as
+ * the userId. Only `{ displayName }` is forwarded — no about/device fields.
+ * Paired with `getAuthToken`, called with the resolved id to mint the secure
+ * token. Here both are mocked.
+ */
+export const CreateUserProfilePageEnrollProfile = {
+  render: (args: { userId?: string }) => {
+    const props: CreateUserProfilePageProps = {
+      // No static userId: the backend enrolls the user and returns its
+      // communityId, which becomes the userId to sign in as.
+      enrollProfile: async ({ displayName } = {}) => {
+        // Real apps: await fetch('/community/enrollment', ...) -> { communityId }
+        const communityId = `enrolled-${(displayName || 'user')
+          .toLowerCase()
+          .replace(/\s+/g, '-')}-${args.userId}`;
+        console.log('[CreateUserProfilePage] enrollProfile ->', communityId);
+        return communityId;
+      },
+      getAuthToken: async (resolvedUserId) => {
+        console.log('[CreateUserProfilePage] getAuthToken for', resolvedUserId);
+        return `mock-auth-token-for-${resolvedUserId}`;
+      },
+      onCreated: (user) => {
+        console.log('[CreateUserProfilePage] onCreated', user);
+      },
+      onError: (error) => {
+        console.log('[CreateUserProfilePage] onError', error);
+      },
+      onCancel: () => {
+        console.log('[CreateUserProfilePage] onCancel');
+      },
+    };
+    return <CreateUserProfilePage {...props} />;
+  },
+  args: {
+    userType: 'visitor',
+    userId: 'enroll-demo',
+  },
+};

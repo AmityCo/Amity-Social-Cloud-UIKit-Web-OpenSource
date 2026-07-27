@@ -11,6 +11,9 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import {
   getVisitorAutoJoinStatus,
   subscribeVisitorAutoJoinStatus,
+  subscribeFeedRefresh,
+  hasPendingFeedRefresh,
+  consumeFeedRefresh,
 } from '~/v4/core/stores/pendingVisitorJoin';
 import styles from './Newsfeed.module.css';
 
@@ -63,6 +66,36 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   useEffect(() => {
     if (autoJoinStatus === 'completed') refreshRef.current();
   }, [autoJoinStatus]);
+
+  // Refresh on every feed-refresh pulse — fired when a community is auto-joined
+  // while already signed-in (e.g. the Explore pinned-community auto-join), so
+  // its posts appear here without a manual tab switch. Uses a monotonic signal
+  // (not the skeleton status), so repeated/propagation-retry pulses each refresh.
+  //
+  // Home tabs are conditionally rendered, so this newsfeed is UNMOUNTED while
+  // the user is on the Explore tab where the pinned auto-join runs — a live
+  // pulse then has no listener. So on mount we also consume any pulse that fired
+  // while we were unmounted and refresh once, ensuring the just-joined pinned
+  // community's posts show the first time the feed is opened.
+  useEffect(() => {
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const doRefresh = () => {
+      consumeFeedRefresh();
+      refreshRef.current();
+      // The membership change may not be reflected in the global-feed query the
+      // instant we refresh, so re-refresh once after a short delay to catch the
+      // server propagation window.
+      timeouts.push(setTimeout(() => refreshRef.current(), 1500));
+    };
+    // Catch a pulse that fired while this newsfeed was unmounted (user was on
+    // the Explore tab during the pinned auto-join).
+    if (hasPendingFeedRefresh()) doRefresh();
+    const unsubscribe = subscribeFeedRefresh(doRefresh);
+    return () => {
+      unsubscribe();
+      timeouts.forEach(clearTimeout);
+    };
+  }, []);
 
   // Hold a loading state while the auto-join runs. Reuse the Feed's skeletons by
   // forcing its first-page loading flag, so the transition looks like a normal

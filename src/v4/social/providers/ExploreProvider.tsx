@@ -3,6 +3,8 @@ import useCategoriesCollection from '~/v4/core/hooks/collections/useCategoriesCo
 import { useRecommendedCommunitiesCollection } from '~/v4/core/hooks/collections/useRecommendedCommunitiesCollection';
 import { useTrendingCommunitiesCollection } from '~/v4/core/hooks/collections/useTrendingCommunitiesCollection';
 import { usePinnedCommunities, EXPLORE_PINNED_TAG } from '~/v4/social/hooks/usePinnedCommunities';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { signalFeedRefresh } from '~/v4/core/stores/pendingVisitorJoin';
 
 type ExploreContextType = {
   fetchTrendingCommunities: () => void;
@@ -69,6 +71,7 @@ type ExploreProviderProps = {
 };
 
 export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) => {
+  const { isVisitorOrBot } = useSDK();
   const [trendingCommunitiesEnable, setTrendingCommunitiesEnable] = useState(false);
   const [recommendedCommunitiesEnable, setRecommendedCommunitiesEnable] = useState(false);
   const [communityCategoriesEnable, setCommunityCategoriesEnable] = useState(false);
@@ -114,26 +117,54 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
 
   const pinnedCommunities = pinnedData.pinnedCommunities || [];
 
-  // Auto-join every pinned community the user is not already in. Runs off the
-  // SAME pinned query used to render the section (no second fetch). Fire-and-
-  // forget so it never blocks render; each join is isolated so one failure does
-  // not affect the others. We intentionally do NOT re-query on success — the
-  // section is meant to feel permanent and membership is auto-managed.
+  // Auto-join pinned communities when a signed-in user lands on Explore (this
+  // provider only mounts while the Explore tab is open). For each pinned
+  // community not already joined (isJoined === false) we join once; already-
+  // joined ones are skipped so no redundant call is made. Runs off the SAME
+  // pinned query used to render the section (no second fetch).
   useEffect(() => {
+    // Never in visitor/bot mode — a read-only session cannot join, so every
+    // call would fail. isVisitorOrBot is in the deps so it runs once the user
+    // becomes signed-in and the pinned list is present.
+    if (isVisitorOrBot) return;
     if (!pinnedCommunities.length) return;
-    pinnedCommunities.forEach((community) => {
-      if (community.isJoined) return;
+
+    let cancelled = false;
+    const retryTimeouts: ReturnType<typeof setTimeout>[] = [];
+
+    const toJoin = pinnedCommunities.filter((community) => !community.isJoined);
+    if (toJoin.length === 0) return;
+
+    const joins = toJoin.map((community) => {
       try {
-        Promise.resolve(community.join()).catch(() => {
-          // Ignore individual join failures (e.g. already joined, transient
-          // network error) — pinned membership is best-effort.
-        });
+        // Each join is isolated — one failure (transient error) must not affect
+        // the others.
+        return Promise.resolve(community.join()).then(
+          () => true,
+          () => false,
+        );
       } catch {
-        // community.join() may throw synchronously in edge cases; swallow so a
-        // single failure never breaks the loop or the render.
+        return Promise.resolve(false);
       }
     });
-  }, [pinnedCommunities]);
+
+    // Once the joins settle, pulse a feed-refresh signal so the newsfeed shows
+    // posts from the newly joined pinned communities without a manual reload.
+    // The server's feed view of the new membership can lag a beat behind the
+    // join resolving, so signal once immediately and once more after a short
+    // delay to catch that propagation window.
+    Promise.all(joins).then((results) => {
+      if (cancelled) return;
+      if (!results.some(Boolean)) return; // nothing actually joined
+      signalFeedRefresh();
+      retryTimeouts.push(setTimeout(() => signalFeedRefresh(), 1500));
+    });
+
+    return () => {
+      cancelled = true;
+      retryTimeouts.forEach(clearTimeout);
+    };
+  }, [pinnedCommunities, isVisitorOrBot]);
 
   const isLoading =
     trendingData.isLoading ||
