@@ -54,6 +54,13 @@ interface ReactionButtonProps {
   isClipReaction?: boolean;
   referenceType?: 'post' | 'comment';
   community?: Amity.Community | null;
+  /**
+   * Ignores taps and long presses (so the reaction picker stays closed) while a previous
+   * reaction is still in flight. Rapid input otherwise fires several add/remove calls
+   * before the first one resolves, and the SDK rejects the duplicates (most visible on
+   * mobile, where taps land closer together).
+   */
+  isDisabled?: boolean;
 }
 
 const MOUSE_DURATION = 250;
@@ -84,6 +91,7 @@ export function ReactionButton({
   isClipReaction = false,
   referenceType = 'post',
   community,
+  isDisabled = false,
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
 
@@ -135,6 +143,7 @@ export function ReactionButton({
     onReactionClick,
     onHover,
     onLongPress,
+    isDisabled,
   });
 
   const checkButtonPosition = useCallback(() => {
@@ -294,7 +303,7 @@ export function ReactionButton({
           />
         )}
         {renderReactionCountText()}
-        {showReactionPicker && !shouldNotShowReactionPicker && (
+        {showReactionPicker && !shouldNotShowReactionPicker && !isDisabled && (
           <div
             ref={panelRef}
             data-testid={`${pageId}/${componentId}/reaction-picker-panel`}
@@ -339,11 +348,15 @@ export function ReactionButton({
       ref={desktopButtonRef}
       style={themeStyles}
       data-testid={accessibilityId}
-      className={clsx(styles.reactButton, buttonClassName)}
+      className={clsx(
+        styles.reactButton,
+        buttonClassName,
+        isDisabled && styles.reactButton__disabled,
+      )}
       onClick={(e) => {
         // Prevent click if reaction picker is shown
         e.stopPropagation();
-        if (showReactionPicker) return;
+        if (showReactionPicker || isDisabled) return;
         handleQuickReaction();
       }}
       role="button"
@@ -375,9 +388,14 @@ export function ReactionButton({
         ref={reactionButtonRef}
         style={themeStyles}
         data-testid={accessibilityId}
-        className={clsx(styles.reactButton, buttonClassName)}
+        className={clsx(
+          styles.reactButton,
+          buttonClassName,
+          isDisabled && styles.reactButton__disabled,
+        )}
+        isDisabled={isDisabled}
         onPress={(e) => {
-          if (showReactionPicker || isLongPressing) {
+          if (showReactionPicker || isLongPressing || isDisabled) {
             return;
           }
 

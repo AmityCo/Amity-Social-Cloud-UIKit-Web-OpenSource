@@ -15,6 +15,12 @@
   user-select: none;
 }
 
+/* Applied while a reaction request is in flight and the button ignores input. */
+.reactButton__disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .reactButton__icon {
   width: 1rem;
   height: 1rem;

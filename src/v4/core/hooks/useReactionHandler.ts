@@ -14,6 +14,12 @@ interface UseReactionHandlerOptions {
   onHover?: () => void;
   onLongPress?: () => void;
   community?: Amity.Community | null;
+  /**
+   * Ignores every reaction interaction — quick tap, long press and picker select.
+   * Set while a previous reaction is still in flight so rapid input can't queue up
+   * conflicting add/remove calls.
+   */
+  isDisabled?: boolean;
 }
 
 interface UseReactionHandlerReturn {
@@ -53,6 +59,7 @@ export function useReactionHandler({
   onReactionClick,
   onHover,
   onLongPress,
+  isDisabled = false,
 }: UseReactionHandlerOptions): UseReactionHandlerReturn {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartTimeRef = useRef<number | null>(null);
@@ -84,10 +91,12 @@ export function useReactionHandler({
 
   /* Long pressing on PC */
   const handleLongPressing = useCallback(() => {
+    if (isDisabled) return;
+
     setIsLongPressing(true);
     setShowReactionPicker(true);
     onLongPress?.();
-  }, [onLongPress]);
+  }, [onLongPress, isDisabled]);
 
   const longPressEvent = useLongPress(handleLongPressing, {
     isPreventDefault: true,
@@ -119,6 +128,8 @@ export function useReactionHandler({
 
   const handleReactionPickerSelect = useCallback(
     (reactionName: string) => {
+      if (isDisabled) return;
+
       setShowReactionPicker(false);
       setIsLongPressing(false);
       setHoveredReaction(null);
@@ -132,7 +143,7 @@ export function useReactionHandler({
       const result = onReactionClick(reactionName);
       result && setOptimisticReaction(reactionName);
     },
-    [onReactionClick, displayReaction],
+    [onReactionClick, displayReaction, isDisabled],
   );
 
   const handleClickOutside = useCallback(() => {
@@ -144,6 +155,10 @@ export function useReactionHandler({
   /* Long pression on Mobile */
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
+      // Skip arming the long-press timer entirely, otherwise the picker still opens
+      // half a second into a press made while a reaction is in flight.
+      if (isDisabled) return;
+
       setIsLongPressing(false);
       setIsTouchDragging(false);
       touchStartTimeRef.current = Date.now();
@@ -163,7 +178,7 @@ export function useReactionHandler({
         onLongPress?.();
       }, longPressDuration);
     },
-    [longPressDuration, onLongPress, isDesktop, shouldNotShowPicker],
+    [longPressDuration, onLongPress, isDesktop, shouldNotShowPicker, isDisabled],
   );
 
   const handleTouchMove = useCallback(
@@ -275,6 +290,8 @@ export function useReactionHandler({
 
   // Handle quick reaction (like button click)
   const handleQuickReaction = useCallback(() => {
+    if (isDisabled) return;
+
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
@@ -294,7 +311,7 @@ export function useReactionHandler({
       const result = onReactionClick(MEETPERRY_DEFAULT_REACTION);
       result && setOptimisticReaction(MEETPERRY_DEFAULT_REACTION);
     }
-  }, [displayReaction, onReactionClick]);
+  }, [displayReaction, onReactionClick, isDisabled]);
 
   // Handle reaction hover in picker
   const handleReactionHover = useCallback(

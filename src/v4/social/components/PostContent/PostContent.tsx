@@ -415,16 +415,40 @@ export const PostContent = ({
     }
   };
 
+  // Reactions are serialized: taps landing while a request is still in flight are dropped.
+  // Each tap resolves add-vs-remove from the reactionByMe snapshot it was rendered with, so
+  // two quick taps both read the pre-tap value and issue conflicting calls (add+add, or a
+  // remove for a reaction the server hasn't created yet), which the SDK rejects. The ref is
+  // the actual guard — state updates land a render too late for taps within the same frame —
+  // while the state only drives the button's disabled prop.
+  const isReactionInFlightRef = useRef(false);
+  const [isReactionInFlight, setIsReactionInFlight] = useState(false);
+
+  const runReaction = async (reactionKey: string) => {
+    isReactionInFlightRef.current = true;
+    setIsReactionInFlight(true);
+    try {
+      await onReactionClick(reactionKey);
+    } catch {
+      // usePostReaction already rolls back the optimistic state and notifies the user.
+    } finally {
+      isReactionInFlightRef.current = false;
+      setIsReactionInFlight(false);
+    }
+  };
+
   const handleReactionClick = (reactionKey: string) => {
+    if (isReactionInFlightRef.current) return false;
+
     if (targetCommunity)
       return handleCommunityProfileBehavior({
-        defaultBehavior: () => onReactionClick(reactionKey),
+        defaultBehavior: () => runReaction(reactionKey),
         allowNonMember: false,
         isJoined: targetCommunity?.isJoined,
       });
 
     return handleUserProfileBehavior({
-      defaultBehavior: () => onReactionClick(reactionKey),
+      defaultBehavior: () => runReaction(reactionKey),
       allowNonFollower: true,
     });
   };
@@ -879,6 +903,7 @@ export const PostContent = ({
                 imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
                 onReactionClick={handleReactionClick}
                 community={targetCommunity}
+                isDisabled={isReactionInFlight}
               />
               <CommentButton
                 pageId={pageId}
