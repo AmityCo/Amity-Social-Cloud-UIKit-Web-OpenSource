@@ -128,12 +128,19 @@ export function useAssignCoHostModerator({
   useEffect(() => {
     if (!isHost || !channelId) return;
 
-    const handleCoHostGone = ({ actorInternalId }: { actorInternalId?: string }) => {
-      if (!actorInternalId) return;
-      const userId = internalToUserIdRef.current.get(actorInternalId);
+    const handleCoHostGone = ({
+      actorInternalId,
+      actorUserId,
+    }: {
+      actorInternalId?: string;
+      actorUserId?: string;
+    }) => {
+      const userId =
+        actorUserId ??
+        (actorInternalId ? internalToUserIdRef.current.get(actorInternalId) : undefined);
       if (!userId) return;
 
-      internalToUserIdRef.current.delete(actorInternalId);
+      if (actorInternalId) internalToUserIdRef.current.delete(actorInternalId);
       setCoHostIds((prev) => prev.filter((id) => id !== userId));
       assignedRef.current.delete(`${channelId}:${userId}`);
       pendingRef.current.delete(`${channelId}:${userId}`);

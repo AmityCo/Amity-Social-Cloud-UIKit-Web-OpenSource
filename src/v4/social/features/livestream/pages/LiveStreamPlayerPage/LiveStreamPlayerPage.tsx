@@ -10,6 +10,7 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useDrawer, useDrawerData } from '~/v4/core/providers/DrawerProvider';
 import {
+  ChannelRepository,
   getCommunityTopic,
   RoomRepository,
   subscribeTopic,
@@ -17,6 +18,7 @@ import {
   InvitationStatusEnum,
 } from '@amityco/ts-sdk';
 import 'plyr/dist/plyr.css';
+import { MemberRoles } from '~/v4/chat/constants';
 import styles from './LiveStreamPlayer.module.css';
 import { LivestreamChatMessageComposer } from '~/v4/social/features/livestream/components/LivestreamChatMessageComposer';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
@@ -145,11 +147,21 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const taggedProductsText = useString('amity_social_button_tagged_products');
   const productsTaggedText = useString('amity_social_button_products_tagged');
 
-  const { leaveRoom, isPending: isLeaving } = useLeaveRoom({
+  const {
+    leaveRoom,
+    leaveRoomAsync,
+    isPending: isLeaving,
+  } = useLeaveRoom({
     room,
     onSettled: () => {
       setUiState('player');
-      reloadPlayer();
+      // Deliberately no `reloadPlayer()` here: returning to the player view re-mounts the
+      // video element and `useLiveStreamPlayer` initialises it on its own. Forcing a reload
+      // tore down that fresh player (pause → clear src → re-init), which showed up as the
+      // stream pausing and then resuming after "Leave as co-host". Instead just put the
+      // player back into its plain-viewer state (resume at the live edge, hide the
+      // play/pause control that the stage teardown's pause had pinned open).
+      resumeAsViewer();
       // Re-fetch the room so `participants` drops the departing co-host —
       // otherwise the cached LiveObject keeps them as `type: 'coHost'` and
       // their previous chat messages keep the badge after they rejoin as a
@@ -197,6 +209,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     showControls,
     togglePlayPause,
     toggleControls,
+    resumeAsViewer,
   } = useLiveStreamPlayer({ videoRef, room });
 
   // Only request device permissions when not in player mode
@@ -230,7 +243,34 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
 
   const myMembership = members.find((member) => member.userId === currentUserId);
 
-  const onClose = useCallback(() => {
+  const removeSelfFromChannelModerators = useCallback(async () => {
+    const channelId = channel?.channelId;
+    if (!channelId || !currentUserId) return;
+
+    const moderators = channel?.metadata?.moderators as string[] | undefined;
+
+    if (moderators?.includes(currentUserId)) {
+      try {
+        await ChannelRepository.updateChannel(channelId, {
+          metadata: {
+            ...channel?.metadata,
+            moderators: moderators.filter((id) => id !== currentUserId),
+          },
+        });
+      } catch (error) {
+        // Best-effort — the host-side cleanup also revokes the role/metadata.
+      }
+    }
+    try {
+      await ChannelRepository.Moderation.removeRole(channelId, MemberRoles.CHANNEL_MODERATOR, [
+        currentUserId,
+      ]);
+    } catch (error) {
+      // Best-effort — may be rejected once the co-host role is already gone server-side.
+    }
+  }, [channel?.channelId, channel?.metadata, currentUserId]);
+
+  const onClose = useCallback(async () => {
     // If the current user is a co-host, close-livestream must run the same
     // leave flow as "Leave as co-host" — otherwise `room.participants` keeps
     // them as `type: 'coHost'` and on rejoin their old messages keep the
@@ -253,10 +293,32 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
         ));
     if (isCurrentUserCoHost) {
       coHostEndSessionRef.current = true;
-      leaveRoom();
+      // Drop self from the channel `moderators` metadata before leaving. The badge on chat
+      // messages is keyed on this array, and the host-side cleanup only runs if the host's
+      // app receives the leave event — so a departing co-host clears their own entry while
+      // they still hold the channel-moderator role. Fire-and-forget: the request completes
+      // independently of this component, so closing never waits on it.
+      void removeSelfFromChannelModerators();
+      // Await the leave before tearing down the player. With the fire-and-forget
+      // `leaveRoom()` the request could still be in flight when this page unmounted,
+      // so the server had not yet dropped the co-host from `room.participants` — on
+      // rejoin the room still reported them as `coHost` and their messages (old and
+      // new) kept rendering the CoHost badge.
+      try {
+        await leaveRoomAsync();
+      } catch (error) {
+        // Leaving is best-effort — never block closing the player on it.
+      }
     }
     setStreamPlayer(null);
-  }, [setStreamPlayer, room, currentUserId, uiState, leaveRoom]);
+  }, [
+    setStreamPlayer,
+    room,
+    currentUserId,
+    uiState,
+    leaveRoomAsync,
+    removeSelfFromChannelModerators,
+  ]);
 
   // Handle Go Live functionality
   const handleGoLive = useCallback(() => {
@@ -685,6 +747,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                 isStarting={isGettingBroadcasterData}
                 onLeaveStreamStage={(isSessionEnded?: boolean) => {
                   coHostEndSessionRef.current = isSessionEnded ?? false;
+                  void removeSelfFromChannelModerators();
                   leaveRoom();
                 }}
                 onLeaveByKickout={() => {

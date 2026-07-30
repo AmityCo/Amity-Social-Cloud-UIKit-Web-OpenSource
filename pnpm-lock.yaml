@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.24.1-65f72a1.0
-        version: 7.24.1-65f72a1.0
+        specifier: 7.24.1-35ea113.0
+        version: 7.24.1-35ea113.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -336,8 +336,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.24.1-65f72a1.0':
-    resolution: {integrity: sha512-+ZEFXfDj6jlnfaorGVHuPuEQawB/V2U9R2/CYCm6FehWfzcCtpABr5taVWhDFeScO6tO+wqnC71J6N99tI0pyA==}
+  '@amityco/ts-sdk@7.24.1-35ea113.0':
+    resolution: {integrity: sha512-OZfGjsKufHIvRF5fq9Po46SGL/gL+CQDkk4U7RnUmcG9M8FnldQ5CZROU3DWx+CsegiQcgd1BAlcwgPc5+XXMA==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5219,8 +5219,8 @@ packages:
   iota-array@1.0.0:
     resolution: {integrity: sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==}
 
-  ip-address@10.2.0:
-    resolution: {integrity: sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==}
+  ip-address@10.3.1:
+    resolution: {integrity: sha512-1e9d3kb97NHJTIJDZW9rKqW2h6+dFa50Dy0fpPSMQp2ADje5gvKsXmdiK6dwY5t76TaTt5+P5N1Y/LoToIxP6g==}
     engines: {node: '>= 12'}
 
   ip@2.0.1:
@@ -5552,8 +5552,8 @@ packages:
   jpeg-js@0.4.4:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
-  js-base64@3.8.0:
-    resolution: {integrity: sha512-65kvbemyZhj+ExQt1PEFyBEjL5vAHysu1lJdW1AwhhChkO8ZBPizYk/m9GVrpbS2Je1hF+UYZ+6KywqtZV8mHw==}
+  js-base64@3.9.2:
+    resolution: {integrity: sha512-6zayE8QlUdiweYI6cETD/XBSqFcoCUlufn/29PJR99r82x1yDnIprRca0YvAYpAW+ez0GuQkVBC6xG5QkD7OjA==}
 
   js-cookie@2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
@@ -7895,8 +7895,8 @@ packages:
   worker-timers-worker@9.0.15:
     resolution: {integrity: sha512-KKUe7lZ/Aignr51H6hOUik8LwTnIgojH/1lwhli8A8qIEIyewogZTpNpMW5B6BF7nmwBOkUoTYgf1H3QShcjSA==}
 
-  worker-timers@8.0.33:
-    resolution: {integrity: sha512-RQVlKkek80v8M6SHvdMKiywaXFmX3XTpYTXTw0r62PdXB06t74XNxcTuG8wsQwnjorAQymNQyyQ0rzv7PykEMQ==}
+  worker-timers@8.0.34:
+    resolution: {integrity: sha512-WXL+Dqsm0G6dnC66rQsvM3tPT2adhbqSirWUCZGglkALOr8ocS0KlpU0iuKbjflJOlu3ydZikMEVrYnHOM9suw==}
 
   wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
@@ -8004,13 +8004,13 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.24.1-65f72a1.0':
+  '@amityco/ts-sdk@7.24.1-35ea113.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
       debug: 4.4.1
       hls.js: 1.5.11
-      js-base64: 3.8.0
+      js-base64: 3.9.2
       jwt-decode: 3.1.2
       mitt: 3.0.1
       mqtt: 5.15.2
@@ -14214,7 +14214,7 @@ snapshots:
 
   iota-array@1.0.0: {}
 
-  ip-address@10.2.0: {}
+  ip-address@10.3.1: {}
 
   ip@2.0.1: {}
 
@@ -14694,7 +14694,7 @@ snapshots:
 
   jpeg-js@0.4.4: {}
 
-  js-base64@3.8.0: {}
+  js-base64@3.9.2: {}
 
   js-cookie@2.2.1: {}
 
@@ -15163,7 +15163,7 @@ snapshots:
       rfdc: 1.4.1
       socks: 2.8.9
       split2: 4.2.0
-      worker-timers: 8.0.33
+      worker-timers: 8.0.34
       ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
@@ -16340,7 +16340,7 @@ snapshots:
 
   socks@2.8.9:
     dependencies:
-      ip-address: 10.2.0
+      ip-address: 10.3.1
       smart-buffer: 4.2.0
 
   source-map-js@1.2.0: {}
@@ -17237,7 +17237,7 @@ snapshots:
       tslib: 2.8.1
       worker-factory: 7.0.50
 
-  worker-timers@8.0.33:
+  worker-timers@8.0.34:
     dependencies:
       '@babel/runtime': 7.29.7
       tslib: 2.8.1
