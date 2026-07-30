@@ -71,9 +71,7 @@
   background-color: var(--asc-color-surface-reactions-reactionpopover-reactionstate-active);
 }
 
-.reactionButton__activeBackground[data-active='true'],
-.reactionButton:hover .reactionButton__activeBackground,
-.reactionButton[data-touch-hovered='true'] .reactionButton__activeBackground {
+.reactionButton__activeBackground[data-active='true'] {
   display: block;
 }
 

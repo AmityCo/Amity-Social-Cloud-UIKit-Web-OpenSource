@@ -39,6 +39,7 @@ export { Expand } from './Expand';
 export { ExpandAlt } from './ExpandAlt';
 export { File } from './File';
 export { Flag } from './Flag';
+export { FlagSlash } from './FlagSlash';
 export { Globe } from './Globe';
 export { Home } from './Home';
 export { Image } from './Image';

@@ -9,8 +9,8 @@ import { Pen } from '~/v4/core/design/icons/Pen';
 import { ShareLeft } from '~/v4/core/design/icons/ShareLeft';
 import { Copy } from '~/v4/core/design/icons/Copy';
 import { ArrowDownToBracket } from '~/v4/core/design/icons/ArrowDownToBracket';
-import { Trash } from '~/v4/core/design/icons/Trash';
 import { Flag } from '~/v4/core/design/icons/Flag';
+import { FlagSlash } from '~/v4/core/design/icons/FlagSlash';
 import styles from './MessageActionsPopover.module.css';
 import { TypographyVariant } from '~/v4/core/components';
 
@@ -110,7 +110,7 @@ export function buildBubbleMenuItems(
     },
     {
       key: 'unreport',
-      icon: <Flag />,
+      icon: <FlagSlash />,
       label: resolveString('amity_chat_option_unreport'),
       onPress: handlers.onUnreport,
       visible: !isOwn && !flagState.isLoading && flagState.isFlaggedByMe,

@@ -4,6 +4,7 @@ import { Bell } from '~/v4/core/design/icons/Bell';
 import { BellSlash } from '~/v4/core/design/icons/BellSlash';
 import { Ban } from '~/v4/core/design/icons/Ban';
 import { Flag } from '~/v4/core/design/icons/Flag';
+import { FlagSlash } from '~/v4/core/design/icons/FlagSlash';
 import {
   useChannelPushNotificationQuery,
   useUserBlockQuery,
@@ -72,7 +73,7 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
           },
           {
             key: 'report',
-            icon: Flag,
+            icon: isReported ? FlagSlash : Flag,
             label: resolveString(
               isReported ? 'amity_chat_action_unreport_user' : 'amity_chat_action_report_user',
             ),
