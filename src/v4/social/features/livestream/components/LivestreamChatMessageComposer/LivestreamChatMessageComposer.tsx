@@ -530,6 +530,9 @@ export const LivestreamChatMessageComposer = ({
       });
     if (
       (isMuted || channel?.metadata?.mutedMembers?.includes(currentUserId)) &&
+      !isHost &&
+      !isCoHost &&
+      !isModerator &&
       channel?.attachedTo?.postId &&
       channel?.attachedTo?.roomId
     )
