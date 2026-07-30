@@ -270,6 +270,7 @@ export const ContentReportReason = ({
                   title={reportOtherReasonDesc}
                   optionalLabel={reportOtherReasonOptional}
                   showCharacterCount
+                  multiLine
                   maxLength={MAX_LENGTH_DESCRIBE}
                   placeholder={reportTextPlaceholder}
                   value={otherReasonText}
