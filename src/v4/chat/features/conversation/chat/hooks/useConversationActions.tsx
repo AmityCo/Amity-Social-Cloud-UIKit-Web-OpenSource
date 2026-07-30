@@ -69,7 +69,7 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
                 : 'amity_chat_action_turn_on_notification',
             ),
             onPress: handleToggleNotification,
-            visible: isChatUserActionEnabled('mute'),
+            visible: false,
           },
           {
             key: 'report',
