@@ -30,7 +30,7 @@ type MessageBubbleProps = {
   isActive?: boolean;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
-  onSeeMore: (text: string) => void;
+  onSeeMore: (text: string, title?: string) => void;
   onLongPress?: OnLongPressMessage;
   localPreviewUrl?: string;
   onMediaLoaded?: (fileId: string) => void;
@@ -99,7 +99,7 @@ type TextBubbleProps = {
   message: Amity.Message;
   isUser: boolean;
   isActive?: boolean;
-  onSeeMore: (text: string) => void;
+  onSeeMore: (text: string, title?: string) => void;
   onLongPress?: OnLongPressMessage;
 };
 
@@ -168,7 +168,7 @@ function TextBubble({
           <AriaButton
             type="button"
             className={styles.textBubble__seeMore}
-            onPress={() => onSeeMore(text)}
+            onPress={() => onSeeMore(text, message.creator?.displayName || undefined)}
             aria-label={seeMoreLabel}
           >
             <Typography.Caption className={styles.textBubble__seeMoreLabel}>

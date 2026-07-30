@@ -30,7 +30,7 @@ type MessageListProps = {
   onOpenReactorList: (message: Amity.Message) => void;
   isBubbleMenuOpen?: boolean;
   activeMessageId?: string | null;
-  onSeeMore: (text: string) => void;
+  onSeeMore: (text: string, title?: string) => void;
   newMessage: Amity.Message | null;
   onClearNewMessage: () => void;
   latestMessage: Amity.Message | null;
