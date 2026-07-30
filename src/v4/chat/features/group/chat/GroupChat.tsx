@@ -54,6 +54,7 @@ export function GroupChat(props: GroupChatPageProps) {
     handleOpenReactorListSheet,
     openFailedSheet,
     viewerIsMutedInChannel,
+    isModerator,
     pendingJumpToMessageId,
     clearJumpToMessageId,
   } = useGroupChat(props);
@@ -148,6 +149,7 @@ export function GroupChat(props: GroupChatPageProps) {
           }}
           onDismiss={closeBubbleMenu}
           viewerIsMutedInChannel={viewerIsMutedInChannel}
+          viewerIsModerator={isModerator}
         />
       ) : null}
     </div>
