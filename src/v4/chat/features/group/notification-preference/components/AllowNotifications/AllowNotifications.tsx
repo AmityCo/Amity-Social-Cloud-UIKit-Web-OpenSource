@@ -1,4 +1,4 @@
-import { Switch } from '~/v4/core/components/AriaSwitch/Switch';
+import { Toggle } from '~/v4/core/design/atoms/Toggle';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
 import styles from './AllowNotifications.module.css';
@@ -26,12 +26,7 @@ export function AllowNotifications({
           {description}
         </Typography.Caption>
       </div>
-      <Switch
-        isSelected={isSelected}
-        isDisabled={isDisabled}
-        onChange={onChange}
-        aria-label={title}
-      />
+      <Toggle isOn={isSelected} isDisabled={isDisabled} onChange={onChange} aria-label={title} />
     </div>
   );
 }

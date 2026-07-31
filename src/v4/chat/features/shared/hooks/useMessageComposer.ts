@@ -7,7 +7,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { COMPOSER_MAX_FILE_SIZE, ERROR_CODE, ERROR_RESPONSE } from '~/v4/chat/constants';
-import { resolveString, useString } from '~/v4/core/localization';
+import { useString } from '~/v4/core/localization';
 
 import { handleTextMessageError } from '~/v4/chat/utils/handleTextMessageError';
 import { useEditMessageQuery } from '~/v4/chat/hooks/queries';
@@ -17,7 +17,7 @@ type CreateMessageParams = Parameters<typeof MessageRepository.createMessage>[0]
 
 type CreateMessageResponse = Awaited<ReturnType<typeof MessageRepository.createMessage>>;
 
-export type FailureReason = 'moderation' | 'generic';
+export type FailureReason = 'moderation' | 'generic' | 'cancelled';
 
 export type PendingUpload = {
   clientId: string;
@@ -75,6 +75,23 @@ function toFormData(file: File): FormData {
   return formData;
 }
 
+function buildPendingText(
+  text: string,
+  failureReason: FailureReason,
+  options: { parentId?: string; metadata?: PendingText['metadata']; mentionees?: Mentionees },
+): PendingText {
+  return {
+    clientId: createClientId(),
+    text,
+    ...(options.parentId ? { parentId: options.parentId } : {}),
+    ...(options.metadata ? { metadata: options.metadata } : {}),
+    ...(options.mentionees ? { mentionees: options.mentionees } : {}),
+    status: 'failed',
+    failureReason,
+    createdAt: new Date().toISOString(),
+  };
+}
+
 function isLinkNotAllowedError(error: unknown): boolean {
   return (
     error instanceof Error && error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)
@@ -97,7 +114,7 @@ export function useMessageComposer({
   onMessageCreated,
   onEditCompleted,
 }: UseMessageComposerParams) {
-  const { error: errorToast } = useNotifications();
+  const { error: errorToast } = useNotifications('chat');
   const { info } = useConfirmContext();
   const queryClient = useQueryClient();
   const { currentUserId } = useSDK();
@@ -210,16 +227,7 @@ export function useMessageComposer({
     setReplyTo(null);
 
     if (!isOnline) {
-      const pending: PendingText = {
-        clientId: createClientId(),
-        text: trimmed,
-        ...(parentId ? { parentId } : {}),
-        ...(metadata ? { metadata } : {}),
-        ...(mentionees ? { mentionees } : {}),
-        status: 'failed',
-        failureReason: 'generic',
-        createdAt: new Date().toISOString(),
-      };
+      const pending = buildPendingText(trimmed, 'generic', { parentId, metadata, mentionees });
       setPendingTexts((prev) => [...prev, pending]);
       onMessageCreated?.();
       return;
@@ -285,6 +293,17 @@ export function useMessageComposer({
 
   const runMediaUpload = useCallback(
     async (pending: PendingUpload) => {
+      if (pending.file.size > COMPOSER_MAX_FILE_SIZE) {
+        setPendingUploads((prev) =>
+          prev.map((p) =>
+            p.clientId === pending.clientId
+              ? { ...p, status: 'failed', failureReason: 'generic' }
+              : p,
+          ),
+        );
+        return;
+      }
+
       try {
         const formData = toFormData(pending.file);
         const uploaded =
@@ -347,11 +366,6 @@ export function useMessageComposer({
       const isVideo = file.type.startsWith('video/');
       if (!isImage && !isVideo) return;
 
-      if (file.size > COMPOSER_MAX_FILE_SIZE) {
-        errorToast({ content: resolveString('amity_social_label_file_exceeds_max_upload') });
-        return;
-      }
-
       const previewUrl = URL.createObjectURL(file);
       previewUrlsRef.current.add(previewUrl);
       const parentId = replyTo?.messageId;
@@ -372,7 +386,7 @@ export function useMessageComposer({
 
       await runMediaUpload(pending);
     },
-    [errorToast, runMediaUpload, onMessageCreated, replyTo],
+    [runMediaUpload, onMessageCreated, replyTo],
   );
 
   const handleRetryUpload = useCallback(
@@ -424,7 +438,7 @@ export function useMessageComposer({
     cancelledClientIdsRef.current.add(clientId);
     setPendingUploads((prev) =>
       prev.map((p) =>
-        p.clientId === clientId ? { ...p, status: 'failed', failureReason: 'generic' } : p,
+        p.clientId === clientId ? { ...p, status: 'failed', failureReason: 'cancelled' } : p,
       ),
     );
   }

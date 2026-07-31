@@ -1,5 +1,5 @@
 import { TopBar } from '~/v4/chat/elements/TopBar';
-import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
+import { SearchInput } from '~/v4/core/design/molecules/SearchInput';
 import { SelectedUsersBar } from '~/v4/chat/features/group/select-member/components/SelectedUsersBar';
 import { useString } from '~/v4/core/localization';
 import styles from './Header.module.css';
@@ -29,6 +29,7 @@ export function Header({
           value={searchValue}
           onChange={onSearchChange}
           placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
         />
       </div>
       <SelectedUsersBar users={selectedUsers} onRemoveUser={onRemoveUser} />

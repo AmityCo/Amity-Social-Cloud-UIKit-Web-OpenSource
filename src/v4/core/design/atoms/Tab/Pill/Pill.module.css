@@ -1,0 +1,82 @@
+.tab {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.5rem;
+  border: 0.0625rem solid var(--asc-color-border-tab-pill-default);
+  outline: none;
+  cursor: pointer;
+  background: var(--asc-color-surface-tab-pill-default);
+  color: var(--asc-color-text-tab-pill-default);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.tab__label {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.tab__skeleton {
+  width: 2.75rem;
+  height: 1rem;
+  border-radius: 9999px;
+}
+
+.tab[data-selected] {
+  background: var(--asc-color-surface-tab-pill-active);
+  border-color: var(--asc-color-border-tab-pill-active);
+  color: var(--asc-color-text-tab-pill-active);
+}
+
+.tab[data-selected] .tab__label {
+  font-weight: 600;
+}
+
+.tab[data-disabled] {
+  cursor: not-allowed;
+  background: var(--asc-color-surface-tab-pill-disabled);
+  border-color: var(--asc-color-border-tab-pill-disabled);
+  color: var(--asc-color-text-tab-pill-disabled);
+}
+
+.tab[data-focus-visible] {
+  outline: 0.125rem solid currentcolor;
+  outline-offset: 0.125rem;
+}
+
+.tab[data-loading] {
+  border-color: transparent;
+  background: var(--asc-color-surface-skeletoneffect-default);
+  animation: tab-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.tab[data-hovered]:not([data-selected], [data-disabled]) {
+  background: var(--asc-color-surface-tab-pill-hover);
+  border-color: var(--asc-color-border-tab-pill-hover);
+  color: var(--asc-color-text-tab-pill-hover);
+}
+
+.tab[data-pressed]:not([data-selected], [data-disabled]) {
+  background: var(--asc-color-surface-tab-pill-press);
+  border-color: var(--asc-color-border-tab-pill-press);
+  color: var(--asc-color-text-tab-pill-press);
+}
+
+@keyframes tab-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}

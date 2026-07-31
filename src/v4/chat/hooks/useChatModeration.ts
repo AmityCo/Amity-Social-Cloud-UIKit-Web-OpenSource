@@ -23,7 +23,7 @@ type UpdateChannelRolePayload = {
 
 export const useChatModeration = () => {
   const { confirm, info } = useConfirmContext();
-  const notification = useNotifications();
+  const notification = useNotifications('chat');
   const { mutate: moderateChat } = useMutation<UpdateChannelResponse, Error, UpdateChannelPayload>({
     mutationFn: ({ channelId, moderators, mutedMembers }) => {
       return ChannelRepository.updateChannel(channelId, {

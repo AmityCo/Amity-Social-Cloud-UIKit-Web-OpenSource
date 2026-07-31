@@ -1,5 +1,5 @@
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import BannedChatEmpty from '~/v4/icons/BannedChatEmpty';
+import { CommentExclamation } from '~/v4/core/design/icons/CommentExclamation';
 import { useString } from '~/v4/core/localization';
 import styles from './BannedEmptyState.module.css';
 
@@ -8,7 +8,7 @@ export function BannedEmptyState() {
   const subtitle = useString('amity_chat_error_banned_chat_sub_title');
   return (
     <div className={styles.bannedEmptyState}>
-      <BannedChatEmpty className={styles.bannedEmptyState__icon} />
+      <CommentExclamation.Light className={styles.bannedEmptyState__icon} />
       <div className={styles.bannedEmptyState__text}>
         <Typography.TitleBold className={styles.bannedEmptyState__title}>
           {title}

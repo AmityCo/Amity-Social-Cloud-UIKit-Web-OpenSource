@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import type { Key } from 'react-aria-components';
+import { type Key } from 'react-aria-components';
 import { useDebounce } from 'react-use';
-import { Tabs } from '~/v4/core/components/Tabs/Tabs';
-import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
+import { Tabs } from '~/v4/core/design/molecules/Tabs';
+import { SearchInput } from '~/v4/core/design/molecules/SearchInput';
 import { useString } from '~/v4/core/localization';
 import { SEARCH_DEBOUNCE_MS } from '~/v4/chat/constants/search';
 import { MemberList } from '~/v4/chat/features/group/members/components/MemberList';
@@ -42,6 +42,7 @@ export function MemberTabs({ channelId }: MemberTabsProps) {
             value={searchText}
             onChange={setSearchText}
             placeholder={searchPlaceholder}
+            aria-label={searchPlaceholder}
           />
         </div>
         <MemberList
@@ -56,7 +57,6 @@ export function MemberTabs({ channelId }: MemberTabsProps) {
   return (
     <Tabs
       variant="underlined"
-      fullWidth={false}
       value={activeTab}
       onChange={handleTabChange}
       tabListClassName={styles.memberTabs__list}

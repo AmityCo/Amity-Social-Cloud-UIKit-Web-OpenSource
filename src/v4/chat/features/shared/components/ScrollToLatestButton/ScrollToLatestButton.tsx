@@ -1,5 +1,5 @@
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { ChevronDown } from '~/v4/icons/ChevronDown';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { ChevronDown } from '~/v4/core/design/icons/ChevronDown';
 import styles from './ScrollToLatestButton.module.css';
 
 type ScrollToLatestButtonProps = {
@@ -8,14 +8,14 @@ type ScrollToLatestButtonProps = {
 
 export function ScrollToLatestButton({ onPress }: ScrollToLatestButtonProps) {
   return (
-    <Button
-      type="button"
-      variant="text"
-      className={styles.scrollToLatestButton}
+    <Button.Icon
+      icon={<ChevronDown />}
+      styleType="filled"
+      hierarchy="secondary"
+      size={40}
       onPress={onPress}
       aria-label="Scroll to latest message"
-    >
-      <ChevronDown className={styles.scrollToLatestButton__icon} />
-    </Button>
+      className={styles.scrollToLatestButton}
+    />
   );
 }

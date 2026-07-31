@@ -1,8 +1,12 @@
-import { Popover } from '~/v4/core/components/AriaPopover/Popover';
-import { Menu } from '~/v4/core/components/Menu';
+import { Popover } from '~/v4/core/design/components/Popover/Popover';
+import { Menu } from '~/v4/core/design/components/Menu';
+import { TypographyVariant } from '~/v4/core/components';
 import { useString } from '~/v4/core/localization';
 import { ChatPageTypes, useChatNavigation } from '~/v4/chat/providers/ChatNavigationProvider';
-import { IconButton } from '~/v4/chat/elements/IconButton/IconButton';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { Plus } from '~/v4/core/design/icons/Plus';
+import { UserPlus } from '~/v4/core/design/icons/UserPlus';
+import { UserGroup } from '~/v4/core/design/icons/UserGroup';
 import { useChatFeatureFlags } from '~/v4/chat/hooks/useChatFeatureFlags';
 
 export function CreateChatMenu() {
@@ -19,8 +23,11 @@ export function CreateChatMenu() {
 
   if (!showBoth) {
     return (
-      <IconButton
-        icon="plus"
+      <Button.Icon
+        icon={<Plus />}
+        styleType="filled"
+        hierarchy="secondary"
+        size={32}
         aria-label={createAriaLabel}
         onPress={() => {
           if (hasConversation) push({ type: ChatPageTypes.CreateConversationPage });
@@ -31,40 +38,43 @@ export function CreateChatMenu() {
   }
 
   return (
-    <div>
-      <Popover
-        forceShowPopUp
-        placement="bottom right"
-        trigger={({ openPopover, isOpen }) => (
-          <IconButton
-            icon="plus"
-            aria-label={createAriaLabel}
-            aria-expanded={isOpen}
-            onPress={openPopover}
+    <Popover
+      forceShowPopUp
+      placement="bottom right"
+      trigger={({ openPopover, isOpen }) => (
+        <Button.Icon
+          icon={<Plus />}
+          styleType="filled"
+          hierarchy="secondary"
+          size={32}
+          aria-label={createAriaLabel}
+          aria-expanded={isOpen}
+          onPress={openPopover}
+        />
+      )}
+    >
+      {({ closePopover }) => (
+        <Menu container="popover">
+          <Menu.Item
+            icon={<UserPlus />}
+            label={directLabel}
+            typography={TypographyVariant.Body}
+            onPress={() => {
+              closePopover();
+              push({ type: ChatPageTypes.CreateConversationPage });
+            }}
           />
-        )}
-      >
-        {({ closePopover }) => (
-          <Menu>
-            <Menu.Item
-              icon="conversation-chat"
-              label={directLabel}
-              onPress={() => {
-                closePopover();
-                push({ type: ChatPageTypes.CreateConversationPage });
-              }}
-            />
-            <Menu.Item
-              icon="group-chat"
-              label={groupLabel}
-              onPress={() => {
-                closePopover();
-                push({ type: ChatPageTypes.SelectGroupMemberPage });
-              }}
-            />
-          </Menu>
-        )}
-      </Popover>
-    </div>
+          <Menu.Item
+            icon={<UserGroup />}
+            label={groupLabel}
+            typography={TypographyVariant.Body}
+            onPress={() => {
+              closePopover();
+              push({ type: ChatPageTypes.SelectGroupMemberPage });
+            }}
+          />
+        </Menu>
+      )}
+    </Popover>
   );
 }

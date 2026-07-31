@@ -9,11 +9,11 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useString } from '~/v4/core/localization';
 import { SettingMenu } from '~/v4/chat/elements/SettingMenu';
-import { PencilFilled } from '~/v4/icons/PencilFilled';
-import { Bell } from '~/v4/icons/Bell';
-import UserUnlock from '~/v4/icons/UserUnlock';
-import { Members } from '~/v4/icons/Members';
-import Banned from '~/v4/icons/Banned';
+import { Pen } from '~/v4/core/design/icons/Pen';
+import { Bell } from '~/v4/core/design/icons/Bell';
+import { UserLock } from '~/v4/core/design/icons/UserLock';
+import { UserGroup } from '~/v4/core/design/icons/UserGroup';
+import { Ban } from '~/v4/core/design/icons/Ban';
 import type { GroupSettingPageProps } from '~/v4/chat/pages/GroupSettingPage';
 
 export type SettingMenuItem = ComponentProps<typeof SettingMenu> & { key: string };
@@ -24,7 +24,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
   const { membership } = useChannelMyMembership(channel);
   const { isEnabled: personalIsEnabled } = useChannelPushNotificationQuery({ channelId });
   const { confirm } = useConfirmContext();
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const { leaveChannel } = useLeaveChannelQuery();
 
   const isModerator = hasModeratorRole(membership?.roles);
@@ -133,7 +133,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
   const groupItems: (SettingMenuItem & { visible: boolean })[] = [
     {
       key: 'group-profile',
-      icon: PencilFilled,
+      icon: Pen.Solid,
       label: groupProfileLabel,
       onPress: handleOpenGroupProfile,
       ariaLabel: groupProfileLabel,
@@ -141,7 +141,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
     },
     {
       key: 'group-notifications',
-      icon: Bell,
+      icon: Bell.Solid,
       label: groupNotificationsLabel,
       trailingText: notificationLabel,
       onPress: handleOpenGroupNotification,
@@ -150,7 +150,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
     },
     {
       key: 'member-permissions',
-      icon: UserUnlock,
+      icon: UserLock.Solid,
       label: memberPermissionsLabel,
       onPress: handleOpenGroupMemberPermissions,
       ariaLabel: memberPermissionsLabel,
@@ -158,7 +158,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
     },
     {
       key: 'all-members',
-      icon: Members,
+      icon: UserGroup.Solid,
       label: allMembersLabel,
       onPress: handleOpenAllMembers,
       ariaLabel: allMembersLabel,
@@ -166,7 +166,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
     },
     {
       key: 'banned-users',
-      icon: Banned,
+      icon: Ban.Solid,
       label: bannedUsersLabel,
       onPress: handleOpenBannedMembers,
       ariaLabel: bannedUsersLabel,
@@ -177,7 +177,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
   const preferenceItems: (SettingMenuItem & { visible: boolean })[] = [
     {
       key: 'notifications',
-      icon: Bell,
+      icon: Bell.Solid,
       label: notificationsLabel,
       trailingText: personalNotificationLabel,
       onPress: handleOpenGroupNotificationPreference,

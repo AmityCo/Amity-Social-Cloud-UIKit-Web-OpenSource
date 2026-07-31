@@ -1,8 +1,8 @@
-import { RadioGroup } from '~/v4/core/components/AriaRadioGroup/RadioGroup';
+import { Selection } from '~/v4/core/design/atoms/Selection';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
-import World from '~/v4/icons/World';
-import { Lock } from '~/v4/icons/Lock';
+import { EarthAfrica } from '~/v4/core/design/icons/EarthAfrica';
+import { LockKeyhole } from '~/v4/core/design/icons/LockKeyhole';
 import styles from './PrivacySection.module.css';
 
 type PrivacySectionProps = {
@@ -24,35 +24,27 @@ export function PrivacySection({ isPublic, onChange }: PrivacySectionProps) {
       <Typography.TitleBold className={styles.privacySection__heading}>
         {privacyLabel}
       </Typography.TitleBold>
-      <RadioGroup
+      <Selection.RadioGroup
+        aria-label={privacyLabel}
         value={selected}
         onChange={(value) => onChange(value === 'public')}
-        className={styles.privacySection__group}
-        radioContainerClassname={styles.privacySection__options}
-        radioProps={{ className: styles.privacySection__optionRow }}
-        radios={[
-          {
-            value: 'public',
-            label: (
-              <PrivacyRow
-                icon={<World className={styles.privacySection__icon} />}
-                title={publicTitle}
-                description={publicDesc}
-              />
-            ),
-          },
-          {
-            value: 'private',
-            label: (
-              <PrivacyRow
-                icon={<Lock className={styles.privacySection__icon} />}
-                title={privateTitle}
-                description={privateDesc}
-              />
-            ),
-          },
-        ]}
-      />
+        className={styles.privacySection__options}
+      >
+        <Selection.Radio value="public" className={styles.privacySection__optionRow}>
+          <PrivacyRow
+            icon={<EarthAfrica.Solid className={styles.privacySection__icon} />}
+            title={publicTitle}
+            description={publicDesc}
+          />
+        </Selection.Radio>
+        <Selection.Radio value="private" className={styles.privacySection__optionRow}>
+          <PrivacyRow
+            icon={<LockKeyhole className={styles.privacySection__icon} />}
+            title={privateTitle}
+            description={privateDesc}
+          />
+        </Selection.Radio>
+      </Selection.RadioGroup>
       <div className={styles.privacySection__banner}>
         <Typography.Caption className={styles.privacySection__bannerText}>
           {privacyWarning}

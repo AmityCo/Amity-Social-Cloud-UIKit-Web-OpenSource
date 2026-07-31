@@ -5,7 +5,7 @@ import { resolveString } from '~/v4/core/localization';
 
 const useChannelRole = ({ channel }: { channel?: Amity.Channel | null }) => {
   const channelId = channel?.channelId;
-  const { success, info } = useNotifications();
+  const { success, info } = useNotifications('chat');
 
   const { mutate: assingRoleToUsers } = useMutation({
     mutationFn: ({ userIds, roleId }: { userIds: string[]; roleId: string }) =>

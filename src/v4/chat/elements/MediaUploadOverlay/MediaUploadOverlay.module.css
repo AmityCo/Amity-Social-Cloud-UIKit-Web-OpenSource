@@ -4,44 +4,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--asc-color-message-overlay);
+  background: var(--asc-color-surface-media-overlay-transparentblack);
   pointer-events: none;
-}
-
-.cancelButton {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 9999px;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.spinner {
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
-.spinner circle:nth-of-type(1) {
-  stroke: var(--asc-color-base-shade3);
-  stroke-width: 1;
-}
-
-.spinner circle:nth-of-type(2) {
-  stroke: var(--asc-color-white);
-  stroke-width: 1;
-}
-
-.cancelIcon {
-  position: absolute;
-  width: 1.125rem;
-  height: 1.125rem;
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
 }

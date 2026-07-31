@@ -1,7 +1,7 @@
 .bannedGroupMembers {
   display: flex;
   flex-direction: column;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-page-background-default);
   min-height: 100svh;
 }
 
@@ -10,5 +10,5 @@
   top: 3.625rem;
   z-index: 9;
   padding: 0.5rem 1rem;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-page-background-default);
 }

@@ -1,17 +1,71 @@
 .mediaSection {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  background: var(--asc-color-background-default);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   width: 100%;
+  padding: 0.5rem 0;
+  background: var(--asc-color-surface-sheets-background-default);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .mediaSection__row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  gap: 4.5rem;
-  width: 20.25rem;
+  gap: 3.5rem;
+  width: 100%;
+  height: 5.625rem;
+}
+
+.mediaSection__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 4rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mediaSection__item:focus,
+.mediaSection__item:focus-visible {
+  outline: none;
+}
+
+.mediaSection__chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 6.1875rem;
+  background: var(--asc-color-surface-iconbutton-filled-secondary-enabled);
+}
+
+.mediaSection__item[data-hovered] .mediaSection__chip {
+  background: var(--asc-color-surface-iconbutton-filled-secondary-hover);
+}
+
+.mediaSection__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-icon-iconbutton-filled-secondary-default);
+  fill: var(--asc-color-icon-iconbutton-filled-secondary-default);
+}
+
+.mediaSection__label {
+  width: 100%;
+  color: var(--asc-color-text-iconbutton-label-general);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mediaSection__input {
+  display: none;
 }

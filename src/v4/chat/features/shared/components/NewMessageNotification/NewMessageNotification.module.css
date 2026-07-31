@@ -9,12 +9,11 @@
   gap: 0.5rem;
   height: 2.5rem;
   padding: 0.375rem 0.625rem 0.375rem 0.375rem;
-  border-radius: 1.25rem;
-  background: var(--asc-color-background-default);
-  border: 0.0625rem solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  background: var(--asc-color-surface-customtoast-default-default);
   box-shadow:
-    0 0.0625rem 0.125rem rgb(41 43 50 / 10%),
-    0 0 0.0625rem rgb(41 43 50 / 10%);
+    0 0.0313rem 0.125rem 0 rgb(96 97 112 / 16%),
+    0 0 0.0625rem 0 rgb(40 41 61 / 8%);
 }
 
 .newMessageNotification__left {
@@ -34,7 +33,7 @@
 }
 
 .newMessageNotification__preview {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-customtoast-default);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -53,7 +52,7 @@
   height: 1.75rem;
   border-radius: 0.25rem;
   overflow: hidden;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-media-image-loaded);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,12 +68,14 @@
 .newMessageNotification__thumbFallback {
   width: 1.125rem;
   height: 1.125rem;
-  color: var(--asc-color-base-shade2);
+  color: var(--asc-color-icon-media-image-broken);
+  fill: var(--asc-color-icon-media-image-broken);
 }
 
 .newMessageNotification__arrow {
   width: 0.625rem;
   height: 0.625rem;
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-customtoast-default);
+  fill: var(--asc-color-text-customtoast-default);
   transform: rotate(180deg);
 }

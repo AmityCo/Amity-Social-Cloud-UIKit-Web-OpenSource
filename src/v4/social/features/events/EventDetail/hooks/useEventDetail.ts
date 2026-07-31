@@ -56,6 +56,11 @@ export function useEventDetail(eventId: string) {
   }, [eventCoverRef?.current]);
 
   useEffect(() => {
+    setMyRSVP(undefined);
+  }, [eventId]);
+
+  useEffect(() => {
+    if (!event) return;
     const fetchRSVP = async () => {
       const rsvpData = await getMyRSVP();
       setMyRSVP(rsvpData ?? undefined);

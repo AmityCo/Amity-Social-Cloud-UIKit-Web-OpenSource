@@ -8,10 +8,11 @@ import {
   CustomConfiguration,
   defaultBaseThemeValue,
   defaultConfig,
-  ConfigurableThemeValue,
   Theme,
   DefaultConfig,
+  DesignTokens,
   themePropertiesToCSSVar,
+  injectColorTokenLayers,
   GetConfigReturnValue,
 } from './utils';
 
@@ -41,6 +42,7 @@ export interface Config {
     dark?: Theme['dark'];
   };
   excludes?: string[];
+  design_tokens?: DesignTokens;
   message_reactions?: AmityReactionType[];
   social_reactions?: AmityReactionType[];
   customizations?: {
@@ -111,9 +113,15 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
 
   useEffect(() => {
     if (validateConfig(initialConfig)) {
-      themePropertiesToCSSVar({
-        theme: { ...initialConfig?.theme?.[currentTheme], ...defaultBaseThemeValue[currentTheme] },
-      });
+      const mergedTheme = {
+        ...initialConfig?.theme?.[currentTheme],
+        ...defaultBaseThemeValue[currentTheme],
+      };
+      themePropertiesToCSSVar({ theme: mergedTheme });
+
+      // 3-layer color-token system
+      // --asc-atomic-* / --asc-color-* vars
+      injectColorTokenLayers(mergedTheme, initialConfig?.design_tokens, currentTheme);
 
       parseConfig(initialConfig);
     } else {
@@ -151,7 +159,7 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
     ): ProxyHandler<
       IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
     > => ({
-      get(_, prop: keyof ConfigurableThemeValue) {
+      get(_, prop: string) {
         for (const key of customizationKeys) {
           if (config?.customizations?.[key]?.theme?.[themeName]?.[prop]) {
             return config.customizations[key].theme?.[themeName]?.[prop];

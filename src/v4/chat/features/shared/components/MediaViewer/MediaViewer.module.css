@@ -56,34 +56,35 @@
   padding: 0.25rem;
   border: none;
   border-radius: 9999px;
-  background: rgb(255 255 255 / 80%);
+  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
   cursor: pointer;
 }
 
 .mediaViewer__closeIcon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-background-transparent-black);
-  fill: var(--asc-color-background-transparent-black);
+  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
+  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
 }
 
 .mediaViewer__bottomIconButton {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0.5rem;
   border: none;
-  background: transparent;
+  border-radius: 9999px;
+  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
   cursor: pointer;
 }
 
 .mediaViewer__bottomIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
+  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
 }
 
 .mediaViewer__stage {

@@ -42,7 +42,7 @@
 }
 
 .messageRow__senderName {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-chatbubble-inbound-header-username-default);
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -82,26 +82,17 @@
 }
 
 .messageRow__side {
-  color: var(--asc-color-base-shade2);
+  color: var(--asc-color-text-timestamp-default);
   flex-shrink: 0;
   padding-bottom: 0.5rem;
 }
 
 .messageRow__errorButton {
-  padding: 0;
-  background: transparent;
-  border: none;
+  flex-shrink: 0;
   align-self: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.25rem;
-  height: 1.25rem;
 }
 
 .messageRow__errorIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--asc-color-base-shade2);
-  fill: var(--asc-color-base-shade2);
+  width: 1rem;
+  height: 1rem;
 }

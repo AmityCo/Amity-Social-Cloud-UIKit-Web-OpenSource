@@ -2,11 +2,12 @@ import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode
 import { mergeProps, useLongPress, usePress } from 'react-aria';
 import Linkify from 'linkify-react';
 import { FileRepository } from '@amityco/ts-sdk';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
-import VideoControl from '~/v4/icons/VideoControl';
-import AngleRight from '~/v4/icons/AngleRight';
+import { Loader } from '~/v4/core/design/atoms/Loader';
+import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
+import { ChevronRight } from '~/v4/core/design/icons/ChevronRight';
+import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import { MediaUploadOverlay } from '~/v4/chat/elements/MediaUploadOverlay';
 import { DeletedMessagePill } from '~/v4/chat/features/shared/components/DeletedMessagePill/DeletedMessagePill';
 import { MessageLinkPreview } from '~/v4/chat/features/shared/components/MessageLinkPreview';
@@ -14,11 +15,7 @@ import {
   isSyntheticPendingMessage,
   type SyntheticPendingMessage,
 } from '~/v4/chat/features/shared/hooks/useMessageComposer';
-import {
-  LONG_PRESS_THRESHOLD_MS,
-  TEXT_MAX_LINES,
-  TEXT_MAX_LINES_WITH_LINK,
-} from '~/v4/chat/constants';
+import { LONG_PRESS_THRESHOLD_MS, TEXT_MAX_LINES } from '~/v4/chat/constants';
 import { extractFirstPreviewUrl } from '~/v4/chat/utils/previewLink';
 import useFile from '~/v4/core/hooks/useFile';
 import { useString } from '~/v4/core/localization';
@@ -33,7 +30,7 @@ type MessageBubbleProps = {
   isActive?: boolean;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
-  onSeeMore: (text: string) => void;
+  onSeeMore: (text: string, title?: string) => void;
   onLongPress?: OnLongPressMessage;
   localPreviewUrl?: string;
   onMediaLoaded?: (fileId: string) => void;
@@ -102,7 +99,7 @@ type TextBubbleProps = {
   message: Amity.Message;
   isUser: boolean;
   isActive?: boolean;
-  onSeeMore: (text: string) => void;
+  onSeeMore: (text: string, title?: string) => void;
   onLongPress?: OnLongPressMessage;
 };
 
@@ -116,8 +113,7 @@ function TextBubble({
   const seeMoreLabel = useString('amity_chat_see_more');
   const editedLabel = useString('amity_chat_status_edited');
   const text = ((message.data as { text?: string } | undefined)?.text ?? '').toString();
-  const hasLink = /(https?:\/\/\S+|www\.\S+)/i.test(text);
-  const maxLines = hasLink ? TEXT_MAX_LINES_WITH_LINK : TEXT_MAX_LINES;
+  const maxLines = TEXT_MAX_LINES;
   const isFailed = message.syncState === ('error' as Amity.SyncState);
   const isSyncing = message.syncState === 'syncing';
   const isEdited = message.editedAt != null;
@@ -156,23 +152,6 @@ function TextBubble({
       <div ref={textRef} className={styles.textBubble__text} style={{ WebkitLineClamp: maxLines }}>
         {renderTextWithMentions(text, message.metadata as MessageMetadata | undefined)}
       </div>
-      {isOverflowing && (
-        <>
-          <div className={styles.textBubble__divider} />
-          <Button
-            type="button"
-            variant="text"
-            className={styles.textBubble__seeMore}
-            onPress={() => onSeeMore(text)}
-            aria-label={seeMoreLabel}
-          >
-            <Typography.Caption className={styles.textBubble__seeMoreLabel}>
-              {seeMoreLabel}
-            </Typography.Caption>
-            <AngleRight className={styles.textBubble__seeMoreIcon} />
-          </Button>
-        </>
-      )}
       {firstUrl && (
         <div className={styles.textBubble__preview}>
           <MessageLinkPreview url={firstUrl} isOwnMessage={isUser} />
@@ -182,6 +161,22 @@ function TextBubble({
         <Typography.Caption className={styles.textBubble__editedCaption}>
           {editedLabel}
         </Typography.Caption>
+      )}
+      {isOverflowing && (
+        <>
+          <div className={styles.textBubble__divider} />
+          <AriaButton
+            type="button"
+            className={styles.textBubble__seeMore}
+            onPress={() => onSeeMore(text, message.creator?.displayName || undefined)}
+            aria-label={seeMoreLabel}
+          >
+            <Typography.Caption className={styles.textBubble__seeMoreLabel}>
+              {seeMoreLabel}
+            </Typography.Caption>
+            <ChevronRight className={styles.textBubble__seeMoreIcon} />
+          </AriaButton>
+        </>
       )}
     </div>
   );
@@ -217,6 +212,7 @@ function ImageBubble({
   const isFailed = message.syncState === ('error' as Amity.SyncState);
   const isSyncing = message.syncState === 'syncing';
   const isSynthetic = isSyntheticPendingMessage(message);
+  const [hasLoadError, setHasLoadError] = useState(false);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -238,7 +234,15 @@ function ImageBubble({
   if (!displaySrc) {
     return (
       <div className={styles.mediaBubble__placeholder}>
-        <Spinner className={styles.mediaBubble__spinner} />
+        <Loader.Upload size="medium" className={styles.mediaBubble__spinner} />
+      </div>
+    );
+  }
+
+  if (hasLoadError && !localPreviewUrl) {
+    return (
+      <div className={styles.mediaBubble__broken} aria-label="Image unavailable">
+        <ImageSlash className={styles.mediaBubble__brokenIcon} />
       </div>
     );
   }
@@ -255,7 +259,12 @@ function ImageBubble({
       data-active={isActive ? 'true' : 'false'}
       {...mergeProps(longPressProps, pressProps)}
     >
-      <img src={displaySrc} alt={altText} className={styles.imageBubble__img} />
+      <img
+        src={displaySrc}
+        alt={altText}
+        className={styles.imageBubble__img}
+        onError={() => setHasLoadError(true)}
+      />
       {showUploadOverlay ? (
         <MediaUploadOverlay
           onCancel={
@@ -323,6 +332,16 @@ function VideoBubble({
     onPress: () => onOpenVideo(message),
   });
 
+  const hasSource = !!(localPreviewUrl || videoUrl);
+
+  if (!hasSource) {
+    return (
+      <div className={styles.mediaBubble__placeholder}>
+        <Loader.Upload size="medium" className={styles.mediaBubble__spinner} />
+      </div>
+    );
+  }
+
   const bubble = (
     <div
       ref={rootRef}
@@ -373,10 +392,9 @@ function VideoBubble({
           }
         />
       ) : (
-        <>
-          <div className={styles.videoBubble__overlay} />
-          <VideoControl className={styles.videoBubble__playIcon} />
-        </>
+        <span className={styles.videoBubble__playChip} aria-hidden="true">
+          <VideoPlay className={styles.videoBubble__playIcon} />
+        </span>
       )}
     </div>
   );
@@ -421,7 +439,9 @@ function wrapWithFailedCaption(
   isFailed: boolean,
   message: Amity.Message,
 ): ReactElement {
-  if (!isFailed) return bubble;
+  const isCancelledUpload =
+    isSyntheticPendingMessage(message) && message.__failureReason === 'cancelled';
+  if (!isFailed || isCancelledUpload) return bubble;
   return (
     <div className={styles.mediaBubble__failedWrapper}>
       {bubble}

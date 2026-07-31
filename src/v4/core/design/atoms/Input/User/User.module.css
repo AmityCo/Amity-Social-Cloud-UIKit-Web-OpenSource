@@ -1,0 +1,58 @@
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+
+  --user-title: var(--asc-color-text-input-userinput-title-default);
+  --user-username: var(--asc-color-text-input-userinput-username-default);
+  --user-description: var(--asc-color-text-input-userinput-textdescription-default);
+  --user-action: var(--asc-color-text-input-userinput-action-default);
+}
+
+.user[data-disabled] {
+  --user-title: var(--asc-color-text-input-userinput-title-disabled);
+  --user-username: var(--asc-color-text-input-userinput-username-disabled);
+  --user-description: var(--asc-color-text-input-userinput-textdescription-disabled);
+  --user-action: var(--asc-color-text-input-userinput-action-disabled);
+}
+
+.user__texts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.user__title {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  color: var(--user-title);
+}
+
+.user__username {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--user-username);
+}
+
+.user__description {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--user-description);
+}
+
+.user__action {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  color: var(--user-action);
+}

@@ -118,6 +118,12 @@ const InternalComponent = ({
         initialConfig = {
           ...initialConfig,
           ...networkConfig.config,
+          // Deep-merge theme per mode (like the json layer above) so a partial remote theme
+          // doesn't replace the whole object and wipe the atomic token layer.
+          theme: {
+            light: { ...initialConfig.theme.light, ...networkConfig.config.theme?.light },
+            dark: { ...initialConfig.theme.dark, ...networkConfig.config.theme?.dark },
+          },
         };
     }
 

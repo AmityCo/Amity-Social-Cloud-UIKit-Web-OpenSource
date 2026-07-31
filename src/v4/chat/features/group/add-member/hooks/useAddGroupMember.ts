@@ -19,7 +19,7 @@ type AddGroupMemberForm = z.infer<typeof schema>;
 
 export function useAddGroupMember({ channelId }: AddGroupMemberPageProps) {
   const { pop } = useChatNavigation();
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const { addMembers } = useChannelMembershipQuery();
   const [debouncedText, setDebouncedText] = useState('');
   const memberAddedToast = useString('amity_chat_toast_member_added');

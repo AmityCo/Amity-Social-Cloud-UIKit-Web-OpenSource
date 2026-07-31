@@ -30,7 +30,7 @@ export type UseEditMessageQueryReturn = {
 };
 
 export function useEditMessageQuery(): UseEditMessageQueryReturn {
-  const { error: errorToast } = useNotifications();
+  const { error: errorToast } = useNotifications('chat');
   const { info } = useConfirmContext();
 
   const { mutateAsync } = useMutation<EditResponse, Error, EditParams>({

@@ -19,7 +19,7 @@
   animation-name: appear;
   animation-fill-mode: forwards;
   pointer-events: auto;
-  background-color: var(--asc-color-base-shade4);
+  background-color: var(--asc-color-base-shade3);
 }
 
 @keyframes appear {

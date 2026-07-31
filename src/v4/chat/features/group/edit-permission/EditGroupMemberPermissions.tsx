@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { Selection } from '~/v4/core/design/atoms/Selection';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { RadioGroup } from '~/v4/core/components/AriaRadioGroup/RadioGroup';
 import { TopBar } from '~/v4/chat/elements/TopBar';
 import { useString } from '~/v4/core/localization';
 import { MESSAGING_PERMISSIONS } from '~/v4/chat/features/group/edit-permission/constants';
@@ -23,41 +23,40 @@ export function EditGroupMemberPermissions(props: EditGroupMemberPermissionsPage
         leadingType="back"
         onLeading={handleClose}
         trailing={
-          <Button
+          <Button.Main
             type="submit"
-            variant="text"
-            color="primary"
+            styleType="ghost"
+            hierarchy="primary"
+            size="sm"
+            label={saveLabel}
             isDisabled={!isFormValid}
-            data-disabled={!isFormValid ? 'true' : 'false'}
-            className={styles.editGroupMemberPermissions__saveButton}
             aria-label={saveLabel}
-          >
-            <Typography.Body className={styles.editGroupMemberPermissions__saveLabel}>
-              {saveLabel}
-            </Typography.Body>
-          </Button>
+          />
         }
       />
-      <Typography.BodyBold className={styles.editGroupMemberPermissions__sectionTitle}>
+      <Typography.TitleBold className={styles.editGroupMemberPermissions__sectionTitle}>
         {messagingSection}
-      </Typography.BodyBold>
+      </Typography.TitleBold>
       <Controller
         control={control}
         name="permission"
         render={({ field: { value, onChange } }) => (
-          <RadioGroup
+          <Selection.RadioGroup
             value={value}
             onChange={onChange}
             aria-label={pageTitle}
-            radioContainerClassname={styles.editGroupMemberPermissions__radios}
-            radioProps={{ className: styles.editGroupMemberPermissions__radio }}
-            radios={MESSAGING_PERMISSIONS.map((mode) => ({
-              value: mode.value,
-              label: (
+            className={styles.editGroupMemberPermissions__radios}
+          >
+            {MESSAGING_PERMISSIONS.map((mode) => (
+              <Selection.Radio
+                key={mode.value}
+                value={mode.value}
+                className={styles.editGroupMemberPermissions__radio}
+              >
                 <MemberPermission titleKey={mode.titleKey} descriptionKey={mode.descriptionKey} />
-              ),
-            }))}
-          />
+              </Selection.Radio>
+            ))}
+          </Selection.RadioGroup>
         )}
       />
     </form>

@@ -1,0 +1,104 @@
+.squareButton {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 5rem;
+  height: 5.125rem;
+  gap: 0.25rem;
+  padding: 1rem 0.5rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: var(--squarebutton-surface);
+  color: var(--squarebutton-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.squareButton[data-disabled] {
+  cursor: not-allowed;
+}
+
+.squareButton__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--squarebutton-icon);
+}
+
+.squareButton__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentcolor;
+}
+
+.squareButton__label {
+  color: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ── Token slices — {Role}/SquareButton/{color}/{hierarchy}/{state}; Destructive has no hierarchy ── */
+
+/* default / primary */
+.squareButton[data-color='default'][data-hierarchy='primary'] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-default-primary-default);
+  --squarebutton-text: var(--asc-color-text-squarebutton-default-primary-default);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-default-primary-default);
+}
+
+.squareButton[data-color='default'][data-hierarchy='primary'][data-hovered] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-default-primary-hover);
+  --squarebutton-text: var(--asc-color-text-squarebutton-default-primary-hover);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-default-primary-hover);
+}
+
+.squareButton[data-color='default'][data-hierarchy='primary'][data-disabled] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-default-primary-disabled);
+  --squarebutton-text: var(--asc-color-text-squarebutton-default-primary-disabled);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-default-primary-disabled);
+}
+
+/* default / secondary */
+.squareButton[data-color='default'][data-hierarchy='secondary'] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-default-secondary-default);
+  --squarebutton-text: var(--asc-color-text-squarebutton-default-secondary-default);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-default-secondary-default);
+}
+
+.squareButton[data-color='default'][data-hierarchy='secondary'][data-hovered] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-default-secondary-hover);
+  --squarebutton-text: var(--asc-color-text-squarebutton-default-secondary-hover);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-default-secondary-hover);
+}
+
+.squareButton[data-color='default'][data-hierarchy='secondary'][data-disabled] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-default-secondary-disabled);
+  --squarebutton-text: var(--asc-color-text-squarebutton-default-secondary-disabled);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-default-secondary-disabled);
+}
+
+/* destructive (no hierarchy) */
+.squareButton[data-color='destructive'] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-destructive-default);
+  --squarebutton-text: var(--asc-color-text-squarebutton-destructive-default);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-destructive-default);
+}
+
+.squareButton[data-color='destructive'][data-hovered] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-destructive-hover);
+  --squarebutton-text: var(--asc-color-text-squarebutton-destructive-hover);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-destructive-hover);
+}
+
+.squareButton[data-color='destructive'][data-disabled] {
+  --squarebutton-surface: var(--asc-color-surface-squarebutton-destructive-disabled);
+  --squarebutton-text: var(--asc-color-text-squarebutton-destructive-disabled);
+  --squarebutton-icon: var(--asc-color-icon-squarebutton-destructive-disabled);
+}

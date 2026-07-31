@@ -17,23 +17,33 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-chatbubble-inbound-header-repliedto-default);
 }
 
 .replyQuote__headerIcon {
   width: 1rem;
-  height: 0.75rem;
-  color: var(--asc-color-base-shade1);
-  fill: var(--asc-color-base-shade1);
+  height: 1rem;
+  color: var(--asc-color-icon-chatbubble-inbound-header-repliedto-default);
+  fill: var(--asc-color-icon-chatbubble-inbound-header-repliedto-default);
   flex-shrink: 0;
 }
 
 .replyQuote__headerText {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-chatbubble-inbound-header-repliedto-default);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 18.75rem;
+}
+
+.replyQuote[data-user='own'] .replyQuote__header,
+.replyQuote[data-user='own'] .replyQuote__headerText {
+  color: var(--asc-color-text-chatbubble-outbound-header-repliedto-default);
+}
+
+.replyQuote[data-user='own'] .replyQuote__headerIcon {
+  color: var(--asc-color-icon-chatbubble-outbound-header-repliedto-default);
+  fill: var(--asc-color-icon-chatbubble-outbound-header-repliedto-default);
 }
 
 .replyQuote__quote {
@@ -52,16 +62,16 @@
 .replyQuote__overlay {
   position: absolute;
   inset: 0;
-  background: rgb(255 255 255 / 60%);
+  background: var(--asc-color-surface-chatbubble-reply-overlay-default);
   border-radius: 1.25rem;
   pointer-events: none;
 }
 
 .replyQuote__textBubble {
   padding: 0.625rem 1rem;
-  background: var(--asc-color-base-shade4);
-  color: var(--asc-color-base-default);
-  font-size: 0.825rem;
+  background: var(--asc-color-surface-chatbubble-reply-message-default);
+  color: var(--asc-color-text-chatbubble-inbound-messages-default);
+  font-size: 0.9375rem;
   line-height: 1.25rem;
   max-width: 14.25rem;
   word-break: break-word;
@@ -77,7 +87,7 @@
 }
 
 .replyQuote__link {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-text-chatbubble-inbound-link-default);
   text-decoration: underline;
 }
 
@@ -87,20 +97,49 @@
   border-radius: 1.25rem;
 }
 
-.replyQuote__videoOverlay {
-  position: absolute;
-  inset: 0;
+.replyQuote__mediaBox {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 1.25rem;
+}
+
+.replyQuote__mediaBox[data-variant='loading'] {
+  background: var(--asc-color-surface-media-image-loading);
+}
+
+.replyQuote__mediaBox[data-variant='broken'] {
+  background: var(--asc-color-surface-media-image-broken);
+}
+
+.replyQuote__mediaBoxIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-icon-media-image-broken);
+  fill: var(--asc-color-icon-media-image-broken);
+}
+
+.replyQuote__playChip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
   pointer-events: none;
 }
 
-.replyQuote__videoIcon {
-  width: 2.5rem;
-  height: 2.5rem;
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+.replyQuote__playIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
+  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
 }
 
 .replyQuote__placeholder {
@@ -110,13 +149,8 @@
   justify-content: center;
   width: 14.25rem;
   height: 3.75rem;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-chatbubble-reply-message-default);
   border-radius: 1.25rem;
-}
-
-.replyQuote__spinner {
-  width: 1.4375rem;
-  height: 1.4375rem;
 }
 
 .replyQuote__deletedBubble {
@@ -124,17 +158,17 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  border: 0.0625rem solid var(--asc-color-base-shade4);
+  border: 0.0625rem solid var(--asc-color-border-chatbubble-inbound-deleted);
   border-radius: 1.25rem;
 }
 
 .replyQuote__deletedIcon {
   width: 1rem;
   height: 0.875rem;
-  color: var(--asc-color-base-shade2);
-  fill: var(--asc-color-base-shade2);
+  color: var(--asc-color-icon-chatbubble-inbound-messages-deleted);
+  fill: var(--asc-color-icon-chatbubble-inbound-messages-deleted);
 }
 
 .replyQuote__deletedText {
-  color: var(--asc-color-base-shade2);
+  color: var(--asc-color-text-chatbubble-inbound-messages-deleted);
 }

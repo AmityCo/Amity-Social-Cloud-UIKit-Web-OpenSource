@@ -1,0 +1,53 @@
+.popover {
+  outline: none;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: var(--asc-box-shadow-04);
+  background-color: var(--asc-color-surface-popover-background-default);
+}
+
+.popover[data-placement='top'] {
+  --origin: translateY(0.5rem);
+}
+
+.popover[data-placement='bottom'] {
+  --origin: translateY(-0.5rem);
+}
+
+.popover[data-placement='right'] {
+  --origin: translateX(-0.5rem);
+}
+
+.popover[data-placement='left'] {
+  --origin: translateX(0.5rem);
+}
+
+.popover[data-entering] {
+  animation: popover-slide 200ms;
+}
+
+.popover[data-exiting] {
+  animation: popover-slide 200ms reverse ease-in;
+}
+
+.dialog {
+  outline: none;
+  min-width: 12.5rem;
+}
+
+.popover__menuButton {
+  background-color: var(--asc-color-background-shade1);
+  border-radius: 0.5rem;
+}
+
+@keyframes popover-slide {
+  from {
+    transform: var(--origin);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

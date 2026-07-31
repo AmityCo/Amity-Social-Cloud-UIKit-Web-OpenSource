@@ -19,7 +19,7 @@ type UnmuteResponse = Awaited<ReturnType<typeof ChannelRepository.Moderation.unm
 
 export function useChannelMemberMuteQuery() {
   const { confirm, closeConfirm } = useConfirmContext();
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
 
   const muteMutation = useMutation<MuteResponse, Error, ChannelMemberMutePayload>({
     mutationFn: ({ channelId, userId }) =>

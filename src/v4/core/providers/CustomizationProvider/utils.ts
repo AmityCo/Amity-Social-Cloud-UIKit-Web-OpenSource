@@ -1,5 +1,7 @@
 import { generateShades } from '~/v4/core/providers/ThemeProvider';
 
+import designTokens from '~/v4/core/design/tokens/amity-uikit-design-tokens.json';
+
 export type IconConfiguration = {
   icon?: string;
   image?: string;
@@ -33,10 +35,16 @@ export type ConfigurableThemeValue = {
   base_shade2_color: string;
   base_shade3_color: string;
   base_shade4_color: string;
-  base_shade5_color: string;
   alert_color: string;
   background_color: string;
   base_inverse_color: string;
+  // atomic keys
+  [key: string]: string;
+};
+
+export type DesignTokens = {
+  alias: Record<string, string>;
+  semantic: Record<string, { light?: string; dark?: string }>;
 };
 
 export type Theme = {
@@ -59,8 +67,11 @@ export type DefaultConfig = {
   customizations?: {
     [key: string]: GetConfigReturnValue;
   };
+  /** Alias/Semantic token maps (read-only default; not customer-overridable in practice). */
+  design_tokens?: DesignTokens;
 };
 
+// Internal base tokens. These map to v1 --asc-color-* vars consumed by Social
 type BaseThemeValue = {
   background_shade1_color: string;
   live_color: string;
@@ -147,40 +158,112 @@ export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValu
 
 export const defaultConfig: DefaultConfig = {
   preferred_theme: 'default',
+  // Self-contained default token values (the standalone fallback when the client passes no config).
+  // These carry the new tokens so all 3 layers have them: remote → json → default.
   theme: {
     light: {
-      primary_color: '#1054de',
-      secondary_color: '#292b32',
-      secondary_shade1_color: '#636878',
-      secondary_shade2_color: '#898e9e',
-      secondary_shade3_color: '#a5a9b5',
-      secondary_shade4_color: '#ebecef',
-      base_color: '#292b32',
+      primary_color: '#1054DE',
+      secondary_color: '#292B32',
+      base_color: '#292B32',
       base_shade1_color: '#636878',
-      base_shade2_color: '#898e9e',
-      base_shade3_color: '#a5a9b5',
-      base_shade4_color: '#ebecef',
-      base_shade5_color: '#F9F9FA',
+      base_shade2_color: '#898E9E',
+      base_shade3_color: '#A5A9b5',
+      base_shade4_color: '#EBECEF',
       alert_color: '#FA4D30',
       background_color: '#FFFFFF',
       base_inverse_color: '#000000',
+      background_shade1_color: '#F6F7F8',
+      highlight_color: '#1054DE',
+      primary_shade4_color: '#1A4499',
+      alert_shade1_color: '#FB7159',
+      black_color: '#000000',
+      destructive_shade1_color: '#F38F96',
+      destructive_shade2_color: '#EE5C66',
+      destructive_shade3_color: '#EA3C49',
+      destructive_shade4_color: '#E50B1B',
+      destructive_shade5_color: '#A30813',
+      event_host_bg_color: '#EAE2FF',
+      event_host_fg_color: '#4B1BD0',
+      live_color: '#FF305A',
+      primary_shade3_color: '#D9E5FC',
+      primary_shade2_color: '#A9C4F9',
+      primary_shade1_color: '#4A82F2',
+      neutral_grey_shade1_color: '#EBECEF',
+      neutral_grey_shade2_color: '#A5A9B5',
+      neutral_grey_shade3_color: '#898E9E',
+      neutral_grey_shade4_color: '#636878',
+      neutral_grey_shade5_color: '#40434E',
+      neutral_grey_shade6_color: '#292B32',
+      white_color: '#FFFFFF',
+      transparent_black_shade4_color: '#00000099',
+      transparent_black_shade2_color: '#0000004D',
+      transparent_black_shade1_color: '#0000004D',
+      transparent_white_shade6_color: '#FFFFFF4D',
+      transparent_white_shade1_color: '#FFFFFF1A',
+      transparent_white_shade2_color: '#FFFFFF1A',
+      transparent_white_shade3_color: '#FFFFFF33',
+      transparent_black_shade3_color: '#00000080',
+      transparent_black_shade5_color: '#000000CC',
+      transparent_red_shade1_color: '#FF305A4D',
+      transparent_white_shade7_color: '#FFFFFF4D',
+      transparent_white_shade5_color: '#FFFFFF4D',
+      transparent_white_shade4_color: '#FFFFFF4D',
+      secondary_shade1_color: '#636878',
+      secondary_shade2_color: '#898E9E',
+      secondary_shade3_color: '#A5A9B5',
+      secondary_shade4_color: '#EBECEF',
     },
     dark: {
-      primary_color: '#1054de',
-      secondary_color: '#ebecef',
-      secondary_shade1_color: '#a5a9b5',
-      secondary_shade2_color: '#898e9e',
-      secondary_shade3_color: '#40434e',
-      secondary_shade4_color: '#292b32',
-      base_color: '#ebecef',
-      base_shade1_color: '#a5a9b5',
-      base_shade2_color: '#6e7487',
-      base_shade3_color: '#40434e',
-      base_shade4_color: '#292b32',
-      base_shade5_color: '#f9f9fa',
+      primary_color: '#1054DE',
+      secondary_color: '#EBECEF',
+      base_color: '#EBECEF',
+      base_shade1_color: '#A5A9B5',
+      base_shade2_color: '#6E7487',
+      base_shade3_color: '#40434E',
+      base_shade4_color: '#292B32',
       alert_color: '#FA4D30',
       background_color: '#191919',
       base_inverse_color: '#FFFFFF',
+      background_shade1_color: '#40434E',
+      highlight_color: '#4A82F2',
+      primary_shade4_color: '#1A4499',
+      alert_shade1_color: '#FB7159',
+      black_color: '#000000',
+      destructive_shade1_color: '#F38F96',
+      destructive_shade2_color: '#EE5C66',
+      destructive_shade3_color: '#EA3C49',
+      destructive_shade4_color: '#E50B1B',
+      destructive_shade5_color: '#A30813',
+      event_host_bg_color: '#EAE2FF',
+      event_host_fg_color: '#4B1BD0',
+      live_color: '#FF305A',
+      primary_shade3_color: '#D9E5FC',
+      primary_shade2_color: '#A9C4F9',
+      primary_shade1_color: '#4A82F2',
+      neutral_grey_shade1_color: '#EBECEF',
+      neutral_grey_shade2_color: '#A5A9B5',
+      neutral_grey_shade3_color: '#898E9E',
+      neutral_grey_shade4_color: '#636878',
+      neutral_grey_shade5_color: '#40434E',
+      neutral_grey_shade6_color: '#292B32',
+      white_color: '#FFFFFF',
+      transparent_black_shade4_color: '#00000099',
+      transparent_black_shade2_color: '#0000004D',
+      transparent_black_shade1_color: '#0000004D',
+      transparent_white_shade6_color: '#FFFFFF4D',
+      transparent_white_shade1_color: '#FFFFFF1A',
+      transparent_white_shade2_color: '#FFFFFF1A',
+      transparent_white_shade3_color: '#FFFFFF33',
+      transparent_black_shade3_color: '#00000080',
+      transparent_black_shade5_color: '#000000CC',
+      transparent_red_shade1_color: '#FF305A4D',
+      transparent_white_shade7_color: '#FFFFFF4D',
+      transparent_white_shade5_color: '#FFFFFF4D',
+      transparent_white_shade4_color: '#FFFFFF4D',
+      secondary_shade1_color: '#A5A9B5',
+      secondary_shade2_color: '#898E9E',
+      secondary_shade3_color: '#40434E',
+      secondary_shade4_color: '#292B32',
     },
   },
   excludes: [],
@@ -1025,6 +1108,7 @@ export const defaultConfig: DefaultConfig = {
     '*/product_tag_selection/product_tag_empty': {},
     '*/product_tag_selection/product_tag_no_result': {},
   },
+  design_tokens: designTokens,
 };
 
 export const getCustomizationKeys = ({
@@ -1072,7 +1156,6 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   base_shade2_color: '--asc-color-base-shade2',
   base_shade3_color: '--asc-color-base-shade3',
   base_shade4_color: '--asc-color-base-shade4',
-  base_shade5_color: '--asc-color-base-shade5',
   alert_color: '--asc-color-alert-default',
   background_color: '--asc-color-background-default',
   base_inverse_color: '--asc-color-base-inverse',
@@ -1121,4 +1204,55 @@ export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> 
       document.documentElement.style.setProperty(cssVar, value);
     }
   });
+};
+
+/** Slug a design-token dot-path or snake_case config key into an `--asc-*` var suffix. */
+const tokenSlug = (name: string) =>
+  name
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+
+/**
+ * Injects the 3-layer color-token system (Chat v4) as chained CSS vars, sourced from the merged
+ * config (override-aware) plus the design-token maps:
+ *  - Atomic  → every theme key becomes `--asc-atomic-<key>` (reflects default ← json ← remote merge).
+ *  - Alias   → `{theme.X}` resolves to the matching `--asc-atomic-*` var.
+ *  - Semantic → per-mode ref becomes `var(--asc-atomic-*)` (via alias) or a raw hex, set on
+ *    `--asc-color-<semantic>` — what chat CSS consumes; value-swaps light/dark on the same names.
+ */
+export const injectColorTokenLayers = (
+  theme: Partial<ThemeValue> | undefined,
+  tokens: DesignTokens | undefined,
+  mode: 'light' | 'dark',
+) => {
+  if (!theme || !tokens) return;
+  const root = document.documentElement.style;
+
+  // ① Atomic: theme keys → --asc-atomic-* (snake_case → kebab).
+  for (const [key, value] of Object.entries(theme)) {
+    if (value) root.setProperty(`--asc-atomic-${tokenSlug(key)}`, value);
+  }
+
+  const { alias, semantic } = tokens;
+  // Resolve a semantic ref: {Alias} → var(--asc-atomic-<themeKey>); {theme.X} → var; raw #hex → literal.
+  const resolve = (ref?: string): string | undefined => {
+    if (!ref) return undefined;
+    if (ref.startsWith('#')) return ref;
+    const name = ref.replace(/^\{|\}$/g, '');
+
+    if (name.startsWith('theme.')) return `var(--asc-atomic-${tokenSlug(name.slice(6))})`;
+
+    const themeKey = alias[name]?.match(/^\{theme\.([^}]+)\}$/)?.[1];
+
+    return themeKey ? `var(--asc-atomic-${tokenSlug(themeKey)})` : undefined;
+  };
+
+  // ② Semantic: value-swap by mode (fall back to the other mode when one side is absent).
+  for (const [name, modes] of Object.entries(semantic)) {
+    const value = resolve(mode === 'dark' ? modes.dark ?? modes.light : modes.light ?? modes.dark);
+
+    if (value) root.setProperty(`--asc-color-${tokenSlug(name)}`, value);
+  }
 };

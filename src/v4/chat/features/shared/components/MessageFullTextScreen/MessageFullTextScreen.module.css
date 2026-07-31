@@ -4,53 +4,32 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-page-background-default);
 }
 
 .fullTextScreen__header {
-  position: relative;
   display: flex;
   align-items: center;
-  height: 3.5rem;
-  padding: 0 1rem;
-  background: var(--asc-color-background-default);
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--asc-color-surface-sheets-background-default);
   flex-shrink: 0;
-}
-
-.fullTextScreen__backButton.fullTextScreen__backButton,
-.fullTextScreen__backButton.fullTextScreen__backButton:hover {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0;
-  border: none;
-  background: transparent;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.fullTextScreen__backIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--asc-color-base-default);
-  fill: var(--asc-color-base-default);
 }
 
 .fullTextScreen__title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.5rem;
-  letter-spacing: -0.025rem;
-  color: var(--asc-color-base-default);
-  max-width: calc(100% - 6rem);
+  flex: 1 0 0;
+  min-width: 0;
+  text-align: center;
+  color: var(--asc-color-text-sheets-header-title-default);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.fullTextScreen__headerSpacer {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
 }
 
 .fullTextScreen__body {
@@ -58,7 +37,7 @@
   min-height: 0;
   overflow-y: auto;
   padding: 1rem;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-page-background-default);
 }
 
 .fullTextScreen__text {
@@ -67,8 +46,8 @@
   font-size: 1.0625rem;
   font-weight: 400;
   line-height: 1.5rem;
-  letter-spacing: -0.025rem;
-  color: var(--asc-color-base-default);
+  letter-spacing: normal;
+  color: var(--asc-color-text-chatbubble-inbound-messages-default);
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
@@ -76,6 +55,6 @@
 }
 
 .fullTextScreen__text a {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-text-chatbubble-inbound-link-default);
   text-decoration: underline;
 }

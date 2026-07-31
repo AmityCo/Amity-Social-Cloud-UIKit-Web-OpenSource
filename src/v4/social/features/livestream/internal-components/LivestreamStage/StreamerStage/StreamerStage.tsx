@@ -401,7 +401,7 @@ export const StreamerStage: FC<StreamerStageProps> = ({
             ),
           ) as string[],
           mutedMembers:
-            channel?.metadata?.mutedMembers?.filter(
+            liveChannel?.metadata?.mutedMembers?.filter(
               (id: string) => id !== invitationByMe?.invitedUserId,
             ) || [],
           creatorId: invitationByMe?.invitedUserId,

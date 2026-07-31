@@ -5,7 +5,7 @@
   gap: 0.5rem;
   width: 100%;
   padding: 1rem;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-list-default-default);
   border: none;
   cursor: pointer;
 }
@@ -24,27 +24,27 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0.125rem;
-  background: var(--asc-color-base-shade4);
-  border-radius: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+  background: var(--asc-color-surface-featuredicon-tinted);
+  border-radius: 0.5rem;
 }
 
 .settingMenu__icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-default);
-  fill: var(--asc-color-base-default);
+  color: var(--asc-color-icon-featuredicon-tinted);
+  fill: var(--asc-color-icon-featuredicon-tinted);
 }
 
 .settingMenu__label {
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-header-default-default);
 }
 
 .settingMenu__destructiveLabel {
-  color: var(--asc-color-alert-default);
-  fill: var(--asc-color-alert-default);
+  color: var(--asc-color-text-list-header-destructive-default);
+  fill: var(--asc-color-text-list-header-destructive-default);
 }
 
 .settingMenu__trailing {
@@ -55,12 +55,12 @@
 }
 
 .settingMenu__trailingText {
-  color: var(--asc-color-base-shade1);
+  color: var(--asc-color-text-list-trailing-text-general);
 }
 
 .settingMenu__chevron {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-shade1);
-  fill: var(--asc-color-base-shade1);
+  color: var(--asc-color-icon-list-leading-default-default);
+  fill: var(--asc-color-icon-list-leading-default-default);
 }

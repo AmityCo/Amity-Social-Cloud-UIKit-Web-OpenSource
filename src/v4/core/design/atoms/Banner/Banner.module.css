@@ -1,0 +1,223 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--banner-gap, 1rem);
+  padding: 0.5rem 1rem;
+  background: var(--asc-color-surface-banner-default-general);
+}
+
+.banner[data-hierarchy='subdue'] {
+  background: var(--asc-color-surface-banner-subdue-general);
+}
+
+.banner[data-state='skeleton'],
+.banner[data-centered='true'] {
+  padding: 0.75rem 1rem;
+}
+
+.banner[data-centered='true'] {
+  justify-content: center;
+}
+
+.banner__body {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  gap: var(--banner-body-gap, 1rem);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  outline: none;
+}
+
+button.banner__body {
+  cursor: pointer;
+}
+
+.banner[data-centered='true'] .banner__body {
+  flex: 0 1 auto;
+  justify-content: center;
+}
+
+.banner__leadingController,
+.banner__leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.banner__leading {
+  color: var(--asc-color-icon-banner-default-leading-icon-general);
+  fill: var(--asc-color-icon-banner-default-leading-icon-general);
+}
+
+.banner[data-hierarchy='subdue'] .banner__leading {
+  color: var(--asc-color-icon-banner-subdue-leading-icon-general);
+  fill: var(--asc-color-icon-banner-subdue-leading-icon-general);
+}
+
+.banner__content {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.banner[data-centered='true'] .banner__content {
+  flex: 0 1 auto;
+  align-items: center;
+  text-align: center;
+}
+
+.banner__overline {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+  color: var(--asc-color-text-banner-default-overline-general);
+}
+
+.banner[data-hierarchy='subdue'] .banner__overline {
+  color: var(--asc-color-text-banner-subdue-overline-general);
+}
+
+.banner__title {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.banner[data-centered='true'] .banner__title {
+  justify-content: center;
+  width: auto;
+}
+
+.banner__header {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.0063rem;
+  color: var(--asc-color-text-banner-default-header-general);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.banner[data-hierarchy='subdue'] .banner__header {
+  color: var(--asc-color-text-banner-subdue-header-general);
+}
+
+.banner__subhead {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+  color: var(--asc-color-text-banner-default-subhead-general);
+  white-space: nowrap;
+}
+
+.banner[data-hierarchy='subdue'] .banner__subhead {
+  color: var(--asc-color-text-banner-subdue-subhead-general);
+}
+
+.banner__description {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.banner[data-centered='true'] .banner__description {
+  justify-content: center;
+  width: auto;
+}
+
+.banner__descriptionIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--asc-color-icon-banner-default-description-general);
+  fill: var(--asc-color-icon-banner-default-description-general);
+}
+
+.banner[data-hierarchy='subdue'] .banner__descriptionIcon {
+  color: var(--asc-color-icon-banner-subdue-description-general);
+  fill: var(--asc-color-icon-banner-subdue-description-general);
+}
+
+.banner__descriptionText {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+  color: var(--asc-color-text-banner-default-textdescription-general);
+}
+
+.banner[data-hierarchy='subdue'] .banner__descriptionText {
+  color: var(--asc-color-text-banner-subdue-textdescription-general);
+}
+
+.banner__trailing {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--asc-color-icon-banner-default-trailing-icon-general);
+  fill: var(--asc-color-icon-banner-default-trailing-icon-general);
+}
+
+.banner[data-hierarchy='subdue'] .banner__trailing {
+  color: var(--asc-color-icon-banner-subdue-trailing-icon-general);
+  fill: var(--asc-color-icon-banner-subdue-trailing-icon-general);
+}
+
+.banner__trailingItem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.banner__skeletonCircle {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: var(--asc-color-surface-skeletoneffect-default);
+  animation: banner-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.banner__skeletonBar {
+  width: 8.75rem;
+  height: 0.625rem;
+  border-radius: 0.75rem;
+  background: var(--asc-color-surface-skeletoneffect-default);
+  animation: banner-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes banner-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}

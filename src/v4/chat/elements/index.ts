@@ -3,7 +3,6 @@ export * from './AvatarPicker';
 export * from './ConversationChatAvatar';
 export * from './GroupNameField';
 export * from './TopBar';
-export * from './IconButton';
 export * from './MediaUploadOverlay';
 export * from './ReceiverMessageBubble';
 export * from './SenderMessageBubble';

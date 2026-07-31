@@ -10,17 +10,23 @@ export interface UseLeaveRoomProps {
 
 export interface UseLeaveRoomReturn {
   leaveRoom: () => void;
+  leaveRoomAsync: () => Promise<unknown>;
   isPending: boolean;
 }
 
 export const useLeaveRoom = ({ room, onSettled }: UseLeaveRoomProps): UseLeaveRoomReturn => {
-  const { mutate: leaveRoom, isPending } = useMutation({
+  const {
+    mutate: leaveRoom,
+    mutateAsync: leaveRoomAsync,
+    isPending,
+  } = useMutation({
     mutationFn: async () => RoomRepository.leaveRoom(room?.roomId || ''),
     onSettled,
   });
 
   return {
     leaveRoom,
+    leaveRoomAsync,
     isPending,
   };
 };

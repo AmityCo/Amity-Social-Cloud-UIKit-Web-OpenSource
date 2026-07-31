@@ -1,4 +1,4 @@
-import { Tabs } from '~/v4/core/components/Tabs/Tabs';
+import { Tabs } from '~/v4/core/design/molecules/Tabs';
 import { useString } from '~/v4/core/localization';
 import { SEARCH_TAB } from '~/v4/chat/constants';
 import { useSearchChannel } from '~/v4/chat/features/search/hooks';
@@ -28,7 +28,6 @@ export function SearchChannel() {
       />
       <Tabs
         variant="underlined"
-        fullWidth={false}
         value={activeTab}
         onChange={setActiveTab}
         tabListClassName={styles.searchChannel__tabList}

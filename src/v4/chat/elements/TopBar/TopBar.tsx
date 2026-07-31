@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { IconButton } from '~/v4/chat/elements/IconButton';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { ChevronLeft } from '~/v4/core/design/icons/ChevronLeft';
+import { Cross } from '~/v4/core/design/icons/Cross';
 import styles from './TopBar.module.css';
 
 type TopBarProps = {
@@ -16,9 +18,11 @@ export function TopBar({ title, leadingType = 'back', onLeading, trailing }: Top
   return (
     <header className={styles.topBar}>
       <div className={styles.topBar__leftAction}>
-        <IconButton
-          icon={isBack ? 'chevron-left' : 'close'}
-          variant="transparent"
+        <Button.Icon
+          icon={isBack ? <ChevronLeft /> : <Cross />}
+          styleType="ghost"
+          hierarchy="secondary"
+          size={32}
           onPress={onLeading}
           aria-label={isBack ? 'Back' : 'Close'}
         />

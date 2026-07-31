@@ -3,9 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.25rem;
   padding: 1rem;
   min-height: calc(100svh - var(--chat-home-header-height, 3rem) - 3.25rem);
+  background: var(--asc-color-surface-page-background-default);
 }
 
 .channelList__emptyContent {
@@ -24,9 +25,9 @@
 }
 
 .channelList__emptyTitle {
-  color: var(--asc-color-base-shade3);
+  color: var(--asc-color-text-emptystate-title-default);
 }
 
 .channelList__emptySubtitle {
-  color: var(--asc-color-base-shade3);
+  color: var(--asc-color-text-emptystate-description-default);
 }

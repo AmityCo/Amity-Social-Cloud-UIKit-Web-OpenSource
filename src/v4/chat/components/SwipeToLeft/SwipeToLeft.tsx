@@ -1,5 +1,5 @@
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
-import { useRef, type ComponentType, type ReactNode, type SVGProps } from 'react';
+import { useRef, useState, type ComponentType, type ReactNode, type SVGProps } from 'react';
 import styles from './SwipeToLeft.module.css';
 
 const ACTION_WIDTH = 80;
@@ -28,6 +28,7 @@ export function SwipeToLeft({
     clamp: true,
   });
   const justDraggedRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   return (
     <div ref={containerRef} className={styles.swipeToLeft}>
@@ -41,6 +42,7 @@ export function SwipeToLeft({
       </div>
       <motion.div
         className={styles.swipeToLeft__row}
+        data-dragging={isDragging || undefined}
         style={{ x }}
         drag="x"
         dragConstraints={{ right: 0 }}
@@ -48,8 +50,10 @@ export function SwipeToLeft({
         whileDrag={{ cursor: 'grabbing' }}
         onDragStart={() => {
           justDraggedRef.current = true;
+          setIsDragging(true);
         }}
         onDragEnd={(_, info) => {
+          setIsDragging(false);
           const shouldTrigger =
             info.offset.x < TRIGGER_OFFSET || info.velocity.x < TRIGGER_VELOCITY;
           if (shouldTrigger) {

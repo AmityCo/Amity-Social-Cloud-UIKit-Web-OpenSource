@@ -19,7 +19,7 @@ export function useChannelPushNotificationQuery({
   channelId,
   enabled = true,
 }: ChannelPushNotificationQueryParams) {
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
   const muteSuccess = useString('amity_chat_action_mute');
   const muteError = useString('amity_chat_action_mute_failed');
   const unmuteSuccess = useString('amity_chat_action_unmute');

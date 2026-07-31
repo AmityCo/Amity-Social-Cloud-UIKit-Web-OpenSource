@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './CreateLivestream.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
@@ -91,6 +91,19 @@ export function CreateLivestreamPage({
   const isWaitingForEventChat = isTargetEvent && uiState === 'broadcast' && !channel;
   const isShowChatColumn = isShowLivestreamChat || isWaitingForEventChat;
   const notificationAlignment = isShowChatColumn ? 'livestreamWithChat' : 'fullscreen';
+
+  // The host layout uses a wider chat column (35dvw, see
+  // CreateLivestream.module.css). Publish that width so the moderation
+  // toast (rendered at document root, aligned 'live-chat') can size itself
+  // to match the host chat panel instead of the viewer default.
+  useEffect(() => {
+    if (!isShowChatColumn) return;
+    const root = document.documentElement;
+    root.style.setProperty('--asc-livestream-chat-toast-width', 'calc(35dvw - 5rem)');
+    return () => {
+      root.style.removeProperty('--asc-livestream-chat-toast-width');
+    };
+  }, [isShowChatColumn]);
 
   useCoHostParticipantEvents({ room, notificationAlignment, mode: 'host' });
 

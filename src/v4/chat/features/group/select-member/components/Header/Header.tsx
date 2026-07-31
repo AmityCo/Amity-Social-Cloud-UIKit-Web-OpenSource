@@ -1,7 +1,6 @@
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
-import { Typography } from '~/v4/core/components/Typography/Typography';
+import { Button } from '~/v4/core/design/atoms/Button';
 import { TopBar } from '~/v4/chat/elements/TopBar';
+import { SearchInput } from '~/v4/core/design/molecules/SearchInput';
 import { SelectedUsersBar } from '~/v4/chat/features/group/select-member/components/SelectedUsersBar/SelectedUsersBar';
 import { useString } from '~/v4/core/localization';
 import styles from './Header.module.css';
@@ -30,21 +29,18 @@ export function Header({
     <header className={styles.header}>
       <TopBar
         title={title}
-        leadingType="close"
+        leadingType="back"
         onLeading={onClose}
         trailing={
-          <Button
+          <Button.Main
             type="submit"
-            variant="text"
-            color="primary"
+            styleType="ghost"
+            hierarchy="primary"
+            size="sm"
+            label={nextLabel}
             isDisabled={!isFormValid}
-            className={styles.header__nextButton}
             aria-label={nextLabel}
-          >
-            <Typography.Body className={styles.header__nextLabel} data-enabled={isFormValid}>
-              {nextLabel}
-            </Typography.Body>
-          </Button>
+          />
         }
       />
       <div className={styles.header__searchBar}>
@@ -52,6 +48,7 @@ export function Header({
           value={searchValue}
           onChange={onSearchChange}
           placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
         />
       </div>
       <SelectedUsersBar users={selectedUsers} onRemoveUser={onRemoveUser} />

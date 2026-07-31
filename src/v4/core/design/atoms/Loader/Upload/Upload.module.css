@@ -1,0 +1,82 @@
+.upload {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload[data-size='sm'] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.upload[data-size='medium'] {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.upload[data-size='large'] {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.upload__ring {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: upload-spin 0.9s linear infinite;
+}
+
+@keyframes upload-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.upload__track {
+  fill: none;
+  stroke: var(--asc-color-surface-loaders-uploadcontroller-background);
+  stroke-width: 2;
+  opacity: 0.5;
+}
+
+.upload__arc {
+  fill: none;
+  stroke: var(--asc-color-surface-loaders-uploadcontroller-loader);
+  stroke-width: 2;
+  stroke-linecap: butt;
+  transition: stroke-dasharray 0.2s ease;
+}
+
+.upload__cancel {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.upload__cancelIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-icon-loaders-uploadcontroller-default);
+  fill: currentcolor;
+}
+
+.upload[data-size='large'] .upload__cancelIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.upload__countdown {
+  position: absolute;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 3rem;
+  letter-spacing: -0.025rem;
+  color: var(--asc-color-text-loaders-uploadcontroller-default);
+}

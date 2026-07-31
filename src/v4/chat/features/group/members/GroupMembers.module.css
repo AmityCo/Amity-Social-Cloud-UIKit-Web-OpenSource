@@ -1,6 +1,6 @@
 .groupMembers {
   --empty-state-offset-top: 12.75rem;
 
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-page-background-default);
   min-height: 100svh;
 }
