@@ -15,6 +15,7 @@ _temporary
 # claude
 .claude/plans
 .claude/specs
+.claude/skills
 settings.local.json
 
 # git
