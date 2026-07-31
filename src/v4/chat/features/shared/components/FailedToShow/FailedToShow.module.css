@@ -1,0 +1,27 @@
+.failedToShow {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+}
+
+.failedToShow__icon {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  color: var(--asc-color-icon-emptystate-icon-default);
+  fill: var(--asc-color-icon-emptystate-icon-default);
+}
+
+.failedToShow__title {
+  text-align: center;
+  color: var(--asc-color-text-emptystate-title-default);
+}
+
+.failedToShow__desc {
+  text-align: center;
+  color: var(--asc-color-text-emptystate-description-default);
+}

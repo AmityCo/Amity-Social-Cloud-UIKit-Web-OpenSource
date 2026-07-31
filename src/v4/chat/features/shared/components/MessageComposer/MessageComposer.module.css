@@ -3,8 +3,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: var(--asc-color-background-default);
-  border-top: 0.0625rem solid var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-page-background-default);
+  border-top: 0.0625rem solid var(--asc-color-line-divider-post-default);
   flex-shrink: 0;
 }
 
@@ -23,13 +23,13 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.75rem 0.75rem 0.75rem 1rem;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-list-default-hover);
 }
 
 .messageComposer__editPanelTitle {
   flex: 1 0 0;
   min-width: 0;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-overline-default-default);
 }
 
 .messageComposer__editPanelClose.messageComposer__editPanelClose,
@@ -48,13 +48,13 @@
 .messageComposer__editPanelCloseIcon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--asc-color-base-shade2);
-  fill: var(--asc-color-base-shade2);
+  color: var(--asc-color-icon-iconbutton-ghost-secondary-default);
+  fill: var(--asc-color-icon-iconbutton-ghost-secondary-default);
 }
 
 .messageComposer__inputRow {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
@@ -71,7 +71,7 @@
   padding: 0;
   border: none;
   border-radius: 9999px;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-iconbutton-filled-secondary-enabled);
   flex-shrink: 0;
 }
 
@@ -82,8 +82,8 @@
 .messageComposer__icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-shade1);
-  fill: var(--asc-color-base-shade1);
+  color: var(--asc-color-icon-iconbutton-filled-secondary-default);
+  fill: var(--asc-color-icon-iconbutton-filled-secondary-default);
 }
 
 .messageComposer__sendButton.messageComposer__sendButton,
@@ -96,32 +96,32 @@
   padding: 0;
   border: none;
   border-radius: 9999px;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-iconbutton-filled-secondary-disabled);
   flex-shrink: 0;
 }
 
 .messageComposer__sendButton.messageComposer__sendButton[data-enabled='true'],
 .messageComposer__sendButton.messageComposer__sendButton[data-enabled='true']:hover {
-  background: var(--asc-color-primary-default);
+  background: var(--asc-color-surface-iconbutton-filled-primary-enabled);
 }
 
 .messageComposer__sendIcon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-shade3);
-  fill: var(--asc-color-base-shade3);
+  color: var(--asc-color-icon-iconbutton-filled-secondary-disabled);
+  fill: var(--asc-color-icon-iconbutton-filled-secondary-disabled);
 }
 
 .messageComposer__sendButton[data-enabled='true'] .messageComposer__sendIcon {
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  color: var(--asc-color-icon-iconbutton-filled-primary-default);
+  fill: var(--asc-color-icon-iconbutton-filled-primary-default);
 }
 
 .messageComposer__inputWrapper {
   display: flex;
   flex: 1 0 0;
   min-width: 0;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-surface-input-boxedinput-default);
   border-radius: 1.25rem;
   padding: 0.625rem 0.75rem;
   min-height: 2.5rem;
@@ -134,7 +134,7 @@
   min-width: 0;
   font-size: 1rem;
   line-height: 1.25rem;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-input-textinput-placeholder-enabled-filled);
 }
 
 .messageComposer__editor :global([contenteditable]) {
@@ -145,7 +145,7 @@
 }
 
 .messageComposer__placeholder {
-  color: var(--asc-color-base-shade2);
+  color: var(--asc-color-text-input-textinput-placeholder-enabled);
   font-size: 1rem;
   line-height: 1.25rem;
 }

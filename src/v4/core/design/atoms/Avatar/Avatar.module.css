@@ -1,0 +1,210 @@
+.avatar {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.avatar__frameWrapper {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.avatar__frame {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--asc-color-surface-avatar-profile-default);
+}
+
+/* ── Shape ── */
+.avatar__frame[data-shape='rounded'] {
+  border-radius: 50%;
+  box-shadow: 0 0 0 var(--avatar-border-width, 0) var(--asc-color-border-avatar-profile-default);
+}
+
+.avatar__frame[data-shape='squared'][data-size='16'],
+.avatar__frame[data-shape='squared'][data-size='24'],
+.avatar__frame[data-shape='squared'][data-size='28'],
+.avatar__frame[data-shape='squared'][data-size='32'] {
+  border-radius: 0.25rem;
+}
+
+.avatar__frame[data-shape='squared'][data-size='40'] {
+  border-radius: 0.5rem;
+}
+
+.avatar__frame[data-shape='squared'][data-size='56'],
+.avatar__frame[data-shape='squared'][data-size='64'] {
+  border-radius: 1rem;
+}
+
+.avatar__frame[data-shape='squared'][data-size='120'] {
+  border-radius: 1.5rem;
+}
+
+/* ── Size (8 intrinsic sizes) ── */
+.avatar__frame[data-size='16'] {
+  width: 1rem;
+  height: 1rem;
+}
+
+.avatar__frame[data-size='24'] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.avatar__frame[data-size='28'] {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.avatar__frame[data-size='32'] {
+  width: 2rem;
+  height: 2rem;
+}
+
+.avatar__frame[data-size='40'] {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.avatar__frame[data-size='56'] {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.avatar__frame[data-size='64'] {
+  width: 4rem;
+  height: 4rem;
+}
+
+.avatar__frame[data-size='120'] {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+/* ── Content ── */
+.avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar__glyph {
+  color: var(--asc-color-icon-avatar-default);
+  fill: currentcolor;
+}
+
+.avatar__frame[data-size='16'] .avatar__glyph {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.avatar__frame[data-size='24'] .avatar__glyph {
+  width: 1rem;
+  height: 1rem;
+}
+
+.avatar__frame[data-size='28'] .avatar__glyph {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.avatar__frame[data-size='32'] .avatar__glyph {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.avatar__frame[data-size='40'] .avatar__glyph {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.avatar__frame[data-size='56'] .avatar__glyph,
+.avatar__frame[data-size='64'] .avatar__glyph {
+  width: 2rem;
+  height: 2rem;
+}
+
+.avatar__frame[data-size='120'] .avatar__glyph {
+  width: 4rem;
+  height: 4rem;
+}
+
+/* ── Hover (edit-photo affordance) ── */
+.avatar__hoverOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--asc-color-background-transparent-black);
+}
+
+.avatar__hoverGlyph {
+  width: 50%;
+  height: 50%;
+  color: var(--asc-color-icon-avatar-default);
+  fill: currentcolor;
+}
+
+.avatar__initials {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--asc-color-text-avatar-atomic-general);
+}
+
+.avatar__frame[data-size='16'] .avatar__initials,
+.avatar__frame[data-size='24'] .avatar__initials,
+.avatar__frame[data-size='28'] .avatar__initials {
+  font-size: 0.625rem;
+}
+
+.avatar__frame[data-size='56'] .avatar__initials,
+.avatar__frame[data-size='64'] .avatar__initials {
+  font-size: 1.5rem;
+}
+
+.avatar__frame[data-size='120'] .avatar__initials {
+  font-size: 3rem;
+}
+
+/* ── Indicator badge slot (bottom-right, with ring) ── */
+.avatar__indicator {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: inline-flex;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0.1875rem var(--asc-color-border-avatar-indicator-default);
+}
+
+/* ── Skeleton ── */
+.avatar__frame[data-state='skeleton'] {
+  background: var(--asc-color-surface-skeletoneffect-default);
+  animation: avatar-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes avatar-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ── Label ── */
+.avatar__label {
+  font-size: 0.8125rem;
+  text-align: center;
+  color: var(--asc-color-text-avatar-label-default);
+}

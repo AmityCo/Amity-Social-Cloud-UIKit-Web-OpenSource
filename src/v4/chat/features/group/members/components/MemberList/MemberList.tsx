@@ -12,13 +12,12 @@ import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useString } from '~/v4/core/localization';
-import { TrashIcon } from '~/v4/icons/Trash';
-import UserShield from '~/v4/icons/UserShield';
-import Banned from '~/v4/icons/Banned';
-import Muted from '~/v4/icons/Muted';
-import UnMuted from '~/v4/icons/UnMutedOutlined';
-import Flag from '~/v4/icons/Flag';
-import UnFlag from '~/v4/icons/UnFlag';
+import { Trash } from '~/v4/core/design/icons/Trash';
+import { UserShield } from '~/v4/core/design/icons/UserShield';
+import { Ban } from '~/v4/core/design/icons/Ban';
+import { VolumeSlash } from '~/v4/core/design/icons/VolumeSlash';
+import { Volume } from '~/v4/core/design/icons/Volume';
+import { Flag } from '~/v4/core/design/icons/Flag';
 import {
   useChannelBanQuery,
   useChannelMemberMuteQuery,
@@ -38,7 +37,7 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
   const [sentinelNode, setSentinelNode] = useState<HTMLDivElement | null>(null);
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const { promoteModerator, demoteModerator } = useChannelModerationQuery();
   const { removeMembers } = useChannelMembershipQuery();
   const { banUser } = useChannelBanQuery();
@@ -198,14 +197,14 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
                 },
                 {
                   key: 'mute',
-                  icon: Muted,
+                  icon: VolumeSlash,
                   label: muteLabel,
                   onPress: () => mute({ channelId, userId: member.user!.userId }),
                   visible: isViewerModerator && !member.isMuted && !isMemberModerator,
                 },
                 {
                   key: 'unmute',
-                  icon: UnMuted,
+                  icon: Volume,
                   label: unmuteLabel,
                   onPress: () => unmute({ channelId, userId: member.user!.userId }),
                   visible: isViewerModerator && !!member.isMuted && !isMemberModerator,
@@ -219,21 +218,21 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
                 },
                 {
                   key: 'unreport',
-                  icon: UnFlag,
+                  icon: Flag,
                   label: unreportLabel,
                   onPress: () => unreport(member.user!.userId),
                   visible: isFlaggedByMe,
                 },
                 {
                   key: 'ban',
-                  icon: Banned,
+                  icon: Ban,
                   label: banLabel,
                   onPress: () => handleBanConfirm(member.user!),
                   visible: isViewerModerator,
                 },
                 {
                   key: 'remove',
-                  icon: TrashIcon,
+                  icon: Trash,
                   label: removeLabel,
                   destructive: true,
                   onPress: () => handleRemoveConfirm(member.user!),

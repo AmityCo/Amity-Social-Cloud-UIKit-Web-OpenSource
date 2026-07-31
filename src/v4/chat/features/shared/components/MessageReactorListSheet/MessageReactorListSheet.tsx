@@ -4,37 +4,37 @@ import { useReactionsCollection } from '~/v4/core/hooks/collections';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useMessageObject } from '~/v4/chat/hooks/objects';
 import { useMessageReactionQuery } from '~/v4/chat/hooks/queries';
+import { FileRepository } from '@amityco/ts-sdk';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Tabs } from '~/v4/core/components/Tabs/Tabs';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
+import { Tabs } from '~/v4/core/design/molecules/Tabs';
+import { Skeleton } from '~/v4/core/design/components/Skeleton/Skeleton';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import { Avatar } from '~/v4/chat/elements/Avatar';
+import { Avatar } from '~/v4/core/design/atoms/Avatar';
 import { abbreviateCount } from '~/v4/utils/abbreviateCount';
 import { REACTION_ICON_MAP } from '~/v4/chat/utils/reactionIcons';
-import FallbackReaction from '~/v4/icons/FallbackReaction';
-import SmilePlus from '~/v4/icons/SmilePlus';
+import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
+import { SmilePlus } from '~/v4/core/design/icons/SmilePlus';
 import { useString } from '~/v4/core/localization';
 import styles from './MessageReactorListSheet.module.css';
 
 type MessageReactorListSheetProps = {
-  message: Amity.Message;
+  messageId: string;
   onClose: () => void;
 };
 
 const ALL_TAB = 'all' as const;
 
-export function MessageReactorListSheet({ message, onClose }: MessageReactorListSheetProps) {
+export function MessageReactorListSheet({ messageId, onClose }: MessageReactorListSheetProps) {
   const { currentUserId } = useSDK();
   const { removeReaction } = useMessageReactionQuery();
   const allTabLabel = useString('amity_chat_tab_all');
 
-  const { message: liveMessage } = useMessageObject({ messageId: message.messageId });
-  const currentMessage = liveMessage ?? message;
-  const isMessageDeleted = !!currentMessage.isDeleted;
+  const { message: currentMessage } = useMessageObject({ messageId });
+  const isMessageDeleted = !!currentMessage?.isDeleted;
 
-  const reactionMap = (currentMessage.reactions as Record<string, number> | undefined) ?? {};
-  const totalCount = isMessageDeleted ? 0 : currentMessage.reactionsCount ?? 0;
+  const reactionMap = (currentMessage?.reactions as Record<string, number> | undefined) ?? {};
+  const totalCount = isMessageDeleted ? 0 : currentMessage?.reactionsCount ?? 0;
   const distinctNames = useMemo(() => {
     if (isMessageDeleted) return [];
     return Object.entries(reactionMap)
@@ -56,7 +56,7 @@ export function MessageReactorListSheet({ message, onClose }: MessageReactorList
 
   const queryParams = {
     referenceType: 'message' as Amity.ReactableType,
-    referenceId: message.messageId ?? '',
+    referenceId: messageId,
     limit: 25,
     ...(activeTab !== ALL_TAB ? { reactionName: activeTab } : {}),
   };
@@ -83,10 +83,10 @@ export function MessageReactorListSheet({ message, onClose }: MessageReactorList
   });
 
   async function handleOwnRowPress() {
-    if (!myReactor || !message.messageId) return;
+    if (!myReactor || !currentMessage) return;
     onClose();
     await removeReaction({
-      message,
+      message: currentMessage,
       reactionName: myReactor.reactionName,
     });
   }
@@ -140,7 +140,6 @@ export function MessageReactorListSheet({ message, onClose }: MessageReactorList
     <div className={styles.messageReactorListSheet}>
       <Tabs
         variant="underlined"
-        fullWidth={false}
         value={activeTab}
         onChange={(key) => setActiveTab(String(key))}
         tabs={tabs()}
@@ -162,15 +161,27 @@ function ReactorRow({ reactor, isOwn = false, onPress }: ReactorRowProps) {
   const tapToRemoveLabel = useString('amity_common_button_tap_to_remove_reaction');
   const Icon: ComponentType<SVGProps<SVGSVGElement>> =
     REACTION_ICON_MAP[reactor.reactionName] ?? FallbackReaction;
+  const displayName = reactor.user?.displayName ?? reactor.user?.userId ?? '';
+  const imageUrl = reactor.user?.avatar?.fileUrl
+    ? FileRepository.fileUrlWithSize(reactor.user.avatar.fileUrl, 'small')
+    : undefined;
   return (
-    <Button
+    <AriaButton
       type="button"
-      variant="default"
       className={styles.messageReactorListSheet__row}
       onPress={onPress ?? (() => {})}
-      aria-label={isOwn ? tapToRemoveLabel : reactor.user?.displayName ?? ''}
+      aria-label={isOwn ? tapToRemoveLabel : displayName}
     >
-      {reactor.user && <Avatar.User user={reactor.user} size="sm" />}
+      {reactor.user && (
+        <Avatar
+          variant={imageUrl ? 'image' : 'text'}
+          shape="rounded"
+          size={32}
+          imageUrl={imageUrl}
+          initials={displayName.trim().charAt(0).toUpperCase() || '?'}
+          alt={displayName}
+        />
+      )}
       <div className={styles.messageReactorListSheet__rowText}>
         <Typography.BodyBold className={styles.messageReactorListSheet__rowTitle}>
           {reactor.user?.displayName ?? ''}
@@ -182,7 +193,7 @@ function ReactorRow({ reactor, isOwn = false, onPress }: ReactorRowProps) {
         ) : null}
       </div>
       <Icon className={styles.messageReactorListSheet__rowReactionIcon} />
-    </Button>
+    </AriaButton>
   );
 }
 

@@ -1,7 +1,7 @@
 import { createElement } from 'react';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import ChevronRight from '~/v4/icons/ChevronRight';
+import { ChevronRight } from '~/v4/core/design/icons/ChevronRight';
 import styles from './SettingMenu.module.css';
 
 type SettingMenuProps = {
@@ -22,9 +22,8 @@ export function SettingMenu({
   onPress,
 }: SettingMenuProps) {
   return (
-    <Button
+    <AriaButton
       type="button"
-      variant="default"
       className={styles.settingMenu}
       onPress={onPress}
       data-destructive={destructive ? 'true' : 'false'}
@@ -54,6 +53,6 @@ export function SettingMenu({
           </span>
         </>
       )}
-    </Button>
+    </AriaButton>
   );
 }

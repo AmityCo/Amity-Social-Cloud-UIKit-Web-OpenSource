@@ -1,5 +1,4 @@
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Typography } from '~/v4/core/components/Typography/Typography';
+import { Button } from '~/v4/core/design/atoms/Button';
 import { useString } from '~/v4/core/localization';
 import styles from './AddMemberButton.module.css';
 
@@ -11,18 +10,16 @@ export function AddMemberButton({ isDisabled }: AddMemberButtonProps) {
   const buttonLabel = useString('amity_chat_add_member_button');
   return (
     <div className={styles.addMemberButton__container}>
-      <Button
+      <Button.Main
         type="submit"
-        variant="fill"
-        color="primary"
-        size="medium"
-        fullWidth
+        styleType="filled"
+        hierarchy="primary"
+        size="lg"
+        label={buttonLabel}
         isDisabled={isDisabled}
         className={styles.addMemberButton}
         aria-label={buttonLabel}
-      >
-        <Typography.BodyBold>{buttonLabel}</Typography.BodyBold>
-      </Button>
+      />
     </div>
   );
 }

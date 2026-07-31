@@ -12,8 +12,8 @@ import {
   LIST_SKELETON_ROW_COUNT,
   SEARCH_MIN_QUERY_LENGTH,
 } from '~/v4/chat/constants';
-import { Archive } from '~/v4/icons/Archive';
-import { Unarchive } from '~/v4/icons/Unarchive';
+import { Archive } from '~/v4/core/design/icons/Archive';
+import { Unarchive } from '~/v4/core/design/icons/Unarchive';
 
 type SearchChannelListProps = {
   query: string;

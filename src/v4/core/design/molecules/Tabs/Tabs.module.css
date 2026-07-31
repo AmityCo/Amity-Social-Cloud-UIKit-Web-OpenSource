@@ -1,0 +1,28 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabList {
+  display: flex;
+  align-items: center;
+}
+
+/* Pill bar — AmityChatHomePage v2: container padding 12/16, 8pt gap */
+.tabList[data-variant='pill'] {
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Underlined bar — Tab spec bar geometry: padding 0/16, gap 20 */
+.tabList[data-variant='underlined'] {
+  gap: 1.25rem;
+  padding: 0 1rem;
+}
+
+/* Icon bar — Tab spec bar geometry: padding 0/16, gap 8 */
+.tabList[data-variant='icon'] {
+  gap: 0.5rem;
+  padding: 0 1rem;
+}

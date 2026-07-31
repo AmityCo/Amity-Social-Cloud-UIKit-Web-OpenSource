@@ -20,11 +20,17 @@ export function UserList({ searchText, onSelectUser }: UserListProps) {
   const { currentUserId } = useSDK();
   const [sentinelNode, setSentinelNode] = useState<HTMLDivElement | null>(null);
 
-  const { users, isLoadingFirstPage, isLoading, hasMore, loadMore } = useSearchUserByDisplayName({
-    limit: LIST_PAGE_LIMIT,
-    displayName: searchText,
-    matchType: 'partial',
-  });
+  const trimmed = searchText.trim();
+  const isPartialQuery = trimmed.length > 0 && trimmed.length < SEARCH_MIN_QUERY_LENGTH;
+
+  const { users, isLoadingFirstPage, isLoading, hasMore, loadMore } = useSearchUserByDisplayName(
+    {
+      limit: LIST_PAGE_LIMIT,
+      displayName: searchText,
+      matchType: 'partial',
+    },
+    { shouldCall: !isPartialQuery },
+  );
 
   useIntersectionObserver({
     node: sentinelNode,
@@ -32,8 +38,7 @@ export function UserList({ searchText, onSelectUser }: UserListProps) {
     onIntersect: () => hasMore && !isLoadingFirstPage && !isLoading && loadMore(),
   });
 
-  const trimmed = searchText.trim();
-  if (trimmed.length > 0 && trimmed.length < SEARCH_MIN_QUERY_LENGTH) {
+  if (isPartialQuery) {
     return <EmptyState variant="prompt" />;
   }
 

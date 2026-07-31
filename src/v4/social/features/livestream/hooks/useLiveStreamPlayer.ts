@@ -76,6 +76,25 @@ export const useLiveStreamPlayer = ({
     }
   }, [videoRef, room?.status, seekToLiveEdge]);
 
+  /**
+   * Return the player to a plain-viewer state. Leaving the co-host stage pauses the video
+   * element, and `handlePause` pins the play/pause control open (it cancels the auto-hide),
+   * so the control stayed visible after dropping back to the viewer view. Resume playback at
+   * the live edge and hide the control again.
+   */
+  const resumeAsViewer = useCallback(() => {
+    const video = videoRef?.current;
+    cancelHideControls();
+    setShowControls(false);
+
+    if (video?.paused) {
+      if (room?.status === 'live' || room?.status === 'waitingReconnect') {
+        seekToLiveEdge();
+      }
+      video.play().catch(() => {});
+    }
+  }, [videoRef, cancelHideControls, room?.status, seekToLiveEdge]);
+
   const toggleControls = useCallback(() => {
     setShowControls((prev) => {
       const next = !prev;
@@ -404,5 +423,6 @@ export const useLiveStreamPlayer = ({
     showControls,
     togglePlayPause,
     toggleControls,
+    resumeAsViewer,
   };
 };

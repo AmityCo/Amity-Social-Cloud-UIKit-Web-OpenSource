@@ -34,7 +34,7 @@ export function useFlagMessageQuery({
   enabled = true,
   toastAlignment,
 }: UseFlagMessageQueryParams) {
-  const { success, info } = useNotifications();
+  const { success, info } = useNotifications('chat');
   const { isDesktop } = useResponsive();
   const [isMessageDeleted, setIsMessageDeleted] = useState(false);
   const reportSuccessToast = useString('amity_chat_toast_message_reported');

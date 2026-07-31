@@ -1,12 +1,16 @@
 import type { RefObject } from 'react';
 import { Popover, Dialog } from 'react-aria-components';
-import { Menu, type MenuIcon } from '~/v4/core/components/Menu';
+import { Menu, type MenuIcon } from '~/v4/core/design/components/Menu';
 import { resolveString } from '~/v4/core/localization';
 import { useFlagMessageQuery, useMessageReactionQuery } from '~/v4/chat/hooks/queries';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { ReactionPicker } from '~/v4/chat/elements/ReactionPicker';
-import Flag from '~/v4/icons/Flag';
-import UnFlag from '~/v4/icons/UnFlag';
+import { Pen } from '~/v4/core/design/icons/Pen';
+import { ShareLeft } from '~/v4/core/design/icons/ShareLeft';
+import { Copy } from '~/v4/core/design/icons/Copy';
+import { ArrowDownToBracket } from '~/v4/core/design/icons/ArrowDownToBracket';
+import { Flag } from '~/v4/core/design/icons/Flag';
+import { FlagSlash } from '~/v4/core/design/icons/FlagSlash';
 import styles from './MessageActionsPopover.module.css';
 import { TypographyVariant } from '~/v4/core/components';
 
@@ -40,6 +44,7 @@ type MessageActionsPopoverProps = {
   handlers: Omit<BubbleMenuHandlers, 'onUnreport'>;
   onDismiss: () => void;
   viewerIsMutedInChannel?: boolean;
+  viewerIsModerator?: boolean;
 };
 
 const MUTED_VICTIM_TRIMMED_KEYS = new Set([
@@ -56,12 +61,12 @@ export function buildBubbleMenuItems(
   flagState: BubbleMenuFlagState,
   handlers: BubbleMenuHandlers,
   viewerIsMutedInChannel: boolean = false,
+  viewerIsModerator: boolean = false,
 ): MessageActionItem[] {
   const isOwn = !!currentUserId && message.creatorId === currentUserId;
   const isText = message.dataType === 'text';
   const isCustom = message.dataType === 'custom';
   const isImage = message.dataType === 'image';
-  const isVideo = message.dataType === 'video';
   const isSynced = message.syncState === ('synced' as Amity.SyncState);
   const isDeleted = message.isDeleted === true;
   const isActive = isSynced && !isDeleted;
@@ -69,31 +74,31 @@ export function buildBubbleMenuItems(
   const items: (MessageActionItem & { visible: boolean })[] = [
     {
       key: 'edit',
-      icon: 'pen',
+      icon: <Pen />,
       label: resolveString('amity_chat_option_edit'),
       onPress: handlers.onEdit,
       visible: isOwn && isText && isActive,
     },
     {
       key: 'reply',
-      icon: 'reply',
+      icon: <ShareLeft />,
       label: resolveString('amity_chat_option_reply'),
       onPress: handlers.onReply,
       visible: isActive,
     },
     {
       key: 'copy',
-      icon: 'copy',
+      icon: <Copy />,
       label: resolveString('amity_chat_option_copy'),
       onPress: handlers.onCopy,
       visible: (isText || isCustom) && isActive,
     },
     {
       key: 'save',
-      icon: 'save',
+      icon: <ArrowDownToBracket />,
       label: resolveString('amity_chat_action_save'),
       onPress: handlers.onSave,
-      visible: (isImage || isVideo) && isActive,
+      visible: isImage && isActive,
     },
     {
       key: 'report-loading',
@@ -105,7 +110,7 @@ export function buildBubbleMenuItems(
     },
     {
       key: 'unreport',
-      icon: UnFlag,
+      icon: <FlagSlash />,
       label: resolveString('amity_chat_option_unreport'),
       onPress: handlers.onUnreport,
       visible: !isOwn && !flagState.isLoading && flagState.isFlaggedByMe,
@@ -123,7 +128,7 @@ export function buildBubbleMenuItems(
       label: resolveString('amity_chat_option_delete'),
       destructive: true,
       onPress: handlers.onDelete,
-      visible: isOwn,
+      visible: isOwn || viewerIsModerator,
     },
   ];
 
@@ -138,6 +143,7 @@ export function MessageActionsPopover({
   handlers,
   onDismiss,
   viewerIsMutedInChannel = false,
+  viewerIsModerator = false,
 }: MessageActionsPopoverProps) {
   const triggerRef = { current: anchor } as RefObject<HTMLElement>;
   const { currentUserId } = useSDK();
@@ -160,6 +166,7 @@ export function MessageActionsPopover({
       onUnreport: () => unreport(),
     },
     viewerIsMutedInChannel,
+    viewerIsModerator,
   );
 
   if (items.length === 0) return null;
@@ -171,9 +178,13 @@ export function MessageActionsPopover({
       onOpenChange={(open) => {
         if (!open) onDismiss();
       }}
-      placement="bottom right"
+      placement={isOwn ? 'bottom right' : 'bottom left'}
     >
-      <Dialog aria-label="Message actions" className={styles.messageActionsPopover}>
+      <Dialog
+        aria-label="Message actions"
+        className={styles.messageActionsPopover}
+        data-own={isOwn ? 'true' : undefined}
+      >
         <div className={styles.messageActionsPopover__reactionPicker}>
           <ReactionPicker
             myReaction={myReaction}

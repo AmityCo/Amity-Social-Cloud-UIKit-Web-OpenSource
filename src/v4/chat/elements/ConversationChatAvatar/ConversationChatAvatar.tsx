@@ -1,22 +1,41 @@
-import { Avatar } from '~/v4/chat/elements/Avatar';
-import UserFilled from '~/v4/icons/UserFilled';
-import styles from './ConversationChatAvatar.module.css';
+import { FileRepository } from '@amityco/ts-sdk';
+import { Avatar } from '~/v4/core/design/atoms/Avatar';
+import { ModeratorBadge } from '~/v4/core/design/elements/ModeratorBadge';
 
 type ConversationChatAvatarProps = {
   user?: Amity.User;
   isDeleted?: boolean;
+  isModerator?: boolean;
 };
 
-export function ConversationChatAvatar({ user, isDeleted }: ConversationChatAvatarProps) {
+export function ConversationChatAvatar({
+  user,
+  isDeleted,
+  isModerator,
+}: ConversationChatAvatarProps) {
+  const indicator = isModerator ? <ModeratorBadge /> : undefined;
+
   if (isDeleted) {
-    return (
-      <div className={styles.conversationChatAvatar__deleted}>
-        <UserFilled className={styles.conversationChatAvatar__deletedIcon} />
-      </div>
-    );
+    return <Avatar variant="icon" shape="rounded" size={40} indicator={indicator} />;
   }
 
   if (!user) return null;
 
-  return <Avatar.User user={user} size="md" />;
+  const displayName = user.displayName ?? user.userId ?? '';
+  const initials = displayName.trim().charAt(0).toUpperCase() || '?';
+  const imageUrl = user.avatar?.fileUrl
+    ? FileRepository.fileUrlWithSize(user.avatar.fileUrl, 'large')
+    : undefined;
+
+  return (
+    <Avatar
+      variant={imageUrl ? 'image' : 'text'}
+      shape="rounded"
+      size={40}
+      imageUrl={imageUrl}
+      initials={initials}
+      alt={displayName}
+      indicator={indicator}
+    />
+  );
 }

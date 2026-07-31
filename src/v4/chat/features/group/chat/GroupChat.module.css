@@ -1,7 +1,17 @@
 .groupChat {
   display: flex;
   flex-direction: column;
-  height: 100svh;
-  background: var(--asc-color-background-default);
+  height: 100dvh;
+  background: var(--asc-color-surface-page-background-default);
   overflow: hidden;
+}
+
+@media (width < 48em) {
+  .groupChat {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100dvh;
+  }
 }

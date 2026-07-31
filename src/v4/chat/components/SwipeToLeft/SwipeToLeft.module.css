@@ -7,7 +7,7 @@
 .swipeToLeft__row {
   position: relative;
   z-index: 1;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-page-background-default);
   touch-action: pan-y;
   cursor: grab;
   user-select: none;
@@ -17,10 +17,14 @@
   cursor: grabbing;
 }
 
+.swipeToLeft__row[data-dragging] > * {
+  pointer-events: none;
+}
+
 .swipeToLeft__action {
   position: absolute;
   inset: 0;
-  background: var(--asc-color-base-shade2);
+  background: var(--asc-color-surface-squarebutton-default-secondary-default);
   z-index: 0;
   pointer-events: none;
 }
@@ -43,8 +47,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--asc-color-white);
-  fill: var(--asc-color-white);
+  color: var(--asc-color-icon-squarebutton-default-secondary-default);
+  fill: var(--asc-color-icon-squarebutton-default-secondary-default);
 }
 
 .swipeToLeft__actionLabel {
@@ -52,5 +56,5 @@
   font-weight: 600;
   line-height: 1.125rem;
   letter-spacing: -0.005em;
-  color: var(--asc-color-white);
+  color: var(--asc-color-text-squarebutton-default-secondary-default);
 }

@@ -1,0 +1,183 @@
+.tabs {
+  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabList[data-variant='icon'],
+.tabList[data-variant='underlined'] {
+  gap: 1.25rem;
+  display: flex;
+  align-items: center;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-left: 1px solid var(--asc-color-base-shade4);
+  border-right: 1px solid var(--asc-color-base-shade4);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
+  padding: 1rem 1rem 0;
+}
+
+.tabList[data-variant='iconSmall'] {
+  border-left: unset;
+  border-right: unset;
+  border-radius: unset;
+  padding: 0.75rem 1rem 0;
+}
+
+.tab[data-variant='icon'],
+.tab[data-variant='iconSmall'],
+.tab[data-variant='underlined'] {
+  width: 100%;
+  outline: none;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--color);
+  transition: color 200ms;
+
+  --border-color: transparent;
+  --color: var(--asc-color-base-shade2);
+
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tabList[data-full-width='false'] {
+  justify-content: flex-start;
+}
+
+.tab[data-full-width='false'] {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.tab[data-variant='icon'],
+.tab[data-variant='underlined'] {
+  padding-bottom: 1rem;
+}
+
+.tab[data-variant='iconSmall'] {
+  padding-bottom: 0.75rem;
+}
+
+.tab[data-variant='icon'][data-hovered],
+.tab[data-variant='iconSmall'][data-hovered] {
+  color: var(--asc-color-base-default);
+}
+
+.tab[data-variant='underlined'][data-hovered] {
+  color: var(--asc-color-primary-default);
+}
+
+.tab[data-variant='icon'][data-selected],
+.tab[data-variant='iconSmall'][data-selected] {
+  color: var(--asc-color-base-default);
+
+  --border-color: var(--asc-color-primary-default);
+}
+
+.tab[data-variant='underlined'][data-selected] {
+  color: var(--asc-color-text-tab-underlined-active);
+
+  --border-color: var(--asc-color-line-tab-underlined-active);
+}
+
+.tab[data-variant='icon'][data-disabled],
+.tab[data-variant='iconSmall'][data-disabled],
+.tab[data-variant='underlined'][data-disabled] {
+  color: var(--asc-color-base-shade3);
+}
+
+.tabIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentcolor;
+}
+
+.tabIcon[data-variant='iconSmall'] {
+  width: 1rem;
+  height: 1rem;
+}
+
+.tabPanel {
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabPanel::-webkit-scrollbar {
+  display: none;
+}
+
+.tabList[data-variant='chip'] {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabList[data-variant='chip']::-webkit-scrollbar {
+  display: none;
+}
+
+.tab[data-variant='chip'] {
+  outline: none;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--asc-color-border-tab-pill-default);
+  background-color: var(--asc-color-surface-tab-pill-default);
+  color: var(--asc-color-text-tab-pill-default);
+  transition:
+    background-color 200ms,
+    border-color 200ms,
+    color 200ms;
+  white-space: nowrap;
+}
+
+.tab[data-variant='chip'][data-hovered] {
+  background-color: var(--asc-color-surface-tab-pill-hover);
+}
+
+.tab[data-variant='chip'][data-selected] {
+  background-color: var(--asc-color-surface-tab-pill-active);
+  border-color: var(--asc-color-border-tab-pill-active);
+  color: var(--asc-color-text-tab-pill-active);
+}
+
+.tab[data-variant='chip'][data-disabled] {
+  color: var(--asc-color-text-tab-pill-disabled);
+  cursor: not-allowed;
+}
+
+@media only screen and (width < 48em) {
+  .tabs {
+    gap: 0;
+  }
+
+  .tabList[data-variant='icon'],
+  .tabList[data-variant='iconSmall'],
+  .tabList[data-variant='underlined'] {
+    border-left: none;
+    border-right: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+}
+
+/* Search page's underlined variant — tokens bound per Figma node 10806-46948.
+   Scoped to underlined only so icon/iconSmall variants keep their v1 tokens. */
+.tab[data-variant='underlined'] {
+  --color: var(--asc-color-text-tab-underlined-default);
+}
+
+.tabList[data-variant='underlined'] {
+  border-color: var(--asc-color-line-divider-post-default);
+  background-color: var(--asc-color-surface-page-background-default);
+}

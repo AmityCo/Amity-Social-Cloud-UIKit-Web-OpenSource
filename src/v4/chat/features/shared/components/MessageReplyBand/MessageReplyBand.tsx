@@ -1,7 +1,7 @@
 import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import Close from '~/v4/icons/Close';
-import VideoControl from '~/v4/icons/VideoControl';
+import { Cross } from '~/v4/core/design/icons/Cross';
+import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import useFile from '~/v4/core/hooks/useFile';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useMessageObject } from '~/v4/chat/hooks/objects';
@@ -86,7 +86,7 @@ export function MessageReplyBand({
           onCancel();
         }}
       >
-        <Close className={styles.replyBand__closeIcon} />
+        <Cross className={styles.replyBand__closeIcon} />
       </button>
     </div>
   );
@@ -163,7 +163,7 @@ function VideoThumb({ replyTo }: { replyTo: Amity.Message }) {
         className={styles.replyBand__thumb}
       />
       <div className={styles.replyBand__videoOverlay} aria-hidden="true">
-        <VideoControl className={styles.replyBand__videoIcon} />
+        <VideoPlay className={styles.replyBand__videoIcon} />
       </div>
     </div>
   );

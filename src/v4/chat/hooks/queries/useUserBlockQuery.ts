@@ -14,7 +14,7 @@ type UnblockResponse = Awaited<ReturnType<typeof UserRepository.Relationship.unB
 
 export function useUserBlockQuery() {
   const { confirm, closeConfirm } = useConfirmContext();
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
 
   const blockMutation = useMutation<BlockResponse, Error, UserBlockPayload>({
     mutationFn: ({ userId }) => UserRepository.Relationship.blockUser(userId),

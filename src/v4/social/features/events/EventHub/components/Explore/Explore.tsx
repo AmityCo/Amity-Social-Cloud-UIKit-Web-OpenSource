@@ -29,6 +29,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
   const eventCollection = useEventsCollection({
     limit: 10,
     status: AmityEventStatus.Scheduled,
+    excludeOwnEvents: true,
   });
 
   if (isExcluded) return null;

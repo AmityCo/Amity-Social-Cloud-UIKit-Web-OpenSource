@@ -18,7 +18,7 @@ export type UseDeleteMessageQueryReturn = {
 
 export function useDeleteMessageQuery(): UseDeleteMessageQueryReturn {
   const { confirm, closeConfirm } = useConfirmContext();
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const deleteAlertTitle = useString('amity_chat_delete_alert_title');
   const deleteAlertMessage = useString('amity_chat_delete_alert_message');
   const deleteConfirm = useString('amity_chat_option_delete');

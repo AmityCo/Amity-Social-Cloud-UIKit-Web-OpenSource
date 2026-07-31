@@ -8,12 +8,6 @@
   position: sticky;
 }
 
-.livestreamChatMessageComposer__unJoined__container {
-  width: 100%;
-  padding: 1.125rem 1rem;
-  text-align: center;
-}
-
 .livestreamChatMessageComposer__pendingPost__container {
   text-align: center;
   padding: 1.125rem 1rem;
@@ -39,8 +33,7 @@
 
 .livestreamChatMessageComposer__mute__icon,
 .livestreamChatMessageComposer__mute__text,
-.livestreamChatMessageComposer__pendingPost__text,
-.livestreamChatMessageComposer__unJoined__text {
+.livestreamChatMessageComposer__pendingPost__text {
   color: var(--asc-color-secondary-shade2);
 }
 
@@ -147,10 +140,6 @@
 }
 
 @media only screen and (width >= 48em) {
-  .livestreamChatMessageComposer__unJoined__container {
-    padding: 1rem;
-  }
-
   .livestreamChatMessageComposer {
     position: unset;
     height: 4.5rem;

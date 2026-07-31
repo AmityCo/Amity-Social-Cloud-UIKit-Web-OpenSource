@@ -3,7 +3,7 @@
 
   display: flex;
   flex-direction: column;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-surface-page-background-default);
   height: 100dvh;
 }
 

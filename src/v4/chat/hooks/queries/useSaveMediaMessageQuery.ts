@@ -67,7 +67,7 @@ async function triggerBrowserDownload(url: string, filename: string): Promise<vo
 }
 
 export function useSaveMediaMessageQuery(): UseSaveMediaMessageQueryReturn {
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
   const photoSuccessToast = useString('amity_chat_save_photo_success');
   const photoFailedToast = useString('amity_chat_save_photo_failed');
   const videoSuccessToast = useString('amity_chat_save_video_success');

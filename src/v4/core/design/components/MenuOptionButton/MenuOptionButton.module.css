@@ -1,0 +1,42 @@
+/* MenuOptionButton Component Styles */
+
+.menuOptionButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.menuOptionButton:hover {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.menuOptionButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-default);
+  fill: var(--asc-color-base-default);
+}
+
+.menuOptionButton__dangerIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-alert-default);
+  fill: var(--asc-color-alert-default);
+}
+
+.menuOptionButton__text {
+  color: var(--asc-color-base-default);
+  flex: 1;
+}
+
+.menuOptionButton__dangerText {
+  color: var(--asc-color-alert-default);
+  flex: 1;
+}

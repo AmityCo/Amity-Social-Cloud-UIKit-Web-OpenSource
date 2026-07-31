@@ -1,25 +1,29 @@
 .messageActionsPopover {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
   background: transparent;
   outline: none;
 }
 
+.messageActionsPopover[data-own='true'] {
+  align-items: flex-end;
+}
+
 .messageActionsPopover__reactionPicker {
-  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   padding: 0.5rem;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-surface-reactions-reactionpopover-filled-default);
   border-radius: 9999px;
   box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 12%);
 }
 
 .messageActionsPopover__menu {
-  min-width: 10rem;
-  padding: 0.25rem;
-  background: var(--asc-color-background-default);
+  width: 10rem;
+  padding: 0.5rem 0;
+  background: var(--asc-color-surface-popover-background-default);
   border-radius: 0.75rem;
   box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 12%);
 }

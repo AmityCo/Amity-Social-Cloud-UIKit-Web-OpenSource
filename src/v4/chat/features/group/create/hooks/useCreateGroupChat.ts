@@ -30,7 +30,7 @@ export function useCreateGroupChat({ selectedUsers }: CreateGroupChatPageProps) 
   const { pop, replace, push } = useChatNavigation();
   const { currentUserId } = useSDK();
   const { user: currentUser } = useUser({ userId: currentUserId });
-  const { success, error } = useNotifications();
+  const { success, error } = useNotifications('chat');
   const { confirm } = useConfirmContext();
   const leaveConfirmText = useString('amity_chat_group_leave_confirm_label');
   const cancelText = useString('amity_chat_cancel');

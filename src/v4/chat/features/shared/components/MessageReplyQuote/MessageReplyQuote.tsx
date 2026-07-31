@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import Linkify from 'linkify-react';
 import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
-import ReplyFilled from '~/v4/icons/ReplyFilled';
-import VideoControl from '~/v4/icons/VideoControl';
-import { TrashIcon } from '~/v4/icons/Trash';
+import { Loader } from '~/v4/core/design/atoms/Loader';
+import { ShareLeft } from '~/v4/core/design/icons/ShareLeft';
+import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
+import { Trash } from '~/v4/core/design/icons/Trash';
+import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import useFile from '~/v4/core/hooks/useFile';
 import { useMessageObject } from '~/v4/chat/hooks/objects';
@@ -40,7 +41,7 @@ export function MessageReplyQuote({
     return (
       <div className={styles.replyQuote} data-user={isUser ? 'own' : 'other'}>
         <div className={styles.replyQuote__placeholder} aria-busy="true">
-          <Spinner className={styles.replyQuote__spinner} />
+          <Loader.Spinner size="sm" />
         </div>
       </div>
     );
@@ -51,7 +52,7 @@ export function MessageReplyQuote({
   return (
     <div className={styles.replyQuote} data-user={isUser ? 'own' : 'other'}>
       <div className={styles.replyQuote__header}>
-        <ReplyFilled className={styles.replyQuote__headerIcon} />
+        <ShareLeft.Solid className={styles.replyQuote__headerIcon} />
         <Typography.Caption className={styles.replyQuote__headerText}>
           {headerText}
         </Typography.Caption>
@@ -96,7 +97,7 @@ function DeletedQuote() {
   return (
     <div className={styles.replyQuote__quote}>
       <div className={styles.replyQuote__deletedBubble}>
-        <TrashIcon className={styles.replyQuote__deletedIcon} />
+        <Trash className={styles.replyQuote__deletedIcon} />
         <Typography.Caption className={styles.replyQuote__deletedText}>
           {deletedLabel}
         </Typography.Caption>
@@ -174,6 +175,7 @@ function ImageQuote({ parent, onOpenImage }: ImageQuoteProps) {
     widthRem: 7.5,
     heightRem: 7.5,
   });
+  const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -183,10 +185,30 @@ function ImageQuote({ parent, onOpenImage }: ImageQuoteProps) {
     }
   }, [mediumUrl]);
 
+  const boxStyle = { width: `${size.widthRem}rem`, height: `${size.heightRem}rem` };
+
   if (!mediumUrl) {
     return (
-      <div className={styles.replyQuote__placeholder} aria-busy="true">
-        <Spinner className={styles.replyQuote__spinner} />
+      <div
+        className={styles.replyQuote__mediaBox}
+        data-variant="loading"
+        style={boxStyle}
+        aria-busy="true"
+      >
+        <Loader.Spinner size="sm" />
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <div
+        className={styles.replyQuote__mediaBox}
+        data-variant="broken"
+        style={boxStyle}
+        aria-label="Image unavailable"
+      >
+        <ImageSlash className={styles.replyQuote__mediaBoxIcon} />
       </div>
     );
   }
@@ -210,7 +232,8 @@ function ImageQuote({ parent, onOpenImage }: ImageQuoteProps) {
         src={mediumUrl}
         alt=""
         className={styles.replyQuote__media}
-        style={{ width: `${size.widthRem}rem`, height: `${size.heightRem}rem` }}
+        style={boxStyle}
+        onError={() => setHasError(true)}
         onLoad={(e) => {
           const target = e.currentTarget;
           setSize(getReplyThumbnailSize(target.naturalWidth, target.naturalHeight));
@@ -234,11 +257,32 @@ function VideoQuote({ parent, onOpenVideo }: VideoQuoteProps) {
     widthRem: 7.5,
     heightRem: 7.5,
   });
+  const [hasError, setHasError] = useState(false);
+
+  const boxStyle = { width: `${size.widthRem}rem`, height: `${size.heightRem}rem` };
 
   if (!videoUrl) {
     return (
-      <div className={styles.replyQuote__placeholder} aria-busy="true">
-        <Spinner className={styles.replyQuote__spinner} />
+      <div
+        className={styles.replyQuote__mediaBox}
+        data-variant="loading"
+        style={boxStyle}
+        aria-busy="true"
+      >
+        <Loader.Spinner size="sm" />
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <div
+        className={styles.replyQuote__mediaBox}
+        data-variant="broken"
+        style={boxStyle}
+        aria-label="Video unavailable"
+      >
+        <ImageSlash className={styles.replyQuote__mediaBoxIcon} />
       </div>
     );
   }
@@ -264,16 +308,17 @@ function VideoQuote({ parent, onOpenVideo }: VideoQuoteProps) {
         playsInline
         controls={false}
         className={styles.replyQuote__media}
-        style={{ width: `${size.widthRem}rem`, height: `${size.heightRem}rem` }}
+        style={boxStyle}
+        onError={() => setHasError(true)}
         onLoadedMetadata={(e) => {
           const target = e.currentTarget;
           setSize(getReplyThumbnailSize(target.videoWidth, target.videoHeight));
         }}
       />
-      <div className={styles.replyQuote__videoOverlay} aria-hidden="true">
-        <VideoControl className={styles.replyQuote__videoIcon} />
-      </div>
       <div className={styles.replyQuote__overlay} aria-hidden="true" />
+      <span className={styles.replyQuote__playChip} aria-hidden="true">
+        <VideoPlay className={styles.replyQuote__playIcon} />
+      </span>
     </div>
   );
 }

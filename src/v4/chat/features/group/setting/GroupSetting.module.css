@@ -1,7 +1,8 @@
 .groupSetting {
   display: block;
   width: 100%;
-  background: var(--asc-color-background-default);
+  min-height: 100svh;
+  background: var(--asc-color-surface-page-background-default);
 }
 
 .groupSetting__avatarWrapper {
@@ -26,7 +27,7 @@
 
 .groupSetting__sectionTitle {
   padding: 1.5rem 1rem 0.25rem;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-list-header-default-default);
 }
 
 .groupSetting__divider {
@@ -34,5 +35,5 @@
   height: 0.0625rem;
   margin: 0 1rem;
   border: none;
-  background: var(--asc-color-base-shade4);
+  background: var(--asc-color-line-divider-post-default);
 }

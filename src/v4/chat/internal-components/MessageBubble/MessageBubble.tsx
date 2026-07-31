@@ -1,11 +1,13 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Popover } from '~/v4/core/components/AriaPopover/Popover';
+import { Button } from '~/v4/core/design/components/Button/Button';
+import { Popover } from '~/v4/core/design/components/Popover/Popover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
+import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
+import { MemberRoles } from '~/v4/chat/constants/memberRoles';
 import { PromoteToModerator } from '~/v4/icons/PromoteToModerator';
 import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
 import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
@@ -56,11 +58,26 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isOwner = message.creatorId === currentUserId;
 
   const isHostMessage = hostId === message.creatorId;
-  const isModeratorMessage = channel?.metadata?.moderators?.includes(message.creatorId);
+
+  const currentUserMembership = useCurrentUserChannelMembership(message.channelId);
+  const currentUserHasChannelModeratorRole = !!currentUserMembership?.roles?.includes(
+    MemberRoles.CHANNEL_MODERATOR,
+  );
+  const inChannelMetadataModerators = !!channel?.metadata?.moderators?.includes(message.creatorId);
+  const isModeratorMessage =
+    inChannelMetadataModerators &&
+    (message.creatorId !== currentUserId || currentUserHasChannelModeratorRole);
   const isCoHostMessage = coHostId === message.creatorId;
   const isUserMuted = channel?.metadata?.mutedMembers?.includes(message.creatorId);
   const isCurrentUserMuted = channel?.metadata?.mutedMembers?.includes(currentUserId);
-  const showMutedIndicator = isUserMuted && (isCurrentUserMuted || isModerator);
+
+  const showMutedIndicator =
+    !isHostMessage &&
+    !isCoHostMessage &&
+    coHostId !== message.creatorId &&
+    !isModeratorMessage &&
+    isUserMuted &&
+    (isCurrentUserMuted || isModerator);
 
   const { updateCohostPermission } = useUpdateCohostPermission({ room, pageId });
   const {

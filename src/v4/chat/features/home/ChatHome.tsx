@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { Key } from 'react-aria-components';
-import { Tabs } from '~/v4/core/components/Tabs/Tabs';
+import { Tabs } from '~/v4/core/design/molecules/Tabs';
 import { useString } from '~/v4/core/localization';
 import { Header } from '~/v4/chat/features/home/components/Header/Header';
 import { ChannelList } from '~/v4/chat/features/home/components/ChannelList/ChannelList';
@@ -59,7 +59,7 @@ export function ChatHome() {
       <Header />
       {showNotificationBanner && isChatNotificationDisabled && <NotificationsDisabledBanner />}
       <Tabs
-        variant="chip"
+        variant="pill"
         value={activeTab}
         onChange={setActiveTab}
         tabs={tabs}

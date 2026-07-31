@@ -1,0 +1,2945 @@
+{
+  "alias": {
+    "Background/Black/Default": "{theme.background_color}",
+    "Background/Standard/Black/Default": "{theme.background_color}",
+    "Background/Standard/Black/Subdue": "{theme.background_shade1_color}",
+    "Background/Standard/White/Default": "{theme.background_color}",
+    "Background/Transparent/Black/200": "{theme.transparent_black_shade1_color}",
+    "Background/Transparent/Black/300": "{theme.transparent_black_shade2_color}",
+    "Background/Transparent/Black/500": "{theme.transparent_black_shade3_color}",
+    "Background/Transparent/Black/600": "{theme.transparent_black_shade4_color}",
+    "Background/Transparent/Black/800": "{theme.transparent_black_shade5_color}",
+    "Background/Transparent/Red/200": "{theme.transparent_red_shade1_color}",
+    "Background/Transparent/White/0": "{theme.transparent_white_shade1_color}",
+    "Background/Transparent/White/100": "{theme.transparent_white_shade2_color}",
+    "Background/Transparent/White/200": "{theme.transparent_white_shade3_color}",
+    "Background/Transparent/White/300": "{theme.transparent_white_shade4_color}",
+    "Background/Transparent/White/400": "{theme.transparent_white_shade5_color}",
+    "Background/Transparent/White/600": "{theme.transparent_white_shade6_color}",
+    "Background/Transparent/White/800": "{theme.transparent_white_shade7_color}",
+    "Background/White/Default": "{theme.background_color}",
+    "Black/Black": "{theme.black_color}",
+    "Generic/White/White": "{theme.white_color}",
+    "Information/200": "{theme.neutral_grey_shade1_color}",
+    "Information/300": "{theme.neutral_grey_shade2_color}",
+    "Information/500": "{theme.neutral_grey_shade3_color}",
+    "Information/700": "{theme.neutral_grey_shade4_color}",
+    "Information/800": "{theme.neutral_grey_shade6_color}",
+    "Information/White": "{theme.white_color}",
+    "Primary/200": "{theme.primary_shade3_color}",
+    "Primary/250": "{theme.primary_shade2_color}",
+    "Primary/400": "{theme.primary_shade1_color}",
+    "Primary/500": "{theme.primary_color}",
+    "Primary/600": "{theme.primary_color}",
+    "Primary/700": "{theme.primary_shade4_color}",
+    "Primary/800": "{theme.primary_shade4_color}",
+    "Primary/White": "{theme.white_color}",
+    "Secondary/200": "{theme.neutral_grey_shade1_color}",
+    "Secondary/250": "{theme.neutral_grey_shade1_color}",
+    "Secondary/300": "{theme.neutral_grey_shade1_color}",
+    "Secondary/400": "{theme.neutral_grey_shade2_color}",
+    "Secondary/500": "{theme.neutral_grey_shade3_color}",
+    "Secondary/700": "{theme.neutral_grey_shade4_color}",
+    "Secondary/750": "{theme.neutral_grey_shade5_color}",
+    "Secondary/800": "{theme.neutral_grey_shade6_color}",
+    "Secondary/White": "{theme.white_color}",
+    "Signal/Alert/400": "{theme.alert_shade1_color}",
+    "Signal/Alert/500": "{theme.alert_color}",
+    "Signal/Alert/700": "{theme.alert_color}",
+    "Signal/Destructive/200": "{theme.destructive_shade1_color}",
+    "Signal/Destructive/300": "{theme.destructive_shade2_color}",
+    "Signal/Destructive/400": "{theme.destructive_shade3_color}",
+    "Signal/Destructive/500": "{theme.destructive_shade4_color}",
+    "Signal/Destructive/700": "{theme.destructive_shade5_color}",
+    "Signal/Destructive/800": "{theme.destructive_shade5_color}",
+    "Signal/Event/150": "{theme.event_host_bg_color}",
+    "Signal/Event/500": "{theme.event_host_fg_color}",
+    "Signal/Live/500": "{theme.alert_color}"
+  },
+  "semantic": {
+    "Border/Avatar/Profile/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Border/Avatar/Indicator/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Border/MainButton/Default/Filled/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Border/MainButton/Default/Filled/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/400}"
+    },
+    "Border/MainButton/Default/Filled/Primary/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Default/Filled/Secondary/Enabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/MainButton/Default/Filled/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/400}"
+    },
+    "Border/MainButton/Default/Filled/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Default/Outlined/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Border/MainButton/Default/Outlined/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/400}"
+    },
+    "Border/MainButton/Default/Outlined/Primary/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Default/Outlined/Secondary/Enabled": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/MainButton/Default/Outlined/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/MainButton/Default/Outlined/Secondary/Disabled": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Default/Ghost/Primary/Hover": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Border/MainButton/Default/Ghost/Secondary/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Default/Inverse/Primary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Border/MainButton/Default/Inverse/Primary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Border/MainButton/Default/Inverse/Primary/Disabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Default/Inverse/Secondary/Enabled": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Border/MainButton/Default/Inverse/Secondary/Hover": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Border/MainButton/Default/Inverse/Secondary/Disabled": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/300}"
+    },
+    "Border/MainButton/Default/Transparent/Primary/Enabled": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Border/MainButton/Default/Transparent/Primary/Hover": {
+      "light": "{Background/Transparent/Black/800}",
+      "dark": "{Background/Transparent/Black/800}"
+    },
+    "Border/MainButton/Default/Transparent/Primary/Disabled": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Border/MainButton/Destructive/Filled/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/700}"
+    },
+    "Border/MainButton/Destructive/Filled/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Border/MainButton/Destructive/Filled/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Destructive/Filled/Secondary/Enabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/MainButton/Destructive/Filled/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/400}"
+    },
+    "Border/MainButton/Destructive/Filled/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Destructive/Outlined/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/700}"
+    },
+    "Border/MainButton/Destructive/Outlined/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Border/MainButton/Destructive/Outlined/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Destructive/Outlined/Secondary/Enabled": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/MainButton/Destructive/Outlined/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/MainButton/Destructive/Outlined/Secondary/Disabled": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Destructive/Ghost/Primary/Hover": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Signal/Destructive/800}"
+    },
+    "Border/MainButton/Destructive/Ghost/Secondary/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/MainButton/Destructive/Inverse/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Border/MainButton/Destructive/Inverse/Primary/Hover": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Border/MainButton/Destructive/Inverse/Primary/Disabled": {
+      "light": "{Signal/Destructive/700}",
+      "dark": "{Signal/Alert/700}"
+    },
+    "Border/MainButton/Destructive/Inverse/Secondary/Enabled": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Border/MainButton/Destructive/Inverse/Secondary/Hover": {
+      "light": "{Background/Transparent/Red/200}",
+      "dark": "{Background/Transparent/Red/200}"
+    },
+    "Border/MainButton/Destructive/Inverse/Secondary/Disabled": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/200}"
+    },
+    "Border/Tab/Pill/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Tab/Pill/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Tab/Pill/Press": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Tab/Pill/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Border/Tab/Pill/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Input/BoxedInput/Error": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/500}"
+    },
+    "Border/Badge/AtomicBadge/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Information/White}"
+    },
+    "Border/Badge/SemanticBadge/General/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Information/White}"
+    },
+    "Border/Badge/Live/Status/Live/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Information/White}"
+    },
+    "Border/SideNavigation/Default": {
+      "light": "{Secondary/200}",
+      "dark": "#FFFFFF"
+    },
+    "Border/Selection/RadioAtomic/Inactive/Default": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/White}"
+    },
+    "Border/Selection/RadioAtomic/Inactive/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Selection/CheckboxAtomic/Inactive/Default": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/White}"
+    },
+    "Border/Selection/CheckboxAtomic/Inactive/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Chips/Filled/Enabled": {
+      "light": "{Information/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Border/Chips/Filled/Disabled": {
+      "light": "{Information/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Chips/Outlined/Enabled": {
+      "light": "{Information/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Border/Chips/Outlined/Disabled": {
+      "light": "{Information/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Reaction/ReactionAtom/Default": {
+      "light": "{Background/Standard/White/Default}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Border/Reaction/ReactionCount/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/Reaction/ReactionCount/Active": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/ChatBubble/Inbound/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Border/ChatBubble/Inbound/Pressed": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Border/ChatBubble/Inbound/Deleted": {
+      "light": "{Secondary/250}",
+      "dark": "{Secondary/700}"
+    },
+    "Border/ChatBubble/Outbound/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Border/ChatBubble/Outbound/Deleted": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Border/Toggle/Background/Active/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Border/Toggle/Background/Active/Hovered": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Border/Toggle/Background/Active/Pressed": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Border/Toggle/Background/Active/Focused": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Border/Toggle/Background/Active/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Border/Toggle/Background/Inactive/Enabled": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/Toggle/Background/Inactive/Hovered": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/Toggle/Background/Inactive/Pressed": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/Toggle/Background/Inactive/Focused": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Border/Toggle/Background/Inactive/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Border/Toggle/Thumb/Active/Hovered": {
+      "light": "#0000001A",
+      "dark": "#0000001A"
+    },
+    "Border/Toggle/Thumb/Active/Pressed": {
+      "light": "#00000033",
+      "dark": "#00000033"
+    },
+    "Border/Toggle/Thumb/Active/Focused": {
+      "light": "#00000033",
+      "dark": "#00000033"
+    },
+    "Border/Toggle/Thumb/Inactive/Hovered": {
+      "light": "#0000001A",
+      "dark": "#0000001A"
+    },
+    "Border/Toggle/Thumb/Inactive/Pressed": {
+      "light": "#00000033",
+      "dark": "#00000033"
+    },
+    "Border/Toggle/Thumb/Inactive/Focused": {
+      "light": "#00000033",
+      "dark": "#00000033"
+    },
+    "Icon/General/Default": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/800}"
+    },
+    "Icon/General/Inverse": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Avatar/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/AtomicBadge/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/AtomicBadge/Inverse": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/PostStatus/Sponsored/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/UserStatus/Muted/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/UserStatus/Banned/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/UserStatus/Private/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/UserStatus/Brand/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/UserStatus/Moderator/Default": {
+      "light": "{Primary/600}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/Chat/Archived/Default": {
+      "light": "{Secondary/700}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/Chat/Mention/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/200}"
+    },
+    "Icon/Badge/SemanticBadge/Chat/Private/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/200}"
+    },
+    "Icon/Badge/SemanticBadge/Live/General/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/Live/Alert/Default": {
+      "light": "{Signal/Live/500}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/Event/Host/Default": {
+      "light": "{Signal/Event/500}",
+      "dark": "{Signal/Event/500}"
+    },
+    "Icon/Badge/SemanticBadge/Community/General/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/Community/Private/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/Badge/SemanticBadge/Community/Official/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/EmptyState/Icon/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Icon/MainButton/Default/Filled/Primary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Filled/Primary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Filled/Primary/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Filled/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Filled/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Filled/Secondary/Disabled": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Outlined/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Icon/MainButton/Default/Outlined/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/200}"
+    },
+    "Icon/MainButton/Default/Outlined/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Outlined/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Outlined/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Outlined/Secondary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Ghost/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Icon/MainButton/Default/Ghost/Primary/Hover": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/200}"
+    },
+    "Icon/MainButton/Default/Ghost/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Ghost/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Ghost/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Ghost/Secondary/Disabled": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Link/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Icon/MainButton/Default/Link/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/200}"
+    },
+    "Icon/MainButton/Default/Link/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Link/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Link/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Link/Secondary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Description/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Icon/MainButton/Default/Description/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/200}"
+    },
+    "Icon/MainButton/Default/Description/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Description/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Description/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/MainButton/Default/Description/Secondary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Inverse/Primary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Inverse/Primary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Inverse/Primary/Disabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Inverse/Secondary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Inverse/Secondary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Inverse/Secondary/Disabled": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Default/Transparent/Primary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Transparent/Primary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Default/Transparent/Primary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Filled/Primary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Filled/Primary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Filled/Primary/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Filled/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Filled/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Filled/Secondary/Disabled": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Outlined/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/300}"
+    },
+    "Icon/MainButton/Destructive/Outlined/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Icon/MainButton/Destructive/Outlined/Primary/Disabled": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Outlined/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Outlined/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Outlined/Secondary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Ghost/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Icon/MainButton/Destructive/Ghost/Primary/Hover": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Icon/MainButton/Destructive/Ghost/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Ghost/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Ghost/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Ghost/Secondary/Disabled": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Link/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Icon/MainButton/Destructive/Link/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Icon/MainButton/Destructive/Link/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Link/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Link/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Link/Secondary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Description/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Icon/MainButton/Destructive/Description/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Icon/MainButton/Destructive/Description/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Description/Secondary/Enabled": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Description/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Description/Secondary/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Inverse/Primary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Inverse/Primary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Inverse/Primary/Disabled": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/MainButton/Destructive/Inverse/Secondary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Inverse/Secondary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/MainButton/Destructive/Inverse/Secondary/Disabled": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/IconButton/Filled/Primary/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Filled/Primary/Hovered": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Filled/Primary/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Primary/700}"
+    },
+    "Icon/IconButton/Filled/Secondary/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Filled/Secondary/Hovered": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Filled/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Icon/IconButton/Ghost/Primary/Default": {
+      "light": "{Primary/600}",
+      "dark": "{Primary/500}"
+    },
+    "Icon/IconButton/Ghost/Primary/Hovered": {
+      "light": "{Primary/600}",
+      "dark": "{Primary/400}"
+    },
+    "Icon/IconButton/Ghost/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Primary/700}"
+    },
+    "Icon/IconButton/Ghost/Secondary/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Ghost/Secondary/Hovered": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Ghost/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Icon/IconButton/Transparent/Primary/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Transparent/Primary/Hovered": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/IconButton/Transparent/Primary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Icon/ChatBubble/Inbound/Messages/Deleted": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Icon/ChatBubble/Inbound/SeeMore/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Icon/ChatBubble/Inbound/Header/RepliedTo/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/200}"
+    },
+    "Icon/ChatBubble/Outbound/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/ChatBubble/Outbound/SeeMore/Default": {
+      "light": "{Primary/250}",
+      "dark": "{Primary/250}"
+    },
+    "Icon/ChatBubble/Outbound/Header/RepliedTo/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/200}"
+    },
+    "Icon/ChatBubble/Outbound/Messages/Deleted": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Icon/FloatingButton/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/SquareButton/Default/Primary/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/SquareButton/Default/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/SquareButton/Default/Primary/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/700}"
+    },
+    "Icon/SquareButton/Default/Secondary/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/SquareButton/Default/Secondary/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Icon/SquareButton/Default/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Icon/SquareButton/Destructive/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/SquareButton/Destructive/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/SquareButton/Destructive/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Icon/ActionButton/SplitButton/Default": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/ActionButton/SplitButton/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/ActionButton/SplitButton/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/FeaturedIcon/Tinted": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/FeaturedIcon/Solid": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Input/TextInput/Default": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Input/TextInput/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/700}"
+    },
+    "Icon/Input/TextInput/Error": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Input/ChipInput/Default": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Input/ChipInput/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/700}"
+    },
+    "Icon/Input/ChipInput/Error": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Tab/Default": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Tab/Hover": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Tab/Press": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Tab/Active": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/Tab/Disabled": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/700}"
+    },
+    "Icon/CustomToast/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Loaders/UploadController/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Loaders/Refresher/General": {
+      "light": "{Secondary/800}",
+      "dark": "{Secondary/200}"
+    },
+    "Icon/Selection/RadioAtomic/Default": {
+      "light": "{Information/White}",
+      "dark": "{Primary/White}"
+    },
+    "Icon/Selection/RadioAtomic/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Primary/700}"
+    },
+    "Icon/Selection/CheckboxAtomic/Default": {
+      "light": "{Information/White}",
+      "dark": "{Primary/White}"
+    },
+    "Icon/Selection/CheckboxAtomic/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Primary/700}"
+    },
+    "Icon/List/Leading/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/List/Leading/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Secondary/700}"
+    },
+    "Icon/List/Leading/Active": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/List/Leading/Default/Default": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/List/Leading/Default/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/List/Leading/Default/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Secondary/700}"
+    },
+    "Icon/List/Leading/Default/Active": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/List/Leading/Destructive/Default": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Icon/List/Leading/Destructive/Hover": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Icon/List/Leading/Destructive/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Signal/Destructive/800}"
+    },
+    "Icon/List/Header/General": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/List/Description/General": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Sheets/Default/Default": {
+      "light": "{Information/500}",
+      "dark": "{Secondary/800}"
+    },
+    "Icon/Media/Image/Broken": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Media/Video/Broken": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Toggle/Active/General": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Toggle/Inactive/General": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/300}"
+    },
+    "Icon/Banner/Default/Leading/Icon/General": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Banner/Default/Description/General": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Banner/Default/Trailing/Icon/General": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Banner/Subdue/Leading/Icon/General": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Icon/Banner/Subdue/Description/General": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Icon/Banner/Subdue/Trailing/Icon/General": {
+      "light": "{Information/800}",
+      "dark": "{Secondary/White}"
+    },
+    "Line/Tab/Underlined/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Line/Tab/Icon/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Line/Input/TextInput/Underlined/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/300}"
+    },
+    "Line/Input/TextInput/Underlined/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Line/Input/TextInput/Underlined/Error": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/500}"
+    },
+    "Line/Input/ChipInput/Underlined/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/200}"
+    },
+    "Line/Input/ChipInput/Underlined/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Line/Input/ChipInput/Underlined/Error": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/500}"
+    },
+    "Line/Divider/Post/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Line/Divider/Content/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Line/CommentBubble/Connector/Start/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Primary/500}"
+    },
+    "Line/CommentBubble/Connector/Middle/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Primary/500}"
+    },
+    "Line/CommentBubble/Connector/End/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Primary/500}"
+    },
+    "Line/ChatBubble/Inbound/Divider/Default": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/700}"
+    },
+    "Line/ChatBubble/Outbound/Divider/Default": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/Tab/Pill/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/Tab/Pill/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Tab/Pill/Press": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Tab/Pill/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Tab/Pill/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Avatar/Profile/Default": {
+      "light": "{Primary/250}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/Banner/Default/General": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/Banner/Subdue/General": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Badge/AtomicBadge/Filled/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Badge/SemanticBadge/General/Notification": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/700}"
+    },
+    "Surface/Badge/SemanticBadge/General/Dot": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/700}"
+    },
+    "Surface/Badge/SemanticBadge/General/Selection": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Badge/SemanticBadge/General/Duration": {
+      "light": "{Background/Transparent/Black/600}",
+      "dark": "{Background/Transparent/Black/600}"
+    },
+    "Surface/Badge/SemanticBadge/PostStatus/Sponsored": {
+      "light": "{Background/Transparent/Black/300}",
+      "dark": "{Background/Transparent/Black/300}"
+    },
+    "Surface/Badge/SemanticBadge/PostStatus/Featured": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Badge/SemanticBadge/PostStatus/TotalMedia": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/Badge/SemanticBadge/UserStatus/Moderator": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Badge/SemanticBadge/Chat/Archived": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Badge/SemanticBadge/Chat/Mention": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Badge/SemanticBadge/Chat/Private": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Badge/SemanticBadge/Live/Alert": {
+      "light": "{Signal/Live/500}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Badge/SemanticBadge/Live/Information": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Badge/SemanticBadge/Live/Indicator": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Badge/SemanticBadge/Community/Official": {
+      "light": "{Primary/600}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Badge/SemanticBadge/Community/General": {
+      "light": "{Primary/250}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Badge/SemanticBadge/Event/Host": {
+      "light": "{Signal/Event/150}",
+      "dark": "{Signal/Event/150}"
+    },
+    "Surface/Badge/SemanticBadge/Event/Default": {
+      "light": "{Secondary/700}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Card/PreviewLink/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Card/PreviewLink/Unavailable": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Card/PreviewLink/Skeleton": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/ChatBubble/Message/Inbound/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/ChatBubble/Message/Inbound/Pressed": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/750}"
+    },
+    "Surface/ChatBubble/Message/Inbound/Deleted": {
+      "light": "{Secondary/200}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/ChatBubble/Message/Outbound/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/ChatBubble/Message/Outbound/Pressed": {
+      "light": "{Primary/700}",
+      "dark": "{Primary/700}"
+    },
+    "Surface/ChatBubble/Message/Outbound/Deleted": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/ChatBubble/Message/Outbound/Failed": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/ChatBubble/Reply/Message/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/ChatBubble/Reply/Message/Failed": {
+      "light": "{Secondary/White}",
+      "dark": "{Black/Black}"
+    },
+    "Surface/ChatBubble/Reply/Overlay/Default": {
+      "light": "{Background/Transparent/White/600}",
+      "dark": "{Background/Transparent/Black/300}"
+    },
+    "Surface/MainButton/Default/Filled/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/MainButton/Default/Filled/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/MainButton/Default/Filled/Primary/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Filled/Secondary/Enabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/MainButton/Default/Filled/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/400}"
+    },
+    "Surface/MainButton/Default/Filled/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Outlined/Primary/Enabled": {
+      "light": "{Primary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Outlined/Primary/Hover": {
+      "light": "{Primary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Outlined/Primary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/MainButton/Default/Outlined/Secondary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Outlined/Secondary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Outlined/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/MainButton/Default/Ghost/Primary/Hover": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Surface/MainButton/Default/Ghost/Secondary/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Default/Inverse/Primary/Enabled": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Surface/MainButton/Default/Inverse/Primary/Hover": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/White/100}"
+    },
+    "Surface/MainButton/Default/Inverse/Primary/Disabled": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/200}"
+    },
+    "Surface/MainButton/Default/Inverse/Secondary/Enabled": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Surface/MainButton/Default/Inverse/Secondary/Hover": {
+      "light": "{Background/Transparent/White/200}",
+      "dark": "{Background/Transparent/White/200}"
+    },
+    "Surface/MainButton/Default/Inverse/Secondary/Disabled": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/300}"
+    },
+    "Surface/MainButton/Default/Transparent/Primary/Enabled": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/MainButton/Default/Transparent/Primary/Hover": {
+      "light": "{Background/Transparent/Black/800}",
+      "dark": "{Background/Transparent/Black/800}"
+    },
+    "Surface/MainButton/Default/Transparent/Primary/Disabled": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/MainButton/Destructive/Filled/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/700}"
+    },
+    "Surface/MainButton/Destructive/Filled/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Surface/MainButton/Destructive/Filled/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Destructive/Filled/Secondary/Enabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/MainButton/Destructive/Filled/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/400}"
+    },
+    "Surface/MainButton/Destructive/Filled/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Destructive/Outlined/Primary/Enabled": {
+      "light": "{Primary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Destructive/Outlined/Primary/Hover": {
+      "light": "{Primary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Destructive/Outlined/Primary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/MainButton/Destructive/Outlined/Secondary/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/MainButton/Destructive/Outlined/Secondary/Hover": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/MainButton/Destructive/Outlined/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/MainButton/Destructive/Ghost/Primary/Hover": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Signal/Destructive/800}"
+    },
+    "Surface/MainButton/Destructive/Ghost/Secondary/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/MainButton/Destructive/Inverse/Primary/Enabled": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Surface/MainButton/Destructive/Inverse/Primary/Hover": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/200}"
+    },
+    "Surface/MainButton/Destructive/Inverse/Primary/Disabled": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/200}"
+    },
+    "Surface/MainButton/Destructive/Inverse/Secondary/Enabled": {
+      "light": "{Background/Transparent/White/0}",
+      "dark": "{Background/Transparent/White/0}"
+    },
+    "Surface/MainButton/Destructive/Inverse/Secondary/Hover": {
+      "light": "{Background/Transparent/Red/200}",
+      "dark": "{Background/Transparent/Red/200}"
+    },
+    "Surface/MainButton/Destructive/Inverse/Secondary/Disabled": {
+      "light": "{Background/Transparent/Black/200}",
+      "dark": "{Background/Transparent/Black/200}"
+    },
+    "Surface/IconButton/Filled/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/IconButton/Filled/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/IconButton/Filled/Primary/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Surface/IconButton/Filled/Secondary/Enabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/IconButton/Filled/Secondary/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/IconButton/Filled/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/IconButton/Ghost/Primary/Hover": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Surface/IconButton/Ghost/Secondary/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/IconButton/Transparent/Primary/Enabled": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/600}"
+    },
+    "Surface/IconButton/Transparent/Primary/Hover": {
+      "light": "{Background/Transparent/Black/800}",
+      "dark": "{Background/Transparent/Black/800}"
+    },
+    "Surface/IconButton/Transparent/Primary/Disabled": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/600}"
+    },
+    "Surface/FloatingButton/Enabled": {
+      "light": "{Primary/600}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/FloatingButton/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/FloatingButton/Pressed": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/700}"
+    },
+    "Surface/ActionButtons/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "#FFFFFF"
+    },
+    "Surface/ActionButtons/Pressed": {
+      "light": "{Secondary/200}",
+      "dark": "#FFFFFF"
+    },
+    "Surface/ActionButtons/CaptureButton/General": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/ActionButtons/SplitButton/Enabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/ActionButtons/SplitButton/Hover": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/ActionButtons/SplitButton/Pressed": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/SquareButton/Default/Primary/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/SquareButton/Default/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/600}"
+    },
+    "Surface/SquareButton/Default/Primary/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/SquareButton/Default/Secondary/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/SquareButton/Default/Secondary/Hover": {
+      "light": "{Secondary/300}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/SquareButton/Default/Secondary/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/SquareButton/Destructive/Default": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/700}"
+    },
+    "Surface/SquareButton/Destructive/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/500}"
+    },
+    "Surface/SquareButton/Destructive/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/FeaturedIcon/Tinted": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/FeaturedIcon/Solid": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/MenuList/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/MenuList/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/MenuList/Active": {
+      "light": "{Primary/250}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Input/BoxedInput/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/TopNavigation/Background/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/SideNavigation/Background/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/Background/Default": {
+      "light": "{Background/White/Default}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/Background/Subdue": {
+      "light": "#F5F5F5",
+      "dark": "#242424"
+    },
+    "Surface/CustomToast/Default/Default": {
+      "light": "{Secondary/750}",
+      "dark": "{Secondary/750}"
+    },
+    "Surface/Loaders/Spinner/Primary/Icon": {
+      "light": "{Primary/600}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Loaders/Spinner/Primary/Background": {
+      "light": "{Primary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Loaders/Refresher/General": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Loaders/UploadController/Loader": {
+      "light": "{Secondary/White}",
+      "dark": "{Primary/White}"
+    },
+    "Surface/Loaders/UploadController/Background": {
+      "light": "{Background/Transparent/White/800}",
+      "dark": "{Background/Transparent/White/800}"
+    },
+    "Surface/Selection/RadioAtomic/Inactive/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/Selection/RadioAtomic/Inactive/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Selection/RadioAtomic/Active/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Selection/RadioAtomic/Active/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Surface/Selection/CheckboxAtomic/Inactive/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/Selection/CheckboxAtomic/Inactive/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Selection/CheckboxAtomic/Active/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Selection/CheckboxAtomic/Active/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Surface/List/Skeleton/Skeleton": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/List/Default/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/List/Default/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/List/Default/Active": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/800}"
+    },
+    "Surface/List/Default/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/List/Destructive/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/List/Destructive/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Background/Standard/Black/Subdue}"
+    },
+    "Surface/List/Destructive/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Background/Black/Default}"
+    },
+    "Surface/Sheets/Background/General": {
+      "light": "{Background/Standard/White/Default}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/Sheets/Handle/Default": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/Popover/Background/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Popover/Lists/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Popover/Lists/Hover": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Popover/Lists/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Chips/Filled/Default": {
+      "light": "{Secondary/250}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Chips/Filled/Disabled": {
+      "light": "{Secondary/250}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Chips/Outlined/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Chips/Outlined/Disabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/AlertDialog/Background/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Page/Background/Default": {
+      "light": "{Background/Standard/White/Default}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/Reactions/ReactionCount/Default": {
+      "light": "{Background/Standard/White/Default}",
+      "dark": "{Background/Standard/Black/Default}"
+    },
+    "Surface/Reactions/ReactionCount/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Surface/Reactions/ReactionPopover/Filled/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Reactions/ReactionPopover/Transparent/Default": {
+      "light": "{Background/Transparent/White/400}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/Reactions/ReactionPopover/ReactionState/Active": {
+      "light": "{Secondary/250}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/Reactions/ReactionPopover/ReactionName/Active": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/Date&Time/DateSeparator/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Media/Image/Loaded": {
+      "light": "#F5F5F5",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Media/Image/Loading": {
+      "light": "#F5F5F5",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Media/Image/Broken": {
+      "light": "#F5F5F5",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Media/Video/Loaded": {
+      "light": "#F5F5F5",
+      "dark": "{Secondary/750}"
+    },
+    "Surface/Media/Video/Loading": {
+      "light": "#F5F5F5",
+      "dark": "{Secondary/750}"
+    },
+    "Surface/Media/Video/Broken": {
+      "light": "#F5F5F5",
+      "dark": "{Secondary/750}"
+    },
+    "Surface/Media/Overlay/TransparentBlack": {
+      "light": "{Background/Transparent/Black/500}",
+      "dark": "{Background/Transparent/Black/500}"
+    },
+    "Surface/Media/Overlay/TransparentWhite": {
+      "light": "{Background/Transparent/White/600}",
+      "dark": "{Background/Transparent/White/600}"
+    },
+    "Surface/Progress/Bar/Filled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Progress/Bar/Empty": {
+      "light": "{Background/Transparent/White/300}",
+      "dark": "{Background/Transparent/White/300}"
+    },
+    "Surface/Progress/Knob/Default": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Background/Active/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/Toggle/Background/Active/Hovered": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/Toggle/Background/Active/Pressed": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/Toggle/Background/Active/Focused": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Surface/Toggle/Background/Active/Disabled": {
+      "light": "{Primary/200}",
+      "dark": "{Primary/700}"
+    },
+    "Surface/Toggle/Background/Inactive/Enabled": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/Toggle/Background/Inactive/Hovered": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/Toggle/Background/Inactive/Pressed": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/Toggle/Background/Inactive/Focused": {
+      "light": "{Secondary/400}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/Toggle/Background/Inactive/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/800}"
+    },
+    "Surface/Toggle/Thumb/Active/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Active/Hovered": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Active/Pressed": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Active/Focused": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Active/Disabled": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/500}"
+    },
+    "Surface/Toggle/Thumb/Inactive/Enabled": {
+      "light": "{Secondary/White}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Inactive/Hovered": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Inactive/Pressed": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Inactive/Focused": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/White}"
+    },
+    "Surface/Toggle/Thumb/Inactive/Disabled": {
+      "light": "{Secondary/500}",
+      "dark": "{Secondary/700}"
+    },
+    "Surface/SkeletonEffect/Default": {
+      "light": "{Secondary/200}",
+      "dark": "{Secondary/500}"
+    },
+    "Text/Avatar/Atomic/General": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Avatar/Label/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Base/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/800}"
+    },
+    "Text/Base/Subdue": {
+      "light": "{Information/700}",
+      "dark": "{Information/700}"
+    },
+    "Text/Base/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Base/Alert": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/500}"
+    },
+    "Text/Base/Inverse": {
+      "light": "{Generic/White/White}",
+      "dark": "{Generic/White/White}"
+    },
+    "Text/Base/Highlight": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/500}"
+    },
+    "Text/Banner/Default/Header/General": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Banner/Default/Subhead/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Banner/Default/TextDescription/General": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/Banner/Default/Overline/General": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Banner/Default/Trailing/Subtext/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Banner/Default/Trailing/Text/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Banner/Subdue/Header/General": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Banner/Subdue/Subhead/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Banner/Subdue/TextDescription/General": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/Banner/Subdue/Overline/General": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Banner/Subdue/Trailing/Subtext/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Banner/Subdue/Trailing/Text/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Badge/AtomicBadge/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/AtomicBadge/Inverse": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/General/Default/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/PostStatus/Sponsored/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/PostStatus/Featured/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/PostStatus/TotalMedia/General": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/UserStatus/Moderator/Default": {
+      "light": "{Primary/600}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/Chat/Archived/Default": {
+      "light": "{Secondary/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/Live/General/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/Event/General/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Badge/SemanticBadge/Event/Host/Default": {
+      "light": "{Signal/Event/500}",
+      "dark": "{Signal/Event/500}"
+    },
+    "Text/Card/PreviewLink/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Card/PreviewLink/Domain/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/200}"
+    },
+    "Text/ChatBubble/Inbound/Header/UserName/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/ChatBubble/Inbound/Header/RepliedTo/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/ChatBubble/Inbound/Messages/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/ChatBubble/Inbound/Messages/Deleted": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/ChatBubble/Inbound/EditedLabel/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/200}"
+    },
+    "Text/ChatBubble/Inbound/SeeMore/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/ChatBubble/Inbound/Link/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Text/ChatBubble/Inbound/Mentioned/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Text/ChatBubble/Outbound/Header/UserName/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/ChatBubble/Outbound/Header/RepliedTo/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/ChatBubble/Outbound/Messages/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/ChatBubble/Outbound/Messages/Deleted": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/ChatBubble/Outbound/EditedLabel/Default": {
+      "light": "{Information/200}",
+      "dark": "{Information/200}"
+    },
+    "Text/ChatBubble/Outbound/SeeMore/Default": {
+      "light": "{Primary/250}",
+      "dark": "{Primary/250}"
+    },
+    "Text/ChatBubble/Outbound/Link/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/ChatBubble/Outbound/Mentioned/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/ChatBubble/Outbound/Helper text/Default": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/400}"
+    },
+    "Text/ChatBubble/Timestamp/Sent/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/ChatBubble/Timestamp/Sending/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/EmptyState/Title/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/EmptyState/Description/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Tab/Underlined/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/Tab/Underlined/Hover": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Tab/Underlined/Press": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Tab/Underlined/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/Tab/Underlined/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/Tab/Pill/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/200}"
+    },
+    "Text/Tab/Pill/Hover": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Tab/Pill/Press": {
+      "light": "{Information/700}",
+      "dark": "{Information/700}"
+    },
+    "Text/Tab/Pill/Active": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Tab/Pill/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/MainButton/Default/Filled/Primary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Filled/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Filled/Primary/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Filled/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Filled/Secondary/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Filled/Secondary/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Outlined/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Text/MainButton/Default/Outlined/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/200}"
+    },
+    "Text/MainButton/Default/Outlined/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Outlined/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Outlined/Secondary/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Outlined/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Ghost/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/MainButton/Default/Ghost/Primary/Hover": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/200}"
+    },
+    "Text/MainButton/Default/Ghost/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Ghost/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Ghost/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Ghost/Secondary/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Link/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Text/MainButton/Default/Link/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/200}"
+    },
+    "Text/MainButton/Default/Link/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Link/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Link/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Link/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Description/Primary/Enabled": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/250}"
+    },
+    "Text/MainButton/Default/Description/Primary/Hover": {
+      "light": "{Primary/400}",
+      "dark": "{Primary/200}"
+    },
+    "Text/MainButton/Default/Description/Primary/Disabled": {
+      "light": "{Primary/250}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Description/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Description/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Description/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Inverse/Primary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Inverse/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Inverse/Primary/Disabled": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Inverse/Secondary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Inverse/Secondary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Inverse/Secondary/Disabled": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Default/Transparent/Primary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Transparent/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Default/Transparent/Primary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Filled/Primary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Filled/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Filled/Primary/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Filled/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Filled/Secondary/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Filled/Secondary/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Outlined/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/300}"
+    },
+    "Text/MainButton/Destructive/Outlined/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Text/MainButton/Destructive/Outlined/Primary/Disabled": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Outlined/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Outlined/Secondary/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Outlined/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Ghost/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/MainButton/Destructive/Ghost/Primary/Hover": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Text/MainButton/Destructive/Ghost/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Ghost/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Ghost/Secondary/Hover": {
+      "light": "{Secondary/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Ghost/Secondary/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Link/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/MainButton/Destructive/Link/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Text/MainButton/Destructive/Link/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Link/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Link/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Link/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Description/Primary/Enabled": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/MainButton/Destructive/Description/Primary/Hover": {
+      "light": "{Signal/Destructive/300}",
+      "dark": "{Signal/Destructive/200}"
+    },
+    "Text/MainButton/Destructive/Description/Primary/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Description/Secondary/Enabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Description/Secondary/Hover": {
+      "light": "{Secondary/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Description/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Inverse/Primary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Inverse/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Inverse/Primary/Disabled": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/MainButton/Destructive/Inverse/Secondary/Enabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Inverse/Secondary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/MainButton/Destructive/Inverse/Secondary/Disabled": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/MenuList/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MenuList/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/MenuList/Active": {
+      "light": "{Primary/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/IconButton/Label/General": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Default/Primary/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Default/Primary/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Default/Primary/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/700}"
+    },
+    "Text/SquareButton/Default/Secondary/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Default/Secondary/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Default/Secondary/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/SquareButton/Destructive/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Destructive/Hover": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/SquareButton/Destructive/Disabled": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/TextInput/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/TextInput/Indicator/Default": {
+      "light": "{Information/300}",
+      "dark": "{Information/300}"
+    },
+    "Text/Input/TextInput/Placeholder/Enabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Input/TextInput/Placeholder/Enabled-Filled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/TextInput/Placeholder/Enabled-Highlight": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/Input/TextInput/Placeholder/Focused": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Input/TextInput/Placeholder/Focused-Filled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/TextInput/Placeholder/Focused-Highlight": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/Input/TextInput/Placeholder/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/Input/TextInput/Placeholder/Disabled-Filled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/Input/TextInput/Placeholder/Disabled-Highlight": {
+      "light": "{Primary/250}",
+      "dark": "{Primary/250}"
+    },
+    "Text/Input/TextInput/Placeholder/Error": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Input/TextInput/Placeholder/Error-Filled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/TextInput/Placeholder/Error-Highlight": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/Input/TextInput/HintText/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/Input/TextInput/HintText/Error": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/500}"
+    },
+    "Text/Input/TextInput/TextCount/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/Input/TextInput/TextDescription/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/500}"
+    },
+    "Text/Input/TextInput/TextCursor/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/600}"
+    },
+    "Text/Input/ChipInput/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Title/Disabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Title/Error": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Indicator/Default": {
+      "light": "{Information/300}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Indicator/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Indicator/Error": {
+      "light": "{Information/300}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Placeholder/Enabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/Placeholder/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/Input/ChipInput/Placeholder/Error": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/HintText/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/HintText/Error": {
+      "light": "{Signal/Alert/500}",
+      "dark": "{Signal/Alert/500}"
+    },
+    "Text/Input/ChipInput/TextCount/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/TextDescription/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/TextDescription/Disabled": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/TextDescription/Error": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/ChipInput/TextCursor/Default": {
+      "light": "{Primary/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/Title/Disabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/Indicator/Default": {
+      "light": "{Information/300}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/Indicator/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/TextDescription/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/TextDescription/Disabled": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/Action/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/Action/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/UserName/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Input/UserInput/UserName/Disabled": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/TopNavigation/Title": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/TopNavigation/Description": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/TopNavigation/Feedback": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/CustomToast/Default": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Loaders/UploadController/Default": {
+      "light": "{Information/White}",
+      "dark": "{Secondary/800}"
+    },
+    "Text/List/Label/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/Label/Hover": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/Label/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/List/Label/Active": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/Header/Default/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Header/Default/Hover": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Header/Default/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/700}"
+    },
+    "Text/List/Header/Default/Highlight": {
+      "light": "{Primary/500}",
+      "dark": "{Primary/400}"
+    },
+    "Text/List/Header/Destructive/Default": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/List/Header/Destructive/Hover": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/List/Header/Destructive/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Signal/Destructive/800}"
+    },
+    "Text/List/Subhead/Default/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Subhead/Default/Hover": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Subhead/Default/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Subhead/Default/Highlight": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Subhead/Destructive/Default": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/List/Subhead/Destructive/Hover": {
+      "light": "{Signal/Destructive/500}",
+      "dark": "{Signal/Destructive/400}"
+    },
+    "Text/List/Subhead/Destructive/Disabled": {
+      "light": "{Signal/Destructive/200}",
+      "dark": "{Signal/Destructive/800}"
+    },
+    "Text/List/TextDescription/Default/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/TextDescription/Default/Hover": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/TextDescription/Default/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/List/TextDescription/Default/Highlight": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/TextDescription/Destructive/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/TextDescription/Destructive/Hover": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/TextDescription/Destructive/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/List/Overline/Default/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/List/Trailing/Subtext/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/List/Trailing/Text/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/300}"
+    },
+    "Text/Sheets/Header/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Sheets/Header/TextDescription/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Divider/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Modal/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Modal/TextDescription/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Chips/Filled/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Chips/Filled/Disabled": {
+      "light": "{Information/500}",
+      "dark": "{Information/700}"
+    },
+    "Text/Chips/Outlined/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Chips/Outlined/Disabled": {
+      "light": "{Information/300}",
+      "dark": "{Information/700}"
+    },
+    "Text/AlertDialog/Header/Title/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/AlertDialog/Header/TextDescription/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/AlertDialog/Body/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/White}"
+    },
+    "Text/Timestamp/Default": {
+      "light": "{Information/500}",
+      "dark": "{Information/500}"
+    },
+    "Text/Reactions/Chat/ReactionCount/Default": {
+      "light": "{Information/800}",
+      "dark": "{Information/White}"
+    },
+    "Text/Reactions/Chat/ReactionCount/Active": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Reactions/Post/ReactionCount/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Reactions/Post/CommentCount/General": {
+      "light": "{Information/500}",
+      "dark": "{Information/White}"
+    },
+    "Text/Reactions/ReactionPopover/ReactionName/General": {
+      "light": "{Information/White}",
+      "dark": "{Information/White}"
+    },
+    "Text/Date&Time/DateSeparator/Default": {
+      "light": "{Information/700}",
+      "dark": "{Information/300}"
+    }
+  }
+}

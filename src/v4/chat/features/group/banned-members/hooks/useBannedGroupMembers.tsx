@@ -5,7 +5,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useString } from '~/v4/core/localization';
 import type { ActionMenuItem } from '~/v4/chat/components/ActionMenu';
-import Banned from '~/v4/icons/Banned';
+import { Ban } from '~/v4/core/design/icons/Ban';
 import { SEARCH_DEBOUNCE_MS } from '~/v4/chat/constants/search';
 import { useChannelBanQuery } from '~/v4/chat/hooks/queries';
 import type { BannedGroupMemberListPageProps } from '~/v4/chat/pages/BannedGroupMemberListPage';
@@ -17,7 +17,7 @@ export type OpenUnbanActionParams = {
 export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPageProps) {
   const { pop } = useChatNavigation();
   const { confirm } = useConfirmContext();
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const { unbanUser } = useChannelBanQuery();
 
   const unbanLabel = useString('amity_chat_member_action_unban');
@@ -53,7 +53,7 @@ export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPagePr
   const getActionItems: (user: Amity.User) => ActionMenuItem[] = (user: Amity.User) => [
     {
       key: 'unban',
-      icon: Banned,
+      icon: Ban,
       label: unbanLabel,
       onPress: () => handleUnbanConfirm(user),
     },

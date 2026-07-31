@@ -113,7 +113,6 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       okButtonColor: 'alert',
       onOk: () => {
         coHostLeaveHandler?.();
-        onLeaveStreamStage?.(true);
         onClose();
       },
       okText: resolveString('amity_social_modal_dialog_leave_button'),

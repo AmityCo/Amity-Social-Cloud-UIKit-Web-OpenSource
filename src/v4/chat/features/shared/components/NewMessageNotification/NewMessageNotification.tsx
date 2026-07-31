@@ -1,10 +1,10 @@
 import { FileRepository } from '@amityco/ts-sdk';
+import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { resolveString } from '~/v4/core/localization';
-import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Avatar } from '~/v4/chat/elements/Avatar';
-import ArrowTop from '~/v4/icons/ArrowTop';
-import { Image as ImageIcon } from '~/v4/icons/Image';
+import { ArrowUp } from '~/v4/core/design/icons/ArrowUp';
+import { Image } from '~/v4/core/design/icons/Image';
 import useFile from '~/v4/core/hooks/useFile';
 import styles from './NewMessageNotification.module.css';
 
@@ -50,9 +50,8 @@ export function NewMessageNotification({ message, onPress }: NewMessageNotificat
       : null;
 
   return (
-    <Button
+    <AriaButton
       type="button"
-      variant="text"
       className={styles.newMessageNotification}
       onPress={onPress}
       aria-label="Scroll to new message"
@@ -73,12 +72,12 @@ export function NewMessageNotification({ message, onPress }: NewMessageNotificat
                 className={styles.newMessageNotification__thumbImg}
               />
             ) : (
-              <ImageIcon className={styles.newMessageNotification__thumbFallback} />
+              <Image className={styles.newMessageNotification__thumbFallback} />
             )}
           </div>
         )}
-        <ArrowTop className={styles.newMessageNotification__arrow} />
+        <ArrowUp className={styles.newMessageNotification__arrow} />
       </div>
-    </Button>
+    </AriaButton>
   );
 }

@@ -1,10 +1,13 @@
 import { useRef, useState } from 'react';
-import { TextEditor, type TextEditorHandle } from '~/v4/core/components/TextEditor/TextEditor';
+import {
+  TextEditor,
+  type TextEditorHandle,
+} from '~/v4/core/design/components/TextEditor/TextEditor';
 import { COMPOSER_TEXT_MAX_LENGTH } from '~/v4/chat/constants';
 import { Typography } from '~/v4/core/components/Typography/Typography';
-import { Plus } from '~/v4/icons/Plus';
-import Close from '~/v4/icons/Close';
-import ArrowTop from '~/v4/icons/ArrowTop';
+import { Plus } from '~/v4/core/design/icons/Plus';
+import { Cross } from '~/v4/core/design/icons/Cross';
+import { ArrowUp } from '~/v4/core/design/icons/ArrowUp';
 import { useString } from '~/v4/core/localization';
 import { MediaSection } from './components/MediaSection/MediaSection';
 import { MessageReplyBand } from '~/v4/chat/features/shared/components/MessageReplyBand';
@@ -104,7 +107,7 @@ export function MessageComposer({
             onClick={cancelEdit}
             aria-label="Cancel edit"
           >
-            <Close className={styles.messageComposer__editPanelCloseIcon} />
+            <Cross className={styles.messageComposer__editPanelCloseIcon} />
           </button>
         </div>
       ) : null}
@@ -131,7 +134,7 @@ export function MessageComposer({
             aria-expanded={showMediaSection}
           >
             {showMediaSection ? (
-              <Close className={styles.messageComposer__icon} />
+              <Cross className={styles.messageComposer__icon} />
             ) : (
               <Plus className={styles.messageComposer__icon} />
             )}
@@ -193,7 +196,7 @@ export function MessageComposer({
             onClick={onSend}
             aria-label="Send message"
           >
-            <ArrowTop className={styles.messageComposer__sendIcon} />
+            <ArrowUp className={styles.messageComposer__sendIcon} />
           </button>
         )}
       </div>

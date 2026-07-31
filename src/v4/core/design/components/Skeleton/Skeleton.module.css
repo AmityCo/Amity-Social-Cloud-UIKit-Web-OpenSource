@@ -1,0 +1,28 @@
+.skeleton__square {
+  border-radius: 0.5rem;
+  background-color: var(--asc-color-surface-skeletoneffect-default);
+  animation: pulse 1.75s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton__circle {
+  border-radius: 50%;
+  background-color: var(--asc-color-surface-skeletoneffect-default);
+  animation: pulse 1.75s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton__line {
+  border-radius: 10rem;
+  background-color: var(--asc-color-surface-skeletoneffect-default);
+  animation: pulse 1.75s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}

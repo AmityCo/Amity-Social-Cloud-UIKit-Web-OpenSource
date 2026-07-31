@@ -3,6 +3,7 @@ import { useLiveCollectionV4 } from '~/v4/core/hooks/useLiveCollectionV4';
 
 type UseEventsCollectionParams = Partial<Parameters<typeof EventRepository.getEvents>[0]> & {
   shouldCall?: boolean;
+  excludeOwnEvents?: boolean;
 };
 
 export function useEventsCollection({
@@ -11,7 +12,7 @@ export function useEventsCollection({
   ...props
 }: UseEventsCollectionParams) {
   const query = useLiveCollectionV4({
-    params: { limit, ...props },
+    params: { limit, ...props } as Parameters<typeof EventRepository.getEvents>[0],
     fetcher: EventRepository.getEvents,
     shouldCall,
   });

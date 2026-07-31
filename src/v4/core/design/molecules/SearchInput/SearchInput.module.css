@@ -1,0 +1,13 @@
+.searchInput__clearButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--asc-color-icon-input-textinput-default);
+  fill: var(--asc-color-icon-input-textinput-default);
+}

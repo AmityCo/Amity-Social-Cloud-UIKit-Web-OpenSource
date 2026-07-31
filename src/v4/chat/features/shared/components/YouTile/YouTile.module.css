@@ -11,6 +11,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-text-avatar-label-default);
   text-align: center;
 }

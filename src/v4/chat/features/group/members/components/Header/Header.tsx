@@ -1,5 +1,6 @@
 import { TopBar } from '~/v4/chat/elements/TopBar';
-import { IconButton } from '~/v4/chat/elements/IconButton';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { Plus } from '~/v4/core/design/icons/Plus';
 import { useString } from '~/v4/core/localization';
 
 type HeaderProps = {
@@ -17,9 +18,11 @@ export function Header({ isViewerModerator, onBack, onAddMember }: HeaderProps) 
       onLeading={onBack}
       trailing={
         isViewerModerator ? (
-          <IconButton
-            icon="plus"
-            variant="transparent"
+          <Button.Icon
+            icon={<Plus />}
+            styleType="ghost"
+            hierarchy="secondary"
+            size={32}
             onPress={onAddMember}
             aria-label="Add member"
           />

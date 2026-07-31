@@ -17,14 +17,15 @@ export function useWatchingUsers({ room }: { room?: Amity.Room | null }): {
     queryFn: async () => {
       if (!room?.roomId) return [];
       const result = await RoomPresenceRepository.getRoomOnlineUsers(room.roomId);
-      return result.data || [];
+      return (result.data ?? []).filter((user) => !!user?.displayName || !!user?.userId);
     },
     enabled: !!room?.roomId,
-    // Disable caching
-    gcTime: 0, // Previously called cacheTime - data is garbage collected immediately
-    staleTime: 0, // Data is always considered stale
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
+    // Never serve a cached "Who's watching" list — the presence set churns
+    // fast, and any stale row rendered without a displayName reads as broken.
+    gcTime: 0,
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 
   return {

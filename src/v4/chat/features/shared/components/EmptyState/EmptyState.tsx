@@ -1,9 +1,9 @@
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
-import { SearchResult } from '~/v4/icons/SearchResult';
-import { NoResultIcon } from '~/v4/icons/NoResult';
-import { List } from '~/v4/icons/List';
-import { Inbox } from '~/v4/icons/Inbox';
+import { Search } from '~/v4/core/design/icons/Search';
+import { SearchCross } from '~/v4/core/design/icons/SearchCross';
+import { ListRadio } from '~/v4/core/design/icons/ListRadio';
+import { Inbox } from '~/v4/core/design/icons/Inbox';
 import styles from './EmptyState.module.css';
 
 type EmptyStateVariant =
@@ -18,10 +18,10 @@ type EmptyStateProps = {
 };
 
 function getIcon(variant: EmptyStateVariant) {
-  if (variant === 'prompt') return SearchResult;
-  if (variant === 'no-banned-users') return List;
+  if (variant === 'prompt') return Search.Light;
+  if (variant === 'no-banned-users') return ListRadio;
   if (variant === 'no-archived-chats') return Inbox;
-  return NoResultIcon;
+  return SearchCross;
 }
 
 export function EmptyState({ variant }: EmptyStateProps) {

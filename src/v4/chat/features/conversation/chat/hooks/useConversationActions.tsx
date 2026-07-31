@@ -1,10 +1,10 @@
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { resolveString } from '~/v4/core/localization';
-import BellOutlined from '~/v4/icons/BellOutlined';
-import BellSlash from '~/v4/icons/BellSlash';
-import BlockedUser from '~/v4/icons/BlockedUser';
-import Flag from '~/v4/icons/Flag';
-import UnFlag from '~/v4/icons/UnFlag';
+import { Bell } from '~/v4/core/design/icons/Bell';
+import { BellSlash } from '~/v4/core/design/icons/BellSlash';
+import { Ban } from '~/v4/core/design/icons/Ban';
+import { Flag } from '~/v4/core/design/icons/Flag';
+import { FlagSlash } from '~/v4/core/design/icons/FlagSlash';
 import {
   useChannelPushNotificationQuery,
   useUserBlockQuery,
@@ -62,18 +62,18 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
       : [
           {
             key: 'notification',
-            icon: isNotificationEnabled ? BellSlash : BellOutlined,
+            icon: isNotificationEnabled ? BellSlash : Bell,
             label: resolveString(
               isNotificationEnabled
                 ? 'amity_chat_action_turn_off_notification'
                 : 'amity_chat_action_turn_on_notification',
             ),
             onPress: handleToggleNotification,
-            visible: isChatUserActionEnabled('mute'),
+            visible: false,
           },
           {
             key: 'report',
-            icon: isReported ? UnFlag : Flag,
+            icon: isReported ? FlagSlash : Flag,
             label: resolveString(
               isReported ? 'amity_chat_action_unreport_user' : 'amity_chat_action_report_user',
             ),
@@ -82,7 +82,7 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
           },
           {
             key: 'block',
-            icon: BlockedUser,
+            icon: Ban,
             label: resolveString(
               isBlockedByMe ? 'amity_chat_action_unblock_user' : 'amity_chat_action_block_user',
             ),

@@ -1,8 +1,7 @@
 import { AmityChannelNotificationModeEnum } from '@amityco/ts-sdk';
 import { Controller } from 'react-hook-form';
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Typography } from '~/v4/core/components/Typography/Typography';
-import { RadioGroup } from '~/v4/core/components/AriaRadioGroup/RadioGroup';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { Selection } from '~/v4/core/design/atoms/Selection';
 import { TopBar } from '~/v4/chat/elements/TopBar';
 import { useString } from '~/v4/core/localization';
 import { NotificationMode } from '~/v4/chat/features/group/edit-notification/components/NotificationMode/NotificationMode';
@@ -46,36 +45,37 @@ export function EditGroupNotification(props: EditGroupNotificationPageProps) {
         leadingType="back"
         onLeading={handleClose}
         trailing={
-          <Button
+          <Button.Main
             type="submit"
-            variant="text"
-            color="primary"
+            styleType="ghost"
+            hierarchy="primary"
+            size="sm"
+            label={saveLabel}
             isDisabled={!isFormValid}
-            data-disabled={!isFormValid ? 'true' : 'false'}
-            className={styles.editGroupNotification__saveButton}
             aria-label={saveLabel}
-          >
-            <Typography.Body className={styles.editGroupNotification__saveLabel}>
-              {saveLabel}
-            </Typography.Body>
-          </Button>
+          />
         }
       />
       <Controller
         control={control}
         name="notificationMode"
         render={({ field: { value, onChange } }) => (
-          <RadioGroup
+          <Selection.RadioGroup
             value={value}
             onChange={onChange}
             aria-label={pageTitle}
-            radioContainerClassname={styles.editGroupNotification__radios}
-            radioProps={{ className: styles.editGroupNotification__radio }}
-            radios={notificationModes.map((mode) => ({
-              value: mode.value,
-              label: <NotificationMode title={mode.title} description={mode.description} />,
-            }))}
-          />
+            className={styles.editGroupNotification__radios}
+          >
+            {notificationModes.map((mode) => (
+              <Selection.Radio
+                key={mode.value}
+                value={mode.value}
+                className={styles.editGroupNotification__radio}
+              >
+                <NotificationMode title={mode.title} description={mode.description} />
+              </Selection.Radio>
+            ))}
+          </Selection.RadioGroup>
         )}
       />
     </form>

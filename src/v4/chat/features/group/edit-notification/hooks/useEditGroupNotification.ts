@@ -18,7 +18,7 @@ type EditGroupNotificationForm = z.infer<typeof schema>;
 export function useEditGroupNotification({ channelId }: EditGroupNotificationPageProps) {
   const { pop } = useChatNavigation();
   const { channel, isLoading } = useChannelObject({ channelId });
-  const { success } = useNotifications();
+  const { success } = useNotifications('chat');
   const errorToast = useString('amity_chat_group_notification_save_error');
   const successToast = useString('amity_chat_group_notification_save_success');
   const { updateChannel } = useUpdateChannelQuery({

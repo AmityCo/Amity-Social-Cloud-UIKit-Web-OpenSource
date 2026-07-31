@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useSDK } from '~/v4/core/hooks/useSDK';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { Loader } from '~/v4/core/design/atoms/Loader';
 import { DateSeparator } from '~/v4/chat/features/shared/components/DateSeparator/DateSeparator';
 import { MessageBubble } from '~/v4/chat/features/shared/components/MessageBubble/MessageBubble';
 import { MessageRow } from '~/v4/chat/features/shared/components/MessageRow/MessageRow';
@@ -30,7 +30,7 @@ type MessageListProps = {
   onOpenReactorList: (message: Amity.Message) => void;
   isBubbleMenuOpen?: boolean;
   activeMessageId?: string | null;
-  onSeeMore: (text: string) => void;
+  onSeeMore: (text: string, title?: string) => void;
   newMessage: Amity.Message | null;
   onClearNewMessage: () => void;
   latestMessage: Amity.Message | null;
@@ -263,7 +263,7 @@ export function MessageList({
       <div ref={mountScrollEl} className={styles.messageList__scroll}>
         {isLoading && !isLoadingFirstPage ? (
           <div className={styles.messageList__topLoader}>
-            <Spinner />
+            <Loader.Spinner size="sm" />
           </div>
         ) : null}
 
@@ -344,7 +344,7 @@ export function MessageList({
 
         {isLoadingPrev && !isLoadingFirstPage ? (
           <div className={styles.messageList__bottomLoader}>
-            <Spinner />
+            <Loader.Spinner size="sm" />
           </div>
         ) : null}
       </div>

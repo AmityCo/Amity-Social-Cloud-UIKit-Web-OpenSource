@@ -7,6 +7,7 @@ import UserTimes from '~/v4/icons/UserTimes';
 import styles from './LivestreamModerationOptions.module.css';
 import { CoHostToggleProductPermission } from '~/v4/social/features/livestream/internal-components/CoHostToggleProductPermission';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 export interface LivestreamModerationOptionsProps {
   isHost?: boolean;
@@ -34,6 +35,8 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
   onCoHostPermissionChange,
 }) => {
   const { confirm } = useConfirmContext();
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+  const isProductCatalogueEnabled = !!productCatalogueSettings?.product.enabled;
 
   const handleInviteAsCoHost = () => {
     onInviteAsCoHost?.();
@@ -70,27 +73,29 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
       )}
       {isHost && !isPendingCoHost && coHostId && (
         <div className={styles.livestreamModerationOptions__coHostOptions}>
-          <CoHostToggleProductPermission
-            isSelected={isSelectedCoHostPermission}
-            onChange={(canManageProductTags) => {
-              if (!canManageProductTags) {
-                confirm({
-                  title: resolveString(
-                    'amity_social_modal_dialog_title_disable_cohost_product_tags',
-                  ),
-                  content: resolveString('amity_social_disable_product_tagging_description'),
-                  cancelText: resolveString('amity_social_button_cancel'),
-                  okText: resolveString('amity_social_button_disable'),
-                  okButtonColor: 'alert',
-                  onOk: () => {
-                    onCoHostPermissionChange?.(canManageProductTags);
-                  },
-                });
-              } else {
-                onCoHostPermissionChange?.(canManageProductTags);
-              }
-            }}
-          />
+          {isProductCatalogueEnabled && (
+            <CoHostToggleProductPermission
+              isSelected={isSelectedCoHostPermission}
+              onChange={(canManageProductTags) => {
+                if (!canManageProductTags) {
+                  confirm({
+                    title: resolveString(
+                      'amity_social_modal_dialog_title_disable_cohost_product_tags',
+                    ),
+                    content: resolveString('amity_social_disable_product_tagging_description'),
+                    cancelText: resolveString('amity_social_button_cancel'),
+                    okText: resolveString('amity_social_button_disable'),
+                    okButtonColor: 'alert',
+                    onOk: () => {
+                      onCoHostPermissionChange?.(canManageProductTags);
+                    },
+                  });
+                } else {
+                  onCoHostPermissionChange?.(canManageProductTags);
+                }
+              }}
+            />
+          )}
           <MenuOptionButton
             text={useString('amity_social_status_remove_from_live')}
             icon={<UserTimes />}

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import styles from './styles.module.css';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
-import FallbackReaction from '~/v4/icons/FallbackReaction';
+import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
 import { abbreviateCount } from '~/v4/utils/abbreviateCount';
 
 export const MessageReactionPreview = ({
@@ -46,12 +46,7 @@ export const MessageReactionPreview = ({
                   alt={reactionMapConfig.name}
                 />
               ) : (
-                <FallbackReaction
-                  className={styles.fallbackIcon}
-                  backgroundColor={getComputedStyle(document.documentElement).getPropertyValue(
-                    '--asc-color-base-shade3',
-                  )}
-                />
+                <FallbackReaction className={styles.fallbackIcon} />
               )}
             </>
           );

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button } from '~/v4/core/design/atoms/Button';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -9,9 +9,9 @@ import { useChatNavigation, ChatPageTypes } from '~/v4/chat/providers/ChatNaviga
 import { ChannelItem } from '~/v4/chat/features/home/components/ChannelItem/ChannelItem';
 import { SwipeToLeft } from '~/v4/chat/components/SwipeToLeft';
 import { LIST_PAGE_LIMIT, LIST_SKELETON_ROW_COUNT } from '~/v4/chat/constants';
-import { ChatEmpty } from '~/v4/icons/ChatEmpty';
-import { Plus } from '~/v4/icons/Plus';
-import { Archive } from '~/v4/icons/Archive';
+import { EmptyCommunity2 } from '~/v4/core/design/illustrations/EmptyCommunity2';
+import { Plus } from '~/v4/core/design/icons/Plus';
+import { Archive } from '~/v4/core/design/icons/Archive';
 import styles from './ChannelList.module.css';
 
 type ChannelListProps = {
@@ -76,7 +76,7 @@ function EmptyChannelList() {
 
   return (
     <div className={styles.channelList__empty}>
-      <ChatEmpty />
+      <EmptyCommunity2 />
       <div className={styles.channelList__emptyContent}>
         <div className={styles.channelList__emptyText}>
           <Typography.TitleBold className={styles.channelList__emptyTitle}>
@@ -86,16 +86,15 @@ function EmptyChannelList() {
             {emptyDescription}
           </Typography.Caption>
         </div>
-        <Button
+        <Button.Main
+          label={createNewChatLabel}
           icon={<Plus />}
           onPress={() =>
             push({
               type: ChatPageTypes.CreateConversationPage,
             })
           }
-        >
-          {createNewChatLabel}
-        </Button>
+        />
       </div>
     </div>
   );

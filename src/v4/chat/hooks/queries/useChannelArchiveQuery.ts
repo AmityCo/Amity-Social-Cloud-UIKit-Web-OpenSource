@@ -13,7 +13,7 @@ export type ChannelArchivePayload = {
 type Response = Awaited<ReturnType<typeof ChannelRepository.archiveChannel>>;
 
 export function useChannelArchiveQuery() {
-  const { error, success } = useNotifications();
+  const { error, success } = useNotifications('chat');
   const { info } = useConfirmContext();
   const archiveLimitTitle = useString('amity_chat_archive_limit_title');
   const archiveLimitMessage = useString('amity_chat_archive_limit_message');
@@ -24,6 +24,7 @@ export function useChannelArchiveQuery() {
   const unarchiveSuccessToast = useString('amity_chat_unarchived_toast');
 
   const archiveMutation = useMutation<Response, Error, ChannelArchivePayload>({
+    networkMode: 'always',
     mutationFn: ({ channelId }) => ChannelRepository.archiveChannel(channelId),
     onSuccess: () => {
       success({ content: archivedSuccessToast });
@@ -42,6 +43,7 @@ export function useChannelArchiveQuery() {
   });
 
   const unarchiveMutation = useMutation<Response, Error, ChannelArchivePayload>({
+    networkMode: 'always',
     mutationFn: ({ channelId }) => ChannelRepository.unarchiveChannel(channelId),
     onSuccess: () => {
       success({ content: unarchiveSuccessToast });

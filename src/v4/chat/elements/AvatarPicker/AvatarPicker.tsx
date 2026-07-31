@@ -1,18 +1,17 @@
 import { FileRepository } from '@amityco/ts-sdk';
-import { FileTrigger } from 'react-aria-components';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { FileTrigger, Button as AriaButton } from 'react-aria-components';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { CameraOutlined } from '~/v4/icons/CameraOutlined';
-import { GroupChatBubble } from '~/v4/icons/GroupChatBubble';
+import { Camera } from '~/v4/core/design/icons/Camera';
+import { CommentsAlt } from '~/v4/core/design/icons/CommentsAlt';
 import { AVATAR_ACCEPTED_IMAGE_TYPES, AVATAR_MAX_FILE_SIZE } from '~/v4/chat/constants';
 import { resolveString, useString } from '~/v4/core/localization';
 import useImageUpload from '~/v4/social/hooks/useImageUpload';
 import { CameraButton } from '~/v4/social/elements/CameraButton/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton/ImageButton';
 import { isMobile } from '~/v4/social/utils/isMobile';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { Loader } from '~/v4/core/design/atoms/Loader';
 import styles from './AvatarPicker.module.css';
 
 type AvatarPickerProps = {
@@ -91,9 +90,8 @@ type AvatarButtonProps = {
 
 function AvatarButton({ value, isUploading, onPress }: AvatarButtonProps) {
   return (
-    <Button
+    <AriaButton
       type="button"
-      variant="default"
       onPress={onPress}
       isDisabled={isUploading}
       className={styles.avatarPicker}
@@ -107,12 +105,16 @@ function AvatarButton({ value, isUploading, onPress }: AvatarButtonProps) {
         />
       ) : (
         <span className={styles.avatarPicker__placeholder}>
-          <GroupChatBubble className={styles.avatarPicker__placeholderIcon} />
+          <CommentsAlt.Solid className={styles.avatarPicker__placeholderIcon} />
         </span>
       )}
       <span className={styles.avatarPicker__overlay}>
-        {isUploading ? <Spinner /> : <CameraOutlined className={styles.avatarPicker__cameraIcon} />}
+        {isUploading ? (
+          <Loader.Spinner size="sm" />
+        ) : (
+          <Camera className={styles.avatarPicker__cameraIcon} />
+        )}
       </span>
-    </Button>
+    </AriaButton>
   );
 }

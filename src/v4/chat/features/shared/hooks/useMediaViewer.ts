@@ -20,7 +20,7 @@ export type VideoPlayerRenderProps = {
   onClose: () => void;
   isOwn: boolean;
   onDelete: () => void;
-  onSave: () => void;
+  onSave?: () => void;
 };
 
 export type UseMediaViewerReturn = {
@@ -69,7 +69,6 @@ export function useMediaViewer(): UseMediaViewerReturn {
         onClose: closeVideoPlayer,
         isOwn: videoMessage.creatorId === currentUserId,
         onDelete: () => requestDelete(videoMessage, { afterDelete: closeVideoPlayer }),
-        onSave: () => requestSave(videoMessage),
       }
     : null;
 

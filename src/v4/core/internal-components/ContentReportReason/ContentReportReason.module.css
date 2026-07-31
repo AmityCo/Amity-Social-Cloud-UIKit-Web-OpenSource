@@ -66,10 +66,7 @@
   border-top: 1px solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-background-default);
   z-index: 1;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
 }
 
 .contentReportReason__submitButton {

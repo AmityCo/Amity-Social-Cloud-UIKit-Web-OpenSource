@@ -17,6 +17,10 @@
   border-top-right-radius: 1.25rem;
 }
 
+.drawer__content[data-full-height='true'] {
+  height: 100%;
+}
+
 .drawer__content:focus {
   outline: none;
 }

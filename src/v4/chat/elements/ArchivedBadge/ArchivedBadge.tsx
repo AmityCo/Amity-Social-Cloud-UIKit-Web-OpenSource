@@ -1,6 +1,6 @@
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
-import { Archive } from '~/v4/icons/Archive';
+import { Archive } from '~/v4/core/design/icons/Archive';
 import styles from './ArchivedBadge.module.css';
 
 export function ArchivedBadge() {

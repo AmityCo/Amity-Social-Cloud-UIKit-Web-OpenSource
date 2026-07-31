@@ -1,5 +1,6 @@
 import { useString } from '~/v4/core/localization';
-import { IconButton } from '~/v4/chat/elements/IconButton';
+import { Button } from '~/v4/core/design/atoms/Button';
+import { Search } from '~/v4/core/design/icons/Search';
 import { useChatNavigation, ChatPageTypes } from '~/v4/chat/providers/ChatNavigationProvider';
 
 export function SearchButton() {
@@ -10,5 +11,14 @@ export function SearchButton() {
     push({ type: ChatPageTypes.SearchChannelPage });
   }
 
-  return <IconButton icon="search" aria-label={ariaLabel} onPress={handlePress} />;
+  return (
+    <Button.Icon
+      icon={<Search />}
+      styleType="filled"
+      hierarchy="secondary"
+      size={32}
+      aria-label={ariaLabel}
+      onPress={handlePress}
+    />
+  );
 }

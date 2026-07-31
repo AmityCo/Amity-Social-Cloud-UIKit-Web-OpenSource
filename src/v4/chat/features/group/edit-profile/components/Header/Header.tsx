@@ -1,8 +1,6 @@
-import { Button } from '~/v4/core/components/AriaButton/Button';
-import { Typography } from '~/v4/core/components/Typography/Typography';
+import { Button } from '~/v4/core/design/atoms/Button';
 import { TopBar } from '~/v4/chat/elements/TopBar';
 import { useString } from '~/v4/core/localization';
-import styles from './Header.module.css';
 
 type HeaderProps = {
   isFormValid: boolean;
@@ -18,17 +16,15 @@ export function Header({ isFormValid, onClose }: HeaderProps) {
       leadingType="back"
       onLeading={onClose}
       trailing={
-        <Button
+        <Button.Main
           type="submit"
-          variant="text"
-          color="primary"
+          styleType="ghost"
+          hierarchy="primary"
+          size="sm"
+          label={saveLabel}
           isDisabled={!isFormValid}
-          className={styles.header__saveButton}
-          data-disabled={!isFormValid ? 'true' : 'false'}
           aria-label={saveLabel}
-        >
-          <Typography.Body className={styles.header__saveLabel}>{saveLabel}</Typography.Body>
-        </Button>
+        />
       }
     />
   );

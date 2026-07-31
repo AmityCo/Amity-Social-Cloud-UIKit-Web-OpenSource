@@ -13,7 +13,7 @@ export type ChannelBanPayload = {
 type Response = Awaited<ReturnType<typeof ChannelRepository.Moderation.banMembers>>;
 
 export function useChannelBanQuery() {
-  const { error } = useNotifications();
+  const { error } = useNotifications('chat');
   const banErrorToast = useString('amity_chat_action_ban_member_failed');
   const unbanErrorToast = useString('amity_chat_action_unban_user_failed');
 

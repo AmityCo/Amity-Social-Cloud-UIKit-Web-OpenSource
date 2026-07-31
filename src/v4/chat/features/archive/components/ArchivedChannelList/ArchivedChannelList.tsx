@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useString } from '~/v4/core/localization';
 import { useArchivedChannelsCollection } from '~/v4/chat/hooks/collections/useArchivedChannelsCollection';
@@ -6,7 +6,7 @@ import { useChannelArchiveQuery } from '~/v4/chat/hooks/queries';
 import { ChannelItem } from '~/v4/chat/features/home/components/ChannelItem/ChannelItem';
 import { EmptyState } from '~/v4/chat/features/shared/components/EmptyState/EmptyState';
 import { SwipeToLeft } from '~/v4/chat/components/SwipeToLeft';
-import { Unarchive } from '~/v4/icons/Unarchive';
+import { Unarchive } from '~/v4/core/design/icons/Unarchive';
 import { LIST_PAGE_LIMIT, LIST_SKELETON_ROW_COUNT } from '~/v4/chat/constants';
 import styles from './ArchivedChannelList.module.css';
 
@@ -18,6 +18,13 @@ export function ArchivedChannelList() {
   const { channels, isLoadingFirstPage, hasMore, loadMore, isLoading } =
     useArchivedChannelsCollection({ limit: LIST_PAGE_LIMIT });
 
+  const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+  useEffect(() => {
+    if (isLoadingFirstPage || isLoading || channels.length > 0) {
+      setHasFetchedOnce(true);
+    }
+  }, [isLoadingFirstPage, isLoading, channels.length]);
+
   useIntersectionObserver({
     node: sentinelNode,
     options: { threshold: 0.7 },
@@ -28,7 +35,9 @@ export function ArchivedChannelList() {
     await unarchiveChannel({ channelId });
   }
 
-  if (channels.length === 0 && !isLoadingFirstPage && !isLoading) {
+  const isInitialLoading = !hasFetchedOnce || isLoadingFirstPage;
+
+  if (channels.length === 0 && hasFetchedOnce && !isLoadingFirstPage && !isLoading) {
     return (
       <div className={styles.archivedChannelList}>
         <EmptyState variant="no-archived-chats" />
@@ -48,7 +57,7 @@ export function ArchivedChannelList() {
           <ChannelItem channel={channel} />
         </SwipeToLeft>
       ))}
-      {(isLoadingFirstPage || isLoading) &&
+      {(isInitialLoading || isLoading) &&
         Array.from({ length: LIST_SKELETON_ROW_COUNT }).map((_, i) => (
           <ChannelItem.Skeleton key={i} />
         ))}

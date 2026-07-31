@@ -89,7 +89,7 @@ export const useLivestreamModeration = ({
       cancelInvitation(invitation.invitationId, {
         onSuccess: () => {
           notification.success({
-            content: resolveString('amity_social_toast_snackbar_invitation_declined'),
+            content: resolveString('amity_social_status_invitation_cancelled'),
           });
         },
       });

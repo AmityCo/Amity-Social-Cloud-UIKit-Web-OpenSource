@@ -1,5 +1,5 @@
-import { SearchInput } from '~/v4/core/components/SearchInput/SearchInput';
 import { TopBar } from '~/v4/chat/elements/TopBar';
+import { SearchInput } from '~/v4/core/design/molecules/SearchInput';
 import { useString } from '~/v4/core/localization';
 import styles from './Header.module.css';
 
@@ -20,6 +20,7 @@ export function Header({ onClose, searchValue, onSearchChange }: HeaderProps) {
           value={searchValue}
           onChange={onSearchChange}
           placeholder={searchPlaceholder}
+          aria-label={searchPlaceholder}
         />
       </div>
     </header>

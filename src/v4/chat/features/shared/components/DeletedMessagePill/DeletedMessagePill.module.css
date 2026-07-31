@@ -8,12 +8,13 @@
 }
 
 .deletedMessagePill[data-user='own'] {
-  color: var(--asc-color-primary-default);
+  color: var(--asc-color-text-chatbubble-outbound-messages-deleted);
+  border-color: var(--asc-color-border-chatbubble-outbound-deleted);
 }
 
 .deletedMessagePill[data-user='other'] {
-  color: var(--asc-color-base-shade2);
-  border-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-text-chatbubble-inbound-messages-deleted);
+  border-color: var(--asc-color-border-chatbubble-inbound-deleted);
 }
 
 .deletedMessagePill__icon {

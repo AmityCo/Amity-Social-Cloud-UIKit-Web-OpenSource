@@ -1,9 +1,10 @@
-import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
+import { Skeleton } from '~/v4/core/design/components/Skeleton/Skeleton';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useString } from '~/v4/core/localization';
 import { Avatar } from '~/v4/chat/elements/Avatar';
-import Muted from '~/v4/icons/Muted';
+import { VolumeSlash } from '~/v4/core/design/icons/VolumeSlash';
 import { BrandBadge } from '~/v4/social/elements/BrandBadge/BrandBadge';
+import { Ellipsis } from '~/v4/core/design/icons/Ellipsis';
 import { ActionMenu, type ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import styles from './MemberItem.module.css';
 
@@ -38,12 +39,12 @@ export function MemberItem({
           </Typography.BodyBold>
         )}
         {isViewerModerator && isMuted && (
-          <Muted className={styles.memberItem__mutedIcon} aria-label="Muted" />
+          <VolumeSlash className={styles.memberItem__mutedIcon} aria-label="Muted" />
         )}
       </div>
       {getActions && (
         <ActionMenu
-          icon="ellipsis"
+          icon={<Ellipsis />}
           getItems={getActions}
           ariaLabel={`Actions for ${displayName}`}
         />

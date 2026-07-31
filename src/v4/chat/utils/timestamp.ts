@@ -3,10 +3,9 @@ import { resolveString } from '~/v4/core/localization';
 
 function formatShortDate(date: Date, withYear: boolean): string {
   const locale = typeof navigator !== 'undefined' ? navigator.language : 'en';
-  const options: Intl.DateTimeFormatOptions = withYear
-    ? { day: 'numeric', month: 'short', year: 'numeric' }
-    : { day: 'numeric', month: 'short' };
-  return new Intl.DateTimeFormat(locale, options).format(date);
+  const day = new Intl.DateTimeFormat(locale, { day: '2-digit' }).format(date);
+  const month = new Intl.DateTimeFormat(locale, { month: 'short' }).format(date);
+  return withYear ? `${day} ${month} ${date.getFullYear()}` : `${day} ${month}`;
 }
 
 export function formatTimestamp(input: string | Date): string {
