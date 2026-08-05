@@ -29,7 +29,6 @@ type CommunityMemberItemProps = {
   roles?: string[];
   user?: Amity.User;
   onClick?: () => void;
-  refresh?: () => void;
   isModeratorTab?: boolean;
   community?: Amity.Community;
   currentUserId?: string | null;
@@ -39,7 +38,6 @@ export const CommunityMemberItem = ({
   user,
   roles,
   onClick,
-  refresh,
   community,
   pageId = '*',
   currentUserId,
@@ -50,11 +48,15 @@ export const CommunityMemberItem = ({
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(user?.userId as string);
 
-  const { hasModeratorPermissions, assignRolesToUsers, removeRolesFromUsers, removeMembers } =
-    useModerator({
-      community,
-      user,
-    });
+  const {
+    canEditMembers,
+    hasModeratorPermissions,
+    assignRolesToUsers,
+    removeRolesFromUsers,
+    removeMembers,
+  } = useModerator({
+    community,
+  });
   const memberHasModeratorRole = isModerator(roles);
   const isGlobalBanned = user?.isGlobalBan;
   const isCurrentUser = currentUserId === user?.userId;
@@ -95,9 +97,6 @@ export const CommunityMemberItem = ({
 
     try {
       await assignRolesToUsers([COMMUNITY_MODERATOR, CHANNEL_MODERATOR], [user?.userId as string]);
-      setTimeout(() => {
-        refresh?.();
-      }, 2000); // TODO: to remove refresh function after SDK has been fixed.
       notification.success({
         content: resolveString('amity_social_toast_snackbar_user_promoted'),
       });
@@ -144,7 +143,7 @@ export const CommunityMemberItem = ({
   };
 
   const options = [
-    hasModeratorPermissions && !memberHasModeratorRole && !isGlobalBanned
+    canEditMembers && !memberHasModeratorRole && !isGlobalBanned
       ? {
           name: useString('amity_social_label_promote_to_moderator'),
           action: onPromoteModeratorClick,
@@ -153,7 +152,7 @@ export const CommunityMemberItem = ({
         }
       : null,
 
-    hasModeratorPermissions && memberHasModeratorRole
+    canEditMembers && memberHasModeratorRole
       ? {
           name: useString('amity_social_label_demote_to_member'),
           action: onDismissModeratorClick,

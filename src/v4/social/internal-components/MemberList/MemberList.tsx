@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useString } from '~/v4/core/localization';
 import styles from './MemberList.module.css';
 import { Search } from '~/v4/icons/Search';
@@ -40,7 +40,7 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
   const [memberSearch, setMemberSearch] = useState('');
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
-  const { members, hasMore, isLoading, loadMore, refresh } = useCommunityMembersCollection({
+  const { members, hasMore, isLoading, loadMore } = useCommunityMembersCollection({
     queryParams: {
       communityId: community?.communityId as string,
       memberships: ['member'],
@@ -64,17 +64,18 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
     setMemberSearch(e.target.value);
   };
 
+  // Stable identity: useIntersectionObserver re-creates the observer whenever onIntersect changes,
+  // and a fresh observer fires immediately when the sentinel is already in view - which it always
+  // is on a short list. An inline closure here re-armed it on every render.
+  const onIntersect = useCallback(() => {
+    if (memberSearch.length === 0 && hasMore && !isLoading) loadMore();
+    if (memberSearch.length > 0 && hasMoreSearch && !isSearchLoading) loadMoreSearch();
+  }, [memberSearch, hasMore, isLoading, loadMore, hasMoreSearch, isSearchLoading, loadMoreSearch]);
+
   useIntersectionObserver({
     node: intersectionNode,
-    onIntersect: () => {
-      if (memberSearch.length === 0 && hasMore && !isLoading) loadMore();
-      if (memberSearch.length > 0 && hasMoreSearch && !isSearchLoading) loadMoreSearch();
-    },
+    onIntersect,
   });
-
-  useEffect(() => {
-    refresh();
-  }, []);
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.memberList}>
@@ -112,7 +113,6 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
           user={user}
           roles={roles}
           pageId={pageId}
-          refresh={refresh}
           community={community}
           currentUserId={currentUserId}
           onClick={() => onClickUser(user?.userId as string)}
