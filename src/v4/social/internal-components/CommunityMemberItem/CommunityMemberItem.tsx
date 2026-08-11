@@ -50,7 +50,7 @@ export const CommunityMemberItem = ({
 
   const {
     canEditMembers,
-    hasModeratorPermissions,
+    canRemoveMembers,
     assignRolesToUsers,
     removeRolesFromUsers,
     removeMembers,
@@ -173,7 +173,7 @@ export const CommunityMemberItem = ({
         <Flag className={styles.communityMemberItem__bottomSheeticon} />
       ),
     },
-    hasModeratorPermissions
+    canRemoveMembers
       ? {
           name: useString('amity_social_label_remove_from_community'),
           accessibilityId: 'remove_member',

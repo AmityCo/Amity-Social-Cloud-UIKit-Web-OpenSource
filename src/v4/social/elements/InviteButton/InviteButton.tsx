@@ -17,6 +17,7 @@ export function InviteButton({ pageId = '*', componentId = '*', ...props }: Invi
 
   return (
     <Button
+      fullWidth
       size="medium"
       type="button"
       variant="fill"

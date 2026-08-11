@@ -2,7 +2,11 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { isAdmin, isModerator } from '~/v4/utils/permissions';
 import { isCommunityMember } from '~/v4/helpers/utils';
-import { checkEditCommunityUserPermission } from '~/v4/social/utils';
+import {
+  checkAddCommunityUserPermission,
+  checkEditCommunityUserPermission,
+  checkRemoveCommunityUserPermission,
+} from '~/v4/social/utils';
 import { CommunityRepository } from '@amityco/ts-sdk';
 
 const useModerator = ({ community }: { community?: Amity.Community | null }) => {
@@ -29,6 +33,10 @@ const useModerator = ({ community }: { community?: Amity.Community | null }) => 
   const canEditMembers =
     checkEditCommunityUserPermission(client, communityId) || hasModeratorPermissions;
 
+  const canAddMembers = checkAddCommunityUserPermission(client, communityId);
+
+  const canRemoveMembers = checkRemoveCommunityUserPermission(client, communityId);
+
   const assignRolesToUsers = (roles: string[], userIds: string[]) =>
     communityId && CommunityRepository.Moderation.addRoles(communityId, roles, userIds);
 
@@ -46,6 +54,8 @@ const useModerator = ({ community }: { community?: Amity.Community | null }) => 
     loadMoreModerators: loadMore,
     hasModeratorPermissions,
     canEditMembers,
+    canAddMembers,
+    canRemoveMembers,
     assignRolesToUsers,
     removeRolesFromUsers,
     removeMembers,
