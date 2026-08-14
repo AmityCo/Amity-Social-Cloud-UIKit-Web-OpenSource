@@ -25,6 +25,7 @@ export function Header({
   const title = useString('amity_chat_select_members_title');
   const nextLabel = useString('amity_chat_next');
   const searchPlaceholder = useString('amity_chat_search_placeholder');
+
   return (
     <header className={styles.header}>
       <TopBar

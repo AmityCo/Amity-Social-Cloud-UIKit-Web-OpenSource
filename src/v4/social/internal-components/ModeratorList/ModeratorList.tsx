@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { CommunityMemberItem } from '~/v4/social/internal-components/CommunityMemberItem';
@@ -20,21 +20,20 @@ export const ModeratorList = ({ pageId = '*', community }: ModeratorListProps) =
   const { onClickUser } = useNavigation();
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
-  const { moderators, hasMore, isLoading, loadMore, refresh } = useCommunityModeratorsCollection({
+  const { moderators, hasMore, isLoading, loadMore } = useCommunityModeratorsCollection({
     communityId: community?.communityId as string,
     shouldCall: !!community?.communityId,
   });
 
+  // See MemberList: a stable onIntersect stops the observer re-arming on every render.
+  const onIntersect = useCallback(() => {
+    if (hasMore && !isLoading) loadMore();
+  }, [hasMore, isLoading, loadMore]);
+
   useIntersectionObserver({
     node: intersectionNode,
-    onIntersect: () => {
-      if (hasMore && !isLoading) loadMore();
-    },
+    onIntersect,
   });
-
-  useEffect(() => {
-    refresh();
-  }, []);
 
   return (
     <div

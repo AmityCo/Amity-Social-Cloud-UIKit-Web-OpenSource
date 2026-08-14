@@ -250,6 +250,48 @@ export const checkEditCommunityPermission = (
   return false;
 };
 
+export const checkEditCommunityUserPermission = (
+  client: Amity.Client | null | undefined,
+  communityId?: string,
+) => {
+  if (!client) {
+    return false;
+  }
+  if (communityId) {
+    return client.hasPermission(Permissions.EditChannelCommunityPermission).community(communityId);
+  }
+
+  return false;
+};
+
+export const checkAddCommunityUserPermission = (
+  client: Amity.Client | null | undefined,
+  communityId?: string,
+) => {
+  if (!client) return false;
+
+  if (communityId) {
+    return client.hasPermission(Permissions.AddChannelCommunityPermission).community(communityId);
+  }
+
+  return false;
+};
+
+export const checkRemoveCommunityUserPermission = (
+  client: Amity.Client | null | undefined,
+  communityId?: string,
+) => {
+  if (!client) return false;
+
+  if (communityId) {
+    return client
+      .hasPermission(Permissions.RemoveChannelCommunityPermission)
+      .community(communityId);
+  }
+
+  return false;
+};
+
 export const checkReviewPostPermission = (
   client: Amity.Client | null | undefined,
   communityId?: string,

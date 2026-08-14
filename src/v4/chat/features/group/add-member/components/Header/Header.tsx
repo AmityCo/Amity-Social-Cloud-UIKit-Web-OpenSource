@@ -21,6 +21,7 @@ export function Header({
 }: HeaderProps) {
   const pageTitle = useString('amity_chat_add_member_title');
   const searchPlaceholder = useString('amity_chat_search_placeholder');
+
   return (
     <header className={styles.header}>
       <TopBar title={pageTitle} leadingType="close" onLeading={onClose} />
