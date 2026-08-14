@@ -20,3 +20,4 @@ settings.local.json
 
 # git
 .worktrees/
+governance/
