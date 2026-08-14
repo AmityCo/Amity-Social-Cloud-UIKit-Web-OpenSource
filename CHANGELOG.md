@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.21.0 (2026-08-14)
+
+
+### Bug Fixes
+
+* PDT-4337 - member management permissions ([#1838](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1838)) ([f095ceb](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/f095cebcf38d22f39e92d1208699cca82a0f76a5))
+
 ## 4.20.0 (2026-07-31)
 
 ### 4.19.1 (2026-07-17)
