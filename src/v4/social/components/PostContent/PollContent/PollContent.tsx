@@ -182,7 +182,7 @@ export const PollContent: FC<PollContentProps> = ({
                 currentUserId={answer.isVotedByUser ? user?.userId : undefined}
                 isTopVoted={answer.isTopVoted}
                 key={answer.id}
-                imageFileId={answer.fileId}
+                imageFile={answer.image}
                 isOwner={isAuthor}
               />
             ))}

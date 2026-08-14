@@ -12,8 +12,6 @@ import { MemberList } from '~/v4/social/internal-components/MemberList';
 import { CommunityRepository, MembershipAcceptanceTypeEnum } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ModeratorList } from '~/v4/social/internal-components/ModeratorList';
-import { useSDK } from '~/v4/core/hooks/useSDK';
-import useUser from '~/v4/core/hooks/objects/useUser';
 import useModerator from '~/v4/social/hooks/useModerator';
 import { SecondaryTab } from '~/v4/core/components/SecondaryTab';
 import { Key } from 'react-aria';
@@ -33,8 +31,6 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
 
   const { onBack } = useNavigation();
 
-  const { currentUserId } = useSDK();
-  const { user } = useUser({ userId: currentUserId });
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
@@ -46,7 +42,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     useString('amity_social_label_community_members_label'),
   );
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
-  const { hasModeratorPermissions } = useModerator({ community, user });
+  const { canAddMembers } = useModerator({ community });
 
   const isInvitation =
     socialSettings?.membershipAcceptance === MembershipAcceptanceTypeEnum.INVITATION;
@@ -55,12 +51,6 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     userIds: Parameters<typeof CommunityRepository.Membership.addMembers>[1],
   ) => {
     if (community.communityId == null) return;
-
-    if (!community.isJoined || !hasModeratorPermissions) {
-      return notification.error({
-        content: useString('amity_social_toast_member_unban_failed'),
-      });
-    }
 
     try {
       await CommunityRepository.Membership.addMembers(community.communityId, userIds);
@@ -74,12 +64,6 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
 
   const onClickInviteMember = async (userIds: string[]) => {
     if (community.communityId == null) return;
-
-    if (!community.isJoined || !hasModeratorPermissions) {
-      return notification.error({
-        content: useString('amity_social_toast_community_invite_member_failed'),
-      });
-    }
 
     if (!online) {
       return notification.info({
@@ -163,7 +147,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
         <Typography.TitleBold className={styles.communityMembershipPage__title}>
           {useString('amity_social_button_all_members')}
         </Typography.TitleBold>
-        {hasModeratorPermissions ? (
+        {canAddMembers ? (
           <Button
             data-testid={`${pageId}/*/add-member-button`}
             className={styles.communityMembershipPage__addMemberButton}

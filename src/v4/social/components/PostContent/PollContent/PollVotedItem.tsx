@@ -12,7 +12,7 @@ type PollVotedItemProps = {
   voteCount: number;
   isTopVoted?: boolean;
   percentage: string;
-  imageFileId?: string;
+  imageFile?: Amity.File<'image'>;
   isOwner?: boolean;
 };
 
@@ -22,7 +22,7 @@ export const PollVotedItem: React.FC<PollVotedItemProps> = ({
   voteCount = 0,
   isTopVoted = false,
   percentage,
-  imageFileId,
+  imageFile,
   isOwner,
 }) => {
   const calVoteCount = currentUserId ? voteCount - 1 : voteCount;
@@ -58,10 +58,10 @@ export const PollVotedItem: React.FC<PollVotedItemProps> = ({
     );
   }, [voteByText, currentUserId]);
 
-  if (imageFileId)
+  if (imageFile)
     return (
       <ImagePollAnswer
-        fileId={imageFileId}
+        imageFile={imageFile}
         label={label}
         votedPrecentage={percentage}
         votedCountText={renderVoteByText()}

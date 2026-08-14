@@ -12,6 +12,7 @@ type HeaderProps = {
 export function Header({ onClose, searchValue, onSearchChange }: HeaderProps) {
   const title = useString('amity_chat_create_conversation_title');
   const searchPlaceholder = useString('amity_chat_search_placeholder');
+
   return (
     <header className={styles.header}>
       <TopBar title={title} leadingType="close" onLeading={onClose} />
