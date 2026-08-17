@@ -1168,5 +1168,20 @@
   "amity_social_you_havent_joined_any_communities": "You haven't joined any communities yet.",
   "amity_social_your_attending_status_cannot_be_changed_once_the_e": "Your attending status cannot be changed once the event has started.",
   "amity_social_your_post_can_still_be_published_but_product_tags_": "Your post can still be published, but product tags won't appear as this feature is unavailable.",
-  "amity_social_community_invitation_accept_success": "You have successfully joined %1."
+  "amity_social_community_invitation_accept_success": "You have successfully joined %1.",
+  "amity_social_button_event_post_create": "Post event to feed",
+  "amity_social_button_post_to_feed": "Post to feed",
+  "amity_social_button_maybe_later": "Maybe later",
+  "amity_social_label_event_created_success_title": "Your event was created successfully",
+  "amity_social_label_event_created_success_description": "Post it to a feed so more people can find and join.",
+  "amity_social_label_select_event_post_target_title": "Post to",
+  "amity_social_label_private_event_target_banner": "This is a private event, it can only be posted to the community it was created in.",
+  "amity_social_label_event_post_card_deleted": "This event is no longer available",
+  "amity_social_toast_event_post_created": "Event posted to feed.",
+  "amity_social_toast_event_post_updating": "Updating...",
+  "amity_social_toast_event_post_updated": "Event post updated.",
+  "amity_social_toast_event_post_create_failed": "Failed to create post. Please try again.",
+  "amity_social_toast_event_post_update_failed": "Failed to update post. Please try again.",
+  "amity_social_toast_event_post_blocked_word": "Your post wasn't posted as it contains an inappropriate word.",
+  "amity_social_toast_event_post_blocked_link": "Your post wasn't posted as it contains a link that is not allowed."
 }

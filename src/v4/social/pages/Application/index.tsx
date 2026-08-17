@@ -53,7 +53,11 @@ import {
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
-import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
+import {
+  EventTargetSelectionPage,
+  EventSetupPage,
+  EventPostTargetSelectionPage,
+} from '~/v4/social/pages';
 import { VisitorUsageLimitPage } from '~/v4/social/pages/VisitorUsageLimitPage';
 
 const Application = () => {
@@ -66,7 +70,8 @@ const Application = () => {
       isDesktop &&
       (page.type === PageTypes.SocialGlobalSearchPage ||
         page.type === PageTypes.PostComposerPage ||
-        page.type === PageTypes.SelectPostTargetPage)
+        page.type === PageTypes.SelectPostTargetPage ||
+        page.type === PageTypes.EventPostTargetSelectionPage)
     ) {
       goToSocialHomePage();
     }
@@ -118,6 +123,7 @@ const Application = () => {
             post={page.context?.post}
             isClipPost={page.context?.isClipPost}
             targetName={page.context?.targetName}
+            event={page.context?.event}
           />
         )}
         {page.type === PageTypes.SelectPostTargetPage && (
@@ -193,6 +199,9 @@ const Application = () => {
         {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
 
         {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
+        {page.type === PageTypes.EventPostTargetSelectionPage && (
+          <EventPostTargetSelectionPage event={page.context.event} />
+        )}
         {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}
         {page.type === PageTypes.UpcomingEventsPage && <UpcomingEventsPage {...page.context} />}
         {page.type === PageTypes.PastEventsPage && <PastEventsPage />}

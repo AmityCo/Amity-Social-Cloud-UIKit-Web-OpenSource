@@ -20,6 +20,7 @@ export interface AmityPostComposerCreateOptions {
   community?: Amity.Community;
   isClipPost?: boolean;
   targetName?: string;
+  event?: Amity.Event;
 }
 
 export interface MetaData {
@@ -37,7 +38,7 @@ const isCreatePage = (props: PostComposerPageProps): props is AmityPostComposerC
 
 export function PostComposerPage(props: PostComposerPageProps) {
   if (isCreatePage(props)) {
-    const { targetId, targetType, community, isClipPost, targetName } = props;
+    const { targetId, targetType, community, isClipPost, targetName, event } = props;
     return (
       <CreatePost
         mode={Mode.CREATE}
@@ -46,6 +47,7 @@ export function PostComposerPage(props: PostComposerPageProps) {
         community={community}
         isClipPost={isClipPost}
         targetName={targetName}
+        event={event}
       />
     );
   } else {

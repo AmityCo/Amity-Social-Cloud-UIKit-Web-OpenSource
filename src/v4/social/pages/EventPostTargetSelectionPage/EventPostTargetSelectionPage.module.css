@@ -1,0 +1,113 @@
+.eventPostTargetSelectionPage {
+  height: 100vh;
+  max-width: 100vw;
+  background-color: var(--asc-color-background-default);
+  padding: var(--asc-spacing-none) var(--asc-spacing-m1);
+}
+
+.eventPostTargetSelectionPage__topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-none);
+}
+
+.eventPostTargetSelectionPage__timelineContainer {
+  width: 100%;
+  padding-top: 0;
+}
+
+.eventPostTargetSelectionPage__timeline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  gap: 0.5rem;
+}
+
+.eventPostTargetSelectionPage__line {
+  margin-top: var(--asc-spacing-s1);
+  border-top: 1px solid var(--asc-color-base-shade4);
+}
+
+.eventPostTargetSelectionPage__myCommunities {
+  display: flex;
+  text-align: left;
+  color: var(--asc-color-base-shade3);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-none) var(--asc-spacing-s1);
+  font-size: var(--asc-text-font-size-md);
+  line-height: var(--asc-line-height-md);
+  letter-spacing: -0.015rem;
+}
+
+.eventPostTargetSelectionPage__communityAvatar {
+  margin-right: var(--asc-spacing-s1);
+}
+
+.eventPostTargetSelectionPage__communityName {
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  justify-content: start;
+}
+
+.eventPostTargetSelectionPage__closeButton {
+  display: flex;
+  fill: var(--asc-color-base-default);
+}
+
+.eventPostTargetSelectionPage__title {
+  color: var(--asc-color-base-default);
+}
+
+.eventPostTargetSelectionPage__displayName {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 1.25rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--asc-color-base-default);
+}
+
+.eventPostTargetSelectionPage__intersectionObserver {
+  height: 1rem;
+}
+
+.eventPostTargetSelectionPage__banner {
+  margin: 0 calc(-1 * var(--asc-spacing-m1));
+  width: calc(100% + 2 * var(--asc-spacing-m1));
+}
+
+@media (width >= 48em) {
+  .eventPostTargetSelectionPage__banner {
+    margin: 0 -1.5rem;
+    width: calc(100% + 3rem);
+  }
+}
+
+@media (width >= 48em) {
+  .eventPostTargetSelectionPage {
+    width: 30rem;
+    overflow-y: auto;
+    padding: 0 1.5rem;
+  }
+
+  .eventPostTargetSelectionPage__timelineContainer {
+    padding-top: 0.5rem;
+  }
+
+  .eventPostTargetSelectionPage__topBar {
+    display: none;
+  }
+
+  .eventPostTargetSelectionPage__timeline[data-focus-visible] {
+    background-color: var(--asc-color-base-shade4);
+  }
+
+  .eventPostTargetSelectionPage__myCommunitiesList {
+    max-height: calc(100% - 24rem);
+    overflow-y: scroll;
+  }
+}

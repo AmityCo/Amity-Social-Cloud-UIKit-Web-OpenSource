@@ -54,6 +54,7 @@ import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
 import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
+import { EventCard } from '~/v4/social/features/events/components/EventCard';
 
 export function CreatePost({
   community,
@@ -61,8 +62,10 @@ export function CreatePost({
   targetId,
   isClipPost = false,
   targetName,
+  event,
 }: AmityPostComposerCreateOptions) {
   const pageId = 'post_composer_page';
+  const isEventPost = !!event;
 
   const drawerRef = useRef<HTMLDivElement>(null);
   const mentionRef = useRef<HTMLDivElement | null>(null);
@@ -120,11 +123,11 @@ export function CreatePost({
     hiddenPreviewUrl: null,
   });
 
-  const [title, setTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>(event?.title ?? '');
   const [productTags, setProductTags] = useState<Amity.TextProductTag[] | undefined>();
 
   const [textValue, setTextValue] = useState<CreatePostParams>({
-    text: '',
+    text: event?.description ?? '',
     mentioned: [],
     hashtagsMetadata: [],
     mentionees: [
@@ -231,13 +234,14 @@ export function CreatePost({
         (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
       // TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
-      if (
+      const needsApproval =
         ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
           ?.needApprovalOnPostCreation ||
           community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED) &&
         !isModerator &&
-        !isAdmin(user?.roles)
-      ) {
+        !isAdmin(user?.roles);
+
+      if (needsApproval) {
         info({
           pageId,
           title: resolveString('amity_social_button_post_composer_create_buttons_sent_for_review'),
@@ -248,7 +252,7 @@ export function CreatePost({
       setIsMuted(false);
       setIsAspectFill(true);
       setIsCreating(false);
-      handlePostSuccess();
+      handlePostSuccess({ suppressToast: needsApproval });
     },
 
     onError: (error: Error) => {
@@ -383,16 +387,31 @@ export function CreatePost({
       return rest;
     });
 
-    let createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
-      targetId: targetId!,
-      targetType,
-      data: { title: title.trim(), text: textValue.text },
-      metadata: { mentioned: textValue.mentioned, hashtags: textValue.hashtagsMetadata },
-      mentionees: textValue.mentionees as Amity.UserMention[],
-      attachments,
-      hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
-      links: effectiveLinks,
-    };
+    let createPostParams: Parameters<typeof PostRepository.createPost>[0] = isEventPost
+      ? ({
+          targetId: targetId!,
+          targetType,
+          dataType: 'event',
+          data: {
+            eventId: event!.eventId,
+            title: title.trim(),
+            text: textValue.text,
+          },
+          metadata: { mentioned: textValue.mentioned, hashtags: textValue.hashtagsMetadata },
+          mentionees: textValue.mentionees as Amity.UserMention[],
+          hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
+          links: effectiveLinks,
+        } as unknown as Parameters<typeof PostRepository.createPost>[0])
+      : {
+          targetId: targetId!,
+          targetType,
+          data: { title: title.trim(), text: textValue.text },
+          metadata: { mentioned: textValue.mentioned, hashtags: textValue.hashtagsMetadata },
+          mentionees: textValue.mentionees as Amity.UserMention[],
+          attachments,
+          hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
+          links: effectiveLinks,
+        };
 
     if (!removeTag) {
       const finalProductTags = productTags?.length
@@ -418,6 +437,9 @@ export function CreatePost({
   };
 
   const validatePost = async () => {
+    if (isEventPost) {
+      return onCreatePost();
+    }
     const setting = await client?.getProductCatalogueSetting();
     const hasProductTags =
       textValue.attachments?.some(
@@ -440,18 +462,41 @@ export function CreatePost({
     } else onCreatePost();
   };
 
-  const handlePostSuccess = () => {
+  const handlePostSuccess = ({ suppressToast = false }: { suppressToast?: boolean } = {}) => {
     setClipFile(null);
+    if (isEventPost && !suppressToast) {
+      notification.success({
+        content: resolveString('amity_social_toast_event_post_created'),
+      });
+    }
     isDesktop ? closePopup() : checkRedirectPage();
   };
 
   const handlePostError = (error: Error) => {
     if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-      setPostErrorText(resolveString('amity_social_error_post_create_ban_word_error'));
+      setPostErrorText(
+        resolveString(
+          isEventPost
+            ? 'amity_social_toast_event_post_blocked_word'
+            : 'amity_social_error_post_create_ban_word_error',
+        ),
+      );
     } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
-      setPostErrorText(resolveString('amity_social_error_add_blocked_links_post_error_message'));
+      setPostErrorText(
+        resolveString(
+          isEventPost
+            ? 'amity_social_toast_event_post_blocked_link'
+            : 'amity_social_error_add_blocked_links_post_error_message',
+        ),
+      );
     } else {
-      setPostErrorText(resolveString('amity_social_toast_error_create_post_failed'));
+      setPostErrorText(
+        resolveString(
+          isEventPost
+            ? 'amity_social_toast_event_post_create_failed'
+            : 'amity_social_toast_error_create_post_failed',
+        ),
+      );
     }
   };
 
@@ -501,6 +546,12 @@ export function CreatePost({
 
   const checkRedirectPage = () => {
     if (isDesktop) closePopup();
+    if (isEventPost) {
+      if (prevPage?.type === PageTypes.EventPostTargetSelectionPage) {
+        return onBack(2);
+      }
+      return onBack();
+    }
     if (
       prevPage?.type === PageTypes.SelectPostTargetPage ||
       prev2Page?.type === PageTypes.SelectPostTargetPage
@@ -518,12 +569,11 @@ export function CreatePost({
 
   const hasContent = textValue.text.length > 0 || files.length > 0 || clipFile !== undefined;
   const hasErrors = files.some((file) => file.errorText !== undefined);
-  const hasNoChanges = textValue.text.length === 0 && files.length === 0 && clipFile == undefined;
+  const hasNoChanges =
+    !isEventPost && textValue.text.length === 0 && files.length === 0 && clipFile == undefined;
 
   const canSubmitPost =
-    !hasNoChanges &&
-    hasContent &&
-    !hasErrors &&
+    (isEventPost || (!hasNoChanges && hasContent && !hasErrors)) &&
     !isCreating &&
     online &&
     !isLoading &&
@@ -541,6 +591,7 @@ export function CreatePost({
           className={styles.createPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
           data-is-clip-post={isClipPost}
+          data-is-event-post={isEventPost}
         >
           <Notification
             className={styles.createPost__notificationToast}
@@ -566,6 +617,7 @@ export function CreatePost({
           className={styles.createPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
           data-is-clip-post={isClipPost}
+          data-is-event-post={isEventPost}
         >
           <Notification
             content={
@@ -595,6 +647,7 @@ export function CreatePost({
         className={styles.createPost__form}
         onSubmit={handleSubmit(validatePost)}
         data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+        data-is-event-post={isEventPost}
       >
         <div className={styles.createPost__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
@@ -672,7 +725,7 @@ export function CreatePost({
               initialProductMentions={productTags}
             />
           </div>
-          {!isClipPost && (
+          {!isClipPost && !isEventPost && (
             <TextEditorLinkPreview
               pageId={pageId}
               urls={urlHighlights}
@@ -694,40 +747,51 @@ export function CreatePost({
               }}
             />
           )}
-          <ImageThumbnail
-            files={files}
-            pageId={pageId}
-            progress={progress}
-            removeFile={removeFile}
-            onAltTextChange={handleAltTextChange}
-            onFileProductTagsChange={handleProductTagsChange}
-            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
-            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
-            taggedProductIds={allProductTags.map((tag) => tag.productId)}
-          />
-          <VideoThumbnail
-            files={files}
-            pageId={pageId}
-            progress={progress}
-            removeFile={removeFile}
-            onFileProductTagsChange={handleProductTagsChange}
-            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
-            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
-            taggedProductIds={allProductTags.map((tag) => tag.productId)}
-          />
+          {isEventPost && event && (
+            <div className={styles.createPost__eventCardPreview}>
+              <EventCard eventId={event.eventId} variant="card" size="lg" readOnly />
+            </div>
+          )}
+          {!isEventPost && (
+            <ImageThumbnail
+              files={files}
+              pageId={pageId}
+              progress={progress}
+              removeFile={removeFile}
+              onAltTextChange={handleAltTextChange}
+              onFileProductTagsChange={handleProductTagsChange}
+              productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+              remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
+            />
+          )}
+          {!isEventPost && (
+            <VideoThumbnail
+              files={files}
+              pageId={pageId}
+              progress={progress}
+              removeFile={removeFile}
+              onFileProductTagsChange={handleProductTagsChange}
+              productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+              remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
+            />
+          )}
         </div>
-        <div className={styles.createPost__attachment}>
-          <MediaAttachment
-            pageId={pageId}
-            isVisibleCamera={isVisibleCamera}
-            isVisibleImage={isVisibleImage}
-            isVisibleVideo={isVisibleVideo}
-            totalMedia={files.length}
-            productTags={allProductTags}
-            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
-            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
-          />
-        </div>
+        {!isEventPost && (
+          <div className={styles.createPost__attachment}>
+            <MediaAttachment
+              pageId={pageId}
+              isVisibleCamera={isVisibleCamera}
+              isVisibleImage={isVisibleImage}
+              isVisibleVideo={isVisibleVideo}
+              totalMedia={files.length}
+              productTags={allProductTags}
+              onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+              onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+            />
+          </div>
+        )}
         <div className={styles.createPost__ctaWrapper}>
           <CreateNewPostButton
             variant="fill"
@@ -743,7 +807,7 @@ export function CreatePost({
           style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
         />
       </form>
-      {!isDesktop && !isClipPost && (
+      {!isDesktop && !isClipPost && !isEventPost && (
         <div className={styles.createPost__attachmentDrawer}>
           <div ref={drawerRef}></div>
           {drawerRef.current
@@ -808,6 +872,12 @@ export function CreatePost({
         </div>
       )}
       {isClipPost && (
+        <>
+          {renderPosting()}
+          {renderError()}
+        </>
+      )}
+      {!isDesktop && isEventPost && (
         <>
           {renderPosting()}
           {renderError()}

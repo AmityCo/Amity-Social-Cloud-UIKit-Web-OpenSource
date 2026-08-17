@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: ^7.25.0
-        version: 7.25.0
+        specifier: 7.25.1-64e58e4.0
+        version: 7.25.1-64e58e4.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -336,8 +336,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.25.0':
-    resolution: {integrity: sha512-+DH3HSxIkLq++dheY6t4hohUjprrh17utfkAMP+o4b+cJqe0AMIlyGkNhcMSSrDGmqad+emyR+qorxUs+5i+5g==}
+  '@amityco/ts-sdk@7.25.1-64e58e4.0':
+    resolution: {integrity: sha512-8fkFFNSi8+/6y3NWAus2JcEs3TYyrcGygNveT6MboPhTexiNvvCSDh6NjfZvVw0Bi5rqWjb7mkP3ZFBlNrq3Tg==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5219,8 +5219,8 @@ packages:
   iota-array@1.0.0:
     resolution: {integrity: sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==}
 
-  ip-address@10.3.1:
-    resolution: {integrity: sha512-1e9d3kb97NHJTIJDZW9rKqW2h6+dFa50Dy0fpPSMQp2ADje5gvKsXmdiK6dwY5t76TaTt5+P5N1Y/LoToIxP6g==}
+  ip-address@10.4.0:
+    resolution: {integrity: sha512-oSK96Grm3aP6OrS263xVxbNDGVL7rzBtYdpGqlDG8iQdoenDoTs/nkki+DflYbAEE8Xl6o5YxhxlrKvI3nqKXQ==}
     engines: {node: '>= 12'}
 
   ip@2.0.1:
@@ -8004,7 +8004,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.25.0':
+  '@amityco/ts-sdk@7.25.1-64e58e4.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
@@ -14214,7 +14214,7 @@ snapshots:
 
   iota-array@1.0.0: {}
 
-  ip-address@10.3.1: {}
+  ip-address@10.4.0: {}
 
   ip@2.0.1: {}
 
@@ -16340,7 +16340,7 @@ snapshots:
 
   socks@2.8.9:
     dependencies:
-      ip-address: 10.3.1
+      ip-address: 10.4.0
       smart-buffer: 4.2.0
 
   source-map-js@1.2.0: {}

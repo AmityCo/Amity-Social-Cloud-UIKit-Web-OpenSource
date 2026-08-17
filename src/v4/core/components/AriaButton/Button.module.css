@@ -42,7 +42,7 @@
 .text.primary[data-disabled='true'],
 .text.primary[data-disabled='true']:hover {
   cursor: not-allowed;
-  color: var(--asc-color-primary-shade2);
+  color: var(--asc-color-primary-shade3);
 }
 
 .text.secondary {

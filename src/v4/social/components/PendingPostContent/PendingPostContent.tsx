@@ -23,7 +23,9 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { useNetworkState } from 'react-use';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { getPostEventId, isEventPost, isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { EventCard } from '~/v4/social/features/events/components/EventCard';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { ProductCarousel } from '~/v4/social/features/product-tagged';
 
@@ -53,6 +55,7 @@ export const PendingPostContent = ({
   const { online } = useNetworkState();
   const { openPopup, closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
+  const { goToEventDetailPage } = useNavigation();
 
   const postAcceptedText = useString('amity_social_button_post_accepted');
   const postDeclinedText = useString('amity_social_button_post_declined');
@@ -259,17 +262,28 @@ export const PendingPostContent = ({
               (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
             )}
           />
-          {post.children.length > 0 && (
-            <ChildrenPostContent
-              pageId={pageId}
-              componentId={componentId}
-              post={post}
-              onImageClick={openImageViewer}
-              onVideoClick={openVideoViewer}
-              onClipClick={() => {}}
+          {isEventPost(post) ? (
+            <EventCard
+              eventId={getPostEventId(post)}
+              variant="card"
+              size="lg"
+              onClick={(eventId) =>
+                goToEventDetailPage ? goToEventDetailPage({ eventId }) : undefined
+              }
             />
+          ) : (
+            post.children.length > 0 && (
+              <ChildrenPostContent
+                pageId={pageId}
+                componentId={componentId}
+                post={post}
+                onImageClick={openImageViewer}
+                onVideoClick={openVideoViewer}
+                onClipClick={() => {}}
+              />
+            )
           )}
-          {canShowProductTags && (
+          {canShowProductTags && !isEventPost(post) && (
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           )}
         </div>

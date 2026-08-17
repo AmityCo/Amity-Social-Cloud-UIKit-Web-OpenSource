@@ -1088,6 +1088,22 @@ export const defaultConfig: DefaultConfig = {
     'event_setup_page/*/event_details_title': {},
     'event_setup_page/*/event_date_time_title': {},
     'event_setup_page/*/event_location_title': {},
+
+    'event_detail_page/*/create_event_post_button': {
+      text: 'Post event to feed',
+      image: '',
+    },
+
+    'event_post_target_selection_page/*/*': {
+      background_color: '',
+    },
+    'event_post_target_selection_page/*/title': {
+      text: '',
+    },
+    'event_post_target_selection_page/*/close_button': {
+      image: '',
+    },
+
     '*/*/brand_badge': {
       image: 'value',
     },

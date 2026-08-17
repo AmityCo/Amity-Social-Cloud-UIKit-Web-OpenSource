@@ -1165,5 +1165,20 @@
   "amity_chat_notifications_title": "การแจ้งเตือน",
   "amity_chat_notifications_off": "ปิด",
   "amity_chat_notifications_on": "เปิด",
-  "amity_chat_notifications_disabled": "คุณได้ปิดการแจ้งเตือนสำหรับแชท"
+  "amity_chat_notifications_disabled": "คุณได้ปิดการแจ้งเตือนสำหรับแชท",
+  "amity_social_button_event_post_create": "โพสต์อีเวนต์ลงฟีด",
+  "amity_social_button_post_to_feed": "โพสต์ลงฟีด",
+  "amity_social_button_maybe_later": "ไว้ทีหลัง",
+  "amity_social_label_event_created_success_title": "สร้างอีเวนต์ของคุณสำเร็จแล้ว",
+  "amity_social_label_event_created_success_description": "โพสต์ลงฟีดเพื่อให้ผู้อื่นสามารถค้นพบและเข้าร่วมได้",
+  "amity_social_label_select_event_post_target_title": "โพสต์ไปที่",
+  "amity_social_label_private_event_target_banner": "อีเวนต์นี้เป็นแบบส่วนตัว สามารถโพสต์ได้เฉพาะในคอมมูนิตี้ที่สร้างขึ้นเท่านั้น",
+  "amity_social_label_event_post_card_deleted": "อีเวนต์นี้ไม่พร้อมใช้งานแล้ว",
+  "amity_social_toast_event_post_created": "โพสต์อีเวนต์ลงฟีดแล้ว",
+  "amity_social_toast_event_post_updating": "กำลังอัปเดต...",
+  "amity_social_toast_event_post_updated": "อัปเดตโพสต์อีเวนต์แล้ว",
+  "amity_social_toast_event_post_create_failed": "สร้างโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+  "amity_social_toast_event_post_update_failed": "อัปเดตโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+  "amity_social_toast_event_post_blocked_word": "โพสต์ของคุณไม่ถูกโพสต์เนื่องจากมีคำที่ไม่เหมาะสม",
+  "amity_social_toast_event_post_blocked_link": "โพสต์ของคุณไม่ถูกโพสต์เนื่องจากมีลิงก์ที่ไม่ได้รับอนุญาต"
 }
