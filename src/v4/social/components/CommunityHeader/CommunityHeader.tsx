@@ -6,6 +6,7 @@ import { CommunityPendingPost } from '~/v4/social/elements/CommunityPendingPost'
 import { CommunityCover } from '~/v4/social/elements/CommunityCover';
 import { CommunityJoinButton } from '~/v4/social/elements/CommunityJoinButton';
 import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
+import { checkAddCommunityUserPermission } from '~/v4/social/utils';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { CommunityDescription } from '~/v4/social/elements/CommunityDescription';
@@ -48,7 +49,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const { onBack } = useNavigation();
   const { isDesktop } = useResponsive();
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
-  const { currentUserId } = useSDK();
+  const { currentUserId, client } = useSDK();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { online } = useNetworkState();
   const notification = useNotifications();
@@ -102,7 +103,10 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
     (canReviewCommunityPosts || isPostOwner) &&
     requiresPostApproval;
 
-  const isShowJoinRequest = joinRequestCount > 0 && canReviewCommunityPosts;
+  const canAddCommunityUser = checkAddCommunityUserPermission(client, community.communityId);
+
+  const isShowJoinRequest =
+    joinRequestCount > 0 && (canReviewCommunityPosts || canAddCommunityUser);
 
   const isShowPendingBanner = isShowPendingPost || isShowJoinRequest;
 

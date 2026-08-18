@@ -52,9 +52,7 @@ export const Members = ({
           configIconName={config.icon}
         />
 
-        <Typography.Body>
-          {resolveText('amity_social_label_community_members_label')}
-        </Typography.Body>
+        <Typography.Body>{resolveText('amity_social_button_members')}</Typography.Body>
       </div>
       <ChevronRight className={styles.members__angleRight} />
     </Button>
