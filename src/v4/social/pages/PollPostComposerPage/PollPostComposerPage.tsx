@@ -568,7 +568,7 @@ export const PollPostComposerPage = ({
               pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
             }
           >
-            {useString('amity_social_label_community_post_label')}
+            {useString('amity_common_post')}
           </AriaButton>
         </div>
         <TextField name="title" className={styles.pollPostComposerPage__pollQuestion}>
