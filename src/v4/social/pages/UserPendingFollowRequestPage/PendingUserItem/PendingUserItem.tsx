@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useString } from '~/v4/core/localization';
+import { useString, resolveString } from '~/v4/core/localization';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import styles from './PendingUserItem.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
@@ -20,14 +20,14 @@ export const PendingUserItem: FC<PendingUserItemProps> = ({ userId }) => {
     try {
       await UserRepository.Relationship.acceptMyFollower(userId);
       success({
-        content: useString('amity_social_label_follow_request_accepted').replace(
+        content: resolveString('amity_social_label_follow_request_accepted').replace(
           '%1$s',
           displayName,
         ),
       });
     } catch (e) {
       error({
-        content: useString('amity_social_toast_follow_request_accept_failed'),
+        content: resolveString('amity_social_toast_follow_request_accept_failed'),
       });
     }
   };
@@ -36,11 +36,11 @@ export const PendingUserItem: FC<PendingUserItemProps> = ({ userId }) => {
     try {
       await UserRepository.Relationship.declineMyFollower(userId);
       success({
-        content: useString('amity_social_label_follow_request_declined'),
+        content: resolveString('amity_social_label_follow_request_declined'),
       });
     } catch (e) {
       error({
-        content: useString('amity_social_failed_to_decline_follow_request'),
+        content: resolveString('amity_social_failed_to_decline_follow_request'),
       });
     }
   };
