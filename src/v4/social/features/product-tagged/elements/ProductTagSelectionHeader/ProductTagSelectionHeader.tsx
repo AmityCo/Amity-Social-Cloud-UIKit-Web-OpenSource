@@ -76,7 +76,7 @@ export function ProductTagSelectionHeader({
           </Typography.Caption>
         </div>
         {mode !== 'livestream' && displayMode === 'mobile' ? (
-          <Button onPress={onDone} variant="text" color="primary">
+          <Button onPress={onDone} variant="text" color="primary" isDisabled={selectedCount === 0}>
             {doneButtonText}
           </Button>
         ) : (
