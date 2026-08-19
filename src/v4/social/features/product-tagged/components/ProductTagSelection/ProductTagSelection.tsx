@@ -419,6 +419,7 @@ export function ProductTagSelection({
           )
         }
         onDone={onDone}
+        isDoneDisabled={!hasProductTagsChanged || !online}
         pageId={pageId}
         componentId={componentId}
         isShowNoProductsTagYet={isShowNoProductsTagYet}
