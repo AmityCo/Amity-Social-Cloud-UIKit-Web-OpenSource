@@ -614,7 +614,7 @@ export const PollPostComposerPage = ({
             onChange={onChange}
             className={styles.pollPostComposerPage__pollQuestion__input}
             placeholderClassName={styles.pollPostComposerPage__pollQuestion__placeholder}
-            placeholder={useString('amity_social_button_poll_question')}
+            placeholder={useString('amity_social_placeholder_hint_poll_question')}
             attachmentAmount={0}
             isClipPost={false}
             isPollPost
