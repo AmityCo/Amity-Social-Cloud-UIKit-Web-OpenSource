@@ -45,7 +45,7 @@ import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import useJoinRequestsCollection from '~/v4/social/hooks/collections/useJoinRequestsCollection';
-import { CameraFilled } from '~/v4/icons/CameraFilled';
+import { CameraOutlined } from '~/v4/icons/CameraOutlined';
 
 type EditCommunityProps = {
   community: Amity.Community;
@@ -360,8 +360,10 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                 (community?.avatarFileId && <div className={styles.editCommunity__overlay} />)}
               {!uploadLoading && (
                 <IconComponent
-                  imgIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
-                  defaultIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
+                  imgIcon={() => <CameraOutlined className={styles.editCommunity__cameraIcon} />}
+                  defaultIcon={() => (
+                    <CameraOutlined className={styles.editCommunity__cameraIcon} />
+                  )}
                 />
               )}
             </Button>
@@ -411,8 +413,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
               (community?.avatarFileId && <div className={styles.editCommunity__overlay} />)}
             {!uploadLoading && (
               <IconComponent
-                imgIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
-                defaultIcon={() => <CameraFilled className={styles.editCommunity__cameraIcon} />}
+                imgIcon={() => <CameraOutlined className={styles.editCommunity__cameraIcon} />}
+                defaultIcon={() => <CameraOutlined className={styles.editCommunity__cameraIcon} />}
               />
             )}
           </Button>
