@@ -35,15 +35,11 @@ export const useJoinRequests = ({
     },
     onError: (error) => {
       info({
-        content: resolveString('amity_social_toast_accept_join_request_failed'),
+        content: error.message.includes(ERROR_RESPONSE.DELETED_POST)
+          ? resolveString('amity_social_label_join_request_unavailable')
+          : resolveString('amity_social_toast_accept_join_request_failed'),
       });
-      onApproveError?.(error)
-        ? onApproveError?.(error)
-        : info({
-            content: error.message.includes(ERROR_RESPONSE.DELETED_POST)
-              ? resolveString('amity_social_label_join_request_unavailable')
-              : resolveString('amity_social_toast_accept_join_request_failed'),
-          });
+      onApproveError?.(error);
     },
   });
 
@@ -51,20 +47,18 @@ export const useJoinRequests = ({
     mutationFn: async (joinRequest: Amity.JoinRequest) => await joinRequest.reject(),
     onSuccess: (data: any) => {
       setJoinRequest(data);
-      onDeclineSuccess?.()
-        ? onDeclineSuccess?.()
-        : success({
-            content: resolveString('amity_social_label_join_request_declined'),
-          });
+      success({
+        content: resolveString('amity_social_label_join_request_declined'),
+      });
+      onDeclineSuccess?.();
     },
     onError: (error) => {
-      onDeclineError?.(error)
-        ? onDeclineError?.(error)
-        : info({
-            content: error.message.includes(ERROR_RESPONSE.DELETED_POST)
-              ? resolveString('amity_social_label_join_request_unavailable')
-              : resolveString('amity_social_toast_decline_join_request_failed'),
-          });
+      info({
+        content: error.message.includes(ERROR_RESPONSE.DELETED_POST)
+          ? resolveString('amity_social_label_join_request_unavailable')
+          : resolveString('amity_social_toast_decline_join_request_failed'),
+      });
+      onDeclineError?.(error);
     },
   });
 

@@ -252,7 +252,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
                 });
               }}
               isPostOwner={isPostOwner}
-              canReviewCommunityPosts={canReviewCommunityPosts}
               isShowJoinRequest={isShowJoinRequest}
               isShowPendingPost={isShowPendingPost}
               joinRequestsCount={joinRequestCount}

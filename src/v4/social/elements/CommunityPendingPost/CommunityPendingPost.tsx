@@ -9,7 +9,6 @@ interface CommunityPendingPostProps {
   componentId?: string;
   pendingPostsCount?: number;
   isPostOwner?: boolean;
-  canReviewCommunityPosts?: boolean;
   onClick?: () => void;
   joinRequestsCount?: number;
   isShowJoinRequest?: boolean;
@@ -22,7 +21,6 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
   pendingPostsCount = 0,
   onClick,
   isPostOwner,
-  canReviewCommunityPosts,
   joinRequestsCount = 0,
   isShowJoinRequest = false,
   isShowPendingPost = false,
@@ -92,16 +90,16 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
       return getOwnerPostMessage();
     }
 
-    if (canReviewCommunityPosts) {
-      if (isShowPendingPost && !isShowJoinRequest) {
-        return getPendingPostsMessage();
-      }
-
-      if (isShowJoinRequest && !isShowPendingPost) {
-        return getJoinRequestsMessage();
-      }
-
+    if (isShowPendingPost && isShowJoinRequest) {
       return getCombinedMessage();
+    }
+
+    if (isShowJoinRequest) {
+      return getJoinRequestsMessage();
+    }
+
+    if (isShowPendingPost) {
+      return getPendingPostsMessage();
     }
 
     return null;
