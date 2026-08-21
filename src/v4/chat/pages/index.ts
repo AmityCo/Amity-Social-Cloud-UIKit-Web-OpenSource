@@ -19,3 +19,5 @@ export { BannedGroupMemberListPage } from './BannedGroupMemberListPage/BannedGro
 export type { BannedGroupMemberListPageProps } from './BannedGroupMemberListPage/BannedGroupMemberListPage';
 export { ArchivedChatPage } from './ArchivedChatPage/ArchivedChatPage';
 export type { ArchivedChatPageProps } from './ArchivedChatPage/ArchivedChatPage';
+export { SearchChannelPage } from './SearchChannelPage/SearchChannelPage';
+export type { SearchChannelPageProps } from './SearchChannelPage/SearchChannelPage';

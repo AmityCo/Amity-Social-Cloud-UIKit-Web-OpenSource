@@ -4,7 +4,7 @@
 //   2. every alias  {theme.X}   →  X exists as a config theme key.
 //   3. every semantic {Alias}   →  Alias exists in the alias map (hex + {theme.X} refs allowed).
 //   4. config + semantic light/dark key parity.
-// Run: node governance/design/verify-tokens.mjs   (also wired into lint-staged for token files)
+// Run: node governance/gates/02-check-tokens.mjs   (also: pnpm verify:tokens; wired into lint-staged for token files)
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';

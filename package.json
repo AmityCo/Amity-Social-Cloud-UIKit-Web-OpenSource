@@ -38,7 +38,9 @@
     "stylelint": "stylelint",
     "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
     "tsc": "tsc",
-    "verify:tokens": "node ./governance/design/check-tokens.mjs",
+    "verify:tokens": "node ./governance/gates/02-check-tokens.mjs",
+    "verify:pages": "node ./governance/gates/01-check-pages.mjs",
+    "verify:gates": "node ./governance/gates/run.mjs",
     "gist": "node ./code-snippets/scripts/create-gist.mjs",
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
@@ -162,7 +164,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{json,css}": "prettier --write",
     "*.{css}": "stylelint --fix",
-    "{amity-uikit.config.json,src/v4/core/design/tokens/amity-uikit-design-tokens.json,src/v4/core/providers/CustomizationProvider/utils.ts}": "node ./governance/design/check-tokens.mjs"
+    "{amity-uikit.config.json,src/v4/core/design/tokens/amity-uikit-design-tokens.json,src/v4/core/providers/CustomizationProvider/utils.ts}": "node ./governance/gates/02-check-tokens.mjs"
   },
   "postcss": {
     "plugins": {
