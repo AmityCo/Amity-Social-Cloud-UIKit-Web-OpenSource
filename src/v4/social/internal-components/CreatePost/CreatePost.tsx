@@ -689,7 +689,7 @@ export function CreatePost({
               communityId={targetId}
               enableFloatingLink={isDesktop}
               initialText={textValue.text}
-              enableProductMention={true}
+              enableProductMention={!isEventPost}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));

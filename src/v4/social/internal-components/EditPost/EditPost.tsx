@@ -894,7 +894,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialText={textValue.text}
               initialMentions={post.metadata?.mentioned}
               initialHashtags={post.metadata?.hashtags}
-              enableProductMention={true}
+              enableProductMention={!isEventPostEdit}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));
