@@ -80,6 +80,11 @@
   display: inline;
 }
 
+.clipCaption__seeMore p,
+.clipCaption__seeLess p {
+  color: inherit !important;
+}
+
 .clipCaption__moderatorBadge {
   width: fit-content;
 }
