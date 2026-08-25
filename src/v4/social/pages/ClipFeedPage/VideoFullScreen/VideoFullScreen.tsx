@@ -25,6 +25,7 @@ type VideoFullScreenProps = {
   onClipFailed?: (postId: string) => void;
   isLoading?: boolean;
   seeMoreIsOpen?: boolean;
+  isFailed?: boolean;
 };
 
 export const VideoFullScreen = ({
@@ -39,6 +40,7 @@ export const VideoFullScreen = ({
   onClipFailed,
   isLoading,
   seeMoreIsOpen,
+  isFailed,
 }: VideoFullScreenProps) => {
   const [isClipLoading, setIsClipLoading] = useState(true);
   const [hasReportedFailure, setHasReportedFailure] = useState(false);
@@ -118,10 +120,6 @@ export const VideoFullScreen = ({
     }
   }, [fileUrl, post.postId, onClipFailed, hasReportedFailure]);
 
-  if (!fileUrl) {
-    return <DeletedClipView onWatchNext={onNextVideo} />;
-  }
-
   const isMuted = (post as Amity.Post<'clip'>)?.data?.isMuted || isLocalMuted;
 
   const handleClickVideo = useCallback(
@@ -130,6 +128,10 @@ export const VideoFullScreen = ({
     },
     [post.postId, seeMoreIsOpen],
   );
+
+  if (!fileUrl || isFailed) {
+    return <DeletedClipView onWatchNext={onNextVideo} />;
+  }
 
   return (
     <div className={styles.videoFullScreen__container}>
