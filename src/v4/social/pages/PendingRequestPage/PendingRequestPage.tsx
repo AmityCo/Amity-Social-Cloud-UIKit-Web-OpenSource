@@ -163,12 +163,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   }
 
   // Only add the join requests tab if the user can review posts OR add users to the
-  // community (both permissions can approve join requests) AND there are join requests
-  if (
-    community.requiresJoinApproval &&
-    (canReviewCommunityPosts || canAddCommunityUser) &&
-    joinRequestsCount > 0
-  ) {
+  // community (both permissions can approve join requests)
+  if (community.requiresJoinApproval && (canReviewCommunityPosts || canAddCommunityUser)) {
     visibleTabs.push({
       value: 'join_requests_button_tab',
       label: resolveString(
@@ -201,6 +197,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   }
 
   const tabs = visibleTabs;
+  const currentActiveTab = tabs.some((tab) => tab.value === activeTab) ? activeTab : tabs[0]?.value;
 
   // If no tabs are visible, render the posts tab (PendingPostList) as fallback
   if (visibleTabs.length === 0) {
@@ -268,7 +265,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       <div className={styles.pendingRequestsPage__content}>
         <SecondaryTab
           tabs={tabs}
-          activeTab={activeTab}
+          activeTab={currentActiveTab}
           onChange={(key) => {
             // Mark as manual change using ref for immediate effect
             isManualTabChangeRef.current = true;
