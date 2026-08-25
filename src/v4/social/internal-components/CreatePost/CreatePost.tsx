@@ -92,6 +92,9 @@ export function CreatePost({
   const waitingForNetworkText = useString('amity_social_label_waiting_for_network');
   const genericPostErrorText = useString('amity_social_toast_error_create_post_failed');
   const titleOptionalPlaceholder = useString('amity_social_label_title_optional');
+  const clipBodyPlaceholder = useString(
+    'amity_social_placeholder_post_composer_body_clip_placeholder',
+  );
   const {
     files,
     progress,
@@ -668,26 +671,29 @@ export function CreatePost({
           </div>
         )}
         <div className={styles.createPost__formContent}>
-          <TextArea
-            data-testid="create-post-title-input"
-            name="title"
-            value={title}
-            maxLength={150}
-            onChange={(e) => {
-              e.target.value.length > 150
-                ? setTitle(e.target.value.slice(0, 150))
-                : setTitle(e.target.value);
-            }}
-            placeholder={titleOptionalPlaceholder}
-            className={styles.createPost__titleInput}
-            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
-          />
+          {!isClipPost && (
+            <TextArea
+              data-testid="create-post-title-input"
+              name="title"
+              value={title}
+              maxLength={150}
+              onChange={(e) => {
+                e.target.value.length > 150
+                  ? setTitle(e.target.value.slice(0, 150))
+                  : setTitle(e.target.value);
+              }}
+              placeholder={titleOptionalPlaceholder}
+              className={styles.createPost__titleInput}
+              onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+            />
+          )}
           <div className={styles.createPost__textEditor}>
             <TextEditor
               pageId={pageId}
               editorContentType="post"
               communityId={targetId}
               enableFloatingLink={isDesktop}
+              placeholder={isClipPost ? clipBodyPlaceholder : undefined}
               initialText={textValue.text}
               enableProductMention={!isEventPost}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}

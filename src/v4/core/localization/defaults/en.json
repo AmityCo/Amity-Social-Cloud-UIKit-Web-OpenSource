@@ -977,6 +977,7 @@
   "amity_social_placeholder_hyperlink_name_hint": "Name your link",
   "amity_social_placeholder_hyperlink_url_hint": "https://example.com",
   "amity_social_placeholder_image_alt_text_hint_message": "Describe this photo briefly to help visually impaired users understand its content",
+  "amity_social_placeholder_post_composer_body_clip_placeholder": "What's going on? (optional)",
   "amity_social_placeholder_post_composer_body_placeholder": "What's going on...",
   "amity_social_placeholder_report_text_placeholder": "Share more details about this issue",
   "amity_social_placeholder_search_member_hint": "Search member",
