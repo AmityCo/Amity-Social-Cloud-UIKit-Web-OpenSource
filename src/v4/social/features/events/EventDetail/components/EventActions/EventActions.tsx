@@ -70,6 +70,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   });
 
   const isPublicCommunity = event.targetCommunity?.isPublic ?? false;
+  const isCommunityMember = event.targetCommunity && event.targetCommunity.isJoined;
   const isShareableStatus = event.status !== AmityEventStatus.Cancelled;
   const showCopyLink =
     isSharableLinkEnabled &&
@@ -115,7 +116,11 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
         : PostEventToFeed,
       iconClassName: styles.eventActions__postEventToFeedIcon,
       label: resolveCreateEventPostText('amity_social_button_event_post_create'),
-      condition: !isVisitorOrBot && event.status !== AmityEventStatus.Cancelled && !event.isDeleted,
+      condition:
+        !isVisitorOrBot &&
+        event.status !== AmityEventStatus.Cancelled &&
+        !event.isDeleted &&
+        isCommunityMember,
       onPress: () => {
         redirectEventPostTargetSelectionPage(event);
       },
