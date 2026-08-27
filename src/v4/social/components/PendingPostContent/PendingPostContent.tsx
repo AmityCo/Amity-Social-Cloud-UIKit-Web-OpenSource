@@ -265,6 +265,7 @@ export const PendingPostContent = ({
             pageId={pageId}
             componentId={componentId}
             text={isTextPost(post) ? post?.data?.text : ''}
+            title={isTextPost(post) ? post?.data?.title ?? '' : ''}
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentionees}
             post={post}
