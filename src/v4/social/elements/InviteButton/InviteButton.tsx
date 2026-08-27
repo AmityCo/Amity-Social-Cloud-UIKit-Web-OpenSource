@@ -1,6 +1,7 @@
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Button, ButtonProps } from '~/v4/core/components/AriaButton';
 import styles from './InviteButton.module.css';
+import { Typography } from '~/v4/core/components';
 
 type InviteButtonProps = ButtonProps & {
   pageId?: string;
@@ -26,7 +27,9 @@ export function InviteButton({ pageId = '*', componentId = '*', ...props }: Invi
       className={styles.inviteButton}
       {...props}
     >
-      {resolveText('amity_social_button_community_add_member_button')}
+      <Typography.CaptionBold>
+        {resolveText('amity_social_button_community_add_member_button')}
+      </Typography.CaptionBold>
     </Button>
   );
 }

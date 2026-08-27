@@ -72,6 +72,12 @@
   padding-right: 1rem;
 }
 
+.watchingUserItem__inviteButton {
+  padding: 0.375rem 0.5rem !important;
+  border-radius: 0.375rem !important;
+  flex-shrink: 0;
+}
+
 @media (width >= 48em) {
   .inviteCoHostList,
   .inviteCoHostList__skeletonWrapper,
