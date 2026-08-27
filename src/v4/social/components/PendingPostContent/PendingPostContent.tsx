@@ -10,6 +10,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { PostAcceptButton } from '~/v4/social/elements/PostAcceptButton';
 import { PostDeclineButton } from '~/v4/social/elements/PostDeclineButton/PostDeclineButton';
+import { BrandBadge } from '~/v4/social/elements';
 import { PostRepository } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
@@ -181,12 +182,21 @@ export const PendingPostContent = ({
           <div className={styles.pendingPostContent__userDetail}>
             <UserAvatar pageId={pageId} componentId={componentId} userId={post?.postedUserId} />
             <div>
-              <Typography.BodyBold
-                className={styles.pendingPostContent__username}
-                data-testid={`${pageId}/${componentId}/username`}
-              >
-                {post.creator?.displayName ?? ''}
-              </Typography.BodyBold>
+              <div className={styles.pendingPostContent__usernameRow}>
+                <Typography.BodyBold
+                  className={styles.pendingPostContent__username}
+                  data-testid={`${pageId}/${componentId}/username`}
+                >
+                  {post.creator?.displayName ?? ''}
+                </Typography.BodyBold>
+                {post.creator?.isBrand && (
+                  <BrandBadge
+                    pageId={pageId}
+                    componentId={componentId}
+                    className={styles.pendingPostContent__brandIcon}
+                  />
+                )}
+              </div>
               <div className={styles.pendingPostContent__information__subtitle}>
                 <Timestamp timestamp={post.createdAt} />
                 {post.createdAt !== post.editedAt && (

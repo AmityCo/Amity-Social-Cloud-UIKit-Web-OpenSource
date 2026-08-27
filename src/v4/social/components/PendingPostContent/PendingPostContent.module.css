@@ -27,6 +27,19 @@
   color: var(--asc-color-base-default);
 }
 
+.pendingPostContent__usernameRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  max-width: 100%;
+}
+
+.pendingPostContent__brandIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
 .pendingPostContent__editedTag {
   color: var(--asc-color-base-shade2);
 }
