@@ -9,6 +9,8 @@ import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
+import { MemberRoles } from '~/v4/chat/constants/memberRoles';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { useString } from '~/v4/core/localization';
 
@@ -36,10 +38,42 @@ const ChatFeed: FC<ChatFeedProps> = ({
   const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const { isVisitorOrBot } = useSDK();
+  const { isVisitorOrBot, currentUserId } = useSDK();
   const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
     channelId: channel.channelId,
   });
+
+  // Channel role changes have no reliable MQTT event, but promotions/demotions
+  // also rewrite channel.metadata.moderators, which *is* delivered in realtime
+  // via the documented channel.updated event. Use it as the refresh trigger so
+  // the current user's roles (and their own moderator badge) update live.
+  const moderatorsRefreshKey = liveChannel
+    ? JSON.stringify(liveChannel.metadata?.moderators ?? [])
+    : undefined;
+
+  const { membership: currentUserMembership, refresh: refreshMembership } =
+    useCurrentUserChannelMembership(channel.channelId, {
+      enabled: joined && !isVisitorOrBot,
+      refreshKey: moderatorsRefreshKey,
+    });
+
+  // The promoter assigns the channel-moderator role right after updating
+  // metadata.moderators, so our refetch can land before the role write does.
+  // If metadata says the current user is a moderator but the role hasn't
+  // appeared yet, re-query once more shortly after.
+  const isSelfInMetadataModerators = !!(
+    currentUserId && liveChannel?.metadata?.moderators?.includes(currentUserId)
+  );
+  const hasChannelModeratorRole = !!currentUserMembership?.roles?.includes(
+    MemberRoles.CHANNEL_MODERATOR,
+  );
+
+  useEffect(() => {
+    if (!joined || isVisitorOrBot) return;
+    if (!isSelfInMetadataModerators || hasChannelModeratorRole) return;
+    const timer = setTimeout(() => refreshMembership(), 3000);
+    return () => clearTimeout(timer);
+  }, [joined, isVisitorOrBot, isSelfInMetadataModerators, hasChannelModeratorRole]);
 
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
@@ -156,6 +190,7 @@ const ChatFeed: FC<ChatFeedProps> = ({
                       key={message.messageId}
                       message={message}
                       channel={liveChannel}
+                      currentUserMembership={currentUserMembership}
                       handlePopoverStateChange={handlePopoverStateChange}
                       isJoinedCommunity={isJoinedCommunity}
                     />
