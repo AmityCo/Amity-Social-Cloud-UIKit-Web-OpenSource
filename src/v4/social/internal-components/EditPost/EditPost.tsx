@@ -569,7 +569,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const validatePost = async () => {
     if (isEventPostEdit) {
-      return performPostUpdate();
+      return proceedWithSave();
     }
     const setting = await client?.getProductCatalogueSetting();
     const hasProductTags =
