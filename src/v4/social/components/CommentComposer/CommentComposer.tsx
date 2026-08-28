@@ -359,7 +359,7 @@ export const CommentComposer = ({
             mutateAsync({ params: textValue });
           }}
         >
-          <Typography.Body>{useString('amity_social_label_post_label_singular')}</Typography.Body>
+          <Typography.Body>{useString('amity_common_post')}</Typography.Body>
         </Button>
       </div>
     </div>

@@ -1,6 +1,6 @@
 .notificationItem__button {
   width: 100%;
-  background-color: color-mix(in srgb, var(--asc-color-primary-default) 30%, transparent);
+  background-color: color-mix(in srgb, var(--asc-color-primary-default) 20%, transparent);
 }
 
 .notificationItem__button[data-isseen='true'] {

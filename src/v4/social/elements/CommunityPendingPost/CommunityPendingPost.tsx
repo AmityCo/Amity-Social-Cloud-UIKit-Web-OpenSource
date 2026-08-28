@@ -9,7 +9,6 @@ interface CommunityPendingPostProps {
   componentId?: string;
   pendingPostsCount?: number;
   isPostOwner?: boolean;
-  canReviewCommunityPosts?: boolean;
   onClick?: () => void;
   joinRequestsCount?: number;
   isShowJoinRequest?: boolean;
@@ -22,7 +21,6 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
   pendingPostsCount = 0,
   onClick,
   isPostOwner,
-  canReviewCommunityPosts,
   joinRequestsCount = 0,
   isShowJoinRequest = false,
   isShowPendingPost = false,
@@ -48,13 +46,13 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
   const getPendingPostsMessage = () => {
     const postLabel =
       pendingPostsCount === 1
-        ? resolveText('amity_social_label_post_label_singular')
+        ? resolveText('amity_social_label_community_post_label')
         : resolveText('amity_social_label_community_posts_label');
     const countText = pendingPostsCount === 1 ? '1' : String(pendingPostsCountNumber);
     const subjectText = `${countText} ${postLabel}`;
     return pendingPostsCount === 1
-      ? resolveText('amity_social_button_community_require_approval', subjectText)
-      : resolveText('amity_social_button_community_requires_approval', subjectText);
+      ? resolveText('amity_social_button_community_requires_approval', subjectText)
+      : resolveText('amity_social_button_community_require_approval', subjectText);
   };
 
   const getJoinRequestsMessage = () => {
@@ -65,14 +63,14 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
     const countText = joinRequestsCount === 1 ? '1' : String(joinRequestsCountNumber);
     const subjectText = `${countText} ${requestLabel}`;
     return joinRequestsCount === 1
-      ? resolveText('amity_social_button_community_require_approval', subjectText)
-      : resolveText('amity_social_button_community_requires_approval', subjectText);
+      ? resolveText('amity_social_button_community_requires_approval', subjectText)
+      : resolveText('amity_social_button_community_require_approval', subjectText);
   };
 
   const getCombinedMessage = () => {
     const postsLabel =
       pendingPostsCount === 1
-        ? resolveText('amity_social_label_post_label_singular')
+        ? resolveText('amity_social_label_community_post_label')
         : resolveText('amity_social_label_community_posts_label');
     const requestsLabel =
       joinRequestsCount === 1
@@ -82,7 +80,7 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
     const requestsText = `${joinRequestsCount === 1 ? '1' : joinRequestsCountNumber} ${requestsLabel}`;
     const andLabel = resolveText('amity_social_button_community_and');
     return resolveText(
-      'amity_social_button_community_requires_approval',
+      'amity_social_button_community_require_approval',
       `${postsText} ${andLabel} ${requestsText}`,
     );
   };
@@ -92,16 +90,16 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
       return getOwnerPostMessage();
     }
 
-    if (canReviewCommunityPosts) {
-      if (isShowPendingPost && !isShowJoinRequest) {
-        return getPendingPostsMessage();
-      }
-
-      if (isShowJoinRequest && !isShowPendingPost) {
-        return getJoinRequestsMessage();
-      }
-
+    if (isShowPendingPost && isShowJoinRequest) {
       return getCombinedMessage();
+    }
+
+    if (isShowJoinRequest) {
+      return getJoinRequestsMessage();
+    }
+
+    if (isShowPendingPost) {
+      return getPendingPostsMessage();
     }
 
     return null;

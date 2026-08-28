@@ -24,6 +24,7 @@ type ClipFeedMenuProps = {
   childPost?: Amity.Post<'video' | 'clip'>;
   handleMuteToggle: (isMuted: boolean) => void;
   isLocalMuted: boolean;
+  onClipDeleted?: () => void;
 };
 
 export const ClipFeedMenu = ({
@@ -36,6 +37,7 @@ export const ClipFeedMenu = ({
   childPost,
   handleMuteToggle,
   isLocalMuted,
+  onClipDeleted,
 }: ClipFeedMenuProps) => {
   const { post, isLoading } = usePost(postId);
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
@@ -49,6 +51,7 @@ export const ClipFeedMenu = ({
     reactionsCount,
   } = usePostReaction({
     post: post as Amity.Post<'video' | 'clip'>,
+    onDeletedPost: onClipDeleted,
   });
 
   const notification = useNotifications();

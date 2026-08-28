@@ -103,7 +103,11 @@ export function CommunityPendingInvitationPage(props: CommunityPendingInvitation
     >
       <div className={styles.communityPendingInvitationPage__topBar}>
         <BackButton onPress={() => onBack()} pageId={pageId} />
-        <Title titleClassName={styles.communityPendingInvitationPage__title} pageId={pageId} />
+        <Title
+          pageId={pageId}
+          textKey="amity_social_setting_community_setting_pending_invitations"
+          titleClassName={styles.communityPendingInvitationPage__title}
+        />
         <div className={styles.communityPendingInvitationPage__emptySpace} />
       </div>
       <div className={styles.communityPendingInvitationPage__members}>

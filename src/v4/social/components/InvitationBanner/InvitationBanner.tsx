@@ -8,7 +8,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
-import { JoinButton, RejectButton, UserAvatar } from '~/v4/social/elements';
+import { BrandBadge, JoinButton, RejectButton, UserAvatar } from '~/v4/social/elements';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import styles from './InvitationBanner.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -124,6 +124,13 @@ export function InvitationBanner({
           >
             <span className={styles.capitalize}>{invitation?.createdBy?.displayName}</span>
           </TruncateMarkup>
+          {invitation?.createdBy?.isBrand && (
+            <BrandBadge
+              pageId={pageId}
+              componentId={componentId}
+              className={styles.invitationBanner__brandIcon}
+            />
+          )}
           {!truncate && (
             <Typography.BodyBold as="span">
               {' '}

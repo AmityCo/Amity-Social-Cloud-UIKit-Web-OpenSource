@@ -14,6 +14,13 @@
   max-height: calc(100% - 14.875rem);
 }
 
+/* Event posts have no media attachment drawer, so the form should occupy the
+   full available height and not reserve space for the (hidden) drawer. */
+.editPost__form[data-is-event-post='true'],
+.editPost__form[data-is-event-post='true'][data-from-media='false'] {
+  max-height: 100%;
+}
+
 .editPost__form::-webkit-scrollbar {
   width: 0.5rem;
 }
@@ -29,7 +36,7 @@
 .editPost__formContent {
   max-height: auto;
   min-height: auto;
-  padding: 1rem 1.5rem;
+  padding: 1rem;
 }
 
 .editPost__formContent .editPost__titleInput {
@@ -37,11 +44,13 @@
   border: none;
   outline: none;
   font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 600;
 }
 
 .editPost__formContent .editPost__titleInput::placeholder {
   font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 600;
 }
 
@@ -69,6 +78,10 @@
 
 .editPost__attachment {
   display: none;
+}
+
+.editPost__eventCardPreview {
+  padding: 0.5rem 0;
 }
 
 .editPost__ctaWrapper {
@@ -117,7 +130,8 @@
   color: var(--asc-color-background-default);
 }
 
-.editPost__notification[data-isclip='true'] {
+.editPost__notification[data-isclip='true'],
+.editPost__notification[data-is-event-post='true'] {
   width: calc(100% - 2rem);
   position: absolute;
   bottom: 1rem !important;
@@ -159,7 +173,7 @@
 .editPost__notificationIcon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-background-default);
+  fill: var(--asc-color-white);
 }
 
 .editPost__notificationContainer {
@@ -269,6 +283,11 @@
     max-height: 50vh;
     min-height: 35vh;
     position: relative;
+    padding: 1rem 1.5rem;
+  }
+
+  .editPost__form[data-is-event-post='true'] .editPost__formContent {
+    min-height: auto;
   }
 
   .editPost__attachment {

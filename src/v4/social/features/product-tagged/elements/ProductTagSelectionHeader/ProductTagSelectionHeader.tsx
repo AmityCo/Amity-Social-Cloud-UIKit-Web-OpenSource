@@ -15,6 +15,7 @@ export interface ProductTagSelectionHeaderProps {
   maxCount?: number;
   onClose?: () => void;
   onDone?: () => void;
+  isDoneDisabled?: boolean;
   pageId?: string;
   componentId?: string;
   isShowNoProductsTagYet?: boolean;
@@ -27,6 +28,7 @@ export function ProductTagSelectionHeader({
   maxCount = 5,
   onClose,
   onDone,
+  isDoneDisabled = false,
   pageId = PAGE_ID.WILD_CARD,
   componentId = COMPONENT_ID.WILD_CARD,
   isShowNoProductsTagYet = false,
@@ -76,7 +78,7 @@ export function ProductTagSelectionHeader({
           </Typography.Caption>
         </div>
         {mode !== 'livestream' && displayMode === 'mobile' ? (
-          <Button onPress={onDone} variant="text" color="primary">
+          <Button onPress={onDone} variant="text" color="primary" isDisabled={isDoneDisabled}>
             {doneButtonText}
           </Button>
         ) : (

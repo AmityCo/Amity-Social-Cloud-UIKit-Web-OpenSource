@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { EmptyPinnedPost } from '~/v4/social/components/EmptyPinnedPost';
 import styles from './CommunityPin.module.css';
@@ -57,6 +57,16 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
     );
 
   const pinnedPosts = pinnedPost.filter((post) => post.placement === 'default');
+
+  // Total pinned entries that will actually be rendered. The pin tab only
+  // shows posts whose `placement === 'default'` (announcement-only pins are
+  // rendered as an "announcement" ribbon on top of a default pin — a lone
+  // announcement without a matching default is not surfaced on this tab).
+  // We also require the referenced post to have resolved, so entries pointing
+  // at deleted posts don't count.
+  const renderablePinnedPostCount = pinnedPost.filter(
+    (item) => item.placement === 'default' && !!item.post?.postId,
+  ).length;
 
   const handlePostDeleted = () => {
     refresh();
@@ -162,7 +172,9 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
         className={styles.communityPin__noInternet}
       >
         {isMemberPrivateCommunity || community?.isPublic ? (
-          pinnedPost.length > 0 ? (
+          isLoading ? (
+            <CommunityFeedPostContentSkeleton />
+          ) : renderablePinnedPostCount > 0 ? (
             <>
               {renderAnnouncementPost()}
               {renderPinnedPost()}

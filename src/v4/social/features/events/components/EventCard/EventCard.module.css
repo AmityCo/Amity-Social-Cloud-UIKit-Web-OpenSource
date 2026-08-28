@@ -1,7 +1,12 @@
 .eventCard[data-variant='card'][data-size='lg'] {
-  gap: 1rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   cursor: pointer;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--asc-color-background-default);
 }
 
 .eventCard[data-variant='card'][data-size='md'] {
@@ -19,6 +24,10 @@
   align-items: center;
 }
 
+.eventCard[data-readonly='true'] {
+  cursor: default;
+}
+
 .eventCard:focus-visible {
   outline-offset: 2px;
   outline: 2px solid var(--asc-color-primary-default);
@@ -26,9 +35,10 @@
 
 .eventCard__figure[data-variant='card'][data-size='lg'] {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 268 / 150.75;
   overflow: hidden;
   position: relative;
+  background: var(--asc-color-base-shade4);
 }
 
 .eventCard__figure[data-variant='card'][data-size='md'] {
@@ -36,6 +46,7 @@
   height: 8.875rem;
   overflow: hidden;
   position: relative;
+  background: var(--asc-color-base-shade4);
 }
 
 .eventCard__figure[data-variant='list'][data-size='lg'],
@@ -46,9 +57,15 @@
   overflow: hidden;
   position: relative;
   aspect-ratio: 16 / 9;
+  background: var(--asc-color-base-shade4);
 }
 
-.eventCard__image[data-variant='card'][data-size='lg'],
+.eventCard__image[data-variant='card'][data-size='lg'] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .eventCard__image[data-variant='list'] {
   width: 100%;
   height: 100%;
@@ -75,7 +92,15 @@
   position: absolute;
 }
 
-.eventCard__info[data-variant='card'][data-size='lg'],
+.eventCard__info[data-variant='card'][data-size='lg'] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.75rem;
+  gap: 0.125rem;
+}
+
 .eventCard__info[data-variant='list'] {
   display: flex;
   flex-direction: column;
@@ -120,4 +145,87 @@
 .eventCard__creatorBadge {
   width: 1rem;
   height: 1rem;
+}
+
+.eventCard[data-state='deleted'] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  cursor: default;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--asc-color-background-default);
+}
+
+.eventCard__deletedThumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 268 / 150.75;
+  background: var(--asc-color-base-shade4);
+  padding: 0.5rem;
+}
+
+.eventCard__deletedIcon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.eventCard__deletedDetails {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.875rem 0.75rem;
+  background: var(--asc-color-background-default);
+}
+
+.eventCard__deletedText {
+  color: var(--asc-color-base-shade2);
+  flex: 1;
+  text-align: left;
+}
+
+/* Loading skeleton — matches Figma 237:11600 */
+.eventCard__skeleton {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--asc-color-background-default);
+}
+
+.eventCard__skeletonThumbnail {
+  width: 100%;
+  aspect-ratio: 268 / 150.75;
+  background: var(--asc-color-base-shade4);
+}
+
+.eventCard__skeletonDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 5rem;
+  padding: 1rem 0.75rem;
+}
+
+.eventCard__skeletonLine {
+  height: 0.75rem;
+  border-radius: 9999px;
+  background: var(--asc-color-base-shade4);
+}
+
+.eventCard__skeletonLine[data-line='1'] {
+  width: 7rem;
+}
+
+.eventCard__skeletonLine[data-line='2'] {
+  width: 12.25rem;
+}
+
+.eventCard__skeletonLine[data-line='3'] {
+  width: 5rem;
 }

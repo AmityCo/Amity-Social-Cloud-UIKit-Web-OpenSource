@@ -14,6 +14,7 @@ import { CloseCommunity } from '~/v4/social/elements/CloseCommunity';
 import { CloseCommunityDescription } from '~/v4/social/elements/CloseCommunityDescription';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import {
+  checkAddCommunityUserPermission,
   checkDeleteCommunityPermission,
   checkEditCommunityPermission,
   checkReviewPostPermission,
@@ -164,7 +165,8 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
             onClick={() => AmityCommunitySettingPageBehavior?.goToMembershipPage?.({ community })}
           />
           {socialSettings?.membershipAcceptance === MembershipAcceptanceTypeEnum.INVITATION &&
-            isCommunityModerator && (
+            (isCommunityModerator ||
+              checkAddCommunityUserPermission(client, community?.communityId)) && (
               <PendingInvitations
                 pageId={pageId}
                 onPress={() =>

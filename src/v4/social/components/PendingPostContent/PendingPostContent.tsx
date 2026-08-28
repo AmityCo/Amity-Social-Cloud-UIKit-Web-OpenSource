@@ -10,6 +10,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { PostAcceptButton } from '~/v4/social/elements/PostAcceptButton';
 import { PostDeclineButton } from '~/v4/social/elements/PostDeclineButton/PostDeclineButton';
+import { BrandBadge } from '~/v4/social/elements';
 import { PostRepository } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
@@ -23,7 +24,9 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { useNetworkState } from 'react-use';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { getPostEventId, isEventPost, isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { EventCard } from '~/v4/social/features/events/components/EventCard';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { ProductCarousel } from '~/v4/social/features/product-tagged';
 
@@ -53,6 +56,7 @@ export const PendingPostContent = ({
   const { online } = useNetworkState();
   const { openPopup, closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
+  const { goToEventDetailPage } = useNavigation();
 
   const postAcceptedText = useString('amity_social_button_post_accepted');
   const postDeclinedText = useString('amity_social_button_post_declined');
@@ -178,12 +182,21 @@ export const PendingPostContent = ({
           <div className={styles.pendingPostContent__userDetail}>
             <UserAvatar pageId={pageId} componentId={componentId} userId={post?.postedUserId} />
             <div>
-              <Typography.BodyBold
-                className={styles.pendingPostContent__username}
-                data-testid={`${pageId}/${componentId}/username`}
-              >
-                {post.creator?.displayName ?? ''}
-              </Typography.BodyBold>
+              <div className={styles.pendingPostContent__usernameRow}>
+                <Typography.BodyBold
+                  className={styles.pendingPostContent__username}
+                  data-testid={`${pageId}/${componentId}/username`}
+                >
+                  {post.creator?.displayName ?? ''}
+                </Typography.BodyBold>
+                {post.creator?.isBrand && (
+                  <BrandBadge
+                    pageId={pageId}
+                    componentId={componentId}
+                    className={styles.pendingPostContent__brandIcon}
+                  />
+                )}
+              </div>
               <div className={styles.pendingPostContent__information__subtitle}>
                 <Timestamp timestamp={post.createdAt} />
                 {post.createdAt !== post.editedAt && (
@@ -252,6 +265,7 @@ export const PendingPostContent = ({
             pageId={pageId}
             componentId={componentId}
             text={isTextPost(post) ? post?.data?.text : ''}
+            title={isTextPost(post) ? post?.data?.title ?? '' : ''}
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentionees}
             post={post}
@@ -259,17 +273,28 @@ export const PendingPostContent = ({
               (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
             )}
           />
-          {post.children.length > 0 && (
-            <ChildrenPostContent
-              pageId={pageId}
-              componentId={componentId}
-              post={post}
-              onImageClick={openImageViewer}
-              onVideoClick={openVideoViewer}
-              onClipClick={() => {}}
+          {isEventPost(post) ? (
+            <EventCard
+              eventId={getPostEventId(post)}
+              variant="card"
+              size="lg"
+              onClick={(eventId) =>
+                goToEventDetailPage ? goToEventDetailPage({ eventId }) : undefined
+              }
             />
+          ) : (
+            post.children.length > 0 && (
+              <ChildrenPostContent
+                pageId={pageId}
+                componentId={componentId}
+                post={post}
+                onImageClick={openImageViewer}
+                onVideoClick={openVideoViewer}
+                onClipClick={() => {}}
+              />
+            )
           )}
-          {canShowProductTags && (
+          {canShowProductTags && !isEventPost(post) && (
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           )}
         </div>

@@ -46,9 +46,8 @@
 
 .editUserProfilePage__topSection {
   display: flex;
-  height: 3.625rem;
   align-items: center;
-  padding: 0 0.75rem;
+  padding: 1rem;
 }
 
 .editUserProfilePage__topSection__backButton {
@@ -111,7 +110,7 @@
     border-radius: 0.5rem;
     border: 1px solid var(--asc-color-base-shade4);
     margin-bottom: 0.75rem;
-    overflow: hidden;
+    padding: 1.25rem 1rem;
   }
 
   .editUserProfilePage__topSection__title {

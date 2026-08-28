@@ -21,7 +21,7 @@ export const CONTENT_TYPE_DEFAULTS: Record<
     maxLines: 30,
     enableHashtag: true,
     enableUrlDetection: true,
-    placeholderKey: 'amity_social_placeholder_whats_on_your_mind',
+    placeholderKey: 'amity_social_placeholder_post_composer_body_placeholder',
   },
   comment: {
     maxCharacters: 50000,

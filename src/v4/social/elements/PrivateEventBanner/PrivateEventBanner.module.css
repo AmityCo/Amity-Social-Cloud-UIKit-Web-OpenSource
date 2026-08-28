@@ -1,0 +1,17 @@
+.privateEventBanner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-shade1);
+  min-height: 3.25rem;
+}
+
+.privateEventBanner__text {
+  color: var(--asc-color-base-shade1);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  letter-spacing: -0.0063rem;
+  margin: 0;
+}

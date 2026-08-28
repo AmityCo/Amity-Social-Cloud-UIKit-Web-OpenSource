@@ -42,6 +42,7 @@ export const PAGE_ID = {
   DRAFT_CLIP_PAGE: 'draft_clip_page',
   CLIP_FEED_PAGE: 'clip_feed_page',
   SELECT_EVENT_TARGET_PAGE: 'select_event_target_page',
+  EVENT_POST_TARGET_SELECTION_PAGE: 'event_post_target_selection_page',
   EVENT_SETUP_PAGE: 'event_setup_page',
   UPCOMING_EVENTS_PAGE: 'upcoming_events_page',
   PAST_EVENTS_PAGE: 'past_events_page',

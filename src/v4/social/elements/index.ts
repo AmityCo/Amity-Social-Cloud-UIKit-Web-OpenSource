@@ -35,3 +35,4 @@ export { PostsTabDescription } from './PostsTabDescription';
 export { MenuButton } from './MenuButton';
 export { EventHostBadge } from './EventHostBadge';
 export { BrandBadge } from './BrandBadge';
+export { PrivateEventBanner } from './PrivateEventBanner';

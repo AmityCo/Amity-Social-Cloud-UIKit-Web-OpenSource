@@ -85,7 +85,7 @@ const PostReplyComment = ({
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
   const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
+  const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
@@ -100,7 +100,7 @@ const PostReplyComment = ({
   const replyButtonText = useString('amity_social_button_reply');
   const viewMoreRepliesText = useString('amity_social_label_view_more_replies');
   const { online } = useNetworkState();
-  const { page } = useNavigation();
+  const { page, goToUserProfilePage } = useNavigation();
 
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityComponent({
@@ -365,7 +365,13 @@ const PostReplyComment = ({
         </div>
       ) : (
         <div className={styles.postReplyComment} style={themeStyles} data-testid={testId}>
-          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
+          <UserAvatar
+            pageId={pageId}
+            componentId={componentId}
+            userId={comment.userId}
+            userData={comment.creator}
+            shouldRedirectToUserProfile
+          />
           <div className={styles.postReplyComment__details}>
             {/* l1Content: scopes the trunk ::before to L1 height only */}
             <div
@@ -392,7 +398,15 @@ const PostReplyComment = ({
                     isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
                   )}
                 >
-                  <div className={styles.postReplyComment__userInfo}>
+                  <Button
+                    variant="default"
+                    className={styles.postReplyComment__userInfo}
+                    data-testid={`post-reply-comment-user-${comment.creator?.userId}`}
+                    onPress={() => {
+                      closePopup();
+                      goToUserProfilePage(comment.creator?.userId as string);
+                    }}
+                  >
                     <Typography.BodyBold
                       data-testid={`${pageId}/${componentId}/username`}
                       className={styles.postReplyComment__content__username}
@@ -400,7 +414,7 @@ const PostReplyComment = ({
                       {comment.creator?.displayName}
                     </Typography.BodyBold>
                     {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
-                  </div>
+                  </Button>
                   {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
                   <TextWithMention
                     pageId={pageId}

@@ -6,7 +6,6 @@ import { Popover } from '~/v4/core/design/components/Popover/Popover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
-import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
 import { MemberRoles } from '~/v4/chat/constants/memberRoles';
 import { PromoteToModerator } from '~/v4/icons/PromoteToModerator';
 import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
@@ -40,6 +39,7 @@ interface MessageBubbleProps {
   handlePopoverStateChange?: (isOpen: boolean) => void;
   isJoinedCommunity?: boolean;
   channel?: Amity.Channel | null;
+  currentUserMembership?: Amity.Membership<'channel'> | null;
 }
 
 export const MessageBubble: FC<MessageBubbleProps> = ({
@@ -49,6 +49,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   channel,
   handlePopoverStateChange,
   isJoinedCommunity,
+  currentUserMembership,
 }) => {
   const { currentUserId } = useSDK();
   const { isModerator: isChannelModerator } = useChannelPermission(message.channelId);
@@ -59,7 +60,6 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
 
   const isHostMessage = hostId === message.creatorId;
 
-  const currentUserMembership = useCurrentUserChannelMembership(message.channelId);
   const currentUserHasChannelModeratorRole = !!currentUserMembership?.roles?.includes(
     MemberRoles.CHANNEL_MODERATOR,
   );

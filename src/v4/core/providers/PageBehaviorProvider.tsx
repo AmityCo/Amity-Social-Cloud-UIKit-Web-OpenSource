@@ -264,6 +264,16 @@ export interface PageBehavior {
   AmityEventTargetSelectionPageBehavior?: {
     goToEventSetupPage?(context: EventSetupProps): void;
   };
+  AmityEventPostTargetSelectionPageBehavior?: {
+    goToPostComposerPage?(context: {
+      mode: Mode.CREATE;
+      targetId: string | null;
+      targetType: 'community' | 'user';
+      community?: Amity.Community;
+      targetName?: string;
+      event: Amity.Event;
+    }): void;
+  };
 
   AmityMyCommunitiesComponentBehavior?: {
     goToCommunitySetupPage?(context: { mode: AmityCommunitySetupPageMode }): void;
@@ -1041,6 +1051,23 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventTargetSelectionPageBehavior.goToEventSetupPage(context);
         }
         goToEventSetupPage(context);
+      },
+    },
+    AmityEventPostTargetSelectionPageBehavior: {
+      goToPostComposerPage: (context: {
+        mode: Mode.CREATE;
+        targetId: string | null;
+        targetType: 'community' | 'user';
+        community?: Amity.Community;
+        targetName?: string;
+        event: Amity.Event;
+      }) => {
+        if (pageBehavior?.AmityEventPostTargetSelectionPageBehavior?.goToPostComposerPage) {
+          return pageBehavior.AmityEventPostTargetSelectionPageBehavior.goToPostComposerPage(
+            context,
+          );
+        }
+        goToPostComposerPage(context);
       },
     },
     AmityExploreEventFeedComponentBehavior: {

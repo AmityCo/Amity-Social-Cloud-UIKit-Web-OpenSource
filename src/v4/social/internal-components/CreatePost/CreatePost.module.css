@@ -15,6 +15,13 @@
   max-height: calc(100% - 14.875rem);
 }
 
+/* Event posts have no media attachment drawer, so the form should occupy the
+   full available height and not reserve space for the (hidden) drawer. */
+.createPost__form[data-is-event-post='true'],
+.createPost__form[data-is-event-post='true'][data-from-media='false'] {
+  max-height: 100%;
+}
+
 .createPost__topBar {
   width: 100%;
   display: flex;
@@ -50,11 +57,13 @@
   border: none;
   outline: none;
   font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 600;
 }
 
 .createPost__formContent .createPost__titleInput::placeholder {
   font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 600;
 }
 
@@ -78,6 +87,10 @@
 
 .createPost__attachment {
   display: none;
+}
+
+.createPost__eventCardPreview {
+  padding: 0.5rem 0;
 }
 
 .createPost__ctaWrapper {
@@ -164,6 +177,10 @@
 }
 
 .createPost__notification[data-is-clip-post='true'] {
+  bottom: 1rem;
+}
+
+.createPost__notification[data-is-event-post='true'] {
   bottom: 1rem;
 }
 
@@ -266,6 +283,10 @@
     min-height: 35vh;
     position: relative;
     padding: 1rem 1.5rem;
+  }
+
+  .createPost__form[data-is-event-post='true'] .createPost__formContent {
+    min-height: auto;
   }
 
   .createPost__attachment {

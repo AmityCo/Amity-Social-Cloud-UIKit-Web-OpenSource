@@ -1,0 +1,127 @@
+.eventCreatedSuccessSheet {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0 -1rem;
+  width: 100vw;
+  background: var(--asc-color-background-default);
+}
+
+/* Close button — visible on desktop only (mobile uses drawer's own affordances) */
+.eventCreatedSuccessSheet__header {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1.25rem 1.25rem 0 1.5rem;
+}
+
+.eventCreatedSuccessSheet__closeButton {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-shade3);
+}
+
+.eventCreatedSuccessSheet__iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.eventCreatedSuccessSheet__icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  color: var(--asc-color-base-shade2);
+  fill: var(--asc-color-base-shade2);
+}
+
+.eventCreatedSuccessSheet__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.eventCreatedSuccessSheet__title {
+  color: var(--asc-color-base-default);
+  width: 100%;
+}
+
+.eventCreatedSuccessSheet__description {
+  color: var(--asc-color-base-shade1);
+  width: 100%;
+}
+
+.eventCreatedSuccessSheet__buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--asc-color-base-shade4);
+  width: 100%;
+}
+
+.eventCreatedSuccessSheet__primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  margin: 0 1rem;
+  border-radius: 0.5rem;
+  background: var(--asc-color-primary-default);
+  color: var(--asc-color-white);
+  border: 0;
+  cursor: pointer;
+  width: calc(100% - 2rem);
+}
+
+.eventCreatedSuccessSheet__primary:hover {
+  background: var(--asc-color-primary-shade1);
+}
+
+.eventCreatedSuccessSheet__secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  margin: 0 1rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--asc-color-base-default);
+  border: 1px solid var(--asc-color-base-shade3);
+  cursor: pointer;
+  width: calc(100% - 2rem);
+}
+
+.eventCreatedSuccessSheet__secondary:hover {
+  background: var(--asc-color-base-shade4);
+}
+
+/* Desktop popup overrides — matches Figma 644:5960 */
+@media (width >= 48em) {
+  .eventCreatedSuccessSheet {
+    margin: 0;
+    width: 25rem; /* 400px */
+    border-radius: 0.75rem;
+  }
+
+  .eventCreatedSuccessSheet__header {
+    display: flex;
+  }
+
+  .eventCreatedSuccessSheet__buttonContainer {
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: 0;
+  }
+
+  .eventCreatedSuccessSheet__primary,
+  .eventCreatedSuccessSheet__secondary {
+    margin: 0;
+    width: 100%;
+  }
+}

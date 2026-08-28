@@ -52,6 +52,7 @@ export enum PageTypes {
   StoryTargetSelectionPage = 'StoryTargetSelectionPage',
   PollTargetSelectionPage = 'PollTargetSelectionPage',
   EventTargetSelectionPage = 'EventTargetSelectionPage',
+  EventPostTargetSelectionPage = 'EventPostTargetSelectionPage',
   AllCategoriesPage = 'AllCategoriesPage',
   CommunitiesByCategoryPage = 'CommunitiesByCategoryPage',
   CommunityAddCategoryPage = 'CommunityAddCategoryPage',
@@ -167,6 +168,7 @@ type Page =
         post?: Amity.Post;
         isClipPost?: boolean;
         targetName?: string;
+        event?: Amity.Event;
       };
     }
   | {
@@ -174,6 +176,12 @@ type Page =
     }
   | {
       type: PageTypes.EventTargetSelectionPage;
+    }
+  | {
+      type: PageTypes.EventPostTargetSelectionPage;
+      context: {
+        event: Amity.Event;
+      };
     }
   | {
       type: PageTypes.AllCategoriesPage;
@@ -358,6 +366,7 @@ type ContextValue = {
   goToSelectPollPostTargetPage: () => void;
   goToStoryTargetSelectionPage: () => void;
   goToSelectEventTargetPage: () => void;
+  goToEventPostTargetSelectionPage: (context: { event: Amity.Event }) => void;
   goToPollPostComposerPage: (context: {
     targetId: string | null;
     targetType: 'community' | 'user';
@@ -394,6 +403,8 @@ type ContextValue = {
           targetType: 'community' | 'user';
           community?: Amity.Community;
           isClipPost?: boolean;
+          event?: Amity.Event;
+          targetName?: string;
         }
       | { mode: Mode.EDIT; post: Amity.Post; isClipPost?: boolean },
   ) => void;
@@ -500,6 +511,7 @@ let defaultValue: ContextValue = {
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => {},
   goToStoryTargetSelectionPage: () => {},
   goToSelectPollPostTargetPage: () => {},
+  goToEventPostTargetSelectionPage: () => {},
   goToPollPostComposerPage: () => {},
   goToPostComposerPage: () => {},
   goToStoryCreationPage: () => {},
@@ -612,6 +624,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToStoryTargetSelectionPage: () =>
       console.log('NavigationContext goToStoryTargetSelectionPage()'),
     goToSelectEventTargetPage: () => console.log('NavigationContext goToSelectEventTargetPage()'),
+    goToEventPostTargetSelectionPage: (context) =>
+      console.log('NavigationContext goToEventPostTargetSelectionPage()', context),
     goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
     goToPostComposerPage: () => console.log(`NavigationContext goToPostComposerPage()`),
     goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
@@ -1149,6 +1163,18 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const goToEventPostTargetSelectionPage = useCallback(
+    (context: { event: Amity.Event }) => {
+      const next = {
+        type: PageTypes.EventPostTargetSelectionPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
   const goToSelectPollPostTargetPage = useCallback(() => {
     const next = {
       type: PageTypes.PollTargetSelectionPage,
@@ -1224,6 +1250,8 @@ export default function NavigationProvider({
             targetType: 'community' | 'user';
             community?: Amity.Community;
             isClipPost?: boolean;
+            targetName?: string;
+            event?: Amity.Event;
           }
         | { mode: Mode.EDIT; post: Amity.Post; isClipPost?: boolean },
     ) => {
@@ -1672,6 +1700,7 @@ export default function NavigationProvider({
         goToStoryTargetSelectionPage,
         goToSelectPollPostTargetPage,
         goToSelectEventTargetPage,
+        goToEventPostTargetSelectionPage,
         goToStoryCreationPage,
         goToDraftClipPage,
         goToDraftStoryPage,

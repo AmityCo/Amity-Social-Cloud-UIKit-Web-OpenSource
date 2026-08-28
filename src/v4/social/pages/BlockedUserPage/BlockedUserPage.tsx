@@ -50,7 +50,11 @@ export const BlockedUserPage = () => {
     <div className={styles.blockedUserPage} style={themeStyles} data-testid={accessibilityId}>
       <div className={styles.blockedUserPage__topBar}>
         <BackButton pageId={pageId} onPress={() => onBack()} />
-        <Title pageId={pageId} titleClassName={styles.blockedUserPage__topBar__text} />
+        <Title
+          pageId={pageId}
+          textKey="amity_social_label_manage_blocked_users"
+          titleClassName={styles.blockedUserPage__topBar__text}
+        />
       </div>
       {!isLoading && users.length === 0 ? (
         <div className={styles.blockedUserPage__emptyContent}>

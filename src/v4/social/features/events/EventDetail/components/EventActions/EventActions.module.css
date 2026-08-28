@@ -20,3 +20,8 @@
   text-overflow: ellipsis;
   color: var(--asc-color-white);
 }
+
+.eventActions__postEventToFeedIcon {
+  width: 1.5rem !important;
+  height: 1.25rem !important;
+}

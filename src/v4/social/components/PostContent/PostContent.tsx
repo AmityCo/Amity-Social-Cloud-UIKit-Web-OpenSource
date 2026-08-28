@@ -26,7 +26,8 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import styles from './PostContent.module.css';
-import { isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { getPostEventId, isEventPost, isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { EventCard } from '~/v4/social/features/events/components/EventCard';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
 import { Share } from '~/v4/icons/Share';
 import { IconButton } from '~/v4/core/components/IconButton';
@@ -171,7 +172,7 @@ export const PostContent = ({
 
   const { socialReactions } = useCustomReaction();
 
-  const canShowProductTags = !(post?.childrenPosts?.[0]?.dataType === 'room');
+  const canShowProductTags = !(post?.childrenPosts?.[0]?.dataType === 'room') && !isEventPost(post);
 
   const commentCountPluralLabel = useString('amity_social_button_feed_comment_count_plural');
   const commentCountSingularLabel = useString('amity_social_button_feed_comment_count_singular');
@@ -202,7 +203,7 @@ export const PostContent = ({
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
-  const { page, goToClipFeedPage } = useNavigation();
+  const { page, goToClipFeedPage, goToEventDetailPage } = useNavigation();
 
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -577,7 +578,16 @@ export const PostContent = ({
               isSearchPost={isSearchPost}
               isOpenSeeMore={expandAllContent}
             />
-            {post.childrenPosts?.length > 0 ? (
+            {isEventPost(post) ? (
+              <EventCard
+                eventId={getPostEventId(post)}
+                variant="card"
+                size="lg"
+                onClick={(eventId) =>
+                  goToEventDetailPage ? goToEventDetailPage({ eventId }) : undefined
+                }
+              />
+            ) : post.childrenPosts?.length > 0 ? (
               <ChildrenPostContent
                 pageId={pageId}
                 componentId={componentId}
