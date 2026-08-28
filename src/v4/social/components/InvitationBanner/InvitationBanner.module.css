@@ -28,6 +28,14 @@
   color: var(--asc-color-base-default);
 }
 
+.invitationBanner__brandIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.25rem;
+}
+
 .invitationBanner__actions {
   gap: 0.5rem;
   display: grid;

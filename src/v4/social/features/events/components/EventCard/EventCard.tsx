@@ -9,38 +9,94 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { EventTypeBadge } from '~/v4/social/features/events/EventHub/elements';
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import { useString } from '~/v4/core/localization';
+import { useEvent } from '~/v4/social/features/events/hooks';
+import { EventCardSkeleton } from './EventCardSkeleton';
+import { EventCardUnavailable } from './EventCardUnavailable';
 import styles from './EventCard.module.css';
 
-type EventCardProps = {
-  event: Amity.Event;
+export type EventCardProps = {
+  event?: Amity.Event | null;
+  eventId?: string;
   size?: 'lg' | 'md';
   variant?: 'card' | 'list';
+  onClick?: (eventId: string) => void;
+  readOnly?: boolean;
 };
 
-export function EventCard({ event, variant = 'card', size = 'lg' }: EventCardProps) {
+const isEventUnavailable = (event?: Amity.Event | null): boolean => {
+  if (!event) return true;
+  if (event.isDeleted) return true;
+  if (event.status === 'cancelled') return true;
+  return false;
+};
+
+const stopBubble = (e: React.SyntheticEvent) => e.stopPropagation();
+
+export function EventCard({
+  event: eventProp,
+  eventId,
+  variant = 'card',
+  size = 'lg',
+  onClick,
+  readOnly = false,
+}: EventCardProps) {
+  const shouldFetch = eventProp === undefined && !!eventId;
+  const { event: fetchedEvent, isLoading } = useEvent({
+    eventId: eventId ?? '',
+    shouldCall: shouldFetch,
+  });
+
   const { currentUserId } = useSDK();
   const [errorImage, setErrorImage] = useState(false);
   const { goToEventDetailPage } = useNavigation();
+
+  const resolvedEvent = eventProp !== undefined ? eventProp : fetchedEvent;
+
   const byCreatorLabel = useString(
     'amity_social_button_by_creator',
-    event.creator?.displayName ?? event.creator?.userPublicId ?? '',
+    resolvedEvent?.creator?.displayName ?? resolvedEvent?.creator?.userPublicId ?? '',
   );
 
-  const handleClick = () => {
+  if (shouldFetch && isLoading && !fetchedEvent) {
+    return <EventCardSkeleton />;
+  }
+
+  if (isEventUnavailable(resolvedEvent)) {
+    return <EventCardUnavailable size={size} variant={variant} />;
+  }
+
+  const event = resolvedEvent!;
+
+  const handleClick = (e?: React.SyntheticEvent) => {
+    e?.stopPropagation();
+    if (onClick) {
+      onClick(event.eventId);
+      return;
+    }
     goToEventDetailPage({ eventId: event.eventId });
   };
 
+  const interactiveProps = readOnly
+    ? { 'data-readonly': true as const }
+    : {
+        tabIndex: 0,
+        role: 'button' as const,
+        'aria-label': `click to go event ${event.title} details`,
+        onClick: handleClick,
+        onKeyDown: handleClick,
+        onPointerDown: stopBubble,
+        onPointerUp: stopBubble,
+        onMouseDown: stopBubble,
+        onMouseUp: stopBubble,
+      };
+
   return (
     <div
-      tabIndex={0}
-      role="button"
       data-size={size}
       key={event.eventId}
       data-variant={variant}
       className={styles.eventCard}
-      aria-label={`click to go event ${event.title} details`}
-      onClick={handleClick}
-      onKeyDown={handleClick}
+      {...interactiveProps}
     >
       <div className={styles.eventCard__figure} data-size={size} data-variant={variant}>
         <img

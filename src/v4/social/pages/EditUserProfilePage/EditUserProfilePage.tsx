@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import styles from './EditUserProfilePage.module.css';
 import Camera from '~/v4/icons/Camera';
 import { Form } from 'react-aria-components';
@@ -60,15 +60,15 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
         info({
           pageId: pageId,
           type: 'info',
-          title: useString('amity_social_button_inappropriate_image'),
-          content: useString('amity_social_modal_dialog_image_upload_error'),
+          title: resolveString('amity_social_button_inappropriate_image'),
+          content: resolveString('amity_social_modal_dialog_image_upload_error'),
         });
       } else {
         info({
           pageId: pageId,
           type: 'info',
-          title: useString('amity_social_upload_image_failed'),
-          content: useString('amity_social_label_please_try_again'),
+          title: resolveString('amity_social_upload_image_failed'),
+          content: resolveString('amity_social_label_please_try_again'),
         });
       }
     }
@@ -95,7 +95,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
       onSuccess: () => {
         onBack();
         notification.success({
-          content: useString('amity_social_toast_snackbar_profile_updated'),
+          content: resolveString('amity_social_toast_snackbar_profile_updated'),
         });
       },
       onError: (error) => {
@@ -107,12 +107,12 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
         }
         if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
           notification.info({
-            content: useString('amity_social_user_profile_blocked_word_error'),
+            content: resolveString('amity_social_user_profile_blocked_word_error'),
           });
           return;
         }
         notification.info({
-          content: useString('amity_social_toast_snackbar_profile_save_failed'),
+          content: resolveString('amity_social_toast_snackbar_profile_save_failed'),
         });
       },
     });
@@ -128,7 +128,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
     e.preventDefault();
     if (!online) {
       notification.info({
-        content: useString('amity_social_toast_snackbar_profile_save_failed'),
+        content: resolveString('amity_social_toast_snackbar_profile_save_failed'),
       });
       return;
     }
@@ -158,13 +158,13 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
       confirm({
         pageId: pageId,
         type: 'confirm',
-        title: useString('amity_social_modal_community_setup_dialog_leave_edit_title'),
-        content: useString('amity_social_modal_community_setup_dialog_leave_edit_description'),
+        title: resolveString('amity_social_modal_community_setup_dialog_leave_edit_title'),
+        content: resolveString('amity_social_modal_community_setup_dialog_leave_edit_description'),
         onOk: () => {
           onBack();
         },
-        okText: useString('amity_social_modal_dialog_discard_button'),
-        cancelText: useString('amity_social_modal_dialog_cancel_button'),
+        okText: resolveString('amity_social_modal_dialog_discard_button'),
+        cancelText: resolveString('amity_social_modal_dialog_cancel_button'),
       });
     else onBack();
   };

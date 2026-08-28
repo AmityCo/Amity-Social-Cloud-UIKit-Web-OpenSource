@@ -42,6 +42,8 @@ export { ClipFeedPage } from './ClipFeedPage';
 
 export { EventTargetSelectionPage } from './EventTargetSelectionPage';
 
+export { EventPostTargetSelectionPage } from './EventPostTargetSelectionPage';
+
 export { EventSetupPage } from './EventSetupPage';
 
 export { UpcomingEventsPage } from './UpcomingEventsPage';

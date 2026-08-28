@@ -36,7 +36,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
 
   return (
     <section className={styles.explore} style={themeStyles} data-testid={accessibilityId}>
-      <HappeningEvents />
+      <HappeningEvents excludeOwnEvents />
       {eventCollection.isLoadingFirstPage ? (
         <Skeleton className={styles.explore__recommended}>
           <Skeleton.Line width="8.75rem" height="0.75rem" />

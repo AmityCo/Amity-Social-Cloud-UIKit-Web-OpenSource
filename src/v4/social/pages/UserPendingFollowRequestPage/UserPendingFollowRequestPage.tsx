@@ -9,8 +9,7 @@ import useFollowersCollection from '~/v4/core/hooks/collections/useFollowersColl
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PendingUserItem } from './PendingUserItem/PendingUserItem';
-import { EmptyContent } from '~/v4/social/internal-components/EmptyContent/EmptyContent';
-import PartyHorn from '~/v4/icons/PartyHorn';
+import { PartyHorn } from '~/v4/core/design/icons';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 export const UserPendingFollowRequestPage = () => {
@@ -45,13 +44,10 @@ export const UserPendingFollowRequestPage = () => {
         </div>
         {followers && followers.length === 0 ? (
           <div className={styles.userPendingFollowRequestPage__noPending}>
-            <EmptyContent
-              pageId={pageId}
-              defaultIcon={() => (
-                <PartyHorn className={styles.userPendingFollowRequestPage__noPending__icon} />
-              )}
-              text={useString('amity_social_label_no_requests_to_review')}
-            />
+            <PartyHorn.Light className={styles.userPendingFollowRequestPage__noPending__icon} />
+            <Typography.TitleBold className={styles.userPendingFollowRequestPage__noPending__text}>
+              {useString('amity_social_label_no_requests_to_review')}
+            </Typography.TitleBold>
           </div>
         ) : (
           <div>

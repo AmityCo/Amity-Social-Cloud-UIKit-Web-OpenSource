@@ -563,6 +563,7 @@ export const ClipFeedPage = ({
                         onClipFailed={(postId) => handleClipFailed(postId)}
                         isLoading={isLoadingVideo}
                         seeMoreIsOpen={seeMoreIsOpen}
+                        isFailed={isClipFailed(post.postId)}
                       />
                       <div className={styles.clipFeedPage__header}>
                         <BackButton
@@ -596,6 +597,7 @@ export const ClipFeedPage = ({
                           handleMuteToggle={handleMuteToggle}
                           isLocalMuted={isLocalMuted}
                           onClickMenuButton={() => handleMenuClick(post.parentPostId)}
+                          onClipDeleted={() => handleClipFailed(post.postId)}
                         />
                       )}
                       <ClipCaption
@@ -640,6 +642,7 @@ export const ClipFeedPage = ({
                     isLocalMuted={isLocalMuted}
                     onClipFailed={(postId) => handleClipFailed(postId)}
                     isLoading={isLoadingVideo}
+                    isFailed={isClipFailed(post.postId)}
                   />
                   <div className={styles.clipFeedPage__header}>
                     <BackButton
@@ -673,6 +676,7 @@ export const ClipFeedPage = ({
                       handleMuteToggle={handleMuteToggle}
                       isLocalMuted={isLocalMuted}
                       onClickMenuButton={() => handleMenuClick(post.parentPostId)}
+                      onClipDeleted={() => handleClipFailed(post.postId)}
                     />
                   )}
                   <ClipCaption

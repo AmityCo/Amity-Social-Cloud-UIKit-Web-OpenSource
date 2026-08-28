@@ -187,10 +187,10 @@ export function useEventSetup(props: EventSetupProps) {
     await createEventMutation.mutateAsync(payload, {
       onSettled: () => remove('create-event-loading'),
       onSuccess: ({ data }) => {
-        success({ content: resolveString('amity_social_toast_snackbar_event_created') });
         AmityEventSetupPageBehavior?.goToEventDetailPage?.({
           eventId: data.eventId,
           pop: isDesktop ? 2 : 3,
+          showCreatedSuccessSheet: true,
         });
       },
       onError: (error) => {

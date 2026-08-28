@@ -1,6 +1,6 @@
 .invitation {
   width: 100%;
-  background-color: rgb(from var(--asc-color-primary-shade3) r g b / 30%);
+  background-color: color-mix(in srgb, var(--asc-color-primary-default) 20%, transparent);
 
   &[data-seen='true'] {
     background-color: var(--asc-color-background-default);

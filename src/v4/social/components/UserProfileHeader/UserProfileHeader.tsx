@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useString } from '~/v4/core/localization';
+import { useString, resolveString } from '~/v4/core/localization';
 import styles from './UserProfileHeader.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { UserFollowing } from '~/v4/social/elements/UserFollowing/UserFollowing';
@@ -265,7 +265,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
               defaultBehavior: () => {
                 if (!online) {
                   notification.info({
-                    content: useString('amity_social_toast_failed_generic'),
+                    content: resolveString('amity_social_toast_failed_generic'),
                   });
                   return;
                 }
@@ -285,7 +285,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
           onClick={() => {
             if (!online) {
               notification.info({
-                content: useString('amity_social_toast_failed_generic'),
+                content: resolveString('amity_social_toast_failed_generic'),
               });
               return;
             }
@@ -301,7 +301,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
           onClick={() => {
             if (!online) {
               notification.info({
-                content: useString('amity_social_toast_user_unblock_failed'),
+                content: resolveString('amity_social_toast_user_unblock_failed'),
               });
               return;
             }

@@ -45,16 +45,25 @@
 
 .userPendingFollowRequestPage__noPending {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  gap: 0.5rem;
+  padding: 1.5rem;
 }
 
 .userPendingFollowRequestPage__noPending__icon {
   width: 3.75rem;
   height: 3.75rem;
   color: var(--asc-color-secondary-shade4);
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.userPendingFollowRequestPage__noPending__text {
+  max-width: 15.75rem;
+  text-align: center;
+  color: var(--asc-color-base-shade3);
 }
 
 @media (width >=48em) {
@@ -71,7 +80,11 @@
   }
 
   .userPendingFollowRequestPage__noPending {
-    height: auto;
+    flex: 0 0 auto;
+    padding: 2rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
   }
 
   .userPendingFollowRequestPage__description {

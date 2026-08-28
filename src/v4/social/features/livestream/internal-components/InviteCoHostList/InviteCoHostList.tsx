@@ -105,6 +105,9 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
         <InviteButton
           pageId={pageId}
           componentId={componentId}
+          className={styles.watchingUserItem__inviteButton}
+          fullWidth={false}
+          size="small"
           onPress={handleInvite}
           isDisabled={isLoading || hasPendingInvitation || hasCoHost}
         />

@@ -39,6 +39,7 @@ export {
   AddGroupMemberPage as AmityAddGroupMemberPage,
   BannedGroupMemberListPage as AmityBannedGroupMemberListPage,
   ArchivedChatPage as AmityArchivedChatPage,
+  SearchChannelPage as AmitySearchChannelPage,
 } from '~/v4/chat/pages';
 
 // v4 internal use only (Amity Console)

@@ -23,7 +23,6 @@ export function HappeningEvents(props: HappeningEventsProps) {
   } = useEventsCollection({
     limit: 20,
     status: AmityEventStatus.Live,
-    excludeOwnEvents: true,
     ...props,
   });
 

@@ -55,7 +55,7 @@ import { TitleForm } from '~/v4/core/components/TitleForm';
 import { Description } from '~/v4/core/components/Description';
 import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
-import { CameraFilled } from '~/v4/icons/CameraFilled';
+import { CameraOutlined } from '~/v4/icons/CameraOutlined';
 
 type CreateCommunityProps = {
   mode: AmityCommunitySetupPageMode;
@@ -370,9 +370,9 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
               {coverImage.length > 0 && <div className={styles.createCommunity__overlay} />}
               {!uploadLoading && (
                 <IconComponent
-                  imgIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
+                  imgIcon={() => <CameraOutlined className={styles.createCommunity__cameraIcon} />}
                   defaultIcon={() => (
-                    <CameraFilled className={styles.createCommunity__cameraIcon} />
+                    <CameraOutlined className={styles.createCommunity__cameraIcon} />
                   )}
                 />
               )}
@@ -420,8 +420,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             {coverImage.length > 0 && <div className={styles.createCommunity__overlay} />}
             {!uploadLoading && (
               <IconComponent
-                imgIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
-                defaultIcon={() => <CameraFilled className={styles.createCommunity__cameraIcon} />}
+                imgIcon={() => <CameraOutlined className={styles.createCommunity__cameraIcon} />}
+                defaultIcon={() => (
+                  <CameraOutlined className={styles.createCommunity__cameraIcon} />
+                )}
               />
             )}
           </Button>

@@ -9,6 +9,7 @@ import { SecondaryTab } from '~/v4/core/components/SecondaryTab';
 import { JoinRequestContent } from '~/v4/social/components/JoinRequestContent';
 import { PendingPostList } from '~/v4/social/components/PendingPostList';
 import { useCommunityInfo } from '~/v4/social/hooks';
+import { checkAddCommunityUserPermission } from '~/v4/social/utils';
 import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -27,8 +28,9 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   });
 
   const { onBack } = useNavigation();
-  const { currentUserId } = useSDK();
+  const { currentUserId, client } = useSDK();
   const { canReviewCommunityPosts } = useCommunityInfo(community.communityId);
+  const canAddCommunityUser = checkAddCommunityUserPermission(client, community.communityId);
 
   const {
     joinRequests,
@@ -160,8 +162,9 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     });
   }
 
-  // Only add the join requests tab if the user has permission to review community posts AND there are join requests
-  if (community.requiresJoinApproval && canReviewCommunityPosts && joinRequestsCount > 0) {
+  // Only add the join requests tab if the user can review posts OR add users to the
+  // community (both permissions can approve join requests)
+  if (community.requiresJoinApproval && (canReviewCommunityPosts || canAddCommunityUser)) {
     visibleTabs.push({
       value: 'join_requests_button_tab',
       label: resolveString(
@@ -194,6 +197,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   }
 
   const tabs = visibleTabs;
+  const currentActiveTab = tabs.some((tab) => tab.value === activeTab) ? activeTab : tabs[0]?.value;
 
   // If no tabs are visible, render the posts tab (PendingPostList) as fallback
   if (visibleTabs.length === 0) {
@@ -261,7 +265,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       <div className={styles.pendingRequestsPage__content}>
         <SecondaryTab
           tabs={tabs}
-          activeTab={activeTab}
+          activeTab={currentActiveTab}
           onChange={(key) => {
             // Mark as manual change using ref for immediate effect
             isManualTabChangeRef.current = true;

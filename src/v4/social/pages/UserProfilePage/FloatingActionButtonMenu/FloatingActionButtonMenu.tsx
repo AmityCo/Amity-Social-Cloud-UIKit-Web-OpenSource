@@ -45,7 +45,7 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
   }[] = [
     {
       id: 'post',
-      label: useString('amity_social_label_community_post_label'),
+      label: useString('amity_common_post'),
       icon: <CreatePost className={styles.floatingActionButtonMenu__icon} />,
       onPress: () =>
         goToPostComposerPage({ mode: Mode.CREATE, targetId: null, targetType: 'user' }),
@@ -63,6 +63,7 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
       },
     },
   ];
+
   return (
     <div className={styles.floatingActionButtonMenu}>
       {menus.map((menu) => (

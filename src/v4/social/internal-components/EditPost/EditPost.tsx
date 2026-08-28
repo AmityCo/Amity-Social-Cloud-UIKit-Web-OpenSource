@@ -53,7 +53,8 @@ import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin } from '~/v4/social/utils';
 import styles from './EditPost.module.css';
-import { isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { getPostEventId, isEventPost, isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { EventCard } from '~/v4/social/features/events/components/EventCard';
 import { Play } from '~/v4/icons/Play';
 import { useImage } from '~/v4/core/hooks/useImage';
 import { TextArea } from '~/v4/core/components/TextField';
@@ -63,6 +64,8 @@ import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
+  const isEventPostEdit = isEventPost(post);
+  const eventId = isEventPostEdit ? getPostEventId(post) : undefined;
 
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -119,9 +122,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     showToastPosition,
   } = useMediaAttachmentVisible({ files, posts: localPost });
 
-  const [title, setTitle] = useState<string>((post as Amity.Post<'text'>)?.data?.title || '');
+  const initialTitle = (post as Amity.Post<'text'>)?.data?.title || '';
+  const initialText = (post as Amity.Post<'text'>)?.data?.text ?? '';
+  const [title, setTitle] = useState<string>(initialTitle);
   const [textValue, setTextValue] = useState<CreatePostParams>({
-    text: (post as Amity.Post<'text'>)?.data?.text ?? '',
+    text: initialText,
     mentioned: post.metadata?.mentioned || [],
     hashtagsMetadata: [],
     mentionees: post.mentionees as Amity.UserMention[],
@@ -134,8 +139,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
-  const postingText = useString('amity_social_toast_poll_create_posting_toast');
+  const updatingText = useString('amity_social_toast_event_post_updating');
   const waitingForNetworkText = useString('amity_social_label_waiting_for_network');
+  // Backwards-compat name — EditPost is the update flow, so use the updating text.
+  const postingText = updatingText;
   const postEditGenericErrorText = useString('amity_social_toast_post_edit_generic_error_message');
   const titlePlaceholder = useString('amity_social_label_title_optional');
 
@@ -253,12 +260,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === currentUserId) != null;
 
+  const isModeratorOrAdmin = isModerator || isAdmin(user?.roles);
   const isPostNeedsApproval =
-    (community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+    !isModeratorOrAdmin &&
+    ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
       ?.needApprovalOnPostCreation ||
-    (community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED &&
-      !isModerator &&
-      !isAdmin(user?.roles));
+      community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED);
 
   const { updateNewPost } = useGlobalFeedContext();
 
@@ -322,6 +329,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               'amity_social_label_post_composer_post_updates_sent_for_review_title',
             ),
           });
+        } else if (isEventPostEdit) {
+          success({
+            content: resolveString('amity_social_toast_event_post_updated'),
+          });
         }
       },
       onError: (error) => {
@@ -329,13 +340,29 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setIsError(true);
 
         if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
-          setPostErrorText(resolveString('amity_social_error_post_create_ban_word_error'));
+          setPostErrorText(
+            resolveString(
+              isEventPostEdit
+                ? 'amity_social_toast_event_post_blocked_word'
+                : 'amity_social_error_post_create_ban_word_error',
+            ),
+          );
         } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
           setPostErrorText(
-            resolveString('amity_social_error_add_blocked_links_post_error_message'),
+            resolveString(
+              isEventPostEdit
+                ? 'amity_social_toast_event_post_blocked_link'
+                : 'amity_social_error_add_blocked_links_post_error_message',
+            ),
           );
         } else {
-          setPostErrorText(resolveString('amity_social_toast_post_create_generic_error_message'));
+          setPostErrorText(
+            resolveString(
+              isEventPostEdit
+                ? 'amity_social_toast_event_post_update_failed'
+                : 'amity_social_toast_post_create_generic_error_message',
+            ),
+          );
         }
       },
     });
@@ -492,31 +519,44 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     }
 
     if (textValue) {
-      isClipPost
-        ? mutateUpdatePostAsync({
-            data: { text: textValue.text },
-            metadata: {
-              mentioned: textValue.mentioned ?? [],
-              hashtags: textValue.hashtagsMetadata,
-            },
-            mentionees: textValue.mentionees as Amity.UserMention[],
-            hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
-            links: effectiveLinks,
-            productTags: finalProductTags,
-          })
-        : mutateUpdatePostAsync({
-            data: { text: textValue.text, title: title.trim() },
-            metadata: {
-              mentioned: textValue.mentioned ?? [],
-              hashtags: textValue.hashtagsMetadata,
-            },
-            mentionees: textValue.mentionees as Amity.UserMention[],
-            hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
-            attachments: attachments,
-            links: effectiveLinks,
-            productTags: finalProductTags,
-            attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
-          });
+      if (isEventPostEdit) {
+        mutateUpdatePostAsync({
+          data: { text: textValue.text, title: title.trim() },
+          metadata: {
+            mentioned: textValue.mentioned ?? [],
+            hashtags: textValue.hashtagsMetadata,
+          },
+          mentionees: textValue.mentionees as Amity.UserMention[],
+          hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
+          links: effectiveLinks,
+        });
+      } else if (isClipPost) {
+        mutateUpdatePostAsync({
+          data: { text: textValue.text },
+          metadata: {
+            mentioned: textValue.mentioned ?? [],
+            hashtags: textValue.hashtagsMetadata,
+          },
+          mentionees: textValue.mentionees as Amity.UserMention[],
+          hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
+          links: effectiveLinks,
+          productTags: finalProductTags,
+        });
+      } else {
+        mutateUpdatePostAsync({
+          data: { text: textValue.text, title: title.trim() },
+          metadata: {
+            mentioned: textValue.mentioned ?? [],
+            hashtags: textValue.hashtagsMetadata,
+          },
+          mentionees: textValue.mentionees as Amity.UserMention[],
+          hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
+          attachments: attachments,
+          links: effectiveLinks,
+          productTags: finalProductTags,
+          attachmentProductTags: hasAttachmentProductTags ? attachmentProductTags : undefined,
+        });
+      }
     }
   };
 
@@ -528,6 +568,9 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   };
 
   const validatePost = async () => {
+    if (isEventPostEdit) {
+      return proceedWithSave();
+    }
     const setting = await client?.getProductCatalogueSetting();
     const hasProductTags =
       files.some((file) => file.productTags && file.productTags.length > 0) ||
@@ -709,21 +752,24 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     return false;
   }, [post.productTags, productTags, posts, postImages, postVideos, files]);
 
-  const hasNoChanges =
-    isTextPost(post) &&
-    post.data?.text === textValue.text &&
-    post.data?.title === title &&
-    !hasLinkChanges() &&
-    !hasMediaChange &&
-    !hasProductTagsChange;
+  const hasNoChanges = isEventPostEdit
+    ? initialText === textValue.text && initialTitle === title
+    : isTextPost(post) &&
+      post.data?.text === textValue.text &&
+      post.data?.title === title &&
+      !hasLinkChanges() &&
+      !hasMediaChange &&
+      !hasProductTagsChange;
 
-  const hasNoContent = !(
-    textValue.text.trim().length > 0 ||
-    files.length > 0 ||
-    postImages.length > 0 ||
-    postVideos.length > 0 ||
-    localPost.length > 0
-  );
+  const hasNoContent = isEventPostEdit
+    ? false
+    : !(
+        textValue.text.trim().length > 0 ||
+        files.length > 0 ||
+        postImages.length > 0 ||
+        postVideos.length > 0 ||
+        localPost.length > 0
+      );
 
   const isButtonDisabled =
     !online ||
@@ -750,6 +796,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           className={styles.editPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
           data-isclip={isClipPost}
+          data-is-event-post={isEventPostEdit}
         >
           <Notification
             className={styles.editPost__notificationToast}
@@ -771,6 +818,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           className={styles.editPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
           data-isclip={isClipPost}
+          data-is-event-post={isEventPostEdit}
         >
           <Notification
             content={postErrorText ?? postEditGenericErrorText}
@@ -796,6 +844,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         className={styles.editPost__form}
         onSubmit={handleSubmit(onSave)}
         data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+        data-is-event-post={isEventPostEdit}
       >
         <div className={styles.editPost__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
@@ -845,7 +894,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialText={textValue.text}
               initialMentions={post.metadata?.mentioned}
               initialHashtags={post.metadata?.hashtags}
-              enableProductMention={true}
+              enableProductMention={!isEventPostEdit}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));
@@ -880,7 +929,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialProductMentions={productTags as Amity.TextProductTag[]}
             />
           </div>
-          {!isClipPost && (
+          {!isClipPost && !isEventPostEdit && (
             <TextEditorLinkPreview
               pageId={pageId}
               urls={urlHighlights}
@@ -903,53 +952,62 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               }}
             />
           )}
+          {isEventPostEdit && eventId && (
+            <div className={styles.editPost__eventCardPreview}>
+              <EventCard eventId={eventId} variant="card" size="lg" readOnly />
+            </div>
+          )}
 
-          <ImageThumbnail
-            files={files}
-            pageId={pageId}
-            progress={progress}
-            removeFile={removeFile}
-            postImages={postImages as Amity.Post<'image'>[]}
-            onAltTextChange={handleAltTextChange}
-            onRemovePostImage={handleRemoveThumbnailImage}
-            onFileProductTagsChange={handleProductTagsChange}
-            onChildPostProductTagsChange={(postId, productTags) => {
-              setPostImages((prev) => {
-                const updatedPosts = prev.map((post) =>
-                  post.postId === postId ? { ...post, productTags: [...productTags] } : post,
-                );
+          {!isEventPostEdit && (
+            <ImageThumbnail
+              files={files}
+              pageId={pageId}
+              progress={progress}
+              removeFile={removeFile}
+              postImages={postImages as Amity.Post<'image'>[]}
+              onAltTextChange={handleAltTextChange}
+              onRemovePostImage={handleRemoveThumbnailImage}
+              onFileProductTagsChange={handleProductTagsChange}
+              onChildPostProductTagsChange={(postId, productTags) => {
+                setPostImages((prev) => {
+                  const updatedPosts = prev.map((post) =>
+                    post.postId === postId ? { ...post, productTags: [...productTags] } : post,
+                  );
 
-                return [...updatedPosts];
-              });
-            }}
-            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
-            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
-            taggedProductIds={allProductTags.map((tag) => tag.productId)}
-          />
-          <VideoThumbnail
-            files={files}
-            pageId={pageId}
-            progress={progress}
-            removeFile={removeFile}
-            postVideos={postVideos as Amity.Post<'video'>[]}
-            onRemovePostVideo={handleRemoveThumbnailVideo}
-            onFileProductTagsChange={handleProductTagsChange}
-            onChildPostProductTagsChange={(postId, productTags) => {
-              setPostVideos((prev) => {
-                const updatedPosts = prev.map((post) =>
-                  post.postId === postId ? { ...post, productTags: [...productTags] } : post,
-                );
+                  return [...updatedPosts];
+                });
+              }}
+              productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+              remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
+            />
+          )}
+          {!isEventPostEdit && (
+            <VideoThumbnail
+              files={files}
+              pageId={pageId}
+              progress={progress}
+              removeFile={removeFile}
+              postVideos={postVideos as Amity.Post<'video'>[]}
+              onRemovePostVideo={handleRemoveThumbnailVideo}
+              onFileProductTagsChange={handleProductTagsChange}
+              onChildPostProductTagsChange={(postId, productTags) => {
+                setPostVideos((prev) => {
+                  const updatedPosts = prev.map((post) =>
+                    post.postId === postId ? { ...post, productTags: [...productTags] } : post,
+                  );
 
-                return [...updatedPosts];
-              });
-            }}
-            productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
-            remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
-            taggedProductIds={allProductTags.map((tag) => tag.productId)}
-          />
+                  return [...updatedPosts];
+                });
+              }}
+              productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
+              remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
+              taggedProductIds={allProductTags.map((tag) => tag.productId)}
+            />
+          )}
         </div>
         {/* TODO: Handle file type */}
-        {!isClipPost && (
+        {!isClipPost && !isEventPostEdit && (
           <div className={styles.editPost__attachment}>
             <MediaAttachment
               pageId={pageId}
@@ -985,7 +1043,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
         />
       </form>
-      {!isDesktop && !isClipPost && (
+      {!isDesktop && !isClipPost && !isEventPostEdit && (
         <div className={styles.editPost__attachmentDrawer}>
           <div ref={drawerRef}></div>
           {drawerRef.current
@@ -1060,6 +1118,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             className={styles.editPost__notification}
             data-show-detail-media-attachment={showToastPosition()}
             data-isclip={isClipPost}
+            data-is-event-post={isEventPostEdit}
           >
             <Notification
               className={styles.editPost__notificationToast}
@@ -1074,6 +1133,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             className={styles.editPost__notification}
             data-isclip={isClipPost}
             data-show-detail-media-attachment={showToastPosition()}
+            data-is-event-post={isEventPostEdit}
           >
             <Notification
               content={postErrorText ?? postEditGenericErrorText}

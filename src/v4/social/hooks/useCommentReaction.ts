@@ -58,6 +58,7 @@ export const useCommentReaction = ({
       if (!reactionByMe) {
         setReactionsCount(reactionsCount + 1);
       }
+      setReactionByMe(reactionKey);
     },
 
     onError: () => {

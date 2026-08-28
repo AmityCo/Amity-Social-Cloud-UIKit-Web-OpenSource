@@ -286,7 +286,7 @@ export function PostDetailPage({
           data-testid={`${pageId}/page_title`}
           className={styles.postDetailPage__topBar__title}
         >
-          {useString('amity_social_label_community_post_label')}
+          {useString('amity_common_post')}
         </Typography.TitleBold>
         <Popover
           containerClassName={styles.postDetailPage__topBar__menuBar}

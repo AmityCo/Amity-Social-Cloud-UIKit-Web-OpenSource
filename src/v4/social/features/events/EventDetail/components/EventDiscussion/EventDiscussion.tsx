@@ -65,8 +65,8 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
 
   const actions = [
     {
-      id: useString('amity_social_label_community_post_label'),
-      label: useString('amity_social_label_community_post_label'),
+      id: useString('amity_common_post'),
+      label: useString('amity_common_post'),
       icon: CreatePost,
       onPress: () => {
         removeDrawerData();

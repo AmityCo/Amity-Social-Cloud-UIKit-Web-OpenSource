@@ -1,6 +1,7 @@
 import { Pencil } from '~/v4/icons/Pencil';
 import { useString } from '~/v4/core/localization';
 import { resolveString } from '~/v4/core/localization';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import Trash from '~/v4/social/icons/trash';
 import { Typography } from '~/v4/core/components';
 import { EventSetupMode } from '~/v4/social/features';
@@ -9,7 +10,10 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { checkIsWithinMinutes } from '~/v4/social/utils/timezone';
 import { BackButton, MenuButton } from '~/v4/social/elements';
 import { Menu } from '~/v4/core/components/Menu';
-import { useEventPermission } from '~/v4/social/features/events/hooks';
+import {
+  useEventPermission,
+  useRedirectEventPostTargetSelectionPage,
+} from '~/v4/social/features/events/hooks';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
@@ -26,6 +30,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import { CopyToClipboard } from '~/v4/icons/CopyToClipboard';
+import { PostEventToFeed } from '~/v4/icons/PostEventToFeed';
 
 export type EventActionsProps = {
   event: Amity.Event;
@@ -36,12 +41,20 @@ export type EventActionsProps = {
 
 export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActionsProps) {
   const { onBack } = useNavigation();
+  const { redirectEventPostTargetSelectionPage } = useRedirectEventPostTargetSelectionPage();
   const { info } = useConfirmContext();
   const { deleteEvent } = useEventActions();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
   const { hasDeleteEventPermission } = useEventPermission(event.originId);
-  const { currentUserId } = useSDK();
+  const { currentUserId, isVisitorOrBot } = useSDK();
+
+  const { config: createEventPostConfig, resolveText: resolveCreateEventPostText } =
+    useAmityElement({
+      pageId: 'event_detail_page',
+      componentId: '*',
+      elementId: 'create_event_post_button',
+    });
 
   const isHostEvent = event.creator?.userId === currentUserId;
 
@@ -57,6 +70,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   });
 
   const isPublicCommunity = event.targetCommunity?.isPublic ?? false;
+  const isCommunityMember = event.targetCommunity && event.targetCommunity.isJoined;
   const isShareableStatus = event.status !== AmityEventStatus.Cancelled;
   const showCopyLink =
     isSharableLinkEnabled &&
@@ -87,6 +101,28 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
             event,
           });
         }
+      },
+    },
+    {
+      key: 'post-event-to-feed',
+      icon: createEventPostConfig.image
+        ? () => (
+            <img
+              src={createEventPostConfig.image}
+              alt=""
+              className={styles.eventActions__postEventToFeedIcon}
+            />
+          )
+        : PostEventToFeed,
+      iconClassName: styles.eventActions__postEventToFeedIcon,
+      label: resolveCreateEventPostText('amity_social_button_event_post_create'),
+      condition:
+        !isVisitorOrBot &&
+        event.status !== AmityEventStatus.Cancelled &&
+        !event.isDeleted &&
+        isCommunityMember,
+      onPress: () => {
+        redirectEventPostTargetSelectionPage(event);
       },
     },
     {
