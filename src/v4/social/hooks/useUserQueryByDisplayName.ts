@@ -29,15 +29,12 @@ export const useUserQueryByDisplayName = (
       unSubRef.current = null;
     }
 
-    const unSubFn = UserRepository.searchUserByDisplayName(
-      { displayName, limit: 10 },
-      (response) => {
-        setHasMore(response.hasNextPage || false);
-        setIsLoading(response.loading);
-        loadMoreRef.current = response.onNextPage || null;
-        setItems(response.data);
-      },
-    );
+    const unSubFn = UserRepository.searchUsers({ displayName, limit: 10 }, (response) => {
+      setHasMore(response.hasNextPage || false);
+      setIsLoading(response.loading);
+      loadMoreRef.current = response.onNextPage || null;
+      setItems(response.data);
+    });
     unSubRef.current = unSubFn;
 
     return () => {

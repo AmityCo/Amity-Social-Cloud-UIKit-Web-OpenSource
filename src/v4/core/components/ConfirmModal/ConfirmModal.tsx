@@ -133,8 +133,11 @@ export const ConfirmModal = () => {
   };
 
   const onOk = async () => {
-    await confirmData?.onOk?.();
-    closeConfirm();
+    try {
+      await confirmData?.onOk?.();
+    } finally {
+      closeConfirm();
+    }
   };
 
   return <Confirm {...confirmData} onOk={onOk} onCancel={onCancel} isOpen={!!confirmData} />;

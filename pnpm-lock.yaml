@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.26.0
-        version: 7.26.0
+        specifier: 7.26.1-a95742e.0
+        version: 7.26.1-a95742e.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -336,8 +336,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.26.0':
-    resolution: {integrity: sha512-ABntZKPQToPVHPaD/5UzgArdu6uR5pZqki8rftY0cR9IZt0G5r/Z1FjWJC1kVkCjVezGB2ZXVXfoFSTSNYexRQ==}
+  '@amityco/ts-sdk@7.26.1-a95742e.0':
+    resolution: {integrity: sha512-yFgNd84v1fQ/KXrLu/0Nwun1UAwoC/hOo4NdwFPkAuD/AcVlI6MTgEfocNIR4y7kr2WSnkjsHYjK9o5qatuHlA==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5219,8 +5219,8 @@ packages:
   iota-array@1.0.0:
     resolution: {integrity: sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==}
 
-  ip-address@10.4.0:
-    resolution: {integrity: sha512-oSK96Grm3aP6OrS263xVxbNDGVL7rzBtYdpGqlDG8iQdoenDoTs/nkki+DflYbAEE8Xl6o5YxhxlrKvI3nqKXQ==}
+  ip-address@10.7.0:
+    resolution: {integrity: sha512-BGFsyJd5mpXp3rK6jIdADLNgpJUK1jnjzvYF8lK+VyDab9JAmqN0YOKDdP17HlgKb2+ehPgDc8EtnRLbGCAMhA==}
     engines: {node: '>= 12'}
 
   ip@2.0.1:
@@ -5552,8 +5552,8 @@ packages:
   jpeg-js@0.4.4:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
-  js-base64@3.9.2:
-    resolution: {integrity: sha512-6zayE8QlUdiweYI6cETD/XBSqFcoCUlufn/29PJR99r82x1yDnIprRca0YvAYpAW+ez0GuQkVBC6xG5QkD7OjA==}
+  js-base64@3.9.3:
+    resolution: {integrity: sha512-uwYQp+VJ38FVvtim6qNbit6e9uT6dwWQ4Y1+H9TxhW5hcHjpHwoxlR0nMpqUmIFOmu4VqMxwdJA88gIVuZJQ/g==}
 
   js-cookie@2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
@@ -8004,13 +8004,13 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.26.0':
+  '@amityco/ts-sdk@7.26.1-a95742e.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
       debug: 4.4.1
       hls.js: 1.5.11
-      js-base64: 3.9.2
+      js-base64: 3.9.3
       jwt-decode: 3.1.2
       mitt: 3.0.1
       mqtt: 5.15.2
@@ -14214,7 +14214,7 @@ snapshots:
 
   iota-array@1.0.0: {}
 
-  ip-address@10.4.0: {}
+  ip-address@10.7.0: {}
 
   ip@2.0.1: {}
 
@@ -14694,7 +14694,7 @@ snapshots:
 
   jpeg-js@0.4.4: {}
 
-  js-base64@3.9.2: {}
+  js-base64@3.9.3: {}
 
   js-cookie@2.2.1: {}
 
@@ -16340,7 +16340,7 @@ snapshots:
 
   socks@2.8.9:
     dependencies:
-      ip-address: 10.4.0
+      ip-address: 10.7.0
       smart-buffer: 4.2.0
 
   source-map-js@1.2.0: {}

@@ -38,7 +38,7 @@ export const useUserQueryByDisplayName = ({
       return;
     }
 
-    const unSubFn = UserRepository.searchUserByDisplayName(
+    const unSubFn = UserRepository.searchUsers(
       {
         displayName,
         limit,
