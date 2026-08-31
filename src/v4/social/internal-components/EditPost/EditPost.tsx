@@ -36,8 +36,8 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
-import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
-import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
+import { SelectedMediaComponent } from '~/v4/social/features/posts/components/SelectedMediaComponent';
+import type { FrameRatio } from '~/v4/social/features/posts/utils/getFrameRatio';
 import { FileItem, useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
 import { DetailedMediaAttachment, MediaAttachment } from '~/v4/social/components';
 import ReactDOM from 'react-dom';
@@ -60,7 +60,6 @@ import { useImage } from '~/v4/core/hooks/useImage';
 import { TextArea } from '~/v4/core/components/TextField';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -267,7 +266,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       ?.needApprovalOnPostCreation ||
       community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED);
 
-  const { updateNewPost } = useGlobalFeedContext();
+  const { updateNewPost, setPostRatioOverride } = useGlobalFeedContext();
+  const composerRatioRef = useRef<FrameRatio | undefined>(undefined);
 
   const useMutateUpdatePost = () =>
     useMutation({
@@ -322,6 +322,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
         updateNewPost(updatedPost);
+        setPostRatioOverride(updatedPost.postId, composerRatioRef.current);
 
         if (isPostNeedsApproval) {
           success({
@@ -959,46 +960,29 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           )}
 
           {!isEventPostEdit && (
-            <ImageThumbnail
+            <SelectedMediaComponent
               files={files}
               pageId={pageId}
               progress={progress}
               removeFile={removeFile}
               postImages={postImages as Amity.Post<'image'>[]}
+              postVideos={postVideos as Amity.Post<'video'>[]}
+              ratioRef={composerRatioRef}
               onAltTextChange={handleAltTextChange}
               onRemovePostImage={handleRemoveThumbnailImage}
-              onFileProductTagsChange={handleProductTagsChange}
-              onChildPostProductTagsChange={(postId, productTags) => {
-                setPostImages((prev) => {
-                  const updatedPosts = prev.map((post) =>
-                    post.postId === postId ? { ...post, productTags: [...productTags] } : post,
-                  );
-
-                  return [...updatedPosts];
-                });
-              }}
-              productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
-              remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
-              taggedProductIds={allProductTags.map((tag) => tag.productId)}
-            />
-          )}
-          {!isEventPostEdit && (
-            <VideoThumbnail
-              files={files}
-              pageId={pageId}
-              progress={progress}
-              removeFile={removeFile}
-              postVideos={postVideos as Amity.Post<'video'>[]}
               onRemovePostVideo={handleRemoveThumbnailVideo}
               onFileProductTagsChange={handleProductTagsChange}
               onChildPostProductTagsChange={(postId, productTags) => {
-                setPostVideos((prev) => {
-                  const updatedPosts = prev.map((post) =>
+                setPostImages((prev) =>
+                  prev.map((post) =>
                     post.postId === postId ? { ...post, productTags: [...productTags] } : post,
-                  );
-
-                  return [...updatedPosts];
-                });
+                  ),
+                );
+                setPostVideos((prev) =>
+                  prev.map((post) =>
+                    post.postId === postId ? { ...post, productTags: [...productTags] } : post,
+                  ),
+                );
               }}
               productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
               remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
@@ -1072,10 +1056,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                         {isShowDetailMediaAttachmentMenu ? (
                           <DetailedMediaAttachment
                             pageId={pageId}
+                            sourceId={post.postId}
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
                             totalMedia={totalMedia}
+                            productTags={allProductTags}
                             onImageFileChange={(files) =>
                               handleFileChange(files, FileType.IMAGE, localPost.length)
                             }
@@ -1091,6 +1077,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
                             totalMedia={totalMedia}
+                            productTags={allProductTags}
                             onImageFileChange={(files) =>
                               handleFileChange(files, FileType.IMAGE, localPost.length)
                             }
@@ -1149,18 +1136,6 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           </div>
         )}
       </div>
-      {!isDesktop && allProductTags.length > 0 && (
-        <div
-          className={styles.editPost__productTagActionButton}
-          data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
-        >
-          <ProductTagActionButton
-            pageId={pageId}
-            productTags={allProductTags}
-            className={styles.editPost__productTagActionButton__button}
-          />
-        </div>
-      )}
     </div>
   );
 }

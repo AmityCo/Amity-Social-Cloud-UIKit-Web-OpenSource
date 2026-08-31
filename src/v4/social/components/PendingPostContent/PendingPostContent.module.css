@@ -104,6 +104,16 @@
   background-color: var(--asc-color-black) !important;
 }
 
+.pendingPostContent__videoViewer {
+  border-radius: 0 !important;
+  max-height: none !important;
+  background-color: transparent !important;
+}
+
+.pendingPostContent__videoViewerOverlay {
+  background-color: var(--asc-color-black) !important;
+}
+
 @media (width >= 48em) {
   .pendingPostContent__container {
     border-radius: 0.5rem;
@@ -115,6 +125,10 @@
   }
 
   .pendingPostContent__imageViewerOverlay {
+    background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
+  }
+
+  .pendingPostContent__videoViewerOverlay {
     background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
   }
 }

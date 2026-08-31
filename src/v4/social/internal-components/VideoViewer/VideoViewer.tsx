@@ -1,170 +1,413 @@
+import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import type SwiperCore from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { useKeyPressEvent } from 'react-use';
+import useFile from '~/v4/core/hooks/useFile';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Button } from '~/v4/core/natives/Button';
-import { Typography } from '~/v4/core/components';
-import ChevronRight from '~/v4/icons/ChevronRight';
-import useSwiper from '~/v4/social/hooks/useSwiper';
 import usePostByIds from '~/v4/core/hooks/usePostByIds';
-import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { ClearButton } from '~/v4/social/elements/ClearButton/ClearButton';
-import { memo, useCallback, useMemo, useState } from 'react';
-import styles from './VideoViewer.module.css';
 import { isClipPost, isVideoPost } from '~/v4/social/utils/postTypeChecker';
 import { VideoPlayer as CustomVideoPlayer } from '~/v4/social/internal-components/VideoPlayer/VideoPlayer';
-import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { DisplayModeEnum } from '~/v4/social/types';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { formatDuration } from '~/v4/social/utils/formatDuration';
+import CloseIcon from '~/v4/icons/Close';
+import { Play } from '~/v4/icons/Play';
+import { Pause } from '~/v4/icons/Pause';
+import Muted from '~/v4/icons/Muted';
+import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
+import ChevronLeft from '~/v4/icons/ChevronLeft';
+import ChevronRight from '~/v4/icons/ChevronRight';
+import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge';
+import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
+import styles from './VideoViewer.module.css';
 
-type VideoViewerProps = {
-  onClose(): void;
-  pageId?: string;
-  post: Amity.Post;
-  elementId?: string;
-  componentId?: string;
-  initialVideoIndex: number;
+enum VideoFileStatus {
+  Transcoded = 'transcoded',
+}
+
+export type VideoViewerItem = {
+  fileId?: string;
+  url?: string;
+  thumbnailFileId?: string;
+  thumbnailUrl?: string;
+  productTags?: Amity.ProductTag[];
 };
 
+type VideoViewerProps = {
+  videos?: VideoViewerItem[];
+  post?: Amity.Post;
+  initialIndex?: number;
+  onClose: () => void;
+  pageId?: string;
+  sourceId?: string;
+  indexRef?: MutableRefObject<number>;
+};
+
+function getPostVideoFileId(videoPost?: Amity.Post<'video' | 'clip'>): string | undefined {
+  if (isClipPost(videoPost)) return videoPost?.data?.fileId;
+  if (isVideoPost(videoPost))
+    return (
+      videoPost?.data?.videoFileId?.high ||
+      videoPost?.data?.videoFileId?.medium ||
+      videoPost?.data?.videoFileId?.low ||
+      videoPost?.data?.videoFileId?.original
+    );
+  return undefined;
+}
+
+function resolveVideoUrl(item?: VideoViewerItem, file?: Amity.File<'video'>): string | undefined {
+  if (item?.url) return item.url;
+  if (!file) return undefined;
+  if (file.status === VideoFileStatus.Transcoded) {
+    const { videoUrl } = file;
+    return (
+      videoUrl?.['1080p'] ||
+      videoUrl?.['720p'] ||
+      videoUrl?.['480p'] ||
+      videoUrl?.['360p'] ||
+      videoUrl?.original ||
+      file.fileUrl
+    );
+  }
+  return file.fileUrl;
+}
+
 export function VideoViewer({
+  videos: videosProp,
   post,
+  initialIndex = 0,
   onClose,
-  pageId = '*',
-  elementId = '*',
-  componentId = '*',
-  initialVideoIndex,
+  pageId,
+  sourceId = '',
+  indexRef,
 }: VideoViewerProps) {
-  useKeyPressEvent('Escape', onClose);
   const { isDesktop } = useResponsive();
-  const { removeDrawerData } = useDrawer();
+  const swiperRef = useRef<SwiperCore | null>(null);
+  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
-  const posts = usePostByIds(post?.children || []);
-  const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(initialVideoIndex);
+  const [index, setIndex] = useState(initialIndex);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
-  const next = () => {
-    if (hasNext) setSelectedVideoIndex((prev) => prev + 1);
+  // Feed passes a `post`; derive its video/clip children into the shared item shape.
+  const childPosts = usePostByIds(post?.children || []);
+  const videos = useMemo<VideoViewerItem[]>(() => {
+    if (videosProp) return videosProp;
+    return childPosts
+      .filter((child) => child.dataType === 'video' || child.dataType === 'clip')
+      .map((child) => ({
+        fileId: getPostVideoFileId(child as Amity.Post<'video' | 'clip'>),
+        thumbnailFileId: (child.data as Amity.ContentDataVideo | Amity.ContentDataClip)
+          ?.thumbnailFileId,
+        productTags: child.productTags,
+      }));
+  }, [videosProp, childPosts]);
+
+  const total = videos.length;
+  const item = videos[index];
+  const hasPrev = index > 0;
+  const hasNext = index < total - 1;
+
+  const { showProductTagList } = useShowProductTagList({ pageId, mode: 'post', sourceId });
+
+  useKeyPressEvent('Escape', onClose);
+
+  useEffect(() => {
+    if (indexRef) indexRef.current = index;
+  }, [index, indexRef]);
+
+  useEffect(() => {
+    if (swiperRef.current) swiperRef.current.allowTouchMove = !isDesktop;
+  }, [isDesktop]);
+
+  const activeVideo = () => videoRefs.current[index];
+
+  // Only the active video plays; every other one is paused (Swiper keeps them all mounted).
+  const handleSlideChange = (swiper: SwiperCore) => {
+    const nextIndex = swiper.activeIndex;
+    videoRefs.current.forEach((video, i) => {
+      if (video && i !== nextIndex) video.pause();
+    });
+    const active = videoRefs.current[nextIndex];
+    if (active) {
+      active.currentTime = 0;
+      active.play().catch(() => {});
+    }
+    setCurrentTime(0);
+    setDuration(active?.duration || 0);
+    setIndex(nextIndex);
   };
 
-  const prev = () => {
-    if (hasPrev) setSelectedVideoIndex((prev) => prev - 1);
+  const togglePlay = () => {
+    const video = activeVideo();
+    if (!video) return;
+    if (video.paused) video.play().catch(() => {});
+    else video.pause();
   };
 
-  const videoPosts = posts.filter((post) => post.dataType === 'video' || post.dataType === 'clip');
-  const videoPost = videoPosts[selectedVideoIndex];
-  const hasNext = selectedVideoIndex < videoPosts.length - 1;
-  const hasPrev = selectedVideoIndex > 0;
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
+  };
 
-  const handleClose = useCallback(() => {
-    removeDrawerData();
-    onClose();
-  }, [onClose, removeDrawerData]);
+  const seek = (seconds: number) => {
+    const video = activeVideo();
+    if (!video) return;
+    video.currentTime = seconds;
+    setCurrentTime(seconds);
+  };
+
+  const handleProductTagClick = useCallback(() => {
+    showProductTagList(item?.productTags ?? []);
+  }, [item?.productTags, showProductTagList]);
+
+  const productTags = item?.productTags ?? [];
+  const counter = `${index + 1} / ${total}`;
+  const progress = duration > 0 ? currentTime / duration : 0;
+
+  const productTagBadge = productTags.length > 0 && (
+    <div className={styles.videoViewer__tag}>
+      <ProductTagBadge selectedProductTags={productTags} onClick={handleProductTagClick} />
+    </div>
+  );
+
+  const seekBar = (
+    <input
+      type="range"
+      className={styles.videoViewer__seek}
+      min={0}
+      max={duration || 0}
+      step="any"
+      value={currentTime}
+      onChange={(e) => seek(Number(e.target.value))}
+      aria-label="Seek"
+      style={{ '--progress': `${progress * 100}%` } as React.CSSProperties}
+    />
+  );
 
   return (
-    <div style={themeStyles} data-testid={accessibilityId} className={styles.videoViewer__modal}>
+    <div className={styles.videoViewer} data-desktop={isDesktop}>
+      <div className={styles.videoViewer__stage}>
+        {total > 0 && (
+          <Swiper
+            className={styles.videoViewer__swiper}
+            slidesPerView={1}
+            initialSlide={initialIndex}
+            onSwiper={(swiper: SwiperCore) => {
+              swiperRef.current = swiper;
+              swiper.allowTouchMove = !isDesktop;
+            }}
+            onSlideChange={handleSlideChange}
+          >
+            {videos.map((video, i) => (
+              <SwiperSlide key={i} className={styles.videoViewer__slide}>
+                <VideoSlide
+                  item={video}
+                  isActive={i === index}
+                  isMuted={isMuted}
+                  isDesktop={isDesktop}
+                  pageId={pageId}
+                  registerRef={(el) => {
+                    videoRefs.current[i] = el;
+                  }}
+                  onTogglePlay={togglePlay}
+                  onToggleMute={toggleMute}
+                  onPlay={() => i === index && setIsPlaying(true)}
+                  onPause={() => i === index && setIsPlaying(false)}
+                  onTime={(t) => i === index && setCurrentTime(t)}
+                  onMeta={(d) => i === index && setDuration(d)}
+                  onProductTag={(tags) => showProductTagList(tags)}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+      </div>
+
+      {!isDesktop && (
+        <div className={styles.videoViewer__overlay}>
+          <div className={styles.videoViewer__topNav}>
+            <div className={styles.videoViewer__navSide}>
+              <Button
+                onPress={onClose}
+                className={styles.videoViewer__iconButton}
+                aria-label="Close"
+              >
+                <CloseIcon className={styles.videoViewer__icon} />
+              </Button>
+            </div>
+            {total > 1 && <span className={styles.videoViewer__counter}>{counter}</span>}
+            <div className={styles.videoViewer__navSideEnd}>
+              <Button
+                onPress={toggleMute}
+                className={styles.videoViewer__iconButton}
+                aria-label={isMuted ? 'Unmute' : 'Mute'}
+              >
+                {isMuted ? (
+                  <Muted className={styles.videoViewer__icon} />
+                ) : (
+                  <UnMutedOutlined className={styles.videoViewer__icon} />
+                )}
+              </Button>
+            </div>
+          </div>
+
+          <Button
+            onPress={togglePlay}
+            className={styles.videoViewer__playCenter}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
+          >
+            {isPlaying ? (
+              <Pause className={styles.videoViewer__playIcon} />
+            ) : (
+              <Play className={styles.videoViewer__playIcon} />
+            )}
+          </Button>
+
+          <div className={styles.videoViewer__bottom}>
+            {productTagBadge}
+            <div className={styles.videoViewer__times}>
+              <span>{formatDuration(currentTime)}</span>
+              <span>{formatDuration(duration)}</span>
+            </div>
+            {seekBar}
+          </div>
+        </div>
+      )}
+
       {isDesktop && (
-        <span className={styles.videoViewer__close}>
-          <ClearButton
-            pageId={pageId}
-            onPress={onClose}
-            componentId={componentId}
-            defaultClassName={styles.videoViewer__closeButton}
-            imgClassName={styles.videoViewer__closeButton__img}
-          />
-        </span>
-      )}
-      {videoPosts.length > 1 && (
-        <Typography.TitleBold className={styles.videoViewer__count}>
-          {selectedVideoIndex + 1} / {videoPosts.length}
-        </Typography.TitleBold>
-      )}
-      {hasPrev && (
-        <Button className={styles.videoViewer__prev} onPress={prev}>
-          <ChevronRight className={styles.videoViewer__prevButton} />
-        </Button>
-      )}
-      <VideoPlayer
-        pageId={pageId}
-        videoPost={videoPost as Amity.Post<'video' | 'clip'>}
-        next={next}
-        prev={prev}
-        onClose={handleClose}
-      />
-      {hasNext && (
-        <Button className={styles.videoViewer__next} onPress={next}>
-          <ChevronRight className={styles.videoViewer__nextButton} />
-        </Button>
+        <>
+          <div className={styles.videoViewer__desktopHeader}>
+            <div className={styles.videoViewer__headerSide}>
+              <Button
+                onPress={onClose}
+                className={styles.videoViewer__closeCircle}
+                aria-label="Close"
+              >
+                <CloseIcon className={styles.videoViewer__closeCircleIcon} />
+              </Button>
+            </div>
+            {total > 1 && <span className={styles.videoViewer__counter}>{counter}</span>}
+            <div className={styles.videoViewer__headerSide} />
+          </div>
+
+          {hasPrev && (
+            <Button
+              onPress={() => swiperRef.current?.slidePrev()}
+              className={styles.videoViewer__arrowLeft}
+              aria-label="Previous video"
+            >
+              <ChevronLeft className={styles.videoViewer__arrowIcon} />
+            </Button>
+          )}
+          {hasNext && (
+            <Button
+              onPress={() => swiperRef.current?.slideNext()}
+              className={styles.videoViewer__arrowRight}
+              aria-label="Next video"
+            >
+              <ChevronRight className={styles.videoViewer__arrowIcon} />
+            </Button>
+          )}
+        </>
       )}
     </div>
   );
 }
 
-const VideoPlayer = memo(
-  ({
-    pageId,
-    videoPost,
-    prev,
-    next,
-    onClose,
-  }: {
-    pageId?: string;
-    videoPost?: Amity.Post<'video' | 'clip'>;
-    prev: () => void;
-    next: () => void;
-    onClose: () => void;
-  }) => {
-    const { isDesktop } = useResponsive();
-    const [isDragging, setIsDragging] = useState(false);
-    const videoFileId = useMemo(() => {
-      if (isClipPost(videoPost)) return videoPost?.data?.fileId;
-      if (isVideoPost(videoPost))
-        return (
-          videoPost?.data?.videoFileId?.high ||
-          videoPost?.data?.videoFileId?.medium ||
-          videoPost?.data?.videoFileId?.low ||
-          videoPost?.data?.videoFileId?.original
-        );
-      return undefined;
-    }, [videoPost]);
+type VideoSlideProps = {
+  item: VideoViewerItem;
+  isActive: boolean;
+  isMuted: boolean;
+  isDesktop: boolean;
+  pageId?: string;
+  registerRef: (el: HTMLVideoElement | null) => void;
+  onTogglePlay: () => void;
+  onToggleMute: () => void;
+  onPlay: () => void;
+  onPause: () => void;
+  onTime: (time: number) => void;
+  onMeta: (duration: number) => void;
+  onProductTag: (productTags: Amity.ProductTag[]) => void;
+};
 
-    const { handleTouchEnd, handleTouchMove, handleTouchStart } = useSwiper({
-      next,
-      prev,
-      threshold: 100,
-    });
+function VideoSlide({
+  item,
+  isActive,
+  isMuted,
+  isDesktop,
+  pageId,
+  registerRef,
+  onTogglePlay,
+  onToggleMute,
+  onPlay,
+  onPause,
+  onTime,
+  onMeta,
+  onProductTag,
+}: VideoSlideProps) {
+  const file = useFile<'video'>(item.fileId);
+  const posterFile = useFile(item.thumbnailFileId);
+  const url = useMemo(() => resolveVideoUrl(item, file), [item, file]);
+  const poster = item.thumbnailUrl ?? posterFile?.fileUrl;
+  const desktopVideoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement | null>(null);
 
-    const { showProductTagList } = useShowProductTagList({
-      pageId,
-      mode: 'post',
-      sourceId: videoPost?.parentPostId || '',
-    });
+  // Swiper keeps every slide mounted and `autoPlay` only fires on mount, so on desktop we drive
+  // play/pause of the shared player from `isActive`.
+  useEffect(() => {
+    if (!isDesktop) return;
+    const video = desktopVideoRef.current;
+    if (!video) return;
+    if (isActive) video.play().catch(() => {});
+    else video.pause();
+  }, [isActive, isDesktop]);
 
-    const handleProductTagClick = useCallback(() => {
-      showProductTagList(videoPost?.productTags ?? []);
-    }, [videoPost?.productTags, showProductTagList]);
+  useEffect(() => {
+    if (isDesktop) return;
+    const video = mobileVideoRef.current;
+    if (video) video.muted = isActive ? isMuted : true;
+  }, [isActive, isDesktop, isMuted]);
 
+  // Desktop follows the existing feed viewer's UI: reuse the shared CustomVideoPlayer + its controls.
+  if (isDesktop) {
     return (
       <CustomVideoPlayer
-        displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
-        autoPlay={true}
-        onTouchEnd={handleTouchEnd}
-        onTouchMove={handleTouchMove}
-        fileId={videoFileId}
-        thumbnailFileId={videoPost?.data?.thumbnailFileId ?? ''}
-        productTags={videoPost?.productTags}
-        onTouchStart={handleTouchStart}
-        onVolumeChange={(e) => {
-          if (
-            videoPost?.dataType === 'clip' &&
-            (videoPost?.data as Amity.ContentDataClip)?.isMuted
-          ) {
-            e.currentTarget.muted = true;
-          }
-        }}
-        className={styles.videoViewer__fullImage}
-        onClickProductTagBadge={handleProductTagClick}
-        isDragging={isDragging}
-        onDragging={(isDragging) => setIsDragging(isDragging)}
-        onClose={onClose}
+        displayMode={DisplayModeEnum.DESKTOP}
+        autoPlay={isActive}
+        isMuted={isActive ? isMuted : true}
+        onClickMute={onToggleMute}
+        externalVideoRef={desktopVideoRef}
+        fileId={item.fileId}
+        thumbnailFileId={item.thumbnailFileId ?? ''}
+        thumbnailUrl={item.thumbnailUrl}
+        productTags={item.productTags}
+        pageId={pageId}
+        onClickProductTagBadge={() => onProductTag(item.productTags ?? [])}
+        className={styles.videoViewer__desktopVideo}
       />
     );
-  },
-);
+  }
+
+  return (
+    <video
+      ref={(el) => {
+        mobileVideoRef.current = el;
+        registerRef(el);
+      }}
+      className={styles.videoViewer__video}
+      playsInline
+      autoPlay={isActive}
+      preload={isActive ? 'auto' : 'none'}
+      poster={poster}
+      onClick={onTogglePlay}
+      onPlay={onPlay}
+      onPause={onPause}
+      onTimeUpdate={(e) => onTime(e.currentTarget.currentTime)}
+      onLoadedMetadata={(e) => onMeta(e.currentTarget.duration)}
+    >
+      {url && <source src={url} type="video/mp4" />}
+    </video>
+  );
+}

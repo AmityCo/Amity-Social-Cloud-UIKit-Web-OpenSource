@@ -20,8 +20,13 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   const { themeStyles } = useAmityComponent({ pageId, componentId });
   const { isDesktop } = useResponsive();
 
-  const { newPosts, globalFeaturedPostsItems, isGlobalFeaturedPostsLoading, removeNewPost } =
-    useGlobalFeedContext();
+  const {
+    newPosts,
+    postRatioOverrides,
+    globalFeaturedPostsItems,
+    isGlobalFeaturedPostsLoading,
+    removeNewPost,
+  } = useGlobalFeedContext();
 
   const { posts, isLoading, isLoadingFirstPage, hasMore, loadMore, refresh } =
     useGlobalFeedCollection();
@@ -53,6 +58,7 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
         componentId={componentId}
         posts={posts}
         newPosts={newPosts}
+        postRatioOverrides={postRatioOverrides}
         isLoading={isLoading}
         isLoadingFirstPage={isLoadingFirstPage}
         hasMore={hasMore}

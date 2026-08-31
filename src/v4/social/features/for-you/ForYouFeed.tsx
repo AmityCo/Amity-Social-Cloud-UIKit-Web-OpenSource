@@ -26,7 +26,8 @@ export function ForYouFeed({ pageId }: ForYouFeedProps) {
   const { setActiveTab } = useLayoutContext();
   const [, setPersistedTab] = useSocialHomePageTab();
 
-  const { newPosts, globalFeaturedPostsItems, removeNewPost } = useGlobalFeedContext();
+  const { newPosts, postRatioOverrides, globalFeaturedPostsItems, removeNewPost } =
+    useGlobalFeedContext();
 
   const { posts, isLoading, isLoadingFirstPage, hasMore, loadMore, refresh } =
     useForYouFeedCollection();
@@ -54,6 +55,7 @@ export function ForYouFeed({ pageId }: ForYouFeedProps) {
         componentId={componentId}
         posts={posts}
         newPosts={newPosts}
+        postRatioOverrides={postRatioOverrides}
         isLoading={isLoading}
         isLoadingFirstPage={isLoadingFirstPage}
         hasMore={hasMore}

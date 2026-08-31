@@ -19,8 +19,8 @@ import {
   UrlHighlight,
   LinkRetentionState,
 } from '~/v4/core/components/TextEditor';
-import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
-import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
+import { SelectedMediaComponent } from '~/v4/social/features/posts/components/SelectedMediaComponent';
+import type { FrameRatio } from '~/v4/social/features/posts/utils/getFrameRatio';
 import ReactDOM from 'react-dom';
 import { Drawer } from 'vaul';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
@@ -52,7 +52,6 @@ import { TextArea } from '~/v4/core/components/TextField';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { MAX_LINKS_PER_POST } from '~/v4/social/constants/post';
-import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
 import { DEFAULT_MAX_PRODUCTS } from '~/v4/constants/text-editor';
 import { EventCard } from '~/v4/social/features/events/components/EventCard';
 
@@ -118,6 +117,7 @@ export function CreatePost({
   const [isCreating, setIsCreating] = useState(false);
   const [isError, setIsError] = useState(false);
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
+  const composerRatioRef = useRef<FrameRatio | undefined>(undefined);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [urlHighlights, setUrlHighlights] = useState<UrlHighlight[]>([]);
   // Ref to store link retention state from TextEditorLinkPreview
@@ -186,7 +186,7 @@ export function CreatePost({
     onSuccess: (response) => {
       const post = response.data;
 
-      prependNewPost(post);
+      prependNewPost(post, composerRatioRef.current);
 
       // Calculate expected product tags count (what we sent)
       const expectedTextProductTagsCount = productTags?.length || 0;
@@ -759,25 +759,14 @@ export function CreatePost({
             </div>
           )}
           {!isEventPost && (
-            <ImageThumbnail
+            <SelectedMediaComponent
               files={files}
               pageId={pageId}
               progress={progress}
               removeFile={removeFile}
               onAltTextChange={handleAltTextChange}
               onFileProductTagsChange={handleProductTagsChange}
-              productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
-              remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
-              taggedProductIds={allProductTags.map((tag) => tag.productId)}
-            />
-          )}
-          {!isEventPost && (
-            <VideoThumbnail
-              files={files}
-              pageId={pageId}
-              progress={progress}
-              removeFile={removeFile}
-              onFileProductTagsChange={handleProductTagsChange}
+              ratioRef={composerRatioRef}
               productTagsReachLimit={allProductTags.length >= DEFAULT_MAX_PRODUCTS}
               remainingLimit={DEFAULT_MAX_PRODUCTS - allProductTags.length}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
@@ -850,6 +839,7 @@ export function CreatePost({
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
                             totalMedia={files.length}
+                            productTags={allProductTags}
                             onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
                             onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
                           />
@@ -888,18 +878,6 @@ export function CreatePost({
           {renderPosting()}
           {renderError()}
         </>
-      )}
-      {!isDesktop && allProductTags.length > 0 && (
-        <div
-          className={styles.createPost__productTagActionButton}
-          data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
-        >
-          <ProductTagActionButton
-            pageId={pageId}
-            productTags={allProductTags}
-            className={styles.createPost__productTagActionButton__button}
-          />
-        </div>
       )}
     </div>
   );

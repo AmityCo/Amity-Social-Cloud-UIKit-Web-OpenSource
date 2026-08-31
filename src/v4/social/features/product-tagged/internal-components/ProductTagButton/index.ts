@@ -1,0 +1,1 @@
+export { ProductTagButton } from './ProductTagButton';

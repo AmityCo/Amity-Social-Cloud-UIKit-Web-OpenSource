@@ -12,6 +12,7 @@ import { Divider } from '~/v4/social/elements/Divider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useMeaningFullView } from '~/v4/social/hooks/useMeaningFullView';
 import { useAds } from '~/v4/social/hooks/useAds';
+import type { FrameRatio } from '~/v4/social/features/posts/utils/getFrameRatio';
 import styles from './Feed.module.css';
 
 type PostClickHandler = NonNullable<React.ComponentProps<typeof PostContent>['onClick']>;
@@ -21,6 +22,7 @@ type FeedProps = {
   componentId?: string;
   posts: Array<Amity.Post>;
   newPosts?: Array<Amity.Post>;
+  postRatioOverrides?: Record<string, FrameRatio>;
   globalFeaturedPosts?: Array<Amity.PinnedPost>;
   isLoading: boolean;
   isLoadingFirstPage: boolean;
@@ -40,6 +42,7 @@ export function Feed({
   componentId = '*',
   posts,
   newPosts = [],
+  postRatioOverrides = {},
   globalFeaturedPosts,
   isLoading,
   isLoadingFirstPage,
@@ -123,6 +126,7 @@ export function Feed({
             withAnalytics={withAnalytics}
             onPostDeleted={onPostDeleted}
             onClick={handlePostClick(post)}
+            mediaRatioOverride={postRatioOverrides[post.postId]}
           />
         </React.Fragment>
       ))}
@@ -140,6 +144,7 @@ export function Feed({
               withAnalytics={withAnalytics}
               onPostDeleted={onPostDeleted}
               onClick={handlePostClick(item)}
+              mediaRatioOverride={postRatioOverrides[item.postId]}
             />
           )}
         </React.Fragment>
@@ -169,6 +174,7 @@ type FeedPostProps = {
   withAnalytics: boolean;
   onPostDeleted?: (post: Amity.Post) => void;
   onClick: NonNullable<React.ComponentProps<typeof PostContent>['onClick']>;
+  mediaRatioOverride?: FrameRatio;
 };
 
 function FeedPost({
@@ -178,6 +184,7 @@ function FeedPost({
   withAnalytics,
   onPostDeleted,
   onClick,
+  mediaRatioOverride,
 }: FeedPostProps) {
   const [node, setNode] = useState<HTMLDivElement | null>(null);
   const viewedRef = useRef(false);
@@ -207,6 +214,7 @@ function FeedPost({
         onPostDeleted={onPostDeleted}
         onPollPostDeleted={onPostDeleted}
         onClick={onClick}
+        mediaRatioOverride={mediaRatioOverride}
       />
     </div>
   );

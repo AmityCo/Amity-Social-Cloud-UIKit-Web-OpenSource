@@ -1,0 +1,215 @@
+.selectedMedia {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0;
+  width: calc(100% + 2 * var(--selected-media-inset, 1rem));
+  margin-left: calc(-1 * var(--selected-media-inset, 1rem));
+  margin-right: calc(-1 * var(--selected-media-inset, 1rem));
+}
+
+.selectedMedia__track {
+  position: relative;
+  width: 100%;
+}
+
+.selectedMedia__swiper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.selectedMedia__swiper :global(.swiper-wrapper) {
+  display: flex;
+  align-items: flex-start;
+}
+
+.selectedMedia__slide {
+  flex-shrink: 0;
+  width: calc(100% - 3.4375rem);
+}
+
+.selectedMedia__frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--asc-color-base-shade4);
+}
+
+.selectedMedia__media__button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.selectedMedia__media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.selectedMedia__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--asc-color-transparent-black);
+  pointer-events: none;
+}
+
+.selectedMedia__playDisc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--asc-border-radius-full);
+  background: rgb(from var(--asc-color-black) r g b / 50%);
+  pointer-events: none;
+}
+
+.selectedMedia__playGlyph {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.selectedMedia__remove {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--asc-border-radius-full);
+  background: var(--asc-color-transparent-black);
+  cursor: pointer;
+}
+
+.selectedMedia__removeIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.selectedMedia__state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  pointer-events: none;
+}
+
+.selectedMedia__errorIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.selectedMedia__altText {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+}
+
+.selectedMedia__productTag {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+}
+
+.selectedMedia__altTextHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectedMedia__altTextHeader__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.selectedMedia__altTextHeader__count {
+  color: var(--asc-color-base-shade1);
+}
+
+.selectedMedia__arrowLeft,
+.selectedMedia__arrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--asc-color-transparent-black);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.selectedMedia__arrowLeft {
+  left: 0.5rem;
+}
+
+.selectedMedia__arrowRight {
+  right: 0.5rem;
+}
+
+.selectedMedia__arrowIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.selectedMedia__viewer {
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+
+.selectedMedia__viewerOverlay {
+  background-color: var(--asc-color-black) !important;
+}
+
+@media (width >= 48em) {
+  .selectedMedia__viewerOverlay {
+    background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
+  }
+
+  .selectedMedia[data-single='true'] {
+    align-items: flex-start;
+    padding-left: 1.5rem;
+  }
+
+  .selectedMedia__slide {
+    width: auto;
+  }
+
+  .selectedMedia__frame {
+    width: min(22.75rem, calc(18.5rem * var(--frame-ratio, 1)));
+  }
+}

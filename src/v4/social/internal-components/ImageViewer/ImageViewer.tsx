@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import { useEffect, useRef, useState, type MutableRefObject } from 'react';
+import type SwiperCore from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { formatAltText } from '~/v4/social/utils';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import ChevronRight from '~/v4/icons/ChevronRight';
-import useSwiper from '~/v4/social/hooks/useSwiper';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
@@ -23,20 +24,28 @@ import { FeedSourceEnum } from '@amityco/ts-sdk';
 import { MediaTabType } from '~/v4/social/constants/mediaTabs';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
+export type ImageViewerImage = {
+  file: Amity.File<'image'>;
+  productTags?: Amity.ProductTag[];
+};
+
 type ImageViewerProps = {
   pageId?: string;
   onClose(): void;
-  post: Amity.Post;
+  post?: Amity.Post;
+  images?: ImageViewerImage[];
   elementId?: string;
   componentId?: string;
   initialImageIndex: number;
   isFromGallery?: boolean;
   target?: 'community' | 'user';
   feedSources?: FeedSourceEnum[];
+  indexRef?: MutableRefObject<number>;
 };
 
 export function ImageViewer({
   post,
+  images,
   onClose,
   target,
   pageId = '*',
@@ -45,47 +54,56 @@ export function ImageViewer({
   initialImageIndex,
   isFromGallery,
   feedSources,
+  indexRef,
 }: ImageViewerProps) {
   const { isOwner } = usePostPermissions({ post });
   const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
-  const [isBrokenImg, setIsBrokenImg] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
+  const swiperRef = useRef<SwiperCore | null>(null);
   const { goToPostDetailPage } = useNavigation();
+
+  useEffect(() => {
+    if (indexRef) indexRef.current = selectedImageIndex;
+  }, [selectedImageIndex, indexRef]);
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.allowTouchMove = !isDesktop;
+    }
+  }, [isDesktop]);
+
   const { setLinkToPost } = useLayoutContext();
 
-  const isParentPost = post.children.length > 0;
+  const useImages = images != null;
+  const isParentPost = !useImages && (post?.children.length ?? 0) > 0;
 
-  const imageFile = isParentPost
-    ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
-    : post?.getImageInfo();
+  const slides: ImageViewerImage[] = useImages
+    ? images
+    : isParentPost
+      ? (post?.childrenPosts ?? []).map((child) => ({
+          file: child.getImageInfo() as Amity.File<'image'>,
+          productTags: child.productTags,
+        }))
+      : post?.getImageInfo()
+        ? [{ file: post.getImageInfo() as Amity.File<'image'>, productTags: post.productTags }]
+        : [];
 
-  const productTags = isParentPost
-    ? post.childrenPosts[selectedImageIndex]?.productTags
-    : post.productTags;
+  const total = slides.length;
+  const imageFile = slides[selectedImageIndex]?.file;
+  const hasPrev = selectedImageIndex > 0;
+  const hasNext = selectedImageIndex < total - 1;
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
   const { showProductTagList } = useShowProductTagList({
     pageId,
     mode: 'image',
-    sourceId: post.postId,
+    sourceId: post?.postId ?? '',
   });
 
-  const next = () => {
-    if (hasNext) setSelectedImageIndex((prev) => prev + 1);
-  };
-
-  const prev = () => {
-    if (hasPrev) setSelectedImageIndex((prev) => prev - 1);
-  };
-
-  const hasNext = isParentPost && selectedImageIndex < post?.children.length - 1;
-  const hasPrev = isParentPost && selectedImageIndex > 0;
-
-  const { handleTouchEnd, handleTouchMove, handleTouchStart } = useSwiper({ next, prev });
-
   const redirectToPostDetailPage = () => {
+    if (!post) return;
     const postId = post.children.length > 0 ? post.postId : post.parentPostId;
     if (target === 'community') {
       if (post) {
@@ -205,15 +223,15 @@ export function ImageViewer({
         )}
       </span>
 
-      {post?.children.length > 1 && (
+      {total > 1 && (
         <Typography.TitleBold className={styles.imageViewer__count} as="p">
-          {selectedImageIndex + 1} / {post?.children.length}
+          {selectedImageIndex + 1} / {total}
         </Typography.TitleBold>
       )}
 
       {hasPrev && (
         <Button
-          onPress={prev}
+          onPress={() => swiperRef.current?.slidePrev()}
           className={styles.imageViewer__prev}
           aria-label="Click to go to previous image"
         >
@@ -221,41 +239,31 @@ export function ImageViewer({
         </Button>
       )}
 
-      <div aria-live="assertive" className={styles.imageViewer__imageContainer}>
-        {imageFile && !isBrokenImg ? (
-          <img
-            onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchMove}
-            onTouchStart={handleTouchStart}
-            onError={() => setIsBrokenImg(true)}
-            className={styles.imageViewer__fullImage}
-            src={getFileUrlWithSize(imageFile.fileUrl)}
-            alt={formatAltText({
-              current: selectedImageIndex + 1,
-              total: post?.children.length,
-              altText: imageFile?.altText,
-            })}
-          />
-        ) : (
-          <div
-            role="status"
-            aria-label="loading image"
-            className={styles.imageViewer__itemContainer}
-          />
-        )}
-        {productTags && productTags.length > 0 && (
-          <div className={styles.imageViewer__productTagBadge}>
-            <ProductTagBadge
-              selectedProductTags={productTags}
-              onClick={() => showProductTagList(productTags)}
+      <Swiper
+        className={styles.imageViewer__swiper}
+        slidesPerView={1}
+        initialSlide={initialImageIndex}
+        onSwiper={(swiper: SwiperCore) => {
+          swiperRef.current = swiper;
+          swiper.allowTouchMove = !isDesktop;
+        }}
+        onSlideChange={(swiper: SwiperCore) => setSelectedImageIndex(swiper.activeIndex)}
+      >
+        {slides.map((slide, index) => (
+          <SwiperSlide key={index} className={styles.imageViewer__slide}>
+            <ImageSlide
+              slide={slide}
+              index={index}
+              total={total}
+              showProductTagList={showProductTagList}
             />
-          </div>
-        )}
-      </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
       {hasNext && (
         <Button
-          onPress={next}
+          onPress={() => swiperRef.current?.slideNext()}
           className={styles.imageViewer__next}
           aria-label="Click to go to next image"
         >
@@ -265,6 +273,46 @@ export function ImageViewer({
 
       {imageFile && isOwner && !isDesktop && (
         <AltTextBottomSheet file={imageFile} mode="edit" isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
+    </div>
+  );
+}
+
+type ImageSlideProps = {
+  slide: ImageViewerImage;
+  index: number;
+  total: number;
+  showProductTagList: (productTags: Amity.ProductTag[]) => void;
+};
+
+function ImageSlide({ slide, index, total, showProductTagList }: ImageSlideProps) {
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const file = slide.file;
+  const productTags = slide.productTags ?? [];
+
+  return (
+    <div aria-live="assertive" className={styles.imageViewer__imageContainer}>
+      {file?.fileUrl && !isBrokenImg ? (
+        <img
+          onError={() => setIsBrokenImg(true)}
+          className={styles.imageViewer__fullImage}
+          src={getFileUrlWithSize(file.fileUrl)}
+          alt={formatAltText({ current: index + 1, total, altText: file.altText })}
+        />
+      ) : (
+        <div
+          role="status"
+          aria-label="loading image"
+          className={styles.imageViewer__itemContainer}
+        />
+      )}
+      {productTags.length > 0 && (
+        <div className={styles.imageViewer__productTagBadge}>
+          <ProductTagBadge
+            selectedProductTags={productTags}
+            onClick={() => showProductTagList(productTags)}
+          />
+        </div>
       )}
     </div>
   );

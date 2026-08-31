@@ -1,1 +1,0 @@
-export { ProductTagActionButton } from './ProductTagActionButton';

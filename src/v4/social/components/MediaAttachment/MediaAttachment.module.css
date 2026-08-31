@@ -16,14 +16,12 @@
   margin-bottom: 0.5rem;
 }
 
-.mediaAttachment__wrapMedia {
-  display: flex;
-  justify-content: space-between;
-}
-
+.mediaAttachment__wrapMedia,
 .mediaAttachment__wrapMedia_2items {
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5rem;
 }
 
 @media (width >= 48em) {

@@ -472,6 +472,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             productTags={productTags}
             postId={postId}
             onClickProductTagBadge={onClickProductTagBadge}
+            mutedOverride={internalMuted}
+            onToggleMute={handleClickMute}
           />
         </>
       )}
