@@ -38,7 +38,7 @@ const LiveChatMessageContent = ({
 }: MessageItemProps) => {
   const sdk = useSDK();
   const isOwner = message.creatorId === sdk.currentUserId;
-  const { isModerator } = useChannelPermission(message.channelId);
+  const { isModerator, canDeleteMessage } = useChannelPermission(message.channelId);
   const [openReactionPanel, setOpenReactionPanel] = useState<Amity.Message | undefined>(undefined);
 
   return (
@@ -68,6 +68,7 @@ const LiveChatMessageContent = ({
                   containerRef={containerRef}
                   isOwner={isOwner}
                   isModerator={isModerator}
+                  canDeleteMessage={canDeleteMessage}
                   action={action}
                   isFlagged={message.flagCount > 0}
                 />

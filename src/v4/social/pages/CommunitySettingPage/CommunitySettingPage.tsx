@@ -17,7 +17,6 @@ import {
   checkAddCommunityUserPermission,
   checkDeleteCommunityPermission,
   checkEditCommunityPermission,
-  checkReviewPostPermission,
 } from '~/v4/social/utils';
 import { Button } from '~/v4/core/natives/Button';
 import { useCommunityInfo } from '~/v4/social/hooks';
@@ -177,16 +176,14 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
               />
             )}
         </div>
-        {(checkReviewPostPermission(client, community?.communityId) ||
-          checkEditCommunityPermission(client, community?.communityId) ||
-          checkDeleteCommunityPermission(client, community?.communityId)) && (
+        {checkEditCommunityPermission(client, community?.communityId) && (
           <div className={styles.communitySettingPage__communityPermissionWrap}>
             {
               <Typography.TitleBold className={styles.communitySettingPage__communityPermissions}>
                 {communityPermissionsTitle}
               </Typography.TitleBold>
             }
-            {checkReviewPostPermission(client, community?.communityId) && (
+            {checkEditCommunityPermission(client, community?.communityId) && (
               <PostPermission
                 pageId={pageId}
                 onClick={() => {

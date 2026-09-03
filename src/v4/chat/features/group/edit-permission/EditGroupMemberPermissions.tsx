@@ -7,11 +7,14 @@ import { useString } from '~/v4/core/localization';
 import { MESSAGING_PERMISSIONS } from '~/v4/chat/features/group/edit-permission/constants';
 import { MemberPermission } from '~/v4/chat/features/group/edit-permission/components/MemberPermission/MemberPermission';
 import { useEditGroupMemberPermissions } from '~/v4/chat/features/group/edit-permission/hooks/useEditGroupMemberPermissions';
+import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import type { EditGroupMemberPermissionsPageProps } from '~/v4/chat/pages/EditGroupMemberPermissionsPage';
 import styles from './EditGroupMemberPermissions.module.css';
 
 export function EditGroupMemberPermissions(props: EditGroupMemberPermissionsPageProps) {
   const { control, handleClose, handleSave, isFormValid } = useEditGroupMemberPermissions(props);
+  // Page checks its own permission (do not rely on the gated entry row alone).
+  const { canEditChannel } = useChannelPermission(props.channelId);
   const pageTitle = useString('amity_chat_group_member_permissions_navbar_title');
   const saveLabel = useString('amity_chat_group_edit_permission_save');
   const messagingSection = useString('amity_chat_group_edit_permissions_messaging_title');
@@ -29,7 +32,7 @@ export function EditGroupMemberPermissions(props: EditGroupMemberPermissionsPage
             hierarchy="primary"
             size="sm"
             label={saveLabel}
-            isDisabled={!isFormValid}
+            isDisabled={!isFormValid || !canEditChannel}
             aria-label={saveLabel}
           />
         }

@@ -23,6 +23,7 @@ export const useChannelPermission = (subChannelId?: Amity.SubChannel['subChannel
       canRemove: check(Permissions.RemoveChannelUserPermission),
       canMute: check(Permissions.MuteUserInsideChannelPermission),
       canBan: check(Permissions.BanUserFromChannelPermission),
+      canDeleteMessage: check(Permissions.DeleteMessagePermission),
     };
   }, [client, subChannelId]);
 };

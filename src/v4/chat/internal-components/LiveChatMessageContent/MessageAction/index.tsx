@@ -21,6 +21,7 @@ export type MessageActionType = {
 interface MessageActionProps {
   isOwner: boolean;
   isModerator: boolean;
+  canDeleteMessage: boolean;
   isFlagged?: boolean;
   action: MessageActionType;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -29,6 +30,7 @@ interface MessageActionProps {
 export const MessageAction = ({
   isOwner,
   isModerator,
+  canDeleteMessage,
   isFlagged,
   action,
   containerRef,
@@ -114,7 +116,7 @@ export const MessageAction = ({
                 <Flag className={styles.flagIcon} />
               </div>
             )}
-            {(isOwner || isModerator) && (
+            {(isOwner || canDeleteMessage) && (
               <div className={styles.messageActionButton} onClick={onDeleteMessage}>
                 <div className={styles.messageDangerActionButtonText}>
                   <Typography.Body>{resolveString('amity_social_button_delete')}</Typography.Body>
