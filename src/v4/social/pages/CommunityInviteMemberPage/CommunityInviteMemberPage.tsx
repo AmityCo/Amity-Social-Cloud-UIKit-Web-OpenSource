@@ -338,7 +338,12 @@ function CommunityInviteMemberPageTopBar({
         <div className={styles.communityInviteMemberPage__emptySpace} />
       </nav>
       <div className={styles.communityInviteMemberPage__search}>
-        <TopSearchBar pageId={pageId} hasCancelButton={false} search={search} />
+        <TopSearchBar
+          pageId={pageId}
+          hasCancelButton={false}
+          search={search}
+          placeholderKey="amity_social_placeholder_search_user_hint"
+        />
       </div>
       {selectedMembers.length > 0 && (
         <div className={styles.communityInviteMemberPage__selectedUsers}>
