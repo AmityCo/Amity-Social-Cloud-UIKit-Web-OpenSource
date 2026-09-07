@@ -1,0 +1,121 @@
+name: Notify Code review (Eko chat)
+
+# Posts to the Web Team › Code review topic in Eko chat when a PR is open and has a requested reviewer:
+#   Please review {PR title} - {PR link}
+#   Release date : {release_label_date}
+#
+# Fires on:
+#   - opened           → only if the PR already has at least one requested reviewer
+#   - review_requested → only when this is the FIRST reviewer/team on the PR
+#                        (also skipped if the PR was created <60s ago — the "opened"
+#                         run already covered PRs created with reviewers).
+#                        GitHub emits one "review_requested" event per reviewer added,
+#                        so the count-based check dedupes multi-reviewer batches.
+# Draft PRs and non-open PRs are ignored.
+#
+# Request format follows scripts/send-message.sh in Social-Plus-React-Native-Uikit-Sample-App:
+#   POST {BOT_EKO_CHAT_URL}/{GROUP_ID}/{THREAD_ID}   body: {"message": "..."}
+#
+# Required repository (or organization) secrets (same names as the sample app):
+#   BOT_EKO_CHAT_URL           n8n webhook URL (…/eko-noti/moodeng/raw/channel)
+#   BOT_EKO_CHAT_ACCESS_TOKEN  base64 token, sent as "Authorization: Basic <token>"
+#   EKOAPP_GROUP_ID            ID of the "Web Team" group chat
+#   EKOAPP_THREAD_ID           ID of the "Code review" topic in that group
+
+on:
+  pull_request:
+    types:
+      - opened
+      - review_requested
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  notify:
+    if: >-
+      github.event.pull_request.state == 'open' &&
+      github.event.pull_request.draft == false &&
+      (github.event.pull_request.requested_reviewers[0] != null || github.event.pull_request.requested_teams[0] != null)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide whether this event should notify
+        id: gate
+        env:
+          ACTION: ${{ github.event.action }}
+          CREATED_AT: ${{ github.event.pull_request.created_at }}
+        run: |
+          if [ "$ACTION" = "review_requested" ]; then
+            created=$(date -d "$CREATED_AT" +%s)
+            now=$(date +%s)
+            if [ $((now - created)) -lt 60 ]; then
+              echo "PR was just created; the 'opened' run handles the notification."
+              echo "send=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            reviewer_count=$(jq '(.pull_request.requested_reviewers // [] | length) + (.pull_request.requested_teams // [] | length)' "$GITHUB_EVENT_PATH")
+            if [ "$reviewer_count" -gt 1 ]; then
+              echo "PR already has $reviewer_count reviewers; the earlier request already notified."
+              echo "send=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "send=true" >> "$GITHUB_OUTPUT"
+
+      - name: Build message
+        if: steps.gate.outputs.send == 'true'
+        id: msg
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          # First label starting with "Release/", prefix stripped → e.g. 2026-09-15
+          release_label_date=$(jq -r '
+            [.pull_request.labels[].name | select(startswith("Release/"))]
+            | first // "" | sub("^Release/"; "")
+          ' "$GITHUB_EVENT_PATH")
+
+          # Two-line message; the "Release date" line is omitted when the PR has no Release/ label
+          text="Please review ${PR_TITLE} - ${PR_URL}"
+          if [ -n "$release_label_date" ]; then
+            text="${text}"$'\n'"Release date : ${release_label_date}"
+          fi
+
+          echo "Message: $text"
+          {
+            echo "text<<EOF"
+            echo "$text"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Send to Eko chat
+        if: steps.gate.outputs.send == 'true'
+        env:
+          BOT_EKO_CHAT_URL: ${{ secrets.BOT_EKO_CHAT_URL }}
+          BOT_EKO_CHAT_ACCESS_TOKEN: ${{ secrets.BOT_EKO_CHAT_ACCESS_TOKEN }}
+          GID: ${{ secrets.EKOAPP_GROUP_ID }}
+          TID: ${{ secrets.EKOAPP_THREAD_ID }}
+          TEXT: ${{ steps.msg.outputs.text }}
+        run: |
+          : "${BOT_EKO_CHAT_URL:?Missing secret BOT_EKO_CHAT_URL}"
+          : "${BOT_EKO_CHAT_ACCESS_TOKEN:?Missing secret BOT_EKO_CHAT_ACCESS_TOKEN}"
+          : "${GID:?Missing secret EKOAPP_GROUP_ID}"
+          : "${TID:?Missing secret EKOAPP_THREAD_ID}"
+
+          # Same contract as scripts/send-message.sh in the RN sample app
+          body=$(jq -n --arg message "$TEXT" '{message: $message}')
+
+          status=$(curl -sS -o /tmp/resp.txt -w '%{http_code}' \
+            --location "${BOT_EKO_CHAT_URL}/${GID}/${TID}" \
+            -H "Authorization: Basic ${BOT_EKO_CHAT_ACCESS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "$body")
+
+          echo "Eko webhook responded HTTP $status"
+          cat /tmp/resp.txt; echo
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "::error::Eko chat notification failed (HTTP $status)"
+            exit 1
+          fi
