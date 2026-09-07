@@ -10,6 +10,8 @@ export const ERROR_RESPONSE = Object.freeze({
   BLOCKED_URL: '400309',
   NOT_FOLLOWING_USER: 'You are not following this user',
   GLOBAL_BAN: '400312',
+  ROOM_ALREADY_ENDED: 'Room is already ended',
+  ROOM_DELETED: 'is deleted',
 });
 
 export const ERROR_CODE = {

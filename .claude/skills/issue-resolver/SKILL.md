@@ -303,10 +303,21 @@ The PR body fills in the template fields:
 
 Do **not** add extra sections (no "QA coverage", no "Test plan") — the template is the contract.
 
+**Assign the reviewers and yourself in this same `gh pr create` call.** This matters: the repo's `notify_code_review.yaml` workflow only posts to the Eko "Code review" channel when a PR is **opened with a requested reviewer already attached**. If reviewers are added *after* open (via a later `gh pr edit --add-reviewer`), the notification is silently skipped — the `opened` run saw no reviewer, and the follow-up `review_requested` event is gated out when the PR is <60s old or already has >1 reviewer. So attach reviewers at creation, never in a separate step.
+
+**Reviewers = the web-team pool minus the PR author.** GitHub rejects requesting a review from the author, so a fixed list breaks whenever a pool member runs the skill. Compute it: the pool is `htutwaiphyoe ChayanitBm pitchaya-sp` (exact logins), and you request everyone in it except `@me`. `--assignee @me` is always the author.
+
+```bash
+ME=$(gh api user --jq '.login')
+REVIEWERS=$(printf '%s\n' htutwaiphyoe ChayanitBm pitchaya-sp | grep -viFx "$ME" | paste -sd, -)
+```
+
+If the user named different reviewers this session, use their explicit list instead of the pool.
+
 Example HEREDOC form:
 
 ```bash
-gh pr create --base <base> --title "<verb>: PDT-<num> - <short summary>" --body "$(cat <<'EOF'
+gh pr create --base <base> --title "<verb>: PDT-<num> - <short summary>" --reviewer "$REVIEWERS" --assignee @me --body "$(cat <<'EOF'
 **Jira ticket :**
 
 - https://socialplus.atlassian.net/browse/PDT-<num>
@@ -329,15 +340,18 @@ EOF
 )"
 ```
 
-## Stage 5 — Assign reviewers and self
+## Stage 5 — Reviewers and self
 
-Immediately after `gh pr create` returns the PR URL, attach the standard reviewer pair and set the current user as assignee:
+Reviewers (the web-team pool minus the author, computed as `$REVIEWERS` above) and the `@me` assignee are attached **in the `gh pr create` call above**, not in a separate `gh pr edit` step — see the note there for why (the code-review notify bot fires on `opened` only when a reviewer is already attached, and GitHub rejects requesting the author as a reviewer).
+
+**Fallback — the notification didn't post:** if a PR ended up opened *without* reviewers (or you need to re-fire the notify), emit a clean `review_requested` with **exactly one** reviewer on the **>60s-old** PR: clear all reviewers, then add a single one (any pool member who isn't the author).
 
 ```bash
-gh pr edit <pr-number> --add-reviewer chayanitbm,pitchaya-sp --add-assignee @me
+gh pr edit <pr-number> --remove-reviewer ChayanitBm --remove-reviewer pitchaya-sp   # exact login case
+gh pr edit <pr-number> --add-reviewer pitchaya-sp                                   # count = 1 → fires
 ```
 
-If the user has named different reviewers in this session, prefer their explicit list over the defaults.
+Adding two reviewers at once (count > 1) or adding within 60s of creation is skipped by the workflow's de-dupe. Verify with `gh run list --workflow notify_code_review.yaml` (the Send step logs `Eko webhook responded HTTP 200`).
 
 ---
 
