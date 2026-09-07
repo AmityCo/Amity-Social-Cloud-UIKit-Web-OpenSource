@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChannelRepository, CommunityRepository, UserRepository } from '@amityco/ts-sdk';
+import {
+  ChannelRepository,
+  CommunityRepository,
+  SearchUsersByEnum,
+  UserRepository,
+} from '@amityco/ts-sdk';
 import { extractMetadata, formatMentionees, isNonNullable } from '~/v4/helpers/utils';
 import { useCommunity } from './useCommunity';
 
@@ -119,6 +124,7 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
             {
               displayName: keyword,
               limit: 20,
+              searchBy: [SearchUsersByEnum.DISPLAY_NAME],
             },
             (response: SearchUsersResponse) => {
               if (response.loading) return;

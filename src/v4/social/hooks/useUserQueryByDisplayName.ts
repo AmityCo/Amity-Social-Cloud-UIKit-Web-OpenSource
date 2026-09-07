@@ -1,4 +1,4 @@
-import { UserRepository } from '@amityco/ts-sdk';
+import { SearchUsersByEnum, UserRepository } from '@amityco/ts-sdk';
 import { useEffect, useRef, useState } from 'react';
 
 const MINIMUM_STRING_LENGTH_TO_TRIGGER_QUERY = 3;
@@ -29,12 +29,15 @@ export const useUserQueryByDisplayName = (
       unSubRef.current = null;
     }
 
-    const unSubFn = UserRepository.searchUsers({ displayName, limit: 10 }, (response) => {
-      setHasMore(response.hasNextPage || false);
-      setIsLoading(response.loading);
-      loadMoreRef.current = response.onNextPage || null;
-      setItems(response.data);
-    });
+    const unSubFn = UserRepository.searchUsers(
+      { displayName, limit: 10, searchBy: [SearchUsersByEnum.DISPLAY_NAME] },
+      (response) => {
+        setHasMore(response.hasNextPage || false);
+        setIsLoading(response.loading);
+        loadMoreRef.current = response.onNextPage || null;
+        setItems(response.data);
+      },
+    );
     unSubRef.current = unSubFn;
 
     return () => {
