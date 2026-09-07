@@ -6,11 +6,12 @@ name: Notify Code review (Eko chat)
 #
 # Fires on:
 #   - opened           → only if the PR already has at least one requested reviewer
-#   - review_requested → only when this is the FIRST reviewer/team on the PR
-#                        (also skipped if the PR was created <60s ago — the "opened"
-#                         run already covered PRs created with reviewers).
-#                        GitHub emits one "review_requested" event per reviewer added,
-#                        so the count-based check dedupes multi-reviewer batches.
+#   - review_requested → whenever a reviewer/team is added
+# Dedup: a `code-review-notified` label is added to the PR after a successful send.
+# The gate step skips if that label is already present, so we notify exactly once
+# per PR regardless of how reviewers are attached (batched at create time,
+# added one-by-one via the UI, or a mix). Concurrency is serialized per-PR so
+# two concurrent events can't both pass the gate before the label is written.
 # Draft PRs and non-open PRs are ignored.
 #
 # Request format follows scripts/send-message.sh in Social-Plus-React-Native-Uikit-Sample-App:
@@ -30,7 +31,11 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
+
+concurrency:
+  group: notify-code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
 
 jobs:
   notify:
@@ -40,29 +45,19 @@ jobs:
       (github.event.pull_request.requested_reviewers[0] != null || github.event.pull_request.requested_teams[0] != null)
     runs-on: ubuntu-latest
     steps:
-      - name: Decide whether this event should notify
+      - name: Skip if PR already notified
         id: gate
         env:
-          ACTION: ${{ github.event.action }}
-          CREATED_AT: ${{ github.event.pull_request.created_at }}
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
         run: |
-          if [ "$ACTION" = "review_requested" ]; then
-            created=$(date -d "$CREATED_AT" +%s)
-            now=$(date +%s)
-            if [ $((now - created)) -lt 60 ]; then
-              echo "PR was just created; the 'opened' run handles the notification."
-              echo "send=false" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-
-            reviewer_count=$(jq '(.pull_request.requested_reviewers // [] | length) + (.pull_request.requested_teams // [] | length)' "$GITHUB_EVENT_PATH")
-            if [ "$reviewer_count" -gt 1 ]; then
-              echo "PR already has $reviewer_count reviewers; the earlier request already notified."
-              echo "send=false" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
+          if gh pr view "$PR" --repo "$REPO" --json labels --jq '.labels[].name' | grep -qx 'code-review-notified'; then
+            echo "PR #$PR already has 'code-review-notified' — skipping."
+            echo "send=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "send=true" >> "$GITHUB_OUTPUT"
           fi
-          echo "send=true" >> "$GITHUB_OUTPUT"
 
       - name: Build message
         if: steps.gate.outputs.send == 'true'
@@ -119,3 +114,19 @@ jobs:
             echo "::error::Eko chat notification failed (HTTP $status)"
             exit 1
           fi
+
+      - name: Mark PR as notified
+        if: steps.gate.outputs.send == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Idempotent label creation, then attach to the PR. Any failure here
+          # would let a future event re-notify, so surface it.
+          gh label create code-review-notified \
+            --repo "$REPO" \
+            --color cccccc \
+            --description "Code-review notification already sent to Eko chat" \
+            2>/dev/null || true
+          gh pr edit "$PR" --repo "$REPO" --add-label code-review-notified
