@@ -57,6 +57,7 @@ export function CommunitySideBar({ className, pageId = '*' }: CommunitySideBarPr
                   <NotificationTrayButton
                     pageId={pageId}
                     componentId={componentId}
+                    redDotTestId="notification-red-dot-sidebar"
                     onPress={() => {
                       openPopover();
                       handleNotificationTrayButtonClick();

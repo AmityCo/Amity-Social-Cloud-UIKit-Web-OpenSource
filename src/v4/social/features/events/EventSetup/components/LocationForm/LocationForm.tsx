@@ -103,6 +103,9 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                 key={eventType}
                 variant="default"
                 className={styles.locationForm__popoverItem}
+                data-testid={
+                  eventType === AmityEventType.Virtual ? 'virtual-button' : 'in-person-button'
+                }
                 onPress={() => {
                   setShownEventTypeOption(false);
                   onChange(eventType);
@@ -185,6 +188,9 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                     key={eventType}
                     variant="default"
                     className={styles.locationForm__popoverItem}
+                    data-testid={
+                      eventType === AmityEventType.Virtual ? 'virtual-button' : 'in-person-button'
+                    }
                     onPress={() => {
                       closePopover();
                       onChange(eventType);
@@ -218,6 +224,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                 radios={[
                   {
                     value: Platform.Livestream,
+                    props: { 'data-testid': 'livestream-platform-radio' },
                     label: (
                       <div className={styles.locationForm__radioItem}>
                         <div className={styles.locationForm__radioIconContainer}>
@@ -236,6 +243,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                   },
                   {
                     value: Platform.External,
+                    props: { 'data-testid': 'external-platform-radio' },
                     label: (
                       <div className={styles.locationForm__radioItem}>
                         <div className={styles.locationForm__radioIconContainer}>
@@ -267,6 +275,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                     variant="boxed"
                     maxLength={200}
                     placeholder={useString('amity_social_placeholder_event_link_hint')}
+                    data-testid="external-platform-url-input"
                     onChange={(e) => onChange(e.target.value)}
                   />
                 </div>

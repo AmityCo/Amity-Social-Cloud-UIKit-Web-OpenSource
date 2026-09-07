@@ -187,6 +187,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
           trigger={({ openPopover, isDesktop }) => (
             <MenuButton
               variant="filled"
+              testId="event-options-menu-button"
               onClick={() => {
                 isDesktop
                   ? openPopover()

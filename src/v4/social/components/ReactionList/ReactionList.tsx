@@ -232,6 +232,7 @@ const SocialReactionList = ({
               <div
                 data-active={activeTab === 'All'}
                 className={styles.tabItem}
+                data-testid="reaction-tab-all"
                 onClick={() => handleTabClick('All')}
               >
                 <Typography.BodyBold testId={`${accessibilityId}_tab_all`}>
@@ -249,6 +250,7 @@ const SocialReactionList = ({
                     key={UNKNOWN_TAB}
                     data-active={activeTab === UNKNOWN_TAB}
                     className={styles.tabItem}
+                    data-testid="reaction-tab-unknown"
                     onClick={() => handleTabClick(UNKNOWN_TAB)}
                   >
                     <Typography.BodyBold>
@@ -269,6 +271,7 @@ const SocialReactionList = ({
                   key={reactionType}
                   data-active={activeTab === reactionType}
                   className={styles.tabItem}
+                  data-testid={`reaction-tab-${reactionType}`}
                   onClick={() => handleTabClick(reactionType)}
                 >
                   <Typography.BodyBold

@@ -47,6 +47,7 @@ export const PollMultipleAnswer: FC<PollMultipleAnswerProps> = ({
       }}
       checkboxes={answers.map((answer) => ({
         value: answer.id,
+        'data-testid': 'poll-option-checkbox',
         label: isImagePoll ? (
           <ImagePollAnswer
             imageFile={answer.image}
@@ -55,7 +56,7 @@ export const PollMultipleAnswer: FC<PollMultipleAnswerProps> = ({
             isDisabled={disabled}
           />
         ) : (
-          <Typography.BodyBold>{answer.data}</Typography.BodyBold>
+          <Typography.BodyBold data-testid="poll-option-label">{answer.data}</Typography.BodyBold>
         ),
       }))}
     />

@@ -104,7 +104,12 @@ function GroupChat({
     <div data-size={size} className={clsx(styles.avatar__groupChat, className)}>
       <div className={styles.avatar__groupChatImageWrapper}>
         {imageUrl ? (
-          <img src={imageUrl} alt="Group chat" className={styles.avatar__groupChatImage} />
+          <img
+            src={imageUrl}
+            alt="Group chat"
+            className={styles.avatar__groupChatImage}
+            data-testid="chat-channel-avatar-image"
+          />
         ) : (
           <div className={styles.avatar__groupChatPlaceholder} data-variant={variant}>
             <CommentsAlt.Solid className={styles.avatar__groupChatPlaceholderIcon} />
@@ -113,6 +118,7 @@ function GroupChat({
       </div>
       {isPrivate && (
         <PrivateBadge
+          data-testid="chat-channel-private-badge"
           className={styles.avatar__groupChatPrivateBadge}
           size={size === 'lg' ? 32 : 16}
           border

@@ -24,6 +24,7 @@ interface NotificationProps {
   iconClassName?: string;
   textClassName?: string;
   onClose?: () => void;
+  testId?: string;
 }
 
 export const Notification = ({
@@ -36,6 +37,7 @@ export const Notification = ({
   iconClassName,
   textClassName,
   onClose,
+  testId,
 }: NotificationProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -51,7 +53,7 @@ export const Notification = ({
   return (
     isVisible && (
       <div
-        data-testid="toast-notification"
+        data-testid={testId ?? 'toast-notification'}
         data-show-detail-media-attachment={isShowAttributes}
         className={clsx(styles.notificationContainer, className)}
         data-alignment={alignment}

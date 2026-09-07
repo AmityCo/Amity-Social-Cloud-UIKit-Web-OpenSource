@@ -14,6 +14,7 @@ export const EventCover = forwardRef<HTMLDivElement, EventCoverProps>(({ url }, 
     <div className={styles.eventCover} ref={ref}>
       <img
         alt="Event cover"
+        data-testid="event-cover-thumbnail"
         onError={() => setErrorImage(true)}
         className={styles.eventCover__image}
         src={

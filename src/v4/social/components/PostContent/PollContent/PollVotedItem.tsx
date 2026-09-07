@@ -74,9 +74,15 @@ export const PollVotedItem: React.FC<PollVotedItemProps> = ({
   return (
     <div className={styles.pollVotedItem} data-top-voted={isTopVoted}>
       <div className={styles.pollVotedItem__title}>
-        <Typography.BodyBold className={styles.pollVotedItem__title}>{label}</Typography.BodyBold>
+        <Typography.BodyBold
+          className={styles.pollVotedItem__title}
+          data-testid="poll-option-label"
+        >
+          {label}
+        </Typography.BodyBold>
         <Typography.BodyBold
           className={styles.pollVotedItem__title__percent}
+          data-testid="poll-option-percentage"
           data-top-voted={isTopVoted}
         >
           {percentage}%

@@ -559,7 +559,12 @@ function Frame({
         onPress={handlePress}
         aria-label={`${mediaLabel} ${index + 1}`}
       >
-        <img className={styles.selectedMedia__media} src={src} alt={altText} />
+        <img
+          className={styles.selectedMedia__media}
+          src={src}
+          alt={altText}
+          data-testid="post-composer-thumbnail"
+        />
       </Button>
 
       {(isUploading || hasError) && <div className={styles.selectedMedia__overlay} />}

@@ -14,15 +14,24 @@ interface BrandBadgeProps {
 export const BrandBadge = ({ pageId = '*', componentId = '*', className }: BrandBadgeProps) => {
   const elementId = 'brand_badge';
 
-  const { config, uiReference, defaultConfig } = useAmityElement({
+  const { config, uiReference, defaultConfig, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
   return (
     <IconComponent
-      defaultIcon={() => <Brand className={clsx(className, styles.brandBadge)} />}
-      imgIcon={() => <img src={config.image} alt={uiReference} className={className} />}
+      defaultIcon={() => (
+        <Brand className={clsx(className, styles.brandBadge)} data-testid={accessibilityId} />
+      )}
+      imgIcon={() => (
+        <img
+          src={config.image}
+          alt={uiReference}
+          className={className}
+          data-testid={accessibilityId}
+        />
+      )}
       defaultIconName={defaultConfig.image}
       configIconName={config.image}
     />

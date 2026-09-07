@@ -35,6 +35,7 @@ export function GroupNameField({
       showCharacterCount
       maxLength={GROUP_NAME_MAX_LENGTH}
       multiLine
+      inputTestId="group-name-input"
       className={styles.groupNameField}
     />
   );

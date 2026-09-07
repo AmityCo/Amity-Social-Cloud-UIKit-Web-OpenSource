@@ -45,6 +45,7 @@ export const PollSingleAnswer: FC<PollSingleAnswerProps> = ({
       isImageOption={isImagePoll}
       radios={answers.map((answer) => ({
         value: answer.id,
+        props: { 'data-testid': 'poll-option-radio' },
         label: isImagePoll ? (
           <ImagePollAnswer
             imageFile={answer.image}
@@ -53,7 +54,7 @@ export const PollSingleAnswer: FC<PollSingleAnswerProps> = ({
             isDisabled={disabled}
           />
         ) : (
-          <Typography.BodyBold>{answer.data}</Typography.BodyBold>
+          <Typography.BodyBold data-testid="poll-option-label">{answer.data}</Typography.BodyBold>
         ),
       }))}
       testId="poll-single-answer-options"

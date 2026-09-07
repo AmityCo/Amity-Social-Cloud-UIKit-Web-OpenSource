@@ -398,7 +398,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
-          <div className={clsx(styles.viewStoryOverlay)} />
+          <div className={clsx(styles.viewStoryOverlay)} data-testid={`${pageId}/story_overlay`} />
           {/* NOTE: Do not use isPaused prop, it will cause the first video story skipped */}
           <Stories
             // hide default progress bar

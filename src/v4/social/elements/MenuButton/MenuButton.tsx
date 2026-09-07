@@ -14,6 +14,7 @@ export type MenuButtonProps = {
   iconClassName?: string;
   onMouseEnter?: () => void;
   variant?: 'default' | 'filled';
+  testId?: string;
 };
 
 export function MenuButton({
@@ -23,6 +24,7 @@ export function MenuButton({
   iconClassName,
   componentId = '*',
   variant = 'default',
+  testId,
 }: MenuButtonProps) {
   const elementId = 'menu_button';
   const { isExcluded, accessibilityId, themeStyles, config, defaultConfig, uiReference } =
@@ -39,7 +41,7 @@ export function MenuButton({
       onPress={onClick}
       data-variant={variant}
       aria-label="Click to open menu"
-      data-testid={accessibilityId}
+      data-testid={testId ?? accessibilityId}
       className={clsx(styles.menuButton, className)}
     >
       <IconComponent

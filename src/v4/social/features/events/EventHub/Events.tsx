@@ -40,6 +40,8 @@ export function Events({ pageId }: EventsProps) {
             variant="default"
             onPress={redirectEventTargetSelectionPage}
             iconClassName={styles.events__header__icon}
+            aria-label="Create event"
+            data-testid="create-event-button"
           />
         )}
       </div>
@@ -56,11 +58,13 @@ export function Events({ pageId }: EventsProps) {
             {
               value: EventsTab.Explore,
               label: useString('amity_social_tab_tab_explore'),
+              accessibilityId: 'explore-events-tab',
               content: () => <ExploreEvent pageId={pageId} />,
             },
             {
               value: EventsTab.MyEvents,
               label: useString('amity_social_tab_tab_my_events'),
+              accessibilityId: 'my-events-tab',
               content: () => <MyEvents pageId={pageId} />,
             },
           ]}

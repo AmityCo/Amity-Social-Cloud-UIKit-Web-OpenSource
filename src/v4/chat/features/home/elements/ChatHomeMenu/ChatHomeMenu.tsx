@@ -22,6 +22,7 @@ export function ChatHomeMenu() {
           hierarchy="secondary"
           size={32}
           aria-label="Chat menu"
+          data-testid="chat-menu-button"
           aria-expanded={isOpen}
           onPress={openPopover}
         />

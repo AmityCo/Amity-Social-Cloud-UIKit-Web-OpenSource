@@ -29,15 +29,24 @@ export function PrivacySection({ isPublic, onChange }: PrivacySectionProps) {
         value={selected}
         onChange={(value) => onChange(value === 'public')}
         className={styles.privacySection__options}
+        data-testid="group-privacy-radiogroup"
       >
-        <Selection.Radio value="public" className={styles.privacySection__optionRow}>
+        <Selection.Radio
+          value="public"
+          className={styles.privacySection__optionRow}
+          data-testid="group-privacy-public-radio"
+        >
           <PrivacyRow
             icon={<EarthAfrica.Solid className={styles.privacySection__icon} />}
             title={publicTitle}
             description={publicDesc}
           />
         </Selection.Radio>
-        <Selection.Radio value="private" className={styles.privacySection__optionRow}>
+        <Selection.Radio
+          value="private"
+          className={styles.privacySection__optionRow}
+          data-testid="group-privacy-private-radio"
+        >
           <PrivacyRow
             icon={<LockKeyhole className={styles.privacySection__icon} />}
             title={privateTitle}

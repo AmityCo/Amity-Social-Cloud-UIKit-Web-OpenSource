@@ -231,6 +231,7 @@ export const ContentReportReason = ({
     <div
       data-iserror={isError || isCommentDeleted || isMessageDeleted}
       className={clsx(styles.contentReportReason__container, className)}
+      data-testid="content-report-reason"
     >
       {isError || isCommentDeleted || isMessageDeleted ? (
         <FailedToShow allowBack={false} className={styles.contentReportReason__failed} />
@@ -280,6 +281,7 @@ export const ContentReportReason = ({
                     onKeyDown={handleKeyDown}
                     maxLength={MAX_LENGTH_DESCRIBE}
                     disabled={isReportPostLoading || isReportCommentLoading}
+                    data-testid="report-reason-description-input"
                   />
                 </TextField>
               </div>

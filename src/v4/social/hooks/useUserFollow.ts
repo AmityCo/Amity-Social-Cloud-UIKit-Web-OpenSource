@@ -46,6 +46,7 @@ const useUserFollow = (): UseUserFollowReturnType => {
       type: 'info',
       title: resolveString('amity_social_modal_dialog_title_unfollow_user'),
       content: resolveString('amity_social_unfollow_user_dialog_content'),
+      okTestId: 'unfollow-confirm-ok-button',
       onOk: () => unFollowUser(userId),
     });
   };

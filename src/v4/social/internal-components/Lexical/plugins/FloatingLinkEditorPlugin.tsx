@@ -394,10 +394,16 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
   };
 
   return (
-    <div ref={editorRef} className={styles.linkEditorContainer}>
+    <div ref={editorRef} className={styles.linkEditorContainer} data-testid="link-editor">
       {linkUrl ? (
         <div className={styles.linkForm}>
-          <a href={linkUrl} target="_blank" rel="noopener noreferrer" className={styles.link}>
+          <a
+            href={linkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.link}
+            data-testid="link-editor-preview-url"
+          >
             {linkUrl}
           </a>
           <Button
@@ -406,6 +412,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
             color="secondary"
             aria-label={useString('amity_social_button_remove_link')}
             className={styles.linkSaveBtn}
+            data-testid="remove-link-button"
             onPress={handleRemoveLink}
           >
             <Trash className={styles.addLinkBtn__icon} />
@@ -420,6 +427,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
             value={editedLinkUrl}
             placeholder={typeOrPasteALinkLabel}
             className={styles.linkInput}
+            data-testid="link-url-input"
             style={
               {
                 '--input-length': editedLinkUrl.length,
@@ -442,6 +450,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
             variant="text"
             color="secondary"
             aria-label="Save link"
+            data-testid="save-link-button"
             onPress={handleLinkSubmit}
             className={styles.linkSaveBtn}
             isDisabled={!isValidUrl(editedLinkUrl)}
@@ -454,6 +463,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
             color="secondary"
             aria-label="clear link"
             className={styles.linkSaveBtn}
+            data-testid="clear-link-button"
             onPress={() => {
               setTimeout(() => {
                 const editorElem = editorRef.current;
@@ -479,6 +489,7 @@ export const FloatingLinkEditorPlugin = ({ enabled = true }: FloatingLinkEditorP
           variant="text"
           color="secondary"
           className={styles.addLinkBtn}
+          data-testid="add-link-button"
           onPress={handleAddLinkClick}
           aria-label={useString('amity_social_button_add_link')}
         >

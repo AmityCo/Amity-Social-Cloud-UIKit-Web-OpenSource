@@ -28,6 +28,7 @@ export type TextProps = {
   onSubmit?: (value: string) => void;
   className?: string;
   'aria-label'?: string;
+  inputTestId?: string;
 };
 
 export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
@@ -50,6 +51,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
     onBlur,
     onSubmit,
     className,
+    inputTestId,
     ...props
   },
   ref,
@@ -97,12 +99,14 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
             placeholder={placeholder}
             maxLength={maxLength}
             rows={1}
+            data-testid={inputTestId}
           />
         ) : (
           <AriaInput
             className={styles.field__input}
             placeholder={placeholder}
             maxLength={maxLength}
+            data-testid={inputTestId}
             onKeyDown={(e) => {
               if (e.key === 'Enter') onSubmit?.(value ?? '');
             }}

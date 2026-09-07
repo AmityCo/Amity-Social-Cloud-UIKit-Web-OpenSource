@@ -57,6 +57,7 @@ export const ImagePollAnswer: FC<ImagePollAnswerProps> = ({
     <>
       <div
         className={styles.pollContent__imageOption__wrapper}
+        data-testid="image-poll-option"
         data-is-voted={!!votedPrecentage}
         data-is-top-voted={isTopVoted}
         data-disabled={isDisabled}
@@ -82,7 +83,10 @@ export const ImagePollAnswer: FC<ImagePollAnswerProps> = ({
             <>
               {isTopVoted && <div className={styles.pollContent__imageOption__overlay__topVoted} />}
               <div className={styles.pollContent__imageOption__overlay}>
-                <Typography.Headline className={styles.pollContent__imageOption__percentage}>
+                <Typography.Headline
+                  className={styles.pollContent__imageOption__percentage}
+                  data-testid="poll-option-percentage"
+                >
                   {votedPrecentage}%
                 </Typography.Headline>
               </div>
@@ -92,6 +96,7 @@ export const ImagePollAnswer: FC<ImagePollAnswerProps> = ({
         {label && (
           <Typography.BodyBold
             className={styles.pollContent__imageOption__text}
+            data-testid="poll-image-option-label"
             data-disabled={isDisabled}
           >
             {label}

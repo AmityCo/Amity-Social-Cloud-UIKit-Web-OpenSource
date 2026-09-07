@@ -233,7 +233,10 @@ export const CommentComposer = ({
 
   if (!shouldAllowCreation) {
     return (
-      <div className={styles.commentComposer__disableContainer}>
+      <div
+        className={styles.commentComposer__disableContainer}
+        data-testid="comments-disabled-message"
+      >
         <LockSvg />
         <Typography.Body>
           {useString('amity_social_label_comments_disabled_message')}

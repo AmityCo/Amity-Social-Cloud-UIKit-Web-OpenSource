@@ -1011,7 +1011,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           </div>
         )}
 
-        <div className={styles.editPost__ctaWrapper}>
+        <div className={styles.editPost__ctaWrapper} data-testid="post-composer-save-button">
           <EditPostButton
             variant="fill"
             pageId={pageId}

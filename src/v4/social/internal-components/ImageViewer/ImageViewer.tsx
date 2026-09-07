@@ -291,7 +291,11 @@ function ImageSlide({ slide, index, total, showProductTagList }: ImageSlideProps
   const productTags = slide.productTags ?? [];
 
   return (
-    <div aria-live="assertive" className={styles.imageViewer__imageContainer}>
+    <div
+      aria-live="assertive"
+      className={styles.imageViewer__imageContainer}
+      data-testid="image-viewer-container"
+    >
       {file?.fileUrl && !isBrokenImg ? (
         <img
           onError={() => setIsBrokenImg(true)}

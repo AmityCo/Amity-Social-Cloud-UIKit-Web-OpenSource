@@ -73,6 +73,7 @@ type MenuItemProps = {
   className?: string;
   onPress: ButtonProps['onPress'];
   typography?: TypographyVariant;
+  'data-testid'?: string;
 };
 
 function renderIcon(icon: MenuIcon | undefined, className?: string): ReactNode {
@@ -103,6 +104,7 @@ function MenuItem({
   className,
   iconClassName,
   typography = TypographyVariant.BodyBold,
+  'data-testid': testId,
 }: MenuItemProps) {
   const iconNode = renderIcon(icon, clsx(styles.menuItem__icon, iconClassName));
 
@@ -113,6 +115,7 @@ function MenuItem({
       fullWidth
       variant="default"
       onPress={onPress}
+      data-testid={testId}
       data-destructive={destructive}
       className={clsx(styles.menuItem, className)}
     >

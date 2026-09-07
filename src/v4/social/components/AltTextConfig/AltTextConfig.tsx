@@ -193,6 +193,7 @@ export function AltTextConfig({ mode, result, renderHeader }: AltTextConfigProps
             value={altText}
             ref={textareaRef}
             aria-labelledby="alt-text"
+            data-testid="alt-text-textarea"
             onChange={handleTextareaChange}
             className={styles.altTextConfig__input}
             placeholder={altTextPlaceholder}

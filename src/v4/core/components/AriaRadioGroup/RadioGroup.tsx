@@ -56,7 +56,7 @@ export function RadioGroup({
                   label={label}
                   isDisabled={isDisabled || radioProps?.isDisabled}
                   data-image-option={isImageOption}
-                  data-testid={`${testId}-${index}`}
+                  data-testid={radioItemProps?.['data-testid'] ?? `${testId}-${index}`}
                 />
               )}
               {icon && (
@@ -67,7 +67,7 @@ export function RadioGroup({
                     isDisabled={isDisabled || radioProps?.isDisabled}
                     value={value}
                     data-image-option={isImageOption}
-                    data-testid={`${testId}-${index}`}
+                    data-testid={radioItemProps?.['data-testid'] ?? `${testId}-${index}`}
                     label={
                       <>
                         <Button

@@ -32,6 +32,7 @@ const Confirm = ({
   componentId = '*',
   cancelText = 'Cancel',
   retryText,
+  okTestId,
 }: ConfirmProps) => {
   const elementId = 'confirm-modal';
   const { accessibilityId, themeStyles } = useAmityElement({ pageId, componentId, elementId });
@@ -92,7 +93,7 @@ const Confirm = ({
                     style={themeStyles}
                     className={styles.popup__footer__okButton}
                     color={okButtonColor ? okButtonColor : type === 'info' ? 'primary' : 'alert'}
-                    data-testid={`${elementId}-${accessibilityId}-ok-button`}
+                    data-testid={okTestId ?? `${elementId}-${accessibilityId}-ok-button`}
                     isDisabled={isLoading}
                     onPress={async () => {
                       setIsLoading(true);

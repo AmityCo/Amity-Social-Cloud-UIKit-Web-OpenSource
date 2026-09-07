@@ -96,15 +96,17 @@ function AvatarButton({ value, isUploading, onPress }: AvatarButtonProps) {
       isDisabled={isUploading}
       className={styles.avatarPicker}
       aria-label="Upload group avatar"
+      data-testid="upload-group-avatar-button"
     >
       {value ? (
         <img
           alt={value.altText || 'group avatar'}
           className={styles.avatarPicker__image}
+          data-testid="group-avatar-image"
           src={FileRepository.fileUrlWithSize(value.fileUrl, 'medium')}
         />
       ) : (
-        <span className={styles.avatarPicker__placeholder}>
+        <span className={styles.avatarPicker__placeholder} data-testid="group-avatar-default">
           <CommentsAlt.Solid className={styles.avatarPicker__placeholderIcon} />
         </span>
       )}

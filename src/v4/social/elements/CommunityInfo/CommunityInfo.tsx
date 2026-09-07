@@ -11,6 +11,7 @@ interface CommunityInfoProps {
   pageId?: string;
   componentId?: string;
   onClick?: () => void;
+  countTestId?: string;
 }
 
 export const CommunityInfo = ({
@@ -19,6 +20,7 @@ export const CommunityInfo = ({
   count,
   text,
   onClick,
+  countTestId,
 }: CommunityInfoProps) => {
   const elementId = 'community_info';
   const { config, accessibilityId, themeStyles, isExcluded } = useAmityElement({
@@ -34,7 +36,7 @@ export const CommunityInfo = ({
       className={styles.communityInfo__container}
     >
       <div className={styles.communityInfo__wrapper}>
-        <Typography.BodyBold className={styles.communityInfo__count}>
+        <Typography.BodyBold className={styles.communityInfo__count} data-testid={countTestId}>
           {millify(count)}
         </Typography.BodyBold>
         <Typography.Caption className={styles.communityInfo__title}>{text}</Typography.Caption>

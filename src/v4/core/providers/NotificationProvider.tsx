@@ -18,6 +18,7 @@ interface Notification {
   variant?: ToastVariant;
   module?: NotificationModule;
   alignment?: NotificationAlignment;
+  testId?: string;
 }
 
 type NotificationFunction = {

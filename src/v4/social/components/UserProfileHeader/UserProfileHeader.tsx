@@ -120,6 +120,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
   }) => (
     <Button
       className={styles.userProfileHeader__unFollowButton}
+      data-testid="user-profile-unfollow-option"
       onPress={() => {
         removeDrawerData();
         unFollowUser({ pageId, userId });
@@ -237,6 +238,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         <Button
           variant="outlined"
           className={styles.pendingCountButton}
+          data-testid="user-profile-new-follow-request-button"
           onPress={() => AmityUserProfileHeaderComponentBehavior?.goToPendingFollowRequestPage?.()}
         >
           <div className={styles.pendingCountButton__inner}>

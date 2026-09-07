@@ -191,6 +191,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
             pageId={PAGE_ID.SOCIAL_HOME_PAGE}
             elementId={ELEMENT_ID.CLIPSFEED_BUTTON}
             isActive={activeTab === HomePageTab.Clips}
+            labelTestId="explore-clips-tab"
             onPress={() => handleTabClick(HomePageTab.Clips)}
             textId="amity_social_button_social_home_clips_button"
           />

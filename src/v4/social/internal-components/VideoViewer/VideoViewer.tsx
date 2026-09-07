@@ -397,6 +397,7 @@ function VideoSlide({
         registerRef(el);
       }}
       className={styles.videoViewer__video}
+      data-testid="video-player"
       playsInline
       autoPlay={isActive}
       preload={isActive ? 'auto' : 'none'}

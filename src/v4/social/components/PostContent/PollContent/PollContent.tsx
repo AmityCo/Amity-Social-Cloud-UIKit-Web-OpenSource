@@ -245,9 +245,12 @@ export const PollContent: FC<PollContentProps> = ({
           </Button>
         </>
       )}
-      <div className={styles.pollContent__pollDetail__container}>
+      <div
+        className={styles.pollContent__pollDetail__container}
+        data-testid="poll-detail-container"
+      >
         <div className={styles.pollContent__pollDetail}>
-          <Typography.CaptionBold>
+          <Typography.CaptionBold data-testid="poll-vote-count">
             {(voteCount !== 1 ? votersLabel : voterLabel).replace('%@', String(voteCount))}
           </Typography.CaptionBold>
           <Typography.CaptionBold>•</Typography.CaptionBold>

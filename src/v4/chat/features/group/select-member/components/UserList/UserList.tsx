@@ -74,6 +74,7 @@ export function UserList({ searchText, selectedUsers, onChange }: UserListProps)
             key={user.userId}
             value={user.userId}
             className={styles.userList__row}
+            data-testid="select-member-item"
           >
             <UserItem user={user} />
           </Selection.Checkbox>

@@ -155,6 +155,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
             pageId={pageId}
             componentId={componentId}
             count={community.postsCount}
+            countTestId="community-header-post-count"
             text={resolveString(
               community.postsCount === 1
                 ? 'amity_social_label_community_post_label'
@@ -167,6 +168,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
             pageId={pageId}
             componentId={componentId}
             count={community.membersCount}
+            countTestId="community-header-member-count"
             text={resolveString(
               community.membersCount === 1
                 ? 'amity_social_button_member_count_singular'
@@ -227,6 +229,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               variant="outlined"
               defaultIcon={<Clock className={styles.communityProfile__pendingIcon} />}
               onPress={cancelJoinCommunity}
+              data-testid="community-cancel-request-button"
               text={useString('amity_social_button_cancel_request')}
               typographyVariant="bodyBold"
               className={styles.communityProfile__cancelJoinButton}

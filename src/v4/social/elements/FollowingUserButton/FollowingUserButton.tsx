@@ -30,7 +30,10 @@ export const FollowingUserButton: React.FC<FollowingUserButtonProps> = ({
 
   return (
     <Button data-testid={accessibilityId} className={styles.followingUserButton} onPress={onClick}>
-      <div className={styles.followingUserButton__inner}>
+      <div
+        className={styles.followingUserButton__inner}
+        data-testid="user-profile-following-button"
+      >
         <IconComponent
           defaultIcon={() => <FollowingUser className={styles.followingUserButton__icon} />}
           configIconName={config.image}

@@ -59,6 +59,7 @@ export function TopNavigation({
           <NotificationTrayButton
             pageId={pageId}
             componentId={componentId}
+            redDotTestId="notification-red-dot-top-navigation"
             onPress={handleNotificationTrayButtonClick}
           />
         )}

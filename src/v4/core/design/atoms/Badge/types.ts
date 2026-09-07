@@ -10,6 +10,7 @@ export type BadgeBaseProps = {
   border?: boolean;
   preset?: BadgePreset;
   className?: string;
+  'data-testid'?: string;
 };
 
 export const presetSlug = (preset?: BadgePreset) =>

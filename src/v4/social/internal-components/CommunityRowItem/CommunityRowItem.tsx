@@ -168,6 +168,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
               <CommunityJoinedButton
                 pageId={pageId}
                 componentId={componentId}
+                testId="trending-community-membership-button"
                 className={styles.communityRowItem__joinButton}
                 data-has-categories={community.categoryIds.length > 0}
                 onClick={() => handleLeaveButtonClick(community)}
@@ -181,6 +182,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
                 variant="outlined"
                 defaultIcon={<Clock className={styles.communityRowItem__pendingButton} />}
                 onPress={() => onPendingButtonClick?.() ?? cancelJoinCommunity()}
+                data-testid="trending-community-membership-button"
                 text={useString('amity_social_button_pending')}
                 className={styles.communityRowItem__pendingButtonWrapper}
               />
@@ -190,6 +192,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
               <CommunityJoinButton
                 pageId={pageId}
                 componentId={componentId}
+                data-testid="trending-community-membership-button"
                 className={styles.communityRowItem__joinButton}
                 data-has-categories={community.categoryIds.length > 0}
                 onClick={() => {

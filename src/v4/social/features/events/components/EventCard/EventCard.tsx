@@ -96,6 +96,7 @@ export function EventCard({
       key={event.eventId}
       data-variant={variant}
       className={styles.eventCard}
+      data-testid="event-card"
       {...interactiveProps}
     >
       <div className={styles.eventCard__figure} data-size={size} data-variant={variant}>
@@ -104,6 +105,7 @@ export function EventCard({
           data-size={size}
           data-variant={variant}
           className={styles.eventCard__image}
+          data-testid="event-card-thumbnail"
           src={
             errorImage
               ? eventThumbnail
@@ -122,24 +124,40 @@ export function EventCard({
         )}
       </div>
       <div className={styles.eventCard__info} data-size={size} data-variant={variant}>
-        <Typography.CaptionBold className={styles.eventCard__duration} as="p">
+        <Typography.CaptionBold
+          className={styles.eventCard__duration}
+          as="p"
+          data-testid="event-card-duration"
+        >
           {formatEventDuration(event.startTime, event.endTime)}
         </Typography.CaptionBold>
         {size === 'lg' ? (
-          <Typography.BodyBold className={styles.eventCard__title} as="p">
+          <Typography.BodyBold
+            className={styles.eventCard__title}
+            as="p"
+            data-testid="event-card-title"
+          >
             <TruncateMarkup lines={2}>
               <div>{event.title}</div>
             </TruncateMarkup>
           </Typography.BodyBold>
         ) : (
-          <Typography.BodyBold className={styles.eventCard__title} as="p">
+          <Typography.BodyBold
+            className={styles.eventCard__title}
+            as="p"
+            data-testid="event-card-title"
+          >
             <TruncateMarkup>
               <div>{event.title}</div>
             </TruncateMarkup>
           </Typography.BodyBold>
         )}
         <div className={styles.eventCard__creator}>
-          <Typography.Body className={styles.eventCard__creatorName} as="p">
+          <Typography.Body
+            className={styles.eventCard__creatorName}
+            as="p"
+            data-testid="event-creator-name"
+          >
             <TruncateMarkup lines={1}>
               <div>{byCreatorLabel}</div>
             </TruncateMarkup>

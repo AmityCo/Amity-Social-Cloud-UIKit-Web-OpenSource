@@ -22,7 +22,7 @@ type UserRelationshipPageProps = {
 export const UserRelationshipPage: FC<UserRelationshipPageProps> = ({ userId, selectedTab }) => {
   const pageId = 'user_releationship_page';
 
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
   const { onBack } = useNavigation();
 
@@ -46,7 +46,7 @@ export const UserRelationshipPage: FC<UserRelationshipPageProps> = ({ userId, se
   ];
 
   return (
-    <div className={styles.userRelationshipPage} style={themeStyles}>
+    <div className={styles.userRelationshipPage} style={themeStyles} data-testid={accessibilityId}>
       <div className={styles.userRelationshipPage__container}>
         <div className={styles.userRelationshipPage__topSection}>
           <div className={styles.userRelationshipPage__topBar}>

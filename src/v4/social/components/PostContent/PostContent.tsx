@@ -511,7 +511,7 @@ export const PostContent = ({
                   </span>
                 </div>
               ) : null}
-              <Timestamp timestamp={post.createdAt} />
+              <Timestamp pageId={pageId} componentId={componentId} timestamp={post.createdAt} />
               {post.createdAt !== post.editedAt && (
                 <Typography.Caption
                   data-testid={`${pageId}/${componentId}/post_edited_text`}
