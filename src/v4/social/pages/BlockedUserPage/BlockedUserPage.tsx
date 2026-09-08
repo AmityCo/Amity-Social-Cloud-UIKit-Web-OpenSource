@@ -11,6 +11,7 @@ import { UserListSkeleton } from '~/v4/core/components/UserListSkeleton';
 import useBlockedUsersCollection from '~/v4/social/hooks/collections/useBlockedUsersCollection';
 import { BlockedUserItem } from './BlockedUserItem/BlockedUserItem';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 export const BlockedUserPage = () => {
   const pageId = 'blocked_users_page';
@@ -18,6 +19,7 @@ export const BlockedUserPage = () => {
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
+  const { isDesktop } = useResponsive();
   const { users, isLoading, hasMore, loadMore, refresh } = useBlockedUsersCollection({});
 
   useIntersectionObserver({
@@ -52,6 +54,7 @@ export const BlockedUserPage = () => {
         <BackButton pageId={pageId} onPress={() => onBack()} />
         <Title
           pageId={pageId}
+          variant={isDesktop ? 'headline' : 'title'}
           textKey="amity_social_label_manage_blocked_users"
           titleClassName={styles.blockedUserPage__topBar__text}
         />

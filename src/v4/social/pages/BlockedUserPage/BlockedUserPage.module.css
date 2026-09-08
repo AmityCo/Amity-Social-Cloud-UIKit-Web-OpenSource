@@ -71,6 +71,7 @@
   }
 
   .blockedUserPage__topBar {
+    height: 4rem;
     background-color: var(--asc-color-background-default);
     position: static;
     border: 1px solid var(--asc-color-base-shade4);
