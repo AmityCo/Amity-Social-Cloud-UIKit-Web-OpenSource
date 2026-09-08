@@ -35,6 +35,7 @@ import { useString } from '~/v4/core/localization';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner/ProgressSpinner';
 import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge';
 import { useProductTagSelection } from '~/v4/social/features/product-tagged/hooks';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
 import {
   getFrameRatio,
@@ -635,7 +636,10 @@ function FrameControls({
 }: FrameControlsProps) {
   const productTags =
     frame.kind === 'post' ? frame.post.productTags ?? [] : frame.item.productTags ?? [];
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+  const isProductCatalogueEnabled = !!productCatalogueSettings?.product.enabled;
   const showProductTag =
+    isProductCatalogueEnabled &&
     (frame.kind === 'post' ? !!onChildPostProductTagsChange : !!onFileProductTagsChange) &&
     (productTags.length !== 0 || !productTagsReachLimit);
 
