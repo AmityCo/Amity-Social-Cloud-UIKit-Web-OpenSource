@@ -27,4 +27,9 @@
   object-position: center;
   color: var(--asc-color-white);
   background-color: var(--asc-color-black);
+  padding: 0 1rem;
+}
+
+.liveStreamTerminatedThumbnail[data-view='full-screen'] > * {
+  max-width: 34rem;
 }
