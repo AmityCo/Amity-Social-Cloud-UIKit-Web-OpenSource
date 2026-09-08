@@ -334,7 +334,7 @@ export const CommentComposer = ({
                     '%s',
                     replyTo?.creator?.displayName ?? '',
                   )
-                : useString('amity_social_replying_to')
+                : useString('amity_social_placeholder_comment_text_field_placeholder')
             }
             communityId={community?.communityId}
             shouldAutoFocus={
