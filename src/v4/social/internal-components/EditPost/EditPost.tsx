@@ -87,7 +87,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     handleFileChange,
     handleAltTextChange,
     handleProductTagsChange,
-  } = useFilePostUpload(pageId);
+  } = useFilePostUpload(pageId, true);
 
   const posts = usePostByIds(post?.children || []);
 

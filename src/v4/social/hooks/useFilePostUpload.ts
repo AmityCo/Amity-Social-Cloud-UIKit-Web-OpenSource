@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useNetworkState } from 'react-use';
 import { FileRepository, FileType } from '@amityco/ts-sdk';
 import { v4 as uuid } from 'uuid';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -12,6 +13,7 @@ export type FileItem<T extends Amity.FileType = any> = {
   file: File | Amity.File<T>;
   status: 'failed' | 'uploaded' | 'selected';
   errorText?: string;
+  isRetryable?: boolean;
   thumbnailVideo?: string;
   productTags?: Amity.ProductTag[];
   selectionKey?: string;
@@ -34,8 +36,11 @@ const getSelectionKey = (file: File | Amity.File): string => {
   return file.name;
 };
 
-export function useFilePostUpload(pageId?: string) {
+export function useFilePostUpload(pageId?: string, autoRetryOnReconnect = false) {
   const { info } = useConfirmContext();
+  const { online } = useNetworkState();
+  const isOnline = online !== false;
+  const hasBeenOfflineRef = useRef(false);
   const [progress, setProgress] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -78,6 +83,7 @@ export function useFilePostUpload(pageId?: string) {
       id: uuid(),
       status: 'failed',
       errorText: resolveString('amity_social_label_file_size_exceed_limit'),
+      isRetryable: false,
       selectionKey: getSelectionKey(file),
     }));
 
@@ -158,6 +164,7 @@ export function useFilePostUpload(pageId?: string) {
               ...file,
               status: 'failed',
               errorText: resolveString('amity_social_toast_failed_to_upload'),
+              isRetryable: true,
             };
           }
           return file;
@@ -307,6 +314,20 @@ export function useFilePostUpload(pageId?: string) {
     await uploadSingleFile(fileToRetry, fileToRetry.file.type);
     setProgress((prev) => ({ ...prev, [fileId]: undefined }));
   };
+
+  useEffect(() => {
+    if (!autoRetryOnReconnect) return;
+    if (!isOnline) {
+      hasBeenOfflineRef.current = true;
+      return;
+    }
+    if (!hasBeenOfflineRef.current) return;
+    hasBeenOfflineRef.current = false;
+
+    files
+      .filter((item) => item.status === 'failed' && item.isRetryable && !isAmityFile(item.file))
+      .forEach((item) => retryUpload(item.id));
+  }, [autoRetryOnReconnect, isOnline, files]);
 
   return {
     files,
