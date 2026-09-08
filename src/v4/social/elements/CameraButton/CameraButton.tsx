@@ -139,10 +139,7 @@ export function CameraButton({
               ? 'image/png,image/jpg'
               : 'video/*'
         }
-        capture={
-          captureMode ??
-          (isVisibleImage && isVisibleVideo ? undefined : isVisibleImage ? 'user' : 'environment')
-        }
+        capture={captureMode ?? (isVisibleImage && !isVisibleVideo ? 'user' : 'environment')}
         className={styles.cameraButton_input}
       />
     </Button>
