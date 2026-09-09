@@ -22,7 +22,6 @@ import { TopSearchBar } from '~/v4/social/components';
 import styles from './CommunityInviteMemberPage.module.css';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { BrandBadge, InviteButton, Title } from '~/v4/social/elements';
-import { NoResult } from '~/v4/social/internal-components/NoResult';
 import { EmptyResult } from '~/v4/social/internal-components/EmptyResult';
 import { NoInternet } from '~/v4/social/internal-components/NoInternet';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
@@ -144,11 +143,12 @@ function useCommunityInviteMemberPage({
       ? searchedUsers
       : users;
 
-  const isNoResult =
-    online && search.length > 2 && filteredUsers.length === 0 && !isLoading && !isSearchLoading;
-
   const isEmpty =
-    online && search.length === 0 && filteredUsers.length === 0 && !isLoading && !isSearchLoading;
+    online &&
+    (search.length === 0 || search.length > 2) &&
+    filteredUsers.length === 0 &&
+    !isLoading &&
+    !isSearchLoading;
 
   const isLimitCharacterSearch =
     online && search.length > 0 && search.length < 3 && !isLoading && !isSearchLoading;
@@ -172,7 +172,6 @@ function useCommunityInviteMemberPage({
     isLoading,
     isSearchLoading,
     online,
-    isNoResult,
     isEmpty,
     isOnline: online,
     isFetching,
@@ -196,7 +195,6 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
     setSelectedMembers,
     isOnline,
     isEmpty,
-    isNoResult,
     isFetching,
     isLimitCharacterSearch,
     keyboardOffset,
@@ -225,14 +223,6 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             className={styles.communityInviteMemberPage__state}
           >
             <NoInternet pageId={pageId} />
-          </div>
-        )}
-        {isNoResult && (
-          <div
-            data-selected={selectedMembers.length > 0}
-            className={styles.communityInviteMemberPage__state}
-          >
-            <NoResult pageId={pageId} />
           </div>
         )}
         {isLimitCharacterSearch && (
