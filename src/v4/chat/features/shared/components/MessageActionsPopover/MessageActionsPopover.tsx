@@ -44,7 +44,7 @@ type MessageActionsPopoverProps = {
   handlers: Omit<BubbleMenuHandlers, 'onUnreport'>;
   onDismiss: () => void;
   viewerIsMutedInChannel?: boolean;
-  viewerCanDeleteMessage?: boolean;
+  viewerIsModerator?: boolean;
 };
 
 const MUTED_VICTIM_TRIMMED_KEYS = new Set([
@@ -61,7 +61,7 @@ export function buildBubbleMenuItems(
   flagState: BubbleMenuFlagState,
   handlers: BubbleMenuHandlers,
   viewerIsMutedInChannel: boolean = false,
-  viewerCanDeleteMessage: boolean = false,
+  viewerIsModerator: boolean = false,
 ): MessageActionItem[] {
   const isOwn = !!currentUserId && message.creatorId === currentUserId;
   const isText = message.dataType === 'text';
@@ -128,7 +128,7 @@ export function buildBubbleMenuItems(
       label: resolveString('amity_chat_option_delete'),
       destructive: true,
       onPress: handlers.onDelete,
-      visible: isOwn || viewerCanDeleteMessage,
+      visible: isOwn || viewerIsModerator,
     },
   ];
 
@@ -143,7 +143,7 @@ export function MessageActionsPopover({
   handlers,
   onDismiss,
   viewerIsMutedInChannel = false,
-  viewerCanDeleteMessage = false,
+  viewerIsModerator = false,
 }: MessageActionsPopoverProps) {
   const triggerRef = { current: anchor } as RefObject<HTMLElement>;
   const { currentUserId } = useSDK();
@@ -166,7 +166,7 @@ export function MessageActionsPopover({
       onUnreport: () => unreport(),
     },
     viewerIsMutedInChannel,
-    viewerCanDeleteMessage,
+    viewerIsModerator,
   );
 
   if (items.length === 0) return null;

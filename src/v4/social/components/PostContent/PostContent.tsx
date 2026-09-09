@@ -51,7 +51,6 @@ import { EventHostBadge } from '~/v4/social/elements';
 import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import useSDK from '~/v4/core/hooks/useSDK';
-import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { AmitySharableContentType } from '@amityco/ts-sdk';
 
@@ -155,18 +154,7 @@ export const PostContent = ({
   const componentId = 'post_content';
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
-  const { isVisitorOrBot, currentUserId } = useSDK();
-
-  // Sharing matrix (2026-09-01): a user-feed post is not shareable by a viewer the
-  // author has blocked. The private-profile / non-follower case needs no check here —
-  // a viewer who cannot see the feed never reaches this post. Community posts are
-  // handled by the isPublic condition below.
-  const isUserFeedPost = post?.targetType === 'user';
-  const { followStatus: postAuthorFollowStatus } = useFollowCount(
-    isUserFeedPost && post?.targetId !== currentUserId ? post?.targetId : undefined,
-  );
-  const canShareUserFeedPost =
-    !isUserFeedPost || post?.targetId === currentUserId || postAuthorFollowStatus !== 'blocked';
+  const { isVisitorOrBot } = useSDK();
   const { AmityGlobalBehavior } = usePageBehavior();
 
   const { themeStyles, accessibilityId } = useAmityComponent({
@@ -751,52 +739,51 @@ export const PostContent = ({
                 />
               </div>
               <div className={styles.postContent__reactionBar__rightPane}>
-                {(!targetCommunity || targetCommunity?.isPublic || isVisitorOrBot) &&
-                  canShareUserFeedPost && (
-                    <Popover
-                      containerClassName={styles.postContent__bar__actionButton}
-                      trigger={({ openPopover }) => (
-                        <IconButton
-                          variant="text"
-                          pageId={pageId}
-                          componentId={componentId}
-                          elementId="copy_link_button"
-                          defaultIcon={<Share className={styles.postContent__shareIcon} />}
-                          onPress={() => {
-                            if (isVisitorOrBot) {
-                              AmityGlobalBehavior?.handleVisitorUsageLimitSignIn?.({
-                                alignment: 'withSidebar',
+                {(!targetCommunity || targetCommunity?.isPublic || isVisitorOrBot) && (
+                  <Popover
+                    containerClassName={styles.postContent__bar__actionButton}
+                    trigger={({ openPopover }) => (
+                      <IconButton
+                        variant="text"
+                        pageId={pageId}
+                        componentId={componentId}
+                        elementId="copy_link_button"
+                        defaultIcon={<Share className={styles.postContent__shareIcon} />}
+                        onPress={() => {
+                          if (isVisitorOrBot) {
+                            AmityGlobalBehavior?.handleVisitorUsageLimitSignIn?.({
+                              alignment: 'withSidebar',
+                            });
+                            return;
+                          }
+                          isDesktop
+                            ? openPopover()
+                            : setDrawerData({
+                                content: (
+                                  <CopyLinkButton
+                                    pageId={pageId}
+                                    componentId={componentId}
+                                    model={AmitySharableContentType.POST}
+                                    referenceId={post.postId}
+                                    onDone={removeDrawerData}
+                                  />
+                                ),
                               });
-                              return;
-                            }
-                            isDesktop
-                              ? openPopover()
-                              : setDrawerData({
-                                  content: (
-                                    <CopyLinkButton
-                                      pageId={pageId}
-                                      componentId={componentId}
-                                      model={AmitySharableContentType.POST}
-                                      referenceId={post.postId}
-                                      onDone={removeDrawerData}
-                                    />
-                                  ),
-                                });
-                          }}
-                        />
-                      )}
-                    >
-                      {({ closePopover }) => (
-                        <CopyLinkButton
-                          pageId={pageId}
-                          componentId={componentId}
-                          model={AmitySharableContentType.POST}
-                          referenceId={post.postId}
-                          onDone={isDesktop ? closePopover : removeDrawerData}
-                        />
-                      )}
-                    </Popover>
-                  )}
+                        }}
+                      />
+                    )}
+                  >
+                    {({ closePopover }) => (
+                      <CopyLinkButton
+                        pageId={pageId}
+                        componentId={componentId}
+                        model={AmitySharableContentType.POST}
+                        referenceId={post.postId}
+                        onDone={isDesktop ? closePopover : removeDrawerData}
+                      />
+                    )}
+                  </Popover>
+                )}
               </div>
             </div>
           </>

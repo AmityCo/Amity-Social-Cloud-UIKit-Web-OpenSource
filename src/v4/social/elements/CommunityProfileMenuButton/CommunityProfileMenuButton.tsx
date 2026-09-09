@@ -14,7 +14,6 @@ import { IconButton } from '~/v4/core/components/IconButton';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import Users from '~/v4/icons/Users';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { checkEditCommunityPermission } from '~/v4/social/utils';
 import Setting from '~/v4/icons/Setting';
 import { AmitySharableContentType } from '@amityco/ts-sdk';
 
@@ -39,7 +38,7 @@ export function CommunityProfileMenuButton({
   const { isDesktop } = useResponsive();
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { currentUserId, client } = useSDK();
+  const { currentUserId } = useSDK();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const {
     isExcluded,
@@ -64,18 +63,16 @@ export function CommunityProfileMenuButton({
   };
 
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
-  const hasEditCommunityPermission = checkEditCommunityPermission(client, community?.communityId);
-  const canManageCommunity = isCommunityModerator || hasEditCommunityPermission;
   const isMember = community?.isJoined;
 
   const shouldShowCopyButton =
-    community?.isPublic || community?.isDiscoverable || canManageCommunity;
+    community?.isPublic || community?.isDiscoverable || isCommunityModerator;
 
   const renderMenu = useCallback(
     ({ closePopover }: { closePopover?: () => void } = {}) => {
       return (
         <div className={styles.menuButton__wrapper}>
-          {canManageCommunity && (
+          {isCommunityModerator && (
             <IconButton
               className={styles.menuButton__optionButton}
               pageId={pageId}
@@ -88,7 +85,7 @@ export function CommunityProfileMenuButton({
               typographyVariant="bodyBold"
             />
           )}
-          {isMember && !canManageCommunity && (
+          {isMember && !isCommunityModerator && (
             <IconButton
               className={styles.menuButton__optionButton}
               pageId={pageId}
@@ -114,7 +111,7 @@ export function CommunityProfileMenuButton({
         </div>
       );
     },
-    [canManageCommunity, isMember],
+    [isCommunityModerator, isMember],
   );
 
   if (isExcluded) return null;

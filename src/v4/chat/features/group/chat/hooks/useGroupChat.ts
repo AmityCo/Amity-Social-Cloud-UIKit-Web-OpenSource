@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChannelMembersCollection';
 import { useChannelObject, useChannelMyMembership } from '~/v4/chat/hooks/objects';
-import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
+import { hasModeratorRole } from '~/v4/chat/utils/isModerator';
 import { MemberRoles } from '~/v4/chat/constants/memberRoles';
 import type { GroupChatPageProps } from '~/v4/chat/pages/GroupChatPage';
 import { useChatMessage } from '~/v4/chat/features/shared/hooks/useChatMessage';
@@ -27,7 +27,7 @@ export function useGroupChat({ channelId, isJustCreated, jumpToMessageId }: Grou
     [moderators],
   );
 
-  const { isModerator, canDeleteMessage } = useChannelPermission(channelId);
+  const isModerator = hasModeratorRole(myMembership?.roles);
   const isUserMuted = !!myMembership?.isMuted;
   const isChannelMuted = !!channel?.isMuted;
   const showMutedBanner = isUserMuted || (isChannelMuted && !isModerator);
@@ -57,7 +57,6 @@ export function useGroupChat({ channelId, isJustCreated, jumpToMessageId }: Grou
     isUserMuted,
     isChannelMuted,
     isModerator,
-    canDeleteMessage,
     isBanned,
     moderatorIds,
     showMutedBanner,

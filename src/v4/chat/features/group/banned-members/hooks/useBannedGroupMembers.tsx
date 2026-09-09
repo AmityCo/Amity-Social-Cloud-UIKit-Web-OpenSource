@@ -8,7 +8,6 @@ import type { ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import { Ban } from '~/v4/core/design/icons/Ban';
 import { SEARCH_DEBOUNCE_MS } from '~/v4/chat/constants/search';
 import { useChannelBanQuery } from '~/v4/chat/hooks/queries';
-import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import type { BannedGroupMemberListPageProps } from '~/v4/chat/pages/BannedGroupMemberListPage';
 
 export type OpenUnbanActionParams = {
@@ -20,7 +19,6 @@ export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPagePr
   const { confirm } = useConfirmContext();
   const { success } = useNotifications('chat');
   const { unbanUser } = useChannelBanQuery();
-  const { canBan } = useChannelPermission(channelId);
 
   const unbanLabel = useString('amity_chat_member_action_unban');
   const unbanConfirmTitle = useString('amity_chat_unban_confirm_title');
@@ -52,17 +50,14 @@ export function useBannedGroupMembers({ channelId }: BannedGroupMemberListPagePr
     });
   }
 
-  const getActionItems: (user: Amity.User) => ActionMenuItem[] = (user: Amity.User) =>
-    canBan
-      ? [
-          {
-            key: 'unban',
-            icon: Ban,
-            label: unbanLabel,
-            onPress: () => handleUnbanConfirm(user),
-          },
-        ]
-      : [];
+  const getActionItems: (user: Amity.User) => ActionMenuItem[] = (user: Amity.User) => [
+    {
+      key: 'unban',
+      icon: Ban,
+      label: unbanLabel,
+      onPress: () => handleUnbanConfirm(user),
+    },
+  ];
 
   return {
     channelId,

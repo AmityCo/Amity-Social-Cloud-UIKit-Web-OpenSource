@@ -81,7 +81,7 @@ const useCommunityPostPermission = ({
       permissions.canDelete = canDelete;
     } else {
       const canDelete =
-        client?.hasPermission(Permissions.DeleteUserFeedPostPermission).currentUser() ?? false;
+        client?.hasPermission(Permissions.EditUserFeedPostPermission).currentUser() ?? false;
 
       permissions.canDelete = canDelete;
     }

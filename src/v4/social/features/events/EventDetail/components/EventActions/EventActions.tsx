@@ -46,7 +46,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   const { deleteEvent } = useEventActions();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
-  const { hasDeleteEventPermission, hasUpdateEventPermission } = useEventPermission(event.originId);
+  const { hasDeleteEventPermission } = useEventPermission(event.originId);
   const { currentUserId, isVisitorOrBot } = useSDK();
 
   const { config: createEventPostConfig, resolveText: resolveCreateEventPostText } =
@@ -85,7 +85,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       key: 'edit',
       icon: Pencil,
       label: useString('amity_social_button_edit_event'),
-      condition: isHostEvent || hasUpdateEventPermission,
+      condition: isHostEvent,
       onPress: () => {
         if (checkIsWithinMinutes(event.startTime)) {
           info({
