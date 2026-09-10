@@ -25,7 +25,6 @@ export type TextProps = {
   highlightMatch?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  onSubmit?: (value: string) => void;
   className?: string;
   'aria-label'?: string;
   inputTestId?: string;
@@ -49,7 +48,6 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
     highlightMatch = false,
     onFocus,
     onBlur,
-    onSubmit,
     className,
     inputTestId,
     ...props
@@ -107,9 +105,6 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
             placeholder={placeholder}
             maxLength={maxLength}
             data-testid={inputTestId}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') onSubmit?.(value ?? '');
-            }}
           />
         )}
         {trailingIcon ? <span className={styles.field__icon}>{trailingIcon}</span> : null}

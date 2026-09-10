@@ -30,7 +30,6 @@ export type ChipProps = {
   leadingIcon?: ReactNode;
   isDisabled?: boolean;
   isInvalid?: boolean;
-  onSubmit?: (value: string) => void;
   className?: string;
   'aria-label'?: string;
 };
@@ -47,7 +46,6 @@ export const Chip = forwardRef<HTMLDivElement, ChipProps>(function Chip(
     leadingIcon,
     isDisabled = false,
     isInvalid = false,
-    onSubmit,
     className,
     ...props
   },
@@ -90,7 +88,6 @@ export const Chip = forwardRef<HTMLDivElement, ChipProps>(function Chip(
             if (e.key === 'Enter' && next) {
               onChipsChange?.([...chips, { id: next, label: next }]);
               onChange?.('');
-              onSubmit?.(next);
             }
           }}
         />
