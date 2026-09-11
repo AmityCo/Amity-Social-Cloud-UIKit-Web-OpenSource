@@ -17,7 +17,7 @@ import {
   useWatchingCount,
   UseCreateLivestreamReturn,
 } from '~/v4/social/features/livestream/hooks';
-import { WatchingCountBadge } from '~/v4/social/features/livestream/internal-components/WatchingCountBadge';
+import { LiveViewerCount } from '~/v4/social/features/livestream/elements/LiveViewerCount';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { AmitySharableContentType, FileRepository } from '@amityco/ts-sdk';
@@ -144,12 +144,14 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
     role: uiState === 'broadcast' ? 'streamer' : 'viewer',
   });
 
-  const showWatchingCount = useMemo(() => {
-    if (isPlayer) return true; // Always show for viewers
-    if (currentUserId === hostId) {
-      return watchingCount > 0;
-    } else return true;
-  }, [currentUserId, hostId, watchingCount, isPlayer]);
+  const isHostOrCoHost = currentUserId === hostId || currentUserId === coHostId;
+
+  // Broadcast surface (host / co-host) only wants to hide the pill when there
+  // are no viewers yet. Viewer visibility is fully owned by LiveViewerCount.
+  const showBroadcastCount = useMemo(() => {
+    if (currentUserId === hostId) return watchingCount > 0;
+    return true;
+  }, [currentUserId, hostId, watchingCount]);
 
   const showMenu = (community && community?.isPublic) || !community;
 
@@ -236,7 +238,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
             </div>
           </div>
           <div className={styles.livestreamHeader__liveDetail__optionWrapper}>
-            <WatchingCountBadge count={watchingCount} isWatcher={true} />
+            <LiveViewerCount count={watchingCount} isHostOrCoHost={isHostOrCoHost} isWatcher />
             {showMenu && (
               <Popover
                 trigger={({ openPopover }) => (
@@ -398,7 +400,9 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
       {/* if uiState is broadcast, show live stream badge and/or watching count badge */}
       {!isPlayer && uiState === 'broadcast' && (
         <div className={styles.livestreamHeader__headerRight__wrapper}>
-          {showWatchingCount && <WatchingCountBadge count={watchingCount} />}
+          {showBroadcastCount && (
+            <LiveViewerCount count={watchingCount} isHostOrCoHost={isHostOrCoHost} />
+          )}
           {!isCoHost && <LiveStreamLiveBadge duration={duration} />}
           {targetType && (
             <Popover

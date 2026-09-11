@@ -18,6 +18,7 @@ type ImageButtonProps = {
   onImageFileChange?: (files: File[]) => void;
   isDisabled?: boolean;
   textId?: string;
+  iconTestId?: string;
 };
 
 export function ImageButton({
@@ -31,6 +32,7 @@ export function ImageButton({
   isSingleUpload = false,
   isDisabled = false,
   textId = 'amity_social_button_post_composer_image_button',
+  iconTestId,
 }: ImageButtonProps) {
   const elementId = 'image_button';
   const {
@@ -67,6 +69,7 @@ export function ImageButton({
         defaultIcon={() => (
           <ImageIcon
             data-disabled={isDisabled}
+            data-testid={iconTestId}
             className={clsx(styles.imageButton__icon, defaultIconClassName)}
           />
         )}

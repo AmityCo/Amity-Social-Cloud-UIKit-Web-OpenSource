@@ -162,6 +162,7 @@ export const EventSetup = (props: EventSetupProps) => {
             variant="fill"
             color="primary"
             icon={isCreateEvent ? <Plus /> : null}
+            data-testid="create-event-submit-button"
             isDisabled={!isDirty || isSubmitting || !isValid}
           >
             {isCreateEvent

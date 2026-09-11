@@ -1,18 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useNetworkState } from 'react-use';
 import { FileRepository, FileType } from '@amityco/ts-sdk';
 import { v4 as uuid } from 'uuid';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { generateThumbnailVideo } from '~/v4/social/utils/generateThumbnailVideo';
 import { isAmityFile } from '~/v4/utils/checkFileType';
 import { resolveString } from '~/v4/core/localization';
+import { MEDIA_ATTACHMENT_CAP } from '~/v4/social/features/posts/constants';
 
 export type FileItem<T extends Amity.FileType = any> = {
   id: string;
   file: File | Amity.File<T>;
   status: 'failed' | 'uploaded' | 'selected';
   errorText?: string;
+  isRetryable?: boolean;
   thumbnailVideo?: string;
   productTags?: Amity.ProductTag[];
+  selectionKey?: string;
 };
 
 const MAX_PERCENT = 100;
@@ -24,8 +28,19 @@ export const getUpdatedTime = (file: File | Amity.File) => {
   return file.updatedAt ? new Date(file.updatedAt).getTime() : Date.now();
 };
 
-export function useFilePostUpload(pageId?: string) {
+const getSelectionKey = (file: File | Amity.File): string => {
+  if (isAmityFile(file)) {
+    const amityFile = file as Amity.File & { fileName?: string };
+    return amityFile.fileName ?? amityFile.fileId;
+  }
+  return file.name;
+};
+
+export function useFilePostUpload(pageId?: string, autoRetryOnReconnect = false) {
   const { info } = useConfirmContext();
+  const { online } = useNetworkState();
+  const isOnline = online !== false;
+  const hasBeenOfflineRef = useRef(false);
   const [progress, setProgress] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -68,6 +83,8 @@ export function useFilePostUpload(pageId?: string) {
       id: uuid(),
       status: 'failed',
       errorText: resolveString('amity_social_label_file_size_exceed_limit'),
+      isRetryable: false,
+      selectionKey: getSelectionKey(file),
     }));
 
     if (failedFiles.length > 0) {
@@ -83,6 +100,7 @@ export function useFilePostUpload(pageId?: string) {
           file,
           id: uuid(),
           status: 'selected',
+          selectionKey: getSelectionKey(file),
         };
 
         if (file.type.includes(FileType.VIDEO) || file.type.includes(FileType.CLIP)) {
@@ -146,6 +164,7 @@ export function useFilePostUpload(pageId?: string) {
               ...file,
               status: 'failed',
               errorText: resolveString('amity_social_toast_failed_to_upload'),
+              isRetryable: true,
             };
           }
           return file;
@@ -170,15 +189,23 @@ export function useFilePostUpload(pageId?: string) {
   };
 
   const handleFileChange = (file: File[], fileType: string, localFileLength?: number) => {
-    // localFile use for calculate remaining files
-    // file use for calculate incoming files
+    const existingKeys = new Set(
+      files.map((item) => item.selectionKey ?? getSelectionKey(item.file)),
+    );
+    const seenKeys = new Set<string>();
+    const uniqueFiles = file.filter((incoming) => {
+      const key = getSelectionKey(incoming);
+      if (existingKeys.has(key) || seenKeys.has(key)) return false;
+      seenKeys.add(key);
+      return true;
+    });
 
     const filesAmount =
       typeof localFileLength === 'number'
         ? files.length > 0
-          ? files?.length + file.length + localFileLength
-          : file?.length + localFileLength
-        : file.length + files.length;
+          ? files?.length + uniqueFiles.length + localFileLength
+          : uniqueFiles.length + localFileLength
+        : uniqueFiles.length + files.length;
 
     let contentText = '';
     switch (fileType) {
@@ -204,7 +231,7 @@ export function useFilePostUpload(pageId?: string) {
         );
         break;
     }
-    if (filesAmount && filesAmount > 10) {
+    if (filesAmount && filesAmount > MEDIA_ATTACHMENT_CAP) {
       info({
         pageId: pageId,
         type: 'info',
@@ -215,8 +242,8 @@ export function useFilePostUpload(pageId?: string) {
       return;
     }
 
-    if (file.length > 0) {
-      uploadFile(file);
+    if (uniqueFiles.length > 0) {
+      uploadFile(uniqueFiles);
     }
   };
 
@@ -287,6 +314,20 @@ export function useFilePostUpload(pageId?: string) {
     await uploadSingleFile(fileToRetry, fileToRetry.file.type);
     setProgress((prev) => ({ ...prev, [fileId]: undefined }));
   };
+
+  useEffect(() => {
+    if (!autoRetryOnReconnect) return;
+    if (!isOnline) {
+      hasBeenOfflineRef.current = true;
+      return;
+    }
+    if (!hasBeenOfflineRef.current) return;
+    hasBeenOfflineRef.current = false;
+
+    files
+      .filter((item) => item.status === 'failed' && item.isRetryable && !isAmityFile(item.file))
+      .forEach((item) => retryUpload(item.id));
+  }, [autoRetryOnReconnect, isOnline, files]);
 
   return {
     files,

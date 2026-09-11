@@ -29,6 +29,7 @@ export function CreateChatMenu() {
         hierarchy="secondary"
         size={32}
         aria-label={createAriaLabel}
+        data-testid="create-new-chat-button"
         onPress={() => {
           if (hasConversation) push({ type: ChatPageTypes.CreateConversationPage });
           else push({ type: ChatPageTypes.SelectGroupMemberPage });
@@ -49,6 +50,7 @@ export function CreateChatMenu() {
           size={32}
           aria-label={createAriaLabel}
           aria-expanded={isOpen}
+          data-testid="create-new-chat-button"
           onPress={openPopover}
         />
       )}
@@ -59,6 +61,7 @@ export function CreateChatMenu() {
             icon={<UserPlus />}
             label={directLabel}
             typography={TypographyVariant.Body}
+            data-testid="create-direct-chat-option"
             onPress={() => {
               closePopover();
               push({ type: ChatPageTypes.CreateConversationPage });
@@ -68,6 +71,7 @@ export function CreateChatMenu() {
             icon={<UserGroup />}
             label={groupLabel}
             typography={TypographyVariant.Body}
+            data-testid="create-group-chat-option"
             onPress={() => {
               closePopover();
               push({ type: ChatPageTypes.SelectGroupMemberPage });

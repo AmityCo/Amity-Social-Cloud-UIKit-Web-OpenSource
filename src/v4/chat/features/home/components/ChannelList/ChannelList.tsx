@@ -75,7 +75,7 @@ function EmptyChannelList() {
   const createNewChatLabel = useString('amity_chat_create_new_chat');
 
   return (
-    <div className={styles.channelList__empty}>
+    <div className={styles.channelList__empty} data-testid="chat-empty-state">
       <EmptyCommunity2 />
       <div className={styles.channelList__emptyContent}>
         <div className={styles.channelList__emptyText}>

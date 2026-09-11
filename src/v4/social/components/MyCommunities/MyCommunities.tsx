@@ -10,17 +10,17 @@ type MyCommunitiesProps = {
 
 export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
   const componentId = 'my_communities';
-  const { themeStyles } = useAmityComponent({
+  const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
   });
 
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member', sortBy: 'displayName' },
   });
 
   return (
-    <div style={themeStyles} className={styles.myCommunitiesList}>
+    <div style={themeStyles} className={styles.myCommunitiesList} data-testid={accessibilityId}>
       <CreateCommunityRowItem />
       <CommunitySearchResult
         pageId={pageId}

@@ -1,4 +1,4 @@
-export { ProductTagActionButton } from './ProductTagActionButton';
+export { ProductTagButton } from './ProductTagButton';
 export { ProductTagBadge } from './ProductTagBadge';
 export { ProductSelectionItemSkeleton } from './ProductSelectionItemSkeleton';
 export { ProductTagSelectionWrapper } from './ProductTagSelectionWrapper';

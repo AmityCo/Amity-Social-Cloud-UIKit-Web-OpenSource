@@ -37,6 +37,8 @@
   max-height: auto;
   min-height: auto;
   padding: 1rem;
+
+  --selected-media-inset: 1.5rem;
 }
 
 .editPost__formContent .editPost__titleInput {
@@ -346,18 +348,4 @@
   .editPost__attachmentDrawer {
     display: none;
   }
-}
-
-.editPost__productTagActionButton {
-  position: absolute;
-  bottom: 12.75rem;
-  right: 1.25rem;
-}
-
-.editPost__productTagActionButton[data-from-media='true'] {
-  bottom: 6.75rem;
-}
-
-.editPost__productTagActionButton__button {
-  box-shadow: var(--asc-box-shadow-04);
 }

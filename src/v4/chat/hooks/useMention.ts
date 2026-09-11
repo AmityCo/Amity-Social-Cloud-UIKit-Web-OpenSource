@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChannelRepository, CommunityRepository, UserRepository } from '@amityco/ts-sdk';
+import {
+  ChannelRepository,
+  CommunityRepository,
+  SearchUsersByEnum,
+  UserRepository,
+} from '@amityco/ts-sdk';
 import { extractMetadata, formatMentionees, isNonNullable } from '~/v4/helpers/utils';
 import { useCommunity } from './useCommunity';
 
@@ -63,7 +68,16 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
 
   const queryMentionees = useCallback<QueryMentioneesFnType>(
     async (query?: string) => {
-      let users: Amity.User[];
+      type SearchMembersResponse = Parameters<
+        Parameters<typeof CommunityRepository.Membership.searchMembers>[1]
+      >[0];
+      type GetMembersResponse = Parameters<
+        Parameters<typeof ChannelRepository.Membership.getMembers>[1]
+      >[0];
+      type SearchUsersResponse = Parameters<Parameters<typeof UserRepository.searchUsers>[1]>[0];
+      type SearchedUser = SearchUsersResponse['data'][number];
+
+      let users: SearchedUser[];
       let keyword: string | undefined = query || '';
       let unsub: (() => void) | undefined;
 
@@ -72,7 +86,7 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
       }
 
       if (isCommunityFeed && !community?.isPublic && targetId != null) {
-        users = await new Promise((resolve) => {
+        users = await new Promise<SearchedUser[]>((resolve) => {
           unsub?.();
           unsub = CommunityRepository.Membership.searchMembers(
             {
@@ -80,14 +94,15 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
               search: keyword,
               limit: 20,
             },
-            (response) => {
+            (response: SearchMembersResponse) => {
               if (response.loading) return;
-              resolve(response.data.map(({ user }) => user).filter(isNonNullable));
+              const members = response.data as { user?: SearchedUser }[];
+              resolve(members.map((member) => member.user).filter(isNonNullable) as SearchedUser[]);
             },
           );
         });
       } else if (isChannel) {
-        users = await new Promise((resolve) => {
+        users = await new Promise<SearchedUser[]>((resolve) => {
           unsub?.();
           unsub = ChannelRepository.Membership.getMembers(
             {
@@ -95,21 +110,23 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
               search: keyword,
               limit: 20,
             },
-            (response) => {
+            (response: GetMembersResponse) => {
               if (response.loading) return;
-              resolve(response.data.map(({ user }) => user).filter(isNonNullable));
+              const members = response.data as { user?: SearchedUser }[];
+              resolve(members.map((member) => member.user).filter(isNonNullable) as SearchedUser[]);
             },
           );
         });
       } else {
-        users = await new Promise((resolve) => {
+        users = await new Promise<SearchedUser[]>((resolve) => {
           unsub?.();
-          unsub = UserRepository.searchUserByDisplayName(
+          unsub = UserRepository.searchUsers(
             {
               displayName: keyword,
               limit: 20,
+              searchBy: [SearchUsersByEnum.DISPLAY_NAME],
             },
-            (response) => {
+            (response: SearchUsersResponse) => {
               if (response.loading) return;
               resolve(response.data);
             },

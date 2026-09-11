@@ -223,6 +223,7 @@ export const ContentReportReason = ({
     <div
       data-iserror={isError || isCommentDeleted || isMessageDeleted}
       className={clsx(styles.contentReportReason__container, className)}
+      data-testid="content-report-reason"
     >
       {isError || isCommentDeleted || isMessageDeleted ? (
         <FailedToShow className={styles.contentReportReason__failed} />
@@ -275,6 +276,7 @@ export const ContentReportReason = ({
                   placeholder={reportTextPlaceholder}
                   value={otherReasonText}
                   onChange={setOtherReasonText}
+                  inputTestId="report-reason-description-input"
                 />
               </div>
             ) : (

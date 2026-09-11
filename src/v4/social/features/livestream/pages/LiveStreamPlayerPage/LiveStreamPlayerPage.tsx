@@ -356,7 +356,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     room?.status === liveStreamStatus.recorded;
 
   const isTerminated =
-    room?.moderation?.terminateLabels && room?.moderation?.terminateLabels?.length > 0;
+    room?.status === 'terminated' ||
+    (!!room?.moderation?.terminateLabels && room.moderation.terminateLabels.length > 0);
 
   const showLivestreamChat =
     !!channel &&

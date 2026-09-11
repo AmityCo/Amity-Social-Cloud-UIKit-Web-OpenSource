@@ -18,6 +18,7 @@ export type TabItem = {
   content?: () => ReactNode;
   isDisabled?: boolean;
   'aria-label'?: string;
+  testId?: string;
 };
 
 export type TabsProps = {
@@ -61,13 +62,28 @@ export function Tabs({
                 {...common}
                 icon={tab.icon}
                 aria-label={tab['aria-label'] ?? ''}
+                data-testid={tab.testId}
               />
             );
           }
           if (variant === 'underlined') {
-            return <Tab.Underlined key={String(tab.value)} {...common} label={tab.label ?? ''} />;
+            return (
+              <Tab.Underlined
+                key={String(tab.value)}
+                {...common}
+                label={tab.label ?? ''}
+                data-testid={tab.testId}
+              />
+            );
           }
-          return <Tab.Pill key={String(tab.value)} {...common} label={tab.label ?? ''} />;
+          return (
+            <Tab.Pill
+              key={String(tab.value)}
+              {...common}
+              label={tab.label ?? ''}
+              data-testid={tab.testId}
+            />
+          );
         })}
       </AriaTabList>
       {tabs.map((tab) =>

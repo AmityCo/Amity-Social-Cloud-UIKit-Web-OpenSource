@@ -369,6 +369,15 @@
   background-color: var(--asc-color-black) !important;
 }
 
+.postContent__videoViewer {
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+
+.postContent__videoViewerOverlay {
+  background-color: var(--asc-color-black) !important;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -411,6 +420,10 @@
 
 @media (width >= 48em) {
   .postContent__imageViewerOverlay {
+    background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
+  }
+
+  .postContent__videoViewerOverlay {
     background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
   }
 

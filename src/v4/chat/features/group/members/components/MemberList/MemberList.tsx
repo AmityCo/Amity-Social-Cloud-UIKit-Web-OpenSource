@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChannelMembersCollection';
-import { useChannelObject, useChannelMyMembership } from '~/v4/chat/hooks/objects';
+import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { hasModeratorRole } from '~/v4/chat/utils/isModerator';
 import { EmptyState } from '~/v4/chat/features/shared/components';
 import { MemberItem } from '~/v4/chat/features/group/members/components/MemberItem';
@@ -43,9 +43,7 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
   const { banUser } = useChannelBanQuery();
   const { mute, unmute } = useChannelMemberMuteQuery();
   const { report, unreport, queryIsFlaggedByMe } = useUserReportQuery();
-  const { channel } = useChannelObject({ channelId });
-  const { membership } = useChannelMyMembership(channel);
-  const isViewerModerator = hasModeratorRole(membership?.roles);
+  const { canPromote, canMute, canBan, canRemove } = useChannelPermission(channelId);
 
   const muteLabel = useString('amity_chat_group_member_action_mute');
   const unmuteLabel = useString('amity_chat_group_member_action_unmute');
@@ -186,28 +184,28 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
                   icon: UserShield,
                   label: promoteLabel,
                   onPress: () => handlePromoteConfirm(member.user!),
-                  visible: isViewerModerator && !isMemberModerator,
+                  visible: canPromote && !isMemberModerator,
                 },
                 {
                   key: 'demote',
                   icon: UserShield,
                   label: demoteLabel,
                   onPress: () => handleDemoteConfirm(member.user!),
-                  visible: isViewerModerator && isMemberModerator,
+                  visible: canPromote && isMemberModerator,
                 },
                 {
                   key: 'mute',
                   icon: VolumeSlash,
                   label: muteLabel,
                   onPress: () => mute({ channelId, userId: member.user!.userId }),
-                  visible: isViewerModerator && !member.isMuted && !isMemberModerator,
+                  visible: canMute && !member.isMuted && !isMemberModerator,
                 },
                 {
                   key: 'unmute',
                   icon: Volume,
                   label: unmuteLabel,
                   onPress: () => unmute({ channelId, userId: member.user!.userId }),
-                  visible: isViewerModerator && !!member.isMuted && !isMemberModerator,
+                  visible: canMute && !!member.isMuted && !isMemberModerator,
                 },
                 {
                   key: 'report',
@@ -228,7 +226,7 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
                   icon: Ban,
                   label: banLabel,
                   onPress: () => handleBanConfirm(member.user!),
-                  visible: isViewerModerator,
+                  visible: canBan,
                 },
                 {
                   key: 'remove',
@@ -236,7 +234,7 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
                   label: removeLabel,
                   destructive: true,
                   onPress: () => handleRemoveConfirm(member.user!),
-                  visible: isViewerModerator,
+                  visible: canRemove,
                 },
               ];
 
@@ -250,7 +248,7 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
             isModerator={isMemberModerator}
             isCurrentUser={isCurrentUser}
             isMuted={!!member.isMuted}
-            isViewerModerator={isViewerModerator}
+            isViewerModerator={canMute}
             getActions={getActions}
           />
         );

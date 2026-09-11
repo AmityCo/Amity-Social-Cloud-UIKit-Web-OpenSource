@@ -87,6 +87,7 @@ export const ReactionListPanel = ({
                         role="button"
                         tabIndex={0}
                         aria-label={useString('amity_common_button_tap_to_remove_reaction')}
+                        data-testid="remove-reaction-button"
                         onClick={() => removeReaction(reaction.reactionName)}
                       >
                         <Typography.Caption className={styles.removeBtn}>

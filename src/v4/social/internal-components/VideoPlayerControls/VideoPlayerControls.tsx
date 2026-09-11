@@ -33,6 +33,8 @@ interface VideoPlayerControlsProps {
   productTags?: Amity.ProductTag[];
   postId?: string;
   onClickProductTagBadge?: () => void;
+  mutedOverride?: boolean;
+  onToggleMute?: () => void;
 }
 
 const formatTime = (seconds: number): string => {
@@ -49,9 +51,21 @@ const formatTime = (seconds: number): string => {
 };
 
 export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlayerControlsProps>(
-  ({ videoRef, pageId, productTags = [], postId, onClickProductTagBadge }, ref) => {
+  (
+    {
+      videoRef,
+      pageId,
+      productTags = [],
+      postId,
+      onClickProductTagBadge,
+      mutedOverride,
+      onToggleMute,
+    },
+    ref,
+  ) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
+    const displayMuted = onToggleMute ? !!mutedOverride : isMuted;
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isVisible, setIsVisible] = useState(true);
@@ -251,10 +265,10 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
           <div className={styles.videoPlayerControls__rightButtons}>
             <Button
               className={styles.videoPlayerControls__button}
-              onPress={toggleMute}
+              onPress={onToggleMute ?? toggleMute}
               variant="default"
             >
-              {isMuted ? (
+              {displayMuted ? (
                 <UnMuted
                   className={clsx(
                     styles.videoPlayerControls__icon,

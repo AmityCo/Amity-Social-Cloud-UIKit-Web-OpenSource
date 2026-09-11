@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isMobile } from '~/v4/social/utils/isMobile';
 import { FileItem } from './useFilePostUpload';
 import { isImageFile, isVideoFile } from '~/v4/utils/checkFileType';
@@ -74,22 +74,15 @@ export const useMediaAttachmentVisible = ({
     }
   }, [files, posts]);
 
-  // Update snap position based on visible menu items
+  const prevHasMediaRef = useRef(false);
+
   useEffect(() => {
-    // Count visible buttons (excluding camera which has different layout considerations)
-    const visibleCount = [isVisibleCamera, isVisibleImage, isVisibleVideo, isVisibleFile].filter(
-      Boolean,
-    ).length;
-    if (visibleCount === 4) {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_4);
-    } else if (visibleCount === 3) {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3);
-    } else if (visibleCount === 2) {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2);
-    } else if (visibleCount === 1) {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1);
+    const hasMedia = !!(files?.length || posts?.length);
+    if (hasMedia && !prevHasMediaRef.current) {
+      setSnap(HEIGHT_MEDIA_ATTACHMENT_MENU);
     }
-  }, [isVisibleCamera, isVisibleImage, isVisibleVideo, isVisibleFile]);
+    prevHasMediaRef.current = hasMedia;
+  }, [files, posts]);
 
   const showToastPosition = () => {
     //TODO : Change default to 4 when visible file post

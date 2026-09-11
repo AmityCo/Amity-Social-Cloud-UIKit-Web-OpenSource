@@ -8,13 +8,23 @@ export type LabelProps = BadgeBaseProps & {
 };
 
 export const Label = forwardRef<HTMLSpanElement, LabelProps>(function Label(
-  { label, shape = 'round', fill = 'filled', size = 24, border = false, preset, className },
+  {
+    label,
+    shape = 'round',
+    fill = 'filled',
+    size = 24,
+    border = false,
+    preset,
+    className,
+    'data-testid': testId,
+  },
   ref,
 ) {
   return (
     <span
       ref={ref}
       className={clsx(styles.badge, className)}
+      data-testid={testId}
       data-variant="label"
       data-shape={shape}
       data-fill={fill}

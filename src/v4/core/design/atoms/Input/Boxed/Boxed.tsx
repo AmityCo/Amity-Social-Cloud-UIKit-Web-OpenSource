@@ -24,9 +24,9 @@ export type BoxedProps = {
   isInvalid?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
-  onSubmit?: (value: string) => void;
   className?: string;
   'aria-label'?: string;
+  inputTestId?: string;
 };
 
 export const Boxed = forwardRef<HTMLDivElement, BoxedProps>(function Boxed(
@@ -44,8 +44,8 @@ export const Boxed = forwardRef<HTMLDivElement, BoxedProps>(function Boxed(
     isInvalid = false,
     onFocus,
     onBlur,
-    onSubmit,
     className,
+    inputTestId,
     ...props
   },
   ref,
@@ -72,15 +72,14 @@ export const Boxed = forwardRef<HTMLDivElement, BoxedProps>(function Boxed(
           className={styles.boxed__input}
           placeholder={placeholder}
           maxLength={maxLength}
+          data-testid={inputTestId}
         />
       ) : (
         <AriaInput
           className={styles.boxed__input}
           placeholder={placeholder}
           maxLength={maxLength}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') onSubmit?.(value ?? '');
-          }}
+          data-testid={inputTestId}
         />
       )}
       {trailingIcon ? <span className={styles.boxed__icon}>{trailingIcon}</span> : null}

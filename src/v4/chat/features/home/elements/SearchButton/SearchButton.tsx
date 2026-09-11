@@ -18,6 +18,7 @@ export function SearchButton() {
       hierarchy="secondary"
       size={32}
       aria-label={ariaLabel}
+      data-testid="chat-search-button"
       onPress={handlePress}
     />
   );

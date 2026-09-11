@@ -12,6 +12,7 @@ type CommunityJoinedButtonProps = {
   onClick?: () => void;
   className?: string;
   defaultClassName?: string;
+  testId?: string;
 };
 
 export const CommunityJoinedButton = ({
@@ -20,6 +21,7 @@ export const CommunityJoinedButton = ({
   pageId = '*',
   defaultClassName,
   componentId = '*',
+  testId,
 }: CommunityJoinedButtonProps) => {
   const elementId = 'community_joined_button';
   const {
@@ -46,7 +48,7 @@ export const CommunityJoinedButton = ({
       variant="outlined"
       style={themeStyles}
       className={className}
-      data-testid={accessibilityId}
+      data-testid={testId ?? accessibilityId}
       icon={({ className }) => (
         <IconComponent
           configIconName={config.icon}

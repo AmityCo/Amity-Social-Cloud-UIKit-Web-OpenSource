@@ -8,7 +8,7 @@ export const useCommunity = ({
   communityId: string | null | undefined;
   shouldCall?: boolean;
 }) => {
-  const { item, ...rest } = useLiveObject({
+  const { item, ...rest } = useLiveObject<string, Amity.Community, unknown>({
     fetcher: CommunityRepository.getCommunity,
     params: communityId,
     shouldCall: !!communityId && shouldCall,

@@ -62,14 +62,30 @@
   flex-shrink: 0;
 }
 
+/* Name + brand badge sit together; the wrapper takes the free space so the badge
+   stays next to the name instead of being pushed toward the action button. */
+.watchingUserItem__displayNameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+  padding-right: 1rem;
+}
+
 .watchingUserItem__displayName {
   color: var(--asc-color-white);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
-  padding-right: 1rem;
+}
+
+.watchingUserItem__brandBadge {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
 }
 
 .watchingUserItem__inviteButton {

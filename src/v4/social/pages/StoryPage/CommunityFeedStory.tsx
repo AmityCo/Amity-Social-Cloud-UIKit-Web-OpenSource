@@ -386,7 +386,7 @@ export const CommunityFeedStory = ({
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
-          <div className={clsx(styles.viewStoryOverlay)} />
+          <div className={clsx(styles.viewStoryOverlay)} data-testid={`${pageId}/story_overlay`} />
           <Stories
             key={stories?.length}
             progressWrapperStyles={{

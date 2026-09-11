@@ -310,6 +310,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                       }
                     }}
                     className={styles.userProfilePage__feedTypeButton}
+                    data-testid={`${pageId}/feed_filter`}
                   >
                     <Typography.CaptionBold>
                       {FEED_TYPE_OPTIONS.find((option) => option.value === feedSource)?.label}

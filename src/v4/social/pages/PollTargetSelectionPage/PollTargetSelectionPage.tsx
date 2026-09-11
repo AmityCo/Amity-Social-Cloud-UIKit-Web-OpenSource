@@ -32,7 +32,7 @@ export function PollTargetSelectionPage() {
   });
   const { onBack } = useNavigation();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member', sortBy: 'displayName' },
   });
 
   const { currentUserId } = useSDK();

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
 import styles from './PendingPostContent.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -16,8 +16,9 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { TextContent } from '~/v4/social/components/PostContent/TextContent';
 import { ChildrenPostContent } from '~/v4/social/components/PostContent';
+import type { PostMediaControls } from '~/v4/social/features/posts/elements/PostMediaElement';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
-import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
+import { VideoViewer } from '~/v4/social/internal-components/VideoViewer';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import dayjs from 'dayjs';
 import { Popover } from '~/v4/core/components/AriaPopover';
@@ -66,8 +67,8 @@ export const PendingPostContent = ({
 
   const { productCatalogueSettings } = useProductCatalogueSettings();
 
-  const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
-  const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
+  const mediaControlsRef = useRef<PostMediaControls | null>(null);
+  const viewerIndexRef = useRef(0);
 
   const post = useMemo(() => {
     if (initialPost != null && postData != null) {
@@ -142,30 +143,56 @@ export const PendingPostContent = ({
 
   const openImageViewer = (imageIndex: number) => {
     if (!post) return;
+    viewerIndexRef.current = imageIndex;
     openPopup({
       id: 'image-viewer',
       disabledAnimation: true,
       isDismissable: isDesktop,
       className: styles.pendingPostContent__imageViewer,
       overlayClassName: styles.pendingPostContent__imageViewerOverlay,
+      onClose: () => closeImageViewer(),
       children: (
-        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={imageIndex} />
+        <ImageViewer
+          post={post}
+          onClose={closeImageViewer}
+          initialImageIndex={imageIndex}
+          indexRef={viewerIndexRef}
+        />
       ),
     });
   };
 
   const closeImageViewer = () => {
     closePopup('image-viewer');
+    mediaControlsRef.current?.slideTo(viewerIndexRef.current);
   };
 
   const openVideoViewer = (imageIndex: number) => {
-    setIsVideoViewerOpen(true);
-    setClickedVideoIndex(imageIndex);
+    if (!post) return;
+    viewerIndexRef.current = imageIndex;
+    openPopup({
+      id: 'video-viewer',
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      className: styles.pendingPostContent__videoViewer,
+      overlayClassName: styles.pendingPostContent__videoViewerOverlay,
+      onClose: () => closeVideoViewer(),
+      children: (
+        <VideoViewer
+          post={post}
+          pageId={pageId}
+          sourceId={post.parentPostId ?? post.postId}
+          onClose={closeVideoViewer}
+          initialIndex={imageIndex}
+          indexRef={viewerIndexRef}
+        />
+      ),
+    });
   };
 
   const closeVideoViewer = () => {
-    setIsVideoViewerOpen(false);
-    setClickedVideoIndex(null);
+    closePopup('video-viewer');
+    mediaControlsRef.current?.slideTo(viewerIndexRef.current);
   };
 
   if (!post) return null;
@@ -285,6 +312,7 @@ export const PendingPostContent = ({
           ) : (
             post.children.length > 0 && (
               <ChildrenPostContent
+                mediaControlsRef={mediaControlsRef}
                 pageId={pageId}
                 componentId={componentId}
                 post={post}
@@ -331,13 +359,6 @@ export const PendingPostContent = ({
             />
           </div>
         )}
-        {isVideoViewerOpen && post && typeof clickedVideoIndex === 'number' ? (
-          <VideoViewer
-            post={post}
-            onClose={closeVideoViewer}
-            initialVideoIndex={clickedVideoIndex}
-          />
-        ) : null}
       </div>
     </>
   );

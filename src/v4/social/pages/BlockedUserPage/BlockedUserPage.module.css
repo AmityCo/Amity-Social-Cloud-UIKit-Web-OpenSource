@@ -15,8 +15,7 @@
 .blockedUserPage__topBar {
   display: flex;
   align-items: center;
-  height: 3.625rem;
-  padding-inline: 0.75rem 1rem;
+  padding: 1.0625rem 1rem 1.0625rem 0.75rem;
   position: absolute;
   left: 0;
   right: 0;
@@ -71,6 +70,7 @@
   }
 
   .blockedUserPage__topBar {
+    padding: 1.1875rem 1rem 1.1875rem 0.75rem;
     background-color: var(--asc-color-background-default);
     position: static;
     border: 1px solid var(--asc-color-base-shade4);

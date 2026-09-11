@@ -43,7 +43,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
           <EventListSkeleton />
         </Skeleton>
       ) : (
-        <div className={styles.explore__recommended}>
+        <div className={styles.explore__recommended} data-testid="recommended-events-section">
           <Typography.TitleBold className={styles.explore__recommendedTitle}>
             {useString('amity_social_label_recommended_for_you')}
           </Typography.TitleBold>
@@ -56,6 +56,7 @@ export function ExploreEvent({ pageId = '*' }: ExploreEventProps) {
             <Button
               variant="outlined"
               color="secondary"
+              data-testid="view-all-button"
               onPress={() =>
                 AmityExploreEventFeedComponentBehavior?.goToUpcomingEventsPage?.({
                   fromExplore: true,

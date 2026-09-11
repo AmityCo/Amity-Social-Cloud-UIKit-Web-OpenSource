@@ -40,6 +40,8 @@ export function Communities({ pageId }: CommunitiesProps) {
             <Button
               icon={<Plus />}
               variant="default"
+              aria-label="Create community"
+              data-testid="create-community-button"
               iconClassName={styles.communities__header__icon}
               onPress={() => {
                 goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE });
@@ -64,6 +66,7 @@ export function Communities({ pageId }: CommunitiesProps) {
                   {
                     value: CommunitiesTab.Explore,
                     label: exploreLabel,
+                    accessibilityId: 'explore-communities-tab',
                     content: () => <Explore pageId={pageId} />,
                   },
                 ]
@@ -71,6 +74,7 @@ export function Communities({ pageId }: CommunitiesProps) {
             {
               value: CommunitiesTab.MyCommunities,
               label: myCommunitiesLabel,
+              accessibilityId: 'my-communities-tab',
               content: () => <MyCommunities pageId={pageId} />,
             },
           ]}

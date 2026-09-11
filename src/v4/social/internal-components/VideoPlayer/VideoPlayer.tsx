@@ -368,6 +368,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   return (
     <div ref={containerRef} className={clsx(styles.videoPlayerWrapper, className)}>
       <video
+        data-testid="video-player"
         controlsList="nodownload"
         autoPlay={autoPlay}
         loop={loop}
@@ -472,6 +473,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             productTags={productTags}
             postId={postId}
             onClickProductTagBadge={onClickProductTagBadge}
+            mutedOverride={internalMuted}
+            onToggleMute={handleClickMute}
           />
         </>
       )}

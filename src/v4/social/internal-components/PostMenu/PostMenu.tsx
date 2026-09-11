@@ -177,7 +177,7 @@ export const PostMenu = ({
       return PostRepository.softDeletePost(post.postId);
     },
     onSuccess: () => {
-      success({ content: postDeletedText });
+      success({ content: postDeletedText, testId: 'alert-deleted-post' });
       onPostDeleted?.(post);
     },
     onError: () => {

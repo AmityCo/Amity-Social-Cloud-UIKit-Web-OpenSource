@@ -13,6 +13,7 @@ export interface NotificationTrayButtonProps {
   defaultClassName?: string;
   imgClassName?: string;
   onPress: ButtonProps['onPress'];
+  redDotTestId?: string;
 }
 
 export function NotificationTrayButton({
@@ -21,6 +22,7 @@ export function NotificationTrayButton({
   defaultClassName,
   imgClassName,
   onPress,
+  redDotTestId,
 }: NotificationTrayButtonProps) {
   const elementId = 'notification_tray_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -43,7 +45,10 @@ export function NotificationTrayButton({
     >
       {!isLoading && !notificationTraySeen?.isSeen && (
         <div className={styles.notificationTrayButton__redDotWrapper}>
-          <div className={styles.notificationTrayButton__redDot} />{' '}
+          <div
+            className={styles.notificationTrayButton__redDot}
+            data-testid={redDotTestId ?? `${accessibilityId}/red_dot`}
+          />{' '}
         </div>
       )}
       <IconComponent

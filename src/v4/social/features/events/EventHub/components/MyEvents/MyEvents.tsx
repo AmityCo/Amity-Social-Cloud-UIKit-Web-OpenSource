@@ -52,7 +52,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
           <EventListSkeleton />
         </Skeleton>
       ) : (
-        <div className={styles.myEvents__section}>
+        <div className={styles.myEvents__section} data-testid="upcoming-events-section">
           <Typography.TitleBold className={styles.myEvents__sectionTitle}>
             {useString('amity_social_status_event_feed_upcoming')}
           </Typography.TitleBold>
@@ -65,6 +65,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
             <Button
               variant="outlined"
               color="secondary"
+              data-testid="view-all-button"
               onPress={() =>
                 AmityMyEventFeedComponentBehavior?.goToUpcomingEventsPage?.({ fromExplore: false })
               }
@@ -80,7 +81,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
           <EventListSkeleton />
         </Skeleton>
       ) : (
-        <div className={styles.myEvents__section}>
+        <div className={styles.myEvents__section} data-testid="past-events-section">
           <Typography.TitleBold className={styles.myEvents__sectionTitle}>
             {useString('amity_social_button_event_feed_past')}
           </Typography.TitleBold>
@@ -93,6 +94,7 @@ export function MyEvents({ pageId = '*' }: MyEventsProps) {
             <Button
               variant="outlined"
               color="secondary"
+              data-testid="view-all-button"
               onPress={AmityMyEventFeedComponentBehavior?.goToPastEventsPage}
             >
               {useString('amity_social_button_view_all')}

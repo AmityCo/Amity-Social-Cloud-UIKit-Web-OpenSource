@@ -8,6 +8,7 @@ type JoinButtonProps = ButtonProps & {
   componentId?: string;
   elementId?: string;
   textId?: string;
+  testId?: string;
 };
 
 export const JoinButton = ({
@@ -15,6 +16,7 @@ export const JoinButton = ({
   componentId = '*',
   elementId: $elementId,
   textId = 'amity_social_accept_button',
+  testId,
   ...props
 }: JoinButtonProps) => {
   const elementId = $elementId ? $elementId : 'join_button';
@@ -33,7 +35,7 @@ export const JoinButton = ({
       variant="fill"
       color="primary"
       style={themeStyles}
-      data-testid={accessibilityId}
+      data-testid={testId ?? accessibilityId}
     >
       {resolveString(textId) || config.text}
     </Button>

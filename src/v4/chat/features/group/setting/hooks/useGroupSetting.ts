@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react';
 import { useChannelObject, useChannelMyMembership } from '~/v4/chat/hooks/objects';
+import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { useChannelPushNotificationQuery, useLeaveChannelQuery } from '~/v4/chat/hooks/queries';
 import { hasModeratorRole } from '~/v4/chat/utils/isModerator';
 import { getNotificationModeLabelKey } from '~/v4/chat/utils/notificationModeLabel';
@@ -27,7 +28,8 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
   const { success } = useNotifications('chat');
   const { leaveChannel } = useLeaveChannelQuery();
 
-  const isModerator = hasModeratorRole(membership?.roles);
+  const isRoleModerator = hasModeratorRole(membership?.roles);
+  const { canEditChannel, canBan } = useChannelPermission(channelId);
   const notificationLabel = useString(getNotificationModeLabelKey(channel?.notificationMode));
   const personalNotificationLabel = useString(getPersonalNotificationLabelKey(personalIsEnabled));
 
@@ -96,7 +98,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
   function handleLeaveGroup() {
     if (!channelId) return;
     const moderatorCount = channel?.moderatorMemberCount ?? 0;
-    const isLastModerator = isModerator && moderatorCount <= 1;
+    const isLastModerator = isRoleModerator && moderatorCount <= 1;
 
     if (isLastModerator) {
       confirm({
@@ -137,7 +139,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
       label: groupProfileLabel,
       onPress: handleOpenGroupProfile,
       ariaLabel: groupProfileLabel,
-      visible: isModerator,
+      visible: canEditChannel,
     },
     {
       key: 'group-notifications',
@@ -154,7 +156,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
       label: memberPermissionsLabel,
       onPress: handleOpenGroupMemberPermissions,
       ariaLabel: memberPermissionsLabel,
-      visible: isModerator,
+      visible: canEditChannel,
     },
     {
       key: 'all-members',
@@ -170,7 +172,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
       label: bannedUsersLabel,
       onPress: handleOpenBannedMembers,
       ariaLabel: bannedUsersLabel,
-      visible: isModerator,
+      visible: canBan,
     },
   ];
 

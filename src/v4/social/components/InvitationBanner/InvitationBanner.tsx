@@ -140,7 +140,12 @@ export function InvitationBanner({
         </Typography.BodyBold>
       </div>
       <div className={styles.invitationBanner__actions}>
-        <JoinButton pageId={pageId} componentId={componentId} onPress={onJoinClick} />
+        <JoinButton
+          pageId={pageId}
+          componentId={componentId}
+          onPress={onJoinClick}
+          testId="community-invite-accept-button"
+        />
         <RejectButton pageId={pageId} componentId={componentId} onPress={onRejectClick} />
       </div>
     </div>

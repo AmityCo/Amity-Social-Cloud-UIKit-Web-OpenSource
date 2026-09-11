@@ -18,6 +18,7 @@ export const Icon = forwardRef<HTMLSpanElement, IconProps>(function Icon(
     border = false,
     preset,
     className,
+    'data-testid': testId,
   },
   ref,
 ) {
@@ -25,6 +26,7 @@ export const Icon = forwardRef<HTMLSpanElement, IconProps>(function Icon(
     <span
       ref={ref}
       className={clsx(styles.badge, className)}
+      data-testid={testId}
       data-variant="icon"
       data-shape={shape}
       data-fill={fill}

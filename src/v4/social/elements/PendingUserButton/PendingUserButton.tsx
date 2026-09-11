@@ -30,7 +30,7 @@ export const PendingUserButton: React.FC<PendingUserButtonProps> = ({
 
   return (
     <Button data-testid={accessibilityId} className={styles.pendingUserButton} onPress={onClick}>
-      <div className={styles.pendingUserButton__inner}>
+      <div className={styles.pendingUserButton__inner} data-testid="user-profile-pending-button">
         <IconComponent
           defaultIcon={() => <PendingUser className={styles.pendingUserButton__icon} />}
           configIconName={config.image}
@@ -38,7 +38,10 @@ export const PendingUserButton: React.FC<PendingUserButtonProps> = ({
           imgIcon={() => <img src={config.image} alt={uiReference} />}
         />
         {resolveText('amity_social_button_cancel_request') && (
-          <Typography.BodyBold className={styles.pendingUserButton__text}>
+          <Typography.BodyBold
+            className={styles.pendingUserButton__text}
+            data-testid="user-profile-cancel-request-button"
+          >
             {resolveText('amity_social_button_cancel_request')}
           </Typography.BodyBold>
         )}

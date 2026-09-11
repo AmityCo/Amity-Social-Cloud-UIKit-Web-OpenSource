@@ -40,9 +40,13 @@ export function EventDescription({ event }: EventDescriptionProps) {
     event.userId === currentUserId;
 
   return (
-    <div className={styles.eventDescription}>
+    <div className={styles.eventDescription} data-testid="event-description">
       <div className={styles.eventDescription__community}>
-        <Typography.CaptionBold as="span" className={styles.eventDescription__status}>
+        <Typography.CaptionBold
+          as="span"
+          className={styles.eventDescription__status}
+          data-testid="event-status"
+        >
           {statusLabel}
         </Typography.CaptionBold>
         <Typography.CaptionBold as="span" className={styles.eventDescription__status}>
@@ -58,7 +62,11 @@ export function EventDescription({ event }: EventDescriptionProps) {
             })
           }
         >
-          <Typography.BodyBold as="span" className={styles.eventDescription__name}>
+          <Typography.BodyBold
+            as="span"
+            className={styles.eventDescription__name}
+            data-testid="event-community-name"
+          >
             <TruncateMarkup lines={1}>
               <span>{event.targetCommunity?.displayName}</span>
             </TruncateMarkup>
@@ -66,13 +74,13 @@ export function EventDescription({ event }: EventDescriptionProps) {
         </Button>
         {event.targetCommunity?.isOfficial && <CommunityOfficialBadge />}
       </div>
-      <Typography.Headline className={styles.eventDescription__title}>
+      <Typography.Headline className={styles.eventDescription__title} data-testid="event-title">
         <TruncateMarkup lines={2}>
           <span>{event.title}</span>
         </TruncateMarkup>
       </Typography.Headline>
       <div className={styles.eventDescription__details}>
-        <div className={styles.eventDescription__row}>
+        <div className={styles.eventDescription__row} data-testid="event-date-time-row">
           <div className={styles.eventDescription__dateIconContainer}>
             <div className={styles.eventDescription__dateIconMonth}>
               {dayjs(event.startTime).format('MMM')}
@@ -85,7 +93,10 @@ export function EventDescription({ event }: EventDescriptionProps) {
             <Typography.Caption className={styles.eventDescription__subTitle}>
               {startsLabel}
             </Typography.Caption>
-            <Typography.BodyBold className={styles.eventDescription__name}>
+            <Typography.BodyBold
+              className={styles.eventDescription__name}
+              data-testid="event-duration"
+            >
               {formatEventDuration(event.startTime, event.endTime)}
             </Typography.BodyBold>
           </div>
@@ -102,7 +113,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
             <Typography.Caption className={styles.eventDescription__subTitle}>
               {eventTypeLabel}
             </Typography.Caption>
-            <Typography.BodyBold className={styles.eventDescription__name}>
+            <Typography.BodyBold className={styles.eventDescription__name} data-testid="event-type">
               {resolveString(EVENT_TYPE[event.type])}
             </Typography.BodyBold>
           </div>
@@ -117,6 +128,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
             }
             variant="text"
             className={styles.eventDescription__attendeeButton}
+            data-testid="event-attendees-section"
           >
             <div className={styles.eventDescription__row}>
               <div className={styles.eventDescription__iconContainer}>
@@ -126,7 +138,10 @@ export function EventDescription({ event }: EventDescriptionProps) {
                 <Typography.Caption className={styles.eventDescription__subTitle}>
                   {attendeesLabel}
                 </Typography.Caption>
-                <Typography.BodyBold className={styles.eventDescription__name}>
+                <Typography.BodyBold
+                  className={styles.eventDescription__name}
+                  data-testid="event-attendees-count"
+                >
                   {millify(event.rsvpCount)}
                 </Typography.BodyBold>
               </div>
@@ -138,6 +153,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
           variant="default"
           aria-label="Click to go host profile"
           className={styles.eventDescription__row}
+          data-testid="event-hosted-by"
           onPress={() => {
             AmityEventDetailPageBehavior?.goToUserProfilePage?.({ userId: event.userId });
           }}
@@ -154,7 +170,10 @@ export function EventDescription({ event }: EventDescriptionProps) {
               {hostedByLabel}
             </Typography.Caption>
             <div className={styles.eventDescription__hostInfo}>
-              <Typography.BodyBold className={styles.eventDescription__name}>
+              <Typography.BodyBold
+                className={styles.eventDescription__name}
+                data-testid="event-creator-name"
+              >
                 <TruncateMarkup lines={1}>
                   <span>{event?.creator?.displayName || event?.creator?.userPublicId}</span>
                 </TruncateMarkup>

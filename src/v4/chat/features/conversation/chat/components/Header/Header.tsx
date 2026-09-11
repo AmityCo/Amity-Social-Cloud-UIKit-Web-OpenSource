@@ -59,6 +59,7 @@ export function Header({ userId, userDisplayName, onBack, actions }: HeaderProps
             size={32}
             onPress={onBack}
             aria-label="Back"
+            data-testid="chat-room-back-button"
           />
         }
         leading={leading}

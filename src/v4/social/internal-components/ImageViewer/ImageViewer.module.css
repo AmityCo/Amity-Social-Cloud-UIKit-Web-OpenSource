@@ -8,6 +8,24 @@
   justify-content: center;
 }
 
+.imageViewer__swiper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.imageViewer__swiper :global(.swiper-wrapper) {
+  display: flex;
+  align-items: center;
+}
+
+.imageViewer__slide {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .imageViewer__fullImage {
   max-width: 100%;
 

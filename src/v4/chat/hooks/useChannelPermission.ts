@@ -1,18 +1,28 @@
 import { useMemo } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { Permissions } from '~/v4/social/constants/permissions';
 
 export const useChannelPermission = (subChannelId?: Amity.SubChannel['subChannelId']) => {
   const { client } = useSDK();
 
-  const isModerator = useMemo(() => {
-    if (!subChannelId) return false;
-    const currentUser = client?.hasPermission('MUTE_CHANNEL').currentUser() || false;
-    const currentUserInChannel =
-      client?.hasPermission('MUTE_CHANNEL').channel(subChannelId) || false;
-    return currentUser || currentUserInChannel;
-  }, [subChannelId]);
+  return useMemo(() => {
+    const check = (perm: string) => {
+      if (!client || !subChannelId) return false;
+      return (
+        client.hasPermission(perm).currentUser() ||
+        client.hasPermission(perm).channel(subChannelId) ||
+        false
+      );
+    };
 
-  return {
-    isModerator,
-  };
+    return {
+      isModerator: check(Permissions.MuteChannelPermission),
+      canEditChannel: check(Permissions.EditChannelPermission),
+      canAddMember: check(Permissions.AddChannelUserPermission),
+      canPromote: check(Permissions.EditChannelUserPermission),
+      canRemove: check(Permissions.RemoveChannelUserPermission),
+      canMute: check(Permissions.MuteUserInsideChannelPermission),
+      canBan: check(Permissions.BanUserFromChannelPermission),
+    };
+  }, [client, subChannelId]);
 };

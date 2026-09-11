@@ -25,6 +25,7 @@ export function TopBar({ title, leadingType = 'back', onLeading, trailing }: Top
           size={32}
           onPress={onLeading}
           aria-label={isBack ? 'Back' : 'Close'}
+          data-testid={isBack ? 'top-bar-back-button' : 'top-bar-close-button'}
         />
       </div>
       <Typography.TitleBold className={styles.topBar__title}>{title}</Typography.TitleBold>

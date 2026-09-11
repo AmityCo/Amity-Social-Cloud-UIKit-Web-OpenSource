@@ -1,4 +1,4 @@
-import { UserRepository } from '@amityco/ts-sdk';
+import { SearchUsersByEnum, UserRepository } from '@amityco/ts-sdk';
 import { useEffect, useRef, useState } from 'react';
 
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
@@ -38,11 +38,12 @@ export const useUserQueryByDisplayName = ({
       return;
     }
 
-    const unSubFn = UserRepository.searchUserByDisplayName(
+    const unSubFn = UserRepository.searchUsers(
       {
         displayName,
         limit,
         matchType,
+        searchBy: [SearchUsersByEnum.DISPLAY_NAME],
       },
       (response) => {
         setHasMore(response.hasNextPage || false);
