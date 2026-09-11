@@ -99,8 +99,9 @@ export function VideoViewer({
       .filter((child) => child.dataType === 'video' || child.dataType === 'clip')
       .map((child) => ({
         fileId: getPostVideoFileId(child as Amity.Post<'video' | 'clip'>),
-        thumbnailFileId: (child.data as Amity.ContentDataVideo | Amity.ContentDataClip)
-          ?.thumbnailFileId,
+        thumbnailFileId:
+          (child.data as Amity.ContentDataVideo | Amity.ContentDataClip)?.thumbnailFileId ??
+          undefined,
         productTags: child.productTags,
       }));
   }, [videosProp, childPosts]);

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.23.0 (2026-09-11)
+
+
+### Bug Fixes
+
+* PDT-0000 - normalize thumbnailFileId null to undefined for ts-sdk 7.27.0 ([a12b124](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/a12b12477080e76693b4244577634272c77e369d))
+
 ## 4.22.0 (2026-08-28)
 
 ## 4.21.0 (2026-08-14)

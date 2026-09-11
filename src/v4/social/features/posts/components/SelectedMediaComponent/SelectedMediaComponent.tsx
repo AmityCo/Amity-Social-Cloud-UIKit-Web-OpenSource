@@ -120,7 +120,7 @@ function toViewerVideo(frame: ComposerFrame): VideoViewerItem {
     const videoFile = frame.post.getVideoInfo() as Amity.File<'video'> | undefined;
     return {
       fileId: videoFile?.fileId,
-      thumbnailFileId: (frame.post.data as Amity.ContentDataVideo)?.thumbnailFileId,
+      thumbnailFileId: (frame.post.data as Amity.ContentDataVideo)?.thumbnailFileId ?? undefined,
       productTags: frame.post.productTags,
     };
   }
