@@ -13,14 +13,16 @@ import { useMessageObject } from '~/v4/chat/hooks/objects';
 import { useString } from '~/v4/core/localization';
 import { getReplyHeader } from '~/v4/chat/utils/getReplyHeader';
 import { getReplyThumbnailSize } from '~/v4/chat/utils/getReplyThumbnailSize';
+import type { MentionMetadata } from '~/v4/chat/types';
 import styles from './MessageReplyQuote.module.css';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type MessageReplyQuoteProps = {
   parentId: string;
   child: Amity.Message;
   isUser: boolean;
   isGroupChat: boolean;
-  onOpenSeeMore: (text: string, title?: string) => void;
+  onOpenSeeMore: (payload: SeeMorePayload) => void;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
 };
@@ -69,7 +71,7 @@ export function MessageReplyQuote({
 
 type ParentBodyProps = {
   parent: Amity.Message;
-  onOpenSeeMore: (text: string, title?: string) => void;
+  onOpenSeeMore: (payload: SeeMorePayload) => void;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
 };
@@ -109,23 +111,30 @@ function DeletedQuote() {
 
 type TextQuoteProps = {
   parent: Amity.Message;
-  onOpenSeeMore: (text: string, title?: string) => void;
+  onOpenSeeMore: (payload: SeeMorePayload) => void;
 };
 
 function TextQuote({ parent, onOpenSeeMore }: TextQuoteProps) {
   const text = ((parent.data as { text?: string } | undefined)?.text ?? '').toString();
   const repliedMessageTitle = useString('amity_chat_message_replied_message');
+  const openSeeMore = () =>
+    onOpenSeeMore({
+      text,
+      title: repliedMessageTitle,
+      metadata: parent.metadata as MentionMetadata | undefined,
+      mentionees: parent.mentionees,
+    });
   return (
     <div
       role="button"
       tabIndex={0}
       aria-label={repliedMessageTitle}
       className={styles.replyQuote__quote}
-      onClick={() => onOpenSeeMore(text, repliedMessageTitle)}
+      onClick={openSeeMore}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onOpenSeeMore(text, repliedMessageTitle);
+          openSeeMore();
         }
       }}
     >

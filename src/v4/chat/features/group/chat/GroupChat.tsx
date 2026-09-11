@@ -131,9 +131,7 @@ export function GroupChat(props: GroupChatPageProps) {
 
       {imageViewerProps ? <ImageViewer {...imageViewerProps} /> : null}
       {videoPlayerProps ? <VideoPlayer {...videoPlayerProps} /> : null}
-      {seeMore ? (
-        <MessageFullTextScreen text={seeMore.text} title={seeMore.title} onClose={closeSeeMore} />
-      ) : null}
+      {seeMore ? <MessageFullTextScreen {...seeMore} onClose={closeSeeMore} /> : null}
 
       {bubbleMenu && !imageViewerProps && !videoPlayerProps ? (
         <MessageActionsPopover

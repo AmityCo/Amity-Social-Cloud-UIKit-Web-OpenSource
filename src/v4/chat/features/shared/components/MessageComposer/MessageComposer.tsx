@@ -13,12 +13,13 @@ import { MediaSection } from './components/MediaSection/MediaSection';
 import { MessageReplyBand } from '~/v4/chat/features/shared/components/MessageReplyBand';
 import type { useMessageComposer } from '~/v4/chat/features/shared/hooks/useMessageComposer';
 import styles from './MessageComposer.module.css';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type MessageComposer = ReturnType<typeof useMessageComposer>;
 
 type MessageComposerProps = {
   composer: MessageComposer;
-  onOpenSeeMore: (text: string, title?: string) => void;
+  onOpenSeeMore: (payload: SeeMorePayload) => void;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
 };

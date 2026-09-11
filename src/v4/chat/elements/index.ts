@@ -4,6 +4,7 @@ export * from './ConversationChatAvatar';
 export * from './GroupNameField';
 export * from './TopBar';
 export * from './MediaUploadOverlay';
+export * from './HighlightText';
 export * from './ReceiverMessageBubble';
 export * from './SenderMessageBubble';
 export * from './SettingMenu';

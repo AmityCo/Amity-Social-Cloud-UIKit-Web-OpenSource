@@ -1,17 +1,22 @@
 import { useEffect } from 'react';
-import Linkify from 'linkify-react';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { Button } from '~/v4/core/design/atoms/Button';
 import { ChevronLeft } from '~/v4/core/design/icons/ChevronLeft';
+import { HighlightText } from '~/v4/chat/elements/HighlightText';
+import type { SeeMorePayload } from '~/v4/chat/types';
 import styles from './MessageFullTextScreen.module.css';
 
-type MessageFullTextScreenProps = {
-  text: string;
-  title?: string;
+type MessageFullTextScreenProps = SeeMorePayload & {
   onClose: () => void;
 };
 
-export function MessageFullTextScreen({ text, title, onClose }: MessageFullTextScreenProps) {
+export function MessageFullTextScreen({
+  text,
+  title,
+  metadata,
+  mentionees,
+  onClose,
+}: MessageFullTextScreenProps) {
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -46,7 +51,7 @@ export function MessageFullTextScreen({ text, title, onClose }: MessageFullTextS
       </div>
       <div className={styles.fullTextScreen__body}>
         <p className={styles.fullTextScreen__text}>
-          <Linkify options={{ target: '_blank', rel: 'noopener noreferrer' }}>{text}</Linkify>
+          <HighlightText text={text} metadata={metadata} mentionees={mentionees} />
         </p>
       </div>
     </div>

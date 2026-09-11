@@ -1,5 +1,9 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { Button as AriaButton } from 'react-aria-components';
+import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components/Typography/Typography';
+import { ImageViewer } from '~/v4/chat/features/shared/components/ImageViewer';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { Button } from '~/v4/core/design/atoms/Button';
 import { useString } from '~/v4/core/localization';
 import { Exclamation } from '~/v4/core/design/icons/Exclamation';
@@ -10,13 +14,14 @@ import { MessageReplyQuote } from '~/v4/chat/features/shared/components/MessageR
 import { MessageReactionBadge } from '~/v4/chat/features/shared/components/MessageReactionBadge';
 import styles from './MessageRow.module.css';
 import { Avatar } from '~/v4/chat/elements';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type MessageRowProps = {
   message: Amity.Message;
   isUser: boolean;
   bubble: ReactNode;
   onOpenFailedSheet: (message: Amity.Message) => void;
-  onOpenSeeMore: (text: string, title?: string) => void;
+  onOpenSeeMore: (payload: SeeMorePayload) => void;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
   onOpenReactorList: (message: Amity.Message) => void;
@@ -38,7 +43,14 @@ export function MessageRow({
   isGroupChat = false,
   isModerator = false,
 }: MessageRowProps) {
+  const { AmityMessageBubbleBehavior } = usePageBehavior();
+  const [isAvatarViewerOpen, setIsAvatarViewerOpen] = useState(false);
   const sendingLabel = useString('amity_chat_sending_status');
+
+  const creatorAvatarUrl =
+    !message.creator?.isDeleted && message.creator?.avatar?.fileUrl
+      ? FileRepository.fileUrlWithSize(message.creator.avatar.fileUrl, 'large')
+      : undefined;
   const syncState = message.syncState;
   const isFailed = syncState === ('error' as Amity.SyncState);
   const isSynthetic = isSyntheticPendingMessage(message);
@@ -76,9 +88,26 @@ export function MessageRow({
       data-has-reaction={hasReaction ? 'true' : 'false'}
     >
       {!isUser && message.creator ? (
-        <div className={styles.messageRow__avatar}>
+        <AriaButton
+          className={styles.messageRow__avatar}
+          onPress={() => {
+            if (AmityMessageBubbleBehavior?.onAvatarTap) {
+              AmityMessageBubbleBehavior.onAvatarTap({
+                userId: message.creator?.userId ?? '',
+                avatarUrl: creatorAvatarUrl,
+              });
+            } else if (creatorAvatarUrl) {
+              setIsAvatarViewerOpen(true);
+            }
+          }}
+          aria-label="View profile picture"
+        >
           <Avatar.User user={message.creator} isModerator={isModerator} size="sm" />
-        </div>
+        </AriaButton>
+      ) : null}
+
+      {isAvatarViewerOpen && creatorAvatarUrl ? (
+        <ImageViewer src={creatorAvatarUrl} onClose={() => setIsAvatarViewerOpen(false)} />
       ) : null}
 
       <div className={styles.messageRow__content}>

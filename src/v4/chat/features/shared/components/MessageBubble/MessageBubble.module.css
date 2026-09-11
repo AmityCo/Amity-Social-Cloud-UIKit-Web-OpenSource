@@ -55,17 +55,6 @@
   color: var(--asc-color-text-chatbubble-inbound-link-default);
 }
 
-.textBubble__mention {
-  font-weight: 500;
-  color: var(--asc-color-text-chatbubble-inbound-mentioned-default);
-  fill: var(--asc-color-text-chatbubble-inbound-mentioned-default);
-}
-
-.textBubble[data-user='own'] .textBubble__mention {
-  color: var(--asc-color-text-chatbubble-outbound-mentioned-default);
-  fill: var(--asc-color-text-chatbubble-outbound-mentioned-default);
-}
-
 .textBubble__divider {
   height: 0.0625rem;
 }

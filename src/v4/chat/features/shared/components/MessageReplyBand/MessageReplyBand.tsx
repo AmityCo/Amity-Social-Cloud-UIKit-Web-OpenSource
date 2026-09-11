@@ -5,13 +5,15 @@ import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import useFile from '~/v4/core/hooks/useFile';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useMessageObject } from '~/v4/chat/hooks/objects';
+import type { MentionMetadata } from '~/v4/chat/types';
 import { useString } from '~/v4/core/localization';
 import styles from './MessageReplyBand.module.css';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type MessageReplyBandProps = {
   replyTo: Amity.Message;
   onCancel: () => void;
-  onOpenSeeMore: (text: string, title?: string) => void;
+  onOpenSeeMore: (payload: SeeMorePayload) => void;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
 };
@@ -40,7 +42,12 @@ export function MessageReplyBand({
     if (isParentDeleted) return;
     if (replyTo.dataType === 'text') {
       const text = ((replyTo.data as { text?: string } | undefined)?.text ?? '').toString();
-      onOpenSeeMore(text, repliedMessageTitle);
+      onOpenSeeMore({
+        text,
+        title: repliedMessageTitle,
+        metadata: replyTo.metadata as MentionMetadata | undefined,
+        mentionees: replyTo.mentionees,
+      });
       return;
     }
     if (replyTo.dataType === 'image') {

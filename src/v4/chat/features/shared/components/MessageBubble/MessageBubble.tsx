@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import { mergeProps, useLongPress, usePress } from 'react-aria';
-import Linkify from 'linkify-react';
 import { FileRepository } from '@amityco/ts-sdk';
 import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
@@ -9,6 +8,8 @@ import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import { ChevronRight } from '~/v4/core/design/icons/ChevronRight';
 import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import { MediaUploadOverlay } from '~/v4/chat/elements/MediaUploadOverlay';
+import { HighlightText } from '~/v4/chat/elements/HighlightText';
+import type { MentionMetadata } from '~/v4/chat/types';
 import { DeletedMessagePill } from '~/v4/chat/features/shared/components/DeletedMessagePill/DeletedMessagePill';
 import { MessageLinkPreview } from '~/v4/chat/features/shared/components/MessageLinkPreview';
 import {
@@ -21,6 +22,7 @@ import useFile from '~/v4/core/hooks/useFile';
 import { useString } from '~/v4/core/localization';
 import { resolveString } from '~/v4/core/localization/resolveString';
 import styles from './MessageBubble.module.css';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type OnLongPressMessage = (message: Amity.Message, anchor: HTMLElement) => void;
 
@@ -30,7 +32,7 @@ type MessageBubbleProps = {
   isActive?: boolean;
   onOpenImage: (url: string, message: Amity.Message) => void;
   onOpenVideo: (message: Amity.Message) => void;
-  onSeeMore: (text: string, title?: string) => void;
+  onSeeMore: (payload: SeeMorePayload) => void;
   onLongPress?: OnLongPressMessage;
   localPreviewUrl?: string;
   onMediaLoaded?: (fileId: string) => void;
@@ -99,7 +101,7 @@ type TextBubbleProps = {
   message: Amity.Message;
   isUser: boolean;
   isActive?: boolean;
-  onSeeMore: (text: string, title?: string) => void;
+  onSeeMore: (payload: SeeMorePayload) => void;
   onLongPress?: OnLongPressMessage;
 };
 
@@ -150,7 +152,12 @@ function TextBubble({
       {...longPressProps}
     >
       <div ref={textRef} className={styles.textBubble__text} style={{ WebkitLineClamp: maxLines }}>
-        {renderTextWithMentions(text, message.metadata as MessageMetadata | undefined)}
+        <HighlightText
+          text={text}
+          metadata={message.metadata as MentionMetadata | undefined}
+          mentionees={message.mentionees}
+          variant={isUser ? 'outbound' : 'inbound'}
+        />
       </div>
       {firstUrl && (
         <div className={styles.textBubble__preview}>
@@ -168,7 +175,14 @@ function TextBubble({
           <AriaButton
             type="button"
             className={styles.textBubble__seeMore}
-            onPress={() => onSeeMore(text, message.creator?.displayName || undefined)}
+            onPress={() =>
+              onSeeMore({
+                text,
+                title: message.creator?.displayName || undefined,
+                metadata: message.metadata as MentionMetadata | undefined,
+                mentionees: message.mentionees,
+              })
+            }
             aria-label={seeMoreLabel}
           >
             <Typography.Caption className={styles.textBubble__seeMoreLabel}>
@@ -459,52 +473,3 @@ MessageBubble.Image = ImageBubble;
 MessageBubble.Video = VideoBubble;
 
 MessageBubble.Custom = CustomBubble;
-
-type MessageMetadata = {
-  mentioned?: { index: number; length: number; type?: 'user' | 'channel'; userId?: string }[];
-};
-
-function renderTextWithMentions(text: string, metadata: MessageMetadata | undefined): ReactNode {
-  const linkifyOptions = { target: '_blank', rel: 'noopener noreferrer' } as const;
-  const mentioned = metadata?.mentioned ?? [];
-  if (mentioned.length === 0) {
-    return <Linkify options={linkifyOptions}>{text}</Linkify>;
-  }
-
-  const sorted = [...mentioned].sort((a, b) => a.index - b.index);
-  const out: ReactNode[] = [];
-  let cursor = 0;
-
-  sorted.forEach((m, i) => {
-    const startsWithAt = text.charAt(m.index) === '@';
-    const span = startsWithAt ? m.length + 1 : m.length;
-    const start = Math.max(m.index, cursor);
-    const end = Math.min(start + span, text.length);
-    if (start > cursor) {
-      const lead = text.slice(cursor, start);
-      out.push(
-        <Linkify key={`t-${cursor}`} options={linkifyOptions}>
-          {lead}
-        </Linkify>,
-      );
-    }
-    if (end > start) {
-      out.push(
-        <span key={`m-${i}`} className={styles.textBubble__mention}>
-          {text.slice(start, end)}
-        </span>,
-      );
-    }
-    cursor = end;
-  });
-
-  if (cursor < text.length) {
-    out.push(
-      <Linkify key="t-tail" options={linkifyOptions}>
-        {text.slice(cursor)}
-      </Linkify>,
-    );
-  }
-
-  return <>{out}</>;
-}

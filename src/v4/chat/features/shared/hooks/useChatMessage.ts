@@ -11,6 +11,7 @@ import { useMessageComposer } from './useMessageComposer';
 import { useBubbleMenu } from './useBubbleMenu';
 import { useFailedMessageSheet } from './useFailedMessageSheet';
 import { useMediaViewer } from './useMediaViewer';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type UseChatMessageParams = {
   channelId: string | undefined;
@@ -38,7 +39,7 @@ export function useChatMessage({
   const loadingToastIdRef = useRef<string | null>(null);
   const prevLatestIdRef = useRef<string | null>(null);
   const [atBottom, setAtBottom] = useState(true);
-  const [seeMore, setSeeMore] = useState<{ text: string; title?: string } | null>(null);
+  const [seeMore, setSeeMore] = useState<SeeMorePayload | null>(null);
   const [newMessage, setNewMessage] = useState<Amity.Message | null>(null);
   const [editingMessage, setEditingMessage] = useState<Amity.Message | null>(null);
   const [pendingJumpToMessageId, setPendingJumpToMessageId] = useState<string | null>(
@@ -180,8 +181,8 @@ export function useChatMessage({
     setNewMessage(null);
   }
 
-  function openSeeMore(text: string, title?: string) {
-    setSeeMore({ text, title });
+  function openSeeMore(payload: SeeMorePayload) {
+    setSeeMore(payload);
   }
 
   function closeSeeMore() {

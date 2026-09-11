@@ -314,6 +314,13 @@ export interface PageBehavior {
   AmityEventAttendeesPageBehavior?: {
     goToUserProfilePage?(context: { userId: string }): void;
   };
+  AmityChatPageBehavior?: {
+    onAvatarTap?(context: { userId: string; avatarUrl?: string }): void;
+  };
+  AmityMessageBubbleBehavior?: {
+    onAvatarTap?(context: { userId: string; avatarUrl?: string }): void;
+    onMentionUserTap?(context: { userId: string }): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -1169,6 +1176,8 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         goToUserProfilePage(context.userId);
       },
     },
+    AmityChatPageBehavior: pageBehavior?.AmityChatPageBehavior,
+    AmityMessageBubbleBehavior: pageBehavior?.AmityMessageBubbleBehavior,
   };
 
   return (
