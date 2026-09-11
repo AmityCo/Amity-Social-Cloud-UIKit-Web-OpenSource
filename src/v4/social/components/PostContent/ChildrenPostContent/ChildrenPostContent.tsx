@@ -1,9 +1,12 @@
-import React from 'react';
+import { type MutableRefObject } from 'react';
 import { PollContent } from '~/v4/social/components/PostContent/PollContent';
-import { ImageContent } from '~/v4/social/components/PostContent/ImageContent';
-import { VideoContent } from '~/v4/social/components/PostContent/VideoContent';
+import {
+  PostMediaElement,
+  type PostMediaControls,
+} from '~/v4/social/features/posts/elements/PostMediaElement';
 import { ClipContent } from '~/v4/social/components/PostContent/ClipContent';
 import { LiveStreamContent } from '~/v4/social/components/PostContent/LiveStreamContent';
+import type { FrameRatio } from '~/v4/social/features/posts/utils/getFrameRatio';
 
 type ChildrenPostContentProps = {
   pageId?: string;
@@ -19,6 +22,8 @@ type ChildrenPostContentProps = {
   onPollPostDeleted?: (post: Amity.Post) => void;
   forceShowPollResults?: boolean;
   community?: Amity.Community | null;
+  mediaControlsRef?: MutableRefObject<PostMediaControls | null>;
+  mediaRatioOverride?: FrameRatio;
 };
 
 export const ChildrenPostContent = ({
@@ -32,6 +37,8 @@ export const ChildrenPostContent = ({
   goToPostDetail,
   onPollPostDeleted,
   forceShowPollResults,
+  mediaControlsRef,
+  mediaRatioOverride,
   disabledContent = false,
   expandAllContent = false,
 }: ChildrenPostContentProps) => {
@@ -48,19 +55,15 @@ export const ChildrenPostContent = ({
         expandOption={expandAllContent}
         community={community}
       />
-      <ImageContent
+      <PostMediaElement
         pageId={pageId}
         componentId={componentId}
-        posts={post.childrenPosts as Amity.Post<'image'>[]}
+        posts={post.childrenPosts ?? []}
         onImageClick={onImageClick}
-        parentPostId={post.postId}
-      />
-      <VideoContent
-        pageId={pageId}
-        componentId={componentId}
-        posts={post.childrenPosts as Amity.Post<'video'>[]}
         onVideoClick={onVideoClick}
         parentPostId={post.postId}
+        controlsRef={mediaControlsRef}
+        ratioOverride={mediaRatioOverride}
       />
       <LiveStreamContent
         pageId={pageId}

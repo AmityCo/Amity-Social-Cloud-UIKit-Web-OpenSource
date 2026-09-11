@@ -14,6 +14,7 @@ export type SearchInputProps = {
   className?: string;
   clearAriaLabel?: string;
   'aria-label'?: string;
+  inputTestId?: string;
 };
 
 export function SearchInput({
@@ -24,6 +25,7 @@ export function SearchInput({
   maxLength,
   className,
   clearAriaLabel = 'Clear search',
+  inputTestId,
   ...props
 }: SearchInputProps) {
   return (
@@ -36,6 +38,7 @@ export function SearchInput({
       aria-label={props['aria-label'] ?? placeholder}
       maxLength={maxLength}
       className={className}
+      inputTestId={inputTestId}
       leadingIcon={<Search />}
       trailingIcon={
         value ? (

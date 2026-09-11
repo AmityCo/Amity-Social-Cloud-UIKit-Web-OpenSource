@@ -5,6 +5,7 @@ import styles from './Radio.module.css';
 
 export type RadioProps = $RadioProps & {
   label?: React.ReactNode;
+  'data-testid'?: string;
 };
 
 export function Radio({ label, className, ...props }: RadioProps) {

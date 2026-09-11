@@ -43,7 +43,10 @@ export const UserPendingFollowRequestPage = () => {
           </Typography.Caption>
         </div>
         {followers && followers.length === 0 ? (
-          <div className={styles.userPendingFollowRequestPage__noPending}>
+          <div
+            className={styles.userPendingFollowRequestPage__noPending}
+            data-testid="follow-request-empty-state"
+          >
             <PartyHorn.Light className={styles.userPendingFollowRequestPage__noPending__icon} />
             <Typography.TitleBold className={styles.userPendingFollowRequestPage__noPending__text}>
               {useString('amity_social_label_no_requests_to_review')}

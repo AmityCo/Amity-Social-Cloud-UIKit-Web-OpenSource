@@ -35,21 +35,8 @@
   max-height: auto;
   min-height: auto;
   padding: 1rem;
-}
 
-.createPost__productTagActionButton {
-  position: absolute;
-  bottom: 12.75rem;
-  right: 1.25rem;
-}
-
-.createPost__productTagActionButton[data-from-media='true'] {
-  bottom: 6.75rem;
-}
-
-.createPost__productTagActionButton__button {
-  /* TODO: check on this css value again */
-  box-shadow: var(--asc-box-shadow-04);
+  --selected-media-inset: 1rem;
 }
 
 .createPost__formContent .createPost__titleInput {
@@ -283,6 +270,8 @@
     min-height: 35vh;
     position: relative;
     padding: 1rem 1.5rem;
+
+    --selected-media-inset: 1.5rem;
   }
 
   .createPost__form[data-is-event-post='true'] .createPost__formContent {

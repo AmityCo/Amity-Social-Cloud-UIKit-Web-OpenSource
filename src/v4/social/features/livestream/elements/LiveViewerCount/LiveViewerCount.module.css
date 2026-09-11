@@ -1,0 +1,26 @@
+.liveViewerCount {
+  color: var(--asc-color-white);
+  border-radius: 0.25rem;
+  background: var(--asc-color-transparent-black);
+  backdrop-filter: blur(0.3125rem);
+  display: flex;
+  padding: 0.25rem 0.375rem 0.25rem 0.25rem;
+  align-items: center;
+}
+
+.liveViewerCount__liveDotIcon {
+  fill: var(--asc-color-live);
+  width: 1rem;
+  height: 1rem;
+}
+
+.liveViewerCount__userIcon {
+  fill: currentcolor;
+  width: 1rem;
+  height: 1rem;
+}
+
+.liveViewerCount__text {
+  color: currentcolor;
+  margin-left: 0.125rem;
+}

@@ -40,6 +40,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
         <TextWithMention
           maxLines={10}
           mentionees={[]}
+          testId="event-about-text"
           textClassName={styles.eventInfo__text}
           data={{ text: event.description || '' }}
         />
@@ -47,13 +48,17 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
 
       {event.type === AmityEventType.Virtual ? (
         event.externalUrl ? (
-          <div className={styles.eventInfo__container}>
+          <div
+            className={styles.eventInfo__container}
+            data-testid="event-external-platform-container"
+          >
             <Typography.TitleBold className={styles.eventInfo__text}>
               {useString('amity_social_placeholder_event_link_hint')}
             </Typography.TitleBold>
             <div className={styles.eventInfo__row}>
               <TextWithMention
                 mentionees={[]}
+                testId="event-virtual-link"
                 textClassName={styles.eventInfo__link}
                 data={{ text: event.externalUrl || '' }}
               />
@@ -95,7 +100,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
           </div>
         )
       ) : (
-        <div className={styles.eventInfo__container}>
+        <div className={styles.eventInfo__container} data-testid="event-address-section">
           <Typography.TitleBold className={styles.eventInfo__text}>
             {useString('amity_social_event_info_event_address')}
           </Typography.TitleBold>

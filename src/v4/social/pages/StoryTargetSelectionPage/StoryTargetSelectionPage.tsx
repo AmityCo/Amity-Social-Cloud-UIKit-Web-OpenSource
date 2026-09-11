@@ -30,7 +30,7 @@ export function StoryTargetSelectionPage() {
   const { onBack } = useNavigation();
   const { closePopup } = usePopupContext();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member', sortBy: 'displayName' },
   });
   const { AmityStoryTargetSelectionPage } = usePageBehavior();
   const { file, setFile } = useStoryContext();

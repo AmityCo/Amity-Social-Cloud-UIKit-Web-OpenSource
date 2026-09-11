@@ -10,6 +10,7 @@ import { StreamerStage } from './StreamerStage';
 import { useDeviceManagement } from '~/v4/core/hooks/useDeviceManagement';
 import { useLivestreamTimer, usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { LivestreamOverlay } from '~/v4/social/features/livestream/internal-components/LivestreamOverlay';
+import { LiveStreamTerminatedThumbnail } from '~/v4/social/features/livestream/internal-components/LiveStreamTerminatedThumbnail';
 import styles from './LivestreamStage.module.css';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -127,6 +128,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
   const countdownDisplay = remainingSeconds > 0 ? remainingSeconds : null;
   // Computed values
   const isTargetEvent = !!event;
+  const isTerminated = room?.status === 'terminated';
 
   // Header props - consolidated internally
   const headerProps: LivestreamHeaderProps = {
@@ -164,7 +166,10 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       {(uiState === 'preview' || uiState === 'backStage') && (
         <LivestreamPreviewStage deviceManagement={deviceManagement} />
       )}
-      {uiState === 'broadcast' && broadcasterData && room && (
+      {uiState === 'broadcast' && room && isTerminated && (
+        <LiveStreamTerminatedThumbnail view="full-screen" />
+      )}
+      {uiState === 'broadcast' && !isTerminated && broadcasterData && room && (
         <StreamerStage
           pageId={pageId}
           deviceManagement={deviceManagement}
@@ -182,7 +187,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       {showCountdownOverlay && countdownDisplay && (
         <LivestreamOverlay.CountdownEnding countdown={countdownDisplay} />
       )}
-      {uiState === 'broadcast' && channel?.attachedTo?.roomId && room?.post && (
+      {uiState === 'broadcast' && !isTerminated && channel?.attachedTo?.roomId && room?.post && (
         <ReactionFloating post={room?.post as Amity.Post} />
       )}
     </div>

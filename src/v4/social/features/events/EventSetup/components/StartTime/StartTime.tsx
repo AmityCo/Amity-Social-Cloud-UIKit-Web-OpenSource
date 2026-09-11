@@ -42,6 +42,7 @@ export function StartTime({ value, onChange }: StartTimeProps) {
             <Button
               variant="default"
               className={styles.startTime__button}
+              data-testid="event-starts-on-button"
               onPress={() => {
                 isDesktop
                   ? openPopover()

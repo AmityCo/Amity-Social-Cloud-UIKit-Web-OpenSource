@@ -272,8 +272,12 @@ export function ChannelItem({
   }
 
   return (
-    <div className={styles.channelItem} onClick={onPress ?? handlePress}>
-      <div className={styles.channelItem__avatarWrapper}>
+    <div
+      className={styles.channelItem}
+      onClick={onPress ?? handlePress}
+      data-testid="chat-channel-item"
+    >
+      <div className={styles.channelItem__avatarWrapper} data-testid="chat-channel-avatar">
         <ChannelAvatar channel={channel} />
       </div>
       <div className={styles.channelItem__body}>

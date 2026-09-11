@@ -64,7 +64,10 @@ export const StoryCommentComposeBar = ({
 
   if (!shouldAllowCreation) {
     return (
-      <div className={styles.disabledCommentComposerBarContainer}>
+      <div
+        className={styles.disabledCommentComposerBarContainer}
+        data-testid="story-comments-disabled-message"
+      >
         <Lock2Icon />
         {useString('amity_social_label_comments_disabled_message')}
       </div>

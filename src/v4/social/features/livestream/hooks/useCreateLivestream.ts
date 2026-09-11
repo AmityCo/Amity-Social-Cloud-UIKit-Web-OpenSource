@@ -17,7 +17,7 @@ import { useRoom } from './useRoom';
 
 import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
-import { ERROR_CODE } from '~/v4/social/constants/errorResponse';
+import { ERROR_CODE, ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { usePostSubscription } from './usePostSubscription';
 
 export type CreateLivestreamUiState = 'preview' | 'broadcast' | 'backStage';
@@ -204,10 +204,15 @@ export const useCreateLivestream = ({
         else onBack();
       },
       onError: (error) => {
-        if (error.message.includes('Room is already ended')) {
-          if (!isTargetEvent)
-            roomLinkedPost?.postId && goToPostDetailPage({ postId: roomLinkedPost?.postId });
-          else onBack();
+        const isRoomGone =
+          error.message.includes(ERROR_RESPONSE.ROOM_ALREADY_ENDED) ||
+          error.message.includes(ERROR_RESPONSE.ROOM_DELETED);
+        if (isRoomGone) {
+          if (!isTargetEvent && roomLinkedPost?.postId) {
+            goToPostDetailPage({ postId: roomLinkedPost.postId });
+          } else {
+            onBack();
+          }
         }
       },
     });

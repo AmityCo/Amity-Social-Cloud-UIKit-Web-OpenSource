@@ -25,7 +25,11 @@ export function MyCommunitiesSearchPage() {
 
   return (
     <div className={styles.myCommunitiesSearchPage} style={themeStyles}>
-      <TopSearchBar pageId={pageId} search={(newSearchValue) => setSearchValue(newSearchValue)} />
+      <TopSearchBar
+        pageId={pageId}
+        inputTestId="my-communities-search-input"
+        search={(newSearchValue) => setSearchValue(newSearchValue)}
+      />
       {searchValue.length > 0 && (
         <CommunitySearchResult
           pageId={pageId}

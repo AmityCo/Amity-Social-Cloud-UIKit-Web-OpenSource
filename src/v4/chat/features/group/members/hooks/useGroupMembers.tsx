@@ -1,14 +1,12 @@
-import { useChannelObject, useChannelMyMembership } from '~/v4/chat/hooks/objects';
-import { hasModeratorRole } from '~/v4/chat/utils/isModerator';
+import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { ChatPageTypes, useChatNavigation } from '~/v4/chat/providers/ChatNavigationProvider';
 import type { GroupMemberListPageProps } from '~/v4/chat/pages/GroupMemberListPage';
 
 export function useGroupMembers({ channelId }: GroupMemberListPageProps) {
   const { pop, push } = useChatNavigation();
-  const { channel } = useChannelObject({ channelId });
-  const { membership } = useChannelMyMembership(channel);
+  const { canAddMember } = useChannelPermission(channelId);
 
-  const isViewerModerator = hasModeratorRole(membership?.roles);
+  const isViewerModerator = canAddMember;
 
   const handleBack = () => pop();
 

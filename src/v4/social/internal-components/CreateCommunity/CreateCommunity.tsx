@@ -436,7 +436,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                 elementId="community_name_title"
                 textId="amity_social_label_community_setup_name_title"
               />
-              <Typography.Body className={styles.createCommunity__charactersCount}>
+              <Typography.Body
+                className={styles.createCommunity__charactersCount}
+                data-testid="community-name-char-counter"
+              >
                 {displayName.length}/{MAX_LENGTH_COMMUNITY_NAME}
               </Typography.Body>
             </Label>
@@ -464,7 +467,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                   {useString('amity_social_label_community_setup_about_optional_title')}
                 </Typography.Body>
               </div>
-              <Typography.Body className={styles.createCommunity__charactersCount}>
+              <Typography.Body
+                className={styles.createCommunity__charactersCount}
+                data-testid="community-about-char-counter"
+              >
                 {description.length}/{MAX_LENGTH_DESC}
               </Typography.Body>
             </Label>
@@ -579,6 +585,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
           radios={[
             {
               value: AmityCommunitySetupPrivacy.PUBLIC,
+              props: { 'data-testid': 'community-privacy-public-radio' },
               label: (
                 <div className={styles.createCommunity__privacy}>
                   <CommunityPrivacyIcon
@@ -603,6 +610,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             },
             {
               value: AmityCommunitySetupPrivacy.PRIVATE_VISIBLE,
+              props: { 'data-testid': 'community-privacy-private-visible-radio' },
               label: (
                 <div className={styles.createCommunity__privacy}>
                   <CommunityPrivacyIcon
@@ -627,6 +635,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             },
             {
               value: AmityCommunitySetupPrivacy.PRIVATE_HIDDEN,
+              props: { 'data-testid': 'community-privacy-private-hidden-radio' },
               label: (
                 <div className={styles.createCommunity__privacy}>
                   <CommunityPrivacyIcon
@@ -676,6 +685,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             <Switch
               defaultSelected
               className={styles.createCommunity__switch}
+              data-testid="moderator-approval-toggle"
               isSelected={requiresJoinApproval}
               onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
             />

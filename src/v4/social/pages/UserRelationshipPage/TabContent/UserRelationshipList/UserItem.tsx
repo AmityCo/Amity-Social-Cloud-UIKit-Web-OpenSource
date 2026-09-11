@@ -31,7 +31,7 @@ export const UserItem: FC<UserItemProps> = ({
   if (!user) return null;
 
   return (
-    <div className={styles.userItem}>
+    <div className={styles.userItem} data-testid="follower-list-item">
       <Button
         onPress={() => AmityUserRelationshipPageBehavior?.goToUserProfilePage?.({ userId })}
         className={styles.userItem__buttonWrap}

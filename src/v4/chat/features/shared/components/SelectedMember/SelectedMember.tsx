@@ -18,7 +18,7 @@ export function SelectedMember({ user, onRemove }: SelectedMemberProps) {
     : undefined;
 
   return (
-    <div className={styles.selectedMember}>
+    <div className={styles.selectedMember} data-testid="selected-member-chip">
       <div className={styles.selectedMember__avatarWrapper}>
         <Avatar
           variant={imageUrl ? 'image' : 'text'}

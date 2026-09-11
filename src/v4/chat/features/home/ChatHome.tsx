@@ -27,16 +27,19 @@ export function ChatHome() {
     const allTab = {
       value: 'all',
       label: allLabel,
+      testId: 'chat-tab-all',
       content: () => <ChannelList types={['conversation', 'community']} />,
     };
     const directTab = {
       value: 'direct',
       label: directLabel,
+      testId: 'chat-tab-direct',
       content: () => <ChannelList types={['conversation']} />,
     };
     const groupsTab = {
       value: 'group',
       label: groupsLabel,
+      testId: 'chat-tab-group',
       content: () => <ChannelList types={['community']} />,
     };
 

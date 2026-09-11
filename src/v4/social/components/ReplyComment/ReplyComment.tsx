@@ -611,7 +611,10 @@ const PostReplyComment = ({
                     className={styles.postReplyComment__viewReply_button}
                     onPress={() => setShowL2Replies(true)}
                   >
-                    <Typography.CaptionBold className={styles.postReplyComment__viewReply_text}>
+                    <Typography.CaptionBold
+                      className={styles.postReplyComment__viewReply_text}
+                      data-testid="view-level-2-replies-button"
+                    >
                       {pendingL2Comments.length > 0
                         ? viewMoreRepliesText
                         : (() => {

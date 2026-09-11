@@ -41,6 +41,7 @@ const ImageItem = ({
   return image && !isBrokenImg ? (
     <Button
       className={styles.imageGallery__itemContainer}
+      data-testid="image_gallery_item"
       onPress={() => onClickImageItem(postIndex)}
     >
       <img
@@ -58,6 +59,7 @@ const ImageItem = ({
   ) : (
     <Button
       className={styles.imageGallery__itemContainer}
+      data-testid="image_gallery_item"
       onPress={() => onClickImageItem(postIndex)}
     >
       <div className={styles.imageGallery__brokenImg} />

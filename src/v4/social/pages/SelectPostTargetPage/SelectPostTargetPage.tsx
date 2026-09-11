@@ -42,7 +42,7 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member', sortBy: 'displayName' },
   });
   const { file, setFile } = useClipContext();
   const [selectedCommunity, setSelectedCommunity] = useState<null | { communityId: string }>(null);

@@ -11,7 +11,10 @@ export const EmptyVideoFeed = () => {
         defaultIcon={() => <EmptyVideo className={styles.emptyVideoFeed__icon} />}
         imgIcon={() => <EmptyVideo className={styles.emptyVideoFeed__icon} />}
       />
-      <Typography.TitleBold className={styles.emptyVideoFeed__text}>
+      <Typography.TitleBold
+        className={styles.emptyVideoFeed__text}
+        data-testid="videos-empty-state"
+      >
         {useString('amity_social_empty_state_empty_user_video_feed')}
       </Typography.TitleBold>
     </div>

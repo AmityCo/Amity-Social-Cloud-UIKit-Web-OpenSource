@@ -32,9 +32,13 @@ export const RoundedBackButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button style={themeStyles} className={styles.roundedBackButton} onPress={onPress}>
+    <Button
+      style={themeStyles}
+      className={styles.roundedBackButton}
+      onPress={onPress}
+      data-testid={accessibilityId}
+    >
       <IconComponent
-        data-testid={accessibilityId}
         defaultIcon={() => <RoundedBack className={defaultClassName} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
         defaultIconName={defaultConfig.icon}

@@ -9,7 +9,6 @@ import { Button } from '~/v4/core/natives/Button';
 import { Clear } from '~/v4/icons/Clear';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CheckboxGroup } from '~/v4/core/components/AriaCheckboxGroup';
-import useAllUsersCollection from '~/v4/core/hooks/collections/useAllUsersCollection';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 import { SearchResultSkeleton } from '~/v4/social/internal-components/SearchResultSkeleton/SearchResultSkeleton';
@@ -28,6 +27,8 @@ import { NoInternet } from '~/v4/social/internal-components/NoInternet';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { LimitCharacterSearch } from '~/v4/social/internal-components/LimitCharacterSearch/LimitCharacterSearch';
 import { useKeyboardVisibility } from './useKeyboardVisibility';
+
+const MIN_SEARCH_LENGTH = 3;
 
 type CommunityInviteMemberPageProps = {
   communityId?: string;
@@ -67,10 +68,9 @@ function useCommunityInviteMemberPage({
       : members ?? [],
   );
 
-  const { users, hasMore, loadMore, isLoading } = useAllUsersCollection({
-    queryParams: { limit: 20 },
-    shouldCall: search.length === 0,
-  });
+  // Per design (Figma: Discoverable Private Communities / Empty) the page does not
+  // list users until the member searches; a query needs at least 3 characters.
+  const isSearching = search.length >= MIN_SEARCH_LENGTH;
 
   const {
     users: searchedUsers,
@@ -80,7 +80,7 @@ function useCommunityInviteMemberPage({
   } = useUserQueryByDisplayName({
     limit: 10,
     displayName: search,
-    enabled: search.length > 0,
+    enabled: isSearching,
   });
 
   const { members: communityMembers } = useCommunityMembersCollection({
@@ -90,8 +90,6 @@ function useCommunityInviteMemberPage({
 
   const communityMemberIds = communityMembers.map((member) => member.userId);
 
-  const nonMemberUsers = users.filter((user) => !communityMemberIds.includes(user.userId));
-
   const nonMemberSearchedUsers = searchedUsers.filter(
     (user) => !communityMemberIds.includes(user.userId),
   );
@@ -99,10 +97,7 @@ function useCommunityInviteMemberPage({
   useIntersectionObserver({
     node: intersectionNode,
     onIntersect: () => {
-      if (search.length === 0 && hasMore && isLoading === false) {
-        loadMore();
-      }
-      if (search.length > 0 && hasMoreSearch && isSearchLoading === false) {
+      if (isSearching && hasMoreSearch && isSearchLoading === false) {
         loadMoreSearch();
       }
     },
@@ -136,24 +131,17 @@ function useCommunityInviteMemberPage({
     handleClose();
   };
 
-  const filteredUsers = communityId
-    ? search.length > 0
-      ? nonMemberSearchedUsers
-      : nonMemberUsers
-    : search.length > 0
-      ? searchedUsers
-      : users;
+  const filteredUsers = isSearching ? (communityId ? nonMemberSearchedUsers : searchedUsers) : [];
 
-  const isNoResult =
-    online && search.length > 2 && filteredUsers.length === 0 && !isLoading && !isSearchLoading;
+  // Nothing typed yet: "No users available" (no default list, per design).
+  const isEmpty = online && search.length === 0;
 
-  const isEmpty =
-    online && search.length === 0 && filteredUsers.length === 0 && !isLoading && !isSearchLoading;
+  // Search finished with no match: "No results found".
+  const isNoResult = online && isSearching && filteredUsers.length === 0 && !isSearchLoading;
 
-  const isLimitCharacterSearch =
-    online && search.length > 0 && search.length < 3 && !isLoading && !isSearchLoading;
+  const isLimitCharacterSearch = online && search.length > 0 && !isSearching;
 
-  const isFetching = (isLoading || isSearchLoading) && online;
+  const isFetching = isSearching && isSearchLoading && online;
 
   return {
     pageId,
@@ -169,11 +157,10 @@ function useCommunityInviteMemberPage({
     selectedMembers,
     handleRemoveUser,
     setSelectedMembers,
-    isLoading,
     isSearchLoading,
     online,
-    isNoResult,
     isEmpty,
+    isNoResult,
     isOnline: online,
     isFetching,
     isLimitCharacterSearch,
@@ -227,14 +214,6 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             <NoInternet pageId={pageId} />
           </div>
         )}
-        {isNoResult && (
-          <div
-            data-selected={selectedMembers.length > 0}
-            className={styles.communityInviteMemberPage__state}
-          >
-            <NoResult pageId={pageId} />
-          </div>
-        )}
         {isLimitCharacterSearch && (
           <div
             data-selected={selectedMembers.length > 0}
@@ -249,6 +228,14 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             className={styles.communityInviteMemberPage__state}
           >
             <EmptyResult pageId={pageId} textId="amity_social_label_no_users_available" />
+          </div>
+        )}
+        {isNoResult && (
+          <div
+            data-selected={selectedMembers.length > 0}
+            className={styles.communityInviteMemberPage__state}
+          >
+            <NoResult pageId={pageId} />
           </div>
         )}
         {filteredUsers.length > 0 && (
@@ -338,7 +325,12 @@ function CommunityInviteMemberPageTopBar({
         <div className={styles.communityInviteMemberPage__emptySpace} />
       </nav>
       <div className={styles.communityInviteMemberPage__search}>
-        <TopSearchBar pageId={pageId} hasCancelButton={false} search={search} />
+        <TopSearchBar
+          pageId={pageId}
+          hasCancelButton={false}
+          search={search}
+          placeholderKey="amity_social_placeholder_search_user_hint"
+        />
       </div>
       {selectedMembers.length > 0 && (
         <div className={styles.communityInviteMemberPage__selectedUsers}>

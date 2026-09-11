@@ -211,6 +211,7 @@ export const HyperLinkConfig = ({
               },
             })}
             {...{ id: 'asc-uikit-hyperlink-input-url' }}
+            data-testid={`${pageId}/${componentId}/url_input`}
             isError={!!errors.url?.message}
             helperText={errors?.url?.message}
           />
@@ -224,6 +225,7 @@ export const HyperLinkConfig = ({
               },
             })}
             {...{ id: 'asc-uikit-hyperlink-input-link-text' }}
+            data-testid={`${pageId}/${componentId}/custom_text_input`}
             isError={!!errors.customText?.message}
             helperText={
               errors?.customText?.message ??

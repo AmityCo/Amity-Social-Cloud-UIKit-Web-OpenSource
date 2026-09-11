@@ -73,10 +73,12 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
           className={styles.watchingUserItem__avatar}
           shouldRedirectToUserProfile={false}
         />
-        <Typography.BodyBold className={styles.watchingUserItem__displayName}>
-          {user?.displayName || user?.userId}
-        </Typography.BodyBold>
-        {user?.isBrand && <BrandBadge />}
+        <div className={styles.watchingUserItem__displayNameWrapper}>
+          <Typography.BodyBold className={styles.watchingUserItem__displayName}>
+            {user?.displayName || user?.userId}
+          </Typography.BodyBold>
+          {user?.isBrand && <BrandBadge className={styles.watchingUserItem__brandBadge} />}
+        </div>
       </div>
       {isInvited ? (
         <Button

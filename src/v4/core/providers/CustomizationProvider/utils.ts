@@ -1028,6 +1028,11 @@ export const defaultConfig: DefaultConfig = {
     'clip_feed_page/*/create_community_button': {
       icon: 'createCommunityIcon',
     },
+    'livestream_player_page/*/live_viewer_count_element': {
+      background_color: 'var(--asc-color-transparent-black)',
+      text_color: 'var(--asc-color-white)',
+      icon: '',
+    },
     'livestream_player_page/*/share_link': {
       image: 'icon',
     },

@@ -12,7 +12,10 @@ export const EmptyImageFeed = () => {
         imgIcon={() => <EmptyImage className={styles.emptyImageFeed__icon} />}
       />
       <div>
-        <Typography.TitleBold className={styles.emptyImageFeed__text}>
+        <Typography.TitleBold
+          className={styles.emptyImageFeed__text}
+          data-testid="images-empty-state"
+        >
           {useString('amity_social_empty_state_empty_user_image_feed')}
         </Typography.TitleBold>
       </div>

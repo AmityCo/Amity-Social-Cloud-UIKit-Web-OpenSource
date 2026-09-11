@@ -16,7 +16,7 @@ export function CreateGroupChat({ selectedUsers }: CreateGroupChatPageProps) {
   return (
     <form className={styles.createGroupChat} onSubmit={handleCreate}>
       <Header isFormValid={isFormValid} onClose={handleClose} />
-      <div className={styles.createGroupChat__avatarWrapper}>
+      <div className={styles.createGroupChat__avatarWrapper} data-testid="group-avatar-preview">
         <Controller
           control={form.control}
           name="avatarFile"

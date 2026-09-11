@@ -19,6 +19,8 @@ export type TopSearchBarProps = {
   search: (keyword: string) => void;
   initialValue?: string;
   onCloseSearch?: () => void;
+  inputTestId?: string;
+  placeholderKey?: string;
 };
 
 export function TopSearchBar({
@@ -28,6 +30,8 @@ export function TopSearchBar({
   hasCancelButton = true,
   initialValue = '',
   onCloseSearch,
+  inputTestId,
+  placeholderKey = 'amity_social_label_search_my_communities',
 }: TopSearchBarProps) {
   const componentId = 'top_search_bar';
   const { onBack } = useNavigation();
@@ -72,7 +76,8 @@ export function TopSearchBar({
             type="text"
             onFocus={onFocus}
             value={searchValue}
-            placeholder={useString('amity_social_label_search_my_communities')}
+            placeholder={useString(placeholderKey)}
+            data-testid={inputTestId ?? `${accessibilityId}/input`}
             className={styles.topSearchBar__textInput}
             onChange={(ev) => setSearchValue(ev.target.value)}
           />

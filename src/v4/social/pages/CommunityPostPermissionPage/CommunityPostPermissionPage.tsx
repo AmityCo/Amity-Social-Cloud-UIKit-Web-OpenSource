@@ -108,6 +108,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
           color="primary"
           isDisabled={disabled}
           onPress={handleSubmitPermission}
+          data-testid="post-permission-save-button"
           className={styles.communityPostPermissionPage__mobileCta}
         >
           {useString('amity_social_button_community_setup_edit_button')}
@@ -125,12 +126,14 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
         </div>
         <RadioGroup
           value={postSetting}
+          data-testid="post-permission-radiogroup"
           className={styles.communityPostPermissionPage__radioGroup}
           radioProps={{ className: styles.communityPostPermissionPage__choice }}
           onChange={(value) => setPostSetting(value as ValueOf<typeof CommunityPostSettings>)}
           radios={[
             {
               value: CommunityPostSettings.ANYONE_CAN_POST,
+              props: { 'data-testid': 'post-permission-everyone-option' },
               label: (
                 <Typography.Body>
                   {useString('amity_social_permission_post_permission_everyone')}
@@ -139,6 +142,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
             },
             {
               value: CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED,
+              props: { 'data-testid': 'post-permission-admin-review-option' },
               label: (
                 <Typography.Body>
                   {useString('amity_social_permission_post_permission_admin_review')}
@@ -147,6 +151,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
             },
             {
               value: CommunityPostSettings.ONLY_ADMIN_CAN_POST,
+              props: { 'data-testid': 'post-permission-only-admin-option' },
               label: (
                 <Typography.Body>
                   {useString('amity_social_permission_post_permission_only_admin')}
@@ -162,6 +167,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
             color="primary"
             isDisabled={disabled}
             onPress={handleSubmitPermission}
+            data-testid="post-permission-save-button"
             className={styles.communityPostPermissionPage__desktopCta}
           >
             {resolveString('amity_social_button_community_setup_edit_button')}

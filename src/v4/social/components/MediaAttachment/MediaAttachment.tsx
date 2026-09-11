@@ -1,14 +1,12 @@
-import React from 'react';
 import clsx from 'clsx';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
 import styles from './MediaAttachment.module.css';
-import { ProductTagActionButton } from '~/v4/social/features/product-tagged';
+import { ProductTagButton } from '~/v4/social/features/product-tagged';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-
-const MAX_UPLOAD_MEDIA = 10;
+import { MEDIA_ATTACHMENT_CAP } from '~/v4/social/features/posts/constants';
 
 interface MediaAttachmentProps {
   pageId: string;
@@ -58,7 +56,7 @@ export function MediaAttachment({
               isVisibleVideo={isVisibleVideo}
               onVideoFileChange={onVideoFileChange}
               onImageFileChange={onImageFileChange}
-              isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+              isDisabled={!!totalMedia && totalMedia >= MEDIA_ATTACHMENT_CAP}
               textId=""
             />
           )}
@@ -67,7 +65,7 @@ export function MediaAttachment({
               pageId={pageId}
               componentId={componentId}
               onImageFileChange={onImageFileChange}
-              isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+              isDisabled={!!totalMedia && totalMedia >= MEDIA_ATTACHMENT_CAP}
               textId=""
             />
           )}
@@ -77,13 +75,16 @@ export function MediaAttachment({
               pageId={pageId}
               componentId={componentId}
               onVideoFileChange={onVideoFileChange}
-              isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
+              isDisabled={!!totalMedia && totalMedia >= MEDIA_ATTACHMENT_CAP}
               textId=""
             />
           )}
+          {!isDesktop && productTags.length > 0 && (
+            <ProductTagButton productTags={productTags} pageId={pageId} />
+          )}
         </div>
         {isDesktop && productTags.length > 0 && (
-          <ProductTagActionButton productTags={productTags} pageId={pageId} />
+          <ProductTagButton productTags={productTags} pageId={pageId} />
         )}
       </div>
     </div>

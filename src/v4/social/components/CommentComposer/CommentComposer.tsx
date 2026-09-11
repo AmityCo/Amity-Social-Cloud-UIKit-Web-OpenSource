@@ -233,7 +233,10 @@ export const CommentComposer = ({
 
   if (!shouldAllowCreation) {
     return (
-      <div className={styles.commentComposer__disableContainer}>
+      <div
+        className={styles.commentComposer__disableContainer}
+        data-testid="comments-disabled-message"
+      >
         <LockSvg />
         <Typography.Body>
           {useString('amity_social_label_comments_disabled_message')}
@@ -331,7 +334,7 @@ export const CommentComposer = ({
                     '%s',
                     replyTo?.creator?.displayName ?? '',
                   )
-                : useString('amity_social_replying_to')
+                : useString('amity_social_placeholder_comment_text_field_placeholder')
             }
             communityId={community?.communityId}
             shouldAutoFocus={

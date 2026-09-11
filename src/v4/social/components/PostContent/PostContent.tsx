@@ -11,7 +11,7 @@ import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { TextContent } from './TextContent';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
-import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
+import { VideoViewer } from '~/v4/social/internal-components/VideoViewer';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
@@ -35,6 +35,8 @@ import useCommunity from '~/v4/social/hooks/objects/useCommunity';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { PostTitle } from './PostTitle';
 import { ChildrenPostContent } from './ChildrenPostContent';
+import type { FrameRatio } from '~/v4/social/features/posts/utils/getFrameRatio';
+import type { PostMediaControls } from '~/v4/social/features/posts/elements/PostMediaElement';
 import { Comment, CommentSkeleton } from '~/v4/social/components/Comment';
 import { Divider } from '~/v4/social/elements/Divider';
 import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
@@ -90,6 +92,7 @@ interface PostContentProps {
   isSearchPost?: boolean;
   expandAllContent?: boolean;
   eventCreatorId?: Amity.Event['userId'];
+  mediaRatioOverride?: FrameRatio;
 }
 
 const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: boolean }) => {
@@ -146,6 +149,7 @@ export const PostContent = ({
   isSearchPost = false,
   expandAllContent = false,
   eventCreatorId,
+  mediaRatioOverride,
 }: PostContentProps) => {
   const componentId = 'post_content';
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
@@ -200,12 +204,11 @@ export const PostContent = ({
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
-  const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
-  const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
-
   const { page, goToClipFeedPage, goToEventDetailPage } = useNavigation();
 
   const elementRef = useRef<HTMLDivElement>(null);
+  const mediaControlsRef = useRef<PostMediaControls | null>(null);
+  const viewerIndexRef = useRef(0);
 
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
@@ -305,30 +308,55 @@ export const PostContent = ({
   };
 
   const openImageViewer = (imageIndex: number) => {
+    viewerIndexRef.current = imageIndex;
     openPopup({
       id: 'image-viewer',
       disabledAnimation: true,
       isDismissable: isDesktop,
       className: styles.postContent__imageViewer,
       overlayClassName: styles.postContent__imageViewerOverlay,
+      onClose: () => closeImageViewer(),
       children: (
-        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={imageIndex} />
+        <ImageViewer
+          post={post}
+          onClose={closeImageViewer}
+          initialImageIndex={imageIndex}
+          indexRef={viewerIndexRef}
+        />
       ),
     });
   };
 
   const closeImageViewer = () => {
     closePopup('image-viewer');
+    mediaControlsRef.current?.slideTo(viewerIndexRef.current);
   };
 
   const openVideoViewer = (imageIndex: number) => {
-    setIsVideoViewerOpen(true);
-    setClickedVideoIndex(imageIndex);
+    viewerIndexRef.current = imageIndex;
+    openPopup({
+      id: 'video-viewer',
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      className: styles.postContent__videoViewer,
+      overlayClassName: styles.postContent__videoViewerOverlay,
+      onClose: () => closeVideoViewer(),
+      children: (
+        <VideoViewer
+          post={post}
+          pageId={pageId}
+          sourceId={post.parentPostId ?? post.postId}
+          onClose={closeVideoViewer}
+          initialIndex={imageIndex}
+          indexRef={viewerIndexRef}
+        />
+      ),
+    });
   };
 
   const closeVideoViewer = () => {
-    setIsVideoViewerOpen(false);
-    setClickedVideoIndex(null);
+    closePopup('video-viewer');
+    mediaControlsRef.current?.slideTo(viewerIndexRef.current);
   };
 
   const onEditFeaturePost = ({ onConfirm }: { onConfirm: () => void }) => {
@@ -471,7 +499,7 @@ export const PostContent = ({
                   </span>
                 </div>
               ) : null}
-              <Timestamp timestamp={post.createdAt} />
+              <Timestamp pageId={pageId} componentId={componentId} timestamp={post.createdAt} />
               {post.createdAt !== post.editedAt && (
                 <Typography.Caption
                   data-testid={`${pageId}/${componentId}/post_edited_text`}
@@ -592,6 +620,8 @@ export const PostContent = ({
                 pageId={pageId}
                 componentId={componentId}
                 post={post}
+                mediaControlsRef={mediaControlsRef}
+                mediaRatioOverride={mediaRatioOverride}
                 onImageClick={openImageViewer}
                 onVideoClick={openVideoViewer}
                 onClipClick={() => {
@@ -757,14 +787,6 @@ export const PostContent = ({
               </div>
             </div>
           </>
-
-          {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
-            <VideoViewer
-              post={post}
-              onClose={closeVideoViewer}
-              initialVideoIndex={clickedVideoIndex}
-            />
-          ) : null}
         </div>
       </div>
       {disabledInlineComment &&

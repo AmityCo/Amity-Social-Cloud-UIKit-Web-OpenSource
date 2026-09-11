@@ -187,6 +187,7 @@ export function PostComposer({
         pageId={pageId}
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
+        iconTestId="post-composer-image-upload-button"
         textId=""
       />
       <VideoButton

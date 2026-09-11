@@ -26,6 +26,7 @@ export type UnderlineInputProps = {
   placeholderClassName?: string;
   textKey?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  'data-testid'?: string;
 };
 
 export const UnderlineInput = forwardRef(function (
