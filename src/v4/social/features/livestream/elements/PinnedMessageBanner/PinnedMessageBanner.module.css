@@ -1,0 +1,164 @@
+/* PinnedMessageBannerElement — Figma "Livestream chat / Pinned" (307:17993 / 307:17898) */
+
+.pinnedMessageBanner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-live-stream-chat-bubble-pinned);
+  backdrop-filter: blur(2px);
+  outline: none;
+}
+
+/* The whole bubble is the more / less tap target, but only when the text overflows. */
+.pinnedMessageBanner[data-overflowing='true'] {
+  cursor: pointer;
+}
+
+.pinnedMessageBanner[data-overflowing='true']:focus-visible {
+  outline: 2px solid var(--asc-color-primary-default);
+  outline-offset: 2px;
+}
+
+.pinnedMessageBanner__header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.pinnedMessageBanner__author {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pinnedMessageBanner__displayName {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--asc-color-base-shade1);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pinnedMessageBanner__displayName[data-muted='true'] {
+  color: var(--asc-color-base-shade2);
+}
+
+.pinnedMessageBanner__mutedIcon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-base-shade2);
+}
+
+.pinnedMessageBanner__badge {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.125rem 0.375rem 0.125rem 0.25rem;
+  border-radius: 1.25rem;
+  background-color: var(--asc-color-live-stream-chat-pinned-badge);
+  color: var(--asc-color-white);
+}
+
+.pinnedMessageBanner__badgeIcon {
+  flex-shrink: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.pinnedMessageBanner__badgeText {
+  color: var(--asc-color-white);
+  white-space: nowrap;
+}
+
+/* 16px glyph inside a 24px hit area; negative margin keeps the row height unchanged. */
+.pinnedMessageBanner__unpin {
+  display: flex;
+  flex-shrink: 0;
+  margin: -0.25rem -0.25rem -0.25rem 0;
+}
+
+.pinnedMessageBanner__unpinButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pinnedMessageBanner__unpinIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-secondary-default);
+}
+
+/* Collapsed: one line, ellipsis, trailing "more" that never gets clipped. */
+.pinnedMessageBanner__body {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.pinnedMessageBanner__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--asc-color-white);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pinnedMessageBanner__indicator {
+  flex-shrink: 0;
+  color: var(--asc-color-secondary-default);
+  text-decoration: underline;
+}
+
+/* Expanded: full text with the "less" indicator flowing inline after it. */
+.pinnedMessageBanner[data-expanded='true'] .pinnedMessageBanner__body {
+  display: block;
+}
+
+.pinnedMessageBanner[data-expanded='true'] .pinnedMessageBanner__text {
+  display: inline;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.pinnedMessageBanner[data-expanded='true'] .pinnedMessageBanner__indicator {
+  display: inline;
+  margin-left: 0.25rem;
+}
+
+/* Invisible single-line probe spanning the full body width (overflow detection). */
+.pinnedMessageBanner__measure {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.pinnedMessageBanner__measureText {
+  display: inline;
+  white-space: nowrap;
+}

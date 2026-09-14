@@ -13,7 +13,10 @@ import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfi
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { COMPONENT_ID, PAGE_ID } from '~/v4/constants/customization';
+import { COMPONENT_ID, ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { usePinMessage } from '~/v4/chat/hooks/usePinMessage';
+import { PinStraight } from '~/v4/icons/PinStraight';
 
 export interface MessageOptionsProps {
   pageId?: string;
@@ -21,6 +24,8 @@ export interface MessageOptionsProps {
   isOwner: boolean;
   isModerator: boolean;
   isHostMessage?: boolean;
+  /** Pin gate from useCanPinMessage — shows the "Pin message" item (AmityLivestreamChatFeed v2 REQ-080). */
+  canPin?: boolean;
   message: Amity.Message;
   isJoinedCommunity?: boolean;
   onCloseMenu: () => void;
@@ -32,6 +37,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
   isOwner,
   isModerator,
   isHostMessage,
+  canPin = false,
   message,
   onCloseMenu,
   isJoinedCommunity,
@@ -41,6 +47,12 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
   const { deleteMessage } = useDeleteMessage();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const { pinMessage } = usePinMessage();
+  const pinMessageButton = useAmityElement({
+    pageId,
+    componentId: COMPONENT_ID.LIVESTREAM_CHAT_FEED,
+    elementId: ELEMENT_ID.PIN_MESSAGE_BUTTON,
+  });
 
   const { isLoading, isFlaggedByMe, unreport } = useFlagMessageQuery({
     messageId: message.messageId,
@@ -101,8 +113,23 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
     removeDrawerData();
   };
 
+  const handlePinMessage = () => {
+    onCloseMenu();
+    pinMessage(message.messageId);
+  };
+
+  const showPinMessage =
+    canPin && !message.isDeleted && message.syncState !== 'error' && !pinMessageButton.isExcluded;
+
   return (
     <div className={styles.messageOptions}>
+      {showPinMessage && (
+        <MenuOptionButton
+          text={pinMessageButton.resolveText('amity_livechat_pinned_message_pin_button')}
+          icon={<PinStraight />}
+          onPress={handlePinMessage}
+        />
+      )}
       {!isOwner && message.syncState !== 'error' && (
         <>
           {isLoading ? (

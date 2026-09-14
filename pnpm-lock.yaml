@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.27.1-9ea0f34.0
-        version: 7.27.1-9ea0f34.0
+        specifier: 7.27.1-68c2c26.0
+        version: 7.27.1-68c2c26.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -336,8 +336,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.27.1-9ea0f34.0':
-    resolution: {integrity: sha512-PqzMb8PtGMg1XPNzMyZ2XfrEjlq/VLTLJ8kGNtKDQ6eTSlauFsI4DAr16qwRkhqGHkuxvRcLF2BAJ94FqsfytA==}
+  '@amityco/ts-sdk@7.27.1-68c2c26.0':
+    resolution: {integrity: sha512-7Urymg2LL4RQ/Zop9lxaFMkHl4ywJ4Cifk4iA1siHPpaboy6Qu0JOZT+jOUJtwteikfGhRSian9SkiugJXKc7Q==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7043,8 +7043,8 @@ packages:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
 
-  socks@2.8.9:
-    resolution: {integrity: sha512-LJhUYUvItdQ0LkJTmPeaEObWXAqFyfmP85x0tch/ez9cahmhlBBLbIqDFnvBnUJGagb0JbIQrkBs1wJ+yRYpEw==}
+  socks@2.8.10:
+    resolution: {integrity: sha512-e0VyvkVTwVYViNovRkZ9aodhxVlyoMn7eJhVUPxZ+eK9P/7CBkxvvsBOHqFPEH416726W8tLXXXjKwqgTErrCQ==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
 
   source-map-js@1.2.0:
@@ -8004,7 +8004,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.27.1-9ea0f34.0':
+  '@amityco/ts-sdk@7.27.1-68c2c26.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
@@ -15161,7 +15161,7 @@ snapshots:
       number-allocator: 1.0.14
       readable-stream: 4.7.0
       rfdc: 1.4.1
-      socks: 2.8.9
+      socks: 2.8.10
       split2: 4.2.0
       worker-timers: 8.0.34
       ws: 8.21.1
@@ -16338,7 +16338,7 @@ snapshots:
 
   smart-buffer@4.2.0: {}
 
-  socks@2.8.9:
+  socks@2.8.10:
     dependencies:
       ip-address: 10.7.0
       smart-buffer: 4.2.0

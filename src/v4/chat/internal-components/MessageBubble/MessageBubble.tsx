@@ -18,6 +18,7 @@ import {
 } from '~/v4/social/features/livestream/internal-components';
 import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
 import { MessageOptions } from '~/v4/chat/internal-components/MessageOptions';
+import { useCanPinMessage } from '~/v4/chat/hooks/useCanPinMessage';
 import styles from './MessageBubble.module.css';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import Bin from '~/v4/icons/Bin';
@@ -57,6 +58,14 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isModerator =
     isChannelModerator || !!channel?.metadata?.moderators?.includes(currentUserId);
   const isOwner = message.creatorId === currentUserId;
+
+  // Pin gate (AmityLivestreamChatFeed v2 REQ-080 / REQ-081): host, co-host, or PIN_MESSAGE
+  // holder while the room is live. Re-evaluated on channel / membership emissions.
+  const canPin = useCanPinMessage({
+    channelId: message.channelId,
+    channel,
+    membership: currentUserMembership,
+  });
 
   const isHostMessage = hostId === message.creatorId;
 
@@ -302,6 +311,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
           closePopover();
         }}
         isHostMessage={isHostMessage}
+        canPin={canPin}
       />
     );
   };

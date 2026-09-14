@@ -107,6 +107,7 @@ export const COMPONENT_ID = {
   MANAGE_PRODUCT_TAG_LIST: 'manage_product_tag_list',
   TEXT_EDITOR_COMPONENT: 'text_editor_component',
   LIVESTREAM_CHAT: 'livestream_chat',
+  LIVESTREAM_CHAT_FEED: 'livestream_chat_feed',
 } as const;
 
 export const ELEMENT_ID = {
@@ -344,4 +345,7 @@ export const ELEMENT_ID = {
   PRODUCT_TAG_NO_TAGS_YET: 'product_tag_no_tags_yet',
   MANAGE_PRODUCT_TAG: 'manage_product_tag',
   LIVESTREAM_PINNED_PRODUCT: 'livestream_pinned_product',
+  PINNED_MESSAGE_BANNER: 'pinned_message_banner',
+  PIN_MESSAGE_BUTTON: 'pin_message_button',
+  UNPIN_MESSAGE_BUTTON: 'unpin_message_button',
 } as const;

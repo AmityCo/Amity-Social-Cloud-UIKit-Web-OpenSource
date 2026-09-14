@@ -90,6 +90,8 @@ type BaseThemeValue = {
   transparent_black: string;
   custom_toast_background: string;
   live_stream_chat_bubble_color: string;
+  live_stream_chat_bubble_pinned_color: string;
+  live_stream_chat_pinned_badge_color: string;
   base_divider_line: string;
   elevation_08_01_color: string;
   elevation_08_02_color: string;
@@ -126,6 +128,8 @@ const defaultBase = {
   transparent_black: 'rgb(0 0 0 / 50%)',
   trasparent_black_color: 'rgb(0 0 0 / 50%)',
   live_stream_chat_bubble_color: 'rgba(99, 104, 120, 0.30)',
+  live_stream_chat_bubble_pinned_color: 'rgb(41 43 50 / 30%)',
+  live_stream_chat_pinned_badge_color: 'rgb(99 104 120 / 50%)',
   base_divider_line: ' #292B32',
   host_color: '#4B1BD0',
   host_color_shade1: '#EAE2FF',
@@ -1188,6 +1192,8 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   message_bubble_primary_color: '--asc-color-message-bubble-primary',
   message_bubble_secondary_color: '--asc-color-message-bubble-secondary',
   live_stream_chat_bubble_color: '--asc-color-live-steram-chat-bubble',
+  live_stream_chat_bubble_pinned_color: '--asc-color-live-stream-chat-bubble-pinned',
+  live_stream_chat_pinned_badge_color: '--asc-color-live-stream-chat-pinned-badge',
   base_divider_line: '--asc-color-base-divider-line',
   background_transparent_black_color: '--asc-color-background-transparent-black',
   background_transparent_white_color: '--asc-color-background-transparent-white',
