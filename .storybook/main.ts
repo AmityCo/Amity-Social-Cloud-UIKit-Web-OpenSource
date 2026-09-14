@@ -10,6 +10,7 @@ const config: StorybookConfig = {
     '@storybook/addon-viewport',
     '@storybook/addon-toolbars',
     '@storybook/addon-a11y',
+    '@storybook/addon-interactions',
   ],
   framework: '@storybook/react-vite',
   staticDirs: ['../static'],

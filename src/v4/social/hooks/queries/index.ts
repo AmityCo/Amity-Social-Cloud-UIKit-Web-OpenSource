@@ -1,0 +1,1 @@
+export { useContentWidgetPool } from './useContentWidgetPool';

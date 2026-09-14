@@ -1,0 +1,36 @@
+.cardEngagementBar {
+  display: flex;
+  flex: 0 0 2.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  height: 2.25rem;
+  padding: 0 1rem;
+}
+
+.cardEngagementBar__reactions {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.cardEngagementBar__reactionIcons {
+  display: flex;
+  align-items: center;
+}
+
+.cardEngagementBar__reactionIcon {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.cardEngagementBar__reactionIcon:not(:first-child) {
+  margin-left: -0.25rem;
+}
+
+.cardEngagementBar__count {
+  color: var(--asc-color-base-shade2);
+  white-space: nowrap;
+}

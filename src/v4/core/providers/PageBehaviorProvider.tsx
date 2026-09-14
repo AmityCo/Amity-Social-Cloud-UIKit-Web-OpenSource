@@ -15,6 +15,9 @@ import { NotificationAlignment } from '~/v4/core/components/Notification';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface PageBehavior {
+  AmityContentWidgetComponentBehavior?: {
+    goToDestination?: (context: { topicId: string; post: Amity.Post }) => void;
+  };
   AmityStoryViewPageBehavior?: {
     onCloseAction?(): void;
     hyperLinkAction?(context: Record<string, unknown>): void;
@@ -385,6 +388,13 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToLiveStreamPlayerPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
+    AmityContentWidgetComponentBehavior: {
+      goToDestination: (context: { topicId: string; post: Amity.Post }) => {
+        if (pageBehavior?.AmityContentWidgetComponentBehavior?.goToDestination) {
+          return pageBehavior.AmityContentWidgetComponentBehavior.goToDestination(context);
+        }
+      },
+    },
     AmityStoryViewPageBehavior: {
       onCloseAction: () => {
         if (pageBehavior?.AmityStoryViewPageBehavior?.onCloseAction) {

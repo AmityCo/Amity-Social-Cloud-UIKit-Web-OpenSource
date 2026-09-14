@@ -1,0 +1,22 @@
+.widgetPoll {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  height: 100%;
+  padding: 0 1rem 1.25rem;
+  overflow: hidden;
+}
+
+.widgetPoll__options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.widgetPoll__options[data-layout='text'] {
+  flex-direction: column;
+}
+
+.widgetPoll__options[data-layout='image'] {
+  flex-direction: row;
+}

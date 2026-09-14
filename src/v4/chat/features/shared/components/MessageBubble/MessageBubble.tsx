@@ -17,7 +17,7 @@ import {
   type SyntheticPendingMessage,
 } from '~/v4/chat/features/shared/hooks/useMessageComposer';
 import { LONG_PRESS_THRESHOLD_MS, TEXT_MAX_LINES } from '~/v4/chat/constants';
-import { extractFirstPreviewUrl } from '~/v4/chat/utils/previewLink';
+import { extractFirstPreviewUrl } from '~/v4/utils/previewLink';
 import useFile from '~/v4/core/hooks/useFile';
 import { useString } from '~/v4/core/localization';
 import { resolveString } from '~/v4/core/localization/resolveString';
