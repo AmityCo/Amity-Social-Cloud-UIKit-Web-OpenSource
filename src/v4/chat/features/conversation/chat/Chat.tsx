@@ -99,12 +99,7 @@ export function Chat(props: ChatPageProps) {
       {showMutedBanner ? (
         <MutedBanner variant={mutedVariant} />
       ) : (
-        <MessageComposer
-          composer={composer}
-          onOpenSeeMore={openSeeMore}
-          onOpenImage={openImageViewer}
-          onOpenVideo={openVideoPlayer}
-        />
+        <MessageComposer composer={composer} />
       )}
 
       {imageViewerProps ? <ImageViewer {...imageViewerProps} /> : null}

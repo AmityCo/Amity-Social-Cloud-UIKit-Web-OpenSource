@@ -6,13 +6,7 @@
   height: 3.875rem;
   padding: 0.625rem 0.75rem 0.625rem 1rem;
   background: var(--asc-color-surface-list-default-hover);
-  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-}
-
-.replyBand:focus,
-.replyBand:focus-visible {
-  outline: none;
 }
 
 .replyBand__text {

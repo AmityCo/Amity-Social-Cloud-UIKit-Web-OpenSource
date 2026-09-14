@@ -13,25 +13,16 @@ import { MediaSection } from './components/MediaSection/MediaSection';
 import { MessageReplyBand } from '~/v4/chat/features/shared/components/MessageReplyBand';
 import type { useMessageComposer } from '~/v4/chat/features/shared/hooks/useMessageComposer';
 import styles from './MessageComposer.module.css';
-import type { SeeMorePayload } from '~/v4/chat/types';
 
 type MessageComposer = ReturnType<typeof useMessageComposer>;
 
 type MessageComposerProps = {
   composer: MessageComposer;
-  onOpenSeeMore: (payload: SeeMorePayload) => void;
-  onOpenImage: (url: string, message: Amity.Message) => void;
-  onOpenVideo: (message: Amity.Message) => void;
 };
 
 const MAX_MENTIONS = 30;
 
-export function MessageComposer({
-  composer,
-  onOpenSeeMore,
-  onOpenImage,
-  onOpenVideo,
-}: MessageComposerProps) {
+export function MessageComposer({ composer }: MessageComposerProps) {
   const {
     subChannelId,
     enableMention,
@@ -113,15 +104,7 @@ export function MessageComposer({
         </div>
       ) : null}
 
-      {!isEditing && replyTo ? (
-        <MessageReplyBand
-          replyTo={replyTo}
-          onCancel={cancelReply}
-          onOpenSeeMore={onOpenSeeMore}
-          onOpenImage={onOpenImage}
-          onOpenVideo={onOpenVideo}
-        />
-      ) : null}
+      {!isEditing && replyTo && <MessageReplyBand replyTo={replyTo} onCancel={cancelReply} />}
 
       <div className={styles.messageComposer__inputRow}>
         {isEditing ? null : (
