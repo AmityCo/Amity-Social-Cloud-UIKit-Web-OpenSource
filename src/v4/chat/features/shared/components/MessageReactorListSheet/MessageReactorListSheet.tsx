@@ -12,6 +12,7 @@ import { Skeleton } from '~/v4/core/design/components/Skeleton/Skeleton';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { Avatar } from '~/v4/core/design/atoms/Avatar';
 import { abbreviateCount } from '~/v4/utils/abbreviateCount';
+import { LIST_SKELETON_ROW_COUNT } from '~/v4/chat/constants';
 import { REACTION_ICON_MAP } from '~/v4/chat/utils/reactionIcons';
 import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
 import { SmilePlus } from '~/v4/core/design/icons/SmilePlus';
@@ -101,7 +102,7 @@ export function MessageReactorListSheet({ messageId, onClose }: MessageReactorLi
         {others.map((r, index) => (
           <ReactorRow key={`${r.userId ?? 'unknown'}-${index}`} reactor={r} />
         ))}
-        {(isLoadingFirstPage || isLoading) && <SkeletonRows count={3} />}
+        {(isLoadingFirstPage || isLoading) && <SkeletonRows count={LIST_SKELETON_ROW_COUNT} />}
         {hasMore && !isLoading && !isLoadingFirstPage ? (
           <div ref={setSentinelNode} aria-hidden="true" />
         ) : null}
