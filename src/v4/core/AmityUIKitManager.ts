@@ -83,6 +83,8 @@ export class AmityUIKitManager {
       const client: Amity.Client = ASCClient.createClient(config.apiKey, config.apiRegion, {
         apiEndpoint: config.apiEndpoint,
         rteEnabled: !config.seoOptimizationEnabled,
+        product: 'uikit',
+        uikitVersion: __VERSION__,
       });
 
       AmityUIKitManager.setClient(client);
