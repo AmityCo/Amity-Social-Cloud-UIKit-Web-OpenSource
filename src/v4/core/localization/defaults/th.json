@@ -27,6 +27,7 @@
   "amity_social_button_reaction_heart": "หัวใจ",
   "amity_common_button_tap_to_remove_reaction": "แตะเพื่อลบปฏิกิริยา",
   "amity_common_button_unable_to_load_reactions": "ไม่สามารถโหลดปฏิกิริยาได้",
+  "amity_common_button_reactions_not_available": "ไม่สามารถแสดงปฏิกิริยาสำหรับ %1$s นี้ได้",
   "amity_common_join": "เข้าร่วม",
   "amity_common_label_be_first_to_react": "เป็นคนแรกที่แสดงปฏิกิริยาต่อ %1$s นี้!",
   "amity_common_label_follow_user_to_interact": "ติดตามผู้ใช้เพื่อโต้ตอบ",

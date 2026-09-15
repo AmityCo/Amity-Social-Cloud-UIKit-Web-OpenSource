@@ -16,6 +16,7 @@ import { LIST_SKELETON_ROW_COUNT } from '~/v4/chat/constants';
 import { REACTION_ICON_MAP } from '~/v4/chat/utils/reactionIcons';
 import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
 import { SmilePlus } from '~/v4/core/design/icons/SmilePlus';
+import { FaceEyesXmarks } from '~/v4/core/design/icons/FaceEyesXmarks';
 import { useString } from '~/v4/core/localization';
 import styles from './MessageReactorListSheet.module.css';
 
@@ -44,16 +45,18 @@ export function MessageReactorListSheet({ messageId, onClose }: MessageReactorLi
       .map(([name]) => name);
   }, [reactionMap, isMessageDeleted]);
 
+  const showAllTab = distinctNames.length === 0 || distinctNames.length > 1;
+
   const [activeTab, setActiveTab] = useState<string>(
     distinctNames.length > 1 ? ALL_TAB : distinctNames[0] ?? ALL_TAB,
   );
   const [sentinelNode, setSentinelNode] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (activeTab === ALL_TAB) return;
+    if (showAllTab && activeTab === ALL_TAB) return;
     if (distinctNames.includes(activeTab)) return;
-    setActiveTab(distinctNames.length > 1 ? ALL_TAB : distinctNames[0] ?? ALL_TAB);
-  }, [activeTab, distinctNames]);
+    setActiveTab(showAllTab ? ALL_TAB : distinctNames[0] ?? ALL_TAB);
+  }, [activeTab, distinctNames, showAllTab]);
 
   const queryParams = {
     referenceType: 'message' as Amity.ReactableType,
@@ -93,6 +96,9 @@ export function MessageReactorListSheet({ messageId, onClose }: MessageReactorLi
   }
 
   function renderContent() {
+    if (isMessageDeleted) {
+      return <MessageUnavailableState />;
+    }
     if (totalCount === 0) {
       return <EmptyState />;
     }
@@ -112,7 +118,6 @@ export function MessageReactorListSheet({ messageId, onClose }: MessageReactorLi
 
   const tabs = () => {
     const items: { value: string; label: React.ReactNode; content: () => React.ReactNode }[] = [];
-    const showAllTab = distinctNames.length === 0 || distinctNames.length > 1;
     if (showAllTab) {
       items.push({
         value: ALL_TAB,
@@ -204,6 +209,24 @@ function EmptyState() {
   return (
     <div className={styles.messageReactorListSheet__emptyState}>
       <SmilePlus className={styles.messageReactorListSheet__emptyStateIcon} />
+      <div className={styles.messageReactorListSheet__emptyStateText}>
+        <Typography.TitleBold className={styles.messageReactorListSheet__emptyStateTitle}>
+          {title}
+        </Typography.TitleBold>
+        <Typography.Caption className={styles.messageReactorListSheet__emptyStateDescription}>
+          {description}
+        </Typography.Caption>
+      </div>
+    </div>
+  );
+}
+
+function MessageUnavailableState() {
+  const title = useString('amity_common_button_unable_to_load_reactions');
+  const description = useString('amity_common_button_reactions_not_available', 'message');
+  return (
+    <div className={styles.messageReactorListSheet__emptyState}>
+      <FaceEyesXmarks className={styles.messageReactorListSheet__emptyStateIcon} />
       <div className={styles.messageReactorListSheet__emptyStateText}>
         <Typography.TitleBold className={styles.messageReactorListSheet__emptyStateTitle}>
           {title}

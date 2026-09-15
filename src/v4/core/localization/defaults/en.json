@@ -285,6 +285,7 @@
   "amity_common_button_delete": "Delete",
   "amity_common_button_moderator": "Moderator",
   "amity_common_button_no_reactions_yet": "No reactions yet",
+  "amity_common_button_reactions_not_available": "Reactions aren't available for this %1$s",
   "amity_common_button_tap_to_remove_reaction": "Tap to remove reaction",
   "amity_common_button_unable_to_load_reactions": "Unable to load reactions",
   "amity_common_join": "Join",
