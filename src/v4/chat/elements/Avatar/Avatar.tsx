@@ -12,7 +12,7 @@ import styles from './Avatar.module.css';
 
 type AvatarUserProps = {
   user: Amity.User;
-  size?: 'sm' | 'md';
+  size?: 'xs' | 'sm' | 'md';
   isModerator?: boolean;
   className?: string;
   fullscreen?: boolean;

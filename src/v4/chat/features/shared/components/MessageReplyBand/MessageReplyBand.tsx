@@ -1,10 +1,10 @@
 import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { Cross } from '~/v4/core/design/icons/Cross';
-import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import useFile from '~/v4/core/hooks/useFile';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useMessageObject } from '~/v4/chat/hooks/objects';
+import { VideoPlayBadge } from '~/v4/chat/elements/VideoPlayBadge';
 import { useString } from '~/v4/core/localization';
 import styles from './MessageReplyBand.module.css';
 
@@ -121,9 +121,7 @@ function VideoThumb({ replyTo }: { replyTo: Amity.Message }) {
         controls={false}
         className={styles.replyBand__thumb}
       />
-      <div className={styles.replyBand__videoOverlay} aria-hidden="true">
-        <VideoPlay className={styles.replyBand__videoIcon} />
-      </div>
+      <VideoPlayBadge size={24} />
     </div>
   );
 }

@@ -58,28 +58,6 @@
   object-fit: cover;
 }
 
-.replyBand__videoOverlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 9999px;
-  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.replyBand__videoIcon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
-  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
-}
-
 .replyBand__close {
   flex-shrink: 0;
   width: 1.25rem;

@@ -4,10 +4,10 @@ import { FileRepository } from '@amityco/ts-sdk';
 import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { Loader } from '~/v4/core/design/atoms/Loader';
-import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import { ChevronRight } from '~/v4/core/design/icons/ChevronRight';
 import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import { MediaUploadOverlay } from '~/v4/chat/elements/MediaUploadOverlay';
+import { VideoPlayBadge } from '~/v4/chat/elements/VideoPlayBadge';
 import { HighlightText } from '~/v4/chat/elements/HighlightText';
 import type { MentionMetadata } from '~/v4/chat/types';
 import { DeletedMessagePill } from '~/v4/chat/features/shared/components/DeletedMessagePill/DeletedMessagePill';
@@ -406,9 +406,7 @@ function VideoBubble({
           }
         />
       ) : (
-        <span className={styles.videoBubble__playChip} aria-hidden="true">
-          <VideoPlay className={styles.videoBubble__playIcon} />
-        </span>
+        <VideoPlayBadge size={40} />
       )}
     </div>
   );

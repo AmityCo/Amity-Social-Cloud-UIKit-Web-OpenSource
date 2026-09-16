@@ -4,7 +4,6 @@ import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { Loader } from '~/v4/core/design/atoms/Loader';
 import { ShareLeft } from '~/v4/core/design/icons/ShareLeft';
-import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import { Trash } from '~/v4/core/design/icons/Trash';
 import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import { useSDK } from '~/v4/core/hooks/useSDK';
@@ -14,6 +13,7 @@ import { useString } from '~/v4/core/localization';
 import { getReplyHeader } from '~/v4/chat/utils/getReplyHeader';
 import { getReplyThumbnailSize } from '~/v4/chat/utils/getReplyThumbnailSize';
 import type { MentionMetadata } from '~/v4/chat/types';
+import { VideoPlayBadge } from '~/v4/chat/elements/VideoPlayBadge';
 import styles from './MessageReplyQuote.module.css';
 import type { SeeMorePayload } from '~/v4/chat/types';
 
@@ -325,9 +325,7 @@ function VideoQuote({ parent, onOpenVideo }: VideoQuoteProps) {
         }}
       />
       <div className={styles.replyQuote__overlay} aria-hidden="true" />
-      <span className={styles.replyQuote__playChip} aria-hidden="true">
-        <VideoPlay className={styles.replyQuote__playIcon} />
-      </span>
+      <VideoPlayBadge size={40} />
     </div>
   );
 }
