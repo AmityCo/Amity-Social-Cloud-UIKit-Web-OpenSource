@@ -16,7 +16,7 @@
 .replyQuote__header {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   color: var(--asc-color-text-chatbubble-inbound-header-repliedto-default);
 }
 
@@ -73,7 +73,7 @@
   color: var(--asc-color-text-chatbubble-inbound-messages-default);
   font-size: 0.9375rem;
   line-height: 1.25rem;
-  max-width: 14.25rem;
+  max-width: 60vw;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
@@ -124,7 +124,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14.25rem;
+  width: 60vw;
   height: 3.75rem;
   background: var(--asc-color-surface-chatbubble-reply-message-default);
   border-radius: 1.25rem;
