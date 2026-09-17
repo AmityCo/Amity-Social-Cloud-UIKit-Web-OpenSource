@@ -12,6 +12,7 @@ export type ContentWidgetProps = {
   topicId: string;
   showHeader?: boolean;
   minVisibilityThreshold?: number;
+  onCardClick?: (topicId: string, post: Amity.Post) => void;
 };
 
 export function ContentWidget({
@@ -19,6 +20,7 @@ export function ContentWidget({
   topicId,
   showHeader = true,
   minVisibilityThreshold,
+  onCardClick,
 }: ContentWidgetProps) {
   const componentId = COMPONENT_ID.CONTENT_WIDGET_COMPONENT;
 
@@ -40,7 +42,7 @@ export function ContentWidget({
     canGoNext,
     scrollByPage,
     handleCardClick,
-  } = useContentWidget({ topicId, minVisibilityThreshold });
+  } = useContentWidget({ topicId, minVisibilityThreshold, onCardClick });
 
   if (isExcluded || phase === 'absent') return null;
 
@@ -92,7 +94,7 @@ export function ContentWidget({
                   post={post}
                   layout={layout}
                   tabIndex={getCardTabIndex(index)}
-                  onCardClick={handleCardClick}
+                  onClick={() => handleCardClick(post)}
                 />
               </div>
             ))}

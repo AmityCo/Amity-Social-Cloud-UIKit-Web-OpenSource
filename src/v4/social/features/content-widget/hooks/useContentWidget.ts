@@ -4,6 +4,7 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useContentWidgetPool } from '~/v4/social/hooks/queries';
 import {
   MIN_VISIBILITY_THRESHOLD_DEFAULT,
+  MIN_VISIBILITY_THRESHOLD_FLOOR,
   MAX_POOL_LIMIT,
 } from '~/v4/social/features/content-widget/constants';
 import { isValidPostType } from '~/v4/social/features/content-widget/utils';
@@ -18,9 +19,14 @@ import { useWidgetKeyboardNavigation } from './useWidgetKeyboardNavigation';
 type UseContentWidgetParam = {
   topicId: string;
   minVisibilityThreshold?: number;
+  onCardClick?: (topicId: string, post: Amity.Post) => void;
 };
 
-export function useContentWidget({ topicId, minVisibilityThreshold }: UseContentWidgetParam) {
+export function useContentWidget({
+  topicId,
+  minVisibilityThreshold,
+  onCardClick,
+}: UseContentWidgetParam) {
   const { isDesktop } = useResponsive();
   const { AmityContentWidgetComponentBehavior } = usePageBehavior();
 
@@ -30,7 +36,7 @@ export function useContentWidget({ topicId, minVisibilityThreshold }: UseContent
   });
 
   const threshold = Math.max(
-    MIN_VISIBILITY_THRESHOLD_DEFAULT,
+    MIN_VISIBILITY_THRESHOLD_FLOOR,
     minVisibilityThreshold ?? MIN_VISIBILITY_THRESHOLD_DEFAULT,
   );
 
@@ -88,6 +94,12 @@ export function useContentWidget({ topicId, minVisibilityThreshold }: UseContent
 
   const handleCardClick = (post: Amity.Post) => {
     markCardClick(post.postId);
+
+    if (onCardClick) {
+      onCardClick(topicId, post);
+      return;
+    }
+
     AmityContentWidgetComponentBehavior?.goToDestination?.({ topicId, post });
   };
 

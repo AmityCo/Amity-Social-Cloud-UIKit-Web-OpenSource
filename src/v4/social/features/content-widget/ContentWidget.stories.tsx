@@ -9,7 +9,13 @@ export default {
   argTypes: {
     topicId: { control: 'text' },
     showHeader: { control: 'boolean' },
-    minVisibilityThreshold: { control: { type: 'number', min: 3 } },
+    minVisibilityThreshold: { control: { type: 'number', min: 1 } },
+    useOnCardClick: {
+      name: 'Use onCardClick prop',
+      control: 'boolean',
+      description:
+        'On: the onCardClick prop handles the click and goToDestination is skipped. Off: no prop is passed, so the behaviour class handles it. Only one alert ever fires.',
+    },
     runA11yChecks: {
       name: 'Run keyboard a11y checks',
       control: 'boolean',
@@ -19,11 +25,22 @@ export default {
   },
 };
 
-type StoryArgs = React.ComponentProps<typeof ContentWidget> & { runA11yChecks?: boolean };
+type StoryArgs = React.ComponentProps<typeof ContentWidget> & {
+  runA11yChecks?: boolean;
+  useOnCardClick?: boolean;
+};
 
-const render = ({ runA11yChecks: _runA11yChecks, ...props }: StoryArgs) => (
+const render = ({ runA11yChecks: _runA11yChecks, useOnCardClick, ...props }: StoryArgs) => (
   <div style={{ padding: '1.5rem 1rem' }}>
-    <ContentWidget {...props} />
+    <ContentWidget
+      {...props}
+      onCardClick={
+        useOnCardClick
+          ? (topicId, post) =>
+              window.alert(`onCardClick prop \n\npostId: ${post.postId}\ntopicId: ${topicId}`)
+          : undefined
+      }
+    />
   </div>
 );
 
@@ -31,6 +48,7 @@ const args: StoryArgs = {
   topicId: 'game',
   showHeader: true,
   minVisibilityThreshold: 3,
+  useOnCardClick: true,
   runA11yChecks: false,
 };
 
@@ -105,8 +123,9 @@ export const ContentWidgetSample = {
       await expect(cards[0]).toHaveFocus();
     });
 
-    await step('Enter and Space activate the focused card (goToDestination fires)', async () => {
-      // The story's decorator wires goToDestination → window.alert; stub it to observe activation.
+    await step('Enter and Space activate the focused card', async () => {
+      // Both click routes end in window.alert — onCardClick here, goToDestination in the
+      // decorator — so stubbing it observes activation whichever route is wired.
       const cards = getCards(canvasElement);
       const originalAlert = window.alert;
       let activations = 0;

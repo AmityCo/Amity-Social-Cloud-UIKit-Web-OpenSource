@@ -25,12 +25,12 @@ export type PostCardProps = {
   pageId?: string;
   post: Amity.Post;
   layout: ContentWidgetLayout;
-  onCardClick?: (post: Amity.Post) => void;
+  onClick?: () => void;
   tabIndex?: number;
 };
 
 export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(function PostCard(
-  { pageId = '*', post, layout, onCardClick, tabIndex = 0 },
+  { pageId = '*', post, layout, onClick, tabIndex = 0 },
   ref,
 ) {
   const componentId = COMPONENT_ID.CONTENT_WIDGET_POST_CARD_COMPONENT;
@@ -62,12 +62,12 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(function PostC
     poll: pollWord,
   });
 
-  const handleClick = () => onCardClick?.(post);
+  const handleClick = () => onClick?.();
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      onCardClick?.(post);
+      onClick?.();
     }
   };
 

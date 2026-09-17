@@ -1,5 +1,7 @@
 export const MIN_VISIBILITY_THRESHOLD_DEFAULT = 3;
 
+export const MIN_VISIBILITY_THRESHOLD_FLOOR = 1;
+
 export const MAX_POOL_LIMIT = 100;
 
 export const CARD_WIDTH_EXPANDED = 375;
