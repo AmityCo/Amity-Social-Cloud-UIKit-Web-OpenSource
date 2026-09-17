@@ -1,1 +1,1 @@
-export { useContentWidgetPool } from './useContentWidgetPool';
+export { useDiscoveryWidgetPool } from './useDiscoveryWidgetPool';

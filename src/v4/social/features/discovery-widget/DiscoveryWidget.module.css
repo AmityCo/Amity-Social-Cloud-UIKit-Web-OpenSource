@@ -1,0 +1,86 @@
+.discoveryWidget {
+  display: flex;
+  flex-direction: column;
+  background: var(--asc-color-background-default);
+}
+
+.discoveryWidget[data-layout='expanded'] {
+  gap: 1.5rem;
+}
+
+.discoveryWidget[data-layout='compact'] {
+  gap: 1rem;
+}
+
+.discoveryWidget__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discoveryWidget__track {
+    scroll-behavior: auto;
+  }
+}
+
+.discoveryWidget__track::-webkit-scrollbar {
+  display: none;
+}
+
+.discoveryWidget__track[data-layout='expanded'] {
+  gap: 1rem;
+}
+
+.discoveryWidget__track[data-layout='compact'] {
+  gap: 0.5rem;
+}
+
+.discoveryWidget__cell {
+  flex: 0 0 auto;
+}
+
+.discoveryWidget[data-layout='expanded'] .discoveryWidget__cell {
+  width: 23.4375rem;
+}
+
+.discoveryWidget[data-layout='compact'] .discoveryWidget__cell {
+  width: 21.4375rem;
+}
+
+.skeletonCard {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 30rem;
+  background: var(--asc-color-background-default);
+  border: 0.0625rem solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.skeletonCard__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  height: 3.25rem;
+  padding: 0.75rem 1rem 0;
+}
+
+.skeletonCard__headerLines {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2rem;
+}
+
+.skeletonCard__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}

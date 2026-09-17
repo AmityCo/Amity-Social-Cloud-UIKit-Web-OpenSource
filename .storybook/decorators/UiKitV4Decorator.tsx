@@ -211,7 +211,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
       socialCommunityCreationButtonVisible={args.socialCommunityCreationButtonVisible ?? true}
       hideExplore={args.hideExplore ?? false}
       pageBehavior={{
-        AmityContentWidgetComponentBehavior: {
+        AmityDiscoveryWidgetComponentBehavior: {
           goToDestination: ({ topicId, post }) => {
             window.alert(`Widget is clicked \n\npostId: ${post.postId}\ntopicId: ${topicId}`);
           },

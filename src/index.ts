@@ -140,9 +140,9 @@ export { Feed as AmityGlobalFeedComponent } from '~/v4/social/features/shared/co
 export { ForYouFeed as AmityForYouFeedComponent } from '~/v4/social/features/for-you';
 export { FeedCaughtUp as AmityFeedCaughtUpComponent } from '~/v4/social/components/FeedCaughtUp';
 export {
-  ContentWidget as AmityContentWidgetComponent,
-  PostCard as AmityContentWidgetPostCardComponent,
-} from '~/v4/social/features/content-widget';
+  DiscoveryWidget as AmityDiscoveryWidgetComponent,
+  PostCard as AmityDiscoveryWidgetPostCardComponent,
+} from '~/v4/social/features/discovery-widget';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
 
