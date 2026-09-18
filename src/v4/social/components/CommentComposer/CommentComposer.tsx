@@ -16,6 +16,7 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { Notification } from '~/v4/core/components/Notification';
 import { useNetworkState } from 'react-use';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import InfoCircle from '~/v4/icons/InfoCircle';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
@@ -114,18 +115,21 @@ export const CommentComposer = ({
   const { post } = usePost(referenceId);
 
   const [editorKey, setEditorKey] = useState('no-reply');
-  const [inlineError, setInlineError] = useState<string | null>(null);
-  const inlineErrorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [inlineNotice, setInlineNotice] = useState<{
+    message: string;
+    tone: 'error' | 'info';
+  } | null>(null);
+  const inlineNoticeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const showInlineError = (message: string) => {
-    if (inlineErrorTimerRef.current) clearTimeout(inlineErrorTimerRef.current);
-    setInlineError(message);
-    inlineErrorTimerRef.current = setTimeout(() => setInlineError(null), 3000);
+  const showInlineNotice = (message: string, tone: 'error' | 'info' = 'error') => {
+    if (inlineNoticeTimerRef.current) clearTimeout(inlineNoticeTimerRef.current);
+    setInlineNotice({ message, tone });
+    inlineNoticeTimerRef.current = setTimeout(() => setInlineNotice(null), 3000);
   };
 
   useEffect(() => {
     if (externalError && !isDesktop) {
-      showInlineError(externalError);
+      showInlineNotice(externalError);
     }
   }, [externalError]);
 
@@ -187,7 +191,7 @@ export const CommentComposer = ({
       }
 
       if (!isDesktop) {
-        showInlineError(message);
+        showInlineNotice(message);
       } else {
         notification.info({ content: message });
       }
@@ -201,9 +205,27 @@ export const CommentComposer = ({
       editorRef.current?.clearEditorState();
     },
     onSuccess: (data) => {
-      // Notify ReplyCommentList so it can prepend the new comment optimistically
-      // before the live collection catches up.
-      if (data?.parentId && data?.created) {
+      const createdComment = data?.created?.data as Amity.Comment | undefined;
+
+      // In a community that requires comment approval the create response comes back
+      // `pending`: the server holds the comment out of every public collection — the
+      // author's included — until a moderator approves it. Prepending it optimistically
+      // would show it as published, so only the notice below is given and the comment
+      // enters the list when the live collection delivers it after approval.
+      // `approvalStatus` is absent on the wire when approval is off and the SDK
+      // normalises that to `approved`.
+      const isPendingReview = createdComment?.approvalStatus === 'pending';
+
+      if (isPendingReview) {
+        const message = resolveString('amity_social_label_comment_pending_review');
+        if (!isDesktop) {
+          showInlineNotice(message, 'info');
+        } else {
+          notification.info({ content: message });
+        }
+      } else if (data?.parentId && data?.created) {
+        // Notify ReplyCommentList so it can prepend the new comment optimistically
+        // before the live collection catches up.
         document.dispatchEvent(
           new CustomEvent(EVENT_LISTENER.REPLY_CREATED, {
             detail: { parentId: data.parentId, comment: data.created.data as Amity.Comment },
@@ -263,11 +285,17 @@ export const CommentComposer = ({
         />
       )}
       <div className={styles.commentComposer__top}>
-        {!isDesktop && inlineError && (
+        {!isDesktop && inlineNotice && (
           <div className={styles.commentComposer__inlineError}>
             <Notification
-              icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}
-              content={inlineError}
+              icon={
+                inlineNotice.tone === 'info' ? (
+                  <InfoCircle className={styles.commentComposer__notificationIcon} />
+                ) : (
+                  <ExclamationCircle className={styles.commentComposer__notificationIcon} />
+                )
+              }
+              content={inlineNotice.message}
               className={styles.commentComposer__inlineErrorNotification}
             />
           </div>
@@ -350,7 +378,7 @@ export const CommentComposer = ({
           onPressStart={() => {
             if (!online) {
               if (!isDesktop) {
-                showInlineError(resolveString('amity_social_label_no_internet_connection'));
+                showInlineNotice(resolveString('amity_social_label_no_internet_connection'));
               } else {
                 notification.info({
                   content: resolveString('amity_social_label_no_internet_connection'),

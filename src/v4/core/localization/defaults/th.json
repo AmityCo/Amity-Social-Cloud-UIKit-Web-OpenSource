@@ -366,6 +366,7 @@
   "amity_social_label_cohost_declined_invitation": "ผู้ร่วมโฮสต์ปฏิเสธคำเชิญแล้ว",
   "amity_social_label_comment_compose_bar_reply_to": "ตอบกลับ ",
   "amity_social_label_comment_over_mentionees_limit": "คุณถึงขีดจำกัดการแท็กผู้ใช้สูงสุด 30 คนในโพสต์แล้ว",
+  "amity_social_label_comment_pending_review": "ความคิดเห็นของคุณรอการตรวจสอบ",
   "amity_social_label_comments_disabled_message": "ความคิดเห็นถูกปิดใช้งานสำหรับสตอรี่นี้",
   "amity_social_label_community_information_title": "ข้อมูลชุมชน",
   "amity_social_label_community_invitation_accept_success": "คุณเข้าร่วม %s แล้ว",

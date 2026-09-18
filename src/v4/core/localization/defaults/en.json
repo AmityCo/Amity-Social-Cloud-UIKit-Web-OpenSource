@@ -668,6 +668,7 @@
   "amity_social_label_cohost_declined_invitation": "Co-host declined the invitation.",
   "amity_social_label_comment_compose_bar_reply_to": "Reply to ",
   "amity_social_label_comment_over_mentionees_limit": "You have reached maximum 30 mentioned users in a post.",
+  "amity_social_label_comment_pending_review": "Your comment is pending for review",
   "amity_social_label_comments_disabled_message": "Comments are disabled for this story",
   "amity_social_label_community_information_title": "Community information",
   "amity_social_label_community_invitation_accept_success": "You joined %s.",
