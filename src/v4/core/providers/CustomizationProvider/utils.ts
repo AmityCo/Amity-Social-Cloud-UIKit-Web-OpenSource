@@ -1109,7 +1109,7 @@ export const defaultConfig: DefaultConfig = {
     'event_setup_page/*/event_date_time_title': {},
     'event_setup_page/*/event_location_title': {},
 
-    'event_detail_page/event_discussion/create_livestream_button': {},
+    'event_detail_page/*/create_livestream_button': {},
     'event_detail_page/post_composer/livestream_button': {},
     'event_detail_page/post_composer/poll_button': {},
     'event_detail_page/*/create_event_post_button': {
