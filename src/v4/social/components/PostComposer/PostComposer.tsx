@@ -162,7 +162,8 @@ export function PostComposer({
 
     return (
       <EventButton
-        pageId="post_composer_page"
+        pageId={pageId}
+        componentId={componentId}
         onPress={isFromCommunityPage ? onClickEvent : redirectEventTargetSelectionPage}
       />
     );
@@ -197,8 +198,8 @@ export function PostComposer({
         defaultIconClassName={styles.postComposer__button}
         textId=""
       />
-      <LivestreamButton onPress={handleLivestreamClick} pageId="post_composer_page" />
-      <PollButton onPress={handlePollClick} pageId="post_composer_page" componentId="poll_button" />
+      <LivestreamButton onPress={handleLivestreamClick} pageId={pageId} componentId={componentId} />
+      <PollButton onPress={handlePollClick} pageId={pageId} componentId={componentId} />
       {renderEventButton()}
       {renderStoryButton()}
     </div>

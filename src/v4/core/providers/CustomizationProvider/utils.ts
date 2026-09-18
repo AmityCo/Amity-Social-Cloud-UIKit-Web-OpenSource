@@ -437,6 +437,9 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/post_composer/video_button': {
       icon: 'VideoIcon',
     },
+    'social_home_page/post_composer/livestream_button': {},
+    'social_home_page/post_composer/poll_button': {},
+    'social_home_page/post_composer/event_button': {},
     'social_home_page/post_composer/story_button': {
       icon: 'ImageIcon',
     },
@@ -624,6 +627,9 @@ export const defaultConfig: DefaultConfig = {
     'community_profile_page/*/create_story_button': {},
     'community_profile_page/*/create_poll_button': {},
     'community_profile_page/*/create_clip_button': {},
+    'community_profile_page/post_composer/livestream_button': {},
+    'community_profile_page/post_composer/poll_button': {},
+    'community_profile_page/post_composer/event_button': {},
     'community_profile_page/*/create_event_button': {},
     'community_profile_page/community_video_feed/videos_button': {},
     'community_profile_page/community_video_feed/clips_button': {},
@@ -705,6 +711,11 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/post_composer/video_button': {
       icon: 'VideoIcon',
     },
+    'user_profile_page/post_composer/livestream_button': {},
+    'user_profile_page/post_composer/poll_button': {},
+    'user_profile_page/*/create_post_button': {},
+    'user_profile_page/*/create_poll_button': {},
+    'user_profile_page/*/create_clip_button': {},
     'user_profile_page/post_composer/story_button': {
       icon: 'ImageIcon',
     },
@@ -1098,6 +1109,9 @@ export const defaultConfig: DefaultConfig = {
     'event_setup_page/*/event_date_time_title': {},
     'event_setup_page/*/event_location_title': {},
 
+    'event_detail_page/event_discussion/create_livestream_button': {},
+    'event_detail_page/post_composer/livestream_button': {},
+    'event_detail_page/post_composer/poll_button': {},
     'event_detail_page/*/create_event_post_button': {
       text: 'Post event to feed',
       image: '',
