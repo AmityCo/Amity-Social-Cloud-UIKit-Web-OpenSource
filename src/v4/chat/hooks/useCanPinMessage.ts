@@ -18,14 +18,6 @@ export interface UseCanPinMessageParams {
 }
 
 /**
- * Reactive `canPin` for the pin item in the message ⋮ menu and the "X" on the
- * pinned message banner (AmityLivestreamChatFeed v2 REQ-080 / REQ-081).
- *
- * Host / co-host and room status come from the observed room (LivestreamDataProvider);
- * the permission arm reads the SDK cache, so it is recomputed whenever the live channel
- * or the current user's membership changes.
- */
-/**
  * Re-read a channel so the SDK refreshes the current user's cached channel permissions
  * (`channelUsers[...].permissions`, read by `hasPermission(...).channel()`). Mirrors what
  * the SDK does itself after a 403 on pin / unpin. One request per channel at a time: every
@@ -61,9 +53,22 @@ const refreshChannelPermissions = (channelId: Amity.Channel['channelId']) => {
   return refresh;
 };
 
+/**
+ * Reactive `canPin` for the pin item in the message ⋮ menu and the "X" on the
+ * pinned message banner (AmityLivestreamChatFeed v2 REQ-080 / REQ-081).
+ *
+ * Host / co-host and room status come from the observed room (LivestreamDataProvider).
+ * The permission arm reads the SDK cache (`hasPermission` unions network + channel
+ * permissions), so it is recomputed on every reactive permission signal:
+ * - channel scope — `channel.roleAdded` / `channel.roleRemoved` via the live channel and
+ *   the current user's membership;
+ * - network scope (Console) — `user.updated` via the current-user live object, whose
+ *   `.user` topic the livestream screen subscribes (REQ-086, Plan 39 v1.9 "Option B");
+ * - the SDK's permission refresh after a 403 (backstop).
+ */
 export const useCanPinMessage = ({ channelId, channel, membership }: UseCanPinMessageParams) => {
   const { client, currentUserId } = useSDK();
-  const { room, hostId, coHostId } = useLivestreamData();
+  const { room, hostId, coHostId, currentUser } = useLivestreamData();
 
   const isHost = !!currentUserId && hostId === currentUserId;
   const isCoHost = !!currentUserId && coHostId === currentUserId;
@@ -94,9 +99,10 @@ export const useCanPinMessage = ({ channelId, channel, membership }: UseCanPinMe
     if (!client || !channelId || !currentUserId) return false;
     const permission = client.hasPermission(Permissions.PinMessagePermission);
     return permission.currentUser() || permission.channel(channelId) || false;
-    // `channel`, `membership` and `permissionsVersion` are refresh triggers only
-    // (see UseCanPinMessageParams and the demotion effect above).
-  }, [client, channelId, currentUserId, channel, membership, permissionsVersion]);
+    // `channel`, `membership`, `currentUser` and `permissionsVersion` are refresh triggers
+    // only: `currentUser` re-emits on `user.updated` (network-scope revoke), the others cover
+    // the channel-scope signals (see UseCanPinMessageParams and the demotion effect above).
+  }, [client, channelId, currentUserId, channel, membership, currentUser, permissionsVersion]);
 
   return computeCanPinMessage({
     isHost,
