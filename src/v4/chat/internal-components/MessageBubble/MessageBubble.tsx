@@ -67,6 +67,11 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     membership: currentUserMembership,
   });
 
+  // The channel live object carries the single current pin; the ⋮ menu flips between
+  // "Pin message" and "Unpin message" on it (re-evaluated on every channel emission).
+  const isPinned =
+    !!channel?.pinnedMessage && channel.pinnedMessage.messageId === message.messageId;
+
   const isHostMessage = hostId === message.creatorId;
 
   const currentUserHasChannelModeratorRole = !!currentUserMembership?.roles?.includes(
@@ -312,6 +317,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
         }}
         isHostMessage={isHostMessage}
         canPin={canPin}
+        isPinned={isPinned}
       />
     );
   };

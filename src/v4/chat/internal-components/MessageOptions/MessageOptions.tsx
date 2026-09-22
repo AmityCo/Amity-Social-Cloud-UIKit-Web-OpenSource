@@ -17,6 +17,7 @@ import { COMPONENT_ID, ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization'
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { usePinMessage } from '~/v4/chat/hooks/usePinMessage';
 import { PinStraight } from '~/v4/icons/PinStraight';
+import { UnPin } from '~/v4/icons/UnPin';
 
 export interface MessageOptionsProps {
   pageId?: string;
@@ -26,6 +27,11 @@ export interface MessageOptionsProps {
   isHostMessage?: boolean;
   /** Pin gate from useCanPinMessage — shows the "Pin message" item (AmityLivestreamChatFeed v2 REQ-080). */
   canPin?: boolean;
+  /**
+   * Whether this message is the channel's current pin (`channel.pinnedMessage.messageId`).
+   * When true and `canPin`, the menu offers "Unpin message" instead of "Pin message".
+   */
+  isPinned?: boolean;
   message: Amity.Message;
   isJoinedCommunity?: boolean;
   onCloseMenu: () => void;
@@ -38,6 +44,7 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
   isModerator,
   isHostMessage,
   canPin = false,
+  isPinned = false,
   message,
   onCloseMenu,
   isJoinedCommunity,
@@ -47,11 +54,16 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
   const { deleteMessage } = useDeleteMessage();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { pinMessage } = usePinMessage();
+  const { pinMessage, unpinMessage } = usePinMessage();
   const pinMessageButton = useAmityElement({
     pageId,
     componentId: COMPONENT_ID.LIVESTREAM_CHAT_FEED,
     elementId: ELEMENT_ID.PIN_MESSAGE_BUTTON,
+  });
+  const unpinMessageButton = useAmityElement({
+    pageId,
+    componentId: COMPONENT_ID.LIVESTREAM_CHAT_FEED,
+    elementId: ELEMENT_ID.UNPIN_MESSAGE_BUTTON,
   });
 
   const { isLoading, isFlaggedByMe, unreport } = useFlagMessageQuery({
@@ -118,11 +130,28 @@ export const MessageOptions: React.FC<MessageOptionsProps> = ({
     pinMessage(message.messageId);
   };
 
-  const showPinMessage =
-    canPin && !message.isDeleted && message.syncState !== 'error' && !pinMessageButton.isExcluded;
+  const handleUnpinMessage = () => {
+    onCloseMenu();
+    unpinMessage(message.messageId);
+  };
+
+  // Pin / Unpin share one slot at the top of the menu: the item reads "Unpin message" and
+  // calls `unpinMessage` when this message is the channel's current pin, otherwise
+  // "Pin message" (AmityLivestreamChatFeed v2 REQ-080 / REQ-082). Failures stay silent
+  // (REQ-085 … REQ-087); the label follows the channel live object.
+  const canActOnPin = canPin && !message.isDeleted && message.syncState !== 'error';
+  const showUnpinMessage = canActOnPin && isPinned && !unpinMessageButton.isExcluded;
+  const showPinMessage = canActOnPin && !isPinned && !pinMessageButton.isExcluded;
 
   return (
     <div className={styles.messageOptions}>
+      {showUnpinMessage && (
+        <MenuOptionButton
+          text={unpinMessageButton.resolveText('amity_livechat_pinned_message_unpin_button')}
+          icon={<UnPin />}
+          onPress={handleUnpinMessage}
+        />
+      )}
       {showPinMessage && (
         <MenuOptionButton
           text={pinMessageButton.resolveText('amity_livechat_pinned_message_pin_button')}
