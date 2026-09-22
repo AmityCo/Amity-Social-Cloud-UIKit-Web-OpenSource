@@ -25,8 +25,8 @@ interface RegisterDeviceParams {
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
-  onGlobalBanned?: (payload: Amity.UserPayload) => void;
-  onUserDeleted?: (payload: Amity.UserPayload) => void;
+  onGlobalBanned?: () => void;
+  onUserDeleted?: () => void;
   onVisitorUsageLimitReached?: () => void;
 }
 
@@ -56,8 +56,8 @@ export class AmityUIKitManager {
   private onDisconnected?: () => void;
   private globalBannedUnsubscribe?: Amity.Unsubscriber;
   private visitorUsageLimitUnsubscribe?: Amity.Unsubscriber;
-  private onGlobalBanned?: (users: Amity.UserPayload) => void;
-  private onUserDeleted?: (users: Amity.UserPayload) => void;
+  private onGlobalBanned?: () => void;
+  private onUserDeleted?: () => void;
   private onVisitorUsageLimitReached?: () => void;
 
   /**
@@ -173,9 +173,20 @@ export class AmityUIKitManager {
         sessionHandler: bindedSessionHandlder,
       });
 
-    this.stateChangeHandler = ASCClient.onSessionStateChange((state: Amity.SessionStates) => {
-      this.onConnectionStatusChange?.(state);
-    });
+    this.stateChangeHandler = ASCClient.onSessionStateChange(
+      (state: Amity.SessionStates, reason?: Amity.TokenTerminationReason) => {
+        this.onConnectionStatusChange?.(state);
+
+        // The SDK moves the session to `terminated` for every global-ban detection path
+        // (realtime `user.didGlobalBan` event, HTTP termination code 400312, ban found while
+        // resuming a session). Reacting here — rather than only to the realtime event — is
+        // what guarantees the banned user is kicked out even when the event is missed or
+        // its payload does not carry the current user (PDT-5552).
+        if (state !== 'terminated') return;
+        if (reason === 'globalBan') this.onGlobalBanned?.();
+        if (reason === 'userDeleted') this.onUserDeleted?.();
+      },
+    );
 
     this.disconnectedHandler = ASCClient.onClientDisconnected(() => {
       this.onDisconnected && this.onDisconnected();
@@ -183,8 +194,10 @@ export class AmityUIKitManager {
 
     this.onConnected && this.onConnected();
 
-    this.globalBannedUnsubscribe = ASCClient.onClientBanned((payload) => {
-      this.onGlobalBanned?.(payload);
+    // The SDK delivers `user.didGlobalBan` only on the current user's own topic and treats it
+    // as "this client is banned" regardless of payload, so no payload inspection is needed.
+    this.globalBannedUnsubscribe = ASCClient.onClientBanned(() => {
+      this.onGlobalBanned?.();
     });
 
     this.visitorUsageLimitUnsubscribe = ASCClient.onVisitorUsageLimitReached(() => {

@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.27.1-953a4d08.0
-        version: 7.27.1-953a4d08.0
+        specifier: 7.27.1-f66ba12.0
+        version: 7.27.1-f66ba12.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -351,8 +351,8 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@amityco/ts-sdk@7.27.1-953a4d08.0':
-    resolution: {integrity: sha512-HmQUZVxqboJcFkM4MD7Wp6XMc7EmgO+VOmVhGo6usTCefxOjnjnPElx1YkRedUWx4mJw4jkE1Mn2ocLAgoQafA==}
+  '@amityco/ts-sdk@7.27.1-f66ba12.0':
+    resolution: {integrity: sha512-bm/tF4JLq0NZEUEfOff2B2ZT4Aqy6FaHARqXWmH1CzQOhz11UeMtrbWX7D2KCeD8ipwCuZrJY0vsQAe1kP9YZw==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5611,8 +5611,8 @@ packages:
   iota-array@1.0.0:
     resolution: {integrity: sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==}
 
-  ip-address@10.7.0:
-    resolution: {integrity: sha512-BGFsyJd5mpXp3rK6jIdADLNgpJUK1jnjzvYF8lK+VyDab9JAmqN0YOKDdP17HlgKb2+ehPgDc8EtnRLbGCAMhA==}
+  ip-address@10.7.2:
+    resolution: {integrity: sha512-7H/2gFSIitxc0hG3nOI1glS8QLo/EHBFFLk8vEUjXY/xu0AdL8jZ9U1IzO2PUm0d2D/ofQcAifb0g6OBkt8U7w==}
     engines: {node: '>= 12'}
 
   ip@2.0.1:
@@ -6071,14 +6071,11 @@ packages:
   jpeg-js@0.4.4:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
-  js-base64@3.9.3:
-    resolution: {integrity: sha512-uwYQp+VJ38FVvtim6qNbit6e9uT6dwWQ4Y1+H9TxhW5hcHjpHwoxlR0nMpqUmIFOmu4VqMxwdJA88gIVuZJQ/g==}
+  js-base64@3.9.4:
+    resolution: {integrity: sha512-PtOMXpEGuP0RRiRXsjzHzl44dMHxSu2CPvAhinupR1tBa88me+1DPqsobl7eupn5UukjLkln1ZnAOAOXOrYG0Q==}
 
   js-cookie@2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
-
-  js-sdsl@4.3.0:
-    resolution: {integrity: sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==}
 
   js-sha256@0.11.0:
     resolution: {integrity: sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==}
@@ -6548,8 +6545,8 @@ packages:
   mqtt-packet@9.0.2:
     resolution: {integrity: sha512-MvIY0B8/qjq7bKxdN1eD+nrljoeaai+qjLJgfRn3TiMuz0pamsIWY2bFODPZMSNmabsLANXsLl4EMoWvlaTZWA==}
 
-  mqtt@5.15.2:
-    resolution: {integrity: sha512-VWZU2CSUY3U3oN0PSBRDE5SNsFi4zqqNeQ/uv3pZWqY3CrBXD/dhd0ZLjlsk5YnebGlrapi4lRVNJPUNQ5aZ3w==}
+  mqtt@5.16.0:
+    resolution: {integrity: sha512-G0VsEtuJz5sJUgZJaaADMVfW7SIFPzkIuHR+d6rk+tBeSwdCfd9BaIRycRfd2AbyFDEmLlFM+SDQeti/+IbOnw==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -6656,9 +6653,6 @@ packages:
   npm-run-path@5.3.0:
     resolution: {integrity: sha512-ppwTtiJZq0O/ai0z7yfudtBpWIoxM8yE6nHi1X47eFR2EWORqfbu6CnPlNsjeN683eT0qG6H/Pyf9fCcvjnnnQ==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
-  number-allocator@1.0.14:
-    resolution: {integrity: sha512-OrL44UTVAvkKdOdRQZIJpLkAdjXGTRda052sN4sO77bKEzYYqWKMBjQvrJFzqygI99gL6Z4u2xctPW1tB8ErvA==}
 
   nyc@15.1.0:
     resolution: {integrity: sha512-jMW04n9SxKdKi1ZMGhvUTHBN0EICCRkHemEoE5jm6mTYcqcdas0ATzgUgejlQUHMvpnOZqGB5Xxsv9KxJW1j8A==}
@@ -8702,16 +8696,16 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@amityco/ts-sdk@7.27.1-953a4d08.0':
+  '@amityco/ts-sdk@7.27.1-f66ba12.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
       debug: 4.4.1
       hls.js: 1.5.11
-      js-base64: 3.9.3
+      js-base64: 3.9.4
       jwt-decode: 3.1.2
       mitt: 3.0.1
-      mqtt: 5.15.2
+      mqtt: 5.16.0
       object-hash: 3.0.0
       react-native-uuid: 2.0.4
       ua-parser-js: 2.0.10
@@ -15371,7 +15365,7 @@ snapshots:
 
   iota-array@1.0.0: {}
 
-  ip-address@10.7.0: {}
+  ip-address@10.7.2: {}
 
   ip@2.0.1: {}
 
@@ -16024,11 +16018,9 @@ snapshots:
 
   jpeg-js@0.4.4: {}
 
-  js-base64@3.9.3: {}
+  js-base64@3.9.4: {}
 
   js-cookie@2.2.1: {}
-
-  js-sdsl@4.3.0: {}
 
   js-sha256@0.11.0: {}
 
@@ -16483,7 +16475,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mqtt@5.15.2:
+  mqtt@5.16.0:
     dependencies:
       '@types/readable-stream': 4.0.24
       '@types/ws': 8.18.1
@@ -16494,7 +16486,6 @@ snapshots:
       lru-cache: 10.4.3
       minimist: 1.2.8
       mqtt-packet: 9.0.2
-      number-allocator: 1.0.14
       readable-stream: 4.7.0
       rfdc: 1.4.1
       socks: 2.8.10
@@ -16610,13 +16601,6 @@ snapshots:
   npm-run-path@5.3.0:
     dependencies:
       path-key: 4.0.0
-
-  number-allocator@1.0.14:
-    dependencies:
-      debug: 4.4.1
-      js-sdsl: 4.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   nyc@15.1.0:
     dependencies:
@@ -17819,7 +17803,7 @@ snapshots:
 
   socks@2.8.10:
     dependencies:
-      ip-address: 10.7.0
+      ip-address: 10.7.2
       smart-buffer: 4.2.0
 
   source-map-js@1.2.0: {}
