@@ -66,12 +66,6 @@
   cursor: pointer;
 }
 
-.messageReactorListSheet__rowAvatar {
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
 .messageReactorListSheet__rowText {
   flex: 1;
   display: flex;
@@ -83,6 +77,10 @@
 }
 
 .messageReactorListSheet__rowTitle {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--asc-color-text-list-header-default-default);
   fill: var(--asc-color-text-list-header-default-default);
 }
