@@ -39,23 +39,26 @@ git pull origin develop
 
 ### 3 — Ensure `@amityco/ts-sdk` is pinned to the latest NPM release
 
-Check whether the `@amityco/ts-sdk` version in `package.json` matches the `latest` tag on NPM **and** is not a dev/nightly pre-release version. Upgrade if either condition fails.
+`@amityco/ts-sdk` is declared in **both** `peerDependencies` and `devDependencies`. Both entries must be a caret range on the `latest` tag on NPM (e.g. `^7.28.0`) — never an exact pin and never a dev/nightly pre-release version. Upgrade if either entry fails.
 
 ```sh
-LOCAL_SDK=$(node -p "require('./package.json').dependencies['@amityco/ts-sdk']")
+PEER_SDK=$(node -p "require('./package.json').peerDependencies['@amityco/ts-sdk']")
+DEV_SDK=$(node -p "require('./package.json').devDependencies['@amityco/ts-sdk']")
 LATEST_SDK=$(npm view @amityco/ts-sdk dist-tags.latest)
-echo "package.json: $LOCAL_SDK"
-echo "NPM latest:   $LATEST_SDK"
+echo "peerDependencies: $PEER_SDK"
+echo "devDependencies:  $DEV_SDK"
+echo "NPM latest:       $LATEST_SDK"
 
-# Upgrade if versions differ OR if current version contains a pre-release identifier (dev/nightly/sha hash)
-if [ "$LOCAL_SDK" != "$LATEST_SDK" ] || echo "$LOCAL_SDK" | grep -qE '(-[0-9a-f]{7,}\.|nightly|dev/)'; then
-  echo "⚠️  ts-sdk is outdated or on a dev/nightly build — upgrading to $LATEST_SDK"
-  pnpm add @amityco/ts-sdk@latest
+# Upgrade unless both entries are exactly ^<latest>
+if [ "$PEER_SDK" != "^$LATEST_SDK" ] || [ "$DEV_SDK" != "^$LATEST_SDK" ]; then
+  echo "⚠️  ts-sdk is outdated, exact-pinned, or on a dev/nightly build — setting ^$LATEST_SDK"
+  sed -i '' -E "s#\"@amityco/ts-sdk\": \"[^\"]+\"#\"@amityco/ts-sdk\": \"^$LATEST_SDK\"#g" package.json
+  pnpm install --lockfile-only
   git add package.json pnpm-lock.yaml
   git commit -m "chore: upgrade @amityco/ts-sdk to $LATEST_SDK"
   git push
 else
-  echo "✅ @amityco/ts-sdk is already on latest ($LATEST_SDK)"
+  echo "✅ @amityco/ts-sdk is already on ^$LATEST_SDK"
 fi
 ```
 
@@ -85,15 +88,17 @@ gh pr list --repo AmityCo/Amity-Social-Cloud-UIKit-Web --base develop --state op
 
 If a release PR is found, ask the user to merge it first and then re-sync `develop` (go back to step 2) before continuing. If no release PR is found, stop and ask the user how to proceed.
 
-### 4 — Checkout a new release branch from develop
+### 5 — Checkout a new release branch from develop
 
-Replace `<VERSION>` with the target version (e.g. `v4.1.0`):
+Always cut the release branch from a freshly pulled `develop`, so it includes the ts-sdk bump from step 3 and anything merged since step 2. Replace `<VERSION>` with the target version without the `v` prefix (e.g. `4.1.0`):
 
 ```sh
+git checkout develop
+git pull origin develop
 git checkout -b release/v<VERSION>
 ```
 
-### 5 — Push the release branch and open a PR immediately
+### 6 — Push the release branch and open a PR immediately
 
 ```sh
 git push -u origin release/v<VERSION>
@@ -110,7 +115,7 @@ gh pr create \
   --body ""
 ```
 
-### 6 — Trigger the GitHub Actions production pipeline via GitHub CLI
+### 7 — Trigger the GitHub Actions production pipeline via GitHub CLI
 
 **For a normal release** (patch / minor / major / stable), use:
 
@@ -146,7 +151,7 @@ After triggering, share this link with the user to monitor the pipeline:
 
 **https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/actions/workflows/production.yaml**
 
-### 7 — Verify the NPM release
+### 8 — Verify the NPM release
 
 ```sh
 npm view @amityco/ui-kit version
