@@ -1,13 +1,6 @@
 import React, { useRef, useMemo, useEffect, useCallback, useState } from 'react';
 import useFile from '~/v4/core/hooks/useFile';
 
-enum VideoFileStatus {
-  Uploading = 'uploading',
-  Uploaded = 'uploaded',
-  Transcoding = 'transcoding',
-  Transcoded = 'transcoded',
-  TranscodeFailed = 'transcodeFailed',
-}
 import styles from './VideoPlayer.module.css';
 import {
   VideoPlayerControls,
@@ -25,6 +18,14 @@ import { Backward10 } from '~/v4/icons/Backward10';
 import { Forward10 } from '~/v4/icons/Forward10';
 import { Button } from '~/v4/core/components/AriaButton';
 import { VIDEO_CONTROLS_AUTO_HIDE_MS } from '~/v4/social/constants';
+
+enum VideoFileStatus {
+  Uploading = 'uploading',
+  Uploaded = 'uploaded',
+  Transcoding = 'transcoding',
+  Transcoded = 'transcoded',
+  TranscodeFailed = 'transcodeFailed',
+}
 
 export interface VideoPlayerProps {
   fileId?: string;
@@ -62,6 +63,15 @@ export interface VideoPlayerProps {
   onClickMute?: () => void;
   onClickMenu?: () => void;
   onClickVideo?: (e: React.MouseEvent<HTMLElement>) => void;
+}
+
+function isHlsUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  try {
+    return new URL(url, window.location.href).pathname.endsWith('.m3u8');
+  } catch {
+    return false;
+  }
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -212,6 +222,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return file.fileUrl;
   }, [directUrl, file]);
 
+  const shouldUseHls = useHls || isHlsUrl(url);
+
   const posterUrl = useMemo(() => {
     if (directThumbnailUrl) return { fileUrl: directThumbnailUrl };
     return posterUrlFile;
@@ -219,7 +231,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Set up HLS for streaming
   const setupHls = useCallback(() => {
-    if (!url || !videoRef.current || !useHls) return;
+    if (!url || !videoRef.current || !shouldUseHls) return;
 
     // Clean up existing HLS instance
     if (hlsRef.current) {
@@ -271,10 +283,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       // Browser has native HLS support
       videoRef.current.src = url;
     }
-  }, [url, useHls, client?.token?.accessToken]);
+  }, [url, shouldUseHls, client?.token?.accessToken]);
 
   useEffect(() => {
-    if (useHls) {
+    if (shouldUseHls) {
       setupHls();
     } else {
       videoRef.current?.load();
@@ -286,7 +298,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         hlsRef.current = null;
       }
     };
-  }, [url, useHls, setupHls]);
+  }, [url, shouldUseHls, setupHls]);
 
   const handleVideoAreaClick = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -384,7 +396,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onTouchStart={onTouchStart}
         onVolumeChange={onVolumeChange}
       >
-        {!useHls && <source src={url} type="video/mp4" />}
+        {!shouldUseHls && <source src={url} type="video/mp4" />}
         <p>
           Your browser does not support this format of video. Please try again later once the server
           transcodes the video into an playable format(mp4).

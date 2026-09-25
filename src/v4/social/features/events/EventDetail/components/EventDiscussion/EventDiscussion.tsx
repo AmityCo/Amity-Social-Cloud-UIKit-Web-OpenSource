@@ -11,7 +11,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { Mode, PostComposerPage } from '~/v4/social/pages';
 import { LivestreamFill } from '~/v4/icons/LivestreamFill';
 import { useDiscardPostCreation } from '~/v4/social/hooks';
-import { COMPONENT_ID } from '~/v4/constants/customization';
+import { COMPONENT_ID, ELEMENT_ID } from '~/v4/constants/customization';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PostComposer } from '~/v4/social/components/PostComposer';
@@ -99,6 +99,9 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
     },
     {
       id: 'livestream',
+      pageId,
+      componentId,
+      elementId: ELEMENT_ID.CREATE_LIVESTREAM_BUTTON,
       label: useString('amity_social_status_live_stream'),
       icon: LivestreamFill,
       onPress: () => {
@@ -123,6 +126,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
         <PostComposer
           isDisableStory
           isDisableEvent
+          pageId={pageId}
           onClickPost={() => {
             openPopup({
               pageId,

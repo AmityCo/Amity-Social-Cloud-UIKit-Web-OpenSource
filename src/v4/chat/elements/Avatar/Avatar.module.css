@@ -8,6 +8,11 @@
   height: 2.5rem;
 }
 
+.avatar__user[data-size='xs'] {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
 .avatar__user[data-size='sm'] {
   width: 2rem;
   height: 2rem;

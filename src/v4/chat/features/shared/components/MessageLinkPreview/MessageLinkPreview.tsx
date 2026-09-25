@@ -5,7 +5,7 @@ import { Skeleton } from '~/v4/core/design/components/Skeleton/Skeleton';
 import { Loader } from '~/v4/core/design/atoms/Loader';
 import { useString } from '~/v4/core/localization';
 import { usePreviewLink } from '~/v4/core/hooks/usePreviewLink';
-import { getHostName } from '~/v4/chat/utils/previewLink';
+import { getHostName } from '~/v4/utils/previewLink';
 import { ImageSlash } from '~/v4/core/design/icons/ImageSlash';
 import styles from './MessageLinkPreview.module.css';
 

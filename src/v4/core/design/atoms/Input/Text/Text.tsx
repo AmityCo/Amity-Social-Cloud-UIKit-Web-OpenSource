@@ -20,6 +20,7 @@ export type TextProps = {
   showCharacterCount?: boolean;
   maxLength?: number;
   multiLine?: boolean;
+  preventNewLine?: boolean;
   isDisabled?: boolean;
   isInvalid?: boolean;
   highlightMatch?: boolean;
@@ -43,6 +44,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
     showCharacterCount = false,
     maxLength,
     multiLine = false,
+    preventNewLine = false,
     isDisabled = false,
     isInvalid = false,
     highlightMatch = false,
@@ -65,7 +67,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
     <AriaTextField
       ref={ref}
       value={value}
-      onChange={onChange}
+      onChange={(next) => onChange?.(preventNewLine ? next.replace(/[\r\n]+/g, ' ') : next)}
       isDisabled={isDisabled}
       isInvalid={isInvalid}
       onFocus={onFocus}
@@ -97,6 +99,13 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(function Text(
             placeholder={placeholder}
             maxLength={maxLength}
             rows={1}
+            onKeyDown={
+              preventNewLine
+                ? (e) => {
+                    if (e.key === 'Enter') e.preventDefault();
+                  }
+                : undefined
+            }
             data-testid={inputTestId}
           />
         ) : (

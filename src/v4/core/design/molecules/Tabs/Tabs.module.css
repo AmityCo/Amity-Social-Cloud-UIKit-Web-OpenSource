@@ -19,6 +19,7 @@
 .tabList[data-variant='underlined'] {
   gap: 1.25rem;
   padding: 0 1rem;
+  box-shadow: inset 0 -0.0625rem 0 var(--asc-color-line-divider-post-default);
 }
 
 /* Icon bar — Tab spec bar geometry: padding 0/16, gap 8 */

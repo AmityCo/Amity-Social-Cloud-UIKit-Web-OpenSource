@@ -10,14 +10,10 @@ const VideoControl = (props: React.SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <circle cx="20" cy="20" r="20" fill="black" fillOpacity="0.5" />
-    <g clipPath="url(#clip0_212_1181)">
-      <path d="M16 13V27L27 20L16 13Z" fill="white" />
-    </g>
-    <defs>
-      <clipPath id="clip0_212_1181">
-        <rect width="24" height="24" fill="white" transform="translate(8 8)" />
-      </clipPath>
-    </defs>
+    <path
+      d="M28.0312 18.8086C29.1211 19.4766 29.1211 21.0586 28.0312 21.7266L15.6562 29.0391C14.5312 29.707 13.125 28.8984 13.125 27.5625V12.9375C13.125 11.4961 14.6367 10.8984 15.6562 11.4961L28.0312 18.8086Z"
+      fill="white"
+    />
   </svg>
 );
 

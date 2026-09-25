@@ -23,6 +23,7 @@ import styles from './LiveStreamPlayer.module.css';
 import { LivestreamChatMessageComposer } from '~/v4/social/features/livestream/components/LivestreamChatMessageComposer';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
+import { LivestreamPinnedMessage } from '~/v4/social/features/livestream/internal-components/LivestreamPinnedMessage';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useKeyboardVisibility } from './useKeyboardVisibility';
@@ -71,7 +72,11 @@ export type LiveStreamPlayerPageProps = {
 
 export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStreamPlayerPageProps) {
   const pageId = PAGE_ID.LIVESTREAM_PLAYER_PAGE;
-  const chatContainerRef = useRef<HTMLDivElement>(null);
+  // Callback-ref state (not a plain ref): the chat column is portaled into the Plyr
+  // container and mounts after the first render, so an effect keyed on `ref.current`
+  // would never observe it.
+  const [chatColumnElement, setChatColumnElement] = useState<HTMLDivElement | null>(null);
+  const videoSectionRef = useRef<HTMLDivElement>(null);
 
   const [livestreamPost, setLivestreamPost] = useState(post?.childrenPosts[0]);
   const coHostEndSessionRef = useRef(false);
@@ -177,6 +182,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   });
 
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
+  // Distance from the video section's bottom edge to the chat column's top edge, in px.
+  // Both rects are read in viewport space, so the value is correct even if the Plyr
+  // container and the video section do not share a bottom edge.
+  const [chatColumnTopOffset, setChatColumnTopOffset] = useState<number>();
   const [hideChatFeed, setHideChatFeed] = useState(false);
   const [uiState, setUiState] = useState<LivestreamUiState>('player');
   const [shouldRequestDevicePermissions, setShouldRequestDevicePermissions] = useState(false);
@@ -530,24 +539,30 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
     }
   }, [broadcasterData, isLive]);
 
-  // Use chat container's height to position reaction floating lane
+  // Measure the mobile chat column: its height positions the reaction floating lane, and
+  // its top edge (relative to the video section) is where the player's tap catcher must
+  // stop so taps on the pinned message banner reach the banner (see PDT-3883).
   useEffect(() => {
-    if (!chatContainerRef.current) return;
+    if (!chatColumnElement) return;
 
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect) {
-          setChatContainerHeight(entry.contentRect.height);
-        }
+    const measure = () => {
+      const columnRect = chatColumnElement.getBoundingClientRect();
+      setChatContainerHeight(columnRect.height);
+      const sectionRect = videoSectionRef.current?.getBoundingClientRect();
+      if (sectionRect) {
+        setChatColumnTopOffset(Math.max(0, sectionRect.bottom - columnRect.top));
       }
-    });
+    };
 
-    observer.observe(chatContainerRef.current);
+    const observer = new ResizeObserver(measure);
+    observer.observe(chatColumnElement);
+    if (videoSectionRef.current) observer.observe(videoSectionRef.current);
+    measure();
 
     return () => {
       observer.disconnect();
     };
-  }, [chatContainerRef.current]);
+  }, [chatColumnElement]);
 
   const handleUpdateProductTags = useCallback(
     async (tags: Amity.ProductTag[]) => {
@@ -687,7 +702,20 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                   canShowProductTags={canShowProductTags}
                 />
               )}
-              <div data-is-live={isLive} className={styles.liveStreamPlayer__videoSection__wrapper}>
+              <div
+                data-is-live={isLive}
+                className={styles.liveStreamPlayer__videoSection__wrapper}
+                ref={videoSectionRef}
+                // Measured top edge of the mobile chat column (pinned banner + feed band +
+                // product banner); the tap catcher stops there so banner taps are not
+                // swallowed (see PDT-3883).
+                style={
+                  {
+                    '--asc-livestream-chat-top-offset':
+                      chatColumnTopOffset !== undefined ? `${chatColumnTopOffset}px` : undefined,
+                  } as React.CSSProperties
+                }
+              >
                 <LivestreamPlayer
                   themeStyles={themeStyles}
                   accessibilityId={accessibilityId}
@@ -811,16 +839,23 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
                                   )}
                                 </div>
                                 <div
-                                  className={styles.livestreamChat__container__inner}
-                                  ref={chatContainerRef}
+                                  className={styles.livestreamChat__column}
+                                  ref={setChatColumnElement}
                                 >
-                                  {channel && (
-                                    <ChatFeed
-                                      pageId={pageId}
-                                      channel={channel}
-                                      isJoinedCommunity={!!community?.isJoined}
-                                    />
-                                  )}
+                                  <LivestreamPinnedMessage
+                                    pageId={pageId}
+                                    className={styles.livestreamChat__pinnedMessage}
+                                  />
+                                  <div className={styles.livestreamChat__container__inner}>
+                                    {channel && (
+                                      <ChatFeed
+                                        pageId={pageId}
+                                        channel={channel}
+                                        isJoinedCommunity={!!community?.isJoined}
+                                      />
+                                    )}
+                                  </div>
+                                  {/* Below the 20dvh feed band, not inside it. */}
                                   {!isPendingPost && (
                                     <div className={styles.liveStreamPlayer__pinnedProduct}>
                                       <PinnedProductOverlay pageId={pageId} />

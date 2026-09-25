@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit-open-source",
-  "version": "4.23.0",
+  "version": "4.24.0",
   "engines": {
     "node": ">=20",
     "pnpm": "9"
@@ -42,12 +42,12 @@
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": ">=7.27.0",
+    "@amityco/ts-sdk": "^7.28.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": ">=7.27.0",
+    "@amityco/ts-sdk": "^7.28.0",
     "@eslint/js": "^9.4.0",
     "@octokit/core": "^6.1.4",
     "@storybook/addon-a11y": "^7.6.7",
@@ -55,12 +55,16 @@
     "@storybook/addon-backgrounds": "^7.6.7",
     "@storybook/addon-controls": "^7.6.7",
     "@storybook/addon-essentials": "^7.6.7",
+    "@storybook/addon-interactions": "^7.6.7",
     "@storybook/addon-toolbars": "^7.6.7",
     "@storybook/addon-viewport": "^7.6.7",
     "@storybook/client-api": "^7.6.7",
+    "@storybook/jest": "^0.2.3",
     "@storybook/preview-api": "^7.6.7",
     "@storybook/react": "^7.6.7",
     "@storybook/react-vite": "^7.6.7",
+    "@storybook/test-runner": "^0.16.0",
+    "@storybook/testing-library": "^0.2.2",
     "@storybook/theming": "^7.6.7",
     "@tanstack/react-query-devtools": "^5.69.0",
     "@types/eslint__js": "^8.42.3",

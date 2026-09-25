@@ -15,7 +15,7 @@
  *   import type { LocaleBundle, FormatArg } from '~/v4/core/localization';
  *
  * Default bundles / locale map (device-language detection):
- *   import { defaultLocaleBundle, thLocaleBundle, defaultLocaleMap } from '~/v4/core/localization';
+ *   import { defaultLocaleBundle, defaultLocaleMap } from '~/v4/core/localization';
  */
 
 export {
@@ -37,5 +37,4 @@ export type { LocaleContextValue, LocaleProviderProps } from './LocaleProvider';
 export { useString } from './useString';
 
 export { defaultLocaleBundle } from './defaults/en';
-export { thLocaleBundle } from './defaults/th';
 export { defaultLocaleMap } from './defaultLocaleMap';

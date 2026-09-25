@@ -1,7 +1,10 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useObserveRoomAndInvitation } from '~/v4/social/features/livestream/hooks/useObserveRoomAndInvitation';
-import { useCoHostPermissionNotification } from '~/v4/social/features/livestream/hooks';
+import {
+  useCoHostPermissionNotification,
+  useCurrentUserPermissionSubscription,
+} from '~/v4/social/features/livestream/hooks';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 
 // Define the context type for only the data that needs to be passed to nested components
@@ -15,6 +18,13 @@ interface LivestreamDataContextType {
   // Computed values from room for convenience
   hostId?: string;
   coHostId?: string;
+
+  /**
+   * Current user live object, observed for the lifetime of the livestream screen. Emits on
+   * `user.updated`, i.e. when a network-scope (Console) permission change lands — the
+   * recompute trigger for the permission arm of `canPin` (AmityLivestreamChatFeed v2 REQ-081).
+   */
+  currentUser?: Amity.User | null;
 
   host?: Amity.RoomParticipant;
   coHost?: Amity.RoomParticipant;
@@ -74,6 +84,11 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
     notificationAlignment: notificationAlignment ?? 'fullscreen',
   });
 
+  // Subscribe the current user's `.user` topic while the screen is mounted so a network-scope
+  // permission revoke (`user.updated`) reaches the SDK cache and `canPin` can hide the pin
+  // controls without any user action (Implementation Plan 39 v1.9, UC1-14 / UC2-10).
+  const { currentUser } = useCurrentUserPermissionSubscription();
+
   useEffect(() => {
     if (invitations && invitations.length > 0) {
       const invitedByMe = invitations.find(
@@ -94,6 +109,7 @@ export const LivestreamDataProvider: React.FC<LivestreamDataProviderProps> = ({
     coHost,
     hostId,
     coHostId,
+    currentUser,
     invitations,
     invitationByMe,
     setInvitationByMe,

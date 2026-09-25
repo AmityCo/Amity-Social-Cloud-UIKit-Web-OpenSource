@@ -1,0 +1,36 @@
+.highlightText__mention {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  white-space: inherit;
+  font-weight: 500;
+}
+
+.highlightText__mention[data-variant='inbound'] {
+  color: var(--asc-color-text-chatbubble-inbound-mentioned-default);
+  fill: var(--asc-color-text-chatbubble-inbound-mentioned-default);
+}
+
+.highlightText__mention[data-variant='outbound'] {
+  color: var(--asc-color-text-chatbubble-outbound-mentioned-default);
+  fill: var(--asc-color-text-chatbubble-outbound-mentioned-default);
+}
+
+button.highlightText__mention {
+  cursor: pointer;
+  border-radius: 0.25rem;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.highlightText__mention:focus {
+  outline: none;
+}
+
+button.highlightText__mention[data-focus-visible] {
+  outline: 0.125rem solid currentcolor;
+  outline-offset: 0.125rem;
+}

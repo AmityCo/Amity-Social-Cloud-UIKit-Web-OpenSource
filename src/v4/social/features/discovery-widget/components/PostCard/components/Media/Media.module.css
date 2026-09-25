@@ -1,0 +1,87 @@
+.cardMedia {
+  padding: 0.5rem 0;
+  height: 100%;
+}
+
+.cardMedia__frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cardMedia__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cardMedia__broken {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--asc-color-base-shade4);
+}
+
+.cardMedia__brokenIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--asc-color-base-shade2);
+  fill: var(--asc-color-base-shade2);
+}
+
+.cardMedia__counter {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-radius: 62.4375rem;
+  background: var(--asc-color-transparent-black);
+  backdrop-filter: blur(0.3125rem);
+}
+
+.cardMedia__counterText {
+  color: var(--asc-color-white);
+}
+
+.cardMedia__navRight {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 62.4375rem;
+  background: var(--asc-color-transparent-black);
+}
+
+.cardMedia__navIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
+}
+
+.cardMedia__playIndicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardMedia__playIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
