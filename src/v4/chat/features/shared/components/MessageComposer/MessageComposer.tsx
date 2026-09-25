@@ -18,19 +18,11 @@ type MessageComposer = ReturnType<typeof useMessageComposer>;
 
 type MessageComposerProps = {
   composer: MessageComposer;
-  onOpenSeeMore: (text: string, title?: string) => void;
-  onOpenImage: (url: string, message: Amity.Message) => void;
-  onOpenVideo: (message: Amity.Message) => void;
 };
 
 const MAX_MENTIONS = 30;
 
-export function MessageComposer({
-  composer,
-  onOpenSeeMore,
-  onOpenImage,
-  onOpenVideo,
-}: MessageComposerProps) {
+export function MessageComposer({ composer }: MessageComposerProps) {
   const {
     subChannelId,
     enableMention,
@@ -112,15 +104,7 @@ export function MessageComposer({
         </div>
       ) : null}
 
-      {!isEditing && replyTo ? (
-        <MessageReplyBand
-          replyTo={replyTo}
-          onCancel={cancelReply}
-          onOpenSeeMore={onOpenSeeMore}
-          onOpenImage={onOpenImage}
-          onOpenVideo={onOpenVideo}
-        />
-      ) : null}
+      {!isEditing && replyTo && <MessageReplyBand replyTo={replyTo} onCancel={cancelReply} />}
 
       <div className={styles.messageComposer__inputRow}>
         {isEditing ? null : (

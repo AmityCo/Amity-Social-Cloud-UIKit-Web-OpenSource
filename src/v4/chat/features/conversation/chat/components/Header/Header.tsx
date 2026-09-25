@@ -10,6 +10,7 @@ import { Button } from '~/v4/core/design/atoms/Button';
 import { Banner } from '~/v4/core/design/atoms/Banner';
 import { ChevronLeft } from '~/v4/core/design/icons/ChevronLeft';
 import { ImageViewer } from '~/v4/chat/features/shared/components/ImageViewer';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { ActionMenu, type ActionMenuItem } from '~/v4/chat/components/ActionMenu';
 import styles from './Header.module.css';
 
@@ -24,6 +25,7 @@ export function Header({ userId, userDisplayName, onBack, actions }: HeaderProps
   const { online } = useNetworkState();
   const isOnline = online !== false;
   const { user } = useUser({ userId, shouldCall: !!userId });
+  const { AmityChatPageBehavior } = usePageBehavior();
   const waitingForNetwork = useString('amity_chat_waiting_for_network');
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -34,17 +36,23 @@ export function Header({ userId, userDisplayName, onBack, actions }: HeaderProps
     : undefined;
 
   const leading = user ? (
-    imageUrl ? (
-      <AriaButton
-        className={styles.header__avatarButton}
-        onPress={() => setIsViewerOpen(true)}
-        aria-label="View profile picture"
-      >
+    <AriaButton
+      className={styles.header__avatarButton}
+      onPress={() => {
+        if (AmityChatPageBehavior?.onAvatarTap) {
+          AmityChatPageBehavior.onAvatarTap({ userId: userId ?? '', avatarUrl: imageUrl });
+        } else if (imageUrl) {
+          setIsViewerOpen(true);
+        }
+      }}
+      aria-label="View profile picture"
+    >
+      {imageUrl ? (
         <Avatar variant="image" shape="rounded" size={40} imageUrl={imageUrl} alt={displayName} />
-      </AriaButton>
-    ) : (
-      <Avatar variant="text" shape="rounded" size={40} initials={initials} alt={displayName} />
-    )
+      ) : (
+        <Avatar variant="text" shape="rounded" size={40} initials={initials} alt={displayName} />
+      )}
+    </AriaButton>
   ) : undefined;
 
   return (

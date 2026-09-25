@@ -16,7 +16,7 @@
 .replyQuote__header {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   color: var(--asc-color-text-chatbubble-inbound-header-repliedto-default);
 }
 
@@ -73,7 +73,7 @@
   color: var(--asc-color-text-chatbubble-inbound-messages-default);
   font-size: 0.9375rem;
   line-height: 1.25rem;
-  max-width: 14.25rem;
+  max-width: 60vw;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
@@ -119,35 +119,12 @@
   fill: var(--asc-color-icon-media-image-broken);
 }
 
-.replyQuote__playChip {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.25rem;
-  border-radius: 9999px;
-  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
-  pointer-events: none;
-}
-
-.replyQuote__playIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
-  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
-}
-
 .replyQuote__placeholder {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 14.25rem;
+  width: 60vw;
   height: 3.75rem;
   background: var(--asc-color-surface-chatbubble-reply-message-default);
   border-radius: 1.25rem;

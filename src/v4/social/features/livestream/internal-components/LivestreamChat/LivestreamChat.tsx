@@ -8,6 +8,7 @@ import { COMPONENT_ID } from '~/v4/constants/customization';
 import { usePostSubscription } from '~/v4/social/features/livestream/hooks';
 import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
 import { MessageBubbleSkeleton } from '~/v4/chat/internal-components/MessageBubbleSkeleton/MessageBubbleSkeleton';
+import { LivestreamPinnedMessage } from '~/v4/social/features/livestream/internal-components/LivestreamPinnedMessage';
 
 export interface LivestreamChatProps {
   pageId: string;
@@ -70,13 +71,19 @@ export const LivestreamChat: React.FC<LivestreamChatProps> = ({
     <div className={styles.livestreamChat__container}>
       <div className={styles.livestreamChat__container__inner}>
         <div className={styles.livestreamChat__chatFeedWrapper}>
-          <ChatFeed
+          <LivestreamPinnedMessage
             pageId={pageId}
-            componentId={componentId}
-            channel={channel}
-            isJoinedCommunity={!!community?.isJoined}
-            isLoading={isLoading || isPoorConnection}
+            className={styles.livestreamChat__chatFeedWrapper__pinnedMessage}
           />
+          <div className={styles.livestreamChat__chatFeedWrapper__feed}>
+            <ChatFeed
+              pageId={pageId}
+              componentId={componentId}
+              channel={channel}
+              isJoinedCommunity={!!community?.isJoined}
+              isLoading={isLoading || isPoorConnection}
+            />
+          </div>
           {!isPending && (
             <div className={styles.livestreamChat__chatFeedWrapper__pinnedProduct}>
               <PinnedProductOverlay pageId={pageId} componentId={componentId} />

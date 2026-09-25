@@ -13,6 +13,7 @@ import {
 import { AT_BOTTOM_TOLERANCE_PX, PAGE_TOP_TRIGGER_INDEX } from '~/v4/chat/constants';
 import type { ChatItem } from '~/v4/chat/utils/groupMessagesByDate';
 import styles from './MessageList.module.css';
+import type { SeeMorePayload } from '~/v4/chat/types';
 
 type MessageListProps = {
   items: ChatItem[];
@@ -30,7 +31,7 @@ type MessageListProps = {
   onOpenReactorList: (message: Amity.Message) => void;
   isBubbleMenuOpen?: boolean;
   activeMessageId?: string | null;
-  onSeeMore: (text: string, title?: string) => void;
+  onSeeMore: (payload: SeeMorePayload) => void;
   newMessage: Amity.Message | null;
   onClearNewMessage: () => void;
   latestMessage: Amity.Message | null;

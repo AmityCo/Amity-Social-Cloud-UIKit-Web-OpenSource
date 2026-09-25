@@ -41,6 +41,7 @@ export function UserAvatar({
   onPressAvatar,
   userData,
 }: UserAvatarProps) {
+  const isInteractive = shouldRedirectToUserProfile || !!onPressAvatar;
   const elementId = 'user_avatar';
 
   const { onClickUser } = useNavigation();
@@ -85,40 +86,64 @@ export function UserAvatar({
     }
   };
 
+  const moderatorBadge = isShowModeratorBadge && (
+    <ModeratorBadge className={styles.userAvatar__badge} variant="iconOnly" />
+  );
+
   if (userImage) {
-    return (
-      <Button
-        onPress={() => handleAvatarClick()}
-        className={clsx(styles.userAvatar__container, imageContainerClassName)}
-        data-testid={`user-avatar-button-${userId}`}
-      >
+    const imageContent = (
+      <>
         <img
           src={userImage}
           data-testid={`${accessibilityId}-${user?.userId}`}
           className={clsx(styles.userAvatar__img, className)}
         />
-        {isShowModeratorBadge && (
-          <ModeratorBadge className={styles.userAvatar__badge} variant="iconOnly" />
-        )}
+        {moderatorBadge}
+      </>
+    );
+    const imageContainer = clsx(styles.userAvatar__container, imageContainerClassName);
+
+    return isInteractive ? (
+      <Button
+        onPress={() => handleAvatarClick()}
+        className={imageContainer}
+        data-testid={`user-avatar-button-${userId}`}
+      >
+        {imageContent}
       </Button>
+    ) : (
+      <div className={imageContainer} data-testid={`user-avatar-button-${userId}`}>
+        {imageContent}
+      </div>
     );
   }
 
-  return (
-    <Button
-      data-testid={`${accessibilityId}-${user?.userId}`}
-      className={clsx(styles.userAvatar__placeholder, className)}
-      onPress={() => handleAvatarClick()}
-    >
+  const placeholderContent = (
+    <>
       <Typography.TitleBold
+        as={isInteractive ? 'h2' : 'span'}
         data-testid={`user-avatar-${userId}`}
         className={clsx(styles.userAvatar__placeholder__text, textPlaceholderClassName)}
       >
         {firstChar}
       </Typography.TitleBold>
-      {isShowModeratorBadge && (
-        <ModeratorBadge className={styles.userAvatar__badge} variant="iconOnly" />
-      )}
+      {moderatorBadge}
+    </>
+  );
+
+  const placeholderContainer = clsx(styles.userAvatar__placeholder, className);
+
+  return isInteractive ? (
+    <Button
+      data-testid={`${accessibilityId}-${user?.userId}`}
+      className={placeholderContainer}
+      onPress={() => handleAvatarClick()}
+    >
+      {placeholderContent}
     </Button>
+  ) : (
+    <div data-testid={`${accessibilityId}-${user?.userId}`} className={placeholderContainer}>
+      {placeholderContent}
+    </div>
   );
 }

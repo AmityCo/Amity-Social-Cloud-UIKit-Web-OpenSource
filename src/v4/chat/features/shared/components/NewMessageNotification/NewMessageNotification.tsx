@@ -3,8 +3,9 @@ import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { resolveString } from '~/v4/core/localization';
 import { Avatar } from '~/v4/chat/elements/Avatar';
-import { ArrowUp } from '~/v4/core/design/icons/ArrowUp';
+import { ChevronDown } from '~/v4/core/design/icons/ChevronDown';
 import { Image } from '~/v4/core/design/icons/Image';
+import { VideoPlayBadge } from '~/v4/chat/elements/VideoPlayBadge';
 import useFile from '~/v4/core/hooks/useFile';
 import styles from './NewMessageNotification.module.css';
 
@@ -31,23 +32,13 @@ function getPreviewText(message: Amity.Message): string {
 export function NewMessageNotification({ message, onPress }: NewMessageNotificationProps) {
   const isImage = message.dataType === 'image';
   const isVideo = message.dataType === 'video';
-  const imageFileId = isImage
-    ? (message.data as { fileId?: string } | undefined)?.fileId
-    : undefined;
-  const videoThumbFileId = isVideo
-    ? (message.data as { thumbnailFileId?: string } | undefined)?.thumbnailFileId
-    : undefined;
-  const imageFile = useFile<'image'>(imageFileId);
-  const videoThumbFile = useFile<'image'>(videoThumbFileId);
-  const mediaThumb = isImage
-    ? imageFile?.fileUrl
-      ? FileRepository.fileUrlWithSize(imageFile.fileUrl, 'small')
-      : null
-    : isVideo
-      ? videoThumbFile?.fileUrl
-        ? FileRepository.fileUrlWithSize(videoThumbFile.fileUrl, 'small')
-        : null
-      : null;
+  const fileId = (message.data as { fileId?: string } | undefined)?.fileId;
+  const imageFile = useFile<'image'>(isImage ? fileId : undefined);
+  const videoFile = useFile<'video'>(isVideo ? fileId : undefined);
+  const imageUrl = imageFile?.fileUrl
+    ? FileRepository.fileUrlWithSize(imageFile.fileUrl, 'small')
+    : null;
+  const videoUrl = videoFile?.fileUrl ?? null;
 
   return (
     <AriaButton
@@ -57,7 +48,7 @@ export function NewMessageNotification({ message, onPress }: NewMessageNotificat
       aria-label="Scroll to new message"
     >
       <div className={styles.newMessageNotification__left}>
-        {message.creator && <Avatar.User user={message.creator} size="sm" />}
+        {message.creator && <Avatar.User user={message.creator} size="xs" />}
         <Typography.Body className={styles.newMessageNotification__preview}>
           {getPreviewText(message)}
         </Typography.Body>
@@ -65,18 +56,28 @@ export function NewMessageNotification({ message, onPress }: NewMessageNotificat
       <div className={styles.newMessageNotification__right}>
         {(isImage || isVideo) && (
           <div className={styles.newMessageNotification__thumb}>
-            {mediaThumb ? (
+            {isVideo && videoUrl ? (
+              <video
+                src={`${videoUrl}#t=0.1`}
+                preload="metadata"
+                muted
+                playsInline
+                controls={false}
+                className={styles.newMessageNotification__thumbImg}
+              />
+            ) : isImage && imageUrl ? (
               <img
-                src={mediaThumb}
-                alt={isImage ? 'Image preview' : 'Video preview'}
+                src={imageUrl}
+                alt="Image preview"
                 className={styles.newMessageNotification__thumbImg}
               />
             ) : (
               <Image className={styles.newMessageNotification__thumbFallback} />
             )}
+            {isVideo && <VideoPlayBadge size={20} />}
           </div>
         )}
-        <ArrowUp className={styles.newMessageNotification__arrow} />
+        <ChevronDown className={styles.newMessageNotification__chevron} />
       </div>
     </AriaButton>
   );

@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx';
 import { TypographyComponentMap, TypographyVariant } from '~/v4/core/components';
 import { Button, type ButtonProps } from '~/v4/core/components/AriaButton/Button';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Skeleton } from '~/v4/core/components/Skeleton/Skeleton';
 import { ConversationChat } from '~/v4/icons/ConversationChat';
 import Copy from '~/v4/icons/Copy';
@@ -73,6 +74,9 @@ type MenuItemProps = {
   className?: string;
   onPress: ButtonProps['onPress'];
   typography?: TypographyVariant;
+  pageId?: string;
+  componentId?: string;
+  elementId?: string;
 };
 
 function renderIcon(icon: MenuIcon | undefined, className?: string): ReactNode {
@@ -103,10 +107,17 @@ function MenuItem({
   className,
   iconClassName,
   typography = TypographyVariant.BodyBold,
+  pageId = '*',
+  componentId = '*',
+  elementId = '*',
 }: MenuItemProps) {
+  const { isExcluded, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+
   const iconNode = renderIcon(icon, clsx(styles.menuItem__icon, iconClassName));
 
   const $Typography = TypographyComponentMap[typography];
+
+  if (isExcluded) return null;
 
   return (
     <Button
@@ -114,6 +125,7 @@ function MenuItem({
       variant="default"
       onPress={onPress}
       data-destructive={destructive}
+      data-testid={elementId === '*' ? undefined : accessibilityId}
       className={clsx(styles.menuItem, className)}
     >
       {iconNode}

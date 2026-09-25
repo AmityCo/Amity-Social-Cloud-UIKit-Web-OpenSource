@@ -34,6 +34,8 @@ export function GroupNameField({
       placeholder={placeholder ?? defaultPlaceholder}
       showCharacterCount
       maxLength={GROUP_NAME_MAX_LENGTH}
+      multiLine
+      preventNewLine
       inputTestId="group-name-input"
       className={styles.groupNameField}
     />

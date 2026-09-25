@@ -55,17 +55,6 @@
   color: var(--asc-color-text-chatbubble-inbound-link-default);
 }
 
-.textBubble__mention {
-  font-weight: 500;
-  color: var(--asc-color-text-chatbubble-inbound-mentioned-default);
-  fill: var(--asc-color-text-chatbubble-inbound-mentioned-default);
-}
-
-.textBubble[data-user='own'] .textBubble__mention {
-  color: var(--asc-color-text-chatbubble-outbound-mentioned-default);
-  fill: var(--asc-color-text-chatbubble-outbound-mentioned-default);
-}
-
 .textBubble__divider {
   height: 0.0625rem;
 }
@@ -240,29 +229,6 @@
   width: auto;
   max-width: 100%;
   object-fit: cover;
-}
-
-.videoBubble__playChip {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.25rem;
-  border-radius: 9999px;
-  background: var(--asc-color-surface-iconbutton-transparent-primary-enabled);
-  pointer-events: none;
-}
-
-.videoBubble__playIcon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--asc-color-icon-iconbutton-transparent-primary-default);
-  fill: var(--asc-color-icon-iconbutton-transparent-primary-default);
 }
 
 .customBubble {

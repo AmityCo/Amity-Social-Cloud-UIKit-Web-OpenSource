@@ -44,4 +44,5 @@ export enum Permissions {
   DeleteEventPermission = 'DELETE_EVENT',
   CreateEventWithLivestreamPermission = 'CREATE_EVENT_WITH_LIVESTREAM',
   ManageCommunityEventsPermission = 'MANAGE_COMMUNITY_EVENTS',
+  PinMessagePermission = 'PIN_MESSAGE',
 }

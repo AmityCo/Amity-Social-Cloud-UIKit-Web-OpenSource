@@ -22,3 +22,4 @@ export { useUpdateCohostPermission } from './useUpdateCohostPermission';
 export { useCoHostPermissionNotification } from './useCoHostPermissionNotification';
 export { useCoHostParticipantEvents } from './useCoHostParticipantEvents';
 export { useAssignCoHostModerator } from './useAssignCoHostModerator';
+export { useCurrentUserPermissionSubscription } from './useCurrentUserPermissionSubscription';

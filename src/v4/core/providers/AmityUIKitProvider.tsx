@@ -130,10 +130,8 @@ const InternalComponent = ({
     return initialConfig;
   }, [configs, networkConfig]);
 
-  const onGlobalBanned = (payload: Amity.UserPayload) => {
-    if (payload.users.find((user) => user.userId === userId)?.isGlobalBan) {
-      setIsGlobalBanned(true);
-    }
+  const onGlobalBanned = () => {
+    setIsGlobalBanned(true);
   };
 
   const onVisitorUsageLimitReached = () => {
@@ -145,10 +143,8 @@ const InternalComponent = ({
     }
   };
 
-  const onUserDeleted = (payload: Amity.UserPayload) => {
-    if (payload.users.find((user) => user.userId === userId)?.isGlobalBan) {
-      setIsUserDeleted(true);
-    }
+  const onUserDeleted = () => {
+    setIsUserDeleted(true);
   };
 
   useEffect(() => {

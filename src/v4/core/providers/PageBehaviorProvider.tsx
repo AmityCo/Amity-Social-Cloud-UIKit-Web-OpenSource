@@ -15,6 +15,9 @@ import { NotificationAlignment } from '~/v4/core/components/Notification';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface PageBehavior {
+  AmityDiscoveryWidgetComponentBehavior?: {
+    goToDestination?: (context: { topicId: string; post: Amity.Post }) => void;
+  };
   AmityStoryViewPageBehavior?: {
     onCloseAction?(): void;
     hyperLinkAction?(context: Record<string, unknown>): void;
@@ -314,6 +317,13 @@ export interface PageBehavior {
   AmityEventAttendeesPageBehavior?: {
     goToUserProfilePage?(context: { userId: string }): void;
   };
+  AmityChatPageBehavior?: {
+    onAvatarTap?(context: { userId: string; avatarUrl?: string }): void;
+  };
+  AmityMessageBubbleBehavior?: {
+    onAvatarTap?(context: { userId: string; avatarUrl?: string }): void;
+    onMentionUserTap?(context: { userId: string }): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -378,6 +388,13 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToLiveStreamPlayerPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
+    AmityDiscoveryWidgetComponentBehavior: {
+      goToDestination: (context: { topicId: string; post: Amity.Post }) => {
+        if (pageBehavior?.AmityDiscoveryWidgetComponentBehavior?.goToDestination) {
+          return pageBehavior.AmityDiscoveryWidgetComponentBehavior.goToDestination(context);
+        }
+      },
+    },
     AmityStoryViewPageBehavior: {
       onCloseAction: () => {
         if (pageBehavior?.AmityStoryViewPageBehavior?.onCloseAction) {
@@ -1169,6 +1186,8 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         goToUserProfilePage(context.userId);
       },
     },
+    AmityChatPageBehavior: pageBehavior?.AmityChatPageBehavior,
+    AmityMessageBubbleBehavior: pageBehavior?.AmityMessageBubbleBehavior,
   };
 
   return (

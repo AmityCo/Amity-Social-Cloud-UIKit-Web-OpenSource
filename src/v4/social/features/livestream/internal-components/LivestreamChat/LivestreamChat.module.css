@@ -26,6 +26,39 @@
   padding: 0 1rem 0.75rem;
 }
 
+.livestreamChat__chatFeedWrapper__feed {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Rendered only while a message is pinned; the margin matches the feed's side padding.
+   Figma "Livestream chat / Pinned": the bubble overlaps the feed by 8px (mb -8px) so
+   scrolled-away messages pass under its 2px backdrop blur. */
+.livestreamChat__chatFeedWrapper__pinnedMessage {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  margin: 1rem 1rem -0.5rem;
+}
+
+/* Figma "Live stream chat/bubble group + mask": while a message is pinned, older messages
+   fade out toward the banner instead of being cut off by it (stops match the design's
+   fade mask: 0% → 19.7% at the top, 98% → 100% at the bottom). */
+.livestreamChat__chatFeedWrapper:has(.livestreamChat__chatFeedWrapper__pinnedMessage)
+  .livestreamChat__chatFeedWrapper__feed {
+  mask-image: linear-gradient(
+    to bottom,
+    rgb(from var(--asc-color-white) r g b / 0%) 0%,
+    var(--asc-color-white) 19.71%,
+    var(--asc-color-white) 98.07%,
+    rgb(from var(--asc-color-white) r g b / 20%) 100%
+  );
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
 /* Matches ChatFeed's skeleton layout so the pre-channel and message-loading
    phases look consistent. */
 .livestreamChat__loadingSkeleton {
