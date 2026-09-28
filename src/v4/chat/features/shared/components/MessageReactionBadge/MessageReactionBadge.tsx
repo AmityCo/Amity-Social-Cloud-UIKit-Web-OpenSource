@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import type { ComponentType, SVGProps } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { Typography } from '~/v4/core/components/Typography/Typography';
@@ -14,6 +15,12 @@ type MessageReactionBadgeProps = {
 };
 
 export function MessageReactionBadge({ message, onTap }: MessageReactionBadgeProps) {
+  // A reaction surface with no page or component context threaded in, so it
+  // asks the module rather than an element id. Switching Reaction off left
+  // every one of these drawing: the module has to be off on messages,
+  // replies and livestream chat too, not only on posts.
+  const reactionEnabled = useFeatureEnabled('reaction');
+
   const reactionMap = (message.reactions as Record<string, number> | undefined) ?? {};
   const totalCount = message.reactionsCount ?? 0;
   const containsMyReaction = (message.myReactions?.length ?? 0) > 0;
@@ -25,6 +32,11 @@ export function MessageReactionBadge({ message, onTap }: MessageReactionBadgePro
       .slice(0, MAX_REACTION_BADGE_ICONS)
       .map(([name]) => name);
   }, [reactionMap]);
+
+  // Asked as a value, not an early return: a hook cannot be skipped. Returning
+  // above the hooks below changed the hook count when the module was toggled at
+  // runtime, which is what the sample app's Modules screen does.
+  if (!reactionEnabled) return null;
 
   if (totalCount === 0 || message.isDeleted) return null;
 

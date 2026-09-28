@@ -54,9 +54,14 @@ export const UIStoryAd = ({
   const { toggleTheme, setDefaultTheme } = useTheme();
   const forcedLightTheme = { currentTheme: 'light' as const, toggleTheme, setDefaultTheme };
 
-  const { themeStyles } = useAmityComponent({ pageId, componentId: 'story_ad' });
+  const { themeStyles, isExcluded } = useAmityComponent({ pageId, componentId: 'story_ad' });
+
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isAdvertisementInfoOpen, setIsAdvertisementInfoOpen] = useState(false);
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const openAdvertisementInfo = () => {
     setIsAdvertisementInfoOpen(true);

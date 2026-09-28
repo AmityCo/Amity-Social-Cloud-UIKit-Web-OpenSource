@@ -5,6 +5,7 @@ import {
   StoryRepository,
 } from '@amityco/ts-sdk';
 import { useEffect, useState } from 'react';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 const useReactionByReference = (referenceType: Amity.ReactableType, referenceId: string) => {
   const [reactionCount, setReactionCount] = useState(0);
@@ -23,19 +24,23 @@ const useReactionByReference = (referenceType: Amity.ReactableType, referenceId:
     setMyReaction(data.myReactions?.[0] ?? null);
   };
 
-  useEffect(() => {
-    if (referenceType === 'message') {
-      MessageRepository.getMessage(referenceId, updateReaction);
-    } else if (referenceType === 'story') {
-      StoryRepository.getStoryByStoryId(referenceId, updateReaction);
-    } else if (referenceType === 'comment') {
-      CommentRepository.getComment(referenceId, updateReaction);
-    } else if (referenceType === 'post') {
-      PostRepository.getPost(referenceId, updateReaction);
-    } else {
-      throw new Error('Unsupported reference type');
-    }
-  }, [referenceId, referenceType]);
+  useSdkEffect(
+    MessageRepository.getMessage,
+    () => {
+      if (referenceType === 'message') {
+        MessageRepository.getMessage(referenceId, updateReaction);
+      } else if (referenceType === 'story') {
+        StoryRepository.getStoryByStoryId(referenceId, updateReaction);
+      } else if (referenceType === 'comment') {
+        CommentRepository.getComment(referenceId, updateReaction);
+      } else if (referenceType === 'post') {
+        PostRepository.getPost(referenceId, updateReaction);
+      } else {
+        throw new Error('Unsupported reference type');
+      }
+    },
+    [referenceId, referenceType],
+  );
 
   return {
     reactions,

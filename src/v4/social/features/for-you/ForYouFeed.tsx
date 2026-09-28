@@ -12,6 +12,7 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { useForYouFeedCollection } from '~/v4/social/hooks/collections/useForYouFeedCollection';
+import { useModuleFilteredPosts } from '~/v4/social/hooks/useModuleFilteredPosts';
 import styles from './ForYouFeed.module.css';
 
 type ForYouFeedProps = {
@@ -19,18 +20,31 @@ type ForYouFeedProps = {
 };
 
 export function ForYouFeed({ pageId }: ForYouFeedProps) {
-  const componentId = COMPONENT_ID.FOR_YOU_FEED_COMPONENT;
+  // Spelled out, like Newsfeed's own id: apollo reads declared component ids as
+  // literals, so a constant reference is invisible to X24 and the parity gap
+  // stays reported after it is closed.
+  const componentId = 'amity_for_you_feed_component';
 
   const { isDesktop } = useResponsive();
-  const { themeStyles } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
   const { setActiveTab } = useLayoutContext();
   const [, setPersistedTab] = useSocialHomePageTab();
 
   const { newPosts, postRatioOverrides, globalFeaturedPostsItems, removeNewPost } =
     useGlobalFeedContext();
 
-  const { posts, isLoading, isLoadingFirstPage, hasMore, loadMore, refresh } =
-    useForYouFeedCollection();
+  const {
+    posts: feedPosts,
+    isLoading,
+    isLoadingFirstPage,
+    hasMore,
+    loadMore,
+    refresh,
+  } = useForYouFeedCollection();
+
+  // getForYouFeed takes no parameters at all, so this is the only place a
+  // switched-off Poll or Live can leave the feed.
+  const posts = useModuleFilteredPosts(feedPosts);
 
   const onFeedReachBottom = () => {
     if (hasMore && !isLoading && !isLoadingFirstPage) loadMore();
@@ -42,6 +56,11 @@ export function ForYouFeed({ pageId }: ForYouFeedProps) {
   };
 
   const showCaughtUp = !hasMore && !isLoading && !isLoadingFirstPage;
+
+  // Feed off left this whole pane rendering. The tab that reaches it was gated,
+  // which hides the door and not the room — and the collection above kept
+  // fetching. Below the hooks so the hook count does not move with the flag.
+  if (isExcluded) return null;
 
   return (
     <PullToRefresh className={styles.forYouFeed} style={themeStyles} onTouchEndCallback={refresh}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { resolveString, useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -26,7 +26,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
   const notification = useNotifications();
   const { online } = useNetworkState();
   const { onBack, onClickCommunity } = useNavigation();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
 
   const defaultPostSetting = community.postSetting
     ? community.postSetting
@@ -91,6 +91,10 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
 
   const disabled = defaultPostSetting === postSetting;
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div
       style={themeStyles}
@@ -100,7 +104,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
       <div className={styles.communityPostPermissionPage__communityTitleWrap}>
         <BackButton onPress={confirmPageChange} />
         <Typography.TitleBold className={styles.communityPostPermissionPage__communityTitle}>
-          {useString('amity_social_permission_community_setting_post_permission')}
+          {resolveString('amity_social_permission_community_setting_post_permission')}
         </Typography.TitleBold>
         <Button
           size="medium"
@@ -111,17 +115,19 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
           data-testid="post-permission-save-button"
           className={styles.communityPostPermissionPage__mobileCta}
         >
-          {useString('amity_social_button_community_setup_edit_button')}
+          {resolveString('amity_social_button_community_setup_edit_button')}
         </Button>
       </div>
       <div className={styles.communityPostPermissionPage__communityContentWrap}>
         <div className={styles.communityPostPermissionPage__label}>
           <Typography.BodyBold>
-            {useString('amity_social_label_who_can_post_on_this_community')}
+            {resolveString('amity_social_label_who_can_post_on_this_community')}
           </Typography.BodyBold>
           <br />
           <Typography.Body className={styles.communityPostPermissionPage__desc}>
-            {useString('amity_social_label_you_can_control_who_can_create_posts_in_your_community')}
+            {resolveString(
+              'amity_social_label_you_can_control_who_can_create_posts_in_your_community',
+            )}
           </Typography.Body>
         </div>
         <RadioGroup
@@ -136,7 +142,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
               props: { 'data-testid': 'post-permission-everyone-option' },
               label: (
                 <Typography.Body>
-                  {useString('amity_social_permission_post_permission_everyone')}
+                  {resolveString('amity_social_permission_post_permission_everyone')}
                 </Typography.Body>
               ),
             },
@@ -145,7 +151,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
               props: { 'data-testid': 'post-permission-admin-review-option' },
               label: (
                 <Typography.Body>
-                  {useString('amity_social_permission_post_permission_admin_review')}
+                  {resolveString('amity_social_permission_post_permission_admin_review')}
                 </Typography.Body>
               ),
             },
@@ -154,7 +160,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
               props: { 'data-testid': 'post-permission-only-admin-option' },
               label: (
                 <Typography.Body>
-                  {useString('amity_social_permission_post_permission_only_admin')}
+                  {resolveString('amity_social_permission_post_permission_only_admin')}
                 </Typography.Body>
               ),
             },

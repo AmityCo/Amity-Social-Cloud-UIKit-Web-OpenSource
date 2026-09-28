@@ -1,5 +1,5 @@
 import { Typography } from '~/v4/core/components';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PostsTabDescription } from '~/v4/social/elements';
 import React from 'react';
@@ -25,10 +25,14 @@ export const PendingPostList = ({
   const componentId = 'pending_post_list';
   const { isDesktop } = useResponsive();
 
-  const { accessibilityId, themeStyles } = useAmityComponent({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const renderPendingPost = (post: Amity.Post) => {
     return (
@@ -56,7 +60,7 @@ export const PendingPostList = ({
         <div className={styles.pendingPostList__noJoinRequest}>
           <FireworkPaper className={styles.pendingPostList__fireworkIcon} />
           <Typography.TitleBold className={styles.pendingPostList__noJoinRequestText}>
-            {useString('amity_social_label_no_pending_posts')}
+            {resolveString('amity_social_label_no_pending_posts')}
           </Typography.TitleBold>
         </div>
       )}

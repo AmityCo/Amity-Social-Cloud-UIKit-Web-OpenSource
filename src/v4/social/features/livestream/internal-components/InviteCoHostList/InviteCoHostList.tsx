@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { resolveString, useString } from '~/v4/core/localization';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
@@ -90,7 +91,7 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
           onPress={handleCancel}
           isDisabled={isLoading}
         >
-          {useString('amity_social_button_cancel')}
+          {resolveString('amity_social_button_cancel')}
         </Button>
       ) : isCoHost ? (
         <Button
@@ -101,7 +102,7 @@ const WatchingUserItem: FC<WatchingUserItemProps> = ({
           onPress={onRemoveCoHost}
           isDisabled={isLoading}
         >
-          {useString('amity_social_button_remove')}
+          {resolveString('amity_social_button_remove')}
         </Button>
       ) : (
         <InviteButton
@@ -126,8 +127,11 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
   onAction,
 }) => {
   const componentId = 'inivte_co_host_list';
+  // Owned by a module and never asked — the component kept rendering
+  // after its module was switched off.
+  const { isExcluded } = useAmityComponent({ pageId, componentId });
   const { watchingUsers, isLoading } = useWatchingUsers({ room });
-  const noViewersMessageLabel = useString('amity_social_status_no_viewers_message');
+  const noViewersMessageLabel = resolveString('amity_social_status_no_viewers_message');
 
   const { handleCreateInvitation, isPending: isPendingCreateInvitation } = useCreateInvitation({
     room,
@@ -209,7 +213,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
       <div className={styles.inviteCoHostList__empty}>
         <AddUser className={styles.inviteCoHostList__emptyIcon} />
         <Typography.TitleBold className={styles.inviteCoHostList__emptyText}>
-          {useString('amity_social_no_viewers_title')}
+          {resolveString('amity_social_no_viewers_title')}
         </Typography.TitleBold>
         <Typography.Caption className={styles.inviteCoHostList__emptyText}>
           {noViewersMessageLabel}
@@ -218,11 +222,13 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
     );
   }
 
+  if (isExcluded) return null;
+
   return (
     <div className={styles.inviteCoHostList}>
       {coHost?.user && (
         <>
-          {renderHeader(useString('amity_social_button_co_hosting'))}
+          {renderHeader(resolveString('amity_social_button_co_hosting'))}
           <WatchingUserItem
             user={coHost?.user}
             pageId={pageId}
@@ -235,7 +241,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
 
       {pendingInvitation?.user && (
         <>
-          {renderHeader(useString('amity_social_button_pending_invitation'))}
+          {renderHeader(resolveString('amity_social_button_pending_invitation'))}
           <WatchingUserItem
             user={pendingInvitation?.user}
             pageId={pageId}
@@ -248,7 +254,7 @@ export const InviteCoHostList: React.FC<InviteCoHostListProps> = ({
 
       {filteredWatchingUsers.length > 0 && (
         <>
-          {renderHeader(useString('amity_social_button_whos_watching'))}
+          {renderHeader(resolveString('amity_social_button_whos_watching'))}
           {filteredWatchingUsers.map((user) => (
             <WatchingUserItem
               key={user.userId}

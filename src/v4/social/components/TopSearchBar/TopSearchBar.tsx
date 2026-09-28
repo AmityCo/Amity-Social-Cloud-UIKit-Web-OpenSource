@@ -10,7 +10,7 @@ import { BackButton } from '~/v4/social/elements';
 import styles from './TopSearchBar.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 
 export type TopSearchBarProps = {
   pageId?: string;
@@ -31,7 +31,13 @@ export function TopSearchBar({
   initialValue = '',
   onCloseSearch,
   inputTestId,
-  placeholderKey = 'amity_social_label_search_my_communities',
+  // Plain "Search", which is true of every page that shares this bar. The old
+  // default said "Search my communities", which was wrong on global search and
+  // a promise a Community-less build could not keep. The shared key keeps its
+  // own wording — Android and iOS both show "Search my communities" for it — so
+  // a caller with something more specific to say still passes its own key, the
+  // way CommunityInviteMemberPage does.
+  placeholderKey = 'amity_social_label_search',
 }: TopSearchBarProps) {
   const componentId = 'top_search_bar';
   const { onBack } = useNavigation();
@@ -76,7 +82,7 @@ export function TopSearchBar({
             type="text"
             onFocus={onFocus}
             value={searchValue}
-            placeholder={useString(placeholderKey)}
+            placeholder={resolveString(placeholderKey)}
             data-testid={inputTestId ?? `${accessibilityId}/input`}
             className={styles.topSearchBar__textInput}
             onChange={(ev) => setSearchValue(ev.target.value)}

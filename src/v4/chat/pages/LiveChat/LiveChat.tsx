@@ -14,10 +14,14 @@ interface LiveChatProps {
 export const LiveChat = ({ channelId }: LiveChatProps) => {
   const { channel } = useChannel({ channelId });
   const pageId = 'live_chat';
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const ref = useRef<HTMLDivElement>(null);
 
   if (!channel) return null;
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <LiveChatNotificationProvider>

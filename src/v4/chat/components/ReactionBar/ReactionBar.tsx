@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import { Button } from '~/v4/core/design/components/Button';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
@@ -18,10 +19,14 @@ export const ReactionBar = ({
   roomId,
   isJoinedCommunity,
 }: ReactionBarProps) => {
+  // A reaction surface with no page or component context threaded in, so it
+  // asks the module rather than an element id. Switching Reaction off left
+  // every one of these drawing: the module has to be off on messages,
+  // replies and livestream chat too, not only on posts.
+  const reactionEnabled = useFeatureEnabled('reaction');
+
   const { reactions: config } = useCustomReaction();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
-
-  if (!config || !targetId) return null;
 
   const onReactionClick = useCallback(
     (reactionName: string) => {
@@ -35,6 +40,12 @@ export const ReactionBar = ({
     },
     [targetId, targetType, roomId],
   );
+
+  // Both guards below the hooks: a hook cannot be skipped, and both of these
+  // sat above useCallback — the hook count changed with the module toggle and
+  // with any message that arrived before the reaction config did.
+  if (!reactionEnabled) return null;
+  if (!config || !targetId) return null;
 
   const handleReactionClick = (reactionName: string) => {
     return handleCommunityProfileBehavior({

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import styles from './ProductTag.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -44,7 +44,7 @@ export function ProductTag({
   shouldTrackAnalytics = true,
 }: ProductTagProps) {
   const elementId = ELEMENT_ID.PRODUCT_TAG;
-  const { themeStyles, accessibilityId } = useAmityElement({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -105,6 +105,10 @@ export function ProductTag({
     onClick?.();
   };
 
+  // Below the hooks, not above: React counts them, and the sample toggles this
+  // flag at runtime.
+  if (isExcluded) return null;
+
   return (
     <div
       ref={elementRef}
@@ -144,7 +148,7 @@ export function ProductTag({
                 className={styles.productTag__unavailableLabel}
                 data-theme={currentTheme}
               >
-                {useString('amity_social_button_tagged_products_archived_info')}
+                {resolveString('amity_social_button_tagged_products_archived_info')}
               </Typography.Caption>
             )}
             <Typography.BodyBold
@@ -170,7 +174,7 @@ export function ProductTag({
                   className={styles.productTag__viewButton}
                 >
                   <Typography.CaptionBold as="span">
-                    {useString('amity_social_button_view')}
+                    {resolveString('amity_social_button_view')}
                   </Typography.CaptionBold>
                 </Button>
               )}

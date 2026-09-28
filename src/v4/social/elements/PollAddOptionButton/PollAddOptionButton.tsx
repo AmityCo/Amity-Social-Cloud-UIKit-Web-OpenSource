@@ -18,12 +18,23 @@ export const PollAddOptionButton = ({
 }: PollAddOptionButtonProps) => {
   const elementId = 'poll_add_option_button';
 
-  const { config, themeStyles, accessibilityId, uiReference, defaultConfig, resolveText } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const {
+    config,
+    themeStyles,
+    accessibilityId,
+    uiReference,
+    defaultConfig,
+    resolveText,
+    isExcluded,
+  } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
+  // Its module is sold separately from the surface hosting it, so the
+  // page gate cannot reach this control.
+  if (isExcluded) return null;
+
   return (
     <Button
       style={themeStyles}

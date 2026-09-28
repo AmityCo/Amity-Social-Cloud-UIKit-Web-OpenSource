@@ -63,6 +63,7 @@ import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSe
 import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/internal-components';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useEvent } from '~/v4/social/features/events/hooks';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -101,14 +102,18 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   // viewers' sessions), and the CoHostBadge sticks on the departed user's old
   // messages (PDT-3981). Force a re-fetch on every leave/stage-left/removed
   // event so every subscribed client's `room.participants` reflects reality.
-  useEffect(() => {
-    const unsubscribers: Amity.Unsubscriber[] = [
-      RoomRepository.onRoomParticipantLeft(() => refreshRoom()),
-      RoomRepository.onRoomParticipantStageLeft(() => refreshRoom()),
-      RoomRepository.onRoomParticipantRemoved(() => refreshRoom()),
-    ];
-    return () => unsubscribers.forEach((fn) => fn());
-  }, [refreshRoom]);
+  useSdkEffect(
+    RoomRepository.onRoomParticipantLeft,
+    () => {
+      const unsubscribers: Amity.Unsubscriber[] = [
+        RoomRepository.onRoomParticipantLeft(() => refreshRoom()),
+        RoomRepository.onRoomParticipantStageLeft(() => refreshRoom()),
+        RoomRepository.onRoomParticipantRemoved(() => refreshRoom()),
+      ];
+      return () => unsubscribers.forEach((fn) => fn());
+    },
+    [refreshRoom],
+  );
 
   // Also refresh on mount so a rejoin session that came back to a stale room
   // (participantLeft fired while unmounted, so the local cache never saw it)
@@ -234,7 +239,7 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   } = useGetBroadcasterData();
 
   const { setStreamPlayer } = useLayoutContext();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { goToLiveStreamTerminatedPage, goToLiveStreamBannedPage } = useNavigation();
 
   const { channel, isLoading: isChannelLoading } = useLivechat({
@@ -894,6 +899,10 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   // (the option menu, the tagged-products sheet, …). The two traps ping-pong focus() until
   // the call stack overflows (PDT-3913: "Maximum call stack size exceeded" in HTMLElement.focus).
   // A plain container has no focus trap, so vaul owns focus while a drawer is open.
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <LivestreamDataProvider
       room={room}

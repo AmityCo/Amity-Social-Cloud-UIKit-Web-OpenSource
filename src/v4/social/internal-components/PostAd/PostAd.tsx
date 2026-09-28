@@ -9,13 +9,17 @@ interface PostAdProps {
 }
 
 export const PostAd = ({ pageId = '*', ad }: PostAdProps) => {
-  const componentId = 'post_content';
-  const { themeStyles } = useAmityComponent({
+  // Ads owned only story_ad. Scoping the feed ad to post_content meant
+  // switching Ads off left it on screen, and switching Post off took it away.
+  const componentId = 'post_ad';
+  const { themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
 
   const avatarFile = useImage({ fileId: ad.advertiser?.avatar?.fileId });
+
+  if (isExcluded) return null;
   const avatarUrl = avatarFile || ad.advertiser?.avatar?.fileUrl || '';
 
   const adImageFile = useImage({ fileId: ad.image1_1?.fileId });

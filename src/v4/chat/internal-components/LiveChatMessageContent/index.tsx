@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { resolveString } from '~/v4/core/localization';
 import dayjs from 'dayjs';
 import { Typography } from '~/v4/core/components';
 import { MessageAction, MessageActionType } from './MessageAction';
@@ -40,6 +41,11 @@ const LiveChatMessageContent = ({
   const isOwner = message.creatorId === sdk.currentUserId;
   const { isModerator } = useChannelPermission(message.channelId);
   const [openReactionPanel, setOpenReactionPanel] = useState<Amity.Message | undefined>(undefined);
+  // The sender and receiver bubbles hand their element id here and this took it
+  // without ever asking, so both read as guarded while nothing guarded them.
+  const { isExcluded } = useAmityElement({ pageId, componentId, elementId });
+
+  if (isExcluded) return null;
 
   return (
     <>
@@ -50,7 +56,7 @@ const LiveChatMessageContent = ({
               <Bin className={styles.binIcon} />
               <div>
                 <Typography.Body>
-                  {useString('amity_social_button_message_deleted')}
+                  {resolveString('amity_social_button_message_deleted')}
                 </Typography.Body>
               </div>
             </div>

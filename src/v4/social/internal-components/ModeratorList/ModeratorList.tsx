@@ -18,7 +18,8 @@ export const ModeratorList = ({ pageId = '*', community }: ModeratorListProps) =
 
   const { currentUserId } = useSDK();
   const { onClickUser } = useNavigation();
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { moderators, hasMore, isLoading, loadMore } = useCommunityModeratorsCollection({
     communityId: community?.communityId as string,
@@ -34,6 +35,10 @@ export const ModeratorList = ({ pageId = '*', community }: ModeratorListProps) =
     node: intersectionNode,
     onIntersect,
   });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div

@@ -1,5 +1,6 @@
 import { Client as ASCClient, AdRepository } from '@amityco/ts-sdk';
 import { TimeWindowTracker } from './TimeWindowTracker';
+import { isSdkFnEnabledWhenReady } from '~/v4/core/providers/CustomizationProvider/moduleApi';
 
 class SeenRecencyCache {
   static #instance: SeenRecencyCache;
@@ -42,6 +43,23 @@ export class AdEngine {
   private constructor() {
     ASCClient.onSessionStateChange(async (state: Amity.SessionStates) => {
       if (state === 'established') {
+        // R6: a module that is off must not ask. This engine is a singleton the
+        // provider builds, so it never meets `useSdkFnEnabled` — the request
+        // went out for Ads whether or not the customer bought it, and the
+        // backend answers a disabled feature with an error rather than an empty
+        // result. Asking by function identity is the same question the live
+        // hooks ask, resolved through the provider's own traversal.
+        // Awaited, not read: the session can come up before
+        // CustomizationProvider has rendered, and asking in that window
+        // answered "enabled" for every module.
+        if (!(await isSdkFnEnabledWhenReady(AdRepository.getNetworkAds))) {
+          this.ads = [];
+          this.settings = null;
+          this.subscribers.forEach((subscriber) => subscriber(null));
+          this.isLoading = false;
+          return;
+        }
+
         const networkAds = await AdRepository.getNetworkAds();
         this.ads = networkAds.ads;
         this.settings = networkAds.settings;

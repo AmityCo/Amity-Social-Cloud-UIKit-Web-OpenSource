@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
 import { CommunitySideBarTitle } from '~/v4/social/elements/CommunitySideBarTitle';
 import { NotificationTrayPage, SocialGlobalSearchPage } from '~/v4/social/pages';
 import {
@@ -32,6 +32,50 @@ export function CommunitySideBar({ className, pageId = '*' }: CommunitySideBarPr
   const { isPending: isForYouFeedSettingPending } = useForYouFeedSetting({
     shouldCall: !isVisitorOrBot,
   });
+
+  // The rail is chrome, not a feature. It used to belong to Community and
+  // return null wholesale, which took Discovery's search with it — on desktop
+  // only, because the rail is search's one desktop host and the top navigation
+  // collapses to nothing there. Every child answers to its own module instead.
+  //
+  // R3 still applies to the rail itself: a container goes with its last visible
+  // child, so it asks whether anything inside survived rather than drawing an
+  // empty 288px column.
+  const search = useAmityComponent({
+    pageId: 'social_global_search_page',
+    componentId: 'top_search_bar',
+  });
+  const tray = useAmityElement({ pageId, componentId, elementId: 'notification_tray_button' });
+  const forYouItem = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'for_you_sidebar_menu_item',
+  });
+  const newsfeedItem = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'newsfeed_sidebar_menu_item',
+  });
+  const communitiesItem = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'communities_sidebar_menu_item',
+  });
+  const eventsItem = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'events_sidebar_menu_item',
+  });
+
+  const anythingSurvives = [
+    search,
+    tray,
+    forYouItem,
+    newsfeedItem,
+    communitiesItem,
+    eventsItem,
+  ].some((child) => !child.isExcluded);
+  if (!anythingSurvives) return null;
 
   const isResolvingForYou = !isVisitorOrBot && isForYouFeedSettingPending;
 

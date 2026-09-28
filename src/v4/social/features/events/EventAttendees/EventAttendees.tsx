@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements';
@@ -9,6 +9,7 @@ import useRSVPEventsCollection from '~/v4/social/features/events/hooks/useRSVPEv
 import { AmityEventResponseStatus } from '@amityco/ts-sdk';
 import { UserItem } from '~/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserItem';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
 
 export type EventAttendeesProps = {
   event: Amity.Event;
@@ -16,6 +17,9 @@ export type EventAttendeesProps = {
 
 export const EventAttendees = ({ event }: EventAttendeesProps) => {
   const pageId = 'event_attendees_page';
+  // This page named its id and never resolved it at all, so Events being
+  // switched off left the attendee list reachable and rendering.
+  const { isExcluded } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -54,11 +58,19 @@ export const EventAttendees = ({ event }: EventAttendeesProps) => {
 
   const showLoading = isLoadingFirstPage || isLoading;
 
+  // A module switched off renders nothing, so a stale route or deep link lands
+  // on emptiness rather than a page with holes in it. The flag was resolved
+  // and then dropped: the gate said withhold and the page stayed on screen,
+  // which the id tables report as hidden because they measure the decision.
+  if (isExcluded) return null;
+
   return (
     <div ref={containerRef}>
       <div data-scrolled={isScrolled} className={styles.eventAttendees__topBar}>
         <BackButton onPress={() => onBack()} />
-        <Typography.TitleBold>{useString('amity_social_button_attendees')}</Typography.TitleBold>
+        <Typography.TitleBold>
+          {resolveString('amity_social_button_attendees')}
+        </Typography.TitleBold>
         <div className={styles.eventAttendees__spacer} />
       </div>
 

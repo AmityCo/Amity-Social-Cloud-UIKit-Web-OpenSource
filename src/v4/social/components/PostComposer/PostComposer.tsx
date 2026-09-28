@@ -20,7 +20,7 @@ import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events
 import styles from './PostComposer.module.css';
 import { LivestreamButton } from '~/v4/social/elements/LivestreamButton';
 import { LivestreamTargetSelectionPage } from '~/v4/social/features/livestream/pages/LivestreamTargetSelectionPage';
-import { useString } from '~/v4/core/localization/useString';
+import { resolveString } from '~/v4/core/localization/resolveString';
 
 type PostComposerProps = {
   pageId?: string;
@@ -52,8 +52,13 @@ export function PostComposer({
   const { user } = useUser({ userId: currentUserId, shouldCall: !isVisitorOrBot });
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { hasCreateEventPermission } = useEventPermission(communityId);
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const { redirectEventTargetSelectionPage } = useRedirectEventTargetSelectionPage();
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const handlePostClick = () => {
     if (onClickPost) return onClickPost();
@@ -181,7 +186,7 @@ export function PostComposer({
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}
       />
       <Button className={styles.postComposer__input} onPress={handlePostClick}>
-        {useString('amity_social_placeholder_post_composer_body_placeholder')}
+        {resolveString('amity_social_placeholder_post_composer_body_placeholder')}
       </Button>
       <ImageButton
         onPress={handlePostClick}

@@ -5,3 +5,10 @@
   width: 100%;
   box-shadow: var(--asc-box-shadow-03);
 }
+
+/* With the post family gone the sheet holds two entries. Each row is a
+   full-width flex button, so aligning right means pushing its own content to
+   the end rather than leaving it against an empty column. */
+.createPostMenu[data-collapsed='true'] > * {
+  justify-content: flex-end;
+}

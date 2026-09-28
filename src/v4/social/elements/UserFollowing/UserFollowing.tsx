@@ -28,11 +28,15 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
   const { followingCount } = useFollowCount(userId);
   const { AmityUserProfileHeaderComponentBehavior } = usePageBehavior();
   const elementId = 'user_following';
-  const { themeStyles, config, accessibilityId, resolveText } = useAmityElement({
+  const { themeStyles, config, accessibilityId, resolveText, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  // Owned by a module and never asked. The counts stayed on the profile
+  // after User Relationship was switched off.
+  if (isExcluded) return null;
 
   return (
     <Button

@@ -9,6 +9,8 @@ import { AmityCommunitySetupPageMode } from '~/v4/social/pages';
 import { Explore, MyCommunities } from '~/v4/social/components';
 import { useConfig } from '~/v4/social/providers/ConfigProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import styles from './Communities.module.css';
 
 enum CommunitiesTab {
@@ -24,7 +26,19 @@ export function Communities({ pageId }: CommunitiesProps) {
   const { isVisitorOrBot } = useSDK();
   const { goToCreateCommunityPage } = useNavigation();
   const { socialCommunityCreationButtonVisible, hideExplore } = useConfig();
-  const [activeTab, setActiveTab] = useState<Key>(CommunitiesTab.Explore);
+  // The tab has to ask the same question its content does, or Discovery off
+  // leaves a tab that opens on nothing — the label is the door and the door
+  // belongs to the room.
+  const { isExcluded: isExploreExcluded } = useAmityComponent({
+    pageId: pageId ?? '*',
+    componentId: COMPONENT_ID.EXPLORE_COMPONENT,
+  });
+  const showExplore = !hideExplore && !isExploreExcluded;
+  const [activeTab, setActiveTab] = useState<Key>(
+    // Landing on a tab that is not there leaves the panel blank until someone
+    // presses the other one.
+    showExplore ? CommunitiesTab.Explore : CommunitiesTab.MyCommunities,
+  );
 
   const communitiesTitle = useString('amity_social_tab_tab_communities');
   const exploreLabel = useString('amity_social_tab_tab_explore');
@@ -61,7 +75,7 @@ export function Communities({ pageId }: CommunitiesProps) {
           tabListClassName={styles.communities__tabList}
           tabPanelClassName={styles.communities__tabPanel}
           tabs={[
-            ...(!hideExplore
+            ...(showExplore
               ? [
                   {
                     value: CommunitiesTab.Explore,

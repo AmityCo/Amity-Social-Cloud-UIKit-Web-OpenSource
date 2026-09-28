@@ -34,7 +34,7 @@ export const CommentTray = ({
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
   const [replyParentIdOverride, setReplyParentIdOverride] = useState<string | undefined>(undefined);
   const [replyL0AncestorId, setReplyL0AncestorId] = useState<string | undefined>(undefined);
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
 
   const onCancelReply = useCallback(() => {
     setReplyTo(undefined);
@@ -62,6 +62,10 @@ export const CommentTray = ({
     },
     [],
   );
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const canShowComposer = shouldAllowInteraction && !isVisitorOrBot && community.isJoined;
 

@@ -1,0 +1,367 @@
+{
+  ".storybook/decorators/UiKitV4Decorator.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 12
+    }
+  },
+  "src/v4/chat/components/MessageList/MessageList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/chat/internal-components/MessageOptions/MessageOptions.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/components/Comment/Comment.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/components/CommentComposer/CommentInput.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/components/CommentList/CommentList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 11
+    }
+  },
+  "src/v4/social/components/HyperLinkConfig/HyperLinkConfig.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/components/InvitationBanner/InvitationBanner.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/components/PostContent/PostContent.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/components/ReactionList/ReactionList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 9
+    }
+  },
+  "src/v4/social/components/ReactionList/ReactionListPanel.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/components/RecommendedCommunities/RecommendedCommunities.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/components/ReplyCommentList/ReplyCommentList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/components/TrendingCommunities/TrendingCommunities.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/components/UserProfileHeader/UserProfileHeader.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/elements/CameraButton/CameraButton.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/elements/EventHostBadge/EventHostBadge.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/elements/PostTextField/PostTextField.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/features/events/EventDetail/components/EventActions/EventActions.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/features/events/EventDetail/components/RSVPButton/NonMemberBottomSheet.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/features/events/EventDetail/components/RSVPButton/RSVPButton.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 7
+    }
+  },
+  "src/v4/social/features/events/EventHub/Events.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/features/events/EventHub/components/HappeningEvents/HappeningEvents.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/features/events/EventSetup/EventSetup.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 6
+    }
+  },
+  "src/v4/social/features/events/EventSetup/components/LocationForm/LocationForm.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 13
+    }
+  },
+  "src/v4/social/features/events/components/EventList/EventList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/features/livestream/internal-components/LiveStreamIdleThumbnail/LiveStreamIdleThumbnail.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/features/livestream/internal-components/LivestreamModerationOptions/LivestreamModerationOptions.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 4
+    }
+  },
+  "src/v4/social/features/livestream/internal-components/LivestreamOverlay/LivestreamOverlay.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/features/product-tagged/components/ProductTagList/ProductTagList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 5
+    }
+  },
+  "src/v4/social/features/product-tagged/components/ProductTagSelection/ProductTagSelection.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/features/product-tagged/elements/LivestreamPinnedProduct/LivestreamPinnedProduct.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 5
+    }
+  },
+  "src/v4/social/features/product-tagged/elements/ManageProductTag/ManageProductTag.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 4
+    }
+  },
+  "src/v4/social/features/product-tagged/elements/ProductTagSelectedItem/ProductTagSelectedItem.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/features/product-tagged/elements/ProductTagSelectionHeader/ProductTagSelectionHeader.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 5
+    }
+  },
+  "src/v4/social/features/product-tagged/elements/ProductTagSelectionItem/ProductTagSelectionItem.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/features/product-tagged/internal-components/PinnedProductOverlay/PinnedProductOverlay.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/features/product-tagged/internal-components/ProductCarousel/ProductCarousel.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/features/product-tagged/internal-components/ProductImageThumbnail/ProductImageThumbnail.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/CommentAd/CommentAd.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/CommentComposeBar/CommentComposeBar.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/CommunityMemberItem/CommunityMemberItem.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 5
+    }
+  },
+  "src/v4/social/internal-components/CommunityRowItem/CommunityRowItem.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/FailedToShow/FailedToShow.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/ImageViewer/UnavailableMediaViewer.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/Lexical/plugins/FloatingLinkEditorPlugin.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 6
+    }
+  },
+  "src/v4/social/internal-components/Lexical/plugins/MentionPlugin.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 4
+    }
+  },
+  "src/v4/social/internal-components/MemberList/MemberList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/internal-components/MentionTextInput/MentionTextInput.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/internal-components/NoInternetConnection/NoInternetConnection.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/NoResultFound/NoResultFound.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/PollDurationOptions/PollDurationOptions.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 9
+    }
+  },
+  "src/v4/social/internal-components/PostAd/PostAd.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/StoryAd/UIStoryAd.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/internal-components/StoryCommentComposeBar/StoryCommentComposeBar.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/StoryViewer/Renderers/AutoPlayContent.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/internal-components/StoryViewer/Renderers/Default.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/internal-components/StoryViewer/Renderers/Image.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 25
+    }
+  },
+  "src/v4/social/internal-components/StoryViewer/Renderers/Video.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 23
+    }
+  },
+  "src/v4/social/internal-components/StoryViewer/Renderers/storyAd.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 6
+    }
+  },
+  "src/v4/social/internal-components/TextWithMention/TextWithMention.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/internal-components/UnavailableMediaViewer/UnavailableMediaViewer.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/internal-components/UserMenu/UserMenu.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/internal-components/VideoHeader/VideoHeader.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/internal-components/VideoPlayerControls/VideoMenu.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 5
+    }
+  },
+  "src/v4/social/pages/BlockedUserPage/BlockedUserItem/BlockedUserItem.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/pages/CommunityInviteMemberPage/CommunityInviteMemberPage.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/pages/DraftClipPage/DraftClipPage.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 4
+    }
+  },
+  "src/v4/social/pages/PendingRequestPage/PendingRequestPage.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 3
+    }
+  },
+  "src/v4/social/pages/UserPendingFollowRequestPage/PendingUserItem/PendingUserItem.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 2
+    }
+  },
+  "src/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserItemMenu.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 4
+    }
+  },
+  "src/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserRelationshipList.tsx": {
+    "react-hooks/rules-of-hooks": {
+      "count": 1
+    }
+  },
+  "src/v4/social/utils/index.ts": {
+    "react-hooks/rules-of-hooks": {
+      "count": 4
+    }
+  }
+}

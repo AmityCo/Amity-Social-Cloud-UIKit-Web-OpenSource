@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useArgs } from '@storybook/preview-api';
 import { AmityUIKitProvider } from '../../src/v4/core/providers';
 import { Preview } from '@storybook/react';
@@ -86,6 +86,13 @@ const buildApiEndpoint = (
 };
 
 const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) => {
+  // A story that needs no session opts out of the provider. Without this the
+  // provider's own `if (!client) return null` renders such a story as an empty
+  // frame, which is indistinguishable from the story being broken.
+  // Called, not rendered as a component: the `Story` a decorator receives is a
+  // function to invoke, which is how `FluidControl` uses it one layer in.
+  if (context.parameters?.noUiKitProvider) return <>{Story()}</>;
+
   const [args, updateArgs] = useArgs();
 
   // ── Auto-fill apiKey + uploadUrl ONLY on a genuine region switch ─────────────
@@ -175,6 +182,19 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
     }
   }, [args.theme]);
 
+  // Nothing here drives module availability, and nothing reports it. A story
+  // shows what this network's plan actually granted.
+  //
+  // There were switches, writing a `features` block into the customer's config;
+  // that block is gone from `Config`, because whether a module exists is the
+  // plan's answer and nobody else's. There was a card in the corner listing
+  // what was withheld and why. Both are removed rather than left as controls
+  // that cannot move anything and a readout of a state nobody can vary.
+  //
+  // To put either back the decorator needs a way into the provider's
+  // entitlement: seeding the react-query cache that `useNetworkEntitlement`
+  // reads is the route that costs no public API.
+
   const getAuthSignature = async ({
     deviceId,
     authSignatureExpiresAt,
@@ -210,6 +230,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
       getAuthSignature={args.secureMode ? getAuthSignature : undefined}
       socialCommunityCreationButtonVisible={args.socialCommunityCreationButtonVisible ?? true}
       hideExplore={args.hideExplore ?? false}
+      seoOptimizationEnabled={args.seoOptimizationEnabled ?? false}
       pageBehavior={{
         AmityDiscoveryWidgetComponentBehavior: {
           goToDestination: ({ topicId, post }) => {

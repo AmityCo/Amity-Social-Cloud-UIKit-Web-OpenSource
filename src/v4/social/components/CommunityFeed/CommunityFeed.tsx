@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useString } from '~/v4/core/localization';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useModuleFilteredPosts } from '~/v4/social/hooks/useModuleFilteredPosts';
 import { PostContent } from '~/v4/social/components/PostContent';
 import {
   AmityPostCategory,
@@ -59,18 +60,13 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   const { community } = useCommunity({ communityId, shouldCall: !!communityId });
 
-  const {
-    posts,
-    hasMore,
-    loadMore,
-    isLoading,
-    refresh: refreshPosts,
-  } = usePostsCollection({
-    feedType: 'published',
-    targetId: communityId,
-    targetType: 'community',
-    matchingOnlyParentPost: true,
-    dataTypes: [
+  // Every type, as before. Naming fewer of them does not remove a poll or a
+  // livestream: `matchingOnlyParentPost` is true, so the server matches the
+  // parent, and both are parents carrying a typed child — which is how a
+  // livestream reached this feed with liveStream and room already taken out.
+  // The filter below is what removes them.
+  const dataTypes = useMemo(
+    () => [
       FeedDataTypeEnum.Text,
       FeedDataTypeEnum.Image,
       FeedDataTypeEnum.Video,
@@ -79,8 +75,32 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
       FeedDataTypeEnum.LiveStream,
       FeedDataTypeEnum.Room,
     ],
+    [],
+  );
+
+  const {
+    posts: feedPosts,
+    hasMore,
+    loadMore,
+    isLoading,
+    refresh: refreshPosts,
+  } = usePostsCollection({
+    feedType: 'published',
+    targetId: communityId,
+    targetType: 'community',
+    // true, matching Android everywhere and iOS's default. iOS passes false in
+    // one place only — MediaFeedViewModel, where the point is to match a child
+    // type — and a general feed is not that. The livestream post that reached
+    // this feed is taken out below instead.
+    matchingOnlyParentPost: true,
+    dataTypes,
     limit: 10,
   });
+
+  // Belt and braces over the dataTypes above: whether the server matches a
+  // parent or its children is its business, and a livestream post reached the
+  // feed once already. This does not depend on the answer.
+  const posts = useModuleFilteredPosts(feedPosts);
 
   const { pinnedPost: allPinnedPost, refresh: refreshPinnedPosts } = usePinnedPostsCollection({
     communityId,
@@ -236,7 +256,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
           <div className={styles.communityFeed__emptyPost}>
             <EmptyPost className={styles.communityFeed__emptyPostIcon} />
             <Typography.Body className={styles.communityFeed__emptyPostText}>
-              {useString('amity_social_empty_feed_no_posts')}
+              {resolveString('amity_social_empty_feed_no_posts')}
             </Typography.Body>
           </div>
         )}

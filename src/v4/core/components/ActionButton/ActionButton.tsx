@@ -42,11 +42,16 @@ export const ActionButton = forwardRef(function (
     iconClassName,
   );
 
-  const { accessibilityId, uiReference, themeStyles, config, defaultConfig } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, uiReference, themeStyles, config, defaultConfig, isExcluded } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
+
+  // IconButton already does this. Without it every element rendered through
+  // ActionButton was unreachable by its module's flag — View all products is one.
+  if (isExcluded) return null;
 
   const icon = () =>
     typeof defaultIcon === 'function'

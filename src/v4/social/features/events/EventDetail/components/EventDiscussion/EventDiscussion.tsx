@@ -8,6 +8,7 @@ import CreatePoll from '~/v4/icons/CreatePoll';
 import { Typography } from '~/v4/core/components';
 import { PostContent } from '~/v4/social/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import { Mode, PostComposerPage } from '~/v4/social/pages';
 import { LivestreamFill } from '~/v4/icons/LivestreamFill';
 import { useDiscardPostCreation } from '~/v4/social/hooks';
@@ -53,6 +54,7 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({ pageId, componentId });
+  const isLiveEnabled = useFeatureEnabled('live');
 
   const choosePollTypeLabel = useString('amity_social_label_choose_poll_type');
   const emptyFeedLabel = useString('amity_social_empty_feed_no_posts');
@@ -110,7 +112,11 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
         goToLivestreamUnsupportedPage();
       },
     },
-  ];
+    // Filtered rather than built conditionally: every label above is a
+    // `useString` call, and dropping an entry from the literal would drop a
+    // hook with it. Livestream has no element id of its own, so the module is
+    // read directly.
+  ].filter((action) => action.id !== 'livestream' || isLiveEnabled);
 
   useIntersectionObserver({
     node: intersectionNode,

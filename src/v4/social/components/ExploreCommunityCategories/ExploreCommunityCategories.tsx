@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import React, { Fragment, useEffect } from 'react';
 import ChevronRight from '~/v4/icons/ChevronRight';
@@ -21,11 +21,15 @@ export const ExploreCommunityCategories = ({ pageId = '*' }: ExploreCommunityCat
 
   const { categories, isCategoryLoading, fetchCommunityCategories } = useExplore();
   const { goToAllCategoriesPage, goToCommunitiesByCategoryPage } = useNavigation();
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
 
   useEffect(() => {
     fetchCommunityCategories();
   }, []);
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <Carousel
@@ -59,7 +63,7 @@ export const ExploreCommunityCategories = ({ pageId = '*' }: ExploreCommunityCat
                 className={clsx(styles.exploreCommunityCategories__seeMore)}
               >
                 <Typography.BodyBold>
-                  {useString('amity_social_button_see_more')}
+                  {resolveString('amity_social_button_see_more')}
                 </Typography.BodyBold>
                 <ChevronRight className={styles.exploreCommunityCategories__seeMoreIcon} />
               </Button>

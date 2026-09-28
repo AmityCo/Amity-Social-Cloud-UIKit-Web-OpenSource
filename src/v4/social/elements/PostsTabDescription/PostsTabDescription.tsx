@@ -12,11 +12,15 @@ export const PostsTabDescription = ({
   componentId = '*',
 }: PostsTabDescriptionProps) => {
   const elementId = 'posts_tab_description';
-  const { config, accessibilityId, themeStyles, resolveText } = useAmityElement({
+  const { config, accessibilityId, themeStyles, resolveText, isExcluded } = useAmityElement({
     elementId,
     componentId,
     pageId,
   });
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.postsTabDescription}>

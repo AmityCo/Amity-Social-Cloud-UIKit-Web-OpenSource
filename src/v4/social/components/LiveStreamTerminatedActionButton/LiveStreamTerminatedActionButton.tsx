@@ -15,7 +15,11 @@ export function LiveStreamTerminatedActionButton({
 }: LiveStreamTerminatedActionButtonProps) {
   const { onBack } = useNavigation();
   const elementId = 'livestream_terminated_action_button';
-  const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
+  const { themeStyles, isExcluded } = useAmityElement({ pageId, componentId, elementId });
+
+  // Its module is sold separately from the surface hosting it, so the
+  // page gate cannot reach this control.
+  if (isExcluded) return null;
 
   return (
     <Button

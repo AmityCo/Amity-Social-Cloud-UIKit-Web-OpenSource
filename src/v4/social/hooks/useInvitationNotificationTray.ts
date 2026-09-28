@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { InvitationRepository } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export type InvitationNotificationTray = {
   invitations: Amity.Invitation[];
@@ -22,43 +23,47 @@ export function useInvitationNotificationTray(): InvitationNotificationTray {
   const { isVisitorOrBot } = useSDK();
   const [tray, setTray] = useState<InvitationNotificationTray>(initialInvitationNotificationTray);
 
-  useEffect(() => {
-    if (isVisitorOrBot) {
-      setTray(initialInvitationNotificationTray);
-      return;
-    }
+  useSdkEffect(
+    InvitationRepository.getMyCommunityInvitations,
+    () => {
+      if (isVisitorOrBot) {
+        setTray(initialInvitationNotificationTray);
+        return;
+      }
 
-    let unsubscribe: (() => void) | undefined;
+      let unsubscribe: (() => void) | undefined;
 
-    const getTray = () => {
-      if (unsubscribe) unsubscribe();
+      const getTray = () => {
+        if (unsubscribe) unsubscribe();
 
-      unsubscribe = InvitationRepository.getMyCommunityInvitations(
-        { limit: 20 },
-        ({ data, loading }) => {
-          setTray((prev) => {
-            return {
-              invitations: data,
-              isLoading: loading,
-              refresh: getTray,
-              hasUnseenInvitations: !loading
-                ? data.slice(0, 3).some((item) => !localStorage.getItem(item.invitationId))
-                : prev.hasUnseenInvitations,
-            };
-          });
-        },
-      );
-    };
+        unsubscribe = InvitationRepository.getMyCommunityInvitations(
+          { limit: 20 },
+          ({ data, loading }) => {
+            setTray((prev) => {
+              return {
+                invitations: data,
+                isLoading: loading,
+                refresh: getTray,
+                hasUnseenInvitations: !loading
+                  ? data.slice(0, 3).some((item) => !localStorage.getItem(item.invitationId))
+                  : prev.hasUnseenInvitations,
+              };
+            });
+          },
+        );
+      };
 
-    getTray();
+      getTray();
 
-    // const intervalId = setInterval(getTray, POLLING_ONE_MINUTE_INTERVAL);
+      // const intervalId = setInterval(getTray, POLLING_ONE_MINUTE_INTERVAL);
 
-    return () => {
-      if (unsubscribe) unsubscribe();
-      // clearInterval(intervalId);
-    };
-  }, [isVisitorOrBot]);
+      return () => {
+        if (unsubscribe) unsubscribe();
+        // clearInterval(intervalId);
+      };
+    },
+    [isVisitorOrBot],
+  );
 
   return tray;
 }

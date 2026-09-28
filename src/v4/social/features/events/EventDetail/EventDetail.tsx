@@ -47,6 +47,8 @@ export function EventDetail({ eventId, pop, showCreatedSuccessSheet }: EventDeta
     myRSVP,
     setMyRSVP,
     refresh,
+    isExcluded,
+    isDiscussionExcluded,
   } = useEventDetail(eventId);
 
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -98,6 +100,12 @@ export function EventDetail({ eventId, pop, showCreatedSuccessSheet }: EventDeta
     return () => removeDrawerData();
   }, [showCreatedSuccessSheet, event?.eventId, isDesktop]);
 
+  // A module switched off renders nothing, so a stale route or deep link lands
+  // on emptiness rather than a page with holes in it. The flag was resolved
+  // and then dropped: the gate said withhold and the page stayed on screen,
+  // which the id tables report as hidden because they measure the decision.
+  if (isExcluded) return null;
+
   if (!event || event.isDeleted) return <FailedToShow />;
 
   return (
@@ -117,11 +125,19 @@ export function EventDetail({ eventId, pop, showCreatedSuccessSheet }: EventDeta
                   label: Event,
                   content: () => null,
                 },
-                {
-                  value: EventDetailTab.Discussion,
-                  label: Discussion,
-                  content: () => null,
-                },
+                // The discussion tab goes with the feed behind it. Gating only
+                // the body left the tab standing over "No posts yet" with its
+                // composer already withheld — a tab that can never hold
+                // anything, which is worse than no tab.
+                ...(isDiscussionExcluded
+                  ? []
+                  : [
+                      {
+                        value: EventDetailTab.Discussion,
+                        label: Discussion,
+                        content: () => null,
+                      },
+                    ]),
               ]}
             />
           )}
@@ -140,11 +156,15 @@ export function EventDetail({ eventId, pop, showCreatedSuccessSheet }: EventDeta
               label: Event,
               content: () => <EventInfo pageId={pageId} event={event} />,
             },
-            {
-              value: EventDetailTab.Discussion,
-              label: Discussion,
-              content: () => <EventDiscussion pageId={pageId} event={event} />,
-            },
+            ...(isDiscussionExcluded
+              ? []
+              : [
+                  {
+                    value: EventDetailTab.Discussion,
+                    label: Discussion,
+                    content: () => <EventDiscussion pageId={pageId} event={event} />,
+                  },
+                ]),
           ]}
         />
       </div>

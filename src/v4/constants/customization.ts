@@ -1,11 +1,9 @@
 export const PAGE_ID = {
   WILD_CARD: '*',
-  SELECT_TARGET_PAGE: 'select_target_page',
   CAMERA_PAGE: 'camera_page',
   CREATE_STORY_PAGE: 'create_story_page',
   STORY_PAGE: 'story_page',
   SOCIAL_HOME_PAGE: 'social_home_page',
-  GLOBAL_SEARCH_PAGE: 'global_search_page',
   POST_DETAIL_PAGE: 'post_detail_page',
   POST_COMPOSER_PAGE: 'post_composer_page',
   SELECT_POST_TARGET_PAGE: 'select_post_target_page',
@@ -59,8 +57,11 @@ export const COMPONENT_ID = {
   TOP_NAVIGATION: 'top_navigation',
   NEWSFEED_COMPONENT: 'newsfeed_component',
   GLOBAL_FEED_COMPONENT: 'global_feed_component',
-  FOR_YOU_FEED_COMPONENT: 'for_you_feed_component',
-  FEED_CAUGHT_UP_COMPONENT: 'feed_caught_up_component',
+  // The amity_ prefix is the contract: features.json and both other platforms
+  // spell these two with it, so Web's own spelling resolved to no owner and the
+  // gate could never fire whatever the component asked.
+  FOR_YOU_FEED_COMPONENT: 'amity_for_you_feed_component',
+  FEED_CAUGHT_UP_COMPONENT: 'amity_feed_caught_up_component',
   DISCOVERY_WIDGET_COMPONENT: 'discovery_widget_component',
   DISCOVERY_WIDGET_POST_CARD_COMPONENT: 'discovery_widget_post_card_component',
   POST_COMPOSER: 'post_composer',
@@ -79,6 +80,14 @@ export const COMPONENT_ID = {
   COMMUNITY_VIDEO_FEED: 'community_video_feed',
   COMMUNITY_CLIP_FEED: 'community_clip_feed',
   PENDING_POST_CONTENT: 'pending_post_content',
+  // Added here rather than by `apollo features sync`: the Explore tab and its
+  // component carried no id at all, so Discovery could withhold the titles and
+  // the empty state inside it while the tab itself, and the community lists it
+  // shows, stayed. Needs checking against apollo and against Android and iOS
+  // before the next sync: the id space is shared across platforms, so if one of
+  // them already names this surface, that name wins and this one is a
+  // duplicate that will quietly outlive its usefulness.
+  EXPLORE_COMPONENT: 'explore_component',
   EXPLORE_COMMUNITY_CATEGORIES: 'explore_community_categories',
   RECOMMENDED_COMMUNITIES: 'recommended_communities',
   EXPLORE_EMPTY: 'explore_empty',
@@ -226,7 +235,10 @@ export const ELEMENT_ID = {
   FOLLOW_USER_BUTTON: 'follow_user_button',
   FOLLOWING_USER_BUTTON: 'following_user_button',
   PENDING_USER_BUTTON: 'pending_user_button',
+  BLOCK_USER_BUTTON: 'block_user_button',
+  MANAGE_BLOCKED_USERS_BUTTON: 'manage_blocked_users_button',
   UNBLOCK_USER_BUTTON: 'unblock_user_button',
+  UNFOLLOW_USER_BUTTON: 'unfollow_user_button',
   USER_AVATAR: 'user_avatar',
   USER_NAME: 'user_name',
   USER_DESCRIPTION: 'user_description',
@@ -331,7 +343,6 @@ export const ELEMENT_ID = {
   JOIN_DECLINE_BUTTON: 'join_decline_button',
   MESSAGE_COMPOSER: 'message_composer',
   CREATE_MESSAGE_BUTTON: 'create_message_button',
-  SWAP_CAMERA_BUTTON: 'swap_camera_button',
   MUTE_BUTTON: 'mute_button',
   NEXT_BUTTON: 'next_button',
   CREATE_NEW_CLIP_BUTTON: 'create_new_clip_button',

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
@@ -20,6 +21,9 @@ type StoryTabProps = ({ type: 'communityFeed'; communityId: string } | { type: '
 
 export const StoryTab: React.FC<StoryTabProps> = ({ pageId = '*', ...props }) => {
   const componentId = 'story_tab_component';
+  // Owned by Story and never asked — the ring row kept rendering after
+  // the module was switched off.
+  const { isExcluded } = useAmityComponent({ pageId, componentId });
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
   const { goToViewStoryPage, goToDraftStoryPage } = useNavigation();
   const { setFile } = useStoryContext();
@@ -118,6 +122,8 @@ export const StoryTab: React.FC<StoryTabProps> = ({ pageId = '*', ...props }) =>
         );
     }
   };
+
+  if (isExcluded) return null;
 
   return renderStoryTab();
 };

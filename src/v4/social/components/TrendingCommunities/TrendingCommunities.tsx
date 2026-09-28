@@ -17,7 +17,8 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
   const componentId = 'trending_communities';
   const { isVisitorOrBot } = useSDK();
 
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const MAX_COMMUNITIES = 5; // Limit to 5 communities
   const {
     trendingCommunities,
@@ -29,6 +30,10 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
     removePendingJoinCommunity,
   } = useExplore();
   const { goToCommunitiesByCategoryPage, goToCommunityProfilePage } = useNavigation();
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const communityIds = trendingCommunities.map((community) => community.communityId);
 

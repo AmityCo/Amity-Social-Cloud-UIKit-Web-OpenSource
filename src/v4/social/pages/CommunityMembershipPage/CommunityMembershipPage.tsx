@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -39,9 +39,9 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   const { members } = useCommunitySetupContext();
   const { AmityCommunityMembershipPageBehavior } = usePageBehavior();
   const [activeTab, setActiveTab] = useState<Key>(
-    useString('amity_social_label_community_members_label'),
+    resolveString('amity_social_label_community_members_label'),
   );
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { canAddMembers } = useModerator({ community });
 
   const isInvitation =
@@ -55,10 +55,12 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     try {
       await CommunityRepository.Membership.addMembers(community.communityId, userIds);
       notification.success({
-        content: useString('amity_social_toast_community_add_member_success'),
+        content: resolveString('amity_social_toast_community_add_member_success'),
       });
     } catch (err) {
-      notification.error({ content: useString('amity_social_toast_community_add_member_failed') });
+      notification.error({
+        content: resolveString('amity_social_toast_community_add_member_failed'),
+      });
     }
   };
 
@@ -74,23 +76,23 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     try {
       await community.createInvitations(userIds);
       notification.success({
-        content: useString('amity_social_toast_community_invitation_create_success'),
+        content: resolveString('amity_social_toast_community_invitation_create_success'),
       });
     } catch (err) {
       notification.error({
-        content: useString('amity_social_toast_community_invitation_create_failed'),
+        content: resolveString('amity_social_toast_community_invitation_create_failed'),
       });
     }
   };
 
   const tabs = [
     {
-      label: useString('amity_social_button_members'),
-      value: useString('amity_social_label_community_members_label'),
+      label: resolveString('amity_social_button_members'),
+      value: resolveString('amity_social_label_community_members_label'),
       content: () => <MemberList pageId={pageId} community={community} />,
     },
     {
-      label: useString('amity_social_button_moderators'),
+      label: resolveString('amity_social_button_moderators'),
       value: 'moderators',
       content: () => <ModeratorList pageId={pageId} community={community} />,
     },
@@ -136,6 +138,10 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     }
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div
       style={themeStyles}
@@ -145,7 +151,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
       <div className={styles.communityMembershipPage__topBar}>
         <BackButton onPress={() => onBack()} />
         <Typography.TitleBold className={styles.communityMembershipPage__title}>
-          {useString('amity_social_button_all_members')}
+          {resolveString('amity_social_button_all_members')}
         </Typography.TitleBold>
         {canAddMembers ? (
           <Button

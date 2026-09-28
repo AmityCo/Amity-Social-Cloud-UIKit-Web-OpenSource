@@ -18,6 +18,7 @@ import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButton';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { FileTrigger } from 'react-aria-components';
 import { CommunityProfileTab } from '~/v4/social/elements/CommunityProfileTab';
+import { useCommunityProfileTabs } from '~/v4/social/hooks/useCommunityProfileTabs';
 import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
@@ -63,7 +64,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { activeTab, setActiveTab } = useCommunityTabContext();
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { isExcluded: isCreatePostButtonExcluded } = useAmityElement({
     pageId,
     componentId: '*',
@@ -82,9 +83,25 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { goToCreateLivestreamPage } = useNavigation();
   const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
+  const tabs = useCommunityProfileTabs(pageId);
   const { hasCreateEventPermission } = useEventPermission(communityId);
 
+  // R5, read inside the page. CommunityTabProvider seeds the tab to
+  // 'community_feed' and sits above this page in the tree, so it cannot know
+  // which tabs this build has — outside the page wrapper the config is read
+  // once, before it has loaded, and never again. With Post off the row is left
+  // with Events alone and the page still opened on the feed: a tab with no
+  // button, whose body renderTabContent already refuses to draw.
+  useEffect(() => {
+    if (!tabs.isVisible(activeTab) && tabs.visible.length > 0) {
+      setActiveTab(tabs.visible[0]);
+    }
+  }, [activeTab, tabs.visible.join(','), setActiveTab]);
+
   const renderTabContent = () => {
+    // The body follows the tab. Gating the tab alone left the events feed and
+    // the media feed reachable from a saved link after their module was gone.
+    if (!tabs.isVisible(activeTab)) return null;
     switch (activeTab) {
       case 'community_feed':
         return <CommunityFeed pageId={pageId} communityId={communityId} />;
@@ -139,7 +156,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   }, [acceptedInvitation]);
 
   useEffect(() => {
-    !linkToPost && setActiveTab('community_feed');
+    // Land on a tab that exists. With Feed switched off community_feed is not
+    // one of them, and the page would open on a body it never draws.
+    !linkToPost && setActiveTab(tabs.visible[0] ?? 'community_feed');
   }, [communityId]);
 
   useEffect(() => {
@@ -184,6 +203,10 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   }, [clipFile]);
 
   const isShowFailed = (!isLoading && community?.isDeleted) || error;
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <PullToRefresh

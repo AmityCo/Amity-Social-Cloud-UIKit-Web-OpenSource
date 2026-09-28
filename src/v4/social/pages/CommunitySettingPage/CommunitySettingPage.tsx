@@ -36,7 +36,7 @@ type CommunitySettingPageProps = {
 
 export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) => {
   const pageId = 'community_setting_page';
-  const { accessibilityId, themeStyles } = useAmityPage({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { onBack, goToEditCommunityPage } = useNavigation();
@@ -130,6 +130,10 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
       cancelText: cancelText,
     });
   };
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div

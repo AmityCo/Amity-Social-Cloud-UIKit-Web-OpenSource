@@ -75,7 +75,7 @@ export const CommentList = ({
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
 
-  const { themeStyles, accessibilityId } = useAmityComponent({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({
     componentId,
     pageId,
   });
@@ -100,6 +100,10 @@ export const CommentList = ({
     getItemId: (item) => item.commentId,
     shouldCall: true,
   });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   // Keep pending IDs pinned at top even after they land in the live collection
   const pendingL0CommentIds = new Set(pendingL0Comments.map((c) => c.commentId));

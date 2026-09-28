@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import styles from './PendingPostsPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -20,7 +20,7 @@ type PendingPostsPageProps = {
 
 export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
   const pageId = 'pending_posts_page';
-  const { themeStyles, accessibilityId } = useAmityPage({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
   });
   const { isDesktop } = useResponsive();
@@ -43,6 +43,10 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
   useEffect(() => {
     refresh();
   }, [reviewingPosts.length]);
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div
@@ -68,7 +72,7 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
       {(canReviewCommunityPosts || isDesktop) && (
         <div className={styles.pendingPostsPage__descWrap}>
           <Typography.Caption className={styles.pendingPostsPage__desc}>
-            {useString(
+            {resolveString(
               'amity_social_button_decline_pending_post_will_permanently_delete_the_select',
             )}
           </Typography.Caption>
@@ -85,7 +89,7 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
         <div className={styles.pendingPostsPage__noPendingPost}>
           <FireworkPaper className={styles.pendingPostsPage__fireworkIcon} />
           <Typography.TitleBold className={styles.pendingPostsPage__noPendingPostText}>
-            {useString('amity_social_no_post_to_review')}
+            {resolveString('amity_social_no_post_to_review')}
           </Typography.TitleBold>
         </div>
       )}

@@ -16,7 +16,7 @@ type FeedCaughtUpProps = {
 
 export function FeedCaughtUp({
   pageId = '*',
-  componentId = COMPONENT_ID.FEED_CAUGHT_UP_COMPONENT,
+  componentId = 'amity_feed_caught_up_component',
   title,
   ctaLabel,
   onSwitchRequested,

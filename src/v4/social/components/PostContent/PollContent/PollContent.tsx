@@ -8,6 +8,7 @@ import { useVotePoll, useUnvotePoll } from '~/v4/social/hooks/usePollVote';
 import { PollVotedItem } from './PollVotedItem';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { PollSingleAnswer } from './PollSingleAnswer';
 import { PollMultipleAnswer } from './PollMultipleAnswer';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
@@ -17,6 +18,12 @@ import { getTotalVoteCount, getVotePercentage } from '~/v4/social/features/share
 type PollContentProps = {
   pageId?: string;
   componentId?: string;
+  /**
+   * Which id this content answers to. `post_poll` is Poll's own id, so asking it
+   * here is what ties the poll body to the module. It was declared in the id
+   * tables and rendered by nothing, which reads as a working gate from outside
+   * and withholds nothing.
+   */
   elementId?: string;
   community?: Amity.Community | null;
   posts: Amity.Post<'poll'>[];
@@ -32,7 +39,7 @@ type VotePollParam = { pollId: string; answerIds: string[] };
 export const PollContent: FC<PollContentProps> = ({
   pageId = '*',
   componentId = '*',
-  elementId = '*',
+  elementId = 'post_poll',
   parentPost,
   community,
   posts,
@@ -58,6 +65,12 @@ export const PollContent: FC<PollContentProps> = ({
 
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+
+  // The feeds whose fetcher takes dataTypes drop Poll from the request instead
+  // (UserFeed, CommunityFeed). For-you, pinned, community live rooms and the
+  // global feed cannot, so a poll still arrives there and this is what removes
+  // it from the screen.
+  const { isExcluded } = useAmityElement({ pageId, componentId, elementId });
 
   const poll = posts?.[0]?.getPollInfo();
   const [answers, setAnswers] = useState<string[] | undefined>();
@@ -161,6 +174,8 @@ export const PollContent: FC<PollContentProps> = ({
     if (!count) return '0';
     return Number.isInteger(count) ? String(count) : count.toFixed(2);
   };
+
+  if (isExcluded) return null;
 
   if (posts[0]?.dataType !== 'poll' || !poll) return null;
 

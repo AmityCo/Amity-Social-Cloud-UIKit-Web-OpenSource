@@ -32,7 +32,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
   const notification = useNotifications();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
   const { online } = useNetworkState();
   const { confirm, info } = useConfirmContext();
@@ -168,6 +168,10 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
       });
     else onBack();
   };
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.editUserProfilePage} style={themeStyles}>

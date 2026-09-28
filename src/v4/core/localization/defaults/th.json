@@ -1178,6 +1178,7 @@
   "amity_chat_notifications_off": "ปิด",
   "amity_chat_notifications_on": "เปิด",
   "amity_chat_notifications_disabled": "คุณได้ปิดการแจ้งเตือนสำหรับแชท",
+  "amity_social_label_search": "ค้นหา",
   "amity_social_button_event_post_create": "โพสต์อีเวนต์ลงฟีด",
   "amity_social_button_post_to_feed": "โพสต์ลงฟีด",
   "amity_social_button_maybe_later": "ไว้ทีหลัง",
