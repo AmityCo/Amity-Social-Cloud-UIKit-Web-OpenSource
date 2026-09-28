@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { PostContentType } from '@amityco/ts-sdk';
 import useStream from '~/v4/social/hooks/useStream';
 import usePost from '~/v4/core/hooks/objects/usePost';
@@ -22,6 +23,9 @@ type TextContentProps = {
   keyword?: string;
   isSearchPost?: boolean;
   isOpenSeeMore?: boolean;
+  type?: 'default' | 'widget';
+  maxLines?: number;
+  titleClassName?: string;
 };
 
 export const TextContent = ({
@@ -38,6 +42,9 @@ export const TextContent = ({
   keyword,
   isSearchPost = false,
   isOpenSeeMore = false,
+  type = 'default',
+  maxLines,
+  titleClassName,
 }: TextContentProps) => {
   const { post: childPost } = usePost(post?.children?.[0]);
 
@@ -71,6 +78,7 @@ export const TextContent = ({
             productTags={productTags}
             componentId={componentId}
             data={{ text: stream?.title ?? '' }}
+            type={type}
           />
           {stream?.description?.trim() && (
             <TextWithMention
@@ -81,6 +89,7 @@ export const TextContent = ({
               productTags={productTags}
               componentId={componentId}
               data={{ text: stream.description }}
+              type={type}
             />
           )}
         </>
@@ -88,8 +97,9 @@ export const TextContent = ({
         <>
           {title && (
             <Typography.TitleBold
-              data-testid="poll-post-title"
-              className={styles.textContent__postTitle}
+              as={type === 'widget' ? 'p' : 'h2'}
+              data-testid="post-title"
+              className={clsx(styles.textContent__postTitle, titleClassName)}
             >
               {title}
             </Typography.TitleBold>
@@ -108,12 +118,19 @@ export const TextContent = ({
               keyword={keyword}
               isSearchPost={isSearchPost}
               seeMoreIsOpen={isOpenSeeMore}
+              type={type}
+              maxLines={maxLines}
             />
           )}
         </>
       )}
       {canPreviewShown && (
-        <LinkPreview pageId={pageId} componentId={componentId} url={firstLinkWithPreview.url} />
+        <LinkPreview
+          pageId={pageId}
+          componentId={componentId}
+          url={firstLinkWithPreview.url}
+          type={type}
+        />
       )}
     </>
   );

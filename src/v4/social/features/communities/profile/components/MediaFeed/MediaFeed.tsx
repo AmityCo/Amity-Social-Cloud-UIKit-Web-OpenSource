@@ -5,6 +5,7 @@ import { CommunityVideoFeed } from '~/v4/social/components';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { MEDIA_TABS, MediaTabType } from '~/v4/social/constants/mediaTabs';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import { CommunityClipFeed } from '~/v4/social/components/CommunityClipFeed';
 import { CommunityImageFeed } from '~/v4/social/components/CommunityImageFeed';
 import LockPrivateContent from '~/v4/social/internal-components/LockPrivateContent';
@@ -45,6 +46,9 @@ export const CommunityMediaFeed = ({ pageId = '*', communityId }: CommunityMedia
               key={tab.type}
               variant="body"
               label={tabLabel}
+              pageId={pageId}
+              componentId={COMPONENT_ID.COMMUNITY_VIDEO_FEED}
+              elementId={tab.elementId}
               isTransparent={false}
               aria-label={tabLabel}
               isActive={activeTab === tab.type}

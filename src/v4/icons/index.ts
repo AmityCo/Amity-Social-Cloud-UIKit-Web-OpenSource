@@ -160,6 +160,7 @@ export { Pin } from './Pin';
 export { PinBadgeIcon as PinBadge } from './PinBadge';
 export { PinStraight } from './PinStraight';
 export { PinStraightFilled } from './PinStraightFilled';
+export { UnPin } from './UnPin';
 export { Play } from './Play';
 export { PlaybackSpeed } from './PlaybackSpeed';
 export { Plus } from './Plus';

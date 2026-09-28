@@ -37,7 +37,7 @@ export function PrivacySection({ isPublic, onChange }: PrivacySectionProps) {
           data-testid="group-privacy-public-radio"
         >
           <PrivacyRow
-            icon={<EarthAfrica.Solid className={styles.privacySection__icon} />}
+            icon={<EarthAfrica.Regular className={styles.privacySection__icon} />}
             title={publicTitle}
             description={publicDesc}
           />

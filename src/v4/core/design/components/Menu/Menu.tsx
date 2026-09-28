@@ -10,6 +10,7 @@ import {
 import clsx from 'clsx';
 import { TypographyComponentMap, TypographyVariant } from '~/v4/core/components';
 import { Button, type ButtonProps } from '~/v4/core/design/components/Button/Button';
+import { Redo } from '~/v4/core/design/icons/Redo';
 import { Skeleton } from '~/v4/core/design/components/Skeleton/Skeleton';
 import { ConversationChat } from '~/v4/icons/ConversationChat';
 import Copy from '~/v4/icons/Copy';
@@ -27,7 +28,8 @@ export type MenuIconName =
   | 'reply'
   | 'trash'
   | 'copy'
-  | 'save';
+  | 'save'
+  | 'redo';
 
 const ICON_REGISTRY: Record<MenuIconName, ComponentType<SVGProps<SVGSVGElement>>> = {
   'conversation-chat': ConversationChat,
@@ -37,6 +39,7 @@ const ICON_REGISTRY: Record<MenuIconName, ComponentType<SVGProps<SVGSVGElement>>
   trash: TrashIcon,
   copy: Copy,
   save: Save,
+  redo: Redo,
 };
 
 export type MenuIcon = MenuIconName | ComponentType<SVGProps<SVGSVGElement>> | ReactNode;

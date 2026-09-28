@@ -53,3 +53,18 @@
   height: 3rem;
   color: var(--asc-color-base-shade3);
 }
+
+.linkPreviewWidget {
+  cursor: default;
+}
+
+.linkPreviewWidget .linkPreview__top {
+  aspect-ratio: 2 / 1;
+}
+
+.linkPreviewWidget .linkPreview__title {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

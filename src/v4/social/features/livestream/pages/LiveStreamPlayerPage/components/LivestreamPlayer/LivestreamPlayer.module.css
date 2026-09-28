@@ -49,9 +49,14 @@
      its own stacking context (position: relative; z-index: 0). The chat can
      therefore never out-rank this overlay, a sibling of .plyr at z-index: 2,
      so the overlay was swallowing taps on the chat (e.g. a message's 3-dot
-     menu). Stop the overlay above the chat feed band (bottom: 4.5rem;
-     height: 40%) so chat taps reach the messages. See PDT-3883. */
-  bottom: calc(40% + 4.5rem);
+     menu). Stop the overlay above the chat column so chat taps reach the
+     messages. See PDT-3883.
+     The column is the pinned message banner + the 20dvh feed band + the pinned
+     product banner, bottom-anchored at 4.5rem. The page measures the column's top
+     edge relative to this overlay's containing block and publishes it as
+     --asc-livestream-chat-top-offset; the fallback is the bare feed band until the
+     first measurement lands. */
+  bottom: var(--asc-livestream-chat-top-offset, calc(20dvh + 4.5rem));
   z-index: 2;
   background: transparent;
   cursor: pointer;

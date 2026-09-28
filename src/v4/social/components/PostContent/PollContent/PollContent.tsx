@@ -12,6 +12,7 @@ import { PollSingleAnswer } from './PollSingleAnswer';
 import { PollMultipleAnswer } from './PollMultipleAnswer';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { getTotalVoteCount, getVotePercentage } from '~/v4/social/features/shared/utils';
 
 type PollContentProps = {
   pageId?: string;
@@ -122,7 +123,7 @@ export const PollContent: FC<PollContentProps> = ({
     [poll?.answers],
   );
   const voteCount = useMemo(
-    () => poll?.answers.reduce((acc, answer) => acc + answer.voteCount, 0),
+    () => (poll ? getTotalVoteCount(poll.answers) : undefined),
     [poll?.answers],
   );
 
@@ -176,7 +177,7 @@ export const PollContent: FC<PollContentProps> = ({
               <PollVotedItem
                 label={answer.data}
                 percentage={
-                  voteCount ? formatPercentage((answer.voteCount / voteCount) * 100) : '0'
+                  voteCount ? formatPercentage(getVotePercentage(answer.voteCount, voteCount)) : '0'
                 }
                 voteCount={answer.voteCount}
                 currentUserId={answer.isVotedByUser ? user?.userId : undefined}

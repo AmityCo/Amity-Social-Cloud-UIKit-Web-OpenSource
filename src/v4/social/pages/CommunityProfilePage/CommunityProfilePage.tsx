@@ -298,7 +298,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                       />
                       <CreatePollButton
                         pageId={pageId}
-                        componentId={communityId}
                         onClick={() => {
                           setDrawerData({
                             content: (
@@ -321,7 +320,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                           onSelect={handleClipFileSelect}
                           acceptedFileTypes={['video/*']}
                         >
-                          <CreateClipButton pageId={pageId} componentId={communityId} />
+                          <CreateClipButton pageId={pageId} />
                         </FileTrigger>
                       )}
                       {hasCreateEventPermission && (

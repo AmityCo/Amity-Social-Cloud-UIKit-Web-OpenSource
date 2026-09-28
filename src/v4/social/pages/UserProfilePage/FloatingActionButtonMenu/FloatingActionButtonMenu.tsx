@@ -1,24 +1,23 @@
-import React, { FC, ReactNode, useEffect } from 'react';
-import { useString } from '~/v4/core/localization';
+import React, { FC, useEffect } from 'react';
 import styles from './FloatingActionButtonMenu.module.css';
-import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/natives/Button';
-import { CreatePost } from '~/v4/icons/CreatePost';
-import CreatePoll from '~/v4/icons/CreatePoll';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { CreateClip } from '~/v4/icons/CreateClip';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
 import { FileTrigger } from 'react-aria-components';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
+import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
+import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
 
 type FloatingActionButtonMenuProps = {
+  pageId?: string;
   onPressMenu?: () => void;
   userId: string;
 };
 
 export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
+  pageId = '*',
   userId,
   onPressMenu,
 }) => {
@@ -37,50 +36,26 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
     }
   }, [file]);
 
-  const menus: {
-    id: string;
-    label: string;
-    icon: ReactNode;
-    onPress: () => void;
-  }[] = [
-    {
-      id: 'post',
-      label: useString('amity_common_post'),
-      icon: <CreatePost className={styles.floatingActionButtonMenu__icon} />,
-      onPress: () =>
-        goToPostComposerPage({ mode: Mode.CREATE, targetId: null, targetType: 'user' }),
-    },
-    {
-      id: 'poll',
-      label: useString('amity_social_button_poll'),
-      icon: <CreatePoll className={styles.floatingActionButtonMenu__icon} />,
-      onPress: () => {
-        setDrawerData({
-          content: (
-            <PollTypeSelection targetId={null} targetType="user" onClickNext={removeDrawerData} />
-          ),
-        });
-      },
-    },
-  ];
-
   return (
     <div className={styles.floatingActionButtonMenu}>
-      {menus.map((menu) => (
-        <Button
-          key={menu.id}
-          className={styles.floatingActionButtonMenu__button}
-          onPress={() => {
-            onPressMenu?.();
-            menu.onPress();
-          }}
-        >
-          {menu.icon}
-          <Typography.BodyBold className={styles.floatingActionButtonMenu__label}>
-            {menu.label}
-          </Typography.BodyBold>
-        </Button>
-      ))}
+      <CreatePostButton
+        pageId={pageId}
+        onClick={() => {
+          onPressMenu?.();
+          goToPostComposerPage({ mode: Mode.CREATE, targetId: null, targetType: 'user' });
+        }}
+      />
+      <CreatePollButton
+        pageId={pageId}
+        onClick={() => {
+          onPressMenu?.();
+          setDrawerData({
+            content: (
+              <PollTypeSelection targetId={null} targetType="user" onClickNext={removeDrawerData} />
+            ),
+          });
+        }}
+      />
       <FileTrigger
         acceptedFileTypes={['video/*']}
         onSelect={(e) => {
@@ -92,12 +67,7 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
           }
         }}
       >
-        <Button className={styles.floatingActionButtonMenu__button}>
-          <CreateClip className={styles.floatingActionButtonMenu__icon} />
-          <Typography.BodyBold className={styles.floatingActionButtonMenu__label}>
-            {useString('amity_social_button_clip')}
-          </Typography.BodyBold>
-        </Button>
+        <CreateClipButton pageId={pageId} />
       </FileTrigger>
     </div>
   );

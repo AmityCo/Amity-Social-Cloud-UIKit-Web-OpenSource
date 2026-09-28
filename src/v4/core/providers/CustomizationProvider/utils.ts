@@ -90,6 +90,8 @@ type BaseThemeValue = {
   transparent_black: string;
   custom_toast_background: string;
   live_stream_chat_bubble_color: string;
+  live_stream_chat_bubble_pinned_color: string;
+  live_stream_chat_pinned_badge_color: string;
   base_divider_line: string;
   elevation_08_01_color: string;
   elevation_08_02_color: string;
@@ -126,6 +128,8 @@ const defaultBase = {
   transparent_black: 'rgb(0 0 0 / 50%)',
   trasparent_black_color: 'rgb(0 0 0 / 50%)',
   live_stream_chat_bubble_color: 'rgba(99, 104, 120, 0.30)',
+  live_stream_chat_bubble_pinned_color: 'rgb(41 43 50 / 30%)',
+  live_stream_chat_pinned_badge_color: 'rgb(99 104 120 / 50%)',
   base_divider_line: ' #292B32',
   host_color: '#4B1BD0',
   host_color_shade1: '#EAE2FF',
@@ -433,6 +437,9 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/post_composer/video_button': {
       icon: 'VideoIcon',
     },
+    'social_home_page/post_composer/livestream_button': {},
+    'social_home_page/post_composer/poll_button': {},
+    'social_home_page/post_composer/event_button': {},
     'social_home_page/post_composer/story_button': {
       icon: 'ImageIcon',
     },
@@ -620,6 +627,9 @@ export const defaultConfig: DefaultConfig = {
     'community_profile_page/*/create_story_button': {},
     'community_profile_page/*/create_poll_button': {},
     'community_profile_page/*/create_clip_button': {},
+    'community_profile_page/post_composer/livestream_button': {},
+    'community_profile_page/post_composer/poll_button': {},
+    'community_profile_page/post_composer/event_button': {},
     'community_profile_page/*/create_event_button': {},
     'community_profile_page/community_video_feed/videos_button': {},
     'community_profile_page/community_video_feed/clips_button': {},
@@ -701,6 +711,11 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/post_composer/video_button': {
       icon: 'VideoIcon',
     },
+    'user_profile_page/post_composer/livestream_button': {},
+    'user_profile_page/post_composer/poll_button': {},
+    'user_profile_page/*/create_post_button': {},
+    'user_profile_page/*/create_poll_button': {},
+    'user_profile_page/*/create_clip_button': {},
     'user_profile_page/post_composer/story_button': {
       icon: 'ImageIcon',
     },
@@ -1094,6 +1109,9 @@ export const defaultConfig: DefaultConfig = {
     'event_setup_page/*/event_date_time_title': {},
     'event_setup_page/*/event_location_title': {},
 
+    'event_detail_page/*/create_livestream_button': {},
+    'event_detail_page/post_composer/livestream_button': {},
+    'event_detail_page/post_composer/poll_button': {},
     'event_detail_page/*/create_event_post_button': {
       text: 'Post event to feed',
       image: '',
@@ -1188,6 +1206,8 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   message_bubble_primary_color: '--asc-color-message-bubble-primary',
   message_bubble_secondary_color: '--asc-color-message-bubble-secondary',
   live_stream_chat_bubble_color: '--asc-color-live-steram-chat-bubble',
+  live_stream_chat_bubble_pinned_color: '--asc-color-live-stream-chat-bubble-pinned',
+  live_stream_chat_pinned_badge_color: '--asc-color-live-stream-chat-pinned-badge',
   base_divider_line: '--asc-color-base-divider-line',
   background_transparent_black_color: '--asc-color-background-transparent-black',
   background_transparent_white_color: '--asc-color-background-transparent-white',

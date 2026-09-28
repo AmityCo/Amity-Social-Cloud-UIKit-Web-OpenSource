@@ -50,6 +50,7 @@ interface TextWithMentionProps {
   seeLessSupport?: boolean;
   seeMoreIsOpen?: boolean;
   testId?: string;
+  type?: 'default' | 'widget';
 }
 
 export const TextWithMention = ({
@@ -76,9 +77,11 @@ export const TextWithMention = ({
   isSearchPost = false,
   seeLessSupport = false,
   testId,
+  type = 'default',
 }: TextWithMentionProps) => {
   const { goToUserProfilePage, goToSocialGlobalSearchPage } = useNavigation();
   const { AmityGlobalBehavior } = usePageBehavior();
+  const isWidget = type === 'widget';
   const [isExpanded, setIsExpanded] = useState(seeMoreIsOpen);
   const { isDesktop } = useResponsive();
   const { openSearchResultModal, setSearchValue } = useSearchResultContext();
@@ -267,20 +270,24 @@ export const TextWithMention = ({
             <span
               key={`hashtag-${match.index}`}
               data-testid={`${pageId}/${componentId}/hashtag`}
-              className={clsx(styles.textWithMention__hashtag, hashtagClassName)}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                isDesktop
-                  ? (() => {
-                      window.parent.postMessage('parentNeedsScrollToTop', '*');
-                      openSearchResultModal(hashtagText);
-                    })()
-                  : (() => {
-                      setSearchValue(hashtagText);
-                      goToSocialGlobalSearchPage(undefined, hashtagText);
-                    })();
-              }}
+              className={clsx(!isWidget && styles.textWithMention__hashtag, hashtagClassName)}
+              onClick={
+                isWidget
+                  ? undefined
+                  : (e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      isDesktop
+                        ? (() => {
+                            window.parent.postMessage('parentNeedsScrollToTop', '*');
+                            openSearchResultModal(hashtagText);
+                          })()
+                        : (() => {
+                            setSearchValue(hashtagText);
+                            goToSocialGlobalSearchPage(undefined, hashtagText);
+                          })();
+                    }
+              }
               onMouseUp={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
@@ -346,16 +353,20 @@ export const TextWithMention = ({
           <span
             key={uuidv4()}
             data-testid={`${pageId}/${componentId}/product_tag`}
-            className={clsx(styles.textWithMention__productTag, productTagClassName)}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              if (productData.product) {
-                AmityGlobalBehavior?.onPostProductTagClick?.({
-                  product: productData.product,
-                });
-              }
-            }}
+            className={clsx(!isWidget && styles.textWithMention__productTag, productTagClassName)}
+            onClick={
+              isWidget
+                ? undefined
+                : (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (productData.product) {
+                      AmityGlobalBehavior?.onPostProductTagClick?.({
+                        product: productData.product,
+                      });
+                    }
+                  }
+            }
             onMouseUp={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
@@ -373,12 +384,16 @@ export const TextWithMention = ({
         <span
           key={uuidv4()}
           data-testid={`${pageId}/${componentId}/mention`}
-          className={clsx(styles.textWithMention__mention, mentionClassName)}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            goToUserProfilePage((child.data as MentionData).userId);
-          }}
+          className={clsx(!isWidget && styles.textWithMention__mention, mentionClassName)}
+          onClick={
+            isWidget
+              ? undefined
+              : (e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  goToUserProfilePage((child.data as MentionData).userId);
+                }
+          }
           onMouseUp={(e) => e.stopPropagation()}
           onTouchEnd={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
@@ -400,19 +415,23 @@ export const TextWithMention = ({
             key={uuidv4()}
             data-testid={`${pageId}/${componentId}/hashtag`}
             className={clsx(styles.textWithMention__hashtag, hashtagClassName)}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              isDesktop
-                ? (() => {
-                    window.parent.postMessage('parentNeedsScrollToTop', '*');
-                    openSearchResultModal(child.text);
-                  })()
-                : (() => {
-                    setSearchValue(child.text);
-                    goToSocialGlobalSearchPage(undefined, child.text);
-                  })();
-            }}
+            onClick={
+              isWidget
+                ? undefined
+                : (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    isDesktop
+                      ? (() => {
+                          window.parent.postMessage('parentNeedsScrollToTop', '*');
+                          openSearchResultModal(child.text);
+                        })()
+                      : (() => {
+                          setSearchValue(child.text);
+                          goToSocialGlobalSearchPage(undefined, child.text);
+                        })();
+                  }
+            }
             onMouseUp={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
@@ -446,6 +465,21 @@ export const TextWithMention = ({
 
       // Add https:// if URL doesn't have a protocol
       const href = /^(https?|ftp|mailto):/.test(linkUrl) ? linkUrl : `https://${linkUrl}`;
+
+      if (isWidget) {
+        return (
+          <span
+            key={child.url}
+            className={clsx(
+              styles.textWithMention__link,
+              styles.textWithMention__linkWidget,
+              linkClassName,
+            )}
+          >
+            {linkText}
+          </span>
+        );
+      }
 
       return (
         <a
@@ -498,7 +532,14 @@ export const TextWithMention = ({
   }, [seeMoreIsOpen]);
 
   return (
-    <Component testId={testId} className={clsx(styles.textWithMention__container, textClassName)}>
+    <Component
+      testId={testId}
+      className={clsx(
+        styles.textWithMention__container,
+        isWidget && styles.textWithMention__containerWidget,
+        textClassName,
+      )}
+    >
       {isExpanded ? (
         <>
           {renderText(editorState.root.children)}
@@ -522,20 +563,35 @@ export const TextWithMention = ({
           ellipsis={
             <>
               ...{' '}
-              <Button
-                variant="text"
-                className={clsx(styles.textWithMention__seeMore, seeMoreClassName)}
-                onPress={() => {
-                  onClickSeeMoreButton?.(true);
-                  setIsExpanded(true);
-                }}
-                data-testid="see-more-button"
-              >
-                <Typography.BodyBold>
+              {isWidget ? (
+                <Typography.Body
+                  as="span"
+                  aria-hidden="true"
+                  className={clsx(
+                    styles.textWithMention__seeMore,
+                    styles.textWithMention__seeMoreWidget,
+                    seeMoreClassName,
+                  )}
+                >
                   {' '}
                   {useString('amity_social_button_see_more')}
-                </Typography.BodyBold>
-              </Button>
+                </Typography.Body>
+              ) : (
+                <Button
+                  variant="text"
+                  className={clsx(styles.textWithMention__seeMore, seeMoreClassName)}
+                  onPress={() => {
+                    onClickSeeMoreButton?.(true);
+                    setIsExpanded(true);
+                  }}
+                  data-testid="see-more-button"
+                >
+                  <Typography.BodyBold>
+                    {' '}
+                    {useString('amity_social_button_see_more')}
+                  </Typography.BodyBold>
+                </Button>
+              )}
             </>
           }
         >

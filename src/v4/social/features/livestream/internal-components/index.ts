@@ -12,6 +12,7 @@ export * from './LivestreamChat';
 export * from './LivestreamHeaderMenu';
 export * from './LivestreamModerationOptions';
 export * from './LivestreamOverlay';
+export * from './LivestreamPinnedMessage';
 export * from './LivestreamSetup';
 export * from './LivestreamStage';
 export * from './ReadOnlyToggle';

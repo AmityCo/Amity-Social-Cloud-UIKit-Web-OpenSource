@@ -99,19 +99,12 @@ export function Chat(props: ChatPageProps) {
       {showMutedBanner ? (
         <MutedBanner variant={mutedVariant} />
       ) : (
-        <MessageComposer
-          composer={composer}
-          onOpenSeeMore={openSeeMore}
-          onOpenImage={openImageViewer}
-          onOpenVideo={openVideoPlayer}
-        />
+        <MessageComposer composer={composer} />
       )}
 
       {imageViewerProps ? <ImageViewer {...imageViewerProps} /> : null}
       {videoPlayerProps ? <VideoPlayer {...videoPlayerProps} /> : null}
-      {seeMore ? (
-        <MessageFullTextScreen text={seeMore.text} title={seeMore.title} onClose={closeSeeMore} />
-      ) : null}
+      {seeMore ? <MessageFullTextScreen {...seeMore} onClose={closeSeeMore} /> : null}
 
       {bubbleMenu && !imageViewerProps && !videoPlayerProps ? (
         <MessageActionsPopover

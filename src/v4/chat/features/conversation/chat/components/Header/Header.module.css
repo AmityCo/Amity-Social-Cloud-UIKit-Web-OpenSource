@@ -19,4 +19,15 @@
   outline: none;
   background: transparent;
   cursor: pointer;
+  border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header__avatarButton:focus {
+  outline: none;
+}
+
+.header__avatarButton[data-focus-visible] {
+  outline: 0.125rem solid var(--asc-color-primary-default);
+  outline-offset: 0.125rem;
 }

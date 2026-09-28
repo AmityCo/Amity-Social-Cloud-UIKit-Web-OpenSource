@@ -64,3 +64,5 @@ declare module 'colorthief' {
     ) => RGBColor[] | null;
   }
 }
+
+declare const __VERSION__: string;

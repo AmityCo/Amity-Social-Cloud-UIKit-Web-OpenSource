@@ -44,6 +44,16 @@
   color: var(--asc-color-primary-shade1);
 }
 
+.textWithMention__seeMoreWidget {
+  cursor: default;
+  color: var(--asc-color-primary-default);
+}
+
+.textWithMention__linkWidget {
+  cursor: default;
+  color: var(--asc-color-primary-default);
+}
+
 .textWithMention__seeLess {
   /* equal to body text line height */
   margin-top: 1.25rem;
@@ -67,4 +77,8 @@
 .textWithMention__highlight {
   background-color: color-mix(in srgb, var(--asc-color-primary-shade1) 10%, transparent);
   font-weight: 600;
+}
+
+.textWithMention__containerWidget {
+  height: auto;
 }

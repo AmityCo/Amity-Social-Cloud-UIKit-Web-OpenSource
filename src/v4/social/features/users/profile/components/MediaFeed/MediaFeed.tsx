@@ -4,6 +4,7 @@ import { FeedSourceEnum } from '@amityco/ts-sdk';
 import ChipButton from '~/v4/social/elements/ChipButton';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { MEDIA_TABS, MediaTabType } from '~/v4/social/constants/mediaTabs';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import { UserImageFeed, UserVideoFeed, UserClipFeed } from '~/v4/social/components';
 import styles from './MediaFeed.module.css';
 
@@ -40,6 +41,9 @@ export const UserMediaFeed = ({
               key={tab.type}
               variant="body"
               label={tabLabel}
+              pageId={pageId}
+              componentId={COMPONENT_ID.USER_VIDEO_FEED}
+              elementId={tab.elementId}
               isTransparent={false}
               aria-label={tabLabel}
               isActive={activeTab === tab.type}

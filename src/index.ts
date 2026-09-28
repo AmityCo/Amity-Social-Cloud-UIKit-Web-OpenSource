@@ -139,6 +139,7 @@ export {
 export { Feed as AmityGlobalFeedComponent } from '~/v4/social/features/shared/components/Feed';
 export { ForYouFeed as AmityForYouFeedComponent } from '~/v4/social/features/for-you';
 export { FeedCaughtUp as AmityFeedCaughtUpComponent } from '~/v4/social/components/FeedCaughtUp';
+export { DiscoveryWidget as AmityDiscoveryWidgetComponent } from '~/v4/social/features/discovery-widget';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
 

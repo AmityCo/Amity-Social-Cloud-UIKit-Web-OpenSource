@@ -44,7 +44,7 @@ export const EnterKeyInterceptorPlugin = ({
 }) => {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
-    editor.registerCommand(
+    return editor.registerCommand(
       KEY_ENTER_COMMAND,
       (payload) => {
         const selection = $getSelection();
@@ -58,7 +58,10 @@ export const EnterKeyInterceptorPlugin = ({
         const event = payload as KeyboardEvent;
         event.preventDefault();
 
-        if (event.shiftKey) {
+        // Shift+Enter inserts a new line only where new lines are allowed at all. A
+        // single-line composer (e.g. livestream chat, `allowEnterNewLine={false}`) treats
+        // Shift+Enter exactly like Enter, so the modifier cannot smuggle a line break in.
+        if (event.shiftKey && allowEnterNewLine) {
           return editor.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
         }
 
@@ -67,6 +70,7 @@ export const EnterKeyInterceptorPlugin = ({
       },
       commandPriority,
     );
-  }, [editor, onEnter]);
+  }, [editor, onEnter, allowEnterNewLine, allowEnterToSend, commandPriority]);
+
   return null;
 };

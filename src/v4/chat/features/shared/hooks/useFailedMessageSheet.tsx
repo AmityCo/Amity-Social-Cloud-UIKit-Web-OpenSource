@@ -58,8 +58,13 @@ export function useFailedMessageSheet({
       ariaLabel: 'Message actions',
       content: (
         <Menu container="drawer">
-          <Menu.Item label={resendLabel} onPress={() => handleResend(message)} />
-          <Menu.Item label={deleteLabel} destructive onPress={() => handleDelete(message)} />
+          <Menu.Item icon="redo" label={resendLabel} onPress={() => handleResend(message)} />
+          <Menu.Item
+            icon="trash"
+            label={deleteLabel}
+            destructive
+            onPress={() => handleDelete(message)}
+          />
         </Menu>
       ),
     });

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { Typography } from '~/v4/core/components/Typography';
 import { LinkPreviewSkeleton } from './LinkPreviewSkeleton';
@@ -11,6 +12,7 @@ interface LinkPreviewProps {
   componentId?: string;
   url: string;
   onLoadingChange?: (isLoading: boolean) => void;
+  type?: 'default' | 'widget';
 }
 
 const UnableToPreview = () => (
@@ -24,7 +26,9 @@ export function LinkPreview({
   componentId = '*',
   url,
   onLoadingChange,
+  type = 'default',
 }: LinkPreviewProps) {
+  const isWidget = type === 'widget';
   const previewData = usePreviewLink({ url });
   const [imageError, setImageError] = React.useState(false);
 
@@ -50,12 +54,8 @@ export function LinkPreview({
     return <LinkPreviewSkeleton />;
   }
 
-  return (
-    <Button
-      data-testid={`${pageId}/${componentId}/post_preview_link`}
-      onPress={handleClick}
-      className={styles.linkPreview}
-    >
+  const previewContent = (
+    <>
       {previewData.data?.imageUrl && (
         <div className={styles.linkPreview__top}>
           {!imageError ? (
@@ -79,6 +79,22 @@ export function LinkPreview({
           {previewData.data?.domain || url}
         </Typography.Caption>
       </div>
+    </>
+  );
+
+  if (isWidget) {
+    return (
+      <div className={clsx(styles.linkPreview, styles.linkPreviewWidget)}>{previewContent}</div>
+    );
+  }
+
+  return (
+    <Button
+      data-testid={`${pageId}/${componentId}/post_preview_link`}
+      onPress={handleClick}
+      className={styles.linkPreview}
+    >
+      {previewContent}
     </Button>
   );
 }

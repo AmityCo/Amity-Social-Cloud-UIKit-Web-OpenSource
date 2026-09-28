@@ -1,32 +1,22 @@
 import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components/Typography/Typography';
 import { Cross } from '~/v4/core/design/icons/Cross';
-import { VideoPlay } from '~/v4/core/design/icons/VideoPlay';
 import useFile from '~/v4/core/hooks/useFile';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useMessageObject } from '~/v4/chat/hooks/objects';
+import { VideoPlayBadge } from '~/v4/chat/elements/VideoPlayBadge';
 import { useString } from '~/v4/core/localization';
 import styles from './MessageReplyBand.module.css';
 
 type MessageReplyBandProps = {
   replyTo: Amity.Message;
   onCancel: () => void;
-  onOpenSeeMore: (text: string, title?: string) => void;
-  onOpenImage: (url: string, message: Amity.Message) => void;
-  onOpenVideo: (message: Amity.Message) => void;
 };
 
-export function MessageReplyBand({
-  replyTo,
-  onCancel,
-  onOpenSeeMore,
-  onOpenImage,
-  onOpenVideo,
-}: MessageReplyBandProps) {
+export function MessageReplyBand({ replyTo, onCancel }: MessageReplyBandProps) {
   const { currentUserId } = useSDK();
   const yourselfLabel = useString('amity_chat_message_replying_yourself');
   const unknownUserLabel = useString('amity_chat_unknown_user');
-  const repliedMessageTitle = useString('amity_chat_message_replied_message');
   const replyingToLabel = useString('amity_chat_replying_to');
   const { message: liveParent } = useMessageObject({ messageId: replyTo.messageId });
   const isParentDeleted = !!(liveParent?.isDeleted ?? replyTo.isDeleted);
@@ -36,36 +26,8 @@ export function MessageReplyBand({
     : (replyTo as unknown as { creator?: { displayName?: string } }).creator?.displayName ??
       unknownUserLabel;
 
-  function handleBandClick() {
-    if (isParentDeleted) return;
-    if (replyTo.dataType === 'text') {
-      const text = ((replyTo.data as { text?: string } | undefined)?.text ?? '').toString();
-      onOpenSeeMore(text, repliedMessageTitle);
-      return;
-    }
-    if (replyTo.dataType === 'image') {
-      onOpenImage('', replyTo);
-      return;
-    }
-    if (replyTo.dataType === 'video') {
-      onOpenVideo(replyTo);
-    }
-  }
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      aria-label={repliedMessageTitle}
-      className={styles.replyBand}
-      onClick={handleBandClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleBandClick();
-        }
-      }}
-    >
+    <div className={styles.replyBand}>
       <div className={styles.replyBand__text}>
         <div className={styles.replyBand__title}>
           <Typography.CaptionBold>{replyingToLabel}</Typography.CaptionBold>
@@ -81,10 +43,7 @@ export function MessageReplyBand({
         type="button"
         className={styles.replyBand__close}
         aria-label="Cancel reply"
-        onClick={(e) => {
-          e.stopPropagation();
-          onCancel();
-        }}
+        onClick={onCancel}
       >
         <Cross className={styles.replyBand__closeIcon} />
       </button>
@@ -162,9 +121,7 @@ function VideoThumb({ replyTo }: { replyTo: Amity.Message }) {
         controls={false}
         className={styles.replyBand__thumb}
       />
-      <div className={styles.replyBand__videoOverlay} aria-hidden="true">
-        <VideoPlay className={styles.replyBand__videoIcon} />
-      </div>
+      <VideoPlayBadge size={24} />
     </div>
   );
 }

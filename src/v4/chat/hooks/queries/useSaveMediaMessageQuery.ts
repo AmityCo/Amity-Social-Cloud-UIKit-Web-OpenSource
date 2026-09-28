@@ -15,7 +15,17 @@ export type UseSaveMediaMessageQueryReturn = {
   requestSave: (message: Amity.Message) => void;
 };
 
-async function resolveDownloadUrl(message: Amity.Message): Promise<string> {
+type DownloadTarget = {
+  url: string;
+  filename: string;
+};
+
+function buildFilename(dataType: 'image' | 'video', extension: string | undefined): string {
+  const fallback = dataType === 'image' ? 'jpg' : 'mp4';
+  return `${dataType}_${Date.now()}.${extension || fallback}`;
+}
+
+async function resolveDownloadTarget(message: Amity.Message): Promise<DownloadTarget> {
   const data = message.data as { fileId?: string } | undefined;
   const fileId = data?.fileId;
   if (!fileId) {
@@ -24,22 +34,22 @@ async function resolveDownloadUrl(message: Amity.Message): Promise<string> {
   const cached = await FileRepository.getFile(fileId);
   const file = cached.data;
   const fileUrl = file.fileUrl;
+  const extension = (file.attributes as { extension?: string } | undefined)?.extension;
   if (message.dataType === 'image') {
     if (!fileUrl) throw new Error('Image file has no fileUrl');
-    return FileRepository.fileUrlWithSize(fileUrl, 'large');
+    return {
+      url: FileRepository.fileUrlWithSize(fileUrl, 'large'),
+      filename: buildFilename('image', extension),
+    };
   }
   if (message.dataType === 'video') {
-    const videoUrl = (file as Amity.File<'video'>).videoUrl;
-    const resolved = videoUrl?.original ?? fileUrl;
-    if (!resolved) throw new Error('Video file has no playable URL');
-    return resolved;
+    if (!fileUrl) throw new Error('Video file has no fileUrl');
+    return {
+      url: fileUrl,
+      filename: buildFilename('video', extension),
+    };
   }
   throw new Error(`Unsupported dataType: ${String(message.dataType)}`);
-}
-
-function buildFilename(dataType: 'image' | 'video'): string {
-  const stamp = Date.now();
-  return dataType === 'image' ? `image_${stamp}.jpg` : `video_${stamp}.mp4`;
 }
 
 async function triggerBrowserDownload(url: string, filename: string): Promise<void> {
@@ -79,8 +89,7 @@ export function useSaveMediaMessageQuery(): UseSaveMediaMessageQueryReturn {
       if (dataType !== 'image' && dataType !== 'video') {
         throw new Error(`Unsupported dataType: ${String(dataType)}`);
       }
-      const url = await resolveDownloadUrl(message);
-      const filename = buildFilename(dataType);
+      const { url, filename } = await resolveDownloadTarget(message);
       await triggerBrowserDownload(url, filename);
       return { dataType };
     },

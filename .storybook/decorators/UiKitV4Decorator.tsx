@@ -210,6 +210,13 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
       getAuthSignature={args.secureMode ? getAuthSignature : undefined}
       socialCommunityCreationButtonVisible={args.socialCommunityCreationButtonVisible ?? true}
       hideExplore={args.hideExplore ?? false}
+      pageBehavior={{
+        AmityDiscoveryWidgetComponentBehavior: {
+          goToDestination: ({ topicId, post }) => {
+            window.alert(`Widget is clicked \n\npostId: ${post.postId}\ntopicId: ${topicId}`);
+          },
+        },
+      }}
     >
       <Story />
     </AmityUIKitProvider>

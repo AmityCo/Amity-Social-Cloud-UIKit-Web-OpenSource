@@ -1,0 +1,25 @@
+.progressBar {
+  display: flex;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 62.4375rem;
+  overflow: hidden;
+  background: var(--asc-color-base-shade4);
+}
+
+.progressBar[data-leading='true'] {
+  background: var(--asc-color-primary-shade3);
+}
+
+.progressBar__segment {
+  flex: 1 1 0;
+  height: 100%;
+}
+
+.progressBar__segment[data-filled='true'] {
+  background: var(--asc-color-base-shade1);
+}
+
+.progressBar[data-leading='true'] .progressBar__segment[data-filled='true'] {
+  background: var(--asc-color-primary-default);
+}

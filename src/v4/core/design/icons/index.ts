@@ -37,6 +37,7 @@ export { Exclamation } from './Exclamation';
 export { ExclamationCircle } from './ExclamationCircle';
 export { Expand } from './Expand';
 export { ExpandAlt } from './ExpandAlt';
+export { FaceEyesXmarks } from './FaceEyesXmarks';
 export { File } from './File';
 export { Flag } from './Flag';
 export { FlagSlash } from './FlagSlash';

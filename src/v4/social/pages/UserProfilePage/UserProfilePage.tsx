@@ -351,7 +351,11 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
           onPress={() =>
             setDrawerData({
               content: (
-                <FloatingActionButtonMenu userId={userId} onPressMenu={() => removeDrawerData()} />
+                <FloatingActionButtonMenu
+                  pageId={pageId}
+                  userId={userId}
+                  onPressMenu={() => removeDrawerData()}
+                />
               ),
             })
           }
