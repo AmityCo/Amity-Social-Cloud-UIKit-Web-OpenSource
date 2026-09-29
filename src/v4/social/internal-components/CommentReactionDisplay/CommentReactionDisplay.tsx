@@ -4,6 +4,7 @@ import millify from 'millify';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionDisplay';
 import styles from './CommentReactionDisplay.module.css';
 
@@ -26,8 +27,14 @@ export const CommentReactionDisplay = ({
   position = 'comment',
   className,
 }: CommentReactionDisplayProps) => {
+  // A reaction chip on a comment is a Reaction surface, and this one carried no
+  // gate: switching Reaction off removed the Like control and the post's count
+  // and left every comment and reply still showing theirs. Same id Android uses
+  // for the same chip, so the three platforms answer this the same way.
+  const { isExcluded } = useAmityElement({ pageId, componentId, elementId: 'reaction_preview' });
   const { sortedReactions, hasReaction } = useCommentReactionDisplay({ comment });
 
+  if (isExcluded) return null;
   if (reactionsCount <= 0) return null;
 
   const containerClassName = clsx(

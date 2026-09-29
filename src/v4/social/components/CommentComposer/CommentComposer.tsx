@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components/AriaButton';
@@ -109,6 +110,9 @@ export const CommentComposer = ({
   const editorRef = useRef<CommentInputRef | null>(null);
   const composerInputRef = useRef<HTMLDivElement | null>(null);
   const componentId = 'comment_composer_bar';
+  // Owned by a module and never asked — the component kept rendering
+  // after its module was switched off.
+  const { isExcluded } = useAmityComponent({ pageId, componentId });
   const mentionContainerRef = useRef<HTMLDivElement | null>(null);
   const { page } = useNavigation();
 
@@ -261,11 +265,13 @@ export const CommentComposer = ({
       >
         <LockSvg />
         <Typography.Body>
-          {useString('amity_social_label_comments_disabled_message')}
+          {resolveString('amity_social_label_comments_disabled_message')}
         </Typography.Body>
       </div>
     );
   }
+
+  if (isExcluded) return null;
 
   return (
     <div
@@ -279,7 +285,7 @@ export const CommentComposer = ({
       {!online && isPending && page.type == PageTypes.ViewStoryPage && (
         <Notification
           icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}
-          content={useString('amity_social_toast_failed_generic')}
+          content={resolveString('amity_social_toast_failed_generic')}
           alignment="fixed"
           duration={3000}
         />
@@ -314,7 +320,7 @@ export const CommentComposer = ({
               data-testid={`${pageId}/${componentId}/comment_composer_reply_text`}
               className={styles.commentComposer__replyContainer__text}
             >
-              <span>{useString('amity_social_replying_to')} </span>
+              <span>{resolveString('amity_social_replying_to')} </span>
               <span className={styles.commentComposer__replyContainer__username}>
                 {replyTo?.creator?.displayName ?? replyTo?.userId}
               </span>
@@ -358,11 +364,11 @@ export const CommentComposer = ({
             value={initialCommentValue}
             placehoder={
               replyTo
-                ? useString('amity_social_replying_to_display_name').replace(
+                ? resolveString('amity_social_replying_to_display_name').replace(
                     '%s',
                     replyTo?.creator?.displayName ?? '',
                   )
-                : useString('amity_social_placeholder_comment_text_field_placeholder')
+                : resolveString('amity_social_placeholder_comment_text_field_placeholder')
             }
             communityId={community?.communityId}
             shouldAutoFocus={
@@ -390,7 +396,7 @@ export const CommentComposer = ({
             mutateAsync({ params: textValue });
           }}
         >
-          <Typography.Body>{useString('amity_common_post')}</Typography.Body>
+          <Typography.Body>{resolveString('amity_common_post')}</Typography.Body>
         </Button>
       </div>
     </div>

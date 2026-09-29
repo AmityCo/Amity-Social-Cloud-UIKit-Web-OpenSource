@@ -42,7 +42,7 @@ export function AllCategoriesPage() {
 
   const { goToCommunitiesByCategoryPage, onBack } = useNavigation();
 
-  const { themeStyles, accessibilityId } = useAmityPage({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
   });
 
@@ -61,6 +61,10 @@ export function AllCategoriesPage() {
       }
     },
   });
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.allCategoriesPage} style={themeStyles} data-testid={accessibilityId}>

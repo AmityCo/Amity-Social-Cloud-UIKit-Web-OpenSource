@@ -683,9 +683,11 @@ function FrameControls({
         </div>
       )}
       {showProductTag && (
-        <div className={styles.selectedMedia__productTag}>
-          <ProductTagBadge selectedProductTags={productTags} onClick={handleProductTagClick} />
-        </div>
+        <ProductTagBadge
+          wrapperClassName={styles.selectedMedia__productTag}
+          selectedProductTags={productTags}
+          onClick={handleProductTagClick}
+        />
       )}
     </>
   );

@@ -28,7 +28,7 @@ function useCommunityPendingInvitationPage({ community }: CommunityPendingInvita
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
   const { AmityCommunityPendingInvitationPageBehavior } = usePageBehavior();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   const {
@@ -68,6 +68,7 @@ function useCommunityPendingInvitationPage({ community }: CommunityPendingInvita
   return {
     onBack,
     pageId,
+    isExcluded,
     isEmpty,
     isDesktop,
     isFetching,
@@ -86,6 +87,7 @@ export function CommunityPendingInvitationPage(props: CommunityPendingInvitation
     pageId,
     onBack,
     isEmpty,
+    isExcluded,
     isOnline,
     isFetching,
     invitations,
@@ -94,6 +96,10 @@ export function CommunityPendingInvitationPage(props: CommunityPendingInvitation
     accessibilityId,
     setIntersectionNode,
   } = useCommunityPendingInvitationPage(props);
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <section

@@ -176,7 +176,11 @@ export const PostTextField = ({
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const { isDesktop } = useResponsive();
 
-  const { accessibilityId, resolveText } = useAmityElement({ pageId, componentId, elementId });
+  const { accessibilityId, resolveText, isExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   const firstUrl = React.useMemo(() => {
     const links = dataValue?.links;
@@ -235,6 +239,10 @@ export const PostTextField = ({
     onPreviewLinkChange,
     firstLinkRenderPreview,
   ]);
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   // Determine if we should show link preview - only show if there's a valid URL, no attachments, not hidden, and renderPreview is true
   const shouldShowLinkPreview =

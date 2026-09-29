@@ -1181,6 +1181,7 @@
   "amity_social_your_attending_status_cannot_be_changed_once_the_e": "Your attending status cannot be changed once the event has started.",
   "amity_social_your_post_can_still_be_published_but_product_tags_": "Your post can still be published, but product tags won't appear as this feature is unavailable.",
   "amity_social_community_invitation_accept_success": "You have successfully joined %1.",
+  "amity_social_label_search": "Search",
   "amity_social_button_event_post_create": "Post event to feed",
   "amity_social_button_post_to_feed": "Post to feed",
   "amity_social_button_maybe_later": "Maybe later",

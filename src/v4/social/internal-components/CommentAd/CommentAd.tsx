@@ -9,13 +9,17 @@ interface CommentAdProps {
 }
 
 export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
-  const componentId = 'comment_tray_component';
-  const { themeStyles } = useAmityComponent({
+  // Same as the feed ad: scoped to the comment tray, so it followed Comment
+  // rather than Ads.
+  const componentId = 'comment_ad';
+  const { themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
 
   const avatarFile = useImage({ fileId: ad.advertiser?.avatar?.fileId });
+
+  if (isExcluded) return null;
   const avatarUrl = avatarFile || ad.advertiser?.avatar?.fileUrl || '';
 
   const adImageFile = useImage({ fileId: ad.image1_1?.fileId });

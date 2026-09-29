@@ -13,6 +13,7 @@ import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChann
 import { MemberRoles } from '~/v4/chat/constants/memberRoles';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { useString } from '~/v4/core/localization';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -97,40 +98,44 @@ const ChatFeed: FC<ChatFeedProps> = ({
     setIsPopoverOpen(isOpen);
   };
 
-  useEffect(() => {
-    let unsubTopic: Amity.Unsubscriber;
-    let retryCount = 0;
-    const maxRetries = 5;
+  useSdkEffect(
+    ChannelRepository.joinChannel,
+    () => {
+      let unsubTopic: Amity.Unsubscriber;
+      let retryCount = 0;
+      const maxRetries = 5;
 
-    const subscribeWithRetry = () => {
-      setTimeout(() => {
-        unsubTopic = subscribeTopic(getChannelTopic(channel), (error) => {
-          if (error) {
-            if (retryCount < maxRetries) {
-              retryCount++;
-              subscribeWithRetry();
+      const subscribeWithRetry = () => {
+        setTimeout(() => {
+          unsubTopic = subscribeTopic(getChannelTopic(channel), (error) => {
+            if (error) {
+              if (retryCount < maxRetries) {
+                retryCount++;
+                subscribeWithRetry();
+              }
             }
-          }
-        });
-      }, 3000);
-    };
+          });
+        }, 3000);
+      };
 
-    subscribeWithRetry();
+      subscribeWithRetry();
 
-    const joinLiveChannel = async () => {
-      try {
-        await ChannelRepository.joinChannel(channel.channelId);
-      } catch (e) {
-        console.error('error: ', e);
-      } finally {
-        setJoined(true);
-      }
-    };
+      const joinLiveChannel = async () => {
+        try {
+          await ChannelRepository.joinChannel(channel.channelId);
+        } catch (e) {
+          console.error('error: ', e);
+        } finally {
+          setJoined(true);
+        }
+      };
 
-    !isVisitorOrBot && joinLiveChannel();
+      !isVisitorOrBot && joinLiveChannel();
 
-    return () => unsubTopic?.();
-  }, [channel, isVisitorOrBot]);
+      return () => unsubTopic?.();
+    },
+    [channel, isVisitorOrBot],
+  );
 
   const renderLoadingSkeleton = useCallback(() => {
     return (

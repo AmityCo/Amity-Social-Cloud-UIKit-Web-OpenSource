@@ -1,5 +1,5 @@
 import { BackButton } from '~/v4/social/elements';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Tabs, Typography } from '~/v4/core/components';
 import { useUpcomingEvents } from './hooks/useUpcomingEvents';
 import { EventList } from '~/v4/social/features/events/components/EventList';
@@ -20,6 +20,7 @@ export function UpcomingEvents({ fromExplore }: UpcomingEventsProps) {
     accessibilityId,
     UpcomingEventsTab,
     hasCreateEventPermission,
+    isExcluded,
   } = useUpcomingEvents({ fromExplore });
 
   const renderEventList = () => (
@@ -27,6 +28,12 @@ export function UpcomingEvents({ fromExplore }: UpcomingEventsProps) {
       <EventList {...eventCollection} />
     </div>
   );
+
+  // A module switched off renders nothing, so a stale route or deep link lands
+  // on emptiness rather than a page with holes in it. The flag was resolved
+  // and then dropped: the gate said withhold and the page stayed on screen,
+  // which the id tables report as hidden because they measure the decision.
+  if (isExcluded) return null;
 
   return (
     <section className={styles.upcomingEvents} style={themeStyles} data-testid={accessibilityId}>
@@ -36,7 +43,7 @@ export function UpcomingEvents({ fromExplore }: UpcomingEventsProps) {
       >
         <BackButton onPress={() => onBack()} />
         <Typography.Headline className={styles.upcomingEvents__headerTitle}>
-          {useString('amity_social_status_upcoming_events')}
+          {resolveString('amity_social_status_upcoming_events')}
         </Typography.Headline>
         <div className={styles.upcomingEvents__headerActions} />
       </div>
@@ -52,12 +59,12 @@ export function UpcomingEvents({ fromExplore }: UpcomingEventsProps) {
           tabs={[
             {
               value: UpcomingEventsTab.All,
-              label: useString('amity_common_button_all'),
+              label: resolveString('amity_common_button_all'),
               content: renderEventList,
             },
             {
               value: UpcomingEventsTab.Hosting,
-              label: useString('amity_social_tab_tab_hosting'),
+              label: resolveString('amity_social_tab_tab_hosting'),
               content: renderEventList,
             },
           ]}

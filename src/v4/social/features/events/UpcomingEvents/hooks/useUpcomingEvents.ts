@@ -19,7 +19,7 @@ export function useUpcomingEvents({ fromExplore }: UpcomingEventsProps) {
   const { onBack } = useNavigation();
   const { isVisitorOrBot, currentUserId } = useSDK();
   const { hasCreateEventPermission } = useEventPermission();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const [activeTab, setActiveTab] = useState<Key>(UpcomingEventsTab.All);
 
   const eventCollection = useEventsCollection({
@@ -34,6 +34,7 @@ export function useUpcomingEvents({ fromExplore }: UpcomingEventsProps) {
   });
 
   return {
+    isExcluded,
     pageId,
     onBack,
     activeTab,

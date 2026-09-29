@@ -14,11 +14,15 @@ interface BrandBadgeProps {
 export const BrandBadge = ({ pageId = '*', componentId = '*', className }: BrandBadgeProps) => {
   const elementId = 'brand_badge';
 
-  const { config, uiReference, defaultConfig, accessibilityId } = useAmityElement({
+  const { config, uiReference, defaultConfig, accessibilityId, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  // Reaction owns this badge, and ReactionListPanel passes it as a
+  // componentId. Neither side asked.
+  if (isExcluded) return null;
   return (
     <IconComponent
       defaultIcon={() => (

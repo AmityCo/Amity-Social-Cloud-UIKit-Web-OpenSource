@@ -1,5 +1,6 @@
 import { ChannelRepository } from '@amityco/ts-sdk';
 import { useEffect, useState } from 'react';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export const useChannel = ({ channelId }: { channelId?: string }) => {
   // TODO: add hook to use with live object
@@ -7,20 +8,24 @@ export const useChannel = ({ channelId }: { channelId?: string }) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!channelId) return;
+  useSdkEffect(
+    ChannelRepository.getChannel,
+    () => {
+      if (!channelId) return;
 
-    const getChannel = () =>
-      ChannelRepository.getChannel(channelId, ({ data, loading, error }) => {
-        setLoading(loading);
-        if (!loading && data) setChannel(data);
-        if (error) setError(error);
-      });
+      const getChannel = () =>
+        ChannelRepository.getChannel(channelId, ({ data, loading, error }) => {
+          setLoading(loading);
+          if (!loading && data) setChannel(data);
+          if (error) setError(error);
+        });
 
-    const unsubscribe = getChannel();
+      const unsubscribe = getChannel();
 
-    return () => unsubscribe();
-  }, [channelId]);
+      return () => unsubscribe();
+    },
+    [channelId],
+  );
 
   return { channel, error, loading };
 };

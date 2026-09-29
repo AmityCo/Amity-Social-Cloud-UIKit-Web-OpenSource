@@ -4,7 +4,7 @@ import InternalMessageComposer from '~/v4/chat/internal-components/MessageCompos
 import styles from './LivestreamChatMessageComposer.module.css';
 import { Typography } from '~/v4/core/components';
 import ChatMuted from '~/v4/icons/ChatMuted';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
 import { useCreateMessage } from '~/v4/chat/hooks/useCreateMessage';
 import { $getRoot, $getSelection, $isRangeSelection, LexicalEditor } from 'lexical';
 import { ActionButton } from '~/v4/core/components/ActionButton/ActionButton';
@@ -250,9 +250,30 @@ export const LivestreamChatMessageComposer = ({
 
   const hasProductTags = subscribedPost?.productTags && subscribedPost?.productTags.length > 0;
 
-  const { themeStyles, accessibilityId } = useAmityComponent({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({
     pageId,
     componentId,
+  });
+
+  // The livestream live-reaction surface: the composer's reaction button and the
+  // bar behind it. It was only ever "hidden" by the popover not opening, which
+  // is not the same as absent — and the bar writes to the SDK on tap.
+  const { isExcluded: isLivestreamReactionExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'livestream_reaction',
+  });
+
+  // Asked here as well as inside the button, because the wrapper around it is
+  // a positioned box: with the module off the button returned null and the
+  // wrapper kept its space, so the compose bar had a hole in it and nothing
+  // grew to fill it. The button's own gate cannot remove a parent, so the
+  // parent has to ask too — the same shape as the post composer's own product
+  // wrapper.
+  const { isExcluded: isProductTaggingExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'product_tagging_button',
   });
 
   useEffect(() => {
@@ -267,7 +288,14 @@ export const LivestreamChatMessageComposer = ({
     removeDrawerData();
   }, [closePopup, removeDrawerData]);
 
-  const canReact = ((!isHost && !isCoHost) || isPlayer) && (isEmpty || isMuted);
+  // Reaction being switched off means this viewer cannot react, which is what
+  // `canReact` is for — not a reaction button that renders as nothing. The
+  // send-button slot is a ternary between the two, so returning null from the
+  // reaction side left the styled container on screen with nothing in it and
+  // no way to send a message either. Folded in here, the slot falls through to
+  // the send button, which is the whole point of the slot.
+  const canReact =
+    !isLivestreamReactionExcluded && ((!isHost && !isCoHost) || isPlayer) && (isEmpty || isMuted);
 
   const clearMessage = () => {
     editorRef.current?.update(() => {
@@ -377,6 +405,8 @@ export const LivestreamChatMessageComposer = ({
 
   const renderReactionButton = useCallback(
     ({ targetId, roomId }: { targetId: string; roomId: string }) => {
+      if (isLivestreamReactionExcluded) return null;
+
       return (
         <Popover
           forceShowPopUp={true}
@@ -415,7 +445,7 @@ export const LivestreamChatMessageComposer = ({
         </Popover>
       );
     },
-    [community?.communityId],
+    [community?.communityId, isLivestreamReactionExcluded],
   );
 
   const renderReadOnlyState = useCallback(
@@ -551,64 +581,17 @@ export const LivestreamChatMessageComposer = ({
           data-is-host={isHost && !isPlayer}
         >
           {/* Product tagging button */}
-          {!isProductTagButtonHidden && (hasProductTags || isHostOrCoHostWithProductManagement) && (
-            <div className={styles.livestreamChatMessageComposer__productTaggingButton__wrapper}>
-              {isHostOrCoHostWithProductManagement ? (
-                <ProductTaggingButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  // Disable until the room post resolves so tags can't be written
-                  // to the wrong post (the 'room' child can lag behind the parent).
-                  isDisabled={disabled || !subscribedPost?.postId}
-                  badgeCount={
-                    productCatalogueSettings?.product.enabled
-                      ? subscribedPost?.productTags?.length
-                      : undefined
-                  }
-                  onPress={async () => {
-                    if (!(await ensureCatalogueEnabledOrWarn())) return;
-                    if (isDesktop) {
-                      openPopup({
-                        pageId,
-                        id: 'manage_product_tagging_popup',
-                        view: 'desktop',
-                        children: subscribedPost?.postId ? (
-                          <LiveManageProductTagListContent
-                            postId={subscribedPost.postId}
-                            roomId={room?.roomId as string}
-                            pageId={pageId}
-                            sourceType={AnalyticsSourceTypeEnum.ROOM}
-                            onClose={() => closePopup('manage_product_tagging_popup')}
-                            onProductCatalogueDisabled={handleProductCatalogueDisabled}
-                            onPostUpdate={setLivestreamPost}
-                          />
-                        ) : null,
-                      });
-                    } else {
-                      setDrawerData({
-                        content: subscribedPost?.postId ? (
-                          <LiveManageProductTagListContent
-                            postId={subscribedPost.postId}
-                            roomId={room?.roomId as string}
-                            pageId={pageId}
-                            sourceType={AnalyticsSourceTypeEnum.ROOM}
-                            onClose={removeDrawerData}
-                            onProductCatalogueDisabled={handleProductCatalogueDisabled}
-                            onPostUpdate={setLivestreamPost}
-                          />
-                        ) : null,
-                      });
-                    }
-                  }}
-                />
-              ) : (
-                hasProductTags &&
-                room &&
-                !isHost && (
+          {!isProductTaggingExcluded &&
+            !isProductTagButtonHidden &&
+            (hasProductTags || isHostOrCoHostWithProductManagement) && (
+              <div className={styles.livestreamChatMessageComposer__productTaggingButton__wrapper}>
+                {isHostOrCoHostWithProductManagement ? (
                   <ProductTaggingButton
                     pageId={pageId}
                     componentId={componentId}
-                    isDisabled={disabled}
+                    // Disable until the room post resolves so tags can't be written
+                    // to the wrong post (the 'room' child can lag behind the parent).
+                    isDisabled={disabled || !subscribedPost?.postId}
                     badgeCount={
                       productCatalogueSettings?.product.enabled
                         ? subscribedPost?.productTags?.length
@@ -619,43 +602,92 @@ export const LivestreamChatMessageComposer = ({
                       if (isDesktop) {
                         openPopup({
                           pageId,
-                          id: 'product_tag_list_popup',
+                          id: 'manage_product_tagging_popup',
                           view: 'desktop',
-                          children: (
-                            <ProductTagList
-                              renderMode="livestream"
+                          children: subscribedPost?.postId ? (
+                            <LiveManageProductTagListContent
+                              postId={subscribedPost.postId}
+                              roomId={room?.roomId as string}
                               pageId={pageId}
-                              displayMode="desktop"
-                              onClose={() => {
-                                closePopup('product_tag_list_popup');
-                              }}
-                              productTags={subscribedPost?.productTags as Amity.ProductTag[]}
-                              pinnedProductId={pinnedProductId}
-                              sourceId={room.roomId}
+                              sourceType={AnalyticsSourceTypeEnum.ROOM}
+                              onClose={() => closePopup('manage_product_tagging_popup')}
+                              onProductCatalogueDisabled={handleProductCatalogueDisabled}
+                              onPostUpdate={setLivestreamPost}
                             />
-                          ),
+                          ) : null,
                         });
                       } else {
                         setDrawerData({
-                          content: (
-                            <ProductTagList
-                              renderMode="livestream"
+                          content: subscribedPost?.postId ? (
+                            <LiveManageProductTagListContent
+                              postId={subscribedPost.postId}
+                              roomId={room?.roomId as string}
                               pageId={pageId}
-                              displayMode="mobile"
+                              sourceType={AnalyticsSourceTypeEnum.ROOM}
                               onClose={removeDrawerData}
-                              productTags={subscribedPost?.productTags as Amity.ProductTag[]}
-                              pinnedProductId={pinnedProductId}
-                              sourceId={room.roomId}
+                              onProductCatalogueDisabled={handleProductCatalogueDisabled}
+                              onPostUpdate={setLivestreamPost}
                             />
-                          ),
+                          ) : null,
                         });
                       }
                     }}
                   />
-                )
-              )}
-            </div>
-          )}
+                ) : (
+                  hasProductTags &&
+                  room &&
+                  !isHost && (
+                    <ProductTaggingButton
+                      pageId={pageId}
+                      componentId={componentId}
+                      isDisabled={disabled}
+                      badgeCount={
+                        productCatalogueSettings?.product.enabled
+                          ? subscribedPost?.productTags?.length
+                          : undefined
+                      }
+                      onPress={async () => {
+                        if (!(await ensureCatalogueEnabledOrWarn())) return;
+                        if (isDesktop) {
+                          openPopup({
+                            pageId,
+                            id: 'product_tag_list_popup',
+                            view: 'desktop',
+                            children: (
+                              <ProductTagList
+                                renderMode="livestream"
+                                pageId={pageId}
+                                displayMode="desktop"
+                                onClose={() => {
+                                  closePopup('product_tag_list_popup');
+                                }}
+                                productTags={subscribedPost?.productTags as Amity.ProductTag[]}
+                                pinnedProductId={pinnedProductId}
+                                sourceId={room.roomId}
+                              />
+                            ),
+                          });
+                        } else {
+                          setDrawerData({
+                            content: (
+                              <ProductTagList
+                                renderMode="livestream"
+                                pageId={pageId}
+                                displayMode="mobile"
+                                onClose={removeDrawerData}
+                                productTags={subscribedPost?.productTags as Amity.ProductTag[]}
+                                pinnedProductId={pinnedProductId}
+                                sourceId={room.roomId}
+                              />
+                            ),
+                          });
+                        }
+                      }}
+                    />
+                  )
+                )}
+              </div>
+            )}
 
           {/* Invite coHost */}
           {isHost && !isPlayer && (
@@ -769,6 +801,7 @@ export const LivestreamChatMessageComposer = ({
     subscribedPost,
     pinnedProductId,
     isProductTagButtonHidden,
+    isProductTaggingExcluded,
     productCatalogueSettings?.product.enabled,
     isHostOrCoHostWithProductManagement,
     isHost,
@@ -782,6 +815,15 @@ export const LivestreamChatMessageComposer = ({
     handleProductCatalogueDisabled,
     isChannelPending,
   ]);
+
+  // Owned by a module and never asked: the component kept rendering after its
+  // module was switched off. The gate used to sit above the ten hooks below
+  // it, which traded one bug for a worse one — on the render where this turned
+  // true React saw ten fewer hooks than the render before, threw #300, and the
+  // boundary took the whole composer off the screen instead of the one
+  // surface that was switched off. Every hook runs first, unconditionally, and
+  // the decision is made here.
+  if (isExcluded) return null;
 
   return (
     <>

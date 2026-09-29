@@ -9,7 +9,7 @@ import { CommentButton } from '~/v4/social/elements/CommentButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { TextContent } from './TextContent';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
@@ -161,6 +161,20 @@ export const PostContent = ({
     pageId,
     componentId,
   });
+  // The two halves of the engagement bar belong to different modules, and each
+  // can be switched off while the other stays.
+  // Product off leaves the words, not the tag: the run stays in the sentence as
+  // plain text rather than a blue link into a module that is gone.
+  const productTagElement = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'product_tag',
+  });
+  const reactionElement = useAmityElement({ pageId, componentId, elementId: 'reaction_button' });
+  const commentElement = useAmityElement({ pageId, componentId, elementId: 'comment_button' });
+  const hasEngagementSummary =
+    (post?.reactionsCount > 0 && !reactionElement.isExcluded) ||
+    (post?.commentsCount > 0 && !commentElement.isExcluded);
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { confirm } = useConfirmContext();
@@ -598,9 +612,13 @@ export const PostContent = ({
               mentionees={post?.mentionees}
               hashtagged={post?.metadata?.hashtags}
               hashtags={post?.hashtags}
-              productTags={post?.productTags?.filter(
-                (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
-              )}
+              productTags={
+                productTagElement.isExcluded
+                  ? undefined
+                  : post?.productTags?.filter(
+                      (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
+                    )
+              }
               post={post}
               keyword={keyword}
               isSearchPost={isSearchPost}
@@ -645,8 +663,14 @@ export const PostContent = ({
             <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
           )}
 
+          {/*
+            Counting only the numbers left this band standing with Reaction and
+            Comment switched off: a rule with nothing above it and a row with
+            nothing in it. Each half asks for its own module, and the container
+            goes when the last child does.
+          */}
           <div className={styles.postContent__reactions_and_comments}>
-            {post?.reactionsCount > 0 && (
+            {post?.reactionsCount > 0 && !reactionElement.isExcluded && (
               <Button
                 data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
                 variant="default"
@@ -690,7 +714,7 @@ export const PostContent = ({
               </Button>
             )}
 
-            {post?.commentsCount > 0 && (
+            {post?.commentsCount > 0 && !commentElement.isExcluded && (
               <Button
                 data-testid={`${pageId}/${componentId}/comment_count`}
                 variant="default"
@@ -711,7 +735,7 @@ export const PostContent = ({
 
           {/* Reaction Bar */}
           <>
-            <div className={styles.postContent__divider} />
+            {hasEngagementSummary ? <div className={styles.postContent__divider} /> : null}
             <div className={styles.postContent__reactionBar}>
               <div className={styles.postContent__reactionBar__leftPane}>
                 <ReactionButton
@@ -796,7 +820,7 @@ export const PostContent = ({
       {/*
        * Should not see inline comment in post detail page and pending post page
        */}
-      {!disabledInlineComment && (
+      {!disabledInlineComment && !commentElement.isExcluded && (
         <>
           {loadingInlineComment ? (
             <CommentSkeleton pageId={pageId} componentId={componentId} />

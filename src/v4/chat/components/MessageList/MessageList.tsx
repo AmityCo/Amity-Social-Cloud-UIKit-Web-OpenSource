@@ -35,7 +35,7 @@ export const MessageList = ({
   const [height, setHeight] = useState<number | undefined>(undefined);
   const { confirm } = useConfirmContext();
   const notification = useLiveChatNotifications();
-  const { themeStyles } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
 
   const {
     messages: rawMessages,
@@ -52,6 +52,10 @@ export const MessageList = ({
     },
     true,
   );
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const messages = rawMessages as Amity.Message<'text'>[];
 

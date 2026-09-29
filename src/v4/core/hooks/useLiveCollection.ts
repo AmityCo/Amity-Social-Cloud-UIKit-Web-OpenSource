@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSDKLiveCollectionConnector } from '~/v4/core/providers/SDKConnectorProvider';
+import { useSdkFnEnabled } from '~/v4/core/providers/CustomizationProvider/CustomizationProvider';
 
 function useLiveCollection<TCallback, TParams>({
   fetcher,
@@ -27,8 +28,17 @@ function useLiveCollection<TCallback, TParams>({
   refresh: () => void;
 } {
   const { subscribe } = useSDKLiveCollectionConnector();
+
+  // The caller's own condition, and then the module's. A component that early
+  // returns on `isExcluded` has already run this hook by the time it does, so
+  // without this the request goes out for a module the customer switched off.
+  const moduleOn = useSdkFnEnabled(fetcher);
+  const enabled = shouldCall && moduleOn;
+
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(shouldCall ? shouldCall : true);
+  // A disabled module will never answer, so it is not loading — reporting true
+  // would leave every skeleton above it spinning for the life of the session.
+  const [isLoading, setIsLoading] = useState(moduleOn ? (shouldCall ? shouldCall : true) : false);
   const [items, setItems] = useState<TCallback[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -44,7 +54,7 @@ function useLiveCollection<TCallback, TParams>({
 
   const callbackFn = useCallback(
     (response) => {
-      if (!shouldCall) return;
+      if (!enabled) return;
       if (response.data) setItems(response.data);
       setIsLoading(response.loading);
       setHasMore(response.hasNextPage);
@@ -52,10 +62,12 @@ function useLiveCollection<TCallback, TParams>({
       loadMoreFnRef.current = response.onNextPage;
       callback(response);
     },
-    [shouldCall, loadMoreFnRef],
+    [enabled, loadMoreFnRef],
   );
 
   // Keep refs up to date so refresh() always uses the latest values
+  const enabledRef = useRef(enabled);
+  enabledRef.current = enabled;
   const subscribeRef = useRef(subscribe);
   subscribeRef.current = subscribe;
   const fetcherRef = useRef(fetcher);
@@ -66,7 +78,7 @@ function useLiveCollection<TCallback, TParams>({
   callbackFnRef.current = callbackFn;
 
   useEffect(() => {
-    if (!shouldCall) return;
+    if (!enabled) return;
     const { unsubscribe } = subscribe({
       fetcher,
       params,
@@ -78,9 +90,13 @@ function useLiveCollection<TCallback, TParams>({
     return () => {
       unsubscribe();
     };
-  }, [JSON.stringify(params), shouldCall]);
+  }, [JSON.stringify(params), enabled]);
 
   const refresh = useCallback(() => {
+    // refresh() subscribes directly rather than through the effect, so it needs
+    // the same gate — otherwise a pull-to-refresh reaches a disabled module.
+    if (!enabledRef.current) return () => {};
+
     if (unsubscribeRef.current) {
       unsubscribeRef.current();
     }

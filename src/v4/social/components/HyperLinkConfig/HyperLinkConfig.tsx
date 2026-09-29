@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useForm } from 'react-hook-form';
 import { custom, z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -51,11 +51,11 @@ export const HyperLinkConfig = ({
   const { closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
 
-  if (isExcluded) return null;
-
   const { client } = useSDK();
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  if (isExcluded) return null;
 
   const formId = 'asc-story-hyperlink-form';
 
@@ -82,7 +82,7 @@ export const HyperLinkConfig = ({
           }
         },
         {
-          message: useString('amity_social_label_enter_valid_url'),
+          message: resolveString('amity_social_label_enter_valid_url'),
         },
       )
       .refine(
@@ -94,7 +94,7 @@ export const HyperLinkConfig = ({
           return hasWhitelistedUrls;
         },
         {
-          message: useString('amity_social_label_enter_whitelisted_url'),
+          message: resolveString('amity_social_label_enter_whitelisted_url'),
         },
       ),
     customText: z
@@ -104,7 +104,7 @@ export const HyperLinkConfig = ({
         if (!value) return true;
         const hasBlockedWord = await client?.validateTexts([value]).catch(() => false);
         return hasBlockedWord;
-      }, useString('amity_social_label_text_contains_blocklisted')),
+      }, resolveString('amity_social_label_text_contains_blocklisted')),
   });
 
   type HyperLinkFormInputs = z.infer<typeof schema>;
@@ -148,10 +148,10 @@ export const HyperLinkConfig = ({
 
   const discardHyperlink = () => {
     confirm({
-      title: useString('amity_social_modal_dialog_title_remove_link'),
-      content: useString('amity_social_modal_dialog_remove_story_link'),
-      cancelText: useString('amity_social_button_cancel'),
-      okText: useString('amity_social_modal_alert_remove_button'),
+      title: resolveString('amity_social_modal_dialog_title_remove_link'),
+      content: resolveString('amity_social_modal_dialog_remove_story_link'),
+      cancelText: resolveString('amity_social_button_cancel'),
+      okText: resolveString('amity_social_modal_alert_remove_button'),
       onOk: confirmDiscardHyperlink,
     });
   };
@@ -159,10 +159,10 @@ export const HyperLinkConfig = ({
   const handleClose = () => {
     if (hasUnsavedChanges) {
       confirm({
-        title: useString('amity_social_modal_dialog_title_unsaved_changes'),
-        content: useString('amity_social_modal_dialog_cancel_unsaved_changes'),
-        cancelText: useString('amity_social_button_no'),
-        okText: useString('amity_social_button_yes'),
+        title: resolveString('amity_social_modal_dialog_title_unsaved_changes'),
+        content: resolveString('amity_social_modal_dialog_cancel_unsaved_changes'),
+        cancelText: resolveString('amity_social_button_no'),
+        okText: resolveString('amity_social_button_yes'),
 
         onOk: () => {
           reset();
@@ -184,7 +184,7 @@ export const HyperLinkConfig = ({
           onPress={handleClose}
           className={styles.hyperlinkConfig__header__editCancelButton}
         />
-        <Typography.Headline>{useString('amity_social_button_add_link')}</Typography.Headline>
+        <Typography.Headline>{resolveString('amity_social_button_add_link')}</Typography.Headline>
         <DoneButton
           type="submit"
           pageId={pageId}
@@ -202,7 +202,7 @@ export const HyperLinkConfig = ({
           <UnderlineInput
             label="URL"
             required={true}
-            placeholder={useString('amity_social_placeholder_hyperlink_url_hint')}
+            placeholder={resolveString('amity_social_placeholder_hyperlink_url_hint')}
             placeholderClassName={styles.hyperlinkConfig__inputPlaceholder}
             value={watch('url')}
             {...register('url', {
@@ -216,8 +216,8 @@ export const HyperLinkConfig = ({
             helperText={errors?.url?.message}
           />
           <UnderlineInput
-            label={useString('amity_social_label_customize_link_text')}
-            placeholder={useString('amity_social_placeholder_hyperlink_name_hint')}
+            label={resolveString('amity_social_label_customize_link_text')}
+            placeholder={resolveString('amity_social_placeholder_hyperlink_name_hint')}
             placeholderClassName={styles.hyperlinkConfig__inputPlaceholder}
             {...register('customText', {
               onChange: async () => {
@@ -229,7 +229,7 @@ export const HyperLinkConfig = ({
             isError={!!errors.customText?.message}
             helperText={
               errors?.customText?.message ??
-              useString('amity_social_this_text_will_show_on_the_link_instead_of_url')
+              resolveString('amity_social_this_text_will_show_on_the_link_instead_of_url')
             }
             value={watch('customText')}
             showCounter={true}
@@ -240,7 +240,7 @@ export const HyperLinkConfig = ({
           <div className={styles.removeLinkContainer}>
             <Button onPress={discardHyperlink} className={clsx(styles.removeLinkButton)}>
               <Trash className={styles.removeIcon} />
-              {useString('amity_social_button_remove_link')}
+              {resolveString('amity_social_button_remove_link')}
             </Button>
           </div>
         )}

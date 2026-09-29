@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
@@ -27,6 +27,7 @@ import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export interface PostDetailPageProps {
   id: string;
@@ -92,11 +93,11 @@ export function PostDetailPage({
   const { isDesktop } = useResponsive();
   const { onBack, prevPage } = useNavigation();
   const notification = useNotifications();
-  const { themeStyles } = useAmityPage({ pageId });
-  const replyNoLongerAvailableText = useString(
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
+  const replyNoLongerAvailableText = resolveString(
     'amity_social_error_reply_no_longer_available_error_message',
   );
-  const addReplyParentDeletedText = useString(
+  const addReplyParentDeletedText = resolveString(
     'amity_social_error_add_reply_parent_deleted_error_message',
   );
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
@@ -133,48 +134,52 @@ export function PostDetailPage({
 
   // Show a toast when the targeted reply (or its L1 parent for L2 notifications) no longer exists.
   // Always checks commentId; for L2 notifications also checks parentId (the L1 parent).
-  useEffect(() => {
-    if (!commentId) return;
+  useSdkEffect(
+    CommentRepository.getComment,
+    () => {
+      if (!commentId) return;
 
-    const isL2Notification = !!rootId && !!parentId && parentId !== rootId;
+      const isL2Notification = !!rootId && !!parentId && parentId !== rootId;
 
-    const checkDeleted = (id: string, message: string): (() => void) | undefined => {
-      if (community && !community?.isPublic && !community?.isJoined) return;
-      let unsubscribe: (() => void) | undefined;
-      unsubscribe = CommentRepository.getComment(id, (resp) => {
-        if (!resp.loading) {
-          unsubscribe?.();
-          unsubscribe = undefined;
-          const target = resp.data as Amity.Comment | null;
-          if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
-            hasShownReplyNotificationRef.current = true;
-            if (!isDesktop) {
-              setDeletedReplyError(message);
-            } else {
-              notification.info({
-                content: message,
-                alignment: 'withSidebar',
-              });
+      const checkDeleted = (id: string, message: string): (() => void) | undefined => {
+        if (community && !community?.isPublic && !community?.isJoined) return;
+        let unsubscribe: (() => void) | undefined;
+        unsubscribe = CommentRepository.getComment(id, (resp) => {
+          if (!resp.loading) {
+            unsubscribe?.();
+            unsubscribe = undefined;
+            const target = resp.data as Amity.Comment | null;
+            if ((!target || target.isDeleted) && !hasShownReplyNotificationRef.current) {
+              hasShownReplyNotificationRef.current = true;
+              if (!isDesktop) {
+                setDeletedReplyError(message);
+              } else {
+                notification.info({
+                  content: message,
+                  alignment: 'withSidebar',
+                });
+              }
             }
           }
-        }
-      });
-      return () => unsubscribe?.();
-    };
+        });
+        return () => unsubscribe?.();
+      };
 
-    const isL0Comment = !parentId;
-    const commentMessage = isL0Comment ? addReplyParentDeletedText : replyNoLongerAvailableText;
+      const isL0Comment = !parentId;
+      const commentMessage = isL0Comment ? addReplyParentDeletedText : replyNoLongerAvailableText;
 
-    const cleanupComment = checkDeleted(commentId, commentMessage);
-    const cleanupParent = isL2Notification
-      ? checkDeleted(parentId, replyNoLongerAvailableText)
-      : undefined;
+      const cleanupComment = checkDeleted(commentId, commentMessage);
+      const cleanupParent = isL2Notification
+        ? checkDeleted(parentId, replyNoLongerAvailableText)
+        : undefined;
 
-    return () => {
-      cleanupComment?.();
-      cleanupParent?.();
-    };
-  }, [commentId, parentId, rootId]);
+      return () => {
+        cleanupComment?.();
+        cleanupParent?.();
+      };
+    },
+    [commentId, parentId, rootId],
+  );
 
   useEffect(() => {
     // Only scroll if we haven't already and the comment list is available
@@ -274,6 +279,10 @@ export function PostDetailPage({
 
   if (!post) return null;
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
       <div className={styles.postDetailPage__topBar}>
@@ -286,7 +295,7 @@ export function PostDetailPage({
           data-testid={`${pageId}/page_title`}
           className={styles.postDetailPage__topBar__title}
         >
-          {useString('amity_common_post')}
+          {resolveString('amity_common_post')}
         </Typography.TitleBold>
         <Popover
           containerClassName={styles.postDetailPage__topBar__menuBar}

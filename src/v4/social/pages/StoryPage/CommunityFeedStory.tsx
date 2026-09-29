@@ -62,7 +62,7 @@ export const CommunityFeedStory = ({
   onClickCommunity,
   goToDraftStoryPage,
 }: CommunityFeedStoryProps) => {
-  const { accessibilityId, themeStyles } = useAmityPage({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { confirm } = useConfirmContext();
@@ -346,6 +346,10 @@ export const CommunityFeedStory = ({
   }
 
   if (!stories || stories.length === 0) return null;
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={clsx(styles.storyWrapper)} style={themeStyles}>

@@ -53,7 +53,7 @@ export const PlainDraftStoryPage = ({
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { onBack, prevPage } = useNavigation();
   const pageId = 'create_story_page';
-  const { accessibilityId, themeStyles } = useAmityPage({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
 
@@ -273,6 +273,10 @@ export const PlainDraftStoryPage = ({
 
     extractColors();
   }, [file, mediaType, imageMode]);
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div data-testid={accessibilityId} style={themeStyles} className={styles.storyWrapper}>

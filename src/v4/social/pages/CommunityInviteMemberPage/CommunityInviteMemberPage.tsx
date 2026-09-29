@@ -50,7 +50,7 @@ function useCommunityInviteMemberPage({
   const notification = useNotifications();
   const { closePopup } = usePopupContext();
   const { members, setMembers } = useCommunitySetupContext();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { keyboardOffset } = useKeyboardVisibility();
 
   const [search, setSearch] = useState('');
@@ -146,6 +146,7 @@ function useCommunityInviteMemberPage({
   return {
     pageId,
     themeStyles,
+    isExcluded,
     filteredUsers,
     accessibilityId,
     intersectionNode,
@@ -172,6 +173,7 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
   const {
     pageId,
     themeStyles,
+    isExcluded,
     accessibilityId,
     handleClose,
     selectedMembers,
@@ -188,6 +190,10 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
     isLimitCharacterSearch,
     keyboardOffset,
   } = useCommunityInviteMemberPage(props);
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <section

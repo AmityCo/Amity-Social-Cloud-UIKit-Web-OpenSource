@@ -24,7 +24,7 @@ type DraftClipPageProps = {
 
 export const DraftClipPage = ({ targetId, targetType, community }: DraftClipPageProps) => {
   const pageId = 'draft_clip_page';
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { file, isMuted, isAspectFill, setFile, setIsMuted, setIsAspectFill, setClipThumbnail } =
     useClipContext();
   const { files, isLoading, videoThumbnail, uploadFile } = useFilePostUpload(pageId);
@@ -78,6 +78,10 @@ export const DraftClipPage = ({ targetId, targetType, community }: DraftClipPage
   const handleMuteToggle = () => {
     setIsMuted(!isMuted);
   };
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} className={styles.draftClipPage} data-testid={accessibilityId}>

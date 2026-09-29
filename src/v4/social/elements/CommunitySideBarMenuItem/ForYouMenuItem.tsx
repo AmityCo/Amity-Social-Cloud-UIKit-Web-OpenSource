@@ -2,7 +2,6 @@ import { FeedRepository } from '@amityco/ts-sdk';
 import Home from '~/v4/icons/Home';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { ELEMENT_ID } from '~/v4/constants/customization';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -18,7 +17,10 @@ type ForYouMenuItemProps = {
 };
 
 export function ForYouMenuItem({ pageId = '*', componentId = '*' }: ForYouMenuItemProps) {
-  const elementId = ELEMENT_ID.FOR_YOU_SIDEBAR_MENU_ITEM;
+  // Spelled out like its five siblings. Named through the constant it was
+  // the one id no scanner could see, so the table entry that owns it read
+  // as a leftover from a rename.
+  const elementId = 'for_you_sidebar_menu_item';
 
   const { isVisitorOrBot } = useSDK();
   const { onChangePage, page } = useNavigation();

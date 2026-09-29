@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { Title } from '~/v4/social/elements/Title';
@@ -17,7 +17,7 @@ export const BlockedUserPage = () => {
   const pageId = 'blocked_users_page';
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
   const { isDesktop } = useResponsive();
   const { users, isLoading, hasMore, loadMore, refresh } = useBlockedUsersCollection({});
@@ -48,6 +48,10 @@ export const BlockedUserPage = () => {
     );
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div className={styles.blockedUserPage} style={themeStyles} data-testid={accessibilityId}>
       <div className={styles.blockedUserPage__topBar}>
@@ -64,7 +68,7 @@ export const BlockedUserPage = () => {
           <EmptyContent
             pageId={pageId}
             defaultIcon={() => <List className={styles.blockedUserPage__emptyContent__icon} />}
-            text={useString('amity_social_label_nothing_here_yet')}
+            text={resolveString('amity_social_label_nothing_here_yet')}
           />
         </div>
       ) : (

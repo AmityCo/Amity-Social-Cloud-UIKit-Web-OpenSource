@@ -30,12 +30,12 @@ export const CommunityClipFeed = ({ pageId = '*', communityId }: CommunityClipFe
     dataTypes: ['clip'],
   });
 
-  if (isExcluded) return null;
-
   useIntersectionObserver({
     node: intersectionNode,
     onIntersect: () => hasMore && !isLoading && loadMore(),
   });
+
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId}>

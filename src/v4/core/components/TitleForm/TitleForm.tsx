@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 
 interface TitleFormProps {
   pageId?: string;
@@ -28,7 +28,7 @@ export const TitleForm = ({
 
   return (
     <Typography.TitleBold style={themeStyles} data-testid={accessibilityId} className={className}>
-      {textId ? useString(textId) : config.text}
+      {textId ? resolveString(textId) : config.text}
     </Typography.TitleBold>
   );
 };

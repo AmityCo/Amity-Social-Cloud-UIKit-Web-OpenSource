@@ -59,7 +59,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { followStatus } = useFollowCount(userId);
 
   const { onScroll, scrollPosition } = useFeedScrollContext();
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
   const { onBack, goToCreateLivestreamPage } = useNavigation();
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -218,6 +218,10 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
     isCurrentUser ||
     (socialSettings?.userPrivacySetting === 'public' && followStatus !== 'blocked') ||
     followStatus === 'accepted';
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <>

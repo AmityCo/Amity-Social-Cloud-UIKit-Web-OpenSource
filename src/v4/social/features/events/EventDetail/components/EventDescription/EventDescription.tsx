@@ -9,6 +9,7 @@ import TruncateMarkup from 'react-truncate-markup';
 import { Button } from '~/v4/core/components/AriaButton';
 import { AmityEventStatus, AmityEventType } from '@amityco/ts-sdk';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import { EVENT_TYPE, STATUS_LABEL } from '~/v4/social/features/events/constants';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
@@ -34,7 +35,13 @@ export function EventDescription({ event }: EventDescriptionProps) {
 
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
+  // A door onto livestream creation, so it goes with the module. Read directly
+  // because livestream has no element id of its own, the same way EventInfo
+  // and `useModuleFilteredPosts` read it.
+  const isLiveEnabled = useFeatureEnabled('live');
+
   const canSetupLiveStream =
+    isLiveEnabled &&
     (isWithin15Minutes || event.status === AmityEventStatus.Live) &&
     event.room?.status === 'idle' &&
     event.userId === currentUserId;

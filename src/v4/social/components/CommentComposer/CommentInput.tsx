@@ -164,7 +164,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
     const [intersectionNode, setIntersectionNode] = useState<HTMLElement | null>(null);
     const elementId = 'comment_input';
     const { isDesktop } = useResponsive();
-    const { themeStyles, uiReference, config, accessibilityId } = useAmityElement({
+    const { themeStyles, uiReference, config, accessibilityId, isExcluded } = useAmityElement({
       pageId,
       componentId,
       elementId,
@@ -184,6 +184,10 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
         threshold: 0.7,
       },
     });
+
+    // Owned by a module. A reusable element can be rendered on any page,
+    // including one another module owns, so it answers for itself.
+    if (isExcluded) return null;
 
     const editorRef = React.useRef<LexicalEditor | null | undefined>(null);
 

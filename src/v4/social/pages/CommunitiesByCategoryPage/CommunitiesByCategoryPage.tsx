@@ -17,7 +17,7 @@ interface CommunitiesByCategoryPageProps {
 
 export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryPageProps) {
   const pageId = 'communities_by_category_page';
-  const { themeStyles, accessibilityId } = useAmityPage({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
   });
 
@@ -45,6 +45,10 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
   });
 
   const isEmpty = communities.length === 0 && !isLoading;
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div

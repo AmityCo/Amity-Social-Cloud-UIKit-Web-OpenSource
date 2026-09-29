@@ -1,5 +1,5 @@
 import { BackButton } from '~/v4/social/elements';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { usePastEvents } from './hooks/usePastEvents';
 import { Tabs, Typography } from '~/v4/core/components';
 import { EventList } from '~/v4/social/features/events/components/EventList';
@@ -16,6 +16,7 @@ export function PastEvents() {
     accessibilityId,
     PastEventsTab,
     hasCreateEventPermission,
+    isExcluded,
   } = usePastEvents();
 
   const renderEventList = () => (
@@ -23,6 +24,12 @@ export function PastEvents() {
       <EventList {...eventCollection} />
     </div>
   );
+
+  // A module switched off renders nothing, so a stale route or deep link lands
+  // on emptiness rather than a page with holes in it. The flag was resolved
+  // and then dropped: the gate said withhold and the page stayed on screen,
+  // which the id tables report as hidden because they measure the decision.
+  if (isExcluded) return null;
 
   return (
     <section className={styles.pastEvents} style={themeStyles} data-testid={accessibilityId}>
@@ -32,7 +39,7 @@ export function PastEvents() {
       >
         <BackButton onPress={() => onBack()} />
         <Typography.Headline className={styles.pastEvents__headerTitle}>
-          {useString('amity_social_button_past_events')}
+          {resolveString('amity_social_button_past_events')}
         </Typography.Headline>
         <div className={styles.pastEvents__headerActions} />
       </div>
@@ -47,12 +54,12 @@ export function PastEvents() {
           tabPanelClassName={styles.pastEvents__tabPanel}
           tabs={[
             {
-              label: useString('amity_social_tab_tab_all'),
+              label: resolveString('amity_social_tab_tab_all'),
               value: PastEventsTab.All,
               content: renderEventList,
             },
             {
-              label: useString('amity_social_tab_tab_hosting'),
+              label: resolveString('amity_social_tab_tab_hosting'),
               value: PastEventsTab.Hosting,
               content: renderEventList,
             },

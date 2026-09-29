@@ -4,7 +4,8 @@ import { TextArea, Label, TextField } from 'react-aria-components';
 import { Typography } from '~/v4/core/components';
 import { Title } from '~/v4/social/internal-components/Title';
 import clsx from 'clsx';
-import { useString } from '~/v4/core/localization/useString';
+import { resolveString } from '~/v4/core/localization/resolveString';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 // TODO: move this component to core component
 
@@ -53,6 +54,10 @@ export const UnderlineInput = forwardRef(function (
   ref: React.Ref<HTMLTextAreaElement>,
 ) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  // A shared input that its callers identify by element id — livestream_title
+  // and livestream_description among them. Taking the id and never asking about
+  // it left those fields on the Live setup form after the module was gone.
+  const { isExcluded } = useAmityElement({ pageId, componentId, elementId });
 
   useImperativeHandle(ref, () => textareaRef.current!);
 
@@ -71,6 +76,8 @@ export const UnderlineInput = forwardRef(function (
     }
   };
 
+  if (isExcluded) return null;
+
   return (
     <TextField name={name} className={styles.underlineInput}>
       <Label className={styles.underlineInput__label}>
@@ -87,7 +94,7 @@ export const UnderlineInput = forwardRef(function (
           {optional && (
             <Typography.Caption className={styles.underlineInput__optional}>
               {' '}
-              {useString('amity_social_label_optional')}
+              {resolveString('amity_social_label_optional')}
             </Typography.Caption>
           )}
         </div>

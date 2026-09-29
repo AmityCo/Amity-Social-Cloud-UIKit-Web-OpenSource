@@ -3,7 +3,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography, TypographyProps } from '~/v4/core/components';
 import clsx from 'clsx';
 import styles from './SubDescription.module.css';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 
 type SubDescriptionProps = TypographyProps & {
   pageId?: string;
@@ -36,7 +36,7 @@ export const SubDescription = ({
       data-testid={accessibilityId}
       className={clsx(styles.subDescription, className)}
     >
-      {textId ? useString(textId) : config.text}
+      {textId ? resolveString(textId) : config.text}
     </Typography.Caption>
   );
 };

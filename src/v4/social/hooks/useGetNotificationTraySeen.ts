@@ -3,13 +3,22 @@ import { useEffect, useState } from 'react';
 
 const POLLING_INTERVAL = 60 * 1000; // 1 minute
 
-const useGetNotificationTraySeen = () => {
+/**
+ * @param enabled  false stops the subscription and the poll entirely. The
+ *   caller is an element a module owns, and a hook cannot be skipped when that
+ *   module is off — React counts hooks per render — so the skipping happens
+ *   here instead. Without it a switched-off tray button kept asking the
+ *   network every sixty seconds for a badge nobody could see.
+ */
+const useGetNotificationTraySeen = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const [notificationTraySeen, setNotificationTraySeen] = useState<
     Amity.NotificationTraySeen | undefined
   >(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
+
     let unsubscribe: (() => void) | undefined;
 
     const fetchNotificationTraySeen = () => {
@@ -41,7 +50,7 @@ const useGetNotificationTraySeen = () => {
         clearInterval(intervalId);
       }
     };
-  }, []);
+  }, [enabled]);
 
   return { notificationTraySeen, isLoading };
 };

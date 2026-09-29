@@ -38,7 +38,8 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
   const { currentUserId } = useSDK();
   const { onClickUser } = useNavigation();
   const [memberSearch, setMemberSearch] = useState('');
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { members, hasMore, isLoading, loadMore } = useCommunityMembersCollection({
     queryParams: {
@@ -59,6 +60,10 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
     limit: 10,
     enabled: !!community.communityId,
   });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberSearch(e.target.value);

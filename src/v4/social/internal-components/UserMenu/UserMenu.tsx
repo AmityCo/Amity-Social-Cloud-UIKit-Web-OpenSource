@@ -16,6 +16,8 @@ import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { useNetworkState } from 'react-use';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { ELEMENT_ID } from '~/v4/constants/customization';
 import { AmitySharableContentType } from '@amityco/ts-sdk';
 
 interface UserMenuProps {
@@ -41,6 +43,30 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   const { AmityUserProfilePageBehavior } = usePageBehavior();
   const { followStatus } = useFollowCount(user?.userId);
   const isCurrentUser = user?.userId === currentUserId;
+
+  // One button, three jobs — Manage blocked users on your own profile, Block
+  // and Unblock on somebody else's — and all three are User Relationship's.
+  // The id follows the job, because the three are separate rows on iOS and
+  // Android and the gate has to answer for each of them by the same name.
+  //
+  // It had no id at all until PDT-5564, so the row stood on a page the module
+  // had already withheld: `pushPage` refused `blocked_users_page` and tapping
+  // did nothing. `manage_blocked_users_button` was on it as a *test* id, which
+  // nothing gates on — the shape that reads as a working gate from outside.
+  const blockRowElementId = isCurrentUser
+    ? ELEMENT_ID.MANAGE_BLOCKED_USERS_BUTTON
+    : followStatus === 'blocked'
+      ? ELEMENT_ID.UNBLOCK_USER_BUTTON
+      : ELEMENT_ID.BLOCK_USER_BUTTON;
+  const blockRow = useAmityElement({ pageId, componentId, elementId: blockRowElementId });
+
+  // Read before the gate below, not inside it. `useString` is a hook, and
+  // these three sat in a ternary that already made two of them conditional;
+  // hiding the button as well would have varied the count with the module and
+  // taken the subtree down with React #300 the next time it rendered.
+  const manageBlockedUsersLabel = useString('amity_social_label_manage_blocked_users');
+  const unblockUserLabel = useString('amity_social_button_unblock_user');
+  const blockUserLabel = useString('amity_social_button_block_user');
 
   if (!user) return null;
 
@@ -130,20 +156,22 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         </Button>
       )}
 
-      <Button
-        data-testid={`${pageId}/${componentId}/manage_blocked_users_button`}
-        className={styles.userMenu__button}
-        onPress={onBlockUser}
-      >
-        <BlockedUser className={styles.userMenu__blockedUser__icon} />
-        <Typography.BodyBold className={styles.userMenu__blockedUser__text}>
-          {isCurrentUser
-            ? useString('amity_social_label_manage_blocked_users')
-            : followStatus === 'blocked'
-              ? useString('amity_social_button_unblock_user')
-              : useString('amity_social_button_block_user')}
-        </Typography.BodyBold>
-      </Button>
+      {!blockRow.isExcluded && (
+        <Button
+          data-testid={blockRow.accessibilityId}
+          className={styles.userMenu__button}
+          onPress={onBlockUser}
+        >
+          <BlockedUser className={styles.userMenu__blockedUser__icon} />
+          <Typography.BodyBold className={styles.userMenu__blockedUser__text}>
+            {isCurrentUser
+              ? manageBlockedUsersLabel
+              : followStatus === 'blocked'
+                ? unblockUserLabel
+                : blockUserLabel}
+          </Typography.BodyBold>
+        </Button>
+      )}
       <CopyLinkButton
         pageId={pageId}
         componentId={componentId}

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useModuleFilteredPosts } from '~/v4/social/hooks/useModuleFilteredPosts';
 import {
   PostContent,
   AmityPostCategory,
@@ -52,11 +53,14 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
   const componentId = 'user_feed';
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { AmityUserFeedComponentBehavior } = usePageBehavior();
-  const { accessibilityId, themeStyles } = useAmityComponent({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
 
+  // See CommunityFeed: with matchingOnlyParentPost true, leaving a type out of
+  // this list does not remove posts that carry it in a child, so the list stays
+  // whole and the filter below does the work.
   const dataTypes = useMemo(() => {
     return [
       FeedDataTypeEnum.Text,
@@ -68,12 +72,27 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
     ];
   }, []);
 
-  const { posts, hasMore, loadMore, refresh, isLoading, error } = useUserFeed({
+  const {
+    posts: feedPosts,
+    hasMore,
+    loadMore,
+    refresh,
+    isLoading,
+    error,
+  } = useUserFeed({
     userId,
     feedSources,
+    // true, matching Android everywhere and iOS's default. iOS passes false in
+    // one place only — MediaFeedViewModel, where the point is to match a child
+    // type — and a general feed is not that. The livestream post that reached
+    // this feed is taken out below instead.
     matchingOnlyParentPost: true,
     dataTypes,
   });
+
+  // See CommunityFeed: the request names its types, and this does not depend
+  // on how the server matches them.
+  const posts = useModuleFilteredPosts(feedPosts);
 
   useIntersectionObserver({
     onIntersect: () => {
@@ -86,6 +105,10 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
       threshold: 0.7,
     },
   });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const renderUserFeed = () => {
     if (!isLoading && followStatus === 'blocked')

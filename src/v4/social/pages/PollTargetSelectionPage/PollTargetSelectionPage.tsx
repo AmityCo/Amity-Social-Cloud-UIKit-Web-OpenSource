@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -27,7 +27,7 @@ export function PollTargetSelectionPage() {
   const { client } = useSDK();
 
   const pageId = 'select_poll_target_page';
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { onBack } = useNavigation();
@@ -40,7 +40,7 @@ export function PollTargetSelectionPage() {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const choosePollTypeLabel = useString('amity_social_label_choose_poll_type');
+  const choosePollTypeLabel = resolveString('amity_social_label_choose_poll_type');
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
@@ -55,6 +55,10 @@ export function PollTargetSelectionPage() {
     },
     node: intersectionNode,
   });
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.pollTargetSelectionPage} style={themeStyles}>
@@ -111,7 +115,7 @@ export function PollTargetSelectionPage() {
       </div>
       <div className={styles.pollTargetSelectionPage__line} />
       <div className={styles.pollTargetSelectionPage__myCommunities}>
-        {useString('amity_social_button_my_communities')}
+        {resolveString('amity_social_button_my_communities')}
       </div>
       {communities
         .filter((community) => canCreatePostCommunity(client, community))

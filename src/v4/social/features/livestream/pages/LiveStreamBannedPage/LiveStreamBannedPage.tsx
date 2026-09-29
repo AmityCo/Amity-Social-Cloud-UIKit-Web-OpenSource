@@ -13,8 +13,12 @@ import { PAGE_ID } from '~/v4/constants/customization';
 
 export function LiveStreamBannedPage() {
   const pageId = PAGE_ID.LIVESTREAM_BANNED_PAGE;
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <section style={themeStyles} className={styles.liveStreamBannedPage}>
       <div className={styles.liveStreamBannedPage__header}>
