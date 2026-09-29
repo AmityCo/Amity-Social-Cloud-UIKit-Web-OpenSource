@@ -5,11 +5,16 @@ const QUERY_LIMIT = 20;
 
 type UseUserFeedParams = Parameters<typeof FeedRepository.getUserFeed>[0];
 
-export default function useUserFeed({ userId, limit = QUERY_LIMIT, ...params }: UseUserFeedParams) {
+export default function useUserFeed(
+  { userId, limit = QUERY_LIMIT, ...params }: UseUserFeedParams,
+  // A caller whose own module is off cannot skip this hook — React counts them —
+  // so it says so here and no request goes out.
+  enabled = true,
+) {
   const { items, ...rest } = useLiveCollectionV4({
     fetcher: FeedRepository.getUserFeed,
     params: { userId, limit, ...params },
-    shouldCall: !!userId,
+    shouldCall: enabled && !!userId,
   });
 
   // Filter out posts with children type 'file' or 'audio'

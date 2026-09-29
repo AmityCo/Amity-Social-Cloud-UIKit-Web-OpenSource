@@ -20,9 +20,9 @@ type UserRelationshipPageProps = {
 };
 
 export const UserRelationshipPage: FC<UserRelationshipPageProps> = ({ userId, selectedTab }) => {
-  const pageId = 'user_releationship_page';
+  const pageId = 'user_relationship_page';
 
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
   const { onBack } = useNavigation();
 
@@ -44,6 +44,10 @@ export const UserRelationshipPage: FC<UserRelationshipPageProps> = ({ userId, se
       },
     },
   ];
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.userRelationshipPage} style={themeStyles} data-testid={accessibilityId}>

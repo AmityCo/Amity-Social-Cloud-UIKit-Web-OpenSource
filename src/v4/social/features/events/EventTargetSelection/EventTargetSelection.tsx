@@ -24,9 +24,16 @@ export function EventTargetSelection() {
     themeStyles,
     setIntersectionNode,
     isLoading,
+    isExcluded,
   } = useEventTargetSelection();
   const { AmityEventTargetSelectionPageBehavior } = usePageBehavior();
   const myCommunitiesLabel = useString('amity_social_button_my_communities');
+
+  // A module switched off renders nothing, so a stale route or deep link lands
+  // on emptiness rather than a page with holes in it. The flag was resolved
+  // and then dropped: the gate said withhold and the page stayed on screen,
+  // which the id tables report as hidden because they measure the decision.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.eventTargetSelection} style={themeStyles}>

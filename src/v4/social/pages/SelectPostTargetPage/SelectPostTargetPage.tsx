@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -33,7 +33,7 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
   const { isDesktop } = useResponsive();
   const { confirm } = useConfirmContext();
   const { client, currentUserId } = useSDK();
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { openPopup, closePopup } = usePopupContext();
   const { user } = useUser({ userId: currentUserId });
   const { AmityPostTargetSelectionPage } = usePageBehavior();
@@ -79,6 +79,10 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
       }
     }
   }, [file, selectedCommunity]);
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.selectPostTargetPage} style={themeStyles}>
@@ -172,7 +176,7 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
       </div>
       <div className={styles.selectPostTargetPage__line} />
       <div className={styles.selectPostTargetPage__myCommunities}>
-        {useString('amity_social_button_my_communities')}
+        {resolveString('amity_social_button_my_communities')}
       </div>
       <div className={styles.selectPostTargetPage__myCommunitiesList}>
         {communities

@@ -18,7 +18,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 99999;
+
+  /*
+   * Above react-aria's overlay layer, which hardcodes `zIndex: 100000` inline
+   * (@react-aria/overlays useOverlayPosition). The notification tray opens in
+   * one of those popovers, so at 99999 every toast it raised — the one saying
+   * the item cannot be opened included — came up behind the tray that raised
+   * it. Not a number to lower without checking what is on top now.
+   */
+  z-index: 100001;
   pointer-events: none;
   padding: var(--asc-spacing-m1);
 }

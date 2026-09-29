@@ -10,7 +10,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNetworkState } from 'react-use';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { useAmityPage, useAmityElement } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import {
   AmityPostComposerEditOptions,
@@ -66,12 +66,24 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const isEventPostEdit = isEventPost(post);
   const eventId = isEventPostEdit ? getPostEventId(post) : undefined;
 
+  // The Products tab in the @ mention menu was gated on the network's product
+  // catalogue setting alone, which answers whether the network has products —
+  // not whether this customer bought the module. A build without Product still
+  // offered the tab and still searched products as you typed, which is R6 as
+  // well as R2. product_tag is Product's own id, so asking it here ties the tab
+  // to the module the way every other surface is tied.
+  const productMention = useAmityElement({
+    pageId,
+    componentId: '*',
+    elementId: 'product_tag',
+  });
+
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const drawerContentRef = useRef<HTMLDivElement>(null);
 
   const { isDesktop } = useResponsive();
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { closePopup } = usePopupContext();
@@ -838,6 +850,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     return null;
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div className={styles.editPost} style={themeStyles}>
       {isDesktop && notifications}
@@ -895,7 +911,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               initialText={textValue.text}
               initialMentions={post.metadata?.mentioned}
               initialHashtags={post.metadata?.hashtags}
-              enableProductMention={!isEventPostEdit}
+              enableProductMention={!productMention.isExcluded && !isEventPostEdit}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));

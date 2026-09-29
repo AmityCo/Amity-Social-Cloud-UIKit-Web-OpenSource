@@ -1,5 +1,6 @@
 import { MessageRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 type UseMessagesCollectionParams = Parameters<typeof MessageRepository.getMessages>[0];
 
@@ -20,28 +21,32 @@ export default function useMessagesCollection(
     }
   }, []);
 
-  useEffect(() => {
-    if (!params.subChannelId || !shouldFetch) return;
+  useSdkEffect(
+    MessageRepository.getMessages,
+    () => {
+      if (!params.subChannelId || !shouldFetch) return;
 
-    const unsubscriber = MessageRepository.getMessages(
-      params,
-      ({ data, loading, error, hasNextPage, onNextPage }) => {
-        setIsLoading(loading);
+      const unsubscriber = MessageRepository.getMessages(
+        params,
+        ({ data, loading, error, hasNextPage, onNextPage }) => {
+          setIsLoading(loading);
 
-        if (!loading && data) {
-          setItems([...data]);
-          setHasMore(hasNextPage);
-          loadMoreRef.current = hasNextPage ? onNextPage : null;
-        }
+          if (!loading && data) {
+            setItems([...data]);
+            setHasMore(hasNextPage);
+            loadMoreRef.current = hasNextPage ? onNextPage : null;
+          }
 
-        if (error) setError(error);
-      },
-    );
+          if (error) setError(error);
+        },
+      );
 
-    return () => {
-      unsubscriber();
-    };
-  }, [shouldFetch]);
+      return () => {
+        unsubscriber();
+      };
+    },
+    [shouldFetch],
+  );
 
   return {
     messages: items,

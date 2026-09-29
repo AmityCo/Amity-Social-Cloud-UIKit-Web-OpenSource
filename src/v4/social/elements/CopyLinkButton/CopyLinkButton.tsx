@@ -29,12 +29,16 @@ export const CopyLinkButton = ({
 }: CopyLinkButtonProps) => {
   const notification = useNotifications();
   const elementId = 'copy_link';
-  const { resolveText } = useAmityElement({ pageId, componentId, elementId });
+  const { resolveText, isExcluded } = useAmityElement({ pageId, componentId, elementId });
 
   const { link, isLoading } = useSharableLink({
     model,
     referenceId,
   });
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   if (!link || isLoading) return null;
 

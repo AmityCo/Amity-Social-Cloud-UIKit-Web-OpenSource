@@ -49,12 +49,16 @@ export const PollDurationOptions = ({
 }: PollDurationOptionsProps) => {
   const componentId = 'poll_duration_options';
 
-  const { themeStyles, accessibilityId } = useAmityComponent({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
 
   const { isDesktop } = useResponsive();
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
   const timeNow = now(getLocalTimeZone());
 
   const [tempDuration, setTempDuration] = useState(duration);

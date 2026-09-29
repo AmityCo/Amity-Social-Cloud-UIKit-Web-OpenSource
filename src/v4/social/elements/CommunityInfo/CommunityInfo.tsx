@@ -10,6 +10,13 @@ interface CommunityInfoProps {
   text: string;
   pageId?: string;
   componentId?: string;
+  /**
+   * Which id this instance answers to. The community header renders two of
+   * these — a post count and a member count — and they belong to different
+   * modules, so one shared id could not gate them apart. Defaults to the
+   * original id so every other caller keeps its customisation key.
+   */
+  elementId?: string;
   onClick?: () => void;
   countTestId?: string;
 }
@@ -17,12 +24,12 @@ interface CommunityInfoProps {
 export const CommunityInfo = ({
   pageId = '*',
   componentId = '*',
+  elementId = 'community_info',
   count,
   text,
   onClick,
   countTestId,
 }: CommunityInfoProps) => {
-  const elementId = 'community_info';
   const { config, accessibilityId, themeStyles, isExcluded } = useAmityElement({
     pageId,
     componentId,

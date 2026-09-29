@@ -30,11 +30,17 @@ export const CommunitySearchResult = ({
   const componentId = 'community_search_result';
 
   const { isDesktop } = useResponsive();
-  const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const { goToCommunityProfilePage, goToCommunitiesByCategoryPage } = useNavigation();
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.communitySearchResult}>

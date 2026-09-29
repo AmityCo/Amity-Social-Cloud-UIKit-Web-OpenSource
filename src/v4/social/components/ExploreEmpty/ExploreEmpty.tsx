@@ -16,7 +16,11 @@ export function ExploreEmpty({ pageId = '*' }: ExploreEmptyProps) {
   const componentId = 'explore_empty';
 
   const { goToCreateCommunityPage } = useNavigation();
-  const { themeStyles, accessibilityId } = useAmityComponent({ componentId, pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ componentId, pageId });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.exploreEmpty} style={themeStyles} data-testid={accessibilityId}>

@@ -246,6 +246,42 @@ export class AmityUIKitManager {
     return this.isConnected;
   }
 
+  /**
+   * What the network bought, and whether core is acting on it.
+   *
+   * One read answers all three questions — the grants, the enforcement mode and
+   * the whole catalog — so the UIKit gates its surfaces on what the customer
+   * actually has instead of a plan hardcoded here. It is never gated itself, so
+   * it answers even when every module is revoked.
+   *
+   * Through the SDK rather than `client.http`. The endpoint is the same one, and
+   * the reason to stop calling it directly is ownership: the request, its
+   * caching and the shape it decodes to belong to the SDK, and a second caller
+   * hitting the path raw is a second answer to keep in step. That also means the
+   * `X-No-Cache` this used to send is now the SDK's business — calling the
+   * getter *is* the refresh.
+   *
+   * The decode is the SDK's too. `parseModuleSettings` already reads an unknown
+   * mode as `off`, counts only a literal `true` as a grant and keeps a catalog
+   * key this build predates — REQ-001/REQ-002 of `AmityModuleEnforcementMode`,
+   * with P0 cases behind them. The UIKit kept a copy of all of it while it
+   * owned the request; two decoders for one payload is how a wire rename ends
+   * up read by one of them and not the other.
+   *
+   * Throwing rather than returning null on a failed read is deliberate: the
+   * retry and the fail-open both live in `useNetworkEntitlement`, where a
+   * rejected query becomes `entitlement: null` and grants everything.
+   *
+   * The SDK also ships `resolveModuleAvailability`, and the UIKit deliberately
+   * does not use it: it walks the prerequisite chain over the grants alone,
+   * which cannot see the customer's own `config.json`. Switch Community off in
+   * the config with everything granted and it would still call Post available.
+   * There is one walk, in `isFeatureEnabled`, over both sources.
+   */
+  public static async syncNetworkEntitlement(): Promise<Amity.ModuleSettings> {
+    return ASCClient.getModuleSettings();
+  }
+
   public static async syncNetworkConfig(): Promise<NetworkConfig> {
     try {
       const response = await AmityUIKitManager.instance?.client?.http.get(

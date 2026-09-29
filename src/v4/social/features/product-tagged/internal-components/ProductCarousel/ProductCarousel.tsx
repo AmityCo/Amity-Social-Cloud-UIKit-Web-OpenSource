@@ -10,7 +10,8 @@ import styles from './ProductCarousel.module.css';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import ChevronLeft from '~/v4/icons/ChevronLeft';
 import { Button } from '~/v4/core/components/AriaButton';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
+import { ELEMENT_ID } from '~/v4/constants/customization';
 import { AnalyticsSourceTypeEnum } from '@amityco/ts-sdk';
 
 export interface ProductCarouselProps {
@@ -28,6 +29,11 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
     sourceId: post.postId,
   });
   const { accessibilityId } = useAmityComponent({ pageId, componentId });
+  const { isExcluded: isProductTagExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId: ELEMENT_ID.PRODUCT_TAG,
+  });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -106,6 +112,13 @@ export function ProductCarousel({ pageId = '*', componentId = '*', post }: Produ
   }, [allProductTags, showProductTagList]);
 
   if (allProductTags.length === 0) {
+    return null;
+  }
+
+  // The cards inside carry the gate; this wrapper carried none, so Product off
+  // emptied the row and left its "Products tagged" header drawing above the
+  // engagement bar. Rule 3: the container goes with its last visible child.
+  if (isProductTagExcluded) {
     return null;
   }
 

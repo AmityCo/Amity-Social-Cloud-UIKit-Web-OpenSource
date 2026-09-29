@@ -1,5 +1,5 @@
 import { Key } from 'react-aria';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { FeedDataTypeEnum, UserRepository } from '@amityco/ts-sdk';
 import { useClickAway } from 'react-use';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
@@ -15,6 +15,7 @@ import useSearchPostWithHashtagCollection from '~/v4/social/hooks/collections/us
 import useSemanticSearchPostCollection from '~/v4/social/hooks/collections/useSemanticSearchPostCollection';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useGlobalSearchTabs } from '~/v4/social/hooks/useGlobalSearchTabs';
 import styles from './SocialGlobalSearchPage.module.css';
 
 enum AmityGlobalSearchType {
@@ -22,13 +23,21 @@ enum AmityGlobalSearchType {
   Community = 'community',
 }
 
-const useGlobalSearchViewModel = ({ keyword }: { keyword?: string }) => {
+const useGlobalSearchViewModel = ({
+  keyword,
+  canSearchCommunities,
+}: {
+  keyword?: string;
+  canSearchCommunities: boolean;
+}) => {
   const { searchValue, setSearchValue } = useSearchResultContext();
   const previousKeywordRef = useRef<string | undefined>(keyword ?? searchValue);
   const isInitialMount = useRef<boolean>(true);
 
+  // Seeded from what this build can search. Starting on Community regardless
+  // meant a build without it opened asking for communities.
   const [searchType, setSearchType] = useState<AmityGlobalSearchType>(
-    AmityGlobalSearchType.Community,
+    canSearchCommunities ? AmityGlobalSearchType.Community : AmityGlobalSearchType.User,
   );
 
   // Update searchValue when keyword prop changes (for navigation back from post detail)
@@ -124,9 +133,14 @@ const useGlobalSearchViewModel = ({ keyword }: { keyword?: string }) => {
 export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
   const pageId = 'social_global_search_page';
 
-  const DEFAULT_ACTIVE_TAB: Key = 'posts';
   const ref = useRef<HTMLDivElement>(null);
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
+
+  // Which tabs this build has. Discovery survives Community off, so the row
+  // stays and only the tabs whose module went may go — and the tab it lands on
+  // has to be one that is still there, or the body never draws.
+  const searchTabs = useGlobalSearchTabs(pageId);
+  const DEFAULT_ACTIVE_TAB: Key = searchTabs.first ?? 'users';
   const [activeTab, setActiveTab] = useState<Key>(DEFAULT_ACTIVE_TAB);
   const { openSearchResult, setOpenSearchResult, resetSearchValue } = useSearchResultContext();
   const {
@@ -136,7 +150,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
     search,
     searchValue,
     setSearchType,
-  } = useGlobalSearchViewModel({ keyword });
+  } = useGlobalSearchViewModel({ keyword, canSearchCommunities: searchTabs.searchesCommunities });
   const { isDesktop } = useResponsive();
 
   // Show search results if there's an initial keyword or current search value
@@ -153,6 +167,13 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
     }
   }, [keyword]);
 
+  // R5: a tab that the row does not draw is a tab whose body never draws.
+  useEffect(() => {
+    if (!searchTabs.isVisible(activeTab as never) && searchTabs.first) {
+      setActiveTab(searchTabs.first);
+    }
+  }, [activeTab, searchTabs.first]);
+
   useClickAway(ref, () => {
     if (isDesktop) {
       resetSearchValue();
@@ -161,63 +182,83 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
     }
   });
 
+  // resolveString, not useString: it is a plain function, so a tab can be built
+  // conditionally without the entry count changing the hook count. Building the
+  // whole row and filtering after was the way around React #300; resolving the
+  // label outside the hook rules removes the constraint instead of dodging it.
   const tabs = [
-    {
-      value: 'posts',
-      label: useString('amity_social_label_title_posts'),
-      accessibilityId: `${pageId}/top_search_bar/posts`,
-      content: () => (
-        <PostSearchResult
-          pageId={pageId}
-          keyword={searchValue}
-          isLoading={postCollection.loading}
-          postCollection={postCollection.posts as Amity.Post[]}
-          onLoadMore={() => {
-            if (postCollection.hasMore && postCollection.loading === false) {
-              postCollection.loadMore();
-            }
-          }}
-        />
-      ),
-    },
-    {
-      value: 'communities',
-      label: useString('amity_social_button_social_home_communities_button'),
-      accessibilityId: `${pageId}/top_search_bar/communities`,
-      content: () => (
-        <CommunitySearchResult
-          pageId={pageId}
-          isLoading={communityCollection.isLoading}
-          onClosePopover={() => setOpenSearchResult(false)}
-          communityCollection={communityCollection.communities}
-          onLoadMore={() => {
-            if (communityCollection.hasMore && communityCollection.isLoading === false) {
-              communityCollection.loadMore();
-            }
-          }}
-        />
-      ),
-    },
-    {
-      value: 'users',
-      label: useString('amity_social_tab_tab_users'),
-      accessibilityId: `${pageId}/top_search_bar/users`,
-      content: () => (
-        <UserSearchResult
-          pageId={pageId}
-          keyword={searchValue}
-          isLoading={userCollection.isLoading}
-          userCollection={userCollection.users}
-          onClosePopover={() => setOpenSearchResult(false)}
-          onLoadMore={() => {
-            if (userCollection.hasMore && userCollection.isLoading === false) {
-              userCollection.loadMore();
-            }
-          }}
-        />
-      ),
-    },
+    ...(searchTabs.isVisible('posts')
+      ? [
+          {
+            value: 'posts',
+            label: resolveString('amity_social_label_title_posts'),
+            accessibilityId: `${pageId}/top_search_bar/search_posts_tab_button`,
+            content: () => (
+              <PostSearchResult
+                pageId={pageId}
+                keyword={searchValue}
+                isLoading={postCollection.loading}
+                postCollection={postCollection.posts as Amity.Post[]}
+                onLoadMore={() => {
+                  if (postCollection.hasMore && postCollection.loading === false) {
+                    postCollection.loadMore();
+                  }
+                }}
+              />
+            ),
+          },
+        ]
+      : []),
+    ...(searchTabs.isVisible('communities')
+      ? [
+          {
+            value: 'communities',
+            label: resolveString('amity_social_button_social_home_communities_button'),
+            accessibilityId: `${pageId}/top_search_bar/search_communities_tab_button`,
+            content: () => (
+              <CommunitySearchResult
+                pageId={pageId}
+                isLoading={communityCollection.isLoading}
+                onClosePopover={() => setOpenSearchResult(false)}
+                communityCollection={communityCollection.communities}
+                onLoadMore={() => {
+                  if (communityCollection.hasMore && communityCollection.isLoading === false) {
+                    communityCollection.loadMore();
+                  }
+                }}
+              />
+            ),
+          },
+        ]
+      : []),
+    ...(searchTabs.isVisible('users')
+      ? [
+          {
+            value: 'users',
+            label: resolveString('amity_social_tab_tab_users'),
+            accessibilityId: `${pageId}/top_search_bar/search_users_tab_button`,
+            content: () => (
+              <UserSearchResult
+                pageId={pageId}
+                keyword={searchValue}
+                isLoading={userCollection.isLoading}
+                userCollection={userCollection.users}
+                onClosePopover={() => setOpenSearchResult(false)}
+                onLoadMore={() => {
+                  if (userCollection.hasMore && userCollection.isLoading === false) {
+                    userCollection.loadMore();
+                  }
+                }}
+              />
+            ),
+          },
+        ]
+      : []),
   ];
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.socialGlobalSearchPage} style={themeStyles}>

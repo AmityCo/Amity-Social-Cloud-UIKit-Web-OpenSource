@@ -1,6 +1,7 @@
 import { ChannelRepository } from '@amityco/ts-sdk';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 import { Permissions } from '~/v4/social/constants/permissions';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { computeCanPinMessage } from '~/v4/chat/utils/computeCanPinMessage';
@@ -81,19 +82,33 @@ export const useCanPinMessage = ({ channelId, channel, membership }: UseCanPinMe
   // streamer, then recompute the permission arm.
   const [permissionsVersion, setPermissionsVersion] = useState(0);
   const wasStreamerRef = useRef(isStreamer);
-  useEffect(() => {
-    const wasStreamer = wasStreamerRef.current;
-    wasStreamerRef.current = isStreamer;
-    if (!wasStreamer || isStreamer || !channelId) return;
+  // Through useSdkEffect, not useEffect: this reads a channel, and Channel is
+  // owned by chat. MessageBubble and LivestreamPinnedMessage both call this hook
+  // above their own render, so a caller's own isExcluded gate comes too late —
+  // React runs a mounted component's effects even when it renders null, and the
+  // read would go out for a module the network did not buy. (Spelling that gate
+  // out in full here would read as a real one to the static check.)
+  //
+  // The whole body is inside the gate, streamer tracking included: with chat off
+  // there is no pin control, so there is nothing for the ref to decide. A
+  // features change remounts the tree, so the ref does not come back stale.
+  useSdkEffect(
+    ChannelRepository.getChannel,
+    () => {
+      const wasStreamer = wasStreamerRef.current;
+      wasStreamerRef.current = isStreamer;
+      if (!wasStreamer || isStreamer || !channelId) return;
 
-    let cancelled = false;
-    refreshChannelPermissions(channelId).then(() => {
-      if (!cancelled) setPermissionsVersion((version) => version + 1);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [isStreamer, channelId]);
+      let cancelled = false;
+      refreshChannelPermissions(channelId).then(() => {
+        if (!cancelled) setPermissionsVersion((version) => version + 1);
+      });
+      return () => {
+        cancelled = true;
+      };
+    },
+    [isStreamer, channelId],
+  );
 
   const hasPinPermission = useMemo(() => {
     if (!client || !channelId || !currentUserId) return false;

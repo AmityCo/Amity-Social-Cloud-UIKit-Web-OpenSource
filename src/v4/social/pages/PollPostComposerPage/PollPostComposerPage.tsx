@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import styles from './PollPostComposerPage.module.css';
 import { FileTrigger, Form, Input, Label, TextArea, TextField } from 'react-aria-components';
 import { Button as AriaButton } from '~/v4/core/components/AriaButton';
@@ -93,17 +93,17 @@ export const PollPostComposerPage = ({
 }: PollPostComposerPageProps) => {
   const pageId = 'poll_post_composer_page';
 
-  const { themeStyles, accessibilityId } = useAmityPage({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
   });
   const { onBack, prevPage } = useNavigation();
 
   const timeDuration = [
-    { value: 1, label: useString('amity_social_button_poll_duration_1_day') },
-    { value: 3, label: useString('amity_social_button_poll_duration_3_days') },
-    { value: 7, label: useString('amity_social_button_poll_duration_7_days') },
-    { value: 14, label: useString('amity_social_button_poll_duration_14_days') },
-    { value: 30, label: useString('amity_social_button_poll_duration_30_days') },
+    { value: 1, label: resolveString('amity_social_button_poll_duration_1_day') },
+    { value: 3, label: resolveString('amity_social_button_poll_duration_3_days') },
+    { value: 7, label: resolveString('amity_social_button_poll_duration_7_days') },
+    { value: 14, label: resolveString('amity_social_button_poll_duration_14_days') },
+    { value: 30, label: resolveString('amity_social_button_poll_duration_30_days') },
   ];
   const { community } = useCommunity({ communityId: targetId });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
@@ -484,7 +484,7 @@ export const PollPostComposerPage = ({
             }}
           >
             <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
-              {useString('amity_social_button_retry')}
+              {resolveString('amity_social_button_retry')}
             </Typography.Body>
           </Button>
           <Button
@@ -495,7 +495,7 @@ export const PollPostComposerPage = ({
             }}
           >
             <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
-              {useString('amity_social_label_upload_new_image')}
+              {resolveString('amity_social_label_upload_new_image')}
             </Typography.Body>
           </Button>
         </div>
@@ -540,6 +540,10 @@ export const PollPostComposerPage = ({
     );
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div
       style={themeStyles}
@@ -568,7 +572,7 @@ export const PollPostComposerPage = ({
               pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
             }
           >
-            {useString('amity_common_post')}
+            {resolveString('amity_common_post')}
           </AriaButton>
         </div>
         <TextField name="title" className={styles.pollPostComposerPage__pollQuestion}>
@@ -587,7 +591,7 @@ export const PollPostComposerPage = ({
             name="title"
             value={title}
             maxLength={MAX_POST_TITLE_LENGTH}
-            placeholder={useString('amity_social_placeholder_hint_poll_headline')}
+            placeholder={resolveString('amity_social_placeholder_hint_poll_headline')}
             className={styles.pollPostComposerPage__postTitle__input}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
             onChange={(e) => {
@@ -614,7 +618,7 @@ export const PollPostComposerPage = ({
             onChange={onChange}
             className={styles.pollPostComposerPage__pollQuestion__input}
             placeholderClassName={styles.pollPostComposerPage__pollQuestion__placeholder}
-            placeholder={useString('amity_social_placeholder_hint_poll_question')}
+            placeholder={resolveString('amity_social_placeholder_hint_poll_question')}
             attachmentAmount={0}
             isClipPost={false}
             isPollPost
@@ -624,7 +628,7 @@ export const PollPostComposerPage = ({
               <Typography.Caption
                 className={styles.pollPostComposerPage__pollQuestion__validationText}
               >
-                {useString(
+                {resolveString(
                   'amity_social_error_poll_question_char_limit_error',
                   MAX_POLL_QUESTION_LENGTH,
                 )}
@@ -646,7 +650,7 @@ export const PollPostComposerPage = ({
               <PollOptionsDesc pageId={pageId} />
             ) : (
               <Typography.Caption className={styles.pollPostComposerPage__pollOptions__desc}>
-                {useString('amity_social_label_poll_min_options_with_images')}
+                {resolveString('amity_social_label_poll_min_options_with_images')}
               </Typography.Caption>
             )}
           </Label>
@@ -678,7 +682,7 @@ export const PollPostComposerPage = ({
                       <Typography.Caption
                         className={styles.pollPostComposerPage__pollQuestion__validationText}
                       >
-                        {useString(
+                        {resolveString(
                           'amity_social_error_poll_option_char_limit_error',
                           MAX_OPTION_LENGTH,
                         )}
@@ -768,7 +772,7 @@ export const PollPostComposerPage = ({
                     <Typography.CaptionBold
                       className={styles.pollPostComposerPage__imagePollOptions__addOptionCaption}
                     >
-                      {useString('amity_social_button_add_option')}
+                      {resolveString('amity_social_button_add_option')}
                     </Typography.CaptionBold>
                   </div>
                 </div>
@@ -822,7 +826,7 @@ export const PollPostComposerPage = ({
                 >
                   <Typography.Body data-testid="poll-duration">
                     {selectedDate
-                      ? useString('amity_social_poll_post_composer_page_ends_on')
+                      ? resolveString('amity_social_poll_post_composer_page_ends_on')
                           .replace('%s', formatEndDate ?? '')
                           .replace('%s', formatEndTime ?? '')
                       : duration && duration.label}
@@ -855,7 +859,7 @@ export const PollPostComposerPage = ({
               data-testid="poll-duration"
               className={styles.pollPostComposerPage__duration__caption}
             >
-              {useString('amity_social_poll_post_composer_page_ends_on')
+              {resolveString('amity_social_poll_post_composer_page_ends_on')
                 .replace('%s', formattedDate ?? '')
                 .replace('%s', formatEndTime ?? '')}
             </Typography.Caption>
@@ -872,7 +876,7 @@ export const PollPostComposerPage = ({
                 pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
               }
             >
-              {useString('amity_social_button_post_composer_create_button')}
+              {resolveString('amity_social_button_post_composer_create_button')}
             </AriaButton>
           </div>
         )}
@@ -882,14 +886,14 @@ export const PollPostComposerPage = ({
         {isCreating && (
           <Notification
             icon={<Spinner />}
-            content={useString('amity_social_toast_poll_create_posting_toast')}
+            content={resolveString('amity_social_toast_poll_create_posting_toast')}
             alignment="fixed"
           />
         )}
         {isError && (
           <Notification
             duration={3000}
-            content={useString('amity_social_toast_post_create_generic_error_message')}
+            content={resolveString('amity_social_toast_post_create_generic_error_message')}
             alignment="fixed"
             icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
           />

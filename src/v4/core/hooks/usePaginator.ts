@@ -99,6 +99,18 @@ const usePaginatorCore = <T>({
         if (!shouldPlaceAd) return [newItem];
 
         const ad = recommendedAds[runningAdIndex];
+
+        // No ad to place is not the same as a slot to fill with nothing. With
+        // `recommendedAds` empty, `length - 1` is -1, the wrap always resets the
+        // index to 0, and `recommendedAds[0]` is undefined — so the tuple became
+        // `[post, undefined]` and the `flatMap` below put that undefined in the
+        // list. Feed reads `item.postId` off every entry and threw on it.
+        //
+        // It only shows when a slot is reached, which depends on how many posts
+        // came through: a feed that filters some out lands on `runningIndex %
+        // frequency.value === 0` where the unfiltered one did not.
+        if (!ad) return [newItem];
+
         runningAdIndex = runningAdIndex + 1 > recommendedAds.length - 1 ? 0 : runningAdIndex + 1;
         return [newItem, ad];
       });

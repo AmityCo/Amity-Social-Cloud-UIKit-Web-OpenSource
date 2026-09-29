@@ -1,5 +1,6 @@
 import { JoinRequestStatusEnum, PostRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 type useSemanticSearchPostCollectionParams = Parameters<
   typeof PostRepository.semanticSearchPosts
@@ -25,35 +26,39 @@ export default function useSemanticSearchPostCollection({
     }
   }, []);
 
-  useEffect(() => {
-    if (!query) return;
+  useSdkEffect(
+    PostRepository.semanticSearchPosts,
+    () => {
+      if (!query) return;
 
-    const unsubscriber = PostRepository.semanticSearchPosts(
-      {
-        ...props,
-        query,
-        dataTypes,
-        targetId,
-        targetType,
-        limit: 20,
-      },
-      ({ data, loading, error, hasNextPage, onNextPage }) => {
-        setIsLoading(loading);
+      const unsubscriber = PostRepository.semanticSearchPosts(
+        {
+          ...props,
+          query,
+          dataTypes,
+          targetId,
+          targetType,
+          limit: 20,
+        },
+        ({ data, loading, error, hasNextPage, onNextPage }) => {
+          setIsLoading(loading);
 
-        if (!loading && data) {
-          setItems([...data]);
-          setHasMore(hasNextPage);
-          loadMoreRef.current = hasNextPage ? onNextPage : null;
-        }
+          if (!loading && data) {
+            setItems([...data]);
+            setHasMore(hasNextPage);
+            loadMoreRef.current = hasNextPage ? onNextPage : null;
+          }
 
-        if (error) setError(error);
-      },
-    );
+          if (error) setError(error);
+        },
+      );
 
-    return () => {
-      unsubscriber();
-    };
-  }, [query, targetId, targetType]);
+      return () => {
+        unsubscriber();
+      };
+    },
+    [query, targetId, targetType],
+  );
 
   return {
     posts: items,

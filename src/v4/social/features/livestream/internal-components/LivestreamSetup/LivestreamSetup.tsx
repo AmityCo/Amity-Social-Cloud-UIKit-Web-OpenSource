@@ -357,6 +357,7 @@ export const LivestreamSetup: React.FC<LivestreamSetupProps> = ({
 
                 {isEnabledProductTag && targetType !== 'user' && (
                   <TagProductsButton
+                    pageId={pageId}
                     productTagCount={productTags.length}
                     isPending={isPending}
                     onPress={

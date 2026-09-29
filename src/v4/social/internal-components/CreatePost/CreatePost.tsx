@@ -4,7 +4,7 @@ import { AmityAttachmentProductTags, CommunityPostSettings, PostRepository } fro
 import { FileType } from '@amityco/ts-sdk';
 import { useForm } from 'react-hook-form';
 import { useNetworkState } from 'react-use';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { useAmityPage, useAmityElement } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import {
   AmityPostComposerCreateOptions,
@@ -66,6 +66,18 @@ export function CreatePost({
   const pageId = 'post_composer_page';
   const isEventPost = !!event;
 
+  // The Products tab in the @ mention menu was gated on the network's product
+  // catalogue setting alone, which answers whether the network has products —
+  // not whether this customer bought the module. A build without Product still
+  // offered the tab and still searched products as you typed, which is R6 as
+  // well as R2. product_tag is Product's own id, so asking it here ties the tab
+  // to the module the way every other surface is tied.
+  const productMention = useAmityElement({
+    pageId,
+    componentId: '*',
+    elementId: 'product_tag',
+  });
+
   const drawerRef = useRef<HTMLDivElement>(null);
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const drawerContentRef = useRef<HTMLDivElement>(null);
@@ -79,7 +91,7 @@ export function CreatePost({
   const { isDesktop } = useResponsive();
   const { onBack, prevPage, prev2Page } = useNavigation();
   const { AmityPostComposerPageBehavior } = usePageBehavior();
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { closePopup } = usePopupContext();
@@ -643,6 +655,10 @@ export function CreatePost({
     return null;
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div className={styles.createPost} style={themeStyles}>
       {isDesktop && notifications}
@@ -695,7 +711,7 @@ export function CreatePost({
               enableFloatingLink={isDesktop}
               placeholder={isClipPost ? clipBodyPlaceholder : undefined}
               initialText={textValue.text}
-              enableProductMention={!isEventPost}
+              enableProductMention={!productMention.isExcluded && !isEventPost}
               taggedProductIds={allProductTags.map((tag) => tag.productId)}
               onTextChanged={(text) => {
                 setTextValue((prev) => ({ ...prev, text }));

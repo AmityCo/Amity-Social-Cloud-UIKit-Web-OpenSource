@@ -5,6 +5,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { MemberRoles } from '~/v4/chat/constants';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 type AddRoleParams = Parameters<typeof ChannelRepository.Moderation.addRole>;
 
@@ -99,13 +100,17 @@ export function useAssignCoHostModerator({
 
   // Subscribe to stage-join events so we catch co-hosts who accept the invite
   // after the stream is live (room.participants is not reactive for this).
-  useEffect(() => {
-    if (!isHost || roomStatus !== 'live') return;
-    const unsubscribe = RoomRepository.onRoomParticipantStageJoined(({ room: eventRoom }) => {
-      trackCoHost(getRoomParticipant(eventRoom, 'coHost'));
-    });
-    return () => unsubscribe();
-  }, [isHost, roomStatus]);
+  useSdkEffect(
+    RoomRepository.onRoomParticipantStageJoined,
+    () => {
+      if (!isHost || roomStatus !== 'live') return;
+      const unsubscribe = RoomRepository.onRoomParticipantStageJoined(({ room: eventRoom }) => {
+        trackCoHost(getRoomParticipant(eventRoom, 'coHost'));
+      });
+      return () => unsubscribe();
+    },
+    [isHost, roomStatus],
+  );
 
   // Grant the moderator role once both the channel and the co-host(s) are known.
   useEffect(() => {
@@ -135,56 +140,62 @@ export function useAssignCoHostModerator({
   // when a co-host leaves the stream or is removed by the host. Metadata is read
   // from the ref (updated by useChannel) so we always overwrite fresh server
   // state, not a stale snapshot.
-  useEffect(() => {
-    if (!isHost || !channelId) return;
+  useSdkEffect(
+    ChannelRepository.updateChannel,
+    () => {
+      if (!isHost || !channelId) return;
 
-    const handleCoHostGone = ({
-      room: eventRoom,
-      actorInternalId,
-      actorUserId,
-    }: Amity.CoHostEvent) => {
-      const remainingCoHostIds = new Set(
-        (eventRoom?.participants ?? [])
-          .filter((participant) => participant.type === 'coHost')
-          .map((participant) => participant.userId),
-      );
+      const handleCoHostGone = ({
+        room: eventRoom,
+        actorInternalId,
+        actorUserId,
+      }: Amity.CoHostEvent) => {
+        const remainingCoHostIds = new Set(
+          (eventRoom?.participants ?? [])
+            .filter((participant) => participant.type === 'coHost')
+            .map((participant) => participant.userId),
+        );
 
-      // Tracked co-hosts no longer on the room. The actor is only trusted when it is a
-      // tracked co-host (voluntary leave) — on a host kick the actor is the host.
-      const actor =
-        actorUserId ??
-        (actorInternalId ? internalToUserIdRef.current.get(actorInternalId) : undefined);
-      const goneUserIds = new Set(coHostIdsRef.current.filter((id) => !remainingCoHostIds.has(id)));
-      if (actor && coHostIdsRef.current.includes(actor) && !remainingCoHostIds.has(actor)) {
-        goneUserIds.add(actor);
-      }
-      goneUserIds.delete(currentUserId ?? '');
-      if (goneUserIds.size === 0) return;
+        // Tracked co-hosts no longer on the room. The actor is only trusted when it is a
+        // tracked co-host (voluntary leave) — on a host kick the actor is the host.
+        const actor =
+          actorUserId ??
+          (actorInternalId ? internalToUserIdRef.current.get(actorInternalId) : undefined);
+        const goneUserIds = new Set(
+          coHostIdsRef.current.filter((id) => !remainingCoHostIds.has(id)),
+        );
+        if (actor && coHostIdsRef.current.includes(actor) && !remainingCoHostIds.has(actor)) {
+          goneUserIds.add(actor);
+        }
+        goneUserIds.delete(currentUserId ?? '');
+        if (goneUserIds.size === 0) return;
 
-      goneUserIds.forEach((userId) => {
-        internalToUserIdRef.current.forEach((mappedUserId, internalId) => {
-          if (mappedUserId === userId) internalToUserIdRef.current.delete(internalId);
+        goneUserIds.forEach((userId) => {
+          internalToUserIdRef.current.forEach((mappedUserId, internalId) => {
+            if (mappedUserId === userId) internalToUserIdRef.current.delete(internalId);
+          });
+          assignedRef.current.delete(`${channelId}:${userId}`);
+          pendingRef.current.delete(`${channelId}:${userId}`);
+          revokeModerator({ channelId, userId });
         });
-        assignedRef.current.delete(`${channelId}:${userId}`);
-        pendingRef.current.delete(`${channelId}:${userId}`);
-        revokeModerator({ channelId, userId });
-      });
-      setCoHostIds((prev) => prev.filter((id) => !goneUserIds.has(id)));
+        setCoHostIds((prev) => prev.filter((id) => !goneUserIds.has(id)));
 
-      const metadata = metadataRef.current;
-      const nextModerators = (metadata?.moderators ?? []).filter(
-        (id: string) => !goneUserIds.has(id),
-      );
-      const nextMutedMembers = metadata?.mutedMembers ?? [];
-      ChannelRepository.updateChannel(channelId, {
-        metadata: { ...metadata, moderators: nextModerators, mutedMembers: nextMutedMembers },
-      });
-    };
+        const metadata = metadataRef.current;
+        const nextModerators = (metadata?.moderators ?? []).filter(
+          (id: string) => !goneUserIds.has(id),
+        );
+        const nextMutedMembers = metadata?.mutedMembers ?? [];
+        ChannelRepository.updateChannel(channelId, {
+          metadata: { ...metadata, moderators: nextModerators, mutedMembers: nextMutedMembers },
+        });
+      };
 
-    const unsubscribers: Amity.Unsubscriber[] = [
-      RoomRepository.onRoomParticipantLeft(handleCoHostGone),
-      RoomRepository.onRoomParticipantRemoved(handleCoHostGone),
-    ];
-    return () => unsubscribers.forEach((fn) => fn());
-  }, [isHost, channelId, currentUserId, revokeModerator]);
+      const unsubscribers: Amity.Unsubscriber[] = [
+        RoomRepository.onRoomParticipantLeft(handleCoHostGone),
+        RoomRepository.onRoomParticipantRemoved(handleCoHostGone),
+      ];
+      return () => unsubscribers.forEach((fn) => fn());
+    },
+    [isHost, channelId, currentUserId, revokeModerator],
+  );
 }

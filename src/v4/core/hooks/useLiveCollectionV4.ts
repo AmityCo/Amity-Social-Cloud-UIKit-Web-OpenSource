@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSdkFnEnabled } from '~/v4/core/providers/CustomizationProvider/CustomizationProvider';
 
 /*
  * This hook is used to manage live collections without having cache in UIKit level.
@@ -36,6 +37,10 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
   refresh: () => void;
   isLoadingFirstPage: boolean;
 } {
+  // The caller's own condition, and then the module's. See useLiveCollection.
+  const moduleOn = useSdkFnEnabled(fetcher);
+  const enabled = shouldCall && moduleOn;
+
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
   const loadingCountRef = useRef(0);
   const [isLoadingFirstPage, setIsLoadingFirstPage] = useState(false);
@@ -63,7 +68,7 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
 
   const callbackFn = useCallback(
     (response) => {
-      if (!shouldCall) return;
+      if (!enabled) return;
       if (response.data) setItems(response.data);
       if (loadingCountRef.current === 0) {
         setIsLoadingFirstPage(response.loading);
@@ -79,18 +84,21 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
       loadPrevFnRef.current = response.onPrevPage ?? null;
       callback(response);
     },
-    [shouldCall],
+    [enabled],
   );
 
   useEffect(() => {
-    if (!shouldCall) return;
+    if (!enabled) return;
     const { unsubscribe } = subscribe({ fetcher, params, callback: callbackFn });
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, [JSON.stringify(params), shouldCall, callbackFn]);
+  }, [JSON.stringify(params), enabled, callbackFn]);
 
   const refresh = useCallback(() => {
+    // Subscribes directly rather than through the effect, so it needs the gate too.
+    if (!enabled) return () => {};
+
     if (unsubscribeRef.current) unsubscribeRef.current();
 
     const { unsubscribe } = subscribe({
@@ -102,7 +110,7 @@ export function useLiveCollectionV4<TCallback, TParams = void>({
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, [fetcher, params, callbackFn]);
+  }, [fetcher, params, callbackFn, enabled]);
 
   return {
     error,

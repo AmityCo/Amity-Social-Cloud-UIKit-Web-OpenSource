@@ -1,5 +1,6 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
 import { useEffect, useRef, useState } from 'react';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export const useMemberQueryByDisplayName = ({
   communityId,
@@ -26,36 +27,40 @@ export const useMemberQueryByDisplayName = ({
     }
   };
 
-  useEffect(() => {
-    if (!enabled) return;
+  useSdkEffect(
+    CommunityRepository.Membership.searchMembers,
+    () => {
+      if (!enabled) return;
 
-    if (unSubRef.current) {
-      unSubRef.current();
-      unSubRef.current = null;
-    }
+      if (unSubRef.current) {
+        unSubRef.current();
+        unSubRef.current = null;
+      }
 
-    const unSubFn = CommunityRepository.Membership.searchMembers(
-      {
-        communityId,
-        search: displayName,
-        limit,
-        sortBy: 'displayName',
-        includeDeleted: false,
-      },
-      (response) => {
-        setHasMore(response.hasNextPage || false);
-        setIsLoading(response.loading);
-        loadMoreRef.current = response.onNextPage || null;
-        setItems(response.data);
-      },
-    );
-    unSubRef.current = unSubFn;
+      const unSubFn = CommunityRepository.Membership.searchMembers(
+        {
+          communityId,
+          search: displayName,
+          limit,
+          sortBy: 'displayName',
+          includeDeleted: false,
+        },
+        (response) => {
+          setHasMore(response.hasNextPage || false);
+          setIsLoading(response.loading);
+          loadMoreRef.current = response.onNextPage || null;
+          setItems(response.data);
+        },
+      );
+      unSubRef.current = unSubFn;
 
-    return () => {
-      unSubRef.current?.();
-      unSubRef.current = null;
-    };
-  }, [communityId, displayName, enabled]);
+      return () => {
+        unSubRef.current?.();
+        unSubRef.current = null;
+      };
+    },
+    [communityId, displayName, enabled],
+  );
 
   return {
     members: items,

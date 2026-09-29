@@ -27,62 +27,13 @@ import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/Up
 import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
 import { EventAttendeesPageProps } from '~/v4/social/pages/EventAttendeesPage/EventAttendeesPage';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
+import { PageTypes, PAGE_ID_BY_TYPE } from './navigationTargets';
+import {
+  isModuleExcluded,
+  useCustomization,
+} from '~/v4/core/providers/CustomizationProvider/CustomizationProvider';
 
-export enum PageTypes {
-  Explore = 'explore',
-  NewsFeed = 'newsfeed',
-  CommunityFeed = 'communityFeed',
-  CommunityEdit = 'communityEdit',
-  Category = 'category',
-  ViewStoryPage = 'ViewStoryPage',
-  SocialHomePage = 'SocialHomePage',
-  PostDetailPage = 'PostDetailPage',
-  CommunityProfilePage = 'CommunityProfilePage',
-  CommunitySetupPage = 'CommunitySetupPage',
-  UserProfilePage = 'UserProfilePage',
-  EditUserProfilePage = 'EditUserProfilePage',
-  UserRelationshipPage = 'UserRelationshipPage',
-  BlockedUsersPage = 'BlockedUsersPage',
-  UserPendingFollowRequestPage = 'UserPendingFollowRequestPage',
-  SocialGlobalSearchPage = 'SocialGlobalSearchPage',
-  SelectPostTargetPage = 'SelectPostTargetPage',
-  DraftPage = 'DraftPage',
-  PostComposerPage = 'PostComposerPage',
-  MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
-  StoryTargetSelectionPage = 'StoryTargetSelectionPage',
-  PollTargetSelectionPage = 'PollTargetSelectionPage',
-  EventTargetSelectionPage = 'EventTargetSelectionPage',
-  EventPostTargetSelectionPage = 'EventPostTargetSelectionPage',
-  AllCategoriesPage = 'AllCategoriesPage',
-  CommunitiesByCategoryPage = 'CommunitiesByCategoryPage',
-  CommunityAddCategoryPage = 'CommunityAddCategoryPage',
-  CommunityAddMemberPage = 'CommunityAddMemberPage',
-  CommunityInviteMemberPage = 'CommunityInviteMemberPage',
-  CommunitySettingPage = 'CommunitySettingPage',
-  CommunityPostPermissionPage = 'CommunityPostPermissionPage',
-  CommunityStorySettingPage = 'CommunityStorySettingPage',
-  PendingPostsPage = 'PendingPostsPage',
-  CommunityMembershipPage = 'CommunityMembershipPage',
-  CommunityPendingInvitationPage = 'CommunityPendingInvitationPage',
-  CommunityCreatePage = 'CommunityCreatePage',
-  PollPostComposerPage = 'PollPostComposerPage',
-  LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
-  LiveStreamBannedPage = 'LiveStreamBannedPage',
-  LiveStreamPlayerPage = 'LiveStreamPlayerPage',
-  LivestreamUnsupportedPage = 'LivestreamUnsupportedPage',
-  LivestreamTargetSelectionPage = 'LivestreamTargetSelectionPage',
-  CreateLivestreamPage = 'CreateLivestreamPage',
-  NotificationTrayPage = 'NotificationTrayPage',
-  PendingRequestPage = 'PendingRequestPage',
-  DraftClipPage = 'DraftClipPage',
-  ClipFeedPage = 'ClipFeedPage',
-  EventSetupPage = 'EventSetupPage',
-  UpcomingEventsPage = 'UpcomingEventsPage',
-  PastEventsPage = 'PastEventsPage',
-  EventDetailPage = 'EventDetailPage',
-  EventAttendeesPage = 'EventAttendeesPage',
-  VisitorUsageLimitPage = 'VisitorUsageLimitPage',
-}
+export { PageTypes, pageIdOfNavigationTarget } from './navigationTargets';
 
 type Page =
   | {
@@ -337,6 +288,15 @@ type Page =
     };
 
 type ContextValue = {
+  /**
+   * Whether pushing this target would land anywhere. `pushPage` already refuses
+   * an unreachable one silently, which is right for a door that could be
+   * removed instead — but a notification is history the server already sent, so
+   * its item cannot be removed and has to say something when it is tapped.
+   * Exposed rather than re-derived at the call site: one resolver, so the tray
+   * and the stack cannot disagree about who owns a page.
+   */
+  isTargetReachable: (type: PageTypes) => boolean;
   page: Page;
   prevPage?: Page;
   prev2Page?: Page;
@@ -477,6 +437,7 @@ type ContextValue = {
 };
 
 let defaultValue: ContextValue = {
+  isTargetReachable: (type: PageTypes) => true,
   page: { type: PageTypes.SocialHomePage, context: { communityId: undefined } },
   currentClip: 0,
   setCurrentClip: (index: number) => {},
@@ -588,6 +549,10 @@ if (process.env.NODE_ENV !== 'production') {
     onEditCommunity: (communityId) =>
       console.log(`NavigationContext onEditCommunity({${communityId})`),
     onMessageUser: (userId) => console.log(`NavigationContext onMessageUser(${userId})`),
+    isTargetReachable: (type) => {
+      console.log(`NavigationContext isTargetReachable(${type})`);
+      return true;
+    },
     onBack: (page?: number) => console.log(`NavigationContext onBack(${page})`),
     goToUserProfilePage: (userId) =>
       console.log(`NavigationContext goToUserProfilePage(${userId})`),
@@ -824,15 +789,49 @@ export default function NavigationProvider({
 
   const { setStreamPlayer } = useLayoutContext();
 
-  const pushPage = useCallback(async (newPage) => {
-    setPages((prevState) => [...prevState, newPage]);
-  }, []);
+  const { config, entitlement } = useCustomization();
 
-  const replacePage = useCallback((newPage) => {
-    setPages((prevState) =>
-      prevState.length > 0 ? [...prevState.slice(0, -1), newPage] : [newPage],
-    );
-  }, []);
+  /**
+   * Whether the page a target lands on is one this network still has.
+   *
+   * The same resolver the pages and elements use, asked one step earlier:
+   * before the stack changes rather than after the page has rendered null.
+   * A target with no owner is always reachable — the base layer, and the v3
+   * types that carry no config id.
+   */
+  const isTargetReachable = useCallback(
+    (type: PageTypes) => {
+      const pageId = PAGE_ID_BY_TYPE[type];
+
+      if (!pageId) return true;
+
+      return !isModuleExcluded(`${pageId}/*/*`, entitlement);
+    },
+    [entitlement],
+  );
+
+  const pushPage = useCallback(
+    async (newPage) => {
+      // Refused rather than pushed. The alternative is a blank screen the
+      // customer has to leave with the browser's own back button, and a stack
+      // entry that will be blank again every time they return to it.
+      if (!isTargetReachable(newPage.type)) return;
+
+      setPages((prevState) => [...prevState, newPage]);
+    },
+    [isTargetReachable],
+  );
+
+  const replacePage = useCallback(
+    (newPage) => {
+      if (!isTargetReachable(newPage.type)) return;
+
+      setPages((prevState) =>
+        prevState.length > 0 ? [...prevState.slice(0, -1), newPage] : [newPage],
+      );
+    },
+    [isTargetReachable],
+  );
 
   const setDefaultPage = useCallback((defaultPage) => {
     setPages([defaultPage]);
@@ -1675,6 +1674,7 @@ export default function NavigationProvider({
   return (
     <NavigationContext.Provider
       value={{
+        isTargetReachable,
         page: currentPage,
         prevPage,
         prev2Page,

@@ -31,7 +31,7 @@ export function CreateLivestreamPage({
 }: CreateLivestreamPageProps) {
   const pageId = PAGE_ID.CREATE_LIVESTREAM_PAGE;
   const { currentUserId } = useSDK();
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
 
@@ -110,6 +110,10 @@ export function CreateLivestreamPage({
   // As the host, grant the co-host the channel-moderator role on the live chat
   // so their moderation actions (promote/demote/mute/delete) don't 403 (PDT-3908).
   useAssignCoHostModerator({ room, channel });
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <LivestreamDataProvider

@@ -1,6 +1,7 @@
 import { CategoryRepository } from '@amityco/ts-sdk';
 
 import { useEffect, useState } from 'react';
+import { useSdkEffect } from './useSdkEffect';
 
 export const useCategory = ({
   categoryId,
@@ -9,14 +10,18 @@ export const useCategory = ({
 }) => {
   const [category, setCategory] = useState<Amity.Category | null>(null);
 
-  useEffect(() => {
-    async function run() {
-      if (categoryId == null) return;
-      const category = await CategoryRepository.getCategory(categoryId);
-      setCategory(category.data);
-    }
-    run();
-  }, [categoryId]);
+  useSdkEffect(
+    CategoryRepository.getCategory,
+    () => {
+      async function run() {
+        if (categoryId == null) return;
+        const category = await CategoryRepository.getCategory(categoryId);
+        setCategory(category.data);
+      }
+      run();
+    },
+    [categoryId],
+  );
 
   return category;
 };

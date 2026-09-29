@@ -45,10 +45,11 @@ export const PendingPostContent = ({
   refresh,
 }: PendingPostContentProps) => {
   const componentId = 'pending_post_content';
-  const { accessibilityId, themeStyles } = useAmityComponent({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
+
   const { currentUserId } = useSDK();
   const { post: postData } = usePost(initialPost?.postId);
 
@@ -84,6 +85,10 @@ export const PendingPostContent = ({
       return initialPost;
     }
   }, [initialPost, postData]);
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const canShowProductTags =
     productCatalogueSettings?.product.enabled && post?.childrenPosts[0]?.dataType !== 'room';

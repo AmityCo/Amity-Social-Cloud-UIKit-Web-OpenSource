@@ -13,11 +13,15 @@ export const PollMultipleSelectionDesc = ({
 }: PollMultipleSelectionDescProps) => {
   const elementId = 'poll_multiple_selection_desc';
 
-  const { config, themeStyles, accessibilityId, resolveText } = useAmityElement({
+  const { config, themeStyles, accessibilityId, resolveText, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
   return (
     <Typography.Caption
       data-testid={accessibilityId}

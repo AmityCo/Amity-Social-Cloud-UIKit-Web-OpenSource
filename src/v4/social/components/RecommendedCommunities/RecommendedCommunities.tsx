@@ -118,10 +118,11 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
   const MAX_DISPLAYED_COMMUNITIES = 5;
   const FETCH_BUFFER_SIZE = 10; // Fetch more to account for filtering
 
-  const { accessibilityId, themeStyles } = useAmityComponent({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
+
   const { online } = useNetworkState();
   const notification = useNotifications();
   const { goToCommunitiesByCategoryPage, goToCommunityProfilePage } = useNavigation();
@@ -139,6 +140,10 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     addPriorityRecommendedCommunity,
     removePriorityRecommendedCommunity,
   } = useExplore();
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const communityIds = recommendedCommunities
     .map((community) => community.communityId)

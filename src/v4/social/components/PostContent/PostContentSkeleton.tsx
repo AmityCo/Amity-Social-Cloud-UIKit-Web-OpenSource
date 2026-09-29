@@ -15,6 +15,8 @@ export const PostContentSkeleton = ({ pageId = '*' }: PostContentSkeletonProps) 
       componentId,
     });
 
+  if (isExcluded) return null;
+
   return (
     <div
       data-testid={accessibilityId}

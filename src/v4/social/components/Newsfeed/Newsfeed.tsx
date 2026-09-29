@@ -7,6 +7,7 @@ import { PostComposer } from '~/v4/social/components/PostComposer';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { useGlobalFeedCollection } from '~/v4/social/hooks/collections/useGlobalFeedCollection';
+import { useModuleFilteredPosts } from '~/v4/social/hooks/useModuleFilteredPosts';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './Newsfeed.module.css';
 
@@ -17,7 +18,8 @@ type NewsfeedProps = {
 export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   const componentId = 'newsfeed';
 
-  const { themeStyles } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const { isDesktop } = useResponsive();
 
   const {
@@ -28,8 +30,23 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
     removeNewPost,
   } = useGlobalFeedContext();
 
-  const { posts, isLoading, isLoadingFirstPage, hasMore, loadMore, refresh } =
-    useGlobalFeedCollection();
+  const {
+    posts: feedPosts,
+    isLoading,
+    isLoadingFirstPage,
+    hasMore,
+    loadMore,
+    refresh,
+  } = useGlobalFeedCollection();
+
+  // Above the gate, like every other hook here. getGlobalFeed's dataTypes union
+  // has no `text` in it, so asking the server to leave polls out would mean
+  // naming every type we do want and losing text posts with it.
+  const posts = useModuleFilteredPosts(feedPosts);
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const onFeedReachBottom = () => {
     if (hasMore && !isLoading && !isLoadingFirstPage) loadMore();

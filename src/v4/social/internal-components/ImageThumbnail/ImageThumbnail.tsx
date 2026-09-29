@@ -168,12 +168,12 @@ function PostImageItem({
         {/* <AltText file={post.data.file} onAltTextChange={onAltTextChange} /> */}
         {onChildPostProductTagsChange &&
           ((post.productTags ?? [])?.length !== 0 || !productTagsReachLimit) && (
-            <div className={styles.thumbnail__productTagBadge}>
-              <ProductTagBadge
-                selectedProductTags={post.productTags ?? []}
-                onClick={handleProductTagClick}
-              />
-            </div>
+            <ProductTagBadge
+              wrapperClassName={styles.thumbnail__productTagBadge}
+              pageId={pageId}
+              selectedProductTags={post.productTags ?? []}
+              onClick={handleProductTagClick}
+            />
           )}
       </>
     </div>
@@ -256,12 +256,12 @@ function FileImageItem({
           <AltText file={file.file} onAltTextChange={onAltTextChange} />
           {onFileProductTagsChange &&
             ((file.productTags ?? [])?.length !== 0 || !productTagsReachLimit) && (
-              <div className={styles.thumbnail__productTagBadge}>
-                <ProductTagBadge
-                  selectedProductTags={file.productTags ?? []}
-                  onClick={handleProductTagClick}
-                />
-              </div>
+              <ProductTagBadge
+                wrapperClassName={styles.thumbnail__productTagBadge}
+                pageId={pageId}
+                selectedProductTags={file.productTags ?? []}
+                onClick={handleProductTagClick}
+              />
             )}
         </>
       )}

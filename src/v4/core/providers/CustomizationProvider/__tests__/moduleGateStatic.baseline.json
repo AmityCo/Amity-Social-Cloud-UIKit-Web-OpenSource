@@ -1,0 +1,31 @@
+{
+  "hooksBelowGate": [
+    "src/v4/chat/components/MessageList/MessageList.tsx :: useEffect below the gate",
+    "src/v4/core/hooks/useSdkEffect.ts :: useSdkFnEnabled below the gate",
+    "src/v4/core/providers/CustomizationProvider/CustomizationProvider.tsx :: useCustomization below the gate",
+    "src/v4/core/providers/CustomizationProvider/CustomizationProvider.tsx :: useState below the gate",
+    "src/v4/social/components/Comment/Comment.tsx :: useUpdateComment below the gate",
+    "src/v4/social/components/CommentComposer/CommentInput.tsx :: useRef below the gate",
+    "src/v4/social/components/CommentList/CommentList.tsx :: useEffect below the gate",
+    "src/v4/social/components/HyperLinkConfig/HyperLinkConfig.tsx :: useForm below the gate",
+    "src/v4/social/components/ReactionList/ReactionList.tsx :: useEffect below the gate",
+    "src/v4/social/components/RecommendedCommunities/RecommendedCommunities.tsx :: useGetJoinRequestList below the gate",
+    "src/v4/social/components/TrendingCommunities/TrendingCommunities.tsx :: useGetJoinRequestList below the gate",
+    "src/v4/social/elements/CameraButton/CameraButton.tsx :: useCallback below the gate",
+    "src/v4/social/elements/PostTextField/PostTextField.tsx :: useSuggestions below the gate",
+    "src/v4/social/features/product-tagged/components/ProductTagSelection/ProductTagSelection.tsx :: useIntersectionObserver below the gate",
+    "src/v4/social/internal-components/CommentAd/CommentAd.tsx :: useImage below the gate",
+    "src/v4/social/internal-components/MemberList/MemberList.tsx :: useCallback below the gate",
+    "src/v4/social/internal-components/PollDurationOptions/PollDurationOptions.tsx :: useState below the gate",
+    "src/v4/social/internal-components/PostAd/PostAd.tsx :: useImage below the gate",
+    "src/v4/social/internal-components/StoryAd/UIStoryAd.tsx :: useRef below the gate",
+    "src/v4/social/pages/PendingRequestPage/PendingRequestPage.tsx :: useIntersectionObserver below the gate"
+  ],
+  "ungatedRepositoryReads": [
+    "src/v4/chat/hooks/usePinMessage.ts :: ChannelRepository.getChannel",
+    "src/v4/chat/hooks/usePinMessage.ts :: MessageRepository.getMessage",
+    "src/v4/core/hooks/collections/useRecommendedCommunitiesCollection.ts :: CommunityRepository.getRecommendedCommunities",
+    "src/v4/social/components/CommentList/CommentList.tsx :: CommentRepository.getComments",
+    "src/v4/social/features/livestream/hooks/useObserveRoomAndInvitation.ts :: InvitationRepository.getInvitations"
+  ]
+}

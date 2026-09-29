@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FileRepository, notificationTray } from '@amityco/ts-sdk';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
@@ -11,6 +11,9 @@ import { formatEventStartDate, formatEventStartTime } from '~/v4/social/utils/ti
 import { highlightedText } from '~/v4/social/utils/highlightedText';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { resolveString } from '~/v4/core/localization';
 import { useRoom } from '~/v4/social/features/livestream/hooks';
 import LiveIndicator from '~/v4/icons/LiveIndicator';
 const EVENT_TRAY_CATEGORIES = ['event_created', 'event_reminder', 'event_started'];
@@ -36,8 +39,82 @@ export const NotificationItem = ({
   });
   const [errorImage, setErrorImage] = useState(false);
   const { AmityNotificationTrayPageBehavior } = usePageBehavior();
+  const { isTargetReachable } = useNavigation();
+  const notification = useNotifications();
+
+  // A tray item can name content inside the page rather than the page itself,
+  // and the two belong to different modules: a comment or a poll mention opens
+  // post_detail_page, which is Post's, while the thread and the poll body are
+  // Comment's and Poll's. `isTargetReachable` asks about the page, so with
+  // Comment off the page was reachable, the tap went through, and the customer
+  // landed on a post with no thread — the comment they were told about nowhere
+  // on it, and the commentId passed along with the navigation pointing at
+  // nothing.
+  //
+  // Asked through the hooks rather than resolved here, so the tray reads the
+  // same tables as the surfaces it is asking about.
+  const commentContent = useAmityComponent({
+    pageId: 'post_detail_page',
+    componentId: 'comment_tray_component',
+  });
+  const pollContent = useAmityElement({
+    pageId: 'post_detail_page',
+    componentId: '*',
+    elementId: 'post_poll',
+  });
 
   const communityActionTypes = ['poll', 'post', 'join_request'];
+
+  /**
+   * A comment is the subject either way it is named.
+   *
+   * `trayItemCategory` is optional on the wire, and an item can arrive carrying
+   * only `actionType: 'comment'` — reading the category alone missed exactly
+   * those and let the tap through. `reaction` and `mention` say what happened
+   * rather than to what, so for those the category is the only thing that
+   * knows, which is why both are read.
+   */
+  const COMMENT_ACTION_TYPES = ['comment', 'reply'];
+  const COMMENT_CATEGORIES = [
+    'reaction_on_comment',
+    'reaction_on_reply',
+    'mention_in_comment',
+    'mention_in_reply',
+  ];
+
+  /**
+   * Whether the thing this item is about has been withheld, even though the
+   * page holding it has not. Only items naming content need it; for the rest
+   * the page and the subject are the same thing.
+   */
+  const isSubjectWithheld = () => {
+    const category = item.trayItemCategory as string;
+
+    if (COMMENT_ACTION_TYPES.includes(item.actionType)) return commentContent.isExcluded;
+    if (COMMENT_CATEGORIES.includes(category)) return commentContent.isExcluded;
+    if (category === 'mention_in_poll') return pollContent.isExcluded;
+
+    return false;
+  };
+
+  /**
+   * Which page this item opens.
+   *
+   * The same branches as `onClickItem`, in the same order, so one added to that
+   * without this one reads as a stray default rather than hiding. A tray item
+   * cannot be withheld the way a button can — the server already sent the
+   * notification, and it is history rather than a capability — so the module
+   * behind its destination has to be asked here instead.
+   */
+  const targetPage = (): PageTypes => {
+    if (communityActionTypes.includes(item.actionType)) return PageTypes.CommunityProfilePage;
+    if (item.trayItemCategory === 'follow') return PageTypes.UserProfilePage;
+    if (EVENT_TRAY_CATEGORIES.includes(item.trayItemCategory as string))
+      return PageTypes.EventDetailPage;
+    if (item.trayItemCategory === 'room_cohost_invite') return PageTypes.LiveStreamPlayerPage;
+    if (item.actionType === 'user') return PageTypes.EditUserProfilePage;
+    return PageTypes.PostDetailPage;
+  };
 
   const renderCommentId = (item: Amity.NotificationTrayItem) => {
     const { parentId, latestCommentId, actionReferenceId, trayItemCategory } = item;
@@ -48,13 +125,26 @@ export const NotificationItem = ({
   };
 
   const onClickItem = () => {
-    onClose?.();
+    // Seen either way: the customer tapped it, whether or not it opened.
     notificationTray.markItemsSeen([
       {
         id: item._id,
         lastSeenAt: new Date().toISOString(),
       },
     ]);
+
+    if (!isTargetReachable(targetPage()) || isSubjectWithheld()) {
+      // `pushPage` would refuse this silently, which leaves a tap that does
+      // nothing. The tray stays open on purpose — closing it would leave a
+      // toast explaining a screen the customer is no longer looking at.
+      notification.error({
+        content: resolveString('amity_social_toast_failed_generic'),
+        testId: 'notification-item-unavailable',
+      });
+      return;
+    }
+
+    onClose?.();
 
     if (communityActionTypes.includes(item.actionType)) {
       return AmityNotificationTrayPageBehavior?.goToCommunityProfilePage?.({

@@ -19,10 +19,15 @@ interface ChatHeaderProps {
 
 export const ChatHeader = ({ channel, pageId = '*' }: ChatHeaderProps) => {
   const componentId = 'chat_header';
-  const { themeStyles } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const { chatName, chatAvatar } = useChatInfo({ channel });
   const { online } = useNetworkState();
   const waitingForConnectionLabel = useString('amity_social_label_waiting_for_network');
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.messageListHeader} style={themeStyles}>

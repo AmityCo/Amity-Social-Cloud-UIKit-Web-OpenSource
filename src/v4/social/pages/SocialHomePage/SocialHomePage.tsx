@@ -13,6 +13,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useForYouFeedCollection } from '~/v4/social/hooks/collections/useForYouFeedCollection';
 import useForYouFeedSetting from '~/v4/social/hooks/useForYouFeedSetting';
 import { useSocialHomePageTab } from '~/v4/social/features/home/hooks';
+import { useSocialHomeTabs } from '~/v4/social/hooks/useSocialHomeTabs';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { ForYouFeed } from '~/v4/social/features/for-you';
 import { Communities } from '~/v4/social/internal-components/Communities/Communities';
@@ -30,7 +31,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
   const pageId = 'social_home_page';
   const { isVisitorOrBot, currentUserId } = useSDK();
   const { config } = useCustomization();
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
 
@@ -53,6 +54,12 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
     forYouEnabled && !(forYouError instanceof FeedRepository.AmityForYouFeedDisabledError);
 
   const [persistedTab, setPersistedTab] = useSocialHomePageTab();
+
+  // Which tabs this build actually has. Read here rather than above the page,
+  // because this component is the one that calls useAmityPage — a correction
+  // placed outside the page wrapper reads the config once, before it has
+  // loaded, and never fires.
+  const homeTabs = useSocialHomeTabs(pageId);
 
   const hasResolvedRef = useRef(false);
 
@@ -90,11 +97,20 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
     if (isForYouFeedSettingPending) return;
     hasResolvedRef.current = true;
     resolvedForUserRef.current = currentUserId;
-    if (persistedTab && (persistedTab !== HomePageTab.ForYou || isForYouTabVisible)) {
-      setActiveTab(persistedTab);
-    } else {
-      setActiveTab(isForYouTabVisible ? HomePageTab.ForYou : HomePageTab.Newsfeed);
-    }
+    // A remembered tab is only honoured while the build still has it: Feed off
+    // takes For You and Newsfeed, and landing on either leaves a page whose
+    // body never draws. Falling through to the first surviving tab is what
+    // makes a feed-less build open on Communities.
+    const wanted =
+      persistedTab && homeTabs.isVisible(persistedTab)
+        ? persistedTab
+        : isForYouTabVisible && homeTabs.isVisible(HomePageTab.ForYou)
+          ? HomePageTab.ForYou
+          : homeTabs.isVisible(HomePageTab.Newsfeed)
+            ? HomePageTab.Newsfeed
+            : homeTabs.first;
+
+    if (wanted) setActiveTab(wanted);
     setIsInitialTabResolved(true);
   }, [
     currentUserId,
@@ -103,14 +119,19 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
     isForYouTabVisible,
     persistedTab,
     setActiveTab,
+    homeTabs.first,
   ]);
 
+  // R5: when the selected tab can disappear, the selection falls back to one
+  // that is still there. This covers both reasons a tab goes — the network
+  // setting behind For You, and a module switched off — because a tab the row
+  // does not draw is a tab whose body never draws either.
   useEffect(() => {
-    if (isForYouTabVisible) return;
-    if (activeTab === HomePageTab.ForYou) {
-      setActiveTab(HomePageTab.Newsfeed);
-    }
-  }, [isForYouTabVisible, activeTab, setActiveTab]);
+    if (activeTab === HomePageTab.Explore) return;
+    const gone =
+      !homeTabs.isVisible(activeTab) || (activeTab === HomePageTab.ForYou && !isForYouTabVisible);
+    if (gone && homeTabs.first) setActiveTab(homeTabs.first);
+  }, [isForYouTabVisible, activeTab, setActiveTab, homeTabs.first]);
 
   const handleClickButton = () => {
     setIsShowCreatePostMenu((prev) => !prev);
@@ -199,6 +220,10 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
       </div>
     );
   };
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.socialHomePage} style={themeStyles}>

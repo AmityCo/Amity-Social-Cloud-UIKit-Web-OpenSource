@@ -19,7 +19,15 @@ export const CommunityCardImage = ({
   componentId = '*',
 }: CommunityCardImageProps) => {
   const elementId = 'community_card_image';
-  const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   return (
     <Img

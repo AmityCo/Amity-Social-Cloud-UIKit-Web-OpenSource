@@ -10,6 +10,7 @@ import { ProductTagList } from '~/v4/social/features/product-tagged/components/P
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './ProductTagButton.module.css';
 
 type ProductTagButtonVariant = 'compact' | 'detailed';
@@ -28,11 +29,29 @@ export function ProductTagButton({
   className = '',
   variant = 'compact',
 }: ProductTagButtonProps) {
+  // The control that adds a product tag, so it answers to Product. QA scoped
+  // this narrowly: a post that already carries tags may keep showing its badge
+  // when Product is off — that is history, not a capability — but the composer
+  // must not offer a way to add one.
+  //
+  // Gated here rather than at the call sites: this renders three times over
+  // MediaAttachment's mobile and desktop rows and DetailedMediaAttachment, and
+  // three guards would have been three chances to forget one. It carried the
+  // same id as ProductTagActionButton, which this component replaced.
+  const { isExcluded } = useAmityElement({
+    pageId: pageId ?? '*',
+    componentId: '*',
+    elementId: 'product_tag_action_button',
+  });
+
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { setDrawerData } = useDrawer();
   const tagProductsLabel = useString('amity_social_button_tag_products');
   const productAmount = productTags.length;
+
+  // Below every hook: a gate above one un-counts it on the next render.
+  if (isExcluded) return null;
 
   const openProductTagList = () => {
     if (isDesktop) {

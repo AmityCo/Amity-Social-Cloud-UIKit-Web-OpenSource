@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { Typography } from '~/v4/core/components';
@@ -54,7 +54,7 @@ export const ClipCaption = ({
     community: communityId ? community : null,
   });
 
-  const { accessibilityId, themeStyles } = useAmityElement({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -84,6 +84,10 @@ export const ClipCaption = ({
   }, []); // Re-run when content that affects height changes
 
   const isLoadingContent = (isLoading && !creator) || isParentPostLoading;
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   if (isDragging) return null;
 
@@ -137,7 +141,7 @@ export const ClipCaption = ({
                     data-testid={`${pageId}/${componentId}/post_edited_text`}
                     className={styles.clipCaption__textWhite}
                   >
-                    {useString('amity_social_button_edited_suffix')}
+                    {resolveString('amity_social_button_edited_suffix')}
                   </Typography.Caption>
                 )}
               </div>

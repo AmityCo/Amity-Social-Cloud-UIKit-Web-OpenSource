@@ -49,12 +49,15 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   const { hasDeleteEventPermission } = useEventPermission(event.originId);
   const { currentUserId, isVisitorOrBot } = useSDK();
 
-  const { config: createEventPostConfig, resolveText: resolveCreateEventPostText } =
-    useAmityElement({
-      pageId: 'event_detail_page',
-      componentId: '*',
-      elementId: 'create_event_post_button',
-    });
+  const {
+    config: createEventPostConfig,
+    resolveText: resolveCreateEventPostText,
+    isExcluded: isCreateEventPostExcluded,
+  } = useAmityElement({
+    pageId: 'event_detail_page',
+    componentId: '*',
+    elementId: 'create_event_post_button',
+  });
 
   const isHostEvent = event.creator?.userId === currentUserId;
 
@@ -116,7 +119,11 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
         : PostEventToFeed,
       iconClassName: styles.eventActions__postEventToFeedIcon,
       label: resolveCreateEventPostText('amity_social_button_event_post_create'),
+      // The flag was resolved for its config and text and then dropped, so the
+      // menu item outlived the composer it opens: Post off left a door onto a
+      // page that can no longer make a post.
       condition:
+        !isCreateEventPostExcluded &&
         !isVisitorOrBot &&
         event.status !== AmityEventStatus.Cancelled &&
         !event.isDeleted &&

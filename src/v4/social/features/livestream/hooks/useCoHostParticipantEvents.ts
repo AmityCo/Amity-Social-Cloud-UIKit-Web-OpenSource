@@ -5,6 +5,7 @@ import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
 import { NotificationAlignment } from '~/v4/core/components/Notification';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { resolveString } from '~/v4/core/localization';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export function useCoHostParticipantEvents({
   room,
@@ -19,40 +20,44 @@ export function useCoHostParticipantEvents({
   const { currentUser } = useSDK();
   const coHostJoinedRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    const unsubscriber: Amity.Unsubscriber[] = [];
-    if (room?.status === 'live') {
-      const coHostInternalId = getRoomParticipant(room, 'coHost')?.userInternalId;
-      unsubscriber.push(
-        RoomRepository.onRoomParticipantLeft(({ actorInternalId }) => {
-          if (
-            coHostInternalId !== actorInternalId ||
-            currentUser?.userInternalId === actorInternalId
-          )
-            return;
+  useSdkEffect(
+    RoomRepository.onRoomParticipantLeft,
+    () => {
+      const unsubscriber: Amity.Unsubscriber[] = [];
+      if (room?.status === 'live') {
+        const coHostInternalId = getRoomParticipant(room, 'coHost')?.userInternalId;
+        unsubscriber.push(
+          RoomRepository.onRoomParticipantLeft(({ actorInternalId }) => {
+            if (
+              coHostInternalId !== actorInternalId ||
+              currentUser?.userInternalId === actorInternalId
+            )
+              return;
 
-          if (coHostJoinedRef.current || mode === 'viewer')
-            success({
-              content: resolveString('amity_social_status_cohost_left'),
-              alignment: notificationAlignment,
-            });
-          else
-            success({
-              content: resolveString('amity_social_co_host_left_the_stage'),
-              alignment: notificationAlignment,
-            });
+            if (coHostJoinedRef.current || mode === 'viewer')
+              success({
+                content: resolveString('amity_social_status_cohost_left'),
+                alignment: notificationAlignment,
+              });
+            else
+              success({
+                content: resolveString('amity_social_co_host_left_the_stage'),
+                alignment: notificationAlignment,
+              });
 
-          coHostJoinedRef.current = false;
-        }),
-      );
+            coHostJoinedRef.current = false;
+          }),
+        );
 
-      unsubscriber.push(
-        RoomRepository.onRoomParticipantStageJoined(({ room }) => {
-          if (getRoomParticipant(room, 'coHost')) coHostJoinedRef.current = true;
-        }),
-      );
-    }
+        unsubscriber.push(
+          RoomRepository.onRoomParticipantStageJoined(({ room }) => {
+            if (getRoomParticipant(room, 'coHost')) coHostJoinedRef.current = true;
+          }),
+        );
+      }
 
-    return () => unsubscriber.forEach((fn) => fn());
-  }, [room]);
+      return () => unsubscriber.forEach((fn) => fn());
+    },
+    [room],
+  );
 }

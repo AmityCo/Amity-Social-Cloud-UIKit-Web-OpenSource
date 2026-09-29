@@ -5,12 +5,12 @@ const QUERY_LIMIT = 20;
 
 type UsePostsCollectionParams = Partial<Parameters<typeof PostRepository.getPosts>[0]>;
 
-export default function usePostsCollection({
-  targetType,
-  targetId,
-  limit = QUERY_LIMIT,
-  ...props
-}: UsePostsCollectionParams) {
+export default function usePostsCollection(
+  { targetType, targetId, limit = QUERY_LIMIT, ...props }: UsePostsCollectionParams,
+  // A caller whose own module is off cannot skip this hook — React counts them —
+  // so it says so here and no request goes out.
+  enabled = true,
+) {
   const { items, ...rest } = useLiveCollectionV4({
     fetcher: PostRepository.getPosts,
     params: {
@@ -19,7 +19,7 @@ export default function usePostsCollection({
       limit,
       ...props,
     },
-    shouldCall: !!targetId && !!targetType,
+    shouldCall: enabled && !!targetId && !!targetType,
   });
 
   // Filter out posts with children type 'file' or 'audio'

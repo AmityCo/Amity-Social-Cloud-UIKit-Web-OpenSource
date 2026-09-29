@@ -2,8 +2,8 @@ import { Key } from 'react-aria';
 import { FileRepository } from '@amityco/ts-sdk';
 import { TabsRef } from '~/v4/core/components/Tabs';
 import { useEffect, useRef, useState } from 'react';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
-import { PAGE_ID } from '~/v4/constants/customization';
+import { useAmityComponent, useAmityPage } from '~/v4/core/hooks/uikit';
+import { COMPONENT_ID, PAGE_ID } from '~/v4/constants/customization';
 import { useEvent } from '~/v4/social/features/events/hooks';
 import { useRSVP } from '~/v4/social/features/events/hooks/useRSVP';
 
@@ -17,7 +17,15 @@ export function useEventDetail(eventId: string) {
 
   const tabRef = useRef<TabsRef>(null);
   const eventCoverRef = useRef<HTMLDivElement | null>(null);
-  const { accessibilityId, themeStyles } = useAmityPage({ pageId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({ pageId });
+
+  // The discussion tab is a door onto `EventDiscussion`, which is Post's. Read
+  // here rather than in the page so it sits above every early return whatever
+  // the page is rearranged into later — this hook has none of its own.
+  const { isExcluded: isDiscussionExcluded } = useAmityComponent({
+    pageId,
+    componentId: COMPONENT_ID.EVENT_DISCUSSION,
+  });
 
   const [isBackgroundShown, setIsBackgroundShown] = useState(false);
   const [sticky, setSticky] = useState(false);
@@ -75,6 +83,8 @@ export function useEventDetail(eventId: string) {
   }, [myRSVP?.status]);
 
   return {
+    isExcluded,
+    isDiscussionExcluded,
     event,
     pageId,
     tabRef,
