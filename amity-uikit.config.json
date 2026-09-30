@@ -116,6 +116,7 @@
     },
     "chat": {
       "enabled_channel_types": ["conversation", "community"],
+      "channel_list_sort_by": "lastMessage",
       "conversation_chat_user_actions": [
         { "name": "mute", "enabled": true },
         { "name": "report", "enabled": true },

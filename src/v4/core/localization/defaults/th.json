@@ -916,6 +916,8 @@
   "amity_chat_home_title": "แชท",
   "amity_chat_home_empty_title": "ยังไม่มีบทสนทนา",
   "amity_chat_home_empty_description": "เริ่มสร้างแชทเพื่อเริ่มต้นใช้งาน",
+  "amity_chat_home_error_title": "ไม่สามารถโหลดแชทได้",
+  "amity_chat_home_error_description": "เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง",
   "amity_chat_home_notifications_off_banner": "",
   "amity_chat_tab_all": "ทั้งหมด",
   "amity_chat_tab_direct": "ส่วนตัว",

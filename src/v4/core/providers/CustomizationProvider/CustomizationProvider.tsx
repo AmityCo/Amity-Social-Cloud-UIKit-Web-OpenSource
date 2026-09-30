@@ -75,6 +75,12 @@ export interface Config {
     };
     chat?: {
       enabled_channel_types?: ('conversation' | 'community')[];
+      /**
+       * Order of the chat home channel list. `lastActivity` (default) moves a
+       * channel on any activity, including member changes; `lastMessage` moves it
+       * only when a message is posted. Any other value falls back to `lastActivity`.
+       */
+      channel_list_sort_by?: 'lastActivity' | 'lastMessage';
       conversation_chat_user_actions?: { name: 'mute' | 'report' | 'block'; enabled: boolean }[];
     };
   };

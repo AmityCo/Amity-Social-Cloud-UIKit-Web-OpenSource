@@ -65,12 +65,22 @@ export default function SDKConnectorLiveCollectionProvider({
     const key = getSubscriberKey(fetcher.name, params);
 
     if (refresh) {
+      // Dispose the SDK collection being replaced, or it keeps feeding the
+      // subscribers of the one created below.
+      unsubscribeFnMap.current[key]?.();
+      delete unsubscribeFnMap.current[key];
       delete responseMap.current[key];
       delete subscriberMap.current[key];
     }
 
-    if (subscriberMap.current[key] && responseMap.current[key]) {
-      callback?.(responseMap.current[key] as Amity.LiveCollection<TCallback>);
+    // A subscription whose first response has not arrived yet is still a
+    // subscription: join it rather than opening a second SDK collection for
+    // the same key (which would orphan the first and notify everyone twice).
+    // This is what a component that unmounts and remounts at once hits, for
+    // example under React strict mode.
+    if (subscriberMap.current[key]) {
+      const cached = responseMap.current[key];
+      if (cached) callback?.(cached as Amity.LiveCollection<TCallback>);
       subscriberMap.current[key].push(callback as Amity.LiveCollectionCallback<unknown>);
     } else {
       subscriberMap.current[key] = [callback as Amity.LiveCollectionCallback<unknown>];
@@ -90,12 +100,12 @@ export default function SDKConnectorLiveCollectionProvider({
 
     return {
       unsubscribe() {
-        const callbackFn = subscriberMap.current[key].find((subscriber) => subscriber === callback);
-        if (callbackFn) {
-          subscriberMap.current[key] = subscriberMap.current[key].filter(
-            (subscriber) => subscriber !== callbackFn,
-          );
-        }
+        // Only this subscriber leaves. The SDK collection stays alive for the
+        // next mount with the same key, so a page that comes back replays the
+        // rows it already had instead of fetching the first page again.
+        const subscribers = subscriberMap.current[key];
+        if (!subscribers) return;
+        subscriberMap.current[key] = subscribers.filter((subscriber) => subscriber !== callback);
       },
     };
   };
