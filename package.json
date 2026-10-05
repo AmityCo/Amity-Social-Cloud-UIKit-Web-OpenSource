@@ -40,6 +40,12 @@
     "tsc": "tsc",
     "verify:tokens": "node ./governance/gates/02-check-tokens.mjs",
     "verify:pages": "node ./governance/gates/01-check-pages.mjs",
+    "verify:sdk-hooks": "node ./governance/gates/06-check-sdk-hooks.mjs",
+    "verify:components": "node ./governance/gates/04-check-components.mjs",
+    "verify:typography": "node ./governance/gates/05-check-typography.mjs",
+    "verify:localization": "node ./governance/gates/07-check-localization.mjs",
+    "verify:styling": "node ./governance/gates/08-check-styling.mjs",
+    "verify:icons": "node ./governance/gates/09-check-icons.mjs",
     "verify:gates": "node ./governance/gates/run.mjs",
     "gist": "node ./code-snippets/scripts/create-gist.mjs",
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
@@ -169,7 +175,21 @@
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{json,css}": "prettier --write",
     "*.{css}": "stylelint --fix",
-    "{amity-uikit.config.json,src/v4/core/design/tokens/amity-uikit-design-tokens.json,src/v4/core/providers/CustomizationProvider/utils.ts}": "node ./governance/gates/02-check-tokens.mjs"
+    "{amity-uikit.config.json,src/v4/core/design/tokens/amity-uikit-design-tokens.json,src/v4/core/providers/CustomizationProvider/utils.ts}": "node ./governance/gates/02-check-tokens.mjs",
+    "src/v4/**/*.css": [
+      "node ./governance/gates/01-check-pages.mjs",
+      "node ./governance/gates/05-check-typography.mjs",
+      "node ./governance/gates/08-check-styling.mjs"
+    ],
+    "src/v4/**/*.{ts,tsx}": [
+      "node ./governance/gates/01-check-pages.mjs",
+      "node ./governance/gates/04-check-components.mjs",
+      "node ./governance/gates/05-check-typography.mjs",
+      "node ./governance/gates/06-check-sdk-hooks.mjs",
+      "node ./governance/gates/07-check-localization.mjs",
+      "node ./governance/gates/08-check-styling.mjs",
+      "node ./governance/gates/09-check-icons.mjs"
+    ]
   },
   "postcss": {
     "plugins": {

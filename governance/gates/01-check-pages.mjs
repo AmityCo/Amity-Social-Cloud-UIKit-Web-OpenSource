@@ -10,12 +10,13 @@
 // internal, so a mismatch there is SAFE to auto-fix. (pageId is a cross-platform contract
 // and is deliberately out of scope — see the note near the checks.)
 //
-// Run:  node governance/gates/01-check-pages.mjs        (human summary)
-//       node governance/gates/01-check-pages.mjs --json (machine-readable, for the fix loop)
+// Run:  node governance/gates/01-check-pages.mjs              (human summary)
+//       node governance/gates/01-check-pages.mjs <files...>   (only those — lint-staged)
+//       node governance/gates/01-check-pages.mjs --json       (machine-readable, for the fix loop)
 // Exits 1 if any violation exists.
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 
 const DIR = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(DIR, '..', '..');
@@ -24,6 +25,11 @@ const rel = (p) => relative(ROOT, p);
 
 const PAGE_ROOTS = ['src/v4/social/pages', 'src/v4/chat/pages'];
 const JSON_OUT = process.argv.includes('--json');
+const ARG_FILES = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+// Scope by the page FOLDER a staged file sits in, so touching XPage.module.css
+// still checks XPage.
+const SCOPE = ARG_FILES.length ? new Set(ARG_FILES.map((f) => rel(dirname(resolve(f))))) : null;
+const inScope = (folderPath) => SCOPE == null || SCOPE.has(rel(folderPath));
 
 const read = (p) => (existsSync(p) ? readFileSync(p, 'utf8') : null);
 const isDir = (p) => existsSync(p) && statSync(p).isDirectory();
@@ -55,6 +61,7 @@ for (const pageRoot of PAGE_ROOTS) {
     if (!folder.endsWith('Page')) continue; // skip Application/, LiveChat/, barrels, etc.
     const folderPath = join(rootPath, folder);
     if (!isDir(folderPath)) continue;
+    if (!inScope(folderPath)) continue;
 
     const { component, from, index } = canonicalFromIndex(folderPath);
 
@@ -198,6 +205,71 @@ for (const pageRoot of PAGE_ROOTS) {
             fix: `render ${N}'s root element with data-testid={accessibilityId}`,
           });
         }
+        // A page that never reads isExcluded cannot be switched off by config.
+        if (!/\bisExcluded\b/.test(src)) {
+          add({
+            page: folder,
+            canonical: N,
+            rule: 'is-excluded',
+            severity: 'safe',
+            actual: 'isExcluded is never read',
+            expected: 'if (isExcluded) return null',
+            files: [rel(componentFile)],
+            fix: `honour isExcluded in ${N}, or the page cannot be switched off by config`,
+          });
+        }
+        if (!/style=\{\s*themeStyles\s*\}/.test(src)) {
+          add({
+            page: folder,
+            canonical: N,
+            rule: 'theme-styles',
+            severity: 'safe',
+            actual: 'themeStyles is never applied to an element',
+            expected: 'style={themeStyles} on the root element',
+            files: [rel(componentFile)],
+            fix: `apply style={themeStyles} in ${N}, or it ignores its theme config`,
+          });
+        }
+      }
+    }
+
+    // 6. Stylesheets share the page's name, and every one of them is imported.
+    const files = readdirSync(folderPath);
+    const css = files.filter((f) => f.endsWith('.module.css'));
+    if (css.length > 0 && !css.includes(`${N}.module.css`)) {
+      add({
+        page: folder,
+        canonical: N,
+        rule: 'css-naming',
+        severity: 'safe',
+        actual: `stylesheet is ${css.join(', ')}`,
+        expected: `${N}.module.css`,
+        files: [rel(folderPath)],
+        fix: `rename the stylesheet to ${N}.module.css`,
+      });
+    }
+
+    const folderSources = [];
+    (function collect(dir) {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const p = join(dir, entry.name);
+        if (entry.isDirectory()) collect(p);
+        else if (/\.tsx?$/.test(entry.name)) folderSources.push(read(p) ?? '');
+      }
+    })(folderPath);
+
+    for (const sheet of css) {
+      if (!folderSources.some((s) => s.includes(sheet))) {
+        add({
+          page: folder,
+          canonical: N,
+          rule: 'dead-stylesheet',
+          severity: 'safe',
+          actual: `${sheet} is imported by nothing in ${folder}/`,
+          expected: 'every stylesheet in the folder is imported',
+          files: [rel(join(folderPath, sheet))],
+          fix: `delete ${sheet}, or import it`,
+        });
       }
     }
   }

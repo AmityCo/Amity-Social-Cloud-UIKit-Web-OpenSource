@@ -15,166 +15,34 @@ Conventions and patterns required when building anything inside `src/v4/`. Devia
 
 - **No relative imports** — always use the `~/` alias (maps to `src/`)
 - **No explicit `/index` suffix** — ESLint bans `import { X } from '~/.../Foo/index'`. Use either the specific file (`'~/.../Foo/Foo'`) or the folder path (`'~/.../Foo'`) that resolves via the barrel's `index.ts`. Prefer the folder path when the folder has a barrel re-exporting the symbol — shorter, survives file renames.
-- **No test files** — do not create `.test.ts` / `.test.tsx` files
+- **Tests** — the repo has a jest suite under `__tests__/` (localization, CustomizationProvider module gating). Add tests where a sibling already has them; don't add a first test to a folder without discussing it.
 
 ---
 
-## SDK hook organization — three folders, three suffixes
+## SDK hooks — see the `sdk-integration` skill
 
-Every SDK-backed hook in a module lives in one of three sibling folders under
-`src/v4/<module>/hooks/`. The folder name dictates both the suffix on the
-hook and the import path consumers use.
-
-| Folder | Suffix | What goes here | Underlying SDK primitive |
-|---|---|---|---|
-| `hooks/objects/` | `Object` | `useChannelObject`, `usePostObject` | `useLiveObjectV4` |
-| `hooks/collections/` | `Collection` | `useChannelCollection`, `useMessageCollection` | `useLiveCollectionV4` |
-| `hooks/queries/` | `Query` | `useMessageDeleteQuery`, `useMessageResendQuery`, `useCreateMessageQuery` | `useMutation` (React Query) on a one-shot SDK call |
-
-Each folder ships a barrel `index.ts` that re-exports every hook in the
-folder. Consumers always import from the folder path, never the file:
-
-```ts
-import { useChannelObject } from '~/v4/chat/hooks/objects';
-import { useMessageCollection } from '~/v4/chat/hooks/collections';
-import { useMessageDeleteQuery, useMessageResendQuery } from '~/v4/chat/hooks/queries';
-```
-
-See: `src/v4/chat/hooks/objects/useChannelObject.ts`,
-`src/v4/chat/hooks/collections/useMessageCollection.ts`,
-`src/v4/chat/hooks/queries/useMessageDeleteQuery.ts`.
-
-### Live Objects — `useLiveObjectV4` wrappers
-
-- Returns `{ item, isLoading, error }` — read it with the SDK noun:
-  `const { channel } = useChannelObject({ channelId })`.
-- Pass `shouldCall: !!param` to skip fetching until the param is ready.
-- One file per SDK noun. Never call `useLiveObjectV4` from a component
-  directly — always wrap.
-
-### Live Collections — `useLiveCollectionV4` wrappers
-
-- Returns `{ items, isLoadingFirstPage, hasMore, loadMore, isLoading }` —
-  not `hasNextPage`/`loadNextPage`.
-- Pass `shouldCall: false` to skip fetching until params are ready.
-- `isLoadingFirstPage` → full-screen skeleton (first load).
-- `isLoading && !isLoadingFirstPage` → skeleton rows appended at the bottom
-  of the list (next page load).
-- One file per SDK list method (e.g. `useChannelCollection` wraps
-  `ChannelRepository.getChannels`, `useSearchUserByDisplayName` wraps
-  `UserRepository.searchUserByDisplayName`). Never call
-  `useLiveCollectionV4` from a component directly.
-
-### Queries (React Query mutations / one-shot SDK calls)
-
-A `Query` hook is the canonical orchestrator for a single SDK side-effect:
-it owns the `useMutation`, the toast / confirm wiring, and exposes one
-verb function (e.g. `addReaction`, `deleteMessage`). It does NOT own UI
-state — overlays and sheet open/close state belong to feature-local
-hooks under `features/<feature>/hooks/` that consume the Query hook.
-
-Rules for writing a Query hook:
-
-1. **Explicit generics** — `useMutation<Payload, Error, Param>`.
-2. **Derive types from the SDK function** — use `Awaited<ReturnType<...>>`
-   for the resolved payload type and `Parameters<...>[0]` for the SDK
-   param shape. When the generics are wired correctly, **do not add
-   `as SomeParams` type assertions at the call site** — the arg is
-   already type-checked against the generic. When the SDK call takes
-   positional args (e.g. `addReaction('message', id, name)`), define a
-   local `XxxPayload` object type next to the hook and adapt inside
-   `mutationFn` — never expose positional args to the caller. Bind
-   each field of the payload type to the SDK signature via a named
-   `type Params = Parameters<typeof SDK_FN>` alias plus indexed access
-   (`Params[0]`, `Params[1]`, …). Don't hand-roll `string` or
-   `string[]` — when the SDK signature changes, the payload follows
-   automatically.
-3. **`mutationFn` points directly at the SDK function** — no wrapper
-   arrow function.
-4. **Use `await mutateAsync` with `{ onSuccess, onError }` callbacks
-   passed as the second argument** — `await mutateAsync(params, {
-   onSuccess, onError })`. Do **not** wrap `mutateAsync` in
-   `try`/`catch`. Awaiting keeps the calling function's control flow
-   linear (downstream work can read the resolved value or rely on the
-   awaited completion) and plays nicely with `react-hook-form`'s
-   `handleSubmit` / `isSubmitting` tracking. The
-   `{ onSuccess, onError }` form keeps success and failure branches
-   explicit and avoids swallowed errors.
-5. Access the created resource from the `onSuccess` callback — e.g.
-   `onSuccess: (result) => { const id = result?.data?.channelId; ... }`.
-6. `onError` should route to a toast / confirm / alert via existing
-   providers (`useNotifications`, `useConfirmContext`). Do not rethrow.
-7. **Plain inner function, not `useCallback`.** The returned verb
-   function is invoked from event handlers, not stored in `useEffect` /
-   `useMemo` dependency arrays. `useCallback` adds noise without
-   preserving identity that any consumer relies on.
-8. **Optional `afterX` callback in the verb function's options** — pass
-   `{ afterDelete }` / `{ afterResend }` for sheet/viewer close hooks.
-   Define an explicit `<Verb>Options` type next to the hook (no
-   `Request` prefix) and re-export it from the barrel.
-
-9. **Public function name is the bare verb — no `request` / `do` /
-   `handle` prefix.** Expose `addReaction`, `removeReaction`, `report`,
-   `unreport`, `deleteMessage` directly. Older hooks shipped as
-   `requestX` and are being migrated. New hooks: bare verb only.
-
-10. **Hook's own `onError` owns the toast.** Bake the failure toast
-    into the `useMutation` config (`onError: () => error({ content:
-    TOAST.<…>.FAILED, alignment })`). Callers don't pass error
-    callbacks for toast-only failure paths — the hook is the single
-    source of truth. Resolve `toastAlignment` from a hook param with
-    a `useResponsive()` desktop / mobile fallback.
-
-11. **Return `Promise<void>` from the public verb function.** Drop
-    SDK return values (booleans, IDs) at the hook boundary unless a
-    caller actually needs them. Default shape:
-    `async function addReaction(payload): Promise<void> { await
-    mutateAsync(payload); }`.
-
-12. **Pair related opposite operations into one hook with two
-    `useMutation` calls.** When two SDK calls are semantic opposites
-    on the same noun (add/remove members, promote/demote moderator,
-    flag/unflag message, mute/unmute channel) AND share a payload
-    shape, bundle them into ONE `Query` hook holding TWO separate
-    `useMutation` blocks — each with its own `mutationFn` and
-    `onError`. Return both verb functions side-by-side
-    (`{ addMembers, removeMembers }`). This keeps the SDK namespace
-    boundary intact (one hook owns one repository's
-    `Membership.*` operations, another owns its `Moderation.*`),
-    avoids enum/discriminator dispatch inside `mutationFn`, and
-    keeps each operation's failure-toast logic in its own `onError`
-    block. Do **not** combine non-opposite operations (e.g.
-    add-member + promote-moderator) under one hook — that mixes
-    two repository surfaces and forces a switch.
-
-See: `src/v4/chat/hooks/queries/useMessageDeleteQuery.ts`,
-`src/v4/chat/hooks/queries/useMessageResendQuery.ts`,
-`src/v4/chat/hooks/queries/useAddMessageReactionQuery.ts`,
-`src/v4/chat/hooks/queries/useRemoveMessageReactionQuery.ts`,
-`src/v4/chat/features/group/create/hooks/useCreateGroupChat.ts`,
-`src/v4/chat/features/shared/hooks/useMessageComposer.ts`.
-
-### Read-query hooks (network settings & one-shot reads)
-
-For a **read** that wraps a one-shot SDK getter (network settings / feature gates — `getSocialSettings`, `getProductCatalogueSetting`, `getForYouFeedSetting`), use a lean `useQuery` hook. **Reference `useSocialSettings` for the shape — don't copy its body verbatim.**
-
-- **Lean return** — return `{ <name>, isLoading, error }` directly. No `XxxResult` interface, and **no `refetch`** unless a caller actually needs it.
-- **Named param type for options** — when the hook needs a conditional-fetch flag, declare a `type UseXxxParam = { shouldCall?: boolean }` (a named type, not an inline object type and not an `Options` interface) and default the arg: `function useXxx({ shouldCall = true }: UseXxxParam = {})`.
-- **Gate with `enabled`** — `enabled: !!client && shouldCall`. Callers pass `shouldCall: !isVisitorOrBot` (etc.) so the visitor/bot case never fires the request.
-- **`staleTime` from the global constant** — `staleTime: STALE_TIME_5_MINUTES`, imported from `~/v4/constants/query`. Do **not** redefine a local `STALE_TIME_*` in the hook file — shared query constants live in `~/v4/constants/query.ts`.
-- **queryKey** — `['asc-uikit', '<SettingName>']`.
-
-See: `src/v4/social/hooks/useForYouFeedSetting.ts`, `src/v4/social/hooks/useSocialSettings.ts`, `src/v4/social/hooks/useProductCatalogueSettings.ts`.
+Every SDK read and write in `src/v4/` goes through a hook in `hooks/objects/`,
+`hooks/collections/` or `hooks/queries/`. The folder, the naming, the primitive, the mutation
+and read-query rules all live in **`.claude/skills/sdk-integration/SKILL.md`** — invoke that
+skill before touching an SDK call. `pnpm verify:sdk-hooks` enforces it.
 
 ---
 
 ## Core Components — use before creating new ones
 
-**Always check `src/v4/core/components/` first** before building a new component. The core library has ~47 primitives — using them avoids duplication and stays consistent with existing patterns.
+**Check for an existing primitive before building a new component.** Two layers exist:
 
-Key components to know:
+- `src/v4/core/design/` — `atoms/`, `molecules/`, `components/`, `icons/`, `illustrations/`. The
+  newer design system, and where recent work goes. Look here first.
+- `src/v4/core/components/` — 45 older primitives, still imported across most of the tree.
+
+Both are live. Prefer `core/design/*` for anything new; reach for `core/components/*` when the
+surrounding file already uses it and there is no design-system equivalent.
+
+Key `core/components` primitives to know:
 
 ### Tabs
+
 - `variant: 'chip' | 'underlined' | 'icon' | 'iconSmall'`
 - Use `variant="chip"` for pill-style horizontal tab bars
 - Props: `value: Key`, `onChange: (key: Key) => void`, `tabs: { value, label, content }[]`
@@ -226,7 +94,7 @@ See: `src/v4/core/components/AriaRadioGroup/RadioGroup.tsx`, `src/v4/chat/featur
 - Props: `label`, `optional`, `maxLength`, `helperText`, `variant: 'boxed' | 'underlined'` (default `'underlined'`), `multiLine`, plus all native `TextFieldProps` / `InputProps` (`value`, `onChange`, `placeholder`).
 - Never hand-roll a `<label>` + `<input>` + counter — the counter and a11y wiring are built in.
 
-See: `src/v4/core/components/FormInput/FormInput.tsx`, `src/v4/chat/features/group/create/components/GroupNameField/GroupNameField.tsx`
+See: `src/v4/core/components/FormInput/FormInput.tsx`, `src/v4/chat/elements/GroupNameField/GroupNameField.tsx`
 
 ---
 
@@ -302,9 +170,9 @@ Accessibility is a hard requirement across the whole tree, not a checklist reser
 - **Wrap every grouping level with `<Skeleton>`, not `<div>`.** The outer row wrapper IS a `<Skeleton>`, AND every inner grouping wrapper (avatar wrapper, name+badge row, trailing slot) is also a `<Skeleton>`. Plain `<div>` only inside leaf primitives that supply their own. The semantic intent is "this whole subtree is loading state" — using `<div>` mid-tree breaks the intent and invites someone to drop a real `Typography` inside a "skeleton" tree later.
 - **Skeletons are compound statics of their parent, in the parent's existing file — never a new `XxxSkeleton.tsx`.** Define the skeleton function alongside the component and attach it via dot notation at the bottom of the file: `SocialHomePage.FeedSkeleton = FeedSkeleton` (matching `ChannelItem.Skeleton`, `MenuItem.Skeleton`). Don't spin up a separate component/file just to host a skeleton — co-locate it on the component that owns the loading region.
 - **A parent may expose more than one skeleton.** When a component owns multiple distinct loading regions (e.g. a page with both a tab-bar shimmer and a content shimmer), attach each as its own descriptively-named static — `SocialHomePage.FeedSkeleton` and `SocialHomePage.TabsSkeleton` — all defined in the parent's file. A skeleton that mirrors a sibling region (e.g. the tab row) may reuse that region's CSS-module class so positioning matches exactly.
-- **Consume via the compound static everywhere — including the parent's own render.** Render `<SocialHomePage.FeedSkeleton />` / `<CommunitySideBar.MenuSkeleton />` (not the bare local `<FeedSkeleton />`) inside the parent body too; with `export function Parent` + `Parent.X = X` below, TS resolves the static fine. Defining *and* using the compound form keeps one consistent reference, internal and external.
+- **Consume via the compound static everywhere — including the parent's own render.** Render `<SocialHomePage.FeedSkeleton />` / `<CommunitySideBar.MenuSkeleton />` (not the bare local `<FeedSkeleton />`) inside the parent body too; with `export function Parent` + `Parent.X = X` below, TS resolves the static fine. Defining _and_ using the compound form keeps one consistent reference, internal and external.
 
-See: `src/v4/core/components/Skeleton/Skeleton.tsx`, `src/v4/chat/features/shared/components/MessageReactorListSheet/MessageReactorListSheet.tsx`, `src/v4/chat/features/group/member-list/components/MemberItem/MemberItem.tsx`, `src/v4/social/pages/SocialHomePage/SocialHomePage.tsx` (multiple named skeleton statics: `.FeedSkeleton` + `.TabsSkeleton`)
+See: `src/v4/core/components/Skeleton/Skeleton.tsx`, `src/v4/chat/features/shared/components/MessageReactorListSheet/MessageReactorListSheet.tsx`, `src/v4/chat/features/group/members/components/MemberItem/MemberItem.tsx`, `src/v4/social/pages/SocialHomePage/SocialHomePage.tsx` (multiple named skeleton statics: `.FeedSkeleton` + `.TabsSkeleton`)
 
 ---
 
@@ -346,11 +214,11 @@ Rules when using the virtualizer:
 - **Scroll element ref**: `useVirtualizer({ count, estimateSize, overscan, getScrollElement: () => scrollRef.current })`. The ref must target the actual scrollable container, not an inner wrapper.
 - **Variable height**: let the virtualizer measure — attach `ref={virtualizer.measureElement}` on the outer row wrapper and expose `data-index={virtualRow.index}` so the library can correlate observations back to the virtual row.
 - **Reverse anchoring for chat**: don't fight the scroll axis with `column-reverse`. Reverse the items array before feeding the virtualizer (`[...items].reverse()`) so the newest message sits at the largest index; then scroll anchors naturally to the bottom.
-- **Anchor on prepend**: when infinite-scrolling upward, preserve viewport by recording `scrollRef.current.scrollHeight` *before* `loadMore()` and, in a `useLayoutEffect` keyed on `items.length`, add the height delta back to `scrollTop` once new rows land. Without this the view "jumps up" every time a page loads.
+- **Anchor on prepend**: when infinite-scrolling upward, preserve viewport by recording `scrollRef.current.scrollHeight` _before_ `loadMore()` and, in a `useLayoutEffect` keyed on `items.length`, add the height delta back to `scrollTop` once new rows land. Without this the view "jumps up" every time a page loads.
 - **Top infinite-scroll trigger**: inspect `virtualizer.getVirtualItems()[0]?.index` and compare against a small threshold (e.g. `PAGE_TOP_TRIGGER_INDEX = 5`). Don't hand-roll `IntersectionObserver` on top — the virtualizer already knows which rows are visible.
 - **At-bottom detection**: `scrollTop + clientHeight >= scrollHeight - TOLERANCE_PX` (16 px is fine). Use this to gate mark-as-read, "scroll to latest" pill visibility, and auto-anchor-on-new-message.
 
-See: `src/v4/chat/features/conversation/chat/components/MessageList/MessageList.tsx`, `src/v4/chat/constants/chat.ts`.
+See: `src/v4/chat/features/shared/components/MessageList/MessageList.tsx`, `src/v4/chat/constants/chat.ts`.
 
 ---
 
@@ -426,18 +294,50 @@ export function buildBubbleMenuItems(
   const isActive = message.syncState === 'synced' && !message.isDeleted;
 
   const items: (MessageActionItem & { visible: boolean })[] = [
-    { key: 'edit', icon: 'pen', label: 'Edit', onPress: handlers.onEdit,
-      visible: isOwn && message.dataType === 'text' && isActive },
-    { key: 'copy', icon: 'copy', label: 'Copy', onPress: handlers.onCopy,
-      visible: (message.dataType === 'text' || message.dataType === 'custom') && isActive },
-    { key: 'report-loading', icon: Flag, label: '', loading: true, onPress: () => {},
-      visible: !isOwn && flagState.isLoading },
-    { key: 'unreport', icon: UnFlag, label: 'Unreport', onPress: handlers.onUnreport,
-      visible: !isOwn && !flagState.isLoading && flagState.isFlaggedByMe },
-    { key: 'report', icon: Flag, label: 'Report', onPress: () => handlers.onReport(message),
-      visible: !isOwn && !flagState.isLoading && !flagState.isFlaggedByMe },
-    { key: 'delete', icon: 'trash', label: 'Delete', destructive: true,
-      onPress: handlers.onDelete, visible: isOwn },
+    {
+      key: 'edit',
+      icon: 'pen',
+      label: 'Edit',
+      onPress: handlers.onEdit,
+      visible: isOwn && message.dataType === 'text' && isActive,
+    },
+    {
+      key: 'copy',
+      icon: 'copy',
+      label: 'Copy',
+      onPress: handlers.onCopy,
+      visible: (message.dataType === 'text' || message.dataType === 'custom') && isActive,
+    },
+    {
+      key: 'report-loading',
+      icon: Flag,
+      label: '',
+      loading: true,
+      onPress: () => {},
+      visible: !isOwn && flagState.isLoading,
+    },
+    {
+      key: 'unreport',
+      icon: UnFlag,
+      label: 'Unreport',
+      onPress: handlers.onUnreport,
+      visible: !isOwn && !flagState.isLoading && flagState.isFlaggedByMe,
+    },
+    {
+      key: 'report',
+      icon: Flag,
+      label: 'Report',
+      onPress: () => handlers.onReport(message),
+      visible: !isOwn && !flagState.isLoading && !flagState.isFlaggedByMe,
+    },
+    {
+      key: 'delete',
+      icon: 'trash',
+      label: 'Delete',
+      destructive: true,
+      onPress: handlers.onDelete,
+      visible: isOwn,
+    },
   ];
 
   return items.filter((item) => item.visible);
@@ -459,7 +359,7 @@ Rules:
 3. **Don't fork to feature-local empty states.** A duplicate `MyFeatureEmptyState` that hand-rolls the icon + caption + min-height layout fights the shared CSS (`--empty-state-offset-top` ladder) and drifts visually.
 4. **Visibility predicate sits in the consumer**, never inside `EmptyState` itself. The consumer renders `<EmptyState />` only when the data array is empty AND no loading state is active — `EmptyState` doesn't read SDK state.
 
-See: `src/v4/chat/features/shared/components/EmptyState/EmptyState.tsx`, `src/v4/chat/features/group/memberships/components/MemberList/MemberList.tsx`
+See: `src/v4/chat/features/shared/components/EmptyState/EmptyState.tsx`, `src/v4/chat/features/group/members/components/MemberList/MemberList.tsx`
 
 ---
 
@@ -517,132 +417,76 @@ See: `src/v4/chat/features/group/create/hooks/useCreateGroupChat.ts`, `src/v4/ch
 
 ---
 
-## Toasts & notifications — `useNotifications()` + `TOAST` constants
+## Toasts — `useNotifications()`
 
-Use `useNotifications()` from `~/v4/core/providers/NotificationProvider` for all in-app toasts. Never render raw toast UI, use `window.alert`, or spawn custom overlays. Never import a third-party toast library.
+```ts
+const { success, info, error, loading, show } = useNotifications();
+success({ content: successToast });
+error({ content: failedToast, alignment });
+```
 
-Rules:
+- `success` for completion, `error` for failures, `info` for neutral, `loading` for in-flight.
+- **Content comes from localization**, resolved into a local before the call — `useString(...)` in
+  render, `resolveString(...)` outside it. See the Localization section below.
+- **A mutation's failure toast belongs to its `Query` hook**, baked into the `useMutation`
+  `onError`. Callers don't pass error callbacks for toast-only failures. Resolve `toastAlignment`
+  from `useResponsive()`.
+- `useImageUpload` already raises its own dialog for 403 / generic upload errors — don't add a
+  second toast, it double-fires.
 
-1. **Channel**: `const { success, info, error, loading, show } = useNotifications()`. Each method takes `{ content: ReactNode, ... }`. Use `success` for completion confirmations, `error` for action failures, `info` for neutral messages, `loading` for in-flight operations.
-
-2. **Messages live in a constants file, never inline at the call site.** Define them in `<module>/constants/toast.ts` under a nested `TOAST` namespace following the **`TOAST.<FEATURE>.<ACTION>.<OUTCOME>` shape** (e.g. `TOAST.GROUP_CHAT.CREATE.SUCCESS`, `TOAST.GROUP_CHAT.CREATE.FAILED`, `TOAST.CHAT.DELETE.FAILED`, `TOAST.CHAT.SAVE.PHOTO.SUCCESS`). The shape is required for localization-prep — it lets a future i18n migration walk the tree mechanically and emit one key per leaf without renaming. Never use flat keys like `DELETE_FAILED` or `PHOTO_SUCCESS`. Re-export from the module's `constants/index.ts` barrel. Consumers import the `TOAST` object and reference the nested field when calling `success`/`error`.
-
-   **Flat-key exceptions** (no outcome axis):
-   - `TOAST.<FEATURE>.LOADING` — a single in-flight string with no success/failure twin.
-   - `TOAST.COMPOSER.<REASON>` — multiple distinct error reasons that aren't outcomes of one action (e.g. `MAX_FILES`, `MAX_VIDEO_DURATION`, `UNSUPPORTED_FILE`). Treat the reason as the leaf.
-
-3. **Mutations: wrap `mutateAsync` in try/catch, fire the right toast in each branch.** Do not rely on React Query's `onError` alone — the feature-level try/catch keeps outcome handling adjacent to the navigation/state it controls.
-
-4. **Dialogs vs toasts.** Use `useConfirmContext().info({ title, content })` for blocking feedback that needs user acknowledgement (inappropriate image uploads, destructive confirmations). Use `useNotifications()` for non-blocking background toasts.
-
-5. **`useImageUpload` already uses `ConfirmContext` internally** for 403 / generic upload errors — do not add a duplicate toast for upload failures; it will double-fire.
-
-See: `src/v4/chat/constants/toast.ts`, `src/v4/chat/features/group/create/hooks/useCreateGroupChat.ts`, `src/v4/core/providers/NotificationProvider.tsx`
-
----
-
-## Alert dialogs — `useConfirmContext()` + `ALERT` constants
-
-Use `useConfirmContext()` from `~/v4/core/providers/ConfirmProvider` for all blocking/acknowledgement dialogs. The API has two methods:
-
-- `confirm({ title, content, okText, cancelText, okButtonColor, onOk, onCancel })` — two-button dialog for destructive / reversible actions. Pass `okButtonColor: 'alert'` for destructive confirms (Leave, Delete, Discard).
-- `info({ title, content })` — single-button "OK" acknowledgement for error states the user must read before continuing (Upload failed, Unsupported file, Member limit reached).
-
-Rules:
-
-1. **Messages live in `<module>/constants/alert.ts` under an `ALERT` namespace.** Shape: `ALERT.<FEATURE>.<ACTION>.{TITLE, CONTENT, CONFIRM?, CANCEL?}`. Re-export from `<module>/constants/index.ts`. Consumers import `ALERT` and reference the nested field at the call site — no inline strings.
-
-2. **Unsaved-changes guard.** Any "close / back" handler on a form-owning page checks `form.formState.isDirty` first. If dirty, fire `confirm(...)` with `okButtonColor: 'alert'`, wiring `onOk: pop`; if clean, call `pop()` directly.
-
-3. **Validation dialogs fire from the hook, not the UI.** When a Controller-bound input needs to reject a value (over member limit, unsupported image type, file too large), route the Controller's `onChange` through a hook-owned setter that does the guard + `info(...)` + `form.setValue(..., { shouldValidate: true, shouldDirty: true })`. The UI never calls `info`/`confirm` directly for form validation.
-
-4. **Zod schema mirrors the runtime guard.** If the dialog says "max 99", the schema must carry `.max(99)` so `formState.isValid` agrees with the runtime behaviour. Pull the limit from a constants file so both stay in sync.
-
-5. **File-type / size validation happens before upload.** In custom file inputs (AvatarPicker, CoverImage, etc.) check `file.type` against an `ACCEPTED_TYPES` constant and `file.size` against a `MAX_FILE_SIZE` constant before calling `uploadSingleImage`. Fire `info(...)` with the corresponding `ALERT.*.UNSUPPORTED_IMAGE_TYPE` / `ALERT.*.FILE_TOO_LARGE` entry, and call `removeDrawerData()` first if the picker is mounted inside a mobile drawer (so the drawer closes before the alert appears).
-
-See: `src/v4/chat/constants/alert.ts`, `src/v4/chat/features/group/create/hooks/useCreateGroupChat.ts` (LEAVE_WITHOUT_FINISHING), `src/v4/chat/features/group/create/components/AvatarPicker/AvatarPicker.tsx` (UNSUPPORTED_IMAGE_TYPE), `src/v4/chat/features/group/select-member/hooks/useSelectGroupMember.ts` (MEMBER_LIMIT_REACHED), `src/v4/social/hooks/useImageUpload.ts` (UPLOAD_FAILED / INAPPROPRIATE_IMAGE).
+> The old `TOAST` / `BANNER` / `ALERT` constant namespaces are gone. They were a pre-localization
+> scheme and nothing in `src/v4` references them any more; strings live in `en.json` behind
+> localization keys instead.
 
 ---
 
-## Banners — `BANNER` constants, parallel shape to TOAST
+## Dialogs — `useConfirmContext()`
 
-Use banner components (e.g. `MutedBanner`, `ConnectionBanner`) for persistent in-page status strips that aren't dismissible toasts and aren't blocking dialogs. Banner copy lives in `<module>/constants/banner.ts` under a `BANNER` namespace.
+`useConfirmContext()` from `~/v4/core/providers/ConfirmProvider` handles blocking dialogs:
 
-Rules:
+- `confirm({ title, content, okText, cancelText, okButtonColor, onOk, onCancel })` — two-button,
+  for destructive or reversible actions. `okButtonColor: 'alert'` for Leave / Delete / Discard.
+- `info({ title, content })` — single-button acknowledgement the user must read (upload failed,
+  unsupported file, limit reached).
 
-1. **Shape mirrors `TOAST` for consistency: `BANNER.<FEATURE>.<ACTION>.<VARIANT>`.** Examples: `BANNER.CHAT.MUTE.USER`, `BANNER.CHAT.MUTE.CHANNEL`. Never flat (`USER_MUTED` is wrong — it's `MUTE.USER`). The `<VARIANT>` axis describes which subject the banner applies to, paralleling how `<OUTCOME>` works for toasts.
-2. **Re-export from `<module>/constants/index.ts`.** Consumers import `BANNER` and reference the nested field — never inline strings.
-3. **No banner-rendering primitive in core.** Each module defines its own banner component (e.g. `src/v4/chat/features/shared/components/MutedBanner/`) and consumes the strings from `BANNER`. Don't introduce a generic `<Banner />` in `core/components/` without a discussion — the visual language of banners is feature-specific.
+Use a dialog when the user must acknowledge; use a toast when they need not.
 
-See: `src/v4/chat/constants/banner.ts`, `src/v4/chat/features/shared/components/MutedBanner/MutedBanner.tsx`.
+1. **Unsaved-changes guard.** A close/back handler on a form-owning page checks
+   `form.formState.isDirty` first — if dirty, `confirm(...)` with `onOk: pop`; if clean, `pop()`.
+2. **Validation dialogs fire from the hook, not the UI.** Route a Controller's `onChange` through a
+   hook-owned setter that guards, calls `info(...)`, then
+   `form.setValue(..., { shouldValidate: true, shouldDirty: true })`.
+3. **The zod schema mirrors the runtime guard.** If the dialog says "max 99", the schema carries
+   `.max(99)`, both reading the same constant.
+4. **File type and size are checked before upload** — `file.type` against `ACCEPTED_TYPES`,
+   `file.size` against `MAX_FILE_SIZE`. Call `removeDrawerData()` first when the picker sits in a
+   mobile drawer, so the drawer closes before the dialog appears.
 
----
-
-## Inline body strings — `TEXT` constants
-
-When a component renders a hardcoded string **inside its own body** (not via a toast / banner / alert / button label), the string still goes into a constants file — never inline JSX. The namespace is `TEXT`.
-
-Rules:
-
-1. **File location: `<module>/constants/text.ts`.** Re-export from `<module>/constants/index.ts`.
-2. **Shape: `TEXT.<FEATURE>.<KIND>.{TITLE, SUBTITLE, ...}`.** Use `KIND` to describe what the strings render — e.g. `TEXT.PREVIEW.UNAVAILABLE.{TITLE, SUBTITLE}` for a link-preview failure card, `TEXT.EMPTY.<STATE>.{TITLE, SUBTITLE}` for empty-state placeholders. Leaf keys mirror the visual parts (`TITLE` / `SUBTITLE` / `BODY`), the same pattern `ALERT` uses for dialog parts.
-3. **Use `TEXT` only for component-rendered body strings.** Don't put toast / banner / dialog copy here — those have their own namespaces. Don't put button labels here either — buttons usually take their label as a prop and the consumer supplies it from a more specific namespace.
-4. **Localization-prep rationale.** All of `TOAST`, `BANNER`, `ALERT`, and `TEXT` follow the same nested shape so a future i18n pass can flatten every leaf into a single keyspace mechanically. No string survives inline at a call site, no namespace survives flat — the convention pays for itself when localization arrives.
-
-See: `src/v4/chat/constants/text.ts`, `src/v4/chat/features/shared/components/MessageLinkPreview/MessageLinkPreview.tsx`.
+See: `src/v4/chat/elements/AvatarPicker/AvatarPicker.tsx`, `src/v4/social/hooks/useImageUpload.ts`.
 
 ---
 
-## Localization — `useString` / `resolveString` / `en.json`
+## Banners
 
-All NEW visible strings flow through the localization layer instead of the legacy `TOAST` / `ALERT` / `BANNER` / `TEXT` constants files. Existing constants stay where they are; don't migrate unless the surrounding feature is being rewritten.
+Persistent in-page status strips that are neither dismissible toasts nor blocking dialogs. Each
+module defines its own banner component — there is no generic `<Banner />` in core, and the visual
+language is feature-specific, so don't add one without discussing it. Copy comes from localization.
 
-Rules:
-
-1. **Catalog lives in `src/v4/core/localization/defaults/en.json`.** Keys follow `amity_<area>_<topic>_<purpose>` (e.g. `amity_chat_dm_block_user_title`, `amity_chat_blocked_message`, `amity_chat_member_action_mute`). Many keys are pre-allocated as empty strings (`""`) — populate those before adding new ones.
-
-2. **Don't add net-new l10n keys without surfacing the gap to the user first.** Workflow when a string is needed:
-   - Grep `en.json` for empty pre-allocated keys whose name matches the surface (`grep -nE '"amity_chat_<verb>_'`). Many keys ship empty waiting to be populated.
-   - If a close match exists (even if the name isn't a perfect description), reuse it. The user owns the namespace; finding a similar existing key beats inventing a new one.
-   - If no match exists, list the proposed key + value to the user and wait for approval. Never invent keys silently.
-
-3. **`useString(key, ...args)` in render, `resolveString(key, ...args)` in callbacks.**
-   - `useString('amity_chat_dm_action_block_user')` inside a component body — re-renders on language change.
-   - `resolveString('amity_chat_block_success')` inside an `onSuccess` / `onError` / `onPress` callback fired outside the render cycle (e.g. inside a `useMutation` config or a `useConfirmContext().confirm({ ... })` callback). The toast / dialog fires once; `resolveString` reads the current value at fire time.
-
-4. **Dynamic interpolation uses `%s` (and `%d`), not `{0}` or `{name}`.** Catalog stores e.g. `"amity_chat_dm_block_user_message": "%s won't be able to send you the message. They won't be notified that you've blocked them."`. Call sites pass the value as a positional arg: `resolveString('amity_chat_dm_block_user_message', displayName)`. The formatter (`applyFormat` in `core/localization/resolveString.ts`) substitutes left-to-right, matching iOS / Android conventions. Multiple placeholders → multiple args.
-
-5. **Reuse canonical keys for shared labels.** A "Cancel" button uses `amity_chat_cancel`; a "Confirm" button uses the equivalent canonical key. Don't define per-feature variants of the same word — search before adding.
-
-6. **When a new key IS unavoidable, mirror nearby populated siblings.** Examples: confirm-button keys follow `amity_chat_<verb>_confirm_button` (parallels populated `amity_chat_unban_confirm_button`); DM failure-toast keys follow `amity_chat_dm_toast_<verb>_failed` (parallels `_mute_failed` / `_unmute_failed`).
-
-7. **`Query` hooks resolve strings inside `onSuccess` / `onError`.** Toast content uses `resolveString` because the toast fires from a React Query callback, not render. Same for `useConfirmContext().confirm({ title, content, okText, cancelText, ... })` — every visible string is `resolveString(...)`.
-
-8. **Preserve `TOAST` / `ALERT` / `BANNER` / `TEXT` constants for prior phases.** They remain the convention for legacy code paths. New features should NOT add to them; populate `en.json` keys instead. Do not silently migrate older constants either — that's a separate, scoped refactor.
-
-See: `src/v4/core/localization/index.ts`, `src/v4/core/localization/defaults/en.json`, `src/v4/chat/hooks/queries/useUserBlockQuery.ts` (Query hook with all l10n via `resolveString`), `src/v4/chat/features/conversation/chat/hooks/useConversationActions.tsx` (mixed: `useString` labels in render, `resolveString` for confirm-dialog content).
+See: `src/v4/chat/features/shared/components/MutedBanner/MutedBanner.tsx`.
 
 ---
 
-## Styling
+## Localization — see the `localization` skill
 
-- CSS Modules only (`.module.css` per component)
-- Theme tokens use `--asc-` prefix CSS variables — never hardcode color values
-- **Background color**: use `var(--asc-color-background-default)` — not `var(--asc-color-base-background)`
-- **Icon tints — set both `color` AND `fill`**. Every CSS rule that tints an icon glyph must pair the two, either to a named token or to `currentColor`. Icons in `~/v4/icons/*` are a mix of stroke-based (driven by `color`/`currentColor`) and solid-fill SVGs (driven by `fill`); setting only one of the two leaves the second kind rendered in the wrong color. Example:
-  ```css
-  .foo__icon {
-    color: var(--asc-color-base-shade1);
-    fill: var(--asc-color-base-shade1);
-  }
-  ```
-- **Use `rem` for all length values** — never `px`. 1rem = 16px (e.g. 8px → 0.5rem, 12px → 0.75rem, 16px → 1rem, 24px → 1.5rem, 32px → 2rem). Update existing files to rem when touched.
-- No inline styles except dynamic values (e.g. `style={themeStyles}` from `useAmityPage`)
-- **No comments in CSS files**
-- **CSS class naming — BEM-like**: `.componentName` for root, `.componentName__child` for child elements
-- **Conditional styles — use data attributes**: apply variants via `data-*` attributes and style them in CSS with `[data-x='y']` selectors. Never use `clsx` with conditional class name strings.
+Every visible string resolves from `defaults/en.json` + `th.json`. Key naming, `useString` vs
+`resolveString`, the `%s` placeholder format, and the rule that net-new keys need approval all
+live in **`.claude/skills/localization/SKILL.md`**. `pnpm verify:localization` enforces it.
 
----
+## Styling — see the `styling` skill
+
+CSS modules, `rem` lengths, `--asc-color-*` tokens, BEM class names, data-attribute variants and
+the icon `color`+`fill` rule all live in **`.claude/skills/styling/SKILL.md`**.
+`pnpm verify:styling` enforces the mechanical parts.
 
 ## Sticky headers and tab bars
 
@@ -669,11 +513,11 @@ See: `src/v4/chat/features/home/ChatHome.module.css`, `src/v4/chat/features/home
 
 ---
 
-## Text — always use Typography
+## Text — see the `typography` skill
 
-Use the `Typography` component from `~/v4/core/components/Typography/Typography` for all visible text. Never use raw `<span>`, `<p>`, or `<h*>` elements for user-facing text.
-
-Available sub-components: `Typography.Headline`, `Typography.TitleBold`, `Typography.Title`, `Typography.BodyBold`, `Typography.Body`, `Typography.CaptionBold`, `Typography.Caption`, `Typography.CaptionSmall`
+Every visible string renders through `Typography`, and no stylesheet sets `font-size`,
+`font-weight`, `font-family` or `line-height`. The variants, the legacy `--asc-text-*` properties
+and the gate all live in **`.claude/skills/typography/SKILL.md`**.
 
 ---
 
@@ -698,8 +542,12 @@ See: `src/v4/chat/features/home/components/ChannelItem/` for a component example
 Three-layer architecture: `Application` → `Page` → `Feature`
 
 - `pages/Application/Application.tsx` — wraps with the module's navigation provider; renders page-layer components conditionally using `currentPage.type === PageTypes.X && <XPage />` inline (no switch, no sub-components)
-- `pages/PageName/PageName.tsx` — **thin page layer**: calls `useAmityPage({ pageId })`, passes `themeStyles` and `accessibilityId` to the wrapper div, renders the feature root. No business logic, no state, no CSS module.
+- `pages/PageName/PageName.tsx` — **thin page layer**: the scaffolding and naming chain live in the
+  **`create-page`** skill. Keep business logic out of it; a page may carry a small CSS module for
+  layout (34 of 58 do), but anything beyond layout belongs to the feature.
 - `features/<feature>/<Feature>.tsx` — **feature root**: owns layout, business logic, state, navigation pushes, and CSS variable scope. Renders sub-components.
+
+New pages go through **`create-page`**; new components through **`create-component`**.
 
 ### Page props are the canonical shape — reuse, don't duplicate
 
@@ -719,7 +567,7 @@ See: `src/v4/chat/pages/Application/Application.tsx`, `src/v4/chat/pages/SelectG
 
 When the same visual style appears in **2 or more places**, extract it into a reusable element under `src/v4/<module>/elements/<ElementName>/` **before** duplicating CSS inline. Check that folder first before writing a new button / badge / pill / chip / bubble.
 
-Every reusable element ships with four files: `ElementName.tsx`, `ElementName.module.css`, `ElementName.stories.tsx` (required), `index.ts`.
+Every reusable element ships with three files: `ElementName.tsx`, `ElementName.module.css`, `index.ts`.
 
 Rules:
 
@@ -728,44 +576,29 @@ Rules:
 - Icon-bearing elements take a **variant key** (e.g. `icon: 'plus' | 'add-user'`) and map it to SVG components internally — consumers never import icons directly into a reusable.
 - Re-export the `type` union alongside the component from `index.ts`.
 
-See: `src/v4/chat/elements/IconButton/IconButton.tsx`, `src/v4/chat/elements/IconButton/IconButton.stories.tsx`
-
----
-
-## Storybook
-
-A `ComponentName.stories.tsx` file is required alongside:
-
-- Every Application entry and page
-- Every reusable element under `<module>/elements/`
-
-For elements with variants, expose a `control: 'select'` on the variant prop plus one story per meaningful variant (each icon, each size, disabled state).
-
-See: `src/v4/chat/pages/Application/Application.stories.tsx`, `src/v4/chat/pages/ChatHomePage/ChatHomePage.stories.tsx`, `src/v4/chat/elements/IconButton/IconButton.stories.tsx`
-
----
+See: `src/v4/core/components/IconButton/IconButton.tsx`
 
 ## File Locations
 
-| Type                    | Location                                                        |
-| ----------------------- | --------------------------------------------------------------- |
-| Navigation entry        | `src/v4/<module>/pages/Application/`                           |
-| Pages                   | `src/v4/<module>/pages/PageName/`                              |
-| Feature root            | `src/v4/<module>/features/<feature>/<Feature>.tsx`             |
-| Feature components      | `src/v4/<module>/features/<feature>/components/ComponentName/` |
-| Feature-local elements  | `src/v4/<module>/features/<feature>/elements/ElementName/`     |
-| Shared module elements  | `src/v4/<module>/elements/ElementName/`                        |
+| Type                    | Location                                                             |
+| ----------------------- | -------------------------------------------------------------------- |
+| Navigation entry        | `src/v4/<module>/pages/Application/`                                 |
+| Pages                   | `src/v4/<module>/pages/PageName/`                                    |
+| Feature root            | `src/v4/<module>/features/<feature>/<Feature>.tsx`                   |
+| Feature components      | `src/v4/<module>/features/<feature>/components/ComponentName/`       |
+| Feature-local elements  | `src/v4/<module>/features/<feature>/elements/ElementName/`           |
+| Shared module elements  | `src/v4/<module>/elements/ElementName/`                              |
 | Component-local hooks   | `src/v4/<module>/features/<feature>/components/ComponentName/hooks/` |
-| Feature-local hooks     | `src/v4/<module>/features/<feature>/hooks/`                    |
-| Feature-local utils     | `src/v4/<module>/features/<feature>/utils/`                    |
-| Feature-local constants | `src/v4/<module>/features/<feature>/constants/`                |
-| Shared module hooks     | `src/v4/<module>/hooks/`                                       |
-| Live-object hooks       | `src/v4/<module>/hooks/objects/` (suffix: `Object`)            |
-| Collection hooks        | `src/v4/<module>/hooks/collections/` (suffix: `Collection`)    |
-| Query / mutation hooks  | `src/v4/<module>/hooks/queries/` (suffix: `Query`)             |
-| Shared module utils     | `src/v4/<module>/utils/`                                       |
-| Providers               | `src/v4/<module>/providers/`                                   |
-| Shared module constants | `src/v4/<module>/constants/`                                   |
+| Feature-local hooks     | `src/v4/<module>/features/<feature>/hooks/`                          |
+| Feature-local utils     | `src/v4/<module>/features/<feature>/utils/`                          |
+| Feature-local constants | `src/v4/<module>/features/<feature>/constants/`                      |
+| Shared module hooks     | `src/v4/<module>/hooks/`                                             |
+| Live-object hooks       | `src/v4/<module>/hooks/objects/` (suffix: `Object`)                  |
+| Collection hooks        | `src/v4/<module>/hooks/collections/` (suffix: `Collection`)          |
+| Query / mutation hooks  | `src/v4/<module>/hooks/queries/` (suffix: `Query`)                   |
+| Shared module utils     | `src/v4/<module>/utils/`                                             |
+| Providers               | `src/v4/<module>/providers/`                                         |
+| Shared module constants | `src/v4/<module>/constants/`                                         |
 
 Placement guide:
 
@@ -777,7 +610,7 @@ Constants pattern:
 
 - Put each constant in `features/<feature>/constants/index.ts` with an `UPPER_SNAKE_CASE` name that's descriptive on import (`GROUP_NAME_MAX_LENGTH`, not just `MAX_LENGTH`). Multiple constants for the same feature share the file.
 - Never hardcode magic numbers directly in components, schemas, or hooks — extract to the constants module and import. This keeps `zod` schema `.max(100)` and a component's `maxLength={100}` consistent, enforced by a single source.
-- See: `src/v4/chat/features/group/create/constants/index.ts`, consumed by `GroupNameField.tsx` + `useCreateGroupChat.ts`.
+- See: `src/v4/chat/features/group/select-member/constants/index.ts`, `src/v4/chat/features/group/edit-permission/constants/index.ts`.
 
 ---
 
@@ -793,7 +626,7 @@ When the user reports something that "used to work" and now doesn't (popover not
 
 ### Phase 2 — Trace the user-visible flow end-to-end
 
-Walk the event from the DOM event that *triggers* the symptom up to the React state that *produces* the symptom. Don't skip layers. For the popover-not-showing class of bug:
+Walk the event from the DOM event that _triggers_ the symptom up to the React state that _produces_ the symptom. Don't skip layers. For the popover-not-showing class of bug:
 
 1. **Event source** — what fires the trigger? (`useLongPress` on `MessageBubble.tsx` → `onLongPress` callback)
 2. **Callback wiring** — what does the callback call, and is it actually wired? (`onLongPress` is passed from `MessageList.tsx` → comes from `useChatMessage` → wraps `openBubbleMenu` from `useBubbleMenu`)
@@ -823,7 +656,7 @@ Verify before patching:
 - **Mid verification** — temporarily comment out the suspect addition (e.g. remove the second `<Popover>`) and ask the user to confirm the original symptom returns to "works".
 - **Expensive verification** — add scoped `console.log` at each phase-2 layer; ask the user which logs fire. Use this only when phases 1–3 didn't narrow it down.
 
-Don't patch until the hypothesis names the *exact* line / prop / wiring that's wrong. "Something with the popover" is not a hypothesis.
+Don't patch until the hypothesis names the _exact_ line / prop / wiring that's wrong. "Something with the popover" is not a hypothesis.
 
 ### Phase 5 — Present 1–2 fix options to the user, don't auto-apply
 
@@ -847,198 +680,8 @@ If three patch attempts have failed, the architecture is wrong, not the patch �
 
 ---
 
-## Git — branch and commit message conventions
-
-Every piece of work tied to a Jira ticket follows this convention. Apply it for every branch you create and every commit you make.
-
-### Branch names
-
-Format: `<type>/<TICKET-ID>`
-
-- `<type>` is `feat` for feature tickets, `fix` for bug-fix tickets. Match the Jira ticket type, not your guess.
-- `<TICKET-ID>` is the bare Jira key (e.g. `PDT-2492`) — no description suffix.
-- **No Jira ticket?** Use `PDT-0000` as the placeholder ticket id (e.g. `feat/PDT-0000`, `fix/PDT-0000`) and decide `<type>` from the nature of the work.
-
-Examples:
-
-- Feature ticket PDT-2492 → `feat/PDT-2492`
-- Bug ticket PDT-3017 → `fix/PDT-3017`
-- No ticket, ad-hoc feature work → `feat/PDT-0000`
-- No ticket, ad-hoc bug fix → `fix/PDT-0000`
-
-Never include the ticket title, the phase number, or any free-form description in the branch name. The ticket key (or `PDT-0000` placeholder) is the canonical identifier; everything else is in the commit message and PR description.
-
-### Commit messages
-
-Format: `<type>(<scope>): <ticket title>`
-
-- `<type>` matches the branch type (`feat` / `fix`). Conventional Commits is enforced repo-wide via ESLint, so the type must be one of the allowed verbs.
-- `<scope>` is the affected module — `chat`, `social`, `core`, `icons`, etc. Single scope; never plural.
-- `<ticket title>` is the **Jira ticket title verbatim**, with the platform prefix stripped. The Jira ticket title is the source of truth — do not paraphrase, do not rename, do not append the phase number.
-
-**Strip platform prefixes from the ticket title.** Tickets that span multiple UIKits typically open with a bracketed prefix like `[React UIKit v.4]`, `[Flutter UIKit]`, `[iOS UIKit]`. Drop that prefix when porting the title into the commit message — the repo itself identifies the platform.
-
-Examples:
-
-- Jira ticket `[React UIKit v.4] Copy Message` → `feat(chat): copy message`
-- Jira ticket `[React UIKit v.4] Edit Message` → `feat(chat): edit message`
-- Jira ticket `[React UIKit v.4] Fix message bubble overflow` → `fix(chat): message bubble overflow`
-
-The title is lowercased to match Conventional Commits; everything else (including word order) stays as the ticket reads.
-
-### One commit per phase / ticket by default
-
-Stage and commit everything for a phase as a single atomic commit. Per-task commits are only used when the user explicitly asks for them. The pre-commit hook (`lint-staged` → `eslint --fix`) runs automatically — if it modifies files, those modifications go into the same commit (let the hook finish, do not amend).
-
----
-
-## Pull Requests — title, body, reviewers, base
-
-PR conventions diverge from commit conventions. Follow these exactly when opening a PR via `gh pr create`.
-
-### Title format
-
-`<type>: PDT-NNNN - <feature name>`
-
-- `<type>` is `feat` / `fix` (no scope, no parentheses — different from the commit message).
-- `PDT-NNNN` is the bare ticket key, surrounded by spaces and a hyphen.
-- `<feature name>` is the human-readable feature, lowercase first word, free-form (does **not** have to match the Jira title verbatim — paraphrase to read naturally).
-
-Examples:
-
-- `feat: PDT-2483 - report and unreport messages`
-- `fix: PDT-3017 - message bubble overflow on long urls`
-- `feat: PDT-0000 - storybook for menu skeleton`
-
-This is **not** Conventional Commits format. Don't write `feat(chat):` in PR titles — that's commit-only.
-
-### Body — follow `.github/pull_request_template.md`
-
-The repo has a PR template. Read it before creating the PR (`.github/pull_request_template.md`) and fill every section. As of this writing the template is:
-
-```
-**Jira ticket :**
-
--
-
-**Description :**
-
--
-
-**Check lists :**
-
-- [ ] Test code
-- [ ] Build local pass (optional)
-- [ ] Code is the same level as origin/develop branch
-
-**Screen shot :**
-
-
-**Note (optional) :**
-```
-
-Filling rules:
-
-- **Jira ticket** — full URL: `[PDT-NNNN](https://ekoapp.atlassian.net/browse/PDT-NNNN)`. Always linked, never bare key.
-- **Description** — bulleted list of what this PR does. Group by area (e.g. main feature, then "Side fixes discovered during QA"). One bullet per logical change.
-- **Check lists** — tick `[x]` only the boxes that genuinely apply. Don't tick "Test code" if no tests were added (the repo's testing culture is Storybook-first per CLAUDE.md). "Build local pass" gets ticked when `pnpm tsc` and `pnpm lint` are clean for touched files. "Same level as origin/develop" means the branch is current with develop or its base; tick only if true.
-- **Screen shot** — leave blank when running headless. Tell the user to attach screenshots themselves via the GitHub UI before requesting review.
-- **Note** — anything that doesn't fit description: stacking notes ("Stacked on `feat/PDT-XXXX-phase-N-...`"), explicit out-of-scope items per spec, breaking-change callouts.
-
-Pass the body to `gh pr create --body "$(cat <<'EOF' ... EOF)"` so backticks and special chars survive verbatim.
-
-### Base branch — stacked PRs are normal
-
-In multi-phase work, a phase's PR base is the **previous phase's branch**, not `main` or `develop`. The chat-v4 work (PDT-2296) is the integration branch for all chat phases. Each phase stacks on the previous one:
-
-```
-develop
-└── feat/PDT-2296-chat-v4 (integration)
-    └── feat/PDT-2489-phase-6-preview-link
-        └── feat/PDT-2483-phase-4-report-message  ← this PR
-            └── feat/PDT-NNNN-phase-N-next        ← next PR
-```
-
-Pass `--base <previous-phase-branch>` to `gh pr create`. Confirm with the user which base if there's any ambiguity. To re-target after creating: `gh pr edit <num> --base <branch>`.
-
-### Reviewers — login pitfalls
-
-GitHub reviewer logins in this repo do **not** match the obvious guesses. Always verify before requesting:
-
-- `chayanitbm` → wrong. Correct: **`ChayanitBm`** (capital `B`, capital `M`).
-- `pichaya-sp` → wrong. Correct: **`pitchaya-sp`** (with the `t`).
-- `copilot` → wrong. Correct: **`copilot-swe-agent`** (this repo's Copilot bot).
-
-If a reviewer the user names doesn't resolve, list candidates from the repo's assignees / suggested actors:
-
-```bash
-# Find a user reviewer (case-sensitive, partial match)
-gh api 'repos/AmityCo/Amity-Social-Cloud-UIKit-Web/assignees?per_page=100' --paginate \
-  | python3 -c 'import sys,json; [print(n["login"]) for n in json.load(sys.stdin) if "<partial>" in n["login"].lower()]'
-
-# Find bot reviewers (Copilot, etc.)
-gh api graphql -f query='query { repository(owner:"AmityCo", name:"Amity-Social-Cloud-UIKit-Web") { suggestedActors(capabilities: [CAN_BE_ASSIGNED], first: 100) { nodes { ... on Bot { login id } } } } }'
-```
-
-### Adding human reviewers
-
-```bash
-gh pr edit <pr-num> --add-reviewer ChayanitBm,pitchaya-sp
-```
-
-Or at create time: `--reviewer ChayanitBm,pitchaya-sp`.
-
-### Adding Copilot — must use GraphQL `botIds`
-
-`gh pr edit --add-reviewer copilot-swe-agent` returns success silently but does **not** add the bot. The REST endpoint `pulls/:n/requested_reviewers` rejects bots with "not a collaborator" (HTTP 422). The only working path is the GraphQL `requestReviews` mutation with `botIds`:
-
-```bash
-PR_ID=$(gh api graphql -f query='query { repository(owner:"AmityCo", name:"Amity-Social-Cloud-UIKit-Web") { pullRequest(number: <pr-num>) { id } } }' --jq '.data.repository.pullRequest.id')
-
-COPILOT_ID=$(gh api graphql -f query='query { repository(owner:"AmityCo", name:"Amity-Social-Cloud-UIKit-Web") { suggestedActors(capabilities: [CAN_BE_ASSIGNED], first: 100) { nodes { ... on Bot { login id } } } } }' --jq '.data.repository.suggestedActors.nodes[] | select(.login=="copilot-swe-agent") | .id')
-
-gh api graphql -f query="mutation { requestReviews(input: {pullRequestId: \"$PR_ID\", botIds: [\"$COPILOT_ID\"], union: true}) { pullRequest { reviewRequests(first:10) { nodes { requestedReviewer { ... on User { login } ... on Bot { login } } } } } } }"
-```
-
-The mutation returns success even when Copilot review is **not enabled** for the repo/org — verify by reading back `reviewRequests` after. If Copilot doesn't appear, the org/repo lacks Copilot review entitlement; tell the user and don't keep retrying.
-
-### Assignee — always the implementer
-
-`--assignee <github-login>` (e.g. `--assignee htutwaiphyoe`). Confirm with the user; default to "I'll assign you" when in doubt.
-
-### Full create command template
-
-```bash
-gh pr create \
-  --base <previous-phase-branch> \
-  --head <feature-branch> \
-  --title "feat: PDT-NNNN - <feature name>" \
-  --assignee <user> \
-  --reviewer ChayanitBm,pitchaya-sp \
-  --body "$(cat <<'EOF'
-**Jira ticket :**
-
-- [PDT-NNNN](https://ekoapp.atlassian.net/browse/PDT-NNNN)
-
-**Description :**
-
-- <bullet 1>
-- <bullet 2>
-
-**Check lists :**
-
-- [x] Test code
-- [x] Build local pass (optional)
-- [x] Code is the same level as origin/develop branch
-
-**Screen shot :**
-
-
-**Note (optional) :**
-
-- Stacked on `<base-branch>`.
-EOF
-)"
-```
-
-Then add Copilot via the GraphQL block above (separate step).
+## Git — see the `git-convention` skill
+
+Branch names, commit subjects, the PR template, reviewers, the release label and the Jira
+transitions all live in **`.claude/skills/git-convention/SKILL.md`** — invoke that skill when the
+work is ready for a PR.

@@ -7,14 +7,14 @@ description: Use when resolving a QA-filed Jira ticket (PDT-XXXX) in the Amity S
 
 This skill turns a single QA-filed Jira ticket into a pushed branch ready for the user to open a PR. It runs in five sequential stages (plus an optional Stage 6 for tickets that need no code change), each gated on user approval before moving forward.
 
-| Stage | Output | When |
-|---|---|---|
-| 1 — Analyze | Ticket moved to **In Progress** + expected-vs-actual summary in chat | After the user pastes a Jira URL |
-| 2 — Plan + approval gate | Approved fix plan via `ExitPlanMode` | After Stage 1 |
-| 3 — Branch + implement | New branch + applied code changes, file paths listed first in each handoff | After plan approval |
-| 4 — Manual QA gate | User says "ok to commit" | After implementation |
-| 5 — Build + commit + push | Pushed branch + compare URL targeting Stage 3 base | After QA sign-off |
-| 6 — Jira transition (optional) | Ticket moved (e.g. "Deployed to Dev") | Only if user decides no code change is needed in Stage 1 |
+| Stage                          | Output                                                                     | When                                                     |
+| ------------------------------ | -------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1 — Analyze                    | Ticket moved to **In Progress** + expected-vs-actual summary in chat       | After the user pastes a Jira URL                         |
+| 2 — Plan + approval gate       | Approved fix plan via `ExitPlanMode`                                       | After Stage 1                                            |
+| 3 — Branch + implement         | New branch + applied code changes, file paths listed first in each handoff | After plan approval                                      |
+| 4 — Manual QA gate             | User says "ok to commit"                                                   | After implementation                                     |
+| 5 — Build + commit + push      | Pushed branch + compare URL targeting Stage 3 base                         | After QA sign-off                                        |
+| 6 — Jira transition (optional) | Ticket moved (e.g. "Deployed to Dev")                                      | Only if user decides no code change is needed in Stage 1 |
 
 **Never skip ahead.** The user reviews and approves at every stage gate. Do not begin Stage 3 until the plan is approved. Do not begin Stage 5 until the user has manually QA'd the change.
 
@@ -72,11 +72,11 @@ If the description contains a Figma URL:
 
 If no Figma URL is in the ticket, ask the user **once** via `AskUserQuestion`:
 
-| Option | Effect |
-|---|---|
-| Provide Figma link | User pastes a URL; skill fetches it and continues. |
+| Option                | Effect                                                |
+| --------------------- | ----------------------------------------------------- |
+| Provide Figma link    | User pastes a URL; skill fetches it and continues.    |
 | Proceed without Figma | Skill uses Jira description alone as source of truth. |
-| Cancel | Stop the skill. |
+| Cancel                | Stop the skill.                                       |
 
 Do not block the workflow on a missing Figma — many QA bugs are pure regressions with no design reference.
 
@@ -105,6 +105,7 @@ Do **not** persist this summary to a file — plan mode in Stage 2 handles persi
 1. **All plausible root causes** — not just the most obvious. For a "stuck modal" bug, that could be: SDK hangs, React Query pauses, missing error handler, missing network guard, race condition in confirm provider, etc. Read the relevant code paths thoroughly enough to rule causes in or out.
 
 2. **All plausible fix approaches** for the most-likely root cause. Examples of categories to consider:
+
    - **Library-native primitive** (e.g. React Query's `networkMode: 'always'`, AbortController, error boundary) — usually the cleanest, look for it first by grepping the codebase for similar usage.
    - **Local guard** (e.g. pre-check `useNetworkState()` and short-circuit).
    - **Timeout / race** (wrap the hanging call).
@@ -126,7 +127,7 @@ Enter plan mode. Draft a fix plan covering:
 
 1. **Root cause** — one paragraph, citing file paths and line ranges. State what was ruled in vs. ruled out during enumeration.
 2. **Files to change** — explicit paths, with one-line description per file.
-3. **Reusable utilities / components leveraged** — per the [`feature-implementation`](../feature-implementation/SKILL.md) skill rules. Check `~/v4/core/components/` and `~/v4/chat/elements/` before proposing new code. Cite the file paths of the established pattern you're following (e.g. *"matches `networkMode: 'always'` usage in `usePostFlaggedByMe.ts`, `useEventMutation.ts`, …"*).
+3. **Reusable utilities / components leveraged** — per the [`feature-implementation`](../feature-implementation/SKILL.md) skill rules. Check `~/v4/core/components/` and `~/v4/chat/elements/` before proposing new code. Cite the file paths of the established pattern you're following (e.g. _"matches `networkMode: 'always'` usage in `usePostFlaggedByMe.ts`, `useEventMutation.ts`, …"_).
 4. **L10n impact** — if the fix touches strings, list the keys. Net-new l10n keys require user approval per the memory rule `feedback_l10n_keys`. Pre-allocated empty keys may be populated freely.
 5. **Manual QA steps** — how the user will verify the fix locally (Storybook story name, or page + interaction sequence in the dev server).
 
@@ -140,31 +141,18 @@ Call `ExitPlanMode` to request approval. **Do not proceed past this stage withou
 
 Ask the user via `AskUserQuestion`:
 
-| Option | When |
-|---|---|
+| Option                                       | When                                                                                        |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | Current chat-v4 feature branch (Recommended) | QA tickets filed against the chat-v4 milestone — PR targets the chat-v4 integration branch. |
-| `develop` | Bug also affects already-shipped v3 or non-chat code. |
-| Other (specify) | User names the branch. |
+| `develop`                                    | Bug also affects already-shipped v3 or non-chat code.                                       |
+| Other (specify)                              | User names the branch.                                                                      |
 
 Confirm with `git status` that the working tree is clean. If it is dirty, stop and ask the user how to proceed — do not stash, do not discard.
 
 ## Stage 3 — Branch naming
 
-Format: `<type>/PDT-<num>-<slug>`, where `<type>` is `fix` for Jira `Bug`/`Issue` types and `feat` otherwise. The separator between `<type>` and `PDT-` is a **slash**, not a hyphen. (Memory: `feedback_branch_pr_format`.)
-
-Keep `<slug>` **short and meaningful** (3–6 words). Strip filler like `[Web Mobile UIKit Chat 4.0]`, "should", "no" prefixes, and Jira tag noise. The slug is for humans to scan a branch list — capture the essence, not the full Jira title.
-
-1. Identify the 3–6 most descriptive words from the title (the actual subject of the bug).
-2. Lowercase, replace non-alphanumerics with `-`, collapse runs, trim.
-
-Examples:
-
-- Title `[Web Mobile UIKit Chat 4.0) chat list no internet connection state` + key `PDT-2777` → `fix/PDT-2777-chat-list-no-network-state`
-- Title `[Web UIKit : Chat 4.0] No error modal for message >10K characters` + key `PDT-2729` → `fix/PDT-2729-chat-message-too-long-modal`
-
-If unsure, pick the shorter version. Do not mechanically truncate the full title — it produces ugly, hard-to-read branch names.
-
-Run:
+Branch name, and every other git convention, comes from the **`git-convention`** skill — invoke
+it rather than restating the format here.
 
 ```bash
 git checkout <base-branch>
@@ -191,7 +179,7 @@ For any change outside `src/v4/` (legacy v3, build config, docs), apply the chan
 
 For any visual fix, **re-open the Figma frame** after editing and cross-check layout/alignment/centering — not just functionality. Common gaps from the Jira description alone:
 
-- The Jira description tells you *what* should appear; the Figma tells you *where* it sits (inline vs. stacked, centered vs. left-aligned, in the header vs. as a separate block).
+- The Jira description tells you _what_ should appear; the Figma tells you _where_ it sits (inline vs. stacked, centered vs. left-aligned, in the header vs. as a separate block).
 - If the Figma shows three sibling regions in a row (e.g. title / status / actions), match its flex sizing — typically both outer regions get equal `flex: 1 0 0` and the middle region uses `flex-shrink: 0` so it stays centered.
 
 Iterate on layout until it matches the spec. Do not assume Jira description and Figma agree on placement.
@@ -230,11 +218,11 @@ Print a handoff summary with the file list at the very top:
 
 Ask the user via `AskUserQuestion`:
 
-| Option | Effect |
-|---|---|
-| Ok to commit | Proceed to Stage 5. |
+| Option        | Effect                                                        |
+| ------------- | ------------------------------------------------------------- |
+| Ok to commit  | Proceed to Stage 5.                                           |
 | Needs changes | User describes what; skill loops back into Stage 3 implement. |
-| Cancel | Stop without committing. |
+| Cancel        | Stop without committing.                                      |
 
 **Do not commit until the user picks "Ok to commit".**
 
@@ -252,108 +240,20 @@ pnpm build
 
 If `pnpm build` fails, **stop**. Surface the error to the user verbatim. Do not stage, commit, or push. `pnpm tsc` and `pnpm lint` in Stage 3 catch most issues but `pnpm build` validates the actual tsup bundle output that ships to consumers — a green build is the precondition for a push.
 
-## Stage 5 — Stage changes
+## Stage 5 — Stage, commit, push, open the PR
 
-Always use `git add -A` to stage every modified file (user preference — matches `feedback_git_add_all` memory). If something shouldn't be included, revert it rather than skipping the stage step:
+Follow the **`git-convention`** skill for all of it: `git add -A`, the single-line commit subject,
+the push, the UIKit PR template, the reviewer pool minus the author attached inside
+`gh pr create`, the `--assignee @me`, and the dated `Release/` label.
 
-```bash
-git add -A
-```
+Two things this stage adds on top of that skill:
 
-## Stage 5 — Commit
+- The commit verb comes from the Jira issue type captured in Stage 1 — `Bug` → `fix:`, anything
+  else → `feat:`.
+- `--base` is **always the branch chosen in Stage 3**, never a default.
 
-Determine the commit verb from the Jira issue type captured in Stage 1:
-
-- `Bug` → `fix:`
-- `Task` / `Story` / anything else → `feat:`
-
-**Keep the commit message simple and short — single line, no body, no Co-Authored-By footer.** The user prefers terse, scannable history that matches the repo style (e.g. `feat: PDT-2517 - chat v4 localization`, `fix: PDT-3091 - add dot on toast`). Aim for **3–5 words** after the ticket key. (Memory: `feedback_branch_pr_format`.)
-
-Format:
-
-```
-<verb>: PDT-<num> - <short summary>
-```
-
-Use a single `-m` flag — no HEREDOC needed since there is no body. The Jira key in the subject is the entire audit trail; descriptive content lives on the Jira ticket and the PR description, not in the commit body.
-
-The **PR title** uses the **same string** as the commit subject — not a longer reworded version.
-
-If the pre-commit hook (lint-staged) fails, fix the issue and create a **new** commit. Never `--amend` after a failed hook — that modifies the previous commit.
-
-## Stage 5 — Push
-
-```bash
-git push -u origin <branch>
-```
-
-## Stage 5 — Open the PR
-
-Open the PR via `gh pr create` against the Stage 3 base branch, using the project's [pull_request_template.md](../../../../.github/pull_request_template.md) as the body. The `--base` is **always the branch chosen in Stage 3** (the branch we created from). Never default to `develop` or `main` if the user picked the chat-v4 feature branch — the PR target must match the base.
-
-The **PR title** must be **identical to the commit subject** (e.g. `fix: PDT-3091 - add dot on toast`). Do not invent a longer title. (Memory: `feedback_branch_pr_format`.)
-
-The PR body fills in the template fields:
-
-- `**Jira ticket :**` → `- https://socialplus.atlassian.net/browse/PDT-<num>`
-- `**Description :**` → 1–3 short bullets summarizing what changed and why. Don't restate the entire ticket.
-- `**Check lists :**` → check all three (`Test code`, `Build local pass (optional)`, `Code is the same level as origin/develop branch`).
-- `**Screen shot :**` → leave blank; the user attaches screenshots after open.
-- `**Note (optional) :**` → leave blank unless there's something the reviewer needs to know that isn't in the description.
-
-Do **not** add extra sections (no "QA coverage", no "Test plan") — the template is the contract.
-
-**Assign the reviewers and yourself in this same `gh pr create` call.** This matters: the repo's `notify_code_review.yaml` workflow only posts to the Eko "Code review" channel when a PR is **opened with a requested reviewer already attached**. If reviewers are added *after* open (via a later `gh pr edit --add-reviewer`), the notification is silently skipped — the `opened` run saw no reviewer, and the follow-up `review_requested` event is gated out when the PR is <60s old or already has >1 reviewer. So attach reviewers at creation, never in a separate step.
-
-**Reviewers = the web-team pool minus the PR author.** GitHub rejects requesting a review from the author, so a fixed list breaks whenever a pool member runs the skill. Compute it: the pool is `htutwaiphyoe ChayanitBm pitchaya-sp` (exact logins), and you request everyone in it except `@me`. `--assignee @me` is always the author.
-
-```bash
-ME=$(gh api user --jq '.login')
-REVIEWERS=$(printf '%s\n' htutwaiphyoe ChayanitBm pitchaya-sp | grep -viFx "$ME" | paste -sd, -)
-```
-
-If the user named different reviewers this session, use their explicit list instead of the pool.
-
-Example HEREDOC form:
-
-```bash
-gh pr create --base <base> --title "<verb>: PDT-<num> - <short summary>" --reviewer "$REVIEWERS" --assignee @me --body "$(cat <<'EOF'
-**Jira ticket :**
-
-- https://socialplus.atlassian.net/browse/PDT-<num>
-
-**Description :**
-
-- <one-line summary of the change>
-
-**Check lists :**
-
-- [x] Test code
-- [x] Build local pass (optional)
-- [x] Code is the same level as origin/develop branch
-
-**Screen shot :**
-
-
-**Note (optional) :**
-EOF
-)"
-```
-
-## Stage 5 — Reviewers and self
-
-Reviewers (the web-team pool minus the author, computed as `$REVIEWERS` above) and the `@me` assignee are attached **in the `gh pr create` call above**, not in a separate `gh pr edit` step — see the note there for why (the code-review notify bot fires on `opened` only when a reviewer is already attached, and GitHub rejects requesting the author as a reviewer).
-
-**Fallback — the notification didn't post:** if a PR ended up opened *without* reviewers (or you need to re-fire the notify), emit a clean `review_requested` with **exactly one** reviewer on the **>60s-old** PR: clear all reviewers, then add a single one (any pool member who isn't the author).
-
-```bash
-gh pr edit <pr-number> --remove-reviewer ChayanitBm --remove-reviewer pitchaya-sp   # exact login case
-gh pr edit <pr-number> --add-reviewer pitchaya-sp                                   # count = 1 → fires
-```
-
-Adding two reviewers at once (count > 1) or adding within 60s of creation is skipped by the workflow's de-dupe. Verify with `gh run list --workflow notify_code_review.yaml` (the Send step logs `Eko webhook responded HTTP 200`).
-
----
+If the pre-commit hook fails, fix the issue and make a new commit. Never `--amend` after a failed
+hook.
 
 # Stage 6 — Optional: Jira status transition
 
