@@ -176,7 +176,8 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
         const getActions = isCurrentUser
           ? undefined
           : async () => {
-              const isFlaggedByMe = await queryIsFlaggedByMe(member.user!.userId);
+              // Exact answer on menu open; the SDK skips the request when the user's hint is false.
+              const isFlaggedByMe = await queryIsFlaggedByMe(member.user!);
 
               const items: (ActionMenuItem & { visible: boolean })[] = [
                 {

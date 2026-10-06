@@ -1,21 +1,15 @@
-import { UserRepository } from '@amityco/ts-sdk';
-import { useQuery } from '@tanstack/react-query';
-import useSDK from '~/v4/core/hooks/useSDK';
-
-const useUserReportedByMe = (userId?: string) => {
-  const { isVisitorOrBot } = useSDK();
-  const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['asc-uikit', 'UserRepository', 'isUserReportedByMe', userId],
-    queryFn: () => {
-      return UserRepository.isUserFlaggedByMe(userId as string);
-    },
-    enabled: userId != null && !isVisitorOrBot,
-  });
-
+/**
+ * Whether the current user has reported `user`, read from the user object's own
+ * `isFlaggedByMe` hint: a local Bloom test on `hashFlag`, no request. `false` is exact,
+ * `true` can be a false positive. The value follows the user object, so a user delivered
+ * by a live object or collection carries the fresh hint after a flag or unflag.
+ * `isLoading` and `isFetching` are kept for call-site compatibility and are always `false`.
+ */
+const useUserReportedByMe = (user?: Amity.User | null) => {
   return {
-    isLoading,
-    isFetching,
-    isReportedByMe: data,
+    isLoading: false,
+    isFetching: false,
+    isReportedByMe: user?.isFlaggedByMe ?? false,
   };
 };
 

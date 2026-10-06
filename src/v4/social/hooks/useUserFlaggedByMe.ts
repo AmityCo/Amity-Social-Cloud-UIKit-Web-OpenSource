@@ -1,60 +1,57 @@
 import { UserRepository } from '@amityco/ts-sdk';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
 
-const useUserFlaggedByMe = (userId?: string) => {
+/**
+ * Report / unreport toggle for a user object. The label state starts from the object's own
+ * `isFlaggedByMe` hint (local Bloom test, no request) and follows the object when a live
+ * collection re-delivers it. After a flag, the state comes from the user the SDK returns.
+ * After an unflag it is confirmed with `user.getUserFlagsByMe()`, because the caller may
+ * still hold another report and the hint must never be forced to `false` locally.
+ */
+const useUserFlaggedByMe = (user?: Amity.User | null) => {
   const { isVisitorOrBot } = useSDK();
-  const [isFlaggedByMe, setIsFlaggedByMe] = useState(false);
-
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ['asc-uikit', 'UserRepository', 'isUserFlaggedByMe', userId],
-    queryFn: () => {
-      return UserRepository.isUserFlaggedByMe(userId as string);
-    },
-    enabled: userId != null && !isVisitorOrBot,
-  });
+  const hint = !isVisitorOrBot && (user?.isFlaggedByMe ?? false);
+  const [isFlaggedByMe, setIsFlaggedByMe] = useState(hint);
 
   useEffect(() => {
-    if (data != null) {
-      setIsFlaggedByMe(data);
-    }
-  }, [data]);
+    setIsFlaggedByMe(hint);
+  }, [hint, user?.userId]);
 
   const flagUser = async () => {
-    if (userId == null) return;
+    if (!user) return;
     try {
-      await UserRepository.flagUser(userId);
-    } catch (_error) {
-      setIsFlaggedByMe(false);
-    } finally {
-      refetch();
+      const flagged = await UserRepository.flagUser(user.userId);
+      setIsFlaggedByMe(flagged.isFlaggedByMe);
+    } catch (error) {
+      setIsFlaggedByMe(hint);
+      throw error;
     }
   };
 
   const unflagUser = async () => {
-    if (userId == null) return;
+    if (!user) return;
     try {
-      await UserRepository.unflagUser(userId);
-      setIsFlaggedByMe(false);
-    } catch (_error) {
-      setIsFlaggedByMe(true);
-    } finally {
-      refetch();
+      await UserRepository.unflagUser(user.userId);
+      const { isFlagByMe } = await user.getUserFlagsByMe();
+      setIsFlaggedByMe(isFlagByMe);
+    } catch (error) {
+      setIsFlaggedByMe(hint);
+      throw error;
     }
   };
 
   const toggleFlagUser = async () => {
-    if (userId == null) return;
+    if (!user) return;
     if (isFlaggedByMe) {
-      unflagUser();
+      await unflagUser();
     } else {
-      flagUser();
+      await flagUser();
     }
   };
 
   return {
-    isLoading,
+    isLoading: false,
     isFlaggedByMe,
     flagUser,
     unflagUser,
