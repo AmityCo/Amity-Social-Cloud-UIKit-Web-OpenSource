@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef } from 'react';
+import { SearchUsersByEnum } from '@amityco/ts-sdk';
 import type { EditorContentType } from '~/v4/core/design/components/TextEditor/TextEditor';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
@@ -47,6 +48,7 @@ export const useSuggestions = (
     channelId: isSearchChannelMembers ? channelId! : '',
     memberships: ['member', 'muted'],
     search: queryString ?? undefined,
+    searchBy: [SearchUsersByEnum.DISPLAY_NAME],
     limit: 10,
   });
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SearchUsersByEnum } from '@amityco/ts-sdk';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChannelMembersCollection';
 import { EmptyState } from '~/v4/chat/features/shared/components/EmptyState/EmptyState';
@@ -20,6 +21,7 @@ export function BannedMemberList({ channelId, search, getActionItems }: BannedMe
     {
       channelId,
       search,
+      searchBy: [SearchUsersByEnum.DISPLAY_NAME],
       memberships: ['banned'],
       limit: LIST_PAGE_LIMIT,
     },

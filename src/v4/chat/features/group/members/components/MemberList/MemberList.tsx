@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { SearchUsersByEnum } from '@amityco/ts-sdk';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useChannelMembersCollection } from '~/v4/chat/hooks/collections/useChannelMembersCollection';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
@@ -80,6 +81,7 @@ export function MemberList({ channelId, search, onlyModerators }: MemberListProp
   } = useChannelMembersCollection({
     channelId,
     search,
+    searchBy: [SearchUsersByEnum.DISPLAY_NAME],
     memberships: ['member', 'muted'],
     roles: onlyModerators ? [MemberRoles.CHANNEL_MODERATOR] : undefined,
     limit: LIST_PAGE_LIMIT,
