@@ -5,10 +5,10 @@ type Params = Parameters<typeof ChannelRepository.Membership.getMembers>[0] & {
   searchBy?: Amity.SearchUsersBy[];
 };
 
-export function useChannelMembersCollection(params: Params) {
+export function useChannelMembersCollection({ search, searchBy, ...params }: Params) {
   const { items, ...rest } = useLiveCollectionV4<Amity.Membership<'channel'>, Params>({
     fetcher: ChannelRepository.Membership.getMembers,
-    params,
+    params: search ? { ...params, search, searchBy } : params,
     shouldCall: !!params.channelId,
   });
 

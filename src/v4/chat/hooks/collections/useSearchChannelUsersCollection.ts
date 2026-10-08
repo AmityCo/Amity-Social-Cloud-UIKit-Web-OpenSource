@@ -25,7 +25,7 @@ export const useSearchChannelUsersCollection = ({
     params: {
       channelId: channelId!,
       search: search || '',
-      searchBy,
+      searchBy: search ? searchBy : undefined,
       memberships,
       limit,
       includeDeleted: false,

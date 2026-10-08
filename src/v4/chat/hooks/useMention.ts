@@ -110,7 +110,7 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
           const params: GetMembersParams = {
             channelId: targetId!,
             search: keyword,
-            searchBy: [SearchUsersByEnum.DISPLAY_NAME],
+            searchBy: keyword ? [SearchUsersByEnum.DISPLAY_NAME] : undefined,
             limit: 20,
           };
           unsub = ChannelRepository.Membership.getMembers(
