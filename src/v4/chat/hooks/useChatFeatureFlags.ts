@@ -1,9 +1,15 @@
 import { useMemo } from 'react';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider/CustomizationProvider';
+import {
+  resolveChannelListSortBy,
+  type ChannelListSortBy,
+} from '~/v4/chat/utils/resolveChannelListSortBy';
 
 type ChannelType = 'conversation' | 'community';
 
 type UserActionName = 'mute' | 'report' | 'block';
+
+export type { ChannelListSortBy };
 
 const DEFAULT_CHANNEL_TYPES: ChannelType[] = ['conversation', 'community'];
 
@@ -18,6 +24,11 @@ export function useChatFeatureFlags() {
     if (!raw || raw.length === 0) return DEFAULT_CHANNEL_TYPES;
     return raw.length > 0 ? raw : DEFAULT_CHANNEL_TYPES;
   }, [chatFlags]);
+
+  const channelListSortBy = useMemo<ChannelListSortBy>(
+    () => resolveChannelListSortBy(chatFlags?.channel_list_sort_by),
+    [chatFlags],
+  );
 
   const userActionsMap = useMemo<Map<UserActionName, boolean> | null>(() => {
     const raw = chatFlags?.conversation_chat_user_actions;
@@ -34,5 +45,10 @@ export function useChatFeatureFlags() {
     return CONFIG_USER_ACTIONS.some((name) => isChatUserActionEnabled(name));
   }
 
-  return { enabledChannelTypes, isChatUserActionEnabled, hasAnyEnabledChatUserAction };
+  return {
+    enabledChannelTypes,
+    channelListSortBy,
+    isChatUserActionEnabled,
+    hasAnyEnabledChatUserAction,
+  };
 }

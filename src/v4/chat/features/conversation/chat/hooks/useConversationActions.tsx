@@ -46,11 +46,7 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
     elementId: isBlockedByMe ? ELEMENT_ID.UNBLOCK_USER_BUTTON : ELEMENT_ID.BLOCK_USER_BUTTON,
   });
   const { block, unblock } = useUserBlockQuery();
-  const {
-    isFlaggedByMe: isReported,
-    report,
-    unreport,
-  } = useUserReportQuery({ userId: otherUserId });
+  const { isFlaggedByMe: isReported, report, unreport } = useUserReportQuery({ user });
 
   async function handleToggleNotification() {
     if (!channelId) return;

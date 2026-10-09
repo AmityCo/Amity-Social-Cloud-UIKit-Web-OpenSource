@@ -28,7 +28,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
   const { blockUser } = useUserBlock();
   const { removeDrawerData } = useDrawer();
   const { reportUser, unReportUser } = useUserReport();
-  const { isReportedByMe, isFetching } = useUserReportedByMe(user.userId);
+  const { isReportedByMe, isFetching } = useUserReportedByMe(user);
   const { online } = useNetworkState();
   const notification = useNotifications();
 

@@ -116,6 +116,7 @@
     },
     "chat": {
       "enabled_channel_types": ["conversation", "community"],
+      "channel_list_sort_by": "lastMessage",
       "conversation_chat_user_actions": [
         { "name": "mute", "enabled": true },
         { "name": "report", "enabled": true },
@@ -342,21 +343,6 @@
     },
     "live_chat/message_list/message_quick_reaction": {
       "reaction": "heart"
-    }
-  },
-  "feature_flags": {
-    "post": {
-      "clip": {
-        "can_view_tab": "singed_in_user_only"
-      }
-    },
-    "chat": {
-      "enabled_channel_types": ["conversation", "community"],
-      "conversation_chat_user_actions": [
-        { "name": "mute", "enabled": true },
-        { "name": "report", "enabled": true },
-        { "name": "block", "enabled": true }
-      ]
     }
   }
 }

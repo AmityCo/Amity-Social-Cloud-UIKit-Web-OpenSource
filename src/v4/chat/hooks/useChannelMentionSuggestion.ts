@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
+import { SearchUsersByEnum } from '@amityco/ts-sdk';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
-import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
+import { useSearchChannelUsersCollection } from '~/v4/chat/hooks/collections/useSearchChannelUsersCollection';
 import { resolveString } from '~/v4/core/localization/resolveString';
 
 export const useChannelMentionSuggestion = (channelId?: string | null) => {
@@ -8,8 +9,9 @@ export const useChannelMentionSuggestion = (channelId?: string | null) => {
 
   const { isModerator } = useChannelPermission(channelId || undefined);
 
-  const { channelMembers } = useSearchChannelUser({
+  const { channelMembers } = useSearchChannelUsersCollection({
     search: queryString,
+    searchBy: [SearchUsersByEnum.DISPLAY_NAME],
     channelId: channelId as string,
     memberships: ['member'],
     limit: 20,

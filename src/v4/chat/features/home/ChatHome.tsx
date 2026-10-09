@@ -9,7 +9,12 @@ import { useChatFeatureFlags } from '~/v4/chat/hooks/useChatFeatureFlags';
 import { useUserPushNotificationQuery } from '~/v4/chat/hooks/queries/useUserPushNotificationQuery';
 import styles from './ChatHome.module.css';
 
-export function ChatHome() {
+type ChatHomeProps = {
+  /** The page is mounted but not shown; see `ChatHomePage`. */
+  hidden?: boolean;
+};
+
+export function ChatHome({ hidden = false }: ChatHomeProps = {}) {
   const { enabledChannelTypes } = useChatFeatureFlags();
 
   const hasConversation = enabledChannelTypes.includes('conversation');
@@ -28,19 +33,19 @@ export function ChatHome() {
       value: 'all',
       label: allLabel,
       testId: 'chat-tab-all',
-      content: () => <ChannelList types={['conversation', 'community']} />,
+      content: () => <ChannelList types={['conversation', 'community']} hidden={hidden} />,
     };
     const directTab = {
       value: 'direct',
       label: directLabel,
       testId: 'chat-tab-direct',
-      content: () => <ChannelList types={['conversation']} />,
+      content: () => <ChannelList types={['conversation']} hidden={hidden} />,
     };
     const groupsTab = {
       value: 'group',
       label: groupsLabel,
       testId: 'chat-tab-group',
-      content: () => <ChannelList types={['community']} />,
+      content: () => <ChannelList types={['community']} hidden={hidden} />,
     };
 
     if (!showBoth) {
@@ -51,7 +56,7 @@ export function ChatHome() {
       enabledChannelTypes[0] === 'conversation' ? [directTab, groupsTab] : [groupsTab, directTab];
 
     return [allTab, ...typeTabsInOrder];
-  }, [showBoth, hasConversation, enabledChannelTypes, allLabel, directLabel, groupsLabel]);
+  }, [showBoth, hasConversation, enabledChannelTypes, allLabel, directLabel, groupsLabel, hidden]);
 
   const { isChatNotificationDisabled } = useUserPushNotificationQuery();
 

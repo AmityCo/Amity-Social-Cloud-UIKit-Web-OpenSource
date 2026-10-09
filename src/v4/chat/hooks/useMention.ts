@@ -71,6 +71,9 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
       type SearchMembersResponse = Parameters<
         Parameters<typeof CommunityRepository.Membership.searchMembers>[1]
       >[0];
+      type GetMembersParams = Parameters<typeof ChannelRepository.Membership.getMembers>[0] & {
+        searchBy?: Amity.SearchUsersBy[];
+      };
       type GetMembersResponse = Parameters<
         Parameters<typeof ChannelRepository.Membership.getMembers>[1]
       >[0];
@@ -104,12 +107,14 @@ const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMenti
       } else if (isChannel) {
         users = await new Promise<SearchedUser[]>((resolve) => {
           unsub?.();
+          const params: GetMembersParams = {
+            channelId: targetId!,
+            search: keyword,
+            searchBy: keyword ? [SearchUsersByEnum.DISPLAY_NAME] : undefined,
+            limit: 20,
+          };
           unsub = ChannelRepository.Membership.getMembers(
-            {
-              channelId: targetId!,
-              search: keyword,
-              limit: 20,
-            },
+            params,
             (response: GetMembersResponse) => {
               if (response.loading) return;
               const members = response.data as { user?: SearchedUser }[];

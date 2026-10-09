@@ -3,6 +3,8 @@
   "amity_chat_home_title": "Chat",
   "amity_chat_home_empty_title": "No conversation yet",
   "amity_chat_home_empty_description": "Let's create chat to get started.",
+  "amity_chat_home_error_title": "Couldn't load chats",
+  "amity_chat_home_error_description": "Something went wrong. Please try again later.",
   "amity_chat_home_notifications_off_banner": "",
   "amity_chat_tab_all": "All",
   "amity_chat_tab_direct": "Direct",
