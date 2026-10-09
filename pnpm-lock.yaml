@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.29.1-68a4b98.0
-        version: 7.29.1-68a4b98.0
+        specifier: ^7.30.0
+        version: 7.30.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -354,8 +354,8 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@amityco/ts-sdk@7.29.1-68a4b98.0':
-    resolution: {integrity: sha512-INgF00+rmD9ZIaaOrEekr00W0MHkMOWtbWks0CUMoeyJPbHzHhyUezesVMjKKKdXoBd2ZzPCE5QYC9eNLpMpOw==}
+  '@amityco/ts-sdk@7.30.0':
+    resolution: {integrity: sha512-O2P8CKs2i6IgEAuuOnGbIO4alnAFNudQiJr7jpKeO2l4Di6TXJRYFPlwMFNr7PeciR4h4kg+yMlc8zznlLkoUQ==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7005,6 +7005,7 @@ packages:
 
   plyr@3.7.8:
     resolution: {integrity: sha512-yG/EHDobwbB/uP+4Bm6eUpJ93f8xxHjjk2dYcD1Oqpe1EcuQl5tzzw9Oq+uVAzd2lkM11qZfydSiyIpiB8pgdA==}
+    deprecated: 'Plyr is deprecated and receives security updates only. Use Video.js 10 for new projects. Migration guide: https://videojs.org/docs/framework/html/guides/migrate-from-plyr'
 
   pngjs@3.4.0:
     resolution: {integrity: sha512-NCrCHhWmnQklfH4MtJMRjZ2a8c80qXeMlQMv2uVp9ISJMTt562SbGd6n2oq0PaPgKm7Z6pL9E2UlLIhC+SHL3w==}
@@ -8811,7 +8812,7 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@amityco/ts-sdk@7.29.1-68a4b98.0':
+  '@amityco/ts-sdk@7.30.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
