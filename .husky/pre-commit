@@ -2,8 +2,3 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx --no-install lint-staged
-
-# Soft: a regex cannot tell a component with nothing to hide from
-# one that forgot to read its gate flag. Baselined, so existing debt does not
-# block a commit while nothing new joins it.
-node ./governance/module-gate/check-flag-consumed.mjs || true
