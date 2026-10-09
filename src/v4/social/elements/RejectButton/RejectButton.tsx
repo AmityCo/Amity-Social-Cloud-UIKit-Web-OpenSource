@@ -18,11 +18,15 @@ export const RejectButton = ({
   ...props
 }: RejectButtonProps) => {
   const elementId = $elementId ? $elementId : 'reject_button';
-  const { config, themeStyles, accessibilityId } = useAmityElement({
+  const { config, themeStyles, accessibilityId, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  // The accept button next to this one asks; this one never did, so a
+  // Community invitation kept half its actions after the module was gone.
+  if (isExcluded) return null;
 
   return (
     <Button

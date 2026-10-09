@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { AmityReactionType, useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { Typography } from '~/v4/core/components';
 import { FallbackReaction } from '~/v4/core/design/icons/FallbackReaction';
@@ -25,6 +26,19 @@ export const ReactionPicker = ({
   position = 'above',
   hoveredReaction,
 }: ReactionPickerProps) => {
+  // The picker asked no module anything. With Reaction off the badge on a
+  // message disappeared — that one is gated — but long-pressing the bubble
+  // still offered the whole picker, and pressing an emoji still wrote a
+  // reaction. Measured on both viewports before this line existed.
+  //
+  // `message_reaction_picker` is the table's own id for this element, and it
+  // was one of the ids no Web code declared: the table named the surface and
+  // nothing here answered to it.
+  const { isExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'message_reaction_picker',
+  });
   const { reactions: config, getChatReactionLabel } = useCustomReaction();
   const [erroredReactions, setErroredReactions] = useState<Set<string>>(new Set());
 
@@ -33,6 +47,9 @@ export const ReactionPicker = ({
     onSelectReaction && onSelectReaction(reactionName);
   };
 
+  // Below every hook this component calls, so flipping the flag cannot change
+  // the hook count on a re-render (EX-15).
+  if (isExcluded) return null;
   if (!config || config.length === 0) return null;
 
   return (

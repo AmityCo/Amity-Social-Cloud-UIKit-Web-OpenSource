@@ -1,5 +1,5 @@
 import React from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import styles from './UserPendingFollowRequestPage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
@@ -15,7 +15,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 export const UserPendingFollowRequestPage = () => {
   const pageId = 'user_pending_follow_request_page';
   const { currentUserId } = useSDK();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
   const { pendingCount } = useFollowCount(currentUserId);
   const { isDesktop } = useResponsive();
@@ -23,6 +23,10 @@ export const UserPendingFollowRequestPage = () => {
     userId: currentUserId,
     status: 'pending',
   });
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div
@@ -34,12 +38,12 @@ export const UserPendingFollowRequestPage = () => {
         <div className={styles.userPendingFollowRequestPage__topBar}>
           <BackButton pageId={pageId} onPress={() => onBack()} />
           <Typography.TitleBold className={styles.userPendingFollowRequestPage__topBar__text}>
-            {useString('amity_social_label_follow_requests', pendingCount)}
+            {resolveString('amity_social_label_follow_requests', pendingCount)}
           </Typography.TitleBold>
         </div>
         <div className={styles.userPendingFollowRequestPage__description}>
           <Typography.Caption>
-            {useString('amity_social_decline_follow_request_message')}
+            {resolveString('amity_social_decline_follow_request_message')}
           </Typography.Caption>
         </div>
         {followers && followers.length === 0 ? (
@@ -49,7 +53,7 @@ export const UserPendingFollowRequestPage = () => {
           >
             <PartyHorn.Light className={styles.userPendingFollowRequestPage__noPending__icon} />
             <Typography.TitleBold className={styles.userPendingFollowRequestPage__noPending__text}>
-              {useString('amity_social_label_no_requests_to_review')}
+              {resolveString('amity_social_label_no_requests_to_review')}
             </Typography.TitleBold>
           </div>
         ) : (

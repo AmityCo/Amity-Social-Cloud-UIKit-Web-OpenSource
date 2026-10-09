@@ -310,6 +310,7 @@ export const LivestreamHeader: React.FC<LivestreamHeaderProps> = ({
             >
               {({ closePopover }) => (
                 <TagProductsButton
+                  pageId={pageId}
                   className={styles.livestreamHeader__header__tagProducts}
                   productTagCount={productTags.length}
                   onPress={() => {

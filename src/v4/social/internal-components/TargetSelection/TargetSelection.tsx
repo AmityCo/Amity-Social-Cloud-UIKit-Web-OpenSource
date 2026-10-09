@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { MyTimelineAvatar } from '~/v4/social/elements/MyTimelineAvatar';
@@ -32,7 +32,7 @@ export function TargetSelection({
   onSelectTarget,
 }: TargetSelectionProps) {
   const { client } = useSDK();
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { onBack } = useNavigation();
@@ -57,6 +57,10 @@ export function TargetSelection({
     node: intersectionNode,
   });
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div className={styles.targetSelection} style={themeStyles}>
       <div className={styles.targetSelection__timelineContainer}>
@@ -70,7 +74,7 @@ export function TargetSelection({
       </div>
       <div className={styles.targetSelection__line} />
       <div className={styles.targetSelection__myCommunities}>
-        {useString('amity_social_button_my_communities')}
+        {resolveString('amity_social_button_my_communities')}
       </div>
       <div className={styles.targetSelection__myCommunitiesList}>
         {communities

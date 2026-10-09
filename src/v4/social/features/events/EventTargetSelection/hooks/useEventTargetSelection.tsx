@@ -13,7 +13,7 @@ export function useEventTargetSelection() {
   const { client } = useSDK();
   const { onBack } = useNavigation();
   const { closePopup } = usePopupContext();
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
 
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member', sortBy: 'displayName' },
@@ -28,6 +28,7 @@ export function useEventTargetSelection() {
   });
 
   return {
+    isExcluded,
     pageId,
     client,
     onBack,

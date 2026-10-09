@@ -7,6 +7,13 @@
   background: var(--asc-color-background-default);
 }
 
+/* With Post off the description and both buttons go, and the label block's own
+   1rem is all that is left under the title. The button container was carrying
+   the sheet's bottom spacing, so it is put back here. */
+.eventCreatedSuccessSheet[data-title-only='true'] {
+  padding-bottom: 1.5rem;
+}
+
 /* Close button — visible on desktop only (mobile uses drawer's own affordances) */
 .eventCreatedSuccessSheet__header {
   display: none;

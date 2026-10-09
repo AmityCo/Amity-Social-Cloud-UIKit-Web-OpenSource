@@ -32,9 +32,14 @@ export function NotificationTrayButton({
       elementId,
     });
 
-  if (isExcluded) return null;
+  // Runs whatever the gate decided, and asks for nothing when Feed is off. The
+  // hook has to run — React counts them per render — but the badge it fetches
+  // belongs to a button this build is not going to draw.
+  const { notificationTraySeen, isLoading } = useGetNotificationTraySeen({
+    enabled: !isExcluded,
+  });
 
-  const { notificationTraySeen, isLoading } = useGetNotificationTraySeen();
+  if (isExcluded) return null;
 
   return (
     <Button

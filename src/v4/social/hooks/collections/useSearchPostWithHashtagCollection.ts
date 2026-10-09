@@ -1,5 +1,6 @@
 import { PostRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 type useSearchPostWithHashtagCollectionParams = Parameters<
   typeof PostRepository.searchPostsByHashtag
@@ -27,33 +28,37 @@ export default function useSearchPostWithHashtagCollection({
   const hashtagsKey = useMemo(() => JSON.stringify(hashtags || []), [hashtags]);
   const dataTypesKey = useMemo(() => JSON.stringify(dataTypes || []), [dataTypes]);
 
-  useEffect(() => {
-    if (!hashtags || hashtags.length === 0) return;
+  useSdkEffect(
+    PostRepository.searchPostsByHashtag,
+    () => {
+      if (!hashtags || hashtags.length === 0) return;
 
-    const unsubscriber = PostRepository.searchPostsByHashtag(
-      {
-        ...props,
-        hashtags,
-        dataTypes,
-        limit: 20,
-      },
-      ({ data, loading, error, hasNextPage, onNextPage }) => {
-        setIsLoading(loading);
+      const unsubscriber = PostRepository.searchPostsByHashtag(
+        {
+          ...props,
+          hashtags,
+          dataTypes,
+          limit: 20,
+        },
+        ({ data, loading, error, hasNextPage, onNextPage }) => {
+          setIsLoading(loading);
 
-        if (!loading && data) {
-          setItems([...data]);
-          setHasMore(hasNextPage);
-          loadMoreRef.current = hasNextPage ? onNextPage : null;
-        }
+          if (!loading && data) {
+            setItems([...data]);
+            setHasMore(hasNextPage);
+            loadMoreRef.current = hasNextPage ? onNextPage : null;
+          }
 
-        if (error) setError(error);
-      },
-    );
+          if (error) setError(error);
+        },
+      );
 
-    return () => {
-      unsubscriber();
-    };
-  }, [hashtagsKey, dataTypesKey]);
+      return () => {
+        unsubscriber();
+      };
+    },
+    [hashtagsKey, dataTypesKey],
+  );
 
   return {
     posts: items,

@@ -32,8 +32,6 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
     limit: linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10,
   });
 
-  if (isExcluded) return null;
-
   useEffect(() => {
     if (posts.length === 0 && !isLoading) setLinkToPost(null);
   }, [posts.length, isLoading]);
@@ -42,6 +40,8 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
     node: intersectionNode,
     onIntersect: () => hasMore && !isLoading && loadMore(),
   });
+
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId}>

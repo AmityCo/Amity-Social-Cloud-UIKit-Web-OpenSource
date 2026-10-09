@@ -34,6 +34,7 @@ import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { getRoomParticipant } from '~/v4/social/features/livestream/utils';
 import MuteMic from '~/v4/icons/MutedMic';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 interface StreamerStageProps {
   pageId?: string;
@@ -448,17 +449,21 @@ export const StreamerStage: FC<StreamerStageProps> = ({
   // `onRoomParticipantRemoved` fires on every device that receives the event
   // (no per-user filter), so we confirm it was us: after the removal we're no
   // longer the host nor the co-host on the room.
-  useEffect(() => {
-    if (!currentUserId) return;
-    const unsubscribe = RoomRepository.onRoomParticipantRemoved(({ room: eventRoom }) => {
-      const hostUserId = getRoomParticipant(eventRoom, 'host')?.userId;
-      const coHostUserId = getRoomParticipant(eventRoom, 'coHost')?.userId;
-      if (currentUserId !== hostUserId && currentUserId !== coHostUserId) {
-        onLeaveByKickout?.();
-      }
-    });
-    return () => unsubscribe();
-  }, [currentUserId, onLeaveByKickout]);
+  useSdkEffect(
+    RoomRepository.onRoomParticipantRemoved,
+    () => {
+      if (!currentUserId) return;
+      const unsubscribe = RoomRepository.onRoomParticipantRemoved(({ room: eventRoom }) => {
+        const hostUserId = getRoomParticipant(eventRoom, 'host')?.userId;
+        const coHostUserId = getRoomParticipant(eventRoom, 'coHost')?.userId;
+        if (currentUserId !== hostUserId && currentUserId !== coHostUserId) {
+          onLeaveByKickout?.();
+        }
+      });
+      return () => unsubscribe();
+    },
+    [currentUserId, onLeaveByKickout],
+  );
 
   return (
     <div className={styles.streamerStage}>

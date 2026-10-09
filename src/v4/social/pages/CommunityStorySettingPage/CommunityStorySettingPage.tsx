@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { resolveString, useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Label } from 'react-aria-components';
 import { Typography } from '~/v4/core/components';
 import { BackButton } from '~/v4/social/elements';
@@ -22,7 +22,7 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
   const { online } = useNetworkState();
   const { onBack } = useNavigation();
   const { info } = useConfirmContext();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const [isSelected, setIsSelected] = useState(community?.allowCommentInStory);
 
   const handleToggleChange = async (selected: boolean) => {
@@ -48,6 +48,10 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
     }
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div
       style={themeStyles}
@@ -57,17 +61,17 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
       <div className={styles.communityStorySettingPage__communityTitleWrap}>
         <BackButton onPress={() => onBack()} />
         <Typography.TitleBold className={styles.communityStorySettingPage__communityTitle}>
-          {useString('amity_social_label_title_story_comments')}
+          {resolveString('amity_social_label_title_story_comments')}
         </Typography.TitleBold>
         <div className={styles.communityStorySettingPage__emptyDiv} />
       </div>
       <div className={styles.communityStorySettingPage__wrapLabel}>
         <Label>
           <Typography.BodyBold className={styles.communityStorySettingPage__labelText}>
-            {useString('amity_social_label_allow_comments_on_community_stories')}
+            {resolveString('amity_social_label_allow_comments_on_community_stories')}
           </Typography.BodyBold>
           <Typography.Caption className={styles.communityStorySettingPage__description}>
-            {useString(
+            {resolveString(
               'amity_social_label_turn_on_to_receive_comments_on_stories_in_this_communit',
             )}
           </Typography.Caption>

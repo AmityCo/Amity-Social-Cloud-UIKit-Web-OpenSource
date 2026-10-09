@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
 import TruncateMarkup from 'react-truncate-markup';
 import { useGetInvitation } from '~/v4/social/hooks';
@@ -32,9 +32,14 @@ export function InvitationBanner({
   const notification = useNotifications();
   const [truncate, setTruncate] = useState(false);
   const { setAcceptedInvitation, invitationNotificationTray } = useLayoutContext();
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const invitation = $invitation ? $invitation : useGetInvitation(community)?.invitation;
   const { confirm } = useConfirmContext();
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const onJoinClick = async () => {
     try {
@@ -117,7 +122,7 @@ export function InvitationBanner({
               <>
                 ...{' '}
                 <Typography.BodyBold as="span">
-                  {useString('amity_social_label_community_invitation_invited_you')}
+                  {resolveString('amity_social_label_community_invitation_invited_you')}
                 </Typography.BodyBold>
               </>
             }
@@ -134,7 +139,7 @@ export function InvitationBanner({
           {!truncate && (
             <Typography.BodyBold as="span">
               {' '}
-              {useString('amity_social_label_community_invitation_invited_you')}
+              {resolveString('amity_social_label_community_invitation_invited_you')}
             </Typography.BodyBold>
           )}
         </Typography.BodyBold>

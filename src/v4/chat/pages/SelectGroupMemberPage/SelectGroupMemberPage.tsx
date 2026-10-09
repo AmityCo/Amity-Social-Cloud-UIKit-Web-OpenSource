@@ -8,7 +8,11 @@ export type SelectGroupMemberPageProps = {
 
 export function SelectGroupMemberPage({ selectedGroupMember }: SelectGroupMemberPageProps) {
   const pageId = CHAT_PAGE_IDS.SELECT_GROUP_MEMBER_PAGE;
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId}>

@@ -10,11 +10,15 @@ type InviteButtonProps = ButtonProps & {
 
 export function InviteButton({ pageId = '*', componentId = '*', ...props }: InviteButtonProps) {
   const elementId = 'invite_button';
-  const { accessibilityId, resolveText } = useAmityElement({
+  const { accessibilityId, resolveText, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   return (
     <Button

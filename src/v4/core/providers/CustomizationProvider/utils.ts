@@ -272,13 +272,6 @@ export const defaultConfig: DefaultConfig = {
   },
   excludes: [],
   customizations: {
-    'select_target_page/*/*': {
-      theme: {},
-      title: 'Share to',
-    },
-    'select_target_page/*/back_button': {
-      back_icon: 'back.png',
-    },
     'camera_page/*/*': {
       resolution: '720p',
     },
@@ -429,8 +422,14 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/my_communities/community_members_count': {},
     'social_home_page/newsfeed_component/*': {},
     'social_home_page/global_feed_component/*': {},
-    'social_home_page/for_you_feed_component/*': {},
-    'social_home_page/feed_caught_up_component/*': {},
+    // `amity_` prefixed, because that is what the components resolve:
+    // ForYouFeed and FeedCaughtUp both pass the prefixed id to
+    // `useAmityComponent`, and the owner tables carry the prefixed spelling
+    // too. The unprefixed keys that used to sit here matched neither, so a
+    // customer addressing them changed nothing and no module could withhold
+    // them.
+    'social_home_page/amity_for_you_feed_component/*': {},
+    'social_home_page/amity_feed_caught_up_component/*': {},
     'social_home_page/post_composer/image_button': {
       icon: 'ImageIcon',
     },
@@ -448,7 +447,6 @@ export const defaultConfig: DefaultConfig = {
     },
 
     'social_home_page/*/clipsfeed_button': {},
-    'global_search_page/*/*': {},
     'post_detail_page/*/back_button': {
       image: 'backButtonIcon',
     },
@@ -733,6 +731,10 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/user_profile_header/unblock_user_button': {
       image: 'UnblockUser',
     },
+    'user_profile_page/user_profile_header/unfollow_user_button': {},
+    'user_profile_page/*/block_user_button': {},
+    'user_profile_page/*/manage_blocked_users_button': {},
+    'user_profile_page/*/unblock_user_button': {},
     'user_profile_page/user_profile_header/user_avatar': {},
     'user_profile_page/user_profile_header/user_name': {},
     'user_profile_page/user_profile_header/user_description': {},
@@ -991,9 +993,6 @@ export const defaultConfig: DefaultConfig = {
       image: '',
     },
     '*/livestream_chat_compose_bar/create_message_button': {
-      image: '',
-    },
-    '*/livestream_chat_compose_bar/swap_camera_button': {
       image: '',
     },
     'draft_clip_page/*/back_button': {

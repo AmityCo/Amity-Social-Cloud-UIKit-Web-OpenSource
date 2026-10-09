@@ -12,6 +12,9 @@ import {
 } from '~/v4/chat/hooks/queries';
 import { useFollowInfo } from '~/v4/chat/hooks/objects';
 import { useChatFeatureFlags } from '~/v4/chat/hooks/useChatFeatureFlags';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { ELEMENT_ID } from '~/v4/constants/customization';
+import { CHAT_PAGE_IDS } from '~/v4/chat/constants/chatPageIds';
 
 export type UseConversationActionsParams = {
   channelId: string;
@@ -26,6 +29,22 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
     useChannelPushNotificationQuery({ channelId, enabled: !!channelId });
   const { isBlockedByMe } = useFollowInfo({ userId: otherUserId });
   const { isChatUserActionEnabled, hasAnyEnabledChatUserAction } = useChatFeatureFlags();
+
+  // Block and Unblock are User Relationship's, so the module withholds the row
+  // whichever label it wears — ANDed with the config switch, not replacing it
+  // (AmityConversationChatUserActionComponent REQ-008). The config says who may
+  // block inside a feature that exists; the module says whether it exists.
+  //
+  // The component segment is the spec's name for this sheet, which Web draws
+  // through the header's action menu rather than a component of its own. It is
+  // Chat's, so the path resolves to [chat, chat, userRelationship] and either
+  // module withholds the row. Report stays on config alone: it is moderation,
+  // not a relationship (REQ-008a).
+  const blockRow = useAmityElement({
+    pageId: CHAT_PAGE_IDS.CHAT_PAGE,
+    componentId: 'conversation_chat_user_action_component',
+    elementId: isBlockedByMe ? ELEMENT_ID.UNBLOCK_USER_BUTTON : ELEMENT_ID.BLOCK_USER_BUTTON,
+  });
   const { block, unblock } = useUserBlockQuery();
   const {
     isFlaggedByMe: isReported,
@@ -87,7 +106,7 @@ export function useConversationActions({ channelId, otherUserId }: UseConversati
               isBlockedByMe ? 'amity_chat_action_unblock_user' : 'amity_chat_action_block_user',
             ),
             onPress: handleToggleBlock,
-            visible: isChatUserActionEnabled('block'),
+            visible: isChatUserActionEnabled('block') && !blockRow.isExcluded,
           },
         ].filter((item) => item.visible);
 

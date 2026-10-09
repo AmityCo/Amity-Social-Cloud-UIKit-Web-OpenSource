@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage';
 import { Title } from '~/v4/social/elements/Title';
@@ -75,7 +75,7 @@ type CreateCommunityParams = {
 
 export function CreateCommunity({ mode }: CreateCommunityProps) {
   const pageId = 'community_setup_page';
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
 
@@ -110,7 +110,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
 
   const { currentUserId } = useSDK();
   const { user: currentUser } = useUser({ userId: currentUserId });
-  const youLabel = useString('amity_chat_member_you');
+  const youLabel = resolveString('amity_chat_member_you');
 
   const handleCoverPhotoChange = (file: File[]) => {
     removeDrawerData();
@@ -325,6 +325,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
     }
   };
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div style={themeStyles} className={styles.createCommunity}>
       <div className={styles.createCommunity__topBar}>
@@ -446,7 +450,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             <Input
               required
               type="text"
-              placeholder={useString('amity_social_label_community_setup_name_description')}
+              placeholder={resolveString('amity_social_label_community_setup_name_description')}
               value={displayName ?? communityName}
               maxLength={MAX_LENGTH_COMMUNITY_NAME}
               className={styles.createCommunity__input}
@@ -464,7 +468,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                   textId="amity_social_label_community_setup_about_title"
                 />
                 <Typography.Body className={styles.createCommunity__optionalText}>
-                  {useString('amity_social_label_community_setup_about_optional_title')}
+                  {resolveString('amity_social_label_community_setup_about_optional_title')}
                 </Typography.Body>
               </div>
               <Typography.Body
@@ -478,7 +482,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
               rows={1}
               value={description}
               maxLength={MAX_LENGTH_DESC}
-              placeholder={useString('amity_social_button_community_setup_about_description')}
+              placeholder={resolveString('amity_social_button_community_setup_about_description')}
               className={styles.createCommunity__textarea}
               {...register('description')}
             />
@@ -493,7 +497,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                 textId="amity_social_label_community_setup_category_title"
               />
               <Typography.Body className={styles.createCommunity__optionalText}>
-                {useString('amity_social_label_community_setup_about_optional_title')}
+                {resolveString('amity_social_label_community_setup_about_optional_title')}
               </Typography.Body>
             </div>
           </label>
@@ -559,7 +563,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                   }}
                 >
                   <Typography.Body className={styles.createCommunity__selectedCategory}>
-                    {useString('amity_social_button_community_setup_categories_description')}
+                    {resolveString('amity_social_button_community_setup_categories_description')}
                     <IconComponent defaultIcon={() => arrowIcon} imgIcon={() => arrowIcon} />
                   </Typography.Body>
                 </Button>

@@ -285,12 +285,11 @@ function MediaFrame({
         <VideoMedia post={post as Amity.Post<'video'>} />
       )}
       {productTags.length > 0 && (
-        <div className={styles.postMedia__productTag}>
-          <ProductTagBadge
-            selectedProductTags={productTags}
-            onClick={() => showProductTagList(productTags)}
-          />
-        </div>
+        <ProductTagBadge
+          wrapperClassName={styles.postMedia__productTag}
+          selectedProductTags={productTags}
+          onClick={() => showProductTagList(productTags)}
+        />
       )}
     </Button>
   );

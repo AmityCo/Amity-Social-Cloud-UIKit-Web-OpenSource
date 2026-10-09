@@ -17,11 +17,15 @@ export const CommunityRowImage: React.FC<CommunityRowImageProps> = ({
 }) => {
   const elementId = 'community_row_image';
 
-  const { themeStyles } = useAmityElement({
+  const { themeStyles, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
+
+  // Owned by a module. A reusable element can be rendered on any page,
+  // including one another module owns, so it answers for itself.
+  if (isExcluded) return null;
 
   return (
     <Img

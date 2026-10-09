@@ -61,7 +61,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   onSwipeDown,
   onClickCommunity,
 }) => {
-  const { accessibilityId, themeStyles } = useAmityPage({ pageId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({ pageId });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
   const { client, currentUserId } = useSDK();
@@ -363,6 +363,10 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setCurrentIndex(lastStoryIndex);
     return lastStoryIndex;
   };
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div className={clsx(styles.storyWrapper)} data-testid={accessibilityId} style={themeStyles}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { Typography } from '~/v4/core/components';
 import { Terminated } from '~/v4/icons/Terminated';
@@ -10,26 +10,32 @@ import { PAGE_ID } from '~/v4/constants/customization';
 
 export function LivestreamTerminatedPage() {
   const pageId = PAGE_ID.LIVESTREAM_TERMINATED_PAGE;
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <section style={themeStyles} className={styles.liveStreamTerminatedPage}>
       <div>
         <div className={styles.liveStreamTerminatedPage__header}>
           <Typography.TitleBold>
-            {useString('amity_social_status_create_livestream_terminated_toolbar_title')}
+            {resolveString('amity_social_status_create_livestream_terminated_toolbar_title')}
           </Typography.TitleBold>
         </div>
         <div className={styles.liveStreamTerminatedPage__terminatedContent}>
           <Terminated className={styles.liveStreamTerminatedPage__terminatedIcon} />
           <Typography.Headline>
-            {useString('amity_social_modal_dialog_livestream_time_limit')}
+            {resolveString('amity_social_modal_dialog_livestream_time_limit')}
           </Typography.Headline>
-          <Typography.Body>{useString('amity_social_livestream_terminated_body')}</Typography.Body>
+          <Typography.Body>
+            {resolveString('amity_social_livestream_terminated_body')}
+          </Typography.Body>
         </div>
         <div className={styles.liveStreamTerminatedPage__playbackContent}>
           <Typography.BodyBold>
-            {useString('amity_social_label_create_livestream_terminated_question')}
+            {resolveString('amity_social_label_create_livestream_terminated_question')}
           </Typography.BodyBold>
           <div className={styles.liveStreamTerminatedPage__playback}>
             <TrashIcon className={styles.liveStreamTerminatedPage__deletedIcon} />

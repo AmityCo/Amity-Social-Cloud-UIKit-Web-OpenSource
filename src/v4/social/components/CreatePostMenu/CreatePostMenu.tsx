@@ -1,4 +1,5 @@
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
 import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
@@ -17,6 +18,19 @@ type CreatePostMenuProps = {
 
 export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
   const componentId = 'create_post_menu';
+  useAmityComponent({ pageId, componentId });
+
+  // The sheet is chrome now, not Post's. Story needs only Community and Event
+  // only Community, so both outlive Post — and this sheet is the only place
+  // either can be started, so it has to survive Post off.
+  //
+  // What goes with Post is the post family. A poll and a livestream are posts
+  // underneath, but their ids answer to Poll and Live, which survive Post off,
+  // so their own gate is not enough. The sheet asks whether Post's own entry
+  // survived and takes the family with it — one existing id read as a value,
+  // rather than a second owner on every id.
+  const postEntry = useAmityElement({ pageId, componentId, elementId: 'create_post_button' });
+  const postFamilyGone = postEntry.isExcluded;
 
   const { isDesktop } = useResponsive();
   const { hasStoryPermission } = useStoryPermission();
@@ -25,17 +39,19 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
   const { redirectEventTargetSelectionPage } = useRedirectEventTargetSelectionPage();
 
   return (
-    <div className={styles.createPostMenu}>
+    <div className={styles.createPostMenu} data-collapsed={postFamilyGone}>
       <CreatePostButton
         pageId={pageId}
         componentId={componentId}
         onClick={() => AmityCreatePostMenuComponentBehavior?.goToSelectPostTargetPage?.()}
       />
-      <CreatePollButton
-        pageId={pageId}
-        componentId={componentId}
-        onClick={() => AmityCreatePostMenuComponentBehavior?.goToSelectPollPostTargetPage?.()}
-      />
+      {!postFamilyGone && (
+        <CreatePollButton
+          pageId={pageId}
+          componentId={componentId}
+          onClick={() => AmityCreatePostMenuComponentBehavior?.goToSelectPollPostTargetPage?.()}
+        />
+      )}
       {hasStoryPermission && (
         <CreateStoryButton
           pageId={pageId}
@@ -43,7 +59,7 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
           onClick={() => AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage?.()}
         />
       )}
-      {!isDesktop && (
+      {!isDesktop && !postFamilyGone && (
         <CreateClipButton
           pageId={pageId}
           componentId={componentId}
@@ -54,11 +70,13 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
           }
         />
       )}
-      <CreateLivestreamButton
-        pageId={pageId}
-        componentId={componentId}
-        onClick={() => AmityCreatePostMenuComponentBehavior?.goToLivestreamUnsupportedPage?.()}
-      />
+      {!postFamilyGone && (
+        <CreateLivestreamButton
+          pageId={pageId}
+          componentId={componentId}
+          onClick={() => AmityCreatePostMenuComponentBehavior?.goToLivestreamUnsupportedPage?.()}
+        />
+      )}
       {hasCreateEventPermission && (
         <CreateEventButton
           pageId={pageId}

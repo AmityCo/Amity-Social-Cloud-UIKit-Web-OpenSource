@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
+import { useSdkFnEnabled } from '~/v4/core/providers/CustomizationProvider';
 
 interface UseQueryClipGlobalFeedParams {
   limit?: number;
@@ -28,11 +29,21 @@ export const useQueryClipGlobalFeed = ({
   const [error, setError] = useState<Error | null>(null);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
 
+  // Clip needs only Post, so a build with Feed off still has a clip feed page —
+  // and this hook reads Feed's global feed from a bare useCallback, which no
+  // live hook and no useSdkEffect ever sees. Measured: switching Feed off and
+  // opening the clip feed still sent /api/v4/me/global-feeds twice.
+  //
+  // Gated here rather than on the effect, because `loadMore` and `refresh` call
+  // fetchPosts directly — an effect-level guard is the same hole the spec
+  // records for pull-to-refresh reaching a disabled module.
+  const feedEnabled = useSdkFnEnabled(FeedRepository.queryGlobalFeed);
+
   const hasMore = useMemo(() => queryToken !== null, [queryToken]);
 
   const fetchPosts = useCallback(
     async (token: string | null) => {
-      if (!enabled) return;
+      if (!enabled || !feedEnabled) return;
 
       try {
         setIsLoading(true);
@@ -47,7 +58,10 @@ export const useQueryClipGlobalFeed = ({
         const filteredPosts = (
           await Promise.all(
             response.data.map(async (post: Amity.Post) => {
-              if (post?.children?.length > 0) {
+              // children[0] can be absent even when the array is not empty,
+              // and getPost sent `/api/v3/posts/undefined` for every one of
+              // them. Found by reading the HAR, not the code.
+              if (post?.children?.length > 0 && post.children[0]) {
                 let unsub = () => {};
                 const childPost = await new Promise<Amity.Post>((resolve) => {
                   unsub = PostRepository.getPost(post.children[0], (response) => {
@@ -90,7 +104,7 @@ export const useQueryClipGlobalFeed = ({
         setIsLoading(false);
       }
     },
-    [limit, enabled, dataTypes],
+    [limit, enabled, feedEnabled, dataTypes],
   );
 
   const loadMore = useCallback(() => {

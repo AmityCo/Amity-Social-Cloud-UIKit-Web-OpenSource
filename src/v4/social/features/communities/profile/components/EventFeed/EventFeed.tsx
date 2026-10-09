@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import ChipButton from '~/v4/social/elements/ChipButton';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { COMPONENT_ID } from '~/v4/constants/customization';
@@ -50,13 +50,13 @@ export const CommunityEventFeed = ({ pageId = '*', communityId }: CommunityEvent
         <div className={styles.eventFeed__eventsTabs}>
           <ChipButton
             variant="body"
-            label={useString('amity_social_tab_tab_upcoming')}
+            label={resolveString('amity_social_tab_tab_upcoming')}
             isTransparent={false}
             isActive={eventTab === AmityEventStatus.Scheduled}
             onPress={() => setEventTab(AmityEventStatus.Scheduled)}
           />
           <ChipButton
-            label={useString('amity_social_tab_tab_past')}
+            label={resolveString('amity_social_tab_tab_past')}
             variant="body"
             isTransparent={false}
             isActive={eventTab === AmityEventStatus.Ended}

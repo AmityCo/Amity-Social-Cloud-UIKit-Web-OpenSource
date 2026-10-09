@@ -4,7 +4,7 @@ import styles from './UserProfileHeader.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { UserFollowing } from '~/v4/social/elements/UserFollowing/UserFollowing';
 import { UserFollower } from '~/v4/social/elements/UserFollower/UserFollower';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
 import { UserName } from '~/v4/social/elements/UserName/UserName';
 import { UserDescription } from '~/v4/social/elements/UserDescription/UserDescription';
 import UserOfficialBadge from '~/v4/icons/UserOfficialBadge';
@@ -14,6 +14,7 @@ import { FollowingUserButton } from '~/v4/social/elements/FollowingUserButton';
 import { PendingUserButton } from '~/v4/social/elements/PendingUserButton';
 import { UnblockUserButton } from '~/v4/social/elements/UnblockUserButton/UnblockUserButton';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
+import { ELEMENT_ID } from '~/v4/constants/customization';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Typography } from '~/v4/core/components';
 import NotificationIndicator from '~/v4/icons/NotificationIndicator';
@@ -111,29 +112,46 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
 
   const isMultiLine = useMultiLineDetection(displayNameRef, [user?.displayName, user?.userId]);
 
+  // The Unfollow row inside the Following button's drawer and popover. Its door
+  // — `following_user_button` — is already the module's, so with User
+  // Relationship withheld the row is unreachable either way; the id is so the
+  // gate can answer for it by name, the same name iOS and Android use for
+  // theirs. Read up here because the row is built in a helper that runs from
+  // an event handler, where a hook cannot go.
+  const unfollowElement = useAmityElement({
+    pageId,
+    componentId,
+    elementId: ELEMENT_ID.UNFOLLOW_USER_BUTTON,
+  });
+
   const unFollowUserButton = ({
     onClickButton,
     userId,
   }: {
     onClickButton?: () => void;
     userId: string;
-  }) => (
-    <Button
-      className={styles.userProfileHeader__unFollowButton}
-      data-testid="user-profile-unfollow-option"
-      onPress={() => {
-        removeDrawerData();
-        unFollowUser({ pageId, userId });
-        onClickButton?.();
-      }}
-      variant="text"
-    >
-      <UserTimes className={styles.userProfileHeader__unFollowButton__icon} />
-      <Typography.BodyBold className={styles.userProfileHeader__unFollowButton__text}>
-        {useString('amity_social_button_unfollow')}
-      </Typography.BodyBold>
-    </Button>
-  );
+  }) =>
+    unfollowElement.isExcluded ? null : (
+      <Button
+        className={styles.userProfileHeader__unFollowButton}
+        data-testid="user-profile-unfollow-option"
+        onPress={() => {
+          removeDrawerData();
+          unFollowUser({ pageId, userId });
+          onClickButton?.();
+        }}
+        variant="text"
+      >
+        <UserTimes className={styles.userProfileHeader__unFollowButton__icon} />
+        <Typography.BodyBold className={styles.userProfileHeader__unFollowButton__text}>
+          {/* `resolveString`, not `useString`: this helper is called from
+              `onPressFollowingButton`, an event handler, which is no place
+              for a hook — and it would count differently every time the
+              drawer opened. */}
+          {resolveString('amity_social_button_unfollow')}
+        </Typography.BodyBold>
+      </Button>
+    );
 
   const onPressFollowingButton = (userId: string) => {
     setDrawerData({
@@ -169,6 +187,14 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
 
   const isShowPendingButton =
     currentUserId && user && currentUserId !== user.userId && followStatus === 'pending';
+  // Rule 3: a container whose children can all disappear must ask whether any
+  // survive before it draws itself. Both counts return null with User
+  // Relationship off, and this row kept its own height and its separator — a
+  // band of empty space where the numbers had been.
+  const followingElement = useAmityElement({ pageId, componentId, elementId: 'user_following' });
+  const followerElement = useAmityElement({ pageId, componentId, elementId: 'user_follower' });
+  const relationshipRowVisible = !followingElement.isExcluded || !followerElement.isExcluded;
+
   const isShowFollowButton =
     isVisitorOrBot ||
     (currentUserId && user && currentUserId !== user.userId && followStatus === 'none');
@@ -217,23 +243,25 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
 
       <UserDescription description={user.description} pageId={pageId} componentId={componentId} />
 
-      <div className={styles.userProfileHeader__relationship}>
-        <UserFollowing
-          isCurrentUser={user.userId === currentUserId}
-          userId={user.userId}
-          pageId={pageId}
-          componentId={componentId}
-          followStatus={followStatus}
-        />
-        <div className={styles.userProfileHeader__relationship__separator}></div>
-        <UserFollower
-          isCurrentUser={user.userId === currentUserId}
-          userId={user.userId}
-          pageId={pageId}
-          componentId={componentId}
-          followStatus={followStatus}
-        />
-      </div>
+      {relationshipRowVisible && (
+        <div className={styles.userProfileHeader__relationship}>
+          <UserFollowing
+            isCurrentUser={user.userId === currentUserId}
+            userId={user.userId}
+            pageId={pageId}
+            componentId={componentId}
+            followStatus={followStatus}
+          />
+          <div className={styles.userProfileHeader__relationship__separator}></div>
+          <UserFollower
+            isCurrentUser={user.userId === currentUserId}
+            userId={user.userId}
+            pageId={pageId}
+            componentId={componentId}
+            followStatus={followStatus}
+          />
+        </div>
+      )}
       {pendingCount > 0 && (
         <Button
           variant="outlined"

@@ -1,0 +1,97 @@
+{
+  "enforcement": "off",
+  "modules": {
+    "community": true,
+    "chat": true,
+    "live": true,
+    "poll": true,
+    "userRelationship": true,
+    "pushNotification": true,
+    "post": true,
+    "story": true,
+    "events": true,
+    "feed": true,
+    "comment": true,
+    "reaction": true,
+    "product": true,
+    "ads": true,
+    "discovery": true
+  },
+  "catalog": {
+    "community": {
+      "label": "Community",
+      "kind": "api",
+      "requires": []
+    },
+    "chat": {
+      "label": "Chat",
+      "kind": "api",
+      "requires": []
+    },
+    "live": {
+      "label": "Live",
+      "kind": "api",
+      "requires": ["post"]
+    },
+    "poll": {
+      "label": "Poll",
+      "kind": "api",
+      "requires": ["post"]
+    },
+    "userRelationship": {
+      "label": "User Relationship",
+      "kind": "api",
+      "requires": []
+    },
+    "pushNotification": {
+      "label": "Push Notification",
+      "kind": "api",
+      "requires": []
+    },
+    "post": {
+      "label": "Post",
+      "kind": "api",
+      "requires": ["community"]
+    },
+    "story": {
+      "label": "Story",
+      "kind": "api",
+      "requires": ["community"]
+    },
+    "events": {
+      "label": "Events",
+      "kind": "api",
+      "requires": ["community"]
+    },
+    "feed": {
+      "label": "Feed",
+      "kind": "api",
+      "requires": ["post"]
+    },
+    "comment": {
+      "label": "Comment",
+      "kind": "api",
+      "requires": ["post", "story"]
+    },
+    "reaction": {
+      "label": "Reaction",
+      "kind": "api",
+      "requires": ["post", "comment", "chat", "story"]
+    },
+    "product": {
+      "label": "Product",
+      "kind": "api",
+      "requires": ["post", "story"]
+    },
+    "ads": {
+      "label": "Ads",
+      "kind": "api",
+      "requires": ["post", "story"]
+    },
+    "discovery": {
+      "label": "Discovery",
+      "kind": "api",
+      "requires": ["community", "post", "chat"]
+    }
+  }
+}

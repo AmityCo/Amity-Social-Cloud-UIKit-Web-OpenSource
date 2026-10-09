@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography, TypographyProps } from '~/v4/core/components';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 
 type DescriptionProps = TypographyProps & {
   pageId?: string;
@@ -34,7 +34,7 @@ export const Description = ({
       data-testid={accessibilityId}
       className={className}
     >
-      {textId ? useString(textId) : config.text}
+      {textId ? resolveString(textId) : config.text}
     </Typography.BodyBold>
   );
 };

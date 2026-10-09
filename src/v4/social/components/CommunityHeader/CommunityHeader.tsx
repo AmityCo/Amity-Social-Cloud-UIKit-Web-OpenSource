@@ -1,5 +1,6 @@
 import React from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
+import { resolveString } from '~/v4/core/localization';
 import { JoinRequestStatusEnum, JoinResultStatusEnum } from '@amityco/ts-sdk';
 import { StoryTab } from '~/v4/social/components/StoryTab';
 import { CommunityPendingPost } from '~/v4/social/elements/CommunityPendingPost';
@@ -46,6 +47,20 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   page,
 }) => {
   const componentId = 'community_header';
+  // Owned by a module and never asked — the component kept rendering
+  // after its module was switched off.
+  const { isExcluded } = useAmityComponent({ pageId, componentId });
+
+  // The two counts in the header belong to different modules: the post count is
+  // Post's, the member count is Community's. Asked here rather than left to the
+  // element, because the divider between them is the header's own markup — and a
+  // divider with nothing on one side is the hole R3 exists to prevent.
+  const postCount = useAmityElement({ pageId, componentId, elementId: 'community_info_posts' });
+  const memberCount = useAmityElement({
+    pageId,
+    componentId,
+    elementId: 'community_info_members',
+  });
   const { onBack } = useNavigation();
   const { isDesktop } = useResponsive();
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
@@ -110,6 +125,8 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
 
   const isShowPendingBanner = isShowPendingPost || isShowJoinRequest;
 
+  if (isExcluded) return null;
+
   return (
     <>
       <CommunityCover
@@ -151,40 +168,48 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         />
 
         <div className={styles.communityProfile__communityInfo__container}>
-          <CommunityInfo
-            pageId={pageId}
-            componentId={componentId}
-            count={community.postsCount}
-            countTestId="community-header-post-count"
-            text={resolveString(
-              community.postsCount === 1
-                ? 'amity_social_label_community_post_label'
-                : 'amity_social_label_community_posts_label',
-              community.postsCount,
-            )}
-          />
-          <div className={styles.divider}></div>
-          <CommunityInfo
-            pageId={pageId}
-            componentId={componentId}
-            count={community.membersCount}
-            countTestId="community-header-member-count"
-            text={resolveString(
-              community.membersCount === 1
-                ? 'amity_social_button_member_count_singular'
-                : 'amity_social_button_member_count_plural',
-            ).replace(/%s\s?/, '')}
-            onClick={() =>
-              handleCommunityProfileBehavior({
-                allowNonMember: false,
-                isJoined: community.isJoined,
-                defaultBehavior: () =>
-                  AmityCommunityProfilePageBehavior?.goToMembershipPage?.({
-                    community: community,
-                  }),
-              })
-            }
-          />
+          {!postCount.isExcluded && (
+            <CommunityInfo
+              pageId={pageId}
+              componentId={componentId}
+              elementId="community_info_posts"
+              count={community.postsCount}
+              countTestId="community-header-post-count"
+              text={resolveString(
+                community.postsCount === 1
+                  ? 'amity_social_label_community_post_label'
+                  : 'amity_social_label_community_posts_label',
+                community.postsCount,
+              )}
+            />
+          )}
+          {!postCount.isExcluded && !memberCount.isExcluded && (
+            <div className={styles.divider}></div>
+          )}
+          {!memberCount.isExcluded && (
+            <CommunityInfo
+              pageId={pageId}
+              componentId={componentId}
+              elementId="community_info_members"
+              count={community.membersCount}
+              countTestId="community-header-member-count"
+              text={resolveString(
+                community.membersCount === 1
+                  ? 'amity_social_button_member_count_singular'
+                  : 'amity_social_button_member_count_plural',
+              ).replace(/%s\s?/, '')}
+              onClick={() =>
+                handleCommunityProfileBehavior({
+                  allowNonMember: false,
+                  isJoined: community.isJoined,
+                  defaultBehavior: () =>
+                    AmityCommunityProfilePageBehavior?.goToMembershipPage?.({
+                      community: community,
+                    }),
+                })
+              }
+            />
+          )}
         </div>
 
         {invitation && invitation.status === InvitationStatusEnum.Pending && (
@@ -230,7 +255,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               defaultIcon={<Clock className={styles.communityProfile__pendingIcon} />}
               onPress={cancelJoinCommunity}
               data-testid="community-cancel-request-button"
-              text={useString('amity_social_button_cancel_request')}
+              text={resolveString('amity_social_button_cancel_request')}
               typographyVariant="bodyBold"
               className={styles.communityProfile__cancelJoinButton}
             />

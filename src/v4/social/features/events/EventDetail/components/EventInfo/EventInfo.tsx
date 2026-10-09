@@ -1,9 +1,10 @@
 import { Typography } from '~/v4/core/components';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { AmityEventStatus, AmityEventType } from '@amityco/ts-sdk';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import { CopyButton } from '~/v4/social/features/events/EventDetail/elements';
 import { LiveStreamContent } from '~/v4/social/components/PostContent/LiveStreamContent';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
@@ -24,6 +25,13 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
 
   const { AmityEventDetailPageBehavior } = usePageBehavior();
 
+  // Livestream has no element id of its own — nothing in the tables names a
+  // livestream body — so the module is read directly, the same way the feeds
+  // read it in `useModuleFilteredPosts`. The heading and its caption go with
+  // the content: a child's gate cannot remove its parent, and "Live stream"
+  // over an empty box is worse than no section.
+  const isLiveEnabled = useFeatureEnabled('live');
+
   if (isExcluded) return null;
 
   return (
@@ -35,7 +43,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
     >
       <div className={styles.eventInfo__container}>
         <Typography.TitleBold className={styles.eventInfo__text}>
-          {useString('amity_social_label_about_the_event')}
+          {resolveString('amity_social_label_about_the_event')}
         </Typography.TitleBold>
         <TextWithMention
           maxLines={10}
@@ -53,7 +61,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
             data-testid="event-external-platform-container"
           >
             <Typography.TitleBold className={styles.eventInfo__text}>
-              {useString('amity_social_placeholder_event_link_hint')}
+              {resolveString('amity_social_placeholder_event_link_hint')}
             </Typography.TitleBold>
             <div className={styles.eventInfo__row}>
               <TextWithMention
@@ -64,19 +72,19 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
               />
               <CopyButton
                 text={event.externalUrl || ''}
-                toast={useString('amity_social_button_link_copied')}
+                toast={resolveString('amity_social_button_link_copied')}
               />
             </div>
           </div>
-        ) : (
+        ) : isLiveEnabled ? (
           <div className={styles.eventInfo__container}>
             <div>
               <Typography.TitleBold className={styles.eventInfo__text}>
-                {useString('amity_social_status_live_stream')}
+                {resolveString('amity_social_status_live_stream')}
               </Typography.TitleBold>
               {event.status === AmityEventStatus.Scheduled && (
                 <Typography.Caption className={styles.eventInfo__subTitle}>
-                  {useString(
+                  {resolveString(
                     'amity_social_status_you_can_start_setting_up_live_15_minutes_before_the_eve',
                   )}
                 </Typography.Caption>
@@ -98,11 +106,11 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
               }}
             />
           </div>
-        )
+        ) : null
       ) : (
         <div className={styles.eventInfo__container} data-testid="event-address-section">
           <Typography.TitleBold className={styles.eventInfo__text}>
-            {useString('amity_social_event_info_event_address')}
+            {resolveString('amity_social_event_info_event_address')}
           </Typography.TitleBold>
           <div className={styles.eventInfo__row}>
             <TextWithMention
@@ -112,7 +120,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
             />
             <CopyButton
               text={event.location || ''}
-              toast={useString('amity_social_button_address_copied')}
+              toast={resolveString('amity_social_button_address_copied')}
             />
           </div>
         </div>

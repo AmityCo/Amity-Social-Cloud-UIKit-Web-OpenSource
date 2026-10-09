@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton, CloseButton } from '~/v4/social/elements';
@@ -72,7 +72,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
   const notification = useNotifications();
   const { online } = useNetworkState();
   const { confirm, info } = useConfirmContext();
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { onBack, goToCommunityProfilePage } = useNavigation();
   const { AmityCommunitySetupPageBehavior } = usePageBehavior();
@@ -316,6 +316,10 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       !isPublic === !community.isPublic &&
       isDiscoverable === community.isDiscoverable);
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div style={themeStyles} className={styles.editCommunity}>
       <div className={styles.editCommunity__topBar}>
@@ -438,7 +442,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
               required
               type="text"
               aria-label="displayName"
-              placeholder={useString('amity_social_label_community_setup_name_description')}
+              placeholder={resolveString('amity_social_label_community_setup_name_description')}
               value={displayName ?? communityName}
               maxLength={MAX_LENGTH_COMMUNITY_NAME}
               className={styles.editCommunity__input}
@@ -456,7 +460,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                   textId="amity_social_label_community_setup_about_title"
                 />
                 <Typography.Body className={styles.editCommunity__optionalText}>
-                  {useString('amity_social_button_report_other_reason_optional')}
+                  {resolveString('amity_social_button_report_other_reason_optional')}
                 </Typography.Body>
               </div>
               <Typography.Body
@@ -469,7 +473,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
             <TextArea
               value={description}
               maxLength={MAX_LENGTH_DESC}
-              placeholder={useString('amity_social_button_community_setup_about_description')}
+              placeholder={resolveString('amity_social_button_community_setup_about_description')}
               className={styles.editCommunity__textarea}
               {...register('description')}
             />
@@ -484,7 +488,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                 textId="amity_social_label_community_setup_category_title"
               />
               <Typography.Body className={styles.editCommunity__optionalText}>
-                {useString('amity_social_button_report_other_reason_optional')}
+                {resolveString('amity_social_button_report_other_reason_optional')}
               </Typography.Body>
             </div>
           </label>
@@ -552,7 +556,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
                   }}
                 >
                   <Typography.Body className={styles.editCommunity__selectedCategory}>
-                    {useString('amity_social_button_community_setup_categories_description')}
+                    {resolveString('amity_social_button_community_setup_categories_description')}
                     <IconComponent defaultIcon={() => arrowIcon} imgIcon={() => arrowIcon} />
                   </Typography.Body>
                 </Button>

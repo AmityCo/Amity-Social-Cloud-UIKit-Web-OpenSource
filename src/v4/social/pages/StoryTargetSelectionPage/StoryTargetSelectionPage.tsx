@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -24,7 +24,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 
 export function StoryTargetSelectionPage() {
   const pageId = 'select_story_target_page';
-  const { themeStyles } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { onBack } = useNavigation();
@@ -111,6 +111,10 @@ export function StoryTargetSelectionPage() {
     }
   }, [file]);
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div className={styles.selectStoryTargetPage} style={themeStyles}>
       <div className={styles.selectStoryTargetPage__topBar}>
@@ -128,7 +132,7 @@ export function StoryTargetSelectionPage() {
       </div>
 
       <Typography.Body className={styles.selectStoryTargetPage__myCommunities_text}>
-        {useString('amity_social_button_my_communities')}
+        {resolveString('amity_social_button_my_communities')}
       </Typography.Body>
       <div className={styles.selectStoryTargetPage__myCommunities__container}>
         {renderCommunity}

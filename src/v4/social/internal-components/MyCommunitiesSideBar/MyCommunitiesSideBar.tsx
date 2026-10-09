@@ -21,7 +21,8 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
-  const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const { goToCommunityProfilePage, goToCommunitiesByCategoryPage, page } = useNavigation();
   const { communities, hasMore, loadMore, isLoading, refresh } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member', sortBy: 'displayName' },
@@ -44,6 +45,10 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
       setSelectedCommunityId(acceptedInvitation.targetId);
     }
   }, [acceptedInvitation]);
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div style={themeStyles} className={styles.myCommunitiesList} data-testid={accessibilityId}>

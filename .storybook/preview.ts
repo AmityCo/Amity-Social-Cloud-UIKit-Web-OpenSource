@@ -28,6 +28,7 @@ const preview: Preview = {
     _showAuthExpiry: false,
     // ── Behaviour ─────────────────────────────────────────────────────────
     syncNetworkConfig: false,
+    seoOptimizationEnabled: false,
     visitorCanViewClip: false,
     hideExplore: false,
     socialCommunityCreationButtonVisible: true,
@@ -37,6 +38,13 @@ const preview: Preview = {
     submit: false,
   },
   argTypes: {
+    // The module switches lived here. They wrote `config.features`, which no
+    // longer exists — whether a module exists is the network's plan to answer
+    // and nobody else's. The other route, standing in for the plan itself,
+    // needed an override prop on the provider that was public API and was
+    // removed. Controls that cannot move anything read as a working gate from
+    // outside, so they are gone until one of those routes is back; the panel
+    // in the corner still reports what this network's plan withheld.
     // ── User ──────────────────────────────────────────────────────────────
     userId: {
       name: 'User ID',
@@ -102,6 +110,14 @@ const preview: Preview = {
     syncNetworkConfig: {
       name: 'Sync Network Config',
       control: { type: 'boolean' },
+      table: { category: 'Behaviour' },
+    },
+    seoOptimizationEnabled: {
+      name: 'SEO Optimization (no realtime)',
+      control: { type: 'boolean' },
+      description:
+        'Turns off the realtime engine, which is also what lets a capture run reach the app ' +
+        'without a reachable MQTT broker — the login awaits its topic subscriptions otherwise.',
       table: { category: 'Behaviour' },
     },
     visitorCanViewClip: {

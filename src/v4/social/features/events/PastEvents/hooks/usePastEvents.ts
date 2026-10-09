@@ -18,7 +18,7 @@ export function usePastEvents() {
   const { onBack } = useNavigation();
   const { isVisitorOrBot, currentUserId } = useSDK();
   const { hasCreateEventPermission } = useEventPermission();
-  const { themeStyles, accessibilityId } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const [activeTab, setActiveTab] = useState<Key>(PastEventsTab.All);
 
   const eventCollection = useEventsCollection({
@@ -31,6 +31,7 @@ export function usePastEvents() {
   });
 
   return {
+    isExcluded,
     pageId,
     onBack,
     activeTab,

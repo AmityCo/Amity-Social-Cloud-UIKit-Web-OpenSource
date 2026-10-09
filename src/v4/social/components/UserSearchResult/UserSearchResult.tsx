@@ -27,10 +27,15 @@ export const UserSearchResult = ({
 }: UserSearchResultProps) => {
   const componentId = 'user_search_result';
 
-  const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.userSearchResult} style={themeStyles} data-testid={accessibilityId}>

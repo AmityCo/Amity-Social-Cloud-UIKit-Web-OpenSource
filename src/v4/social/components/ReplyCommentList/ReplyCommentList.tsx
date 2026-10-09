@@ -10,6 +10,7 @@ import { AngleDown } from '~/v4/icons/AngleDown';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import clsx from 'clsx';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 interface ReplyCommentProps {
   pageId?: string;
@@ -109,28 +110,32 @@ export const ReplyCommentList = ({
   const onHighlightedDeletedRef = useRef(onHighlightedDeleted);
   onHighlightedDeletedRef.current = onHighlightedDeleted;
 
-  useEffect(() => {
-    if (!isL2List || !highlightedCommentId) return;
-    let unsubscribe: (() => void) | undefined;
-    unsubscribe = CommentRepository.getComment(highlightedCommentId, (resp) => {
-      if (!resp.loading) {
-        if (resp.data) {
-          const comment = resp.data as Amity.Comment;
-          setNotificationTargetComment(comment);
-          if (comment.isDeleted) {
+  useSdkEffect(
+    CommentRepository.getComment,
+    () => {
+      if (!isL2List || !highlightedCommentId) return;
+      let unsubscribe: (() => void) | undefined;
+      unsubscribe = CommentRepository.getComment(highlightedCommentId, (resp) => {
+        if (!resp.loading) {
+          if (resp.data) {
+            const comment = resp.data as Amity.Comment;
+            setNotificationTargetComment(comment);
+            if (comment.isDeleted) {
+              onHighlightedDeletedRef.current?.();
+            }
+          } else {
+            // Comment not found — treat as deleted.
             onHighlightedDeletedRef.current?.();
           }
-        } else {
-          // Comment not found — treat as deleted.
-          onHighlightedDeletedRef.current?.();
+          unsubscribe?.();
+          unsubscribe = undefined;
         }
-        unsubscribe?.();
-        unsubscribe = undefined;
-      }
-    });
+      });
 
-    return () => unsubscribe?.();
-  }, [isL2List, highlightedCommentId]);
+      return () => unsubscribe?.();
+    },
+    [isL2List, highlightedCommentId],
+  );
 
   const highlightedComment: Amity.Comment[] =
     isL2List && highlightedCommentId

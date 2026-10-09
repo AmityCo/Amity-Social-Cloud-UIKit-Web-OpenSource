@@ -1,5 +1,5 @@
 import React from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import User from '~/v4/icons/User';
 import { Avatar, Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -31,7 +31,7 @@ export const JoinRequestContent = ({
 }: JoinRequestContentProps) => {
   const componentId = 'join_request_content';
 
-  const { accessibilityId, themeStyles } = useAmityComponent({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     componentId,
     pageId,
   });
@@ -46,6 +46,10 @@ export const JoinRequestContent = ({
       refresh && refresh();
     },
   });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const onClickAccept = (joinRequest: Amity.JoinRequest) => approveJoinRequest(joinRequest);
   const onClickReject = (joinRequest: Amity.JoinRequest) => declineJoinRequest(joinRequest);
@@ -108,7 +112,7 @@ export const JoinRequestContent = ({
         <div className={styles.joinRequestContent__noJoinRequest}>
           <FireworkPaper className={styles.joinRequestContent__fireworkIcon} />
           <Typography.TitleBold className={styles.joinRequestContent__noJoinRequestText}>
-            {useString('amity_social_label_no_pending_requests')}
+            {resolveString('amity_social_label_no_pending_requests')}
           </Typography.TitleBold>
         </div>
       )}

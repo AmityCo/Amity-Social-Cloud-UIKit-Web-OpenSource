@@ -1,6 +1,7 @@
 // @ts-check
 
 import jest from 'eslint-plugin-jest';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 import globals from 'globals';
 import js from '@eslint/js';
@@ -40,6 +41,14 @@ export default [
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
+    },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}', '.storybook/**/*.{ts,tsx}'],
+    ignores,
+    plugins: { 'react-hooks': reactHooks },
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
     },
   },
   {

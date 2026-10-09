@@ -10,8 +10,12 @@ import styles from './LivestreamUnsupportedPage.module.css';
 
 export function LivestreamUnsupportedPage() {
   const pageId = PAGE_ID.LIVESTREAM_UNSUPPORTED_PAGE;
-  const { themeStyles } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { onBack } = useNavigation();
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <section style={themeStyles} className={styles.livestreamUnsupportedPage}>

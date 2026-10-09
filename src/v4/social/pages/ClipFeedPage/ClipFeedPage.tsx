@@ -50,7 +50,7 @@ export const ClipFeedPage = ({
 
   const { isVisitorOrBot } = useSDK();
 
-  const { accessibilityId, themeStyles } = useAmityPage({
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const {
@@ -477,6 +477,10 @@ export const ClipFeedPage = ({
       : shouldUseGlobalFeed
         ? isGlobalFeedLoading
         : isLoadingCollectionPosts;
+
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
 
   return (
     <div

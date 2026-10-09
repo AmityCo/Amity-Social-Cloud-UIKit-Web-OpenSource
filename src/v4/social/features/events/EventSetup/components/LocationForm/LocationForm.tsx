@@ -13,6 +13,7 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { FormLabel } from '~/v4/core/components/FormLabel';
 import { FormInput } from '~/v4/core/components/FormInput';
 import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
+import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import {
   EventSetupValues,
   Platform,
@@ -59,6 +60,19 @@ type LocationFormValues = z.infer<typeof schema>;
 export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
   const [shownEventTypeOption, setShownEventTypeOption] = useState(false);
 
+  // Livestream is one of the two platforms a Virtual event can run on, and it
+  // is the only one Live owns — an external link is somebody else's video
+  // call. So Live off takes that radio and leaves the Event type alone.
+  const isLiveEnabled = useFeatureEnabled('live');
+
+  // Read once, up here, rather than inside the lists below: `useString` is a
+  // hook, and these sat inside `.map` callbacks and inside
+  // `values.type === Virtual &&`, which makes the platform label a conditional
+  // hook every time someone switches the type.
+  const virtualLabel = useString('amity_social_button_virtual');
+  const inPersonLabel = useString('amity_social_button_in_person');
+  const platformLabel = useString('amity_social_event_platform');
+
   const {
     watch,
     formState: { isSubmitting, isValid },
@@ -69,7 +83,10 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
     mode: 'onChange',
     values: {
       type: value.type,
-      platform: value.externalUrl ? Platform.External : Platform.Livestream,
+      // Livestream is the default platform, and with Live off it is not a
+      // radio any more — the form would open on a value its own group cannot
+      // select, which reads as nothing chosen.
+      platform: value.externalUrl || !isLiveEnabled ? Platform.External : Platform.Livestream,
       externalUrl: value.externalUrl || '',
       location: value.location || '',
     },
@@ -112,9 +129,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                 }}
               >
                 <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                  {eventType === AmityEventType.Virtual
-                    ? useString('amity_social_button_virtual')
-                    : useString('amity_social_button_in_person')}
+                  {eventType === AmityEventType.Virtual ? virtualLabel : inPersonLabel}
                 </Typography.BodyBold>
               </Button>
             ))}
@@ -171,9 +186,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                   onPress={() => (isDesktop ? openPopover() : setShownEventTypeOption(true))}
                 >
                   <Typography.Body className={styles.locationForm__eventTypeLabel}>
-                    {value === AmityEventType.Virtual
-                      ? useString('amity_social_button_virtual')
-                      : useString('amity_social_button_in_person')}
+                    {value === AmityEventType.Virtual ? virtualLabel : inPersonLabel}
                   </Typography.Body>
                   <ChevronDown className={styles.locationForm__icon} />
                 </Button>
@@ -197,9 +210,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                     }}
                   >
                     <Typography.BodyBold className={styles.locationForm__eventTypeLabel}>
-                      {eventType === AmityEventType.Virtual
-                        ? useString('amity_social_button_virtual')
-                        : useString('amity_social_button_in_person')}
+                      {eventType === AmityEventType.Virtual ? virtualLabel : inPersonLabel}
                     </Typography.BodyBold>
                   </Button>
                 ))}
@@ -210,10 +221,7 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
       />
       {values.type === AmityEventType.Virtual && (
         <div>
-          <FormLabel
-            className={styles.locationForm__eventTypeLabel}
-            label={useString('amity_social_event_platform')}
-          />
+          <FormLabel className={styles.locationForm__eventTypeLabel} label={platformLabel} />
           <Controller
             name="platform"
             control={control}
@@ -260,7 +268,10 @@ export function LocationForm({ value, onChange, onCancel }: LocationFormProps) {
                       </div>
                     ),
                   },
-                ]}
+                  // Filtered rather than built conditionally: every label above
+                  // is a `useString` call, so dropping an entry from the
+                  // literal would drop a hook with it.
+                ].filter((radio) => radio.value !== Platform.Livestream || isLiveEnabled)}
               />
             )}
           />

@@ -111,6 +111,7 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
                     />
                     {canShowProductTags && (
                       <TagProductsButton
+                        pageId={pageId}
                         productTagCount={livestreamPost?.productTags?.length || 0}
                         onPress={onClickProductTagBadge}
                       />

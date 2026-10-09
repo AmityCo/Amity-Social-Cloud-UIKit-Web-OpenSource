@@ -19,6 +19,7 @@ import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSe
 import useTaggingProduct from '~/v4/social/hooks/useTaggingProduct';
 import { ERROR_CODE, ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { usePostSubscription } from './usePostSubscription';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 export type CreateLivestreamUiState = 'preview' | 'broadcast' | 'backStage';
 
@@ -176,17 +177,21 @@ export const useCreateLivestream = ({
   // Apply the read-only choice once broadcasting has actually started. Muting at
   // channel-creation time does not stick — broadcast-start re-provisions the
   // channel un-muted — so mute here (after uiState === 'broadcast') and only once.
-  useEffect(() => {
-    if (
-      uiState === 'broadcast' &&
-      channel?.channelId &&
-      readOnlyRef.current &&
-      !hasMutedRef.current
-    ) {
-      hasMutedRef.current = true;
-      ChannelRepository.muteChannel(channel.channelId);
-    }
-  }, [uiState, channel?.channelId]);
+  useSdkEffect(
+    ChannelRepository.muteChannel,
+    () => {
+      if (
+        uiState === 'broadcast' &&
+        channel?.channelId &&
+        readOnlyRef.current &&
+        !hasMutedRef.current
+      ) {
+        hasMutedRef.current = true;
+        ChannelRepository.muteChannel(channel.channelId);
+      }
+    },
+    [uiState, channel?.channelId],
+  );
 
   // Computed states
   const isTargetEvent = !!event;

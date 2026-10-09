@@ -73,6 +73,10 @@ export function Feed({
   const filteredItems = useMemo(
     () =>
       itemWithAds.filter((item) => {
+        // A hole in the list took the whole feed down through the error
+        // boundary, so this reads defensively even though usePaginator no
+        // longer makes one.
+        if (!item) return false;
         if (isAmityAd(item)) return true;
         return !featuredPostIds.has(item.postId) && !newPostIds.has(item.postId);
       }),

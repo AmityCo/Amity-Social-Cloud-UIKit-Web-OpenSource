@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useString, resolveString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import { useCommunitySetupContext } from '~/v4/social/providers/CommunitySetupProvider';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton';
@@ -36,7 +36,7 @@ export const CommunityAddMemberPage = ({
   onAddedAction,
 }: CommunityAddMemberPageProps) => {
   const pageId = 'community_add_member_page';
-  const { themeStyles, accessibilityId } = useAmityPage({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
   });
   const { members, setMembers } = useCommunitySetupContext();
@@ -161,6 +161,10 @@ export const CommunityAddMemberPage = ({
       ? userSearchResults
       : users;
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div
       data-testid={accessibilityId}
@@ -175,7 +179,7 @@ export const CommunityAddMemberPage = ({
             defaultClassName={styles.communityAddMemberPage__closeButton}
           />
           <Typography.TitleBold className={styles.communityAddMemberPage__title}>
-            {useString('amity_social_button_add_member')}
+            {resolveString('amity_social_button_add_member')}
           </Typography.TitleBold>
           <div className={styles.communityAddMemberPage__emptySapce} />
         </div>
@@ -187,7 +191,7 @@ export const CommunityAddMemberPage = ({
           <Input
             className={styles.communityAddMemberPage__searchInput}
             type="text"
-            placeholder={useString('amity_social_placeholder_search_user_hint')}
+            placeholder={resolveString('amity_social_placeholder_search_user_hint')}
             value={memberSearch}
             onChange={(e) => handleSearchUser(e)}
           />
@@ -267,7 +271,7 @@ export const CommunityAddMemberPage = ({
           data-testid={`${pageId}/*/add_member_button`}
           className={styles.communityAddMemberPage__button}
         >
-          {useString('amity_social_button_add_member')}
+          {resolveString('amity_social_button_add_member')}
         </AriaButton>
       </div>
     </div>

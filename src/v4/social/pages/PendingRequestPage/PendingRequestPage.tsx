@@ -59,8 +59,6 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [intersectionNodePost, setIntersectionNodePost] = useState<HTMLDivElement | null>(null);
 
-  if (isExcluded) return null;
-
   const {
     posts: reviewingPosts,
     isLoading,
@@ -72,6 +70,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     targetId: community.communityId,
     feedType: 'reviewing',
   });
+
+  if (isExcluded) return null;
 
   const isPostOwner = reviewingPosts.some((post) => post.postedUserId === currentUserId);
   const joinRequestsCount = (joinRequests && joinRequests?.length) || 0;

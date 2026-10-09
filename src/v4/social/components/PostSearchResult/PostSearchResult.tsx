@@ -34,7 +34,8 @@ export const PostSearchResult = ({
 }: PostSearchResultProps) => {
   const componentId = 'post_search_result';
 
-  const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ pageId, componentId });
+
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { AmitySocialGlobalSearchPageBehavior } = usePageBehavior();
   const { isDesktop } = useResponsive();
@@ -77,6 +78,10 @@ export const PostSearchResult = ({
   }, [keyword, postCollection]);
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   return (
     <div className={styles.postSearchResult} style={themeStyles} data-testid={accessibilityId}>

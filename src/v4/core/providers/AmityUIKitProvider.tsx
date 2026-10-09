@@ -40,6 +40,7 @@ import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
+import { useNetworkEntitlement } from '~/v4/core/hooks/useNetworkEntitlement';
 import { ClipProvider } from '~/v4/social/providers/ClipProvider';
 import { FeedScrollProvider } from '~/v4/core/providers/FeedScrollProvider';
 import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider';
@@ -76,6 +77,9 @@ const InternalComponent = ({
   const { error } = useNotifications();
   const [client, setClient] = useState<Amity.Client | null>(null);
   const { networkConfig, isNetworkConfigLoading } = useNetworkConfig(client);
+  // Read unconditionally, unlike `syncNetworkConfig`: theming is the customer's
+  // to opt into, entitlement is core's answer about what they bought.
+  const { entitlement, isEntitlementLoading } = useNetworkEntitlement(client);
   const [isGlobalBanned, setIsGlobalBanned] = useState<boolean>(false);
   const [isUserDeleted, setIsUserDeleted] = useState<boolean>(false);
   const [isVisitorUsageLimitReached, setIsVisitorUsageLimitReached] = useState<boolean>(false);
@@ -235,18 +239,22 @@ const InternalComponent = ({
       : undefined;
     return (
       <div className="asc-uikit">
-        <CustomizationProvider initialConfig={initialConfig}>
+        <CustomizationProvider initialConfig={initialConfig} entitlement={entitlement}>
           <VisitorUsageLimitPage onSignIn={handleSignIn} />
         </CustomizationProvider>
       </div>
     );
   }
 
-  if (!client || isNetworkConfigLoading) return null;
+  // Waiting on the entitlement as well as the config: a module that turns off
+  // one render after a child mounted is the #300 the provider remounts to
+  // defuse, and a remount on first paint is a visible flash of a surface the
+  // customer is not entitled to.
+  if (!client || isNetworkConfigLoading || isEntitlementLoading) return null;
 
   return (
     <div className="asc-uikit">
-      <CustomizationProvider initialConfig={initialConfig}>
+      <CustomizationProvider initialConfig={initialConfig} entitlement={entitlement}>
         <CustomReactionProvider>
           <AdEngineProvider>
             <FeedScrollProvider>

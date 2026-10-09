@@ -40,6 +40,7 @@ import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfi
 import { useUpdateComment } from '~/v4/social/hooks/useUpdateComment';
 import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
+import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 
 interface CommentProps {
   pageId?: string;
@@ -212,20 +213,24 @@ export const Comment = ({
     return () => clearTimeout(fallback);
   }, [isHighlightedComment, comment.commentId]);
 
-  useEffect(() => {
-    highlightedCommentId &&
-      parentId &&
-      CommentRepository.getComment(highlightedCommentId, (resp) => {
-        setHighlightedReplyComment(resp.data as Amity.Comment);
-      });
-  }, [highlightedCommentId, parentId]);
-
-  if (isExcluded) return null;
+  useSdkEffect(
+    CommentRepository.getComment,
+    () => {
+      highlightedCommentId &&
+        parentId &&
+        CommentRepository.getComment(highlightedCommentId, (resp) => {
+          setHighlightedReplyComment(resp.data as Amity.Comment);
+        });
+    },
+    [highlightedCommentId, parentId],
+  );
 
   const { handleDeleteComment: deleteComment } = useDeleteComment({
     commentId: comment.commentId,
     parentId: comment.parentId ?? undefined,
   });
+
+  if (isExcluded) return null;
 
   const handleEditComment = () => {
     removeDrawerData();

@@ -7,6 +7,23 @@
   border: 1px solid var(--asc-color-base-shade4);
 }
 
+/*
+ * The rows' own box, which CommunitySearchResult used to supply while this list
+ * borrowed it — `padding: 0.5rem 1rem` and a column. It sits inside rather than
+ * on .myCommunitiesList because CreateCommunityRowItem already carries its own
+ * `padding: 0 1rem`, and moving the padding out to the list would double it.
+ *
+ * No data-testid: it is a box, not a component, so it adds no id to the scope.
+ */
+.myCommunitiesList__items {
+  width: 100%;
+  display: flex;
+  min-height: 20rem;
+  padding: 0.5rem 1rem;
+  align-items: start;
+  flex-direction: column;
+}
+
 @media only screen and (width < 48em) {
   .myCommunitiesList {
     border: none;

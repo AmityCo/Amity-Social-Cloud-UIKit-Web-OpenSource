@@ -92,7 +92,7 @@ const SocialReactionList = ({
   customReferenceType,
 }: ReactionListProps) => {
   const componentId = 'reaction_list';
-  const { accessibilityId } = useAmityComponent({
+  const { accessibilityId, isExcluded } = useAmityComponent({
     pageId,
     componentId,
   });
@@ -110,10 +110,15 @@ const SocialReactionList = ({
 
   const { closePopup } = usePopupContext();
   const [activeTab, setActiveTab] = useState('All');
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { socialReactions: config } = useCustomReaction();
   const { removeReaction } = useReaction(referenceType, referenceId);
   const { isDesktop } = useResponsive();
+
+  // Owned by a module and never asked. The component kept rendering
+  // after its module was switched off.
+  if (isExcluded) return null;
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);

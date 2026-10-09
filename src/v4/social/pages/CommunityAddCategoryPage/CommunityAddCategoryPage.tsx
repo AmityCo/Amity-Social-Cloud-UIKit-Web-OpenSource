@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useString } from '~/v4/core/localization';
+import { resolveString } from '~/v4/core/localization';
 import styles from './CommunityAddCategoryPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements';
@@ -21,7 +21,7 @@ interface CommunityAddCategoryPageProps {
 export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageProps) => {
   const pageId = 'community_add_category_page';
   const { isDesktop } = useResponsive();
-  const { themeStyles, accessibilityId } = useAmityPage({
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
   });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
@@ -92,6 +92,10 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
     setSelectedCategories(categories);
   }, [categories]);
 
+  // A module switched off renders nothing, so a stale route or deep
+  // link lands on emptiness rather than a page with holes in it.
+  if (isExcluded) return null;
+
   return (
     <div
       style={themeStyles}
@@ -102,7 +106,7 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
         <div className={styles.communityAddCategoryPage__navbar}>
           <CloseButton pageId={pageId} onPress={() => handleClosePage()} />
           <Typography.TitleBold>
-            {useString('amity_social_button_community_setup_categories_description')}
+            {resolveString('amity_social_button_community_setup_categories_description')}
           </Typography.TitleBold>
           <Typography.Body className={styles.communityAddCategoryPage__categoryCount}>
             {selectedCategories.length}/{MAX_CATEGORIES}
@@ -209,7 +213,7 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
           data-testid={`${pageId}/*/add_category_button`}
           className={styles.communityAddCategoryPage__button}
         >
-          {useString('amity_social_button_add_category')}
+          {resolveString('amity_social_button_add_category')}
         </Button>
       </div>
     </div>

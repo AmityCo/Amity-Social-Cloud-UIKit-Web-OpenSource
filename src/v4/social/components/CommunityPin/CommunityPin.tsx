@@ -27,8 +27,6 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
     componentId,
   });
 
-  if (isExcluded) return null;
-
   const { community } = useCommunity({ communityId, shouldCall: !!communityId });
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { pinnedPost, isLoading, refresh } = usePinnedPostsCollection({
@@ -36,11 +34,13 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
     shouldCall: !!communityId && (community?.isJoined || community?.isPublic),
   });
 
-  const isMemberPrivateCommunity = community?.isJoined && !community?.isPublic;
-
   useEffect(() => {
     refresh();
   }, []);
+
+  if (isExcluded) return null;
+
+  const isMemberPrivateCommunity = community?.isJoined && !community?.isPublic;
 
   const announcementPosts = pinnedPost.filter(
     (post) =>

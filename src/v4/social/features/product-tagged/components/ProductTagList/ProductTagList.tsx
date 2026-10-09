@@ -5,8 +5,8 @@ import { Typography } from '~/v4/core/components';
 import { CloseButton } from '~/v4/social/elements';
 import { Divider, DividerType } from '~/v4/social/elements/Divider/Divider';
 import { ProductTag } from '~/v4/social/features/product-tagged/elements';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { PAGE_ID, COMPONENT_ID } from '~/v4/constants/customization';
+import { useAmityComponent, useAmityElement } from '~/v4/core/hooks/uikit';
+import { PAGE_ID, COMPONENT_ID, ELEMENT_ID } from '~/v4/constants/customization';
 import {
   DisplayModeEnum,
   DisplayMode,
@@ -46,6 +46,19 @@ export function ProductTagList({
     pageId,
     componentId,
   });
+
+  // Asked through the element, not this component: product_tag_list has no owner
+  // in the graph — only manage_product_tag_list does — so a component gate here
+  // could never fire. product_tag is the id Product actually owns, and it is what
+  // the cards inside this list use, so the container disappears with its last
+  // visible child rather than leaving its "Products tagged" header behind.
+  const { isExcluded: isProductTagExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId: ELEMENT_ID.PRODUCT_TAG,
+  });
+
+  if (isProductTagExcluded) return null;
 
   if (!productTags || productTags.length === 0) {
     return null;
