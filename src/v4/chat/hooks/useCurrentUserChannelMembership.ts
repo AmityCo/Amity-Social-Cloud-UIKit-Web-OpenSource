@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
+import { useSearchChannelUsersCollection } from '~/v4/chat/hooks/collections/useSearchChannelUsersCollection';
 
 /**
  * Observes the current user's membership (roles, membership status) on a channel.
@@ -16,7 +16,7 @@ const useCurrentUserChannelMembership = (
   { enabled = true, refreshKey }: { enabled?: boolean; refreshKey?: string } = {},
 ) => {
   const { currentUserId } = useSDK();
-  const { channelMembers, isLoading, refresh } = useSearchChannelUser({
+  const { channelMembers, isLoading, refresh } = useSearchChannelUsersCollection({
     channelId,
     memberships: ['member', 'banned', 'muted'],
     search: currentUserId,

@@ -1,0 +1,132 @@
+{
+  "apollo": "0.20.3",
+  "platform": "web",
+  "rules": {
+    "L03": 63,
+    "L05": 4,
+    "L06": 1,
+    "W1": 23,
+    "W1b": 152,
+    "W1c": 38,
+    "W2": 8,
+    "W4": 60,
+    "W6": 158
+  },
+  "specs": {
+    "AmityCommentComposerComponent": {
+      "G03": 1
+    },
+    "AmityCommentEditorComponent": {
+      "G04": 1
+    },
+    "AmityEventDetailPage": {
+      "G03": 1
+    },
+    "amity_create_livestream_page": {
+      "G04": 1
+    },
+    "amity_livestream_co_host_stage": {
+      "G04": 1
+    },
+    "amity_livestream_invite_co_host_page": {
+      "G04": 1
+    },
+    "archived_chat_page": {
+      "G01": 4
+    },
+    "cancel_co_host_button": {
+      "G04": 1
+    },
+    "chat_home_page": {
+      "G01": 16
+    },
+    "chat_list_item": {
+      "G01": 21,
+      "G04": 1
+    },
+    "chat_page": {
+      "G01": 11
+    },
+    "chat_user_action": {
+      "G01": 3,
+      "G04": 1
+    },
+    "comment.options_sheet": {
+      "G04": 1
+    },
+    "create_group_page": {
+      "G01": 10,
+      "G03": 1
+    },
+    "edit_group_member_permission_page": {
+      "G03": 1
+    },
+    "group_chat_page": {
+      "G01": 8
+    },
+    "group_member_action": {
+      "G04": 1
+    },
+    "group_notification_preference_page": {
+      "G03": 1
+    },
+    "invite_co_host_button": {
+      "G04": 1
+    },
+    "livestream_pinned_product": {
+      "G03": 1
+    },
+    "livestream_player_page": {
+      "G04": 1
+    },
+    "livestream_post_target_selection_page": {
+      "G04": 1
+    },
+    "manage_product_tag_list": {
+      "G03": 1
+    },
+    "media_attachment_picker": {
+      "G04": 1
+    },
+    "mention_picker": {
+      "G04": 1
+    },
+    "message_action_menu": {
+      "G01": 6,
+      "G04": 1
+    },
+    "message_bubble": {
+      "G01": 48,
+      "G03": 1
+    },
+    "message_composer": {
+      "G01": 13,
+      "G03": 1
+    },
+    "microphone_button": {
+      "G04": 1
+    },
+    "mute_user_button": {
+      "G04": 1
+    },
+    "post_composer_page": {
+      "G03": 1
+    },
+    "product_tag_selected_item": {
+      "G04": 1
+    },
+    "product_tagging_button_element": {
+      "G03": 1
+    },
+    "search_channel_results": {
+      "G01": 5,
+      "G04": 1
+    },
+    "search_message_results": {
+      "G04": 1
+    },
+    "start_livestream_button": {
+      "G04": 1
+    }
+  }
+}

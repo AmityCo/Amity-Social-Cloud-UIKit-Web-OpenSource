@@ -26,7 +26,18 @@ function ChatUIKit() {
 
   return (
     <>
-      {currentPage.type === ChatPageTypes.ChatHome && <ChatHomePage />}
+      {/*
+       * The chat home is the root of the navigation stack (ChatNavigationProvider
+       * starts with it) and stays mounted underneath every other page, hidden,
+       * the way the iOS navigation stack and the Android activity stack keep
+       * their chat home alive. Its channel collections keep their realtime
+       * subscriptions, so coming back shows the list as it is instead of
+       * re-creating the collection and fetching the first page again. Right
+       * after a send that fetch could land before the backend has written the
+       * channel's lastMessageAt and preview, and the stale page moved the chat
+       * back down the list (PDT-5758).
+       */}
+      <ChatHomePage hidden={currentPage.type !== ChatPageTypes.ChatHome} />
       {currentPage.type === ChatPageTypes.CreateConversationPage && (
         <ChannelCreateConversationPage />
       )}

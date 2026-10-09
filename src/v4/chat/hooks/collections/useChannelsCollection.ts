@@ -2,7 +2,10 @@ import useChannelCollection from './useChannelCollection';
 
 type UseChannelsCollectionParams = {
   membership?: 'all' | 'member' | 'notMember';
-  sortBy?: 'lastActivity' | 'firstCreated' | 'lastCreated';
+  sortBy?: Extract<
+    Amity.ChannelSortBy,
+    'lastActivity' | 'lastMessage' | 'firstCreated' | 'lastCreated'
+  >;
   types?: Amity.ChannelType[];
   isDeleted?: boolean;
   limit?: number;

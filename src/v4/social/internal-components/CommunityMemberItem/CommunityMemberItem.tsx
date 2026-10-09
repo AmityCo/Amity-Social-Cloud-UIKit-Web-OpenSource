@@ -46,7 +46,7 @@ export const CommunityMemberItem = ({
   const { online } = useNetworkState();
   const notification = useNotifications();
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(user?.userId as string);
+  const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(user);
 
   const {
     canEditMembers,

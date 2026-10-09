@@ -10,7 +10,7 @@ import MutedIcon from '~/v4/icons/Muted';
 import { Typography } from '~/v4/core/components/Typography';
 import mentionStyles from '~/v4/core/components/InputText/styles.module.css';
 import CommentAltExclamation from '~/v4/icons/CommentAltExclamation';
-import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
+import { useSearchChannelUsersCollection } from '~/v4/chat/hooks/collections/useSearchChannelUsersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { useNetworkState } from 'react-use';
@@ -25,7 +25,7 @@ const ChatReadyState = ({ pageId = '*', channel }: { pageId?: string; channel: A
   const { isModerator } = useChannelPermission(channel.channelId);
 
   const currentUserId = useSDK().currentUserId;
-  const { channelMembers } = useSearchChannelUser({
+  const { channelMembers } = useSearchChannelUsersCollection({
     channelId: channel.channelId,
     memberships: ['member', 'banned', 'muted'],
   });
