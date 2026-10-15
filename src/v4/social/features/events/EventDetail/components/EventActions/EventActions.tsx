@@ -86,6 +86,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
   const actions = [
     {
       key: 'edit',
+      'data-testid': 'edit-event-menu-item',
       icon: Pencil,
       label: useString('amity_social_button_edit_event'),
       condition: isHostEvent,
@@ -108,6 +109,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     },
     {
       key: 'post-event-to-feed',
+      'data-testid': 'post-event-to-feed-menu-item',
       icon: createEventPostConfig.image
         ? () => (
             <img
@@ -134,6 +136,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     },
     {
       key: 'add-to-calendar',
+      'data-testid': 'add-to-calendar-menu-item',
       icon: AddCalendar,
       label: useString('amity_social_modal_add_calendar_sheet_add_button'),
       condition:
@@ -145,6 +148,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
     },
     {
       key: 'copy-event-link',
+      'data-testid': 'copy-event-link-menu-item',
       icon: CopyToClipboard,
       label: useString('amity_social_button_copy_event_link'),
       condition: showCopyLink,
@@ -171,6 +175,7 @@ export function EventActions({ event, withTitle, pop = 1, myRSVP }: EventActions
       icon: Trash,
       destructive: true,
       key: 'delete',
+      'data-testid': 'delete-event-menu-item',
       label: useString('amity_social_button_delete_event'),
       condition: hasDeleteEventPermission || isHostEvent,
       onPress: () => deleteEvent(event.eventId),
