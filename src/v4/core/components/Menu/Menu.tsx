@@ -77,6 +77,7 @@ type MenuItemProps = {
   pageId?: string;
   componentId?: string;
   elementId?: string;
+  'data-testid'?: string;
 };
 
 function renderIcon(icon: MenuIcon | undefined, className?: string): ReactNode {
@@ -110,6 +111,7 @@ function MenuItem({
   pageId = '*',
   componentId = '*',
   elementId = '*',
+  'data-testid': testId,
 }: MenuItemProps) {
   const { isExcluded, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
 
@@ -125,7 +127,7 @@ function MenuItem({
       variant="default"
       onPress={onPress}
       data-destructive={destructive}
-      data-testid={elementId === '*' ? undefined : accessibilityId}
+      data-testid={testId ?? (elementId === '*' ? undefined : accessibilityId)}
       className={clsx(styles.menuItem, className)}
     >
       {iconNode}
