@@ -8,7 +8,6 @@ import { isNonNullable } from '~/v4/helpers/utils';
 import { FlagIcon, TrashIcon } from '~/v4/social/icons';
 import { CreatePost } from '~/v4/icons/CreatePost';
 import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
-import { ContentFlagReasonEnum } from '@amityco/ts-sdk';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import UnFlag from '~/v4/icons/UnFlag';
@@ -38,10 +37,6 @@ export const CommentOptions = ({
   onCloseMenu,
   onlyShowDelete = false,
 }: CommentOptionsProps) => {
-  const [reasonReport, setReasonReport] = useState<Amity.ContentFlagReason>(
-    ContentFlagReasonEnum.Others,
-  );
-
   const isReplyComment = comment.parentId != null;
 
   const { openPopup } = usePopupContext();
@@ -54,7 +49,6 @@ export const CommentOptions = ({
 
   const { isFlaggedByMe, mutateUnreportComment } = useCommentFlaggedByMe({
     commentId: comment.commentId,
-    reasonReport,
     isReplyComment,
   });
 

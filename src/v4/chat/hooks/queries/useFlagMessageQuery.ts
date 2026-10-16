@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { MessageRepository } from '@amityco/ts-sdk';
+import { AmityContentFlagReasonType, MessageRepository } from '@amityco/ts-sdk';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useString } from '~/v4/core/localization';
 import { ERROR_CODE } from '~/v4/chat/constants';
 
-type FlagMessageParam = Parameters<typeof MessageRepository.flagMessage>;
+type FlagMessageParam = {
+  reason?: AmityContentFlagReasonType;
+  detail?: string;
+};
 
 type FlagMessagePayload = Awaited<ReturnType<typeof MessageRepository.flagMessage>>;
 
@@ -15,7 +18,8 @@ type UnflagMessageParam = Parameters<typeof MessageRepository.unflagMessage>[0];
 type UnflagMessagePayload = Awaited<ReturnType<typeof MessageRepository.unflagMessage>>;
 
 export type ReportOptions = {
-  reason?: Amity.ContentFlagReason;
+  reason?: AmityContentFlagReasonType;
+  detail?: string;
   onSuccess?: () => void;
 };
 
@@ -59,7 +63,10 @@ export function useFlagMessageQuery({
     Error,
     FlagMessageParam
   >({
-    mutationFn: (args) => MessageRepository.flagMessage(...args),
+    mutationFn: ({ reason, detail }) =>
+      reason
+        ? MessageRepository.flagMessage(messageId, { reason, detail })
+        : MessageRepository.flagMessage(messageId),
     onSuccess: () => {
       refetch();
       success({
@@ -106,11 +113,14 @@ export function useFlagMessageQuery({
 
   function report(options: ReportOptions = {}) {
     if (!messageId) return;
-    const { reason, onSuccess } = options;
+    const { reason, detail, onSuccess } = options;
 
-    flagMessageMutate([messageId, reason], {
-      onSuccess: () => onSuccess?.(),
-    });
+    flagMessageMutate(
+      { reason, detail },
+      {
+        onSuccess: () => onSuccess?.(),
+      },
+    );
   }
 
   function unreport(options: UnreportOptions = {}) {
