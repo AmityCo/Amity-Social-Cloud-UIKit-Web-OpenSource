@@ -349,11 +349,6 @@
       "count": 2
     }
   },
-  "src/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserItemMenu.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 4
-    }
-  },
   "src/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserRelationshipList.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 1

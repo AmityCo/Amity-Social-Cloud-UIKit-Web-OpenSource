@@ -36,7 +36,17 @@ const getSelectionKey = (file: File | Amity.File): string => {
   return file.name;
 };
 
-export function useFilePostUpload(pageId?: string, autoRetryOnReconnect = false) {
+type UseFilePostUploadParams = {
+  pageId?: string;
+  autoRetryOnReconnect?: boolean;
+  isAllowedDuplicate?: boolean;
+};
+
+export function useFilePostUpload({
+  pageId,
+  autoRetryOnReconnect = false,
+  isAllowedDuplicate = false,
+}: UseFilePostUploadParams = {}) {
   const { info } = useConfirmContext();
   const { online } = useNetworkState();
   const isOnline = online !== false;
@@ -193,12 +203,14 @@ export function useFilePostUpload(pageId?: string, autoRetryOnReconnect = false)
       files.map((item) => item.selectionKey ?? getSelectionKey(item.file)),
     );
     const seenKeys = new Set<string>();
-    const uniqueFiles = file.filter((incoming) => {
-      const key = getSelectionKey(incoming);
-      if (existingKeys.has(key) || seenKeys.has(key)) return false;
-      seenKeys.add(key);
-      return true;
-    });
+    const uniqueFiles = isAllowedDuplicate
+      ? file
+      : file.filter((incoming) => {
+          const key = getSelectionKey(incoming);
+          if (existingKeys.has(key) || seenKeys.has(key)) return false;
+          seenKeys.add(key);
+          return true;
+        });
 
     const filesAmount =
       typeof localFileLength === 'number'

@@ -99,7 +99,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     handleFileChange,
     handleAltTextChange,
     handleProductTagsChange,
-  } = useFilePostUpload(pageId, true);
+  } = useFilePostUpload({ pageId, autoRetryOnReconnect: true });
 
   const posts = usePostByIds(post?.children || []);
 

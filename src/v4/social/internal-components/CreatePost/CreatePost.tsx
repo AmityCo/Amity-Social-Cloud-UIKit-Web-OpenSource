@@ -114,7 +114,7 @@ export function CreatePost({
     handleFileChange,
     handleAltTextChange,
     handleProductTagsChange,
-  } = useFilePostUpload(pageId, true);
+  } = useFilePostUpload({ pageId, autoRetryOnReconnect: true });
 
   const {
     file: clipFile,
