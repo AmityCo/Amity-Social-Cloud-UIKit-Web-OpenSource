@@ -65,7 +65,7 @@ interface CommentProps {
   // support inline comment behavior - behavior when click show reply
   onClickShowReply?: () => void;
   testId?: string;
-  isHost?: boolean;
+  eventCreatorId?: Amity.Event['userId'];
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
   /** The L1 comment ID currently being replied to — used to position the inline
    *  composer directly after that specific L1 in the ReplyCommentList. */
@@ -89,7 +89,7 @@ export const Comment = ({
   onClickShowReply,
   maxLines,
   testId,
-  isHost,
+  eventCreatorId,
   renderReplyComment,
   replyTargetCommentId,
   parantId,
@@ -133,6 +133,7 @@ export const Comment = ({
     community,
     userId: comment.creator?.userId,
   });
+  const isHost = !!eventCreatorId && eventCreatorId === comment.userId;
 
   const isBrandUser = comment.creator?.isBrand ?? false;
 
@@ -703,6 +704,7 @@ export const Comment = ({
             pageId={pageId}
             componentId={componentId}
             community={community ?? undefined}
+            eventCreatorId={eventCreatorId}
             referenceId={comment.referenceId}
             referenceType={comment.referenceType}
             parentId={comment.commentId}

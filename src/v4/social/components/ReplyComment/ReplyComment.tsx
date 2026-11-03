@@ -7,7 +7,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Mentionees } from '~/v4/helpers/utils';
 import { EditCancelButton } from '~/v4/social/elements/EditCancelButton/EditCancelButton';
-import { BrandBadge, ReactionButton, SaveButton } from '~/v4/social/elements';
+import { BrandBadge, EventHostBadge, ReactionButton, SaveButton } from '~/v4/social/elements';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
@@ -41,6 +41,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 type ReplyCommentProps = {
   pageId?: string;
   community?: Amity.Community;
+  eventCreatorId?: Amity.Event['userId'];
   comment: Amity.Comment;
   isHighlightDeleted?: boolean;
   testId?: string;
@@ -72,6 +73,7 @@ type ReplyCommentProps = {
 const PostReplyComment = ({
   pageId = '*',
   community,
+  eventCreatorId,
   comment,
   isHighlightDeleted = false,
   testId,
@@ -167,6 +169,7 @@ const PostReplyComment = ({
     community,
     userId: comment.creator?.userId,
   });
+  const isHost = !!eventCreatorId && eventCreatorId === comment.userId;
 
   // Use comment reaction hook for better reaction management
   const {
@@ -415,7 +418,11 @@ const PostReplyComment = ({
                     </Typography.BodyBold>
                     {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
                   </Button>
-                  {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
+                  {isHost ? (
+                    <EventHostBadge withLabel />
+                  ) : (
+                    isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
+                  )}
                   <TextWithMention
                     pageId={pageId}
                     componentId={componentId}

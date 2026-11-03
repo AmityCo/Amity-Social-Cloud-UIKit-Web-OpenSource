@@ -839,7 +839,7 @@ export const PostContent = ({
                     }}
                   >
                     <Comment
-                      isHost={eventCreatorId === inlineComment?.userId}
+                      eventCreatorId={eventCreatorId}
                       key={inlineComment?.commentId} // Add key to force proper re-rendering
                       pageId={pageId}
                       comment={inlineComment}
