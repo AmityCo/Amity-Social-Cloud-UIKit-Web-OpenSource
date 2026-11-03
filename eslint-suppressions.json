@@ -229,11 +229,6 @@
       "count": 6
     }
   },
-  "src/v4/social/internal-components/Lexical/plugins/MentionPlugin.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 4
-    }
-  },
   "src/v4/social/internal-components/MemberList/MemberList.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 3
