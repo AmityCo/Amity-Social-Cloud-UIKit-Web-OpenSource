@@ -304,11 +304,6 @@
       "count": 2
     }
   },
-  "src/v4/social/internal-components/UserMenu/UserMenu.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 3
-    }
-  },
   "src/v4/social/internal-components/VideoHeader/VideoHeader.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 2
