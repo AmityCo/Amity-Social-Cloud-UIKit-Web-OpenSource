@@ -1199,5 +1199,14 @@
   "amity_social_toast_event_post_create_failed": "Failed to create post. Please try again.",
   "amity_social_toast_event_post_update_failed": "Failed to update post. Please try again.",
   "amity_social_toast_event_post_blocked_word": "Your post wasn't posted as it contains an inappropriate word.",
-  "amity_social_toast_event_post_blocked_link": "Your post wasn't posted as it contains a link that is not allowed."
+  "amity_social_toast_event_post_blocked_link": "Your post wasn't posted as it contains a link that is not allowed.",
+  "amity_social_feed_video_unmute": "Turn sound on",
+  "amity_social_feed_video_mute": "Turn sound off",
+  "amity_social_feed_video_replay": "Watch again",
+  "amity_social_autoplay_setting_account_section": "Account",
+  "amity_social_autoplay_setting_section": "Settings",
+  "amity_social_autoplay_setting_row": "Autoplay in feed",
+  "amity_social_autoplay_setting_on": "On",
+  "amity_social_autoplay_setting_off": "Off",
+  "amity_social_autoplay_setting_web_description": "Automatically play videos in your feeds. These settings only apply when you use the website."
 }

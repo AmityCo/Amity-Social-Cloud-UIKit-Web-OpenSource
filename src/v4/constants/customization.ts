@@ -50,6 +50,7 @@ export const PAGE_ID = {
   LIVESTREAM_BANNED_PAGE: 'livestream_banned_page',
   LIVESTREAM_PLAYER_PAGE: 'livestream_player_page',
   LIVESTREAM_UNSUPPORTED_PAGE: 'livestream_unsupported_page',
+  AUTOPLAY_SETTING_PAGE: 'autoplay_setting_page',
 } as const;
 
 export const COMPONENT_ID = {

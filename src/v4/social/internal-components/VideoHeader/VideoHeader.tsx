@@ -45,6 +45,8 @@ export const VideoHeader: React.FC<VideoHeaderProps> = ({
               : useString('amity_social_button_mute')
           }
           data-muted={isMuted}
+          data-testid="video_player/sound_button"
+          data-state={isMuted ? 'muted' : 'sound_on'}
         />
         {onClickMenu && (
           <MenuButton

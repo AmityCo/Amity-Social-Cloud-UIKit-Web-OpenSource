@@ -13,6 +13,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useMeaningFullView } from '~/v4/social/hooks/useMeaningFullView';
 import { useAds } from '~/v4/social/hooks/useAds';
 import type { FrameRatio } from '~/v4/social/features/posts/utils/getFrameRatio';
+import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
 import styles from './Feed.module.css';
 
 type PostClickHandler = NonNullable<React.ComponentProps<typeof PostContent>['onClick']>;
@@ -99,75 +100,77 @@ export function Feed({
     };
 
   return (
-    <div className={styles.feed} style={themeStyles} data-testid={accessibilityId}>
-      {globalFeaturedPosts?.map((item) =>
-        item.post ? (
-          <React.Fragment key={item.post.postId}>
-            <div className={styles.feed__postContainer}>
-              <PostContent
-                pageId={pageId}
-                post={item.post}
-                category={AmityPostCategory.ANNOUNCEMENT}
-                style={AmityPostContentComponentStyle.FEED}
-                isGlobalFeaturePost
-                onPostDeleted={() => onPostDeleted?.(item.post!)}
-                onPollPostDeleted={onPostDeleted}
-                onClick={handlePostClick(item.post, true)}
-              />
-            </div>
-            <Divider />
-          </React.Fragment>
-        ) : null,
-      )}
+    <FeedVideoAutoplayHost>
+      <div className={styles.feed} style={themeStyles} data-testid={accessibilityId}>
+        {globalFeaturedPosts?.map((item) =>
+          item.post ? (
+            <React.Fragment key={item.post.postId}>
+              <div className={styles.feed__postContainer}>
+                <PostContent
+                  pageId={pageId}
+                  post={item.post}
+                  category={AmityPostCategory.ANNOUNCEMENT}
+                  style={AmityPostContentComponentStyle.FEED}
+                  isGlobalFeaturePost
+                  onPostDeleted={() => onPostDeleted?.(item.post!)}
+                  onPollPostDeleted={onPostDeleted}
+                  onClick={handlePostClick(item.post, true)}
+                />
+              </div>
+              <Divider />
+            </React.Fragment>
+          ) : null,
+        )}
 
-      {newPosts.map((post, index) => (
-        <React.Fragment key={post.postId}>
-          <Divider isShown={index !== 0} />
-          <Feed.Post
-            pageId={pageId}
-            post={post}
-            renderIndex={index}
-            withAnalytics={withAnalytics}
-            onPostDeleted={onPostDeleted}
-            onClick={handlePostClick(post)}
-            mediaRatioOverride={postRatioOverrides[post.postId]}
-          />
-        </React.Fragment>
-      ))}
-
-      {filteredItems.map((item, index) => (
-        <React.Fragment key={isAmityAd(item) ? `ad-${item.adId}-${index}` : item.postId}>
-          <Divider isShown={!(index === 0 && newPosts.length === 0)} />
-          {isAmityAd(item) ? (
-            <PostAd ad={item} />
-          ) : (
+        {newPosts.map((post, index) => (
+          <React.Fragment key={post.postId}>
+            <Divider isShown={index !== 0} />
             <Feed.Post
               pageId={pageId}
-              post={item}
-              renderIndex={newPosts.length + index}
+              post={post}
+              renderIndex={index}
               withAnalytics={withAnalytics}
               onPostDeleted={onPostDeleted}
-              onClick={handlePostClick(item)}
-              mediaRatioOverride={postRatioOverrides[item.postId]}
+              onClick={handlePostClick(post)}
+              mediaRatioOverride={postRatioOverrides[post.postId]}
             />
-          )}
-        </React.Fragment>
-      ))}
-
-      <Divider isShown={filteredItems.length > 0 || newPosts.length > 0} />
-
-      {(isLoadingFirstPage || isLoading) &&
-        Array.from({ length: 5 }).map((_, index) => (
-          <div key={`skeleton-${index}`}>
-            <PostContentSkeleton />
-            <Divider isShown={index !== 4} />
-          </div>
+          </React.Fragment>
         ))}
 
-      {!isLoadingFirstPage && !isLoading && hasMore && (
-        <div ref={(node) => setIntersectionNode(node)} className={styles.feed__intersection} />
-      )}
-    </div>
+        {filteredItems.map((item, index) => (
+          <React.Fragment key={isAmityAd(item) ? `ad-${item.adId}-${index}` : item.postId}>
+            <Divider isShown={!(index === 0 && newPosts.length === 0)} />
+            {isAmityAd(item) ? (
+              <PostAd ad={item} />
+            ) : (
+              <Feed.Post
+                pageId={pageId}
+                post={item}
+                renderIndex={newPosts.length + index}
+                withAnalytics={withAnalytics}
+                onPostDeleted={onPostDeleted}
+                onClick={handlePostClick(item)}
+                mediaRatioOverride={postRatioOverrides[item.postId]}
+              />
+            )}
+          </React.Fragment>
+        ))}
+
+        <Divider isShown={filteredItems.length > 0 || newPosts.length > 0} />
+
+        {(isLoadingFirstPage || isLoading) &&
+          Array.from({ length: 5 }).map((_, index) => (
+            <div key={`skeleton-${index}`}>
+              <PostContentSkeleton />
+              <Divider isShown={index !== 4} />
+            </div>
+          ))}
+
+        {!isLoadingFirstPage && !isLoading && hasMore && (
+          <div ref={(node) => setIntersectionNode(node)} className={styles.feed__intersection} />
+        )}
+      </div>
+    </FeedVideoAutoplayHost>
   );
 }
 

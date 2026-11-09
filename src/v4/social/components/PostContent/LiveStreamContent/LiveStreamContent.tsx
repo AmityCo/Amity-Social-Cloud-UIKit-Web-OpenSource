@@ -26,6 +26,10 @@ import clsx from 'clsx';
 import { TaggedProductIcon } from '~/v4/social/features/livestream/internal-components/TaggedProductIcon/TaggedProductIcon';
 import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks/useShowProductTagList';
 import { LivestreamTooShortThumbnail } from '~/v4/social/features/livestream/internal-components/LivestreamTooShortThumbnail';
+import {
+  FeedVideoAutoPlayElement,
+  getFeedVideoStatusId,
+} from '~/v4/social/features/posts/elements/FeedVideoAutoPlayElement';
 
 type LiveStreamContentProps = {
   pageId?: string;
@@ -105,43 +109,68 @@ export function LiveStreamContent({
   const renderProductTags = () => {
     if (!canShowProductTags) return null;
     return (
-      // Intercept the native click so it doesn't bubble to the parent Button and trigger navigation
-      <div role="presentation" onClick={(e) => e.stopPropagation()}>
-        <TaggedProductIcon
-          onPress={() => {
-            showProductTagList(subscribedPost?.productTags as Amity.ProductTag[]);
-          }}
-          className={styles.liveStreamContent__taggedProducts}
-          productTagAmount={subscribedPost?.productTags?.length || 0}
-        />
-      </div>
+      <TaggedProductIcon
+        onPress={() => {
+          showProductTagList(subscribedPost?.productTags as Amity.ProductTag[]);
+        }}
+        className={styles.liveStreamContent__taggedProducts}
+        productTagAmount={subscribedPost?.productTags?.length || 0}
+      />
     );
   };
 
+  const isLiveRoom = room.status === liveStreamStatus.live || room.status === 'waitingReconnect';
+  const playbackUrls = isLiveRoom
+    ? [room.livePlaybackUrl].filter((url): url is string => !!url)
+    : room.status === liveStreamStatus.recorded
+      ? (room.recordedPlaybackInfos ?? [])
+          .map((info) => info.url)
+          .filter((url): url is string => !!url)
+      : [];
+
   return (
-    <Button
-      className={clsx(styles.liveStreamContent, className)}
-      data-idle={room.status === liveStreamStatus.idle}
-      onPress={() => {
-        if (room.status !== liveStreamStatus.idle) {
-          goToLiveStreamPlayerPage?.({ post: parentPost, goToDetailPage: goToPostDetail });
-        }
-      }}
-    >
-      <LiveStreamThumbnail
-        fileId={room.thumbnailFileId}
-        alt={room.title}
-        status={room.status}
-        liveThumbnailUrl={room.liveThumbnailUrl}
-        recordedThumbnailUrl={room.recordedPlaybackInfos?.[0]?.thumbnailUrl}
-        resolution={resolution}
-      />
+    <div className={clsx(styles.liveStreamContent, className)}>
+      <Button
+        className={styles.liveStreamContent__button}
+        data-idle={room.status === liveStreamStatus.idle}
+        aria-describedby={getFeedVideoStatusId(room.roomId)}
+        onPress={() => {
+          if (room.status !== liveStreamStatus.idle) {
+            goToLiveStreamPlayerPage?.({ post: parentPost, goToDetailPage: goToPostDetail });
+          }
+        }}
+      >
+        <LiveStreamThumbnail
+          fileId={room.thumbnailFileId}
+          alt={room.title}
+          status={room.status}
+          liveThumbnailUrl={room.liveThumbnailUrl}
+          recordedThumbnailUrl={room.recordedPlaybackInfos?.[0]?.thumbnailUrl}
+          resolution={resolution}
+        />
+      </Button>
+      {room.status !== liveStreamStatus.idle &&
+        (playbackUrls.length > 0 ? (
+          <FeedVideoAutoPlayElement
+            key={room.roomId}
+            autoplayKey={room.roomId}
+            source={{
+              kind: 'room',
+              playbackUrls,
+              isLive: isLiveRoom,
+              isReconnecting: room.status === 'waitingReconnect',
+            }}
+            playIcon={<VideoControl className={styles.liveStreamContent__playButton} />}
+          />
+        ) : (
+          <VideoControl className={styles.liveStreamContent__playButton} />
+        ))}
       {room.status === liveStreamStatus.idle && (
         <div className={styles.liveStreamContent__statusBadge}>
           <LiveStreamUpcomingBadge />
         </div>
       )}
-      {room.status === liveStreamStatus.live && (
+      {isLiveRoom && (
         <>
           <div className={styles.liveStreamContent__statusBadge}>
             <LiveStreamLiveBadge />
@@ -157,9 +186,6 @@ export function LiveStreamContent({
           {renderProductTags()}
         </>
       )}
-      {room.status !== liveStreamStatus.idle && (
-        <VideoControl className={styles.liveStreamContent__playButton} />
-      )}
-    </Button>
+    </div>
   );
 }

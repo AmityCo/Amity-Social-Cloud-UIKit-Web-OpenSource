@@ -17,6 +17,9 @@ import { Pause } from '~/v4/icons/Pause';
 import { Backward10 } from '~/v4/icons/Backward10';
 import { Forward10 } from '~/v4/icons/Forward10';
 import { Button } from '~/v4/core/components/AriaButton';
+import { Typography } from '~/v4/core/components';
+import { RotateLeft } from '~/v4/core/design/icons';
+import { useString } from '~/v4/core/localization';
 import { VIDEO_CONTROLS_AUTO_HIDE_MS } from '~/v4/social/constants';
 
 enum VideoFileStatus {
@@ -31,6 +34,9 @@ export interface VideoPlayerProps {
   fileId?: string;
   thumbnailFileId?: string;
   isMuted?: boolean;
+  initialTime?: number;
+  // The <video> renders only once the url is known, so a parent that listens to it needs this.
+  onVideoElementChange?: (video: HTMLVideoElement | null) => void;
   pageId?: string;
   productTags?: Amity.ProductTag[];
   postId?: string;
@@ -61,8 +67,14 @@ export interface VideoPlayerProps {
   onDragging?: (val: boolean) => void;
   onClose?: () => void;
   onClickMute?: () => void;
+  onSoundRefused?: () => void;
+  onReplay?: () => void;
   onClickMenu?: () => void;
   onClickVideo?: (e: React.MouseEvent<HTMLElement>) => void;
+}
+
+function isPlayRefused(error: unknown) {
+  return error instanceof DOMException && error.name === 'NotAllowedError';
 }
 
 function isHlsUrl(url: string | null | undefined): boolean {
@@ -78,6 +90,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   fileId,
   thumbnailFileId,
   isMuted = false,
+  initialTime,
+  onVideoElementChange,
   pageId,
   productTags = [],
   postId,
@@ -108,6 +122,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   isLive = false,
   onClose,
   onClickMute,
+  onSoundRefused,
+  onReplay,
   onClickMenu,
   onClickVideo,
 }) => {
@@ -120,10 +136,17 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [internalMuted, setInternalMuted] = useState(isMuted);
+  const onSoundRefusedRef = useRef(onSoundRefused);
+  onSoundRefusedRef.current = onSoundRefused;
+  const hasCheckedSoundRef = useRef(false);
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(!autoPlay);
   const [desktopCenterIcon, setDesktopCenterIcon] = useState<'play' | 'pause' | null>(null);
-  const [showMobileControls, setShowMobileControls] = useState(true);
+  const [showMobileControls, setShowMobileControls] = useState(!autoPlay);
+  const [isEnded, setIsEnded] = useState(false);
+  const replayLabel = useString('amity_social_feed_video_replay');
+  // Only a play the member started shows the pause feedback; an auto-play start stays clean.
+  const isUserPlayRef = useRef(false);
   const desktopIconTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mobileHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -149,14 +172,30 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         (externalVideoRef as React.MutableRefObject<HTMLVideoElement | null>).current = node;
       }
       setVideoElement(node);
+      onVideoElementChange?.(node);
     },
-    [externalVideoRef],
+    [externalVideoRef, onVideoElementChange],
   );
 
   // Sync internal state with prop when prop changes
   useEffect(() => {
     setInternalMuted(isMuted);
   }, [isMuted]);
+
+  useEffect(() => {
+    if (!videoElement || !initialTime) return;
+
+    const seekToInitialTime = () => {
+      videoElement.currentTime = initialTime;
+    };
+
+    if (videoElement.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      seekToInitialTime();
+      return;
+    }
+    videoElement.addEventListener('loadedmetadata', seekToInitialTime, { once: true });
+    return () => videoElement.removeEventListener('loadedmetadata', seekToInitialTime);
+  }, [videoElement]);
 
   // Track video play/pause state for mobile play button
   useEffect(() => {
@@ -170,8 +209,19 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
     const handlePlay = () => {
+      const isUserPlay = isUserPlayRef.current;
+      isUserPlayRef.current = false;
       setIsPaused(false);
+      setIsEnded(false);
       clearDesktopIconTimer();
+      if (!isUserPlay) {
+        setDesktopCenterIcon(null);
+        if (displayMode === DisplayModeEnum.MOBILE) {
+          clearMobileHideTimer();
+          setShowMobileControls(false);
+        }
+        return;
+      }
       setDesktopCenterIcon('pause');
       desktopIconTimerRef.current = setTimeout(() => {
         setDesktopCenterIcon(null);
@@ -180,7 +230,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         scheduleMobileHide();
       }
     };
+    const handleEnded = () => setIsEnded(true);
+    const handleSeeking = () => setIsEnded(video.ended);
     const handlePause = () => {
+      hasCheckedSoundRef.current = true;
       setIsPaused(true);
       clearDesktopIconTimer();
       setDesktopCenterIcon('play');
@@ -190,19 +243,57 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
 
+    // A blocked auto-play fires no pause event; it is still paused once it can play through.
+    const showPaused = () => {
+      setIsPaused(true);
+      setDesktopCenterIcon('play');
+      if (displayMode === DisplayModeEnum.MOBILE) setShowMobileControls(true);
+    };
+    const handleCanPlayThrough = () => {
+      if (!autoPlay || !video.paused) return;
+      if (!onSoundRefusedRef.current || video.muted || hasCheckedSoundRef.current) {
+        showPaused();
+        return;
+      }
+      hasCheckedSoundRef.current = true;
+      video.play().catch((error: unknown) => {
+        if (!isPlayRefused(error)) {
+          showPaused();
+          return;
+        }
+        video.muted = true;
+        video
+          .play()
+          .then(() => {
+            setInternalMuted(true);
+            onSoundRefusedRef.current?.();
+          })
+          .catch(() => {
+            video.muted = false;
+            showPaused();
+          });
+      });
+    };
+
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
+    video.addEventListener('ended', handleEnded);
+    video.addEventListener('seeking', handleSeeking);
+    video.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
 
-    // Set initial state
-    setIsPaused(video.paused);
+    // Set initial state; an auto-play start counts as playing until it is known to be blocked.
+    setIsPaused(video.paused && !autoPlay);
 
     return () => {
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
+      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('seeking', handleSeeking);
+      video.removeEventListener('canplaythrough', handleCanPlayThrough);
       clearDesktopIconTimer();
       clearMobileHideTimer();
     };
-  }, [videoElement, displayMode, scheduleMobileHide, clearMobileHideTimer]);
+  }, [videoElement, displayMode, autoPlay, scheduleMobileHide, clearMobileHideTimer]);
 
   // Prioritize direct URLs over fetched files
   const url = useMemo(() => {
@@ -322,6 +413,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       controlsRef.current?.showControls();
       if (video.paused) {
+        isUserPlayRef.current = true;
         video.play();
       } else {
         video.pause();
@@ -350,11 +442,23 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (!video) return;
 
     if (video.paused) {
+      isUserPlayRef.current = true;
       video.play().catch(() => {});
     } else {
       video.pause();
     }
   }, [displayMode]);
+
+  const handleReplay = useCallback(() => {
+    if (onReplay) {
+      onReplay();
+      return;
+    }
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  }, [onReplay]);
 
   const handleSkipBackward = useCallback(() => {
     const video = videoRef.current;
@@ -397,10 +501,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onVolumeChange={onVolumeChange}
       >
         {!shouldUseHls && <source src={url} type="video/mp4" />}
-        <p>
+        <Typography.Body as="p">
           Your browser does not support this format of video. Please try again later once the server
           transcodes the video into an playable format(mp4).
-        </p>
+        </Typography.Body>
       </video>
       <div
         className={styles.videoPlayerClickArea}
@@ -435,14 +539,29 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                     aria-label="Skip back 10 seconds"
                   />
                 )}
-                <Button
-                  variant="default"
-                  className={styles.playButton}
-                  onPress={handlePlayButtonClick}
-                  icon={isPaused ? <Play /> : <Pause fill="white" />}
-                  iconClassName={styles.playButtonIcon}
-                  aria-label={isPaused ? 'Play' : 'Pause'}
-                />
+                {isEnded ? (
+                  <Button
+                    variant="default"
+                    className={clsx(styles.playButton, styles.replayButton)}
+                    onPress={handleReplay}
+                    icon={<RotateLeft />}
+                    iconClassName={styles.playButtonIcon}
+                    aria-label={replayLabel}
+                  >
+                    <Typography.CaptionBold className={styles.replayLabel}>
+                      {replayLabel}
+                    </Typography.CaptionBold>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="default"
+                    className={styles.playButton}
+                    onPress={handlePlayButtonClick}
+                    icon={isPaused ? <Play /> : <Pause fill="white" />}
+                    iconClassName={styles.playButtonIcon}
+                    aria-label={isPaused ? 'Play' : 'Pause'}
+                  />
+                )}
                 {!isLive && !hideSkipButtons && (
                   <Button
                     variant="default"
@@ -468,7 +587,21 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         </>
       ) : (
         <>
-          {!hidePlayButton && desktopCenterIcon && !isDragging && (
+          {!hidePlayButton && isEnded && !isDragging && (
+            <Button
+              variant="default"
+              className={clsx(styles.desktopCenterPlayButton, styles.replayButton)}
+              onPress={handleReplay}
+              icon={<RotateLeft />}
+              iconClassName={styles.desktopCenterPlayButtonIcon}
+              aria-label={replayLabel}
+            >
+              <Typography.CaptionBold className={styles.replayLabel}>
+                {replayLabel}
+              </Typography.CaptionBold>
+            </Button>
+          )}
+          {!hidePlayButton && !isEnded && desktopCenterIcon && !isDragging && (
             <Button
               variant="default"
               className={styles.desktopCenterPlayButton}
@@ -487,6 +620,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onClickProductTagBadge={onClickProductTagBadge}
             mutedOverride={internalMuted}
             onToggleMute={handleClickMute}
+            autoPlay={autoPlay}
           />
         </>
       )}

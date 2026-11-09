@@ -46,6 +46,20 @@
   color: var(--asc-color-white);
 }
 
+.replayButton {
+  position: relative;
+  overflow: visible;
+}
+
+.replayLabel {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--asc-color-white);
+}
+
 .skipButton {
   width: 2.5rem;
   height: 2.5rem;
@@ -78,6 +92,19 @@
   width: 2rem;
   height: 2rem;
   color: var(--asc-color-white);
+}
+
+.playButton.replayButton,
+.desktopCenterPlayButton.replayButton {
+  width: 3rem;
+  height: 3rem;
+  padding: 0.75rem;
+}
+
+.replayButton .playButtonIcon,
+.replayButton .desktopCenterPlayButtonIcon {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @media only screen and (width >= 48em) {

@@ -53,6 +53,8 @@ import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSe
 import useSDK from '~/v4/core/hooks/useSDK';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { AmitySharableContentType } from '@amityco/ts-sdk';
+import { useFeedVideoAutoplay } from '~/v4/social/features/feed-video-autoplay';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -151,7 +153,7 @@ export const PostContent = ({
   eventCreatorId,
   mediaRatioOverride,
 }: PostContentProps) => {
-  const componentId = 'post_content';
+  const componentId = COMPONENT_ID.POST_CONTENT;
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const { isVisitorOrBot } = useSDK();
@@ -179,6 +181,17 @@ export const PostContent = ({
   const { openPopup, closePopup } = usePopupContext();
   const { confirm } = useConfirmContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const { dropPlayback } = useFeedVideoAutoplay();
+  const handlePostDeleted = (deletedPost: Amity.Post) => {
+    (post.childrenPosts ?? []).forEach((child) => {
+      dropPlayback(child.postId);
+      if (child.dataType === 'room') {
+        const roomId = (child as Amity.Post<'room'>).getRoomInfo?.()?.roomId;
+        if (roomId) dropPlayback(roomId);
+      }
+    });
+    onPostDeleted?.(deletedPost);
+  };
   const { moderators } = useCommunityModeratorsCollection({ communityId: post?.targetId });
   const {
     mutateAddReactionAsync,
@@ -346,8 +359,15 @@ export const PostContent = ({
     mediaControlsRef.current?.slideTo(viewerIndexRef.current);
   };
 
-  const openVideoViewer = (imageIndex: number) => {
-    viewerIndexRef.current = imageIndex;
+  // The feed carousel counts images and videos; the video viewer counts videos only.
+  const getMediaIndexOfVideos = () =>
+    (post.childrenPosts ?? [])
+      .filter((child) => child.dataType === 'image' || child.dataType === 'video')
+      .flatMap((child, index) => (child.dataType === 'video' ? [index] : []));
+
+  const openVideoViewer = (mediaIndex: number) => {
+    const videoIndex = Math.max(0, getMediaIndexOfVideos().indexOf(mediaIndex));
+    viewerIndexRef.current = videoIndex;
     openPopup({
       id: 'video-viewer',
       disabledAnimation: true,
@@ -361,7 +381,7 @@ export const PostContent = ({
           pageId={pageId}
           sourceId={post.parentPostId ?? post.postId}
           onClose={closeVideoViewer}
-          initialIndex={imageIndex}
+          initialIndex={videoIndex}
           indexRef={viewerIndexRef}
         />
       ),
@@ -370,7 +390,8 @@ export const PostContent = ({
 
   const closeVideoViewer = () => {
     closePopup('video-viewer');
-    mediaControlsRef.current?.slideTo(viewerIndexRef.current);
+    const videoIndex = viewerIndexRef.current;
+    mediaControlsRef.current?.slideTo(getMediaIndexOfVideos()[videoIndex] ?? videoIndex);
   };
 
   const onEditFeaturePost = ({ onConfirm }: { onConfirm: () => void }) => {
@@ -501,16 +522,20 @@ export const PostContent = ({
               {eventCreatorId === post?.postedUserId ? (
                 <div className={styles.postContent__bar__information__subtitle__moderator}>
                   <EventHostBadge withLabel />
-                  <span className={styles.postContent__bar__information__subtitle__separator}>
+                  <Typography.Caption
+                    className={styles.postContent__bar__information__subtitle__separator}
+                  >
                     •
-                  </span>
+                  </Typography.Caption>
                 </div>
               ) : isCommunityModerator ? (
                 <div className={styles.postContent__bar__information__subtitle__moderator}>
                   <ModeratorBadge pageId={pageId} componentId={componentId} />
-                  <span className={styles.postContent__bar__information__subtitle__separator}>
+                  <Typography.Caption
+                    className={styles.postContent__bar__information__subtitle__separator}
+                  >
                     •
-                  </span>
+                  </Typography.Caption>
                 </div>
               ) : null}
               <Timestamp pageId={pageId} componentId={componentId} timestamp={post.createdAt} />
@@ -545,7 +570,7 @@ export const PostContent = ({
                           community={targetCommunity}
                           componentId={componentId}
                           isSearchPost={isSearchPost}
-                          onPostDeleted={onPostDeleted}
+                          onPostDeleted={handlePostDeleted}
                           onPollClosed={handlePollClosed}
                           onConfirmEditPost={
                             shouldShowConfirmEdit
@@ -573,7 +598,7 @@ export const PostContent = ({
                     componentId={componentId}
                     community={targetCommunity}
                     isSearchPost={isSearchPost}
-                    onPostDeleted={onPostDeleted}
+                    onPostDeleted={handlePostDeleted}
                     onPollClosed={handlePollClosed}
                     onConfirmEditPost={
                       shouldShowConfirmEdit

@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useKeyPressEvent } from 'react-use';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Button } from '~/v4/core/natives/Button';
+import { Typography } from '~/v4/core/components';
 import usePostByIds from '~/v4/core/hooks/usePostByIds';
 import { isClipPost, isVideoPost } from '~/v4/social/utils/postTypeChecker';
 import { VideoPlayer as CustomVideoPlayer } from '~/v4/social/internal-components/VideoPlayer/VideoPlayer';
@@ -14,9 +15,15 @@ import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
 import ChevronLeft from '~/v4/icons/ChevronLeft';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
+import {
+  useFeedVideoAutoplay,
+  useFeedVideoAutoplayOverlay,
+  useFeedVideoSoundState,
+} from '~/v4/social/features/feed-video-autoplay';
 import styles from './VideoViewer.module.css';
 
 export type VideoViewerItem = {
+  playbackKey?: string;
   fileId?: string;
   url?: string;
   thumbnailFileId?: string;
@@ -46,6 +53,10 @@ function getPostVideoFileId(videoPost?: Amity.Post<'video' | 'clip'>): string | 
   return undefined;
 }
 
+function isPlayRefused(error: unknown) {
+  return error instanceof DOMException && error.name === 'NotAllowedError';
+}
+
 export function VideoViewer({
   videos: videosProp,
   post,
@@ -59,7 +70,9 @@ export function VideoViewer({
   const swiperRef = useRef<SwiperCore | null>(null);
 
   const [index, setIndex] = useState(initialIndex);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useFeedVideoSoundState(false);
+
+  useFeedVideoAutoplayOverlay();
 
   // Feed passes a `post`; derive its video/clip children into the shared item shape.
   const childPosts = usePostByIds(post?.children || []);
@@ -68,6 +81,7 @@ export function VideoViewer({
     return childPosts
       .filter((child) => child.dataType === 'video' || child.dataType === 'clip')
       .map((child) => ({
+        playbackKey: child.postId,
         fileId: getPostVideoFileId(child as Amity.Post<'video' | 'clip'>),
         thumbnailFileId:
           (child.data as Amity.ContentDataVideo | Amity.ContentDataClip)?.thumbnailFileId ??
@@ -98,7 +112,7 @@ export function VideoViewer({
   };
 
   const toggleMute = () => {
-    setIsMuted((prev) => !prev);
+    setIsMuted(!isMuted);
   };
 
   const counter = `${index + 1} / ${total}`;
@@ -126,6 +140,7 @@ export function VideoViewer({
                   isDesktop={isDesktop}
                   pageId={pageId}
                   onToggleMute={toggleMute}
+                  onSoundRefused={() => setIsMuted(true)}
                   onProductTag={(tags) => showProductTagList(tags)}
                 />
               </SwiperSlide>
@@ -146,12 +161,18 @@ export function VideoViewer({
                 <CloseIcon className={styles.videoViewer__icon} />
               </Button>
             </div>
-            {total > 1 && <span className={styles.videoViewer__counter}>{counter}</span>}
+            {total > 1 && (
+              <Typography.Title as="span" className={styles.videoViewer__counter}>
+                {counter}
+              </Typography.Title>
+            )}
             <div className={styles.videoViewer__navSideEnd}>
               <Button
                 onPress={toggleMute}
                 className={styles.videoViewer__iconButton}
                 aria-label={isMuted ? 'Unmute' : 'Mute'}
+                data-testid="video_player/sound_button"
+                data-state={isMuted ? 'muted' : 'sound_on'}
               >
                 {isMuted ? (
                   <Muted className={styles.videoViewer__icon} />
@@ -176,7 +197,11 @@ export function VideoViewer({
                 <CloseIcon className={styles.videoViewer__closeCircleIcon} />
               </Button>
             </div>
-            {total > 1 && <span className={styles.videoViewer__counter}>{counter}</span>}
+            {total > 1 && (
+              <Typography.Title as="span" className={styles.videoViewer__counter}>
+                {counter}
+              </Typography.Title>
+            )}
             <div className={styles.videoViewer__headerSide} />
           </div>
 
@@ -211,6 +236,7 @@ type VideoSlideProps = {
   isDesktop: boolean;
   pageId?: string;
   onToggleMute: () => void;
+  onSoundRefused: () => void;
   onProductTag: (productTags: Amity.ProductTag[]) => void;
 };
 
@@ -221,26 +247,74 @@ function VideoSlide({
   isDesktop,
   pageId,
   onToggleMute,
+  onSoundRefused,
   onProductTag,
 }: VideoSlideProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const onSoundRefusedRef = useRef(onSoundRefused);
+  onSoundRefusedRef.current = onSoundRefused;
+  const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
+  const { getPlayback, savePlayback } = useFeedVideoAutoplay();
+  const [initialTime] = useState(() => {
+    const playback = item.playbackKey ? getPlayback(item.playbackKey) : undefined;
+    return playback && !playback.isEnded ? playback.position : 0;
+  });
+
+  useEffect(() => {
+    const video = videoElement;
+    const { playbackKey } = item;
+    if (!isActive || !video || !playbackKey) return;
+
+    // Keep what the events last saw: on close the player is torn down and no longer reports `ended`.
+    let playback =
+      video.readyState === HTMLMediaElement.HAVE_NOTHING
+        ? getPlayback(playbackKey)
+        : { position: video.currentTime, isEnded: video.ended };
+    const savePosition = () => {
+      if (video.readyState === HTMLMediaElement.HAVE_NOTHING) return;
+      playback = { position: video.currentTime, isEnded: video.ended };
+      savePlayback(playbackKey, playback);
+    };
+
+    video.addEventListener('timeupdate', savePosition);
+    video.addEventListener('ended', savePosition);
+    return () => {
+      video.removeEventListener('timeupdate', savePosition);
+      video.removeEventListener('ended', savePosition);
+      if (playback) savePlayback(playbackKey, playback);
+    };
+  }, [isActive, item, videoElement, getPlayback, savePlayback]);
 
   // Swiper keeps every slide mounted and `autoPlay` only fires on mount, so we drive play/pause
   // of the shared player from `isActive`.
   useEffect(() => {
-    const video = videoRef.current;
+    const video = videoElement;
     if (!video) return;
-    if (isActive) video.play().catch(() => {});
-    else video.pause();
-  }, [isActive]);
+    if (!isActive) {
+      video.pause();
+      return;
+    }
+    video.play().catch((error: unknown) => {
+      if (!isPlayRefused(error) || video.muted) return;
+      video.muted = true;
+      video
+        .play()
+        .then(() => onSoundRefusedRef.current())
+        .catch(() => {
+          video.muted = false;
+        });
+    });
+  }, [isActive, videoElement]);
 
   return (
     <CustomVideoPlayer
       displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
       autoPlay={isActive}
       isMuted={isActive ? isMuted : true}
+      initialTime={initialTime}
       onClickMute={onToggleMute}
       externalVideoRef={videoRef}
+      onVideoElementChange={setVideoElement}
       fileId={item.fileId}
       url={item.url}
       thumbnailFileId={item.thumbnailFileId ?? ''}

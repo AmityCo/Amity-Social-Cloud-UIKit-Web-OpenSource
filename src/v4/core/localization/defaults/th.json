@@ -1196,5 +1196,14 @@
   "amity_social_toast_event_post_create_failed": "สร้างโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
   "amity_social_toast_event_post_update_failed": "อัปเดตโพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
   "amity_social_toast_event_post_blocked_word": "โพสต์ของคุณไม่ถูกโพสต์เนื่องจากมีคำที่ไม่เหมาะสม",
-  "amity_social_toast_event_post_blocked_link": "โพสต์ของคุณไม่ถูกโพสต์เนื่องจากมีลิงก์ที่ไม่ได้รับอนุญาต"
+  "amity_social_toast_event_post_blocked_link": "โพสต์ของคุณไม่ถูกโพสต์เนื่องจากมีลิงก์ที่ไม่ได้รับอนุญาต",
+  "amity_social_feed_video_unmute": "เปิดเสียง",
+  "amity_social_feed_video_mute": "ปิดเสียง",
+  "amity_social_feed_video_replay": "ดูอีกครั้ง",
+  "amity_social_autoplay_setting_account_section": "บัญชี",
+  "amity_social_autoplay_setting_section": "การตั้งค่า",
+  "amity_social_autoplay_setting_row": "เล่นวิดีโออัตโนมัติในฟีด",
+  "amity_social_autoplay_setting_on": "เปิด",
+  "amity_social_autoplay_setting_off": "ปิด",
+  "amity_social_autoplay_setting_web_description": "เล่นวิดีโอในฟีดของคุณโดยอัตโนมัติ การตั้งค่านี้มีผลเฉพาะเมื่อคุณใช้งานผ่านเว็บไซต์"
 }

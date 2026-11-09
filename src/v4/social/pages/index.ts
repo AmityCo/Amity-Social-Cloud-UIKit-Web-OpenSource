@@ -53,3 +53,5 @@ export { PastEventsPage } from './PastEventsPage';
 export { EventDetailPage } from './EventDetailPage';
 
 export { EventAttendeesPage } from './EventAttendeesPage';
+
+export { AutoplaySettingPage } from './AutoplaySettingPage';

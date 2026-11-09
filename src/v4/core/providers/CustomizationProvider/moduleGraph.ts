@@ -53,6 +53,7 @@ export const AMITY_PAGE_MODULE: Record<string, string> = {
   add_group_member_page: 'chat',
   all_categories_page: 'community',
   archived_chat_page: 'chat',
+  autoplay_setting_page: 'post',
   banned_group_member_list_page: 'chat',
   blocked_users_page: 'userRelationship',
   camera_page: 'story',

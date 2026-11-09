@@ -19,6 +19,9 @@ import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBe
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ELEMENT_ID } from '~/v4/constants/customization';
 import { AmitySharableContentType } from '@amityco/ts-sdk';
+import { CirclePlay } from '~/v4/core/design/icons';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useFeedVideoAutoplay } from '~/v4/social/features/feed-video-autoplay';
 
 interface UserMenuProps {
   user?: Amity.User | null;
@@ -33,7 +36,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   componentId = '*',
   onCloseMenu,
 }) => {
-  const { currentUserId } = useSDK();
+  const { currentUserId, isVisitorOrBot } = useSDK();
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const { online } = useNetworkState();
   const notification = useNotifications();
@@ -59,6 +62,8 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       ? ELEMENT_ID.UNBLOCK_USER_BUTTON
       : ELEMENT_ID.BLOCK_USER_BUTTON;
   const blockRow = useAmityElement({ pageId, componentId, elementId: blockRowElementId });
+  const { goToAutoplaySettingPage } = useNavigation();
+  const { isMemberAutoplayOn } = useFeedVideoAutoplay();
 
   // Read before the gate below, not inside it. `useString` is a hook, and
   // these three sat in a ternary that already made two of them conditional;
@@ -74,12 +79,22 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   const unreportFailedText = useString('amity_social_toast_user_unreport_failed');
   const blockFailedText = useString('amity_social_toast_user_block_failed');
   const unblockFailedText = useString('amity_social_toast_user_unblock_failed');
+  const accountSectionLabel = useString('amity_social_autoplay_setting_account_section');
+  const settingsSectionLabel = useString('amity_social_autoplay_setting_section');
+  const autoplayRowLabel = useString('amity_social_autoplay_setting_row');
+  const autoplayOnLabel = useString('amity_social_autoplay_setting_on');
+  const autoplayOffLabel = useString('amity_social_autoplay_setting_off');
 
   if (!user) return null;
 
   const onEditProfile = () => {
     onCloseMenu();
     AmityUserProfilePageBehavior?.goToEditUserPage?.({ userId: user.userId });
+  };
+
+  const onAutoplaySetting = () => {
+    onCloseMenu();
+    goToAutoplaySettingPage();
   };
 
   const onReportUser = () =>
@@ -137,6 +152,11 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   return (
     <div className={styles.userMenu}>
       {isCurrentUser && (
+        <Typography.CaptionBold className={styles.userMenu__sectionTitle}>
+          {accountSectionLabel}
+        </Typography.CaptionBold>
+      )}
+      {isCurrentUser && (
         <Button
           data-testid={`${pageId}/${componentId}/edit_user_profile_button`}
           className={styles.userMenu__button}
@@ -185,6 +205,26 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         onDone={onCloseMenu}
         textId="amity_social_label_copy_profile_link"
       />
+      {isCurrentUser && !isVisitorOrBot && (
+        <>
+          <Typography.CaptionBold className={styles.userMenu__sectionTitle}>
+            {settingsSectionLabel}
+          </Typography.CaptionBold>
+          <Button
+            data-testid="user_menu/autoplay_setting"
+            className={styles.userMenu__button}
+            onPress={onAutoplaySetting}
+          >
+            <CirclePlay className={styles.userMenu__autoplay__icon} />
+            <Typography.BodyBold className={styles.userMenu__autoplay__text}>
+              {autoplayRowLabel}
+            </Typography.BodyBold>
+            <Typography.Body className={styles.userMenu__autoplay__value}>
+              {isMemberAutoplayOn ? autoplayOnLabel : autoplayOffLabel}
+            </Typography.Body>
+          </Button>
+        </>
+      )}
     </div>
   );
 };

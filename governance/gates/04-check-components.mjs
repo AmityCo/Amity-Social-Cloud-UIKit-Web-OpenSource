@@ -83,7 +83,9 @@ for (const m of registry.matchAll(/'([^']*?)\/([^'/]+)\/([^'/]+)'\s*:/g)) {
 const constants = new Map(); // NAME -> value
 {
   const customization = read(at('src/v4/constants/customization.ts')) ?? '';
-  const block = customization.match(/export const COMPONENT_ID\s*=\s*\{([\s\S]*?)\n\};/);
+  const block = customization.match(
+    /export const COMPONENT_ID\s*=\s*\{([\s\S]*?)\n\}(?:\s*as\s+const)?;/,
+  );
   for (const m of (block?.[1] ?? '').matchAll(/([A-Z0-9_]+)\s*:\s*'([^']+)'/g)) {
     constants.set(m[1], m[2]);
   }

@@ -29,7 +29,7 @@
 
 .videoPlayerControls__productTag {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .videoPlayerControls__timeDisplay {

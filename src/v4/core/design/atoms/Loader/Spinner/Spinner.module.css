@@ -27,6 +27,11 @@
   stroke-dasharray: 25 100;
 }
 
+.spinner[data-variant='media'] .spinner__arc {
+  stroke: var(--asc-color-white);
+  stroke-width: 2;
+}
+
 @keyframes loader-spin {
   to {
     transform: rotate(360deg);

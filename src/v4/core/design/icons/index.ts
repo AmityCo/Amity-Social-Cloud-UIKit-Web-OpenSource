@@ -71,6 +71,7 @@ export { Poll } from './Poll';
 export { Post } from './Post';
 export { Question } from './Question';
 export { Redo } from './Redo';
+export { RotateLeft } from './RotateLeft';
 export { Scale2 } from './Scale2';
 export { Search } from './Search';
 export { Search1 } from './Search1';

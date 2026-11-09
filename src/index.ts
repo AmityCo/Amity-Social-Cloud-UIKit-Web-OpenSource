@@ -62,6 +62,7 @@ export {
   UserProfilePage as AmityUserProfilePage,
   EditUserProfilePage as AmityEditUserProfilePage,
   BlockedUserPage as AmityBlockedUserPage,
+  AutoplaySettingPage as AmityAutoplaySettingPage,
   UserRelationshipPage as AmityUserRelationshipPage,
   UserPendingFollowRequestPage as AmityUserPendingFollowRequestPage,
   PollPostComposerPage as AmityPollPostComposerPage,

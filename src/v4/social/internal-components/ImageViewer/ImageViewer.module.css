@@ -165,5 +165,5 @@
 .imageViewer__productTagBadge {
   position: absolute;
   bottom: 0.75rem;
-  right: 0.75rem;
+  left: 0.75rem;
 }
