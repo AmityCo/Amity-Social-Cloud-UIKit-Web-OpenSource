@@ -1,3 +1,4 @@
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import { CommentRepository } from '@amityco/ts-sdk';
 import { useString, resolveString } from '~/v4/core/localization';
 import clsx from 'clsx';
@@ -84,7 +85,7 @@ const PostReplyComment = ({
   showReply = false,
   isHighlighted = false,
 }: ReplyCommentProps) => {
-  const componentId = 'post_comment';
+  const componentId = COMPONENT_ID.POST_COMMENT;
   const { confirm } = useConfirmContext();
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
@@ -300,6 +301,7 @@ const PostReplyComment = ({
           data-isdeleted-highlight={isHighlightDeleted}
           className={styles.postReplyComment__deleteComment_container}
           style={themeStyles}
+          data-testid={accessibilityId}
         >
           <MinusCircleIcon className={styles.postReplyComment__deleteComment_icon} />
           <Typography.Caption className={styles.postReplyComment__deleteComment_text}>
@@ -307,7 +309,7 @@ const PostReplyComment = ({
           </Typography.Caption>
         </div>
       ) : isEditing ? (
-        <div className={styles.postReplyComment__edit}>
+        <div className={styles.postReplyComment__edit} data-testid={accessibilityId}>
           <UserAvatar pageId={pageId} componentId={componentId} userData={comment.creator} />
           <div className={styles.postReplyComment__edit__inputWrap}>
             <div className={styles.postReplyComment__edit__input}>
@@ -396,10 +398,8 @@ const PostReplyComment = ({
               <div className={styles.postReplyComment__firstRow}>
                 <div
                   data-has-reaction={reactionsCount > 0}
-                  className={clsx(
-                    styles.postReplyComment__content,
-                    isHighlighted && isL2 && styles.postReplyComment__contentHighlighted,
-                  )}
+                  data-highlighted={isHighlighted && isL2}
+                  className={styles.postReplyComment__content}
                 >
                   <Button
                     variant="default"
@@ -419,7 +419,7 @@ const PostReplyComment = ({
                     {isBrandUser && <BrandBadge className={styles.postReplyComment__brandBadge} />}
                   </Button>
                   {isHost ? (
-                    <EventHostBadge withLabel />
+                    <EventHostBadge pageId={pageId} componentId={componentId} withLabel />
                   ) : (
                     isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
                   )}
@@ -520,10 +520,13 @@ const PostReplyComment = ({
                         componentId={componentId}
                         timestamp={comment.createdAt}
                       />
-                      <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                      <Typography.Caption
+                        as="span"
+                        data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}
+                      >
                         {(localCommentData !== null || comment.createdAt !== comment.editedAt) &&
                           ` ${editedSuffixText}`}
-                      </span>
+                      </Typography.Caption>
                     </Typography.Caption>
                     <ReactionButton
                       pageId={pageId}

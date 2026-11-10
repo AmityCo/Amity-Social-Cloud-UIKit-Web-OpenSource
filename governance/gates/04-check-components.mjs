@@ -111,7 +111,7 @@ for (const compRoot of COMPONENT_ROOTS) {
 
     const usesHook = /\buseAmityComponent\b/.test(src);
     const literalId = src.match(/const\s+componentId\s*=\s*'([^']+)'/)?.[1];
-    const constName = src.match(/const\s+componentId\s*=\s*COMPONENT_ID\.([A-Z0-9_]+)/)?.[1];
+    const constName = src.match(/\bcomponentId\s*=\s*COMPONENT_ID\.([A-Z0-9_]+)/)?.[1];
     const resolvedId = constName ? constants.get(constName) : literalId;
     if (resolvedId) seenIds.add(resolvedId);
 

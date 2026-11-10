@@ -18,6 +18,7 @@ import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPa
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events/hooks';
 import styles from './PostComposer.module.css';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import { LivestreamButton } from '~/v4/social/elements/LivestreamButton';
 import { LivestreamTargetSelectionPage } from '~/v4/social/features/livestream/pages/LivestreamTargetSelectionPage';
 import { resolveString } from '~/v4/core/localization/resolveString';
@@ -45,7 +46,7 @@ export function PostComposer({
   isDisableStory = false,
   isDisableEvent = false,
 }: PostComposerProps) {
-  const componentId = 'post_composer';
+  const componentId = COMPONENT_ID.POST_COMPOSER;
 
   const { currentUserId, isVisitorOrBot } = useSDK();
   const { openPopup } = usePopupContext();
@@ -185,7 +186,11 @@ export function PostComposer({
         imageContainerClassName={styles.postComposer__avatar}
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}
       />
-      <Button className={styles.postComposer__input} onPress={handlePostClick}>
+      <Button
+        className={styles.postComposer__input}
+        onPress={handlePostClick}
+        data-testid={`${pageId}/${componentId}/create_post_button`}
+      >
         {resolveString('amity_social_placeholder_post_composer_body_placeholder')}
       </Button>
       <ImageButton

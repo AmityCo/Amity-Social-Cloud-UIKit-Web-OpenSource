@@ -521,7 +521,7 @@ export const PostContent = ({
             <div className={styles.postContent__bar__information__subtitle}>
               {eventCreatorId === post?.postedUserId ? (
                 <div className={styles.postContent__bar__information__subtitle__moderator}>
-                  <EventHostBadge withLabel />
+                  <EventHostBadge pageId={pageId} componentId={componentId} withLabel />
                   <Typography.Caption
                     className={styles.postContent__bar__information__subtitle__separator}
                   >

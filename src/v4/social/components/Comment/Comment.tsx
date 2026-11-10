@@ -1,3 +1,4 @@
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import React, { useEffect, useRef, useState } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
@@ -77,7 +78,7 @@ interface CommentProps {
 
 export const Comment = ({
   pageId = '*',
-  componentId = 'comment_bubble',
+  componentId = COMPONENT_ID.COMMENT_BUBBLE,
   comment,
   community,
   onClickReply,
@@ -458,10 +459,7 @@ export const Comment = ({
           </div>
         </div>
       ) : (
-        <div
-          className={clsx(styles.postComment, isHighlighted && styles.postComment__bounce)}
-          data-testid={testId}
-        >
+        <div className={styles.postComment} data-highlighted={isHighlighted} data-testid={testId}>
           <UserAvatar
             pageId={pageId}
             componentId={componentId}
@@ -503,7 +501,7 @@ export const Comment = ({
                 </Button>
 
                 {isHost ? (
-                  <EventHostBadge withLabel />
+                  <EventHostBadge pageId={pageId} componentId={componentId} withLabel />
                 ) : (
                   isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
                 )}
@@ -605,9 +603,12 @@ export const Comment = ({
                         componentId={componentId}
                         timestamp={comment.createdAt}
                       />
-                      <span data-testid={`${pageId}/${componentId}/comment_edited_text`}>
+                      <Typography.Caption
+                        as="span"
+                        data-testid={`${pageId}/${componentId}/comment_edited_text`}
+                      >
                         {comment.createdAt !== comment.editedAt && ` ${editedSuffixText}`}
-                      </span>
+                      </Typography.Caption>
                     </Typography.Caption>
                     <ReactionButton
                       pageId={pageId}

@@ -367,6 +367,12 @@ export const defaultConfig: DefaultConfig = {
     '*/comment_tray_component/*': {
       theme: {},
     },
+    '*/post_comment/*': {
+      theme: {},
+    },
+    '*/comment_bubble/*': {
+      theme: {},
+    },
     '*/comment_tray_component/comment_bubble_deleted_view': {
       comment_bubble_deleted_icon: 'comment_bubble_deleted.png',
     },
