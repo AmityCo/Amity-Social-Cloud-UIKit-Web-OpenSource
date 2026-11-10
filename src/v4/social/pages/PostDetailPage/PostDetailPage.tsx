@@ -15,6 +15,7 @@ import {
   AmityPostContentComponentStyle,
 } from '~/v4/social/components/PostContent/PostContent';
 import useCommunity from '~/v4/social/hooks/objects/useCommunity';
+import { useInteractionCommunity } from '~/v4/social/hooks/useInteractionCommunity';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -114,7 +115,9 @@ export function PostDetailPage({
     referenceId: post?.postId,
   });
 
-  const isJoinedCommunity = post?.targetType === 'community' && community?.isJoined;
+  const interactionCommunity = useInteractionCommunity(community);
+
+  const isJoinedCommunity = post?.targetType === 'community' && interactionCommunity?.isJoined;
   const canSeeCommentComposer =
     post && (isJoinedCommunity || post?.targetType === 'user') && !isVisitorOrBot;
 
@@ -361,7 +364,7 @@ export function PostDetailPage({
                 setReplyParentIdOverride(undefined);
                 setReplyL0AncestorId(undefined);
               }}
-              community={community}
+              community={interactionCommunity}
               containerClassName={
                 post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
               }
@@ -376,7 +379,7 @@ export function PostDetailPage({
                 referenceId={post.postId}
                 referenceType="post"
                 onClickReply={handleReplyClick}
-                community={community}
+                community={interactionCommunity}
                 limit={COMMENT_LIST_LIMIT}
                 commentCount={post.commentsCount}
                 highlightedCommentId={commentId}
@@ -406,7 +409,7 @@ export function PostDetailPage({
                             setReplyParentIdOverride(undefined);
                             setReplyL0AncestorId(undefined);
                           }}
-                          community={community}
+                          community={interactionCommunity}
                           isFromCommentClick={isFromCommentClick}
                         />
                       </div>
@@ -427,7 +430,7 @@ export function PostDetailPage({
               setReplyParentIdOverride(undefined);
               setReplyL0AncestorId(undefined);
             }}
-            community={community}
+            community={interactionCommunity}
             containerClassName={
               post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
             }
