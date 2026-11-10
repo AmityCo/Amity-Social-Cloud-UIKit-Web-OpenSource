@@ -119,5 +119,5 @@
     "code-snippets/scripts/update-code-snippets.mjs",
     "code-snippets/scripts/create-gist.mjs"
   ],
-  "exclude": ["node_modules", "vite.config.ts", "./dist"]
+  "exclude": ["node_modules", "vite.config.ts", "./dist", "./qa"]
 }

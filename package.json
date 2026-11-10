@@ -31,6 +31,7 @@
     "build:prod:analyze": "pnpm build --metafile",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:qa": "pnpm --dir qa test",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "NODE_OPTIONS=--max-old-space-size=4096 storybook build --output-dir ./storybook-build",
     "lint": "eslint . && stylelint \"**/*.css\"",

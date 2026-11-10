@@ -1,22 +1,23 @@
 ---
 name: issue-resolver
-description: Use when resolving a QA-filed Jira ticket (PDT-XXXX) in the Amity Social Cloud UIKit Web repo. Triggers on a pasted Atlassian Jira URL. Orchestrates: ticket + Figma analysis → plan approval gate → branch and implementation → manual QA gate → pnpm build → conventional-commit and push. Use after chat v4 milestone work is feature-complete and QA bug tickets are being worked through.
+description: Use when resolving a QA-filed Jira ticket (PDT-XXXX) in the Amity Social Cloud UIKit Web repo. Triggers on a pasted Atlassian Jira URL. Orchestrates: ticket + Figma analysis → plan approval gate → branch, Playwright "before" recording, implementation, "after" recording → manual QA gate → pnpm build → conventional-commit, push and PR → Jira evidence comment via jira-ticket-report. Use after chat v4 milestone work is feature-complete and QA bug tickets are being worked through.
 ---
 
 # Issue Resolver
 
-This skill turns a single QA-filed Jira ticket into a pushed branch ready for the user to open a PR. It runs in five sequential stages (plus an optional Stage 6 for tickets that need no code change), each gated on user approval before moving forward.
+This skill turns a single QA-filed Jira ticket into a pushed branch and PR, with a before/after video of the bug posted on the ticket. It runs in six sequential stages (plus an optional Stage 7 for tickets that need no code change), each gated on user approval before moving forward.
 
-| Stage                          | Output                                                                     | When                                                     |
-| ------------------------------ | -------------------------------------------------------------------------- | -------------------------------------------------------- |
-| 1 — Analyze                    | Ticket moved to **In Progress** + expected-vs-actual summary in chat       | After the user pastes a Jira URL                         |
-| 2 — Plan + approval gate       | Approved fix plan via `ExitPlanMode`                                       | After Stage 1                                            |
-| 3 — Branch + implement         | New branch + applied code changes, file paths listed first in each handoff | After plan approval                                      |
-| 4 — Manual QA gate             | User says "ok to commit"                                                   | After implementation                                     |
-| 5 — Build + commit + push      | Pushed branch + compare URL targeting Stage 3 base                         | After QA sign-off                                        |
-| 6 — Jira transition (optional) | Ticket moved (e.g. "Deployed to Dev")                                      | Only if user decides no code change is needed in Stage 1 |
+| Stage                          | Output                                                                                               | When                                                     |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1 — Analyze                    | Ticket moved to **In Progress** + expected-vs-actual summary in chat                                 | After the user pastes a Jira URL                         |
+| 2 — Plan + approval gate       | Approved fix plan via `ExitPlanMode`, including the Playwright test case                             | After Stage 1                                            |
+| 3 — Branch, record, implement  | New branch + `PDT-XXXX-before.webm` (test fails) + code changes + `PDT-XXXX-after.webm` (test passes) | After plan approval                                      |
+| 4 — Manual QA gate             | User watches both clips and says "ok to commit"                                                      | After implementation                                     |
+| 5 — Build + commit + push      | Pushed branch + PR targeting the Stage 3 base                                                        | After QA sign-off                                        |
+| 6 — Report on Jira             | Evidence comments with both clips (via `jira-ticket-report`) + ticket moved to **Code Review**       | After the PR is open and the user approves the text      |
+| 7 — Jira transition (optional) | Ticket moved (e.g. "Deployed to Dev")                                                                | Only if user decides no code change is needed in Stage 1 |
 
-**Never skip ahead.** The user reviews and approves at every stage gate. Do not begin Stage 3 until the plan is approved. Do not begin Stage 5 until the user has manually QA'd the change.
+**Never skip ahead.** The user reviews and approves at every stage gate. Do not begin Stage 3 until the plan is approved. Do not begin Stage 5 until the user has manually QA'd the change. Do not post anything on Jira in Stage 6 until the user has approved the comment text.
 
 ## When to use
 
@@ -130,6 +131,7 @@ Enter plan mode. Draft a fix plan covering:
 3. **Reusable utilities / components leveraged** — per the [`feature-implementation`](../feature-implementation/SKILL.md) skill rules. Check `~/v4/core/components/` and `~/v4/chat/elements/` before proposing new code. Cite the file paths of the established pattern you're following (e.g. _"matches `networkMode: 'always'` usage in `usePostFlaggedByMe.ts`, `useEventMutation.ts`, …"_).
 4. **L10n impact** — if the fix touches strings, list the keys. Net-new l10n keys require user approval per the memory rule `feedback_l10n_keys`. Pre-allocated empty keys may be populated freely.
 5. **Manual QA steps** — how the user will verify the fix locally (Storybook story name, or page + interaction sequence in the dev server).
+6. **Recording test** — the feature spec file it goes in (`qa/tests/<feature>.spec.ts`), the test name, its `@PDT-XXXX` tag, and the exact assertion that fails today and passes after the fix. If the ticket cannot be scripted (a purely visual check, missing test data), say so here and name the fallback (screenshots).
 
 Call `ExitPlanMode` to request approval. **Do not proceed past this stage without explicit approval.** If the user requests changes, revise the plan in place and ask again.
 
@@ -159,6 +161,54 @@ git checkout <base-branch>
 git pull --ff-only
 git checkout -b <branch>
 ```
+
+## Stage 3 — Record the bug ("before")
+
+Do this on the new branch **before writing any fix code**, so the branch still matches the base.
+
+**Setup, once per machine.** The suite lives in `qa/` (Playwright, its own package — `@playwright/test` is a dev dependency of `qa/package.json` only and never ships in the UIKit bundle):
+
+```bash
+pnpm --dir qa install --ignore-workspace
+pnpm --dir qa exec playwright install ffmpeg
+```
+
+If `qa/` does not exist on the base branch yet, copy the setup from PR #1965
+(`origin/feat/PDT-5767-feed-video-autoplay-qa`): `qa/.gitignore`, `qa/package.json`,
+`qa/pnpm-lock.yaml`, `qa/tsconfig.json`, `qa/playwright.config.ts`, plus its `tsconfig.json`
+exclude, `jest.config.js` ignore and `test:qa` script. Keep `video: 'on'` in the config.
+
+**Where the test goes.** One spec file per feature, not per ticket:
+
+```
+qa/tests/
+  post-composer.spec.ts   ← a new ticket adds one test() here
+  comments.spec.ts
+  support.ts              ← shared steps (open app, open community, open composer)
+```
+
+Add one test, written from the ticket's own steps, tagged with the ticket key:
+
+```ts
+test('links after an unclosed "(" are detected', { tag: '@PDT-6623' }, async ({ page }) => {
+  // ticket steps, then one assertion on the ticket's Expected Result
+});
+```
+
+Keep it short: shared steps go in `support.ts`. Assert the ticket's Expected Result with real
+values (expected vs received), not "no error".
+
+**Run it — it must FAIL.** Storybook must be running (or Playwright starts it); pass the port it is on:
+
+```bash
+QA_STORYBOOK_PORT=<port> QA_SLOW_MO=150 pnpm --dir qa exec playwright test --grep @PDT-XXXX --headed
+mkdir -p qa/recordings
+cp "$(find qa/test-results -name video.webm | head -1)" qa/recordings/PDT-XXXX-before.webm
+```
+
+- Save the clip to `qa/recordings/` straight away — Playwright **empties `qa/test-results/` on every run**, so the "after" run would delete it. `qa/recordings/` is gitignored.
+- **If the test passes here, the bug did not reproduce.** Stop and tell the user (wrong steps, wrong data, or already fixed) — do not go on to fix.
+- If it fails for a different reason than the ticket (a selector timeout, a login screen), fix the test, not the app, and rerun until the failure is the ticket's own.
 
 ## Stage 3 — Implement
 
@@ -195,6 +245,18 @@ pnpm lint
 
 If either fails, surface the error to the user verbatim. Do not silently ignore. Fix the failures before moving to Stage 4.
 
+## Stage 3 — Record the fix ("after")
+
+Run the **same** test with the same command — never a second, different test:
+
+```bash
+QA_STORYBOOK_PORT=<port> QA_SLOW_MO=150 pnpm --dir qa exec playwright test --grep @PDT-XXXX --headed
+cp "$(find qa/test-results -name video.webm | head -1)" qa/recordings/PDT-XXXX-after.webm
+```
+
+It must **PASS**. If it fails, the fix is not done — go back to Implement. Paste the pass/fail
+lines of both runs into the Stage 4 handoff.
+
 ## Stage 3 — Reporting changes back to the user
 
 **Always lead with the file paths AND show the diff.** Whenever you finish a step — initial implementation, a refactor, a layout fix — your response must contain:
@@ -215,6 +277,7 @@ Print a handoff summary with the file list at the very top:
 1. **Files touched** — list every created/modified path as a plain bulleted list. This is the first thing the user reads. Do not put it after the verification steps.
 2. **How to reproduce the fix locally** — name the Storybook story (`pnpm storybook`, then navigate to `Chat/<Component>/<Story>`) or describe the in-app steps. For new elements with their own story, mention the standalone story path too.
 3. **Acceptance check** — restate each acceptance criterion from the ticket and mark which is now satisfied.
+4. **Recordings** — the full paths of `qa/recordings/PDT-XXXX-before.webm` (FAIL) and `qa/recordings/PDT-XXXX-after.webm` (PASS), with the result line of each run. Ask the user to watch both before choosing.
 
 Ask the user via `AskUserQuestion`:
 
@@ -251,18 +314,46 @@ Two things this stage adds on top of that skill:
 - The commit verb comes from the Jira issue type captured in Stage 1 — `Bug` → `fix:`, anything
   else → `feat:`.
 - `--base` is **always the branch chosen in Stage 3**, never a default.
+- The commit includes the new or changed test in `qa/tests/`. The recordings are not committed (`qa/recordings/` is gitignored).
 
 If the pre-commit hook fails, fix the issue and make a new commit. Never `--amend` after a failed
 hook.
 
-# Stage 6 — Optional: Jira status transition
+---
 
-If after Stage 1 the user decides the ticket needs **no code change** (existing behavior is intentional, fix would be too disruptive, etc.), skip Stages 2–5 and instead:
+# Stage 6 — Report on Jira
 
-1. Ask the user whether to transition the Jira ticket. If yes, use `mcp__7e52d879-...__getTransitionsForJiraIssue` to list available transitions, then `transitionJiraIssue` with the chosen ID. Typical target after a "won't fix as filed" decision is **Deployed to Dev** (status id varies per workflow — read it from the transitions list, do not hardcode).
+Write the evidence comments with the **`jira-ticket-report`** skill. It lives in cleverden, not
+this repo: `Docs/cleverden`, branch `origin/feat/frontend-agentic` (PR #150),
+`frontend-agentic/.claude/skills/jira-ticket-report/SKILL.md`. Read it with
+`git show origin/feat/frontend-agentic:frontend-agentic/.claude/skills/jira-ticket-report/SKILL.md`
+and follow its format:
+
+1. **Engineering summary** — PR link + commit, Issue, Root Cause, Solution, Analysis, Verified, Test setup.
+2. **Case 1/2 — before** — `FAIL (reproduced)`, steps, what to look for, `PDT-XXXX-before.webm` attached.
+3. **Case 2/2 — after** — `PASS`, steps, what to look for, changed files, `PDT-XXXX-after.webm` attached.
+
+Then:
+
+- **Show all three comment texts to the user and wait for approval.** Posting is outward-facing.
+- Post with cleverden's `jira/jira.sh` (copy it from the same branch to the scratchpad), one `--attach` per clip:
+  `jira.sh comment --ticket PDT-XXXX --body "$(cat case.txt)" --attach qa/recordings/PDT-XXXX-before.webm`.
+  It needs `JIRA_BASE_URL`, `JIRA_USER` and `JIRA_API_TOKEN` in the shell. Check them first with a
+  read-only `jira.sh view --ticket PDT-XXXX`; on a 401/404, tell the user to renew the token and stop.
+  The Atlassian MCP cannot attach files, so it is not used for these comments.
+- Move the ticket to **Code Review** (`getTransitionsForJiraIssue` → match the name → `transitionJiraIssue`).
+- Report back: the comment links, what was attached, and the new status.
+
+---
+
+# Stage 7 — Optional: Jira status transition
+
+If after Stage 1 the user decides the ticket needs **no code change** (existing behavior is intentional, fix would be too disruptive, etc.), skip Stages 2–6 and instead:
+
+1. Ask the user whether to transition the Jira ticket. If yes, use `mcp__claude_ai_Atlassian__getTransitionsForJiraIssue` to list available transitions, then `transitionJiraIssue` with the chosen ID. Typical target after a "won't fix as filed" decision is **Deployed to Dev** (status id varies per workflow — read it from the transitions list, do not hardcode).
 2. Confirm to the user the ticket status changed. Stop.
 
-For the normal code-fix flow, the user typically transitions the ticket themselves after the PR merges and the build deploys — do not auto-transition after `git push`.
+For the normal code-fix flow, Stage 6 moves the ticket to Code Review; later moves (Deployed to Dev and onward) happen after the PR merges and the build deploys, and are not this skill's job.
 
 ---
 
@@ -270,11 +361,12 @@ For the normal code-fix flow, the user typically transitions the ticket themselv
 
 This skill does not handle:
 
-- Auto-transitioning the Jira ticket after a code push (the deploy happens first; user transitions manually once the build lands on dev).
-- Posting a Jira comment or worklog write-back.
+- Moving the ticket past Code Review (the deploy happens first).
+- Putting the clips in the PR description — GitHub has no API for uploads; they go on Jira only.
+- Worklog write-back.
 - Multi-ticket batch mode.
 
-If any of those become useful, expand Stage 6 and update this section.
+If any of those become useful, expand the relevant stage and update this section.
 
 ---
 
@@ -285,9 +377,11 @@ To dry-run this skill on a real ticket:
 1. Paste a real PDT Jira URL. Confirm Stage 1 fetches the ticket and (if linked) the Figma frame.
 2. Confirm Stage 2 enters plan mode and `ExitPlanMode` pauses for approval.
 3. Approve a small change; confirm Stage 3 creates a branch named `PDT-<num>-<slug>` off the chosen base, and `pnpm tsc` + `pnpm lint` run after the edits.
-4. Confirm Stage 4 stops at the QA gate and does not auto-commit.
-5. After approving the QA gate, confirm `pnpm build` runs and passes before staging happens; if it fails, the skill stops.
-6. Confirm the commit message is the **single-line** form `<verb>: PDT-<num> - <summary>` (no body, no Co-Authored-By footer) and `git push -u origin <branch>` runs.
-7. Confirm the printed compare URL targets the base branch chosen in Stage 3 (not `develop`/`main`).
+4. Confirm Stage 3 runs the tagged test before any fix code and it **fails**, saving `qa/recordings/PDT-<num>-before.webm`; then after the fix the same test **passes**, saving `PDT-<num>-after.webm`.
+5. Confirm Stage 4 shows both clip paths and stops at the QA gate without auto-committing.
+6. After approving the QA gate, confirm `pnpm build` runs and passes before staging happens; if it fails, the skill stops.
+7. Confirm the commit message is the **single-line** form `<verb>: PDT-<num> - <summary>` (no body, no Co-Authored-By footer), the test is in the commit and the recordings are not, and `git push -u origin <branch>` runs.
+8. Confirm the PR targets the base branch chosen in Stage 3 (not `develop`/`main` by default).
+9. Confirm Stage 6 shows the three comment texts and waits; after approval, the comments are posted with both clips and the ticket is in Code Review.
 
 If any stage skips its gate, applies the wrong conventions, or misnames the branch, update this `SKILL.md` rather than working around it inline.
