@@ -1,3 +1,4 @@
+import { Typography } from '~/v4/core/components/Typography/Typography';
 import { useNetworkState } from 'react-use';
 import { useString } from '~/v4/core/localization';
 import { Button } from '~/v4/core/design/atoms/Button';
@@ -53,7 +54,9 @@ export function Header({
         leading={leading}
         header={
           isBanned ? (
-            <span className={styles.header__bannedName}>{emptyChatLabel}</span>
+            <Typography as="span" className={styles.header__bannedName}>
+              {emptyChatLabel}
+            </Typography>
           ) : (
             channelDisplayName ?? ''
           )
@@ -62,6 +65,7 @@ export function Header({
         descriptionIcon={!isBanned && !isOnline ? <Loader.Spinner size="sm" /> : undefined}
         onPress={isBanned ? undefined : onOpenSettings}
         onPressLabel={isBanned ? undefined : 'Open group settings'}
+        onPressTestId="group-chat-settings-button"
       />
     </header>
   );
