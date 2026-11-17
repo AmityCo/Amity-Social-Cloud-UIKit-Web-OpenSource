@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.33.1-d2b15777.0
-        version: 7.33.1-d2b15777.0
+        specifier: 7.33.2-74d47a9.0
+        version: 7.33.2-74d47a9.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -354,8 +354,8 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@amityco/ts-sdk@7.33.1-d2b15777.0':
-    resolution: {integrity: sha512-mL+D619NwuuTF9kKqg5enFJrK7ZXI7wvMKQDf2pNXIwh3ggx4x1kT7XkrARHzx+1DqTWM66/iBpIwtPkS0qzqQ==}
+  '@amityco/ts-sdk@7.33.2-74d47a9.0':
+    resolution: {integrity: sha512-S6HBK1nu/FsuGbqTpj9us4WhBvOszNfOVWwN2O5IrNx50NAh32bGudAxkd2ieJpY2lr9a+RzoU1Pgdwx8RvLsg==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5690,8 +5690,8 @@ packages:
   iota-array@1.0.0:
     resolution: {integrity: sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==}
 
-  ip-address@10.7.5:
-    resolution: {integrity: sha512-t2v0rkILYv9WXmSL7TpAaU3HXgaFYOPUcH3QHgwQ++gpJuH3bqyMy4Fvt/DJCTKwzH3Cf+bAp5W/mFL39KPLzA==}
+  ip-address@10.7.6:
+    resolution: {integrity: sha512-00LYkM6byILa9eQIx6qoaXCM40xTLd56AZ4vyaPW3YTyb49VZYPo5xsiAq4tuQ54GH4R7gVdYScJ1B7B77PuTg==}
     engines: {node: '>= 12'}
 
   ip@2.0.1:
@@ -8812,7 +8812,7 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@amityco/ts-sdk@7.33.1-d2b15777.0':
+  '@amityco/ts-sdk@7.33.2-74d47a9.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
@@ -15547,7 +15547,7 @@ snapshots:
 
   iota-array@1.0.0: {}
 
-  ip-address@10.7.5: {}
+  ip-address@10.7.6: {}
 
   ip@2.0.1: {}
 
@@ -17985,7 +17985,7 @@ snapshots:
 
   socks@2.8.10:
     dependencies:
-      ip-address: 10.7.5
+      ip-address: 10.7.6
       smart-buffer: 4.2.0
 
   source-map-js@1.2.0: {}

@@ -138,6 +138,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [internalMuted, setInternalMuted] = useState(isMuted);
   const onSoundRefusedRef = useRef(onSoundRefused);
   onSoundRefusedRef.current = onSoundRefused;
+  // Read once when hls.js starts, so a later initialTime change does not reload the stream.
+  const initialTimeRef = useRef(initialTime);
   const hasCheckedSoundRef = useRef(false);
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(!autoPlay);
@@ -184,6 +186,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     if (!videoElement || !initialTime) return;
+    // hls.js starts at initialTime itself (startPosition), so it can skip a gap before the first buffered frame.
+    if (shouldUseHls && Hls.isSupported()) return;
 
     const seekToInitialTime = () => {
       videoElement.currentTime = initialTime;
@@ -332,6 +336,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const hls = new Hls({
       debug: false,
+      startPosition: initialTimeRef.current || -1,
       xhrSetup: (xhr) => {
         if (client?.token?.accessToken) {
           xhr.setRequestHeader('Authorization', `Bearer ${client.token.accessToken}`);
