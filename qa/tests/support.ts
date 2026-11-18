@@ -22,3 +22,10 @@ export async function openPostComposer(page: Page): Promise<Locator> {
   await editor.click();
   return editor;
 }
+
+export async function openMyProfileImages(page: Page, userId = QA_USER_ID) {
+  await page.goto(story);
+  await page.getByTestId(`social_home_page/post_composer/user_avatar-${userId}`).click();
+  await page.getByTestId('user-media-feed-tab-button').click();
+  await page.getByTestId('chip-button-images').click();
+}

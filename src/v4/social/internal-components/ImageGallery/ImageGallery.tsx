@@ -119,6 +119,7 @@ export const ImageGallery = ({
         ) : (
           <ImageViewer
             post={post}
+            posts={posts ?? undefined}
             isFromGallery
             target={target}
             feedSources={feedSources}
