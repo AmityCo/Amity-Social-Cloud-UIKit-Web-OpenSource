@@ -13,7 +13,7 @@
 .coHostBadge__icon {
   width: 0.75rem;
   height: 0.75rem;
-  fill: var(--asc-color-white);
+  color: var(--asc-color-white);
 }
 
 .coHostBadge__text {
