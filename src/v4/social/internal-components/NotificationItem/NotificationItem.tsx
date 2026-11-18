@@ -9,6 +9,7 @@ import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { EventTypeBadge } from '~/v4/social/features/events/EventHub/elements';
 import { formatEventStartDate, formatEventStartTime } from '~/v4/social/utils/timezone';
 import { highlightedText } from '~/v4/social/utils/highlightedText';
+import { isKnownTrayItem } from '~/v4/social/utils/isKnownTrayItem';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -135,7 +136,10 @@ export const NotificationItem = ({
       },
     ]);
 
-    if (!isTargetReachable(targetPage()) || isSubjectWithheld()) {
+    // A type newer than this UIKit version has no page of its own here, and
+    // guessing one sent it to the post detail page with an empty postId. It
+    // gets the same toast as a withheld module: shown, but not opened.
+    if (!isKnownTrayItem(item) || !isTargetReachable(targetPage()) || isSubjectWithheld()) {
       // `pushPage` would refuse this silently, which leaves a tap that does
       // nothing. The tray stays open on purpose — closing it would leave a
       // toast explaining a screen the customer is no longer looking at.
