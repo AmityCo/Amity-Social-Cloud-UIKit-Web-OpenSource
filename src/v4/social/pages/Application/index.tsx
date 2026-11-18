@@ -4,7 +4,7 @@ import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
-import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
+import { ViewStoryPage } from '~/v4/social/pages/ViewStoryPage';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 import styles from './Application.module.css';

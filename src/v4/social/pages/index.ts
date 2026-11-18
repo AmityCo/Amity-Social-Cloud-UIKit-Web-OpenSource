@@ -1,5 +1,5 @@
 export { AmityDraftStoryPage } from './DraftsPage';
-export { ViewStoryPage } from './StoryPage';
+export { ViewStoryPage } from './ViewStoryPage';
 export { StoryTargetSelectionPage } from './StoryTargetSelectionPage';
 export { SocialHomePage } from './SocialHomePage';
 export { PostComposerPage, Mode } from './PostComposerPage';

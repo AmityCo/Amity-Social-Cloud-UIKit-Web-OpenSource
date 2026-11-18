@@ -17,6 +17,7 @@ const SDKConnectorLiveCollectionContext = createContext({
     callback: Amity.LiveCollectionCallback<TCallback>;
     config?: Amity.LiveCollectionConfig;
     refresh?: boolean;
+    fresh?: boolean;
   }) => {
     return { unsubscribe: () => {} };
   },
@@ -50,6 +51,7 @@ export default function SDKConnectorLiveCollectionProvider({
     callback,
     config,
     refresh = false,
+    fresh,
   }: {
     fetcher: (
       params: Amity.LiveCollectionParams<TParams>,
@@ -60,6 +62,7 @@ export default function SDKConnectorLiveCollectionProvider({
     callback: Amity.LiveCollectionCallback<TCallback>;
     config?: Amity.LiveCollectionConfig;
     refresh?: boolean;
+    fresh?: boolean;
   }) => {
     if (currentUserId == null) return { unsubscribe() {} };
     const key = getSubscriberKey(fetcher.name, params);
@@ -73,17 +76,26 @@ export default function SDKConnectorLiveCollectionProvider({
       delete subscriberMap.current[key];
     }
 
+    if (fresh) {
+      unsubscribeFnMap.current[key]?.();
+      delete unsubscribeFnMap.current[key];
+      delete responseMap.current[key];
+    }
+
     // A subscription whose first response has not arrived yet is still a
     // subscription: join it rather than opening a second SDK collection for
     // the same key (which would orphan the first and notify everyone twice).
     // This is what a component that unmounts and remounts at once hits, for
     // example under React strict mode.
-    if (subscriberMap.current[key]) {
+    if (subscriberMap.current[key] && unsubscribeFnMap.current[key]) {
       const cached = responseMap.current[key];
       if (cached) callback?.(cached as Amity.LiveCollection<TCallback>);
       subscriberMap.current[key].push(callback as Amity.LiveCollectionCallback<unknown>);
     } else {
-      subscriberMap.current[key] = [callback as Amity.LiveCollectionCallback<unknown>];
+      subscriberMap.current[key] = [
+        ...(subscriberMap.current[key] ?? []),
+        callback as Amity.LiveCollectionCallback<unknown>,
+      ];
 
       const unsubscribeFn = fetcher(
         params,
