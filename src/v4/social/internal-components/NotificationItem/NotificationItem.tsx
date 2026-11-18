@@ -118,7 +118,9 @@ export const NotificationItem = ({
 
   const renderCommentId = (item: Amity.NotificationTrayItem) => {
     const { parentId, latestCommentId, actionReferenceId, trayItemCategory } = item;
-    if (trayItemCategory === 'reaction_on_post') return undefined;
+    // A reaction on a post or a poll post names the post itself and carries no comment.
+    if (trayItemCategory === 'reaction_on_post' || trayItemCategory === 'reaction_on_poll')
+      return undefined;
     if (parentId === null) return actionReferenceId;
 
     return latestCommentId;
@@ -168,6 +170,7 @@ export const NotificationItem = ({
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
         postId:
           item.trayItemCategory === 'reaction_on_post' ||
+          item.trayItemCategory === 'reaction_on_poll' ||
           item.trayItemCategory === 'mention_in_post' ||
           item.trayItemCategory === 'mention_in_poll'
             ? item.actionReferenceId!
