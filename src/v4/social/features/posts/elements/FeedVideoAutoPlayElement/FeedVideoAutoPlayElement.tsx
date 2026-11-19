@@ -276,6 +276,12 @@ export function FeedVideoAutoPlayElement({
       captureFrame(video).then(saveLastFrame);
       setPhase('ended');
     };
+    // The feed never pauses an active video itself, so a pause here comes from the system, such as
+    // headphones disconnecting. Keep playing, as on iOS and Android.
+    const handleSystemPause = () => {
+      if (isCancelled || isEnded || video.ended || document.hidden) return;
+      play();
+    };
 
     video.muted = isMutedRef.current;
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -283,6 +289,7 @@ export function FeedVideoAutoPlayElement({
     video.addEventListener('waiting', handleWaiting);
     video.addEventListener('timeupdate', handleTimeUpdate);
     video.addEventListener('ended', handleEnded);
+    video.addEventListener('pause', handleSystemPause);
     video.addEventListener('error', fallback);
 
     if (source.kind === 'room' || isHlsUrl(url)) {
@@ -323,6 +330,7 @@ export function FeedVideoAutoPlayElement({
       video.removeEventListener('waiting', handleWaiting);
       video.removeEventListener('timeupdate', handleTimeUpdate);
       video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('pause', handleSystemPause);
       video.removeEventListener('error', fallback);
       video.pause();
       hls?.destroy();
