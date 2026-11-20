@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useFeedVideoAutoplayOverlay } from '~/v4/social/features/feed-video-autoplay';
 import { MenuButton, MenuButtonProps } from '~/v4/social/elements/MenuButton';
 import { Dialog, PopoverProps as $PopoverProps, Popover as $Popover } from 'react-aria-components';
 import styles from './Popover.module.css';
@@ -42,6 +43,8 @@ export const Popover = ({
   const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
+
+  useFeedVideoAutoplayOverlay(isOpen);
 
   const openPopover = () => {
     setIsOpen(true);

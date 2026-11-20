@@ -29,7 +29,7 @@ import { useMotionValue, motion } from 'framer-motion';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PageTypes } from '~/v4/core/providers/NavigationProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import styles from './StoryPage.module.css';
+import styles from './ViewStoryPage.module.css';
 
 interface CommunityFeedStoryProps {
   pageId?: string;
@@ -62,7 +62,7 @@ export const CommunityFeedStory = ({
   onClickCommunity,
   goToDraftStoryPage,
 }: CommunityFeedStoryProps) => {
-  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
+  const { themeStyles, isExcluded } = useAmityPage({
     pageId,
   });
   const { confirm } = useConfirmContext();
@@ -75,14 +75,17 @@ export const CommunityFeedStory = ({
   const [isError, setIsError] = useState(false);
   const { page } = useNavigation();
 
-  const { stories: storiesData, refresh } = useGetActiveStoriesByTarget({
-    targetId: communityId,
-    targetType: 'community',
-    options: {
-      orderBy: 'asc',
-      sortBy: 'createdAt',
+  const { stories: storiesData, refresh } = useGetActiveStoriesByTarget(
+    {
+      targetId: communityId,
+      targetType: 'community',
+      options: {
+        orderBy: 'asc',
+        sortBy: 'createdAt',
+      },
     },
-  });
+    { fresh: true },
+  );
 
   const stories = storiesData.reduce(
     (acc: (Amity.Ad | Amity.Story)[], current: Amity.Ad | Amity.Story) => {
@@ -124,6 +127,8 @@ export const CommunityFeedStory = ({
   const { client, currentUserId } = useSDK();
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const hasJumpedToUnseenRef = useRef(false);
+  const unseenJumpRef = useRef<{ storyId: string; index: number } | null>(null);
   const { file, setFile } = useStoryContext();
 
   const currentStory = stories[currentIndex];
@@ -324,15 +329,32 @@ export const CommunityFeedStory = ({
   }, [currentIndex, stories]);
 
   useEffect(() => {
-    if (stories.filter(isStory).every((story) => story?.isSeen)) return;
-    const firstUnseenStoryIndex = stories.findIndex((story) =>
-      isStory(story) ? !story?.isSeen : false,
-    );
-
-    if (firstUnseenStoryIndex !== -1) {
+    if (!hasJumpedToUnseenRef.current) {
+      if (stories.length === 0) return;
+      hasJumpedToUnseenRef.current = true;
+      const firstUnseenStoryIndex = stories.findIndex((story) =>
+        isStory(story) ? !story?.isSeen : false,
+      );
+      const firstUnseenStory = stories[firstUnseenStoryIndex];
+      if (!isStory(firstUnseenStory)) return;
+      unseenJumpRef.current = { storyId: firstUnseenStory.storyId, index: firstUnseenStoryIndex };
       setCurrentIndex(firstUnseenStoryIndex);
+      return;
     }
-  }, []);
+
+    const unseenJump = unseenJumpRef.current;
+    if (!unseenJump) return;
+    const jumpedStoryIndex = stories.findIndex(
+      (story) => isStory(story) && story.storyId === unseenJump.storyId,
+    );
+    if (currentIndex !== unseenJump.index || jumpedStoryIndex === -1) {
+      unseenJumpRef.current = null;
+      return;
+    }
+    if (jumpedStoryIndex === unseenJump.index) return;
+    unseenJumpRef.current = { ...unseenJump, index: jumpedStoryIndex };
+    setCurrentIndex(jumpedStoryIndex);
+  }, [stories]);
 
   if (file) {
     goToDraftStoryPage(
@@ -362,7 +384,6 @@ export const CommunityFeedStory = ({
       <motion.div
         id={targetRootId}
         ref={motionRef}
-        data-testid={accessibilityId}
         initial={{ y: 0 }}
         drag="y"
         whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}

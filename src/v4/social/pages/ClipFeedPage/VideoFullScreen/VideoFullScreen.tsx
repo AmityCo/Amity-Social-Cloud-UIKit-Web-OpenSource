@@ -3,6 +3,7 @@ import { getFileUrl } from '~/v4/utils/getFileUrl';
 import { VideoPlayer } from '~/v4/social/internal-components/VideoPlayer/VideoPlayer';
 import { DeletedClipView } from '~/v4/social/pages/ClipFeedPage/DeletedClipView/DeletedClipView';
 import { DisplayModeEnum } from '~/v4/social/types';
+import { useFeedVideoAutoplay } from '~/v4/social/features/feed-video-autoplay';
 import styles from './VideoFullScreen.module.css';
 
 type VideoFullScreenProps = {
@@ -45,6 +46,11 @@ export const VideoFullScreen = ({
   const [isClipLoading, setIsClipLoading] = useState(true);
   const [hasReportedFailure, setHasReportedFailure] = useState(false);
   const fileUrl = getFileUrl(post as Amity.Post<'clip' | 'video'>);
+  const { getPlayback, savePlayback } = useFeedVideoAutoplay();
+  const [initialTime] = useState(() => {
+    const playback = getPlayback(post.postId);
+    return playback && !playback.isEnded ? playback.position : 0;
+  });
 
   // Create a ref for this specific video
   const currentVideoRef = useRef<HTMLVideoElement>(null);
@@ -59,17 +65,39 @@ export const VideoFullScreen = ({
     };
   }, [post.postId, videoRefs]);
 
+  const hasBeenActiveRef = useRef(false);
+
   useEffect(() => {
     const video = videoRefs.current[post.postId];
-    if (video) {
-      if (isActive) {
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-        video.currentTime = 0; // optional: reset to beginning
+    if (!video) return;
+    if (!isActive) {
+      video.pause();
+      if (hasBeenActiveRef.current) video.currentTime = 0;
+      return;
+    }
+    if (!hasBeenActiveRef.current) {
+      hasBeenActiveRef.current = true;
+      if (initialTime > 0) {
+        const seekToInitialTime = () => {
+          if (video.currentTime < initialTime) video.currentTime = initialTime;
+        };
+        if (video.readyState >= HTMLMediaElement.HAVE_METADATA) seekToInitialTime();
+        else video.addEventListener('loadedmetadata', seekToInitialTime, { once: true });
       }
     }
-  }, [isActive, post.postId, videoRefs]);
+    video.play().catch(() => {});
+  }, [isActive, post.postId, videoRefs, initialTime]);
+
+  useEffect(() => {
+    const video = currentVideoRef.current;
+    if (!isActive || !video) return;
+
+    const savePosition = () =>
+      savePlayback(post.postId, { position: video.currentTime, isEnded: false });
+
+    video.addEventListener('timeupdate', savePosition);
+    return () => video.removeEventListener('timeupdate', savePosition);
+  }, [isActive, post.postId, savePlayback]);
 
   // Initialize video state when video element is first set or when video ref changes
   useEffect(() => {
@@ -148,6 +176,7 @@ export const VideoFullScreen = ({
         loop={true}
         playsInline={true}
         preload="auto"
+        initialTime={initialTime}
         externalVideoRef={currentVideoRef}
         className={styles.videoFullScreen__player}
         style={{ opacity: isClipLoading ? 0 : 1 }}

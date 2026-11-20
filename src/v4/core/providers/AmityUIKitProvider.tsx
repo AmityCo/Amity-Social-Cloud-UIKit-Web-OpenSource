@@ -34,6 +34,7 @@ import { AdEngineProvider } from './AdEngineProvider';
 import { AdEngine } from '~/v4/core/AdEngine';
 import { GlobalFeedProvider } from '~/v4/social/providers/GlobalFeedProvider';
 import { PopupProvider } from '~/v4/core/providers/PopupProvider';
+import { FeedVideoAutoplayProvider } from '~/v4/social/features/feed-video-autoplay';
 import { Popup } from '~/v4/core/components/AriaPopup';
 import { CommunitySetupProvider } from '~/v4/social/providers/CommunitySetupProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
@@ -281,10 +282,12 @@ const InternalComponent = ({
                                   <CommunitySetupProvider>
                                     <DrawerProvider>
                                       <GlobalFeedProvider>
-                                        <PopupProvider>
-                                          <Popup />
-                                          {children}
-                                        </PopupProvider>
+                                        <FeedVideoAutoplayProvider>
+                                          <PopupProvider>
+                                            <Popup />
+                                            {children}
+                                          </PopupProvider>
+                                        </FeedVideoAutoplayProvider>
                                       </GlobalFeedProvider>
                                       <DrawerContainer />
                                     </DrawerProvider>

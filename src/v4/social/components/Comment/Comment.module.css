@@ -6,7 +6,7 @@
   align-items: start;
 }
 
-.postComment__bounce {
+.postComment[data-highlighted='true'] {
   animation: comment-bounce 1s ease;
 }
 
@@ -20,11 +20,11 @@
   }
 
   40% {
-    transform: translateX(-10px);
+    transform: translateX(-0.625rem);
   }
 
   60% {
-    transform: translateX(-5px);
+    transform: translateX(-0.3125rem);
   }
 }
 

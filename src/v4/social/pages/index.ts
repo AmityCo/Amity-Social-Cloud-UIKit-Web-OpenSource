@@ -1,5 +1,5 @@
 export { AmityDraftStoryPage } from './DraftsPage';
-export { ViewStoryPage } from './StoryPage';
+export { ViewStoryPage } from './ViewStoryPage';
 export { StoryTargetSelectionPage } from './StoryTargetSelectionPage';
 export { SocialHomePage } from './SocialHomePage';
 export { PostComposerPage, Mode } from './PostComposerPage';
@@ -53,3 +53,5 @@ export { PastEventsPage } from './PastEventsPage';
 export { EventDetailPage } from './EventDetailPage';
 
 export { EventAttendeesPage } from './EventAttendeesPage';
+
+export { AutoplaySettingPage } from './AutoplaySettingPage';

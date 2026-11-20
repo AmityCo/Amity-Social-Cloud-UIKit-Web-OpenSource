@@ -16,6 +16,7 @@ interface ReplyCommentProps {
   pageId?: string;
   componentId?: string;
   community?: Amity.Community;
+  eventCreatorId?: Amity.Event['userId'];
   referenceId: string;
   referenceType: string;
   parentId: string;
@@ -57,6 +58,7 @@ export const ReplyCommentList = ({
   referenceId,
   referenceType,
   community,
+  eventCreatorId,
   parentId,
   highlightedCommentId,
   l0AncestorId,
@@ -358,6 +360,7 @@ export const ReplyCommentList = ({
             <ReplyComment
               pageId={pageId}
               community={community}
+              eventCreatorId={eventCreatorId}
               comment={comment}
               testId={`pending-reply-comment-${index}`}
               isL2={isL2List}
@@ -377,6 +380,7 @@ export const ReplyCommentList = ({
                         <ReplyCommentList
                           pageId={pageId}
                           community={community}
+                          eventCreatorId={eventCreatorId}
                           referenceId={comment.referenceId}
                           referenceType={comment.referenceType}
                           parentId={comment.commentId}
@@ -439,6 +443,7 @@ export const ReplyCommentList = ({
               <ReplyComment
                 pageId={pageId}
                 community={community}
+                eventCreatorId={eventCreatorId}
                 comment={comment as Amity.Comment}
                 isHighlightDeleted={
                   highlightedComment.length > 0 && showFilteredComments ? false : true
@@ -461,6 +466,7 @@ export const ReplyCommentList = ({
                           <ReplyCommentList
                             pageId={pageId}
                             community={community}
+                            eventCreatorId={eventCreatorId}
                             referenceId={(comment as Amity.Comment).referenceId}
                             referenceType={(comment as Amity.Comment).referenceType}
                             parentId={(comment as Amity.Comment).commentId}
@@ -500,6 +506,7 @@ export const ReplyCommentList = ({
               <ReplyComment
                 pageId={pageId}
                 community={community}
+                eventCreatorId={eventCreatorId}
                 comment={comment as Amity.Comment}
                 testId={`reply-comment-${index}`}
                 isL2={isL2List}
@@ -519,6 +526,7 @@ export const ReplyCommentList = ({
                           <ReplyCommentList
                             pageId={pageId}
                             community={community}
+                            eventCreatorId={eventCreatorId}
                             referenceId={(comment as Amity.Comment).referenceId}
                             referenceType={(comment as Amity.Comment).referenceType}
                             parentId={(comment as Amity.Comment).commentId}

@@ -31,6 +31,7 @@ export function Header({
           onChange={onSearchChange}
           placeholder={searchPlaceholder}
           aria-label={searchPlaceholder}
+          inputTestId="add-group-member-search-input"
         />
       </div>
       <SelectedUsersBar users={selectedUsers} onRemoveUser={onRemoveUser} />

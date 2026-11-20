@@ -15,6 +15,7 @@ import {
   AmityPostContentComponentStyle,
 } from '~/v4/social/components/PostContent/PostContent';
 import useCommunity from '~/v4/social/hooks/objects/useCommunity';
+import { useInteractionCommunity } from '~/v4/social/hooks/useInteractionCommunity';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -28,6 +29,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
+import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
 
 export interface PostDetailPageProps {
   id: string;
@@ -93,7 +95,7 @@ export function PostDetailPage({
   const { isDesktop } = useResponsive();
   const { onBack, prevPage } = useNavigation();
   const notification = useNotifications();
-  const { themeStyles, isExcluded } = useAmityPage({ pageId });
+  const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const replyNoLongerAvailableText = resolveString(
     'amity_social_error_reply_no_longer_available_error_message',
   );
@@ -113,7 +115,9 @@ export function PostDetailPage({
     referenceId: post?.postId,
   });
 
-  const isJoinedCommunity = post?.targetType === 'community' && community?.isJoined;
+  const interactionCommunity = useInteractionCommunity(community);
+
+  const isJoinedCommunity = post?.targetType === 'community' && interactionCommunity?.isJoined;
   const canSeeCommentComposer =
     post && (isJoinedCommunity || post?.targetType === 'user') && !isVisitorOrBot;
 
@@ -284,72 +288,139 @@ export function PostDetailPage({
   if (isExcluded) return null;
 
   return (
-    <div className={styles.postDetailPage} style={themeStyles}>
-      <div className={styles.postDetailPage__topBar}>
-        <BackButton
-          pageId={pageId}
-          defaultClassName={styles.postDetailPage__backIcon}
-          onPress={handleBack}
-        />
-        <Typography.TitleBold
-          data-testid={`${pageId}/page_title`}
-          className={styles.postDetailPage__topBar__title}
-        >
-          {resolveString('amity_common_post')}
-        </Typography.TitleBold>
-        <Popover
-          containerClassName={styles.postDetailPage__topBar__menuBar}
-          trigger={{
-            pageId,
-            onClick: ({ closePopover }) =>
-              setDrawerData({
-                content: (
-                  <PostMenu
-                    post={post}
-                    pageId={pageId}
-                    community={community}
-                    sharableLink={sharableLink}
-                    onPostDeleted={handlePostDeleted}
-                    onCloseMenu={() => {
-                      closePopover();
-                      removeDrawerData();
-                    }}
-                  />
-                ),
-              }),
-          }}
-        >
-          {({ closePopover }) => (
-            <PostMenu
-              post={post}
+    <FeedVideoAutoplayHost>
+      <div className={styles.postDetailPage} style={themeStyles} data-testid={accessibilityId}>
+        <div className={styles.postDetailPage__topBar}>
+          <BackButton
+            pageId={pageId}
+            defaultClassName={styles.postDetailPage__backIcon}
+            onPress={handleBack}
+          />
+          <Typography.TitleBold
+            data-testid={`${pageId}/page_title`}
+            className={styles.postDetailPage__topBar__title}
+          >
+            {resolveString('amity_common_post')}
+          </Typography.TitleBold>
+          <Popover
+            containerClassName={styles.postDetailPage__topBar__menuBar}
+            trigger={{
+              pageId,
+              onClick: ({ closePopover }) =>
+                setDrawerData({
+                  content: (
+                    <PostMenu
+                      post={post}
+                      pageId={pageId}
+                      community={community}
+                      sharableLink={sharableLink}
+                      onPostDeleted={handlePostDeleted}
+                      onCloseMenu={() => {
+                        closePopover();
+                        removeDrawerData();
+                      }}
+                    />
+                  ),
+                }),
+            }}
+          >
+            {({ closePopover }) => (
+              <PostMenu
+                post={post}
+                pageId={pageId}
+                community={community}
+                sharableLink={sharableLink}
+                onPostDeleted={handlePostDeleted}
+                onCloseMenu={() => {
+                  closePopover();
+                  removeDrawerData();
+                }}
+              />
+            )}
+          </Popover>
+        </div>
+
+        <div className={styles.postDetailPage__container}>
+          <div>
+            <PostContent
               pageId={pageId}
-              community={community}
-              sharableLink={sharableLink}
-              onPostDeleted={handlePostDeleted}
-              onCloseMenu={() => {
-                closePopover();
-                removeDrawerData();
+              post={post}
+              eventCreatorId={eventCreatorId}
+              className={styles.postDetailPage__postContent}
+              category={category ?? AmityPostCategory.GENERAL}
+              style={AmityPostContentComponentStyle.DETAIL}
+              hideTarget={hideTarget}
+              onPollPostDeleted={() => setFailedToShow(true)}
+              expandAllContent
+            />
+          </div>
+          {isDesktop && canSeeCommentComposer && (
+            <CommentComposer
+              pageId={pageId}
+              referenceId={post.postId}
+              referenceType={'post'}
+              onCancelReply={() => {
+                setReplyComment(undefined);
+                setReplyParentIdOverride(undefined);
+                setReplyL0AncestorId(undefined);
               }}
+              community={interactionCommunity}
+              containerClassName={
+                post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+              }
+              isFromCommentClick={isFromCommentClick}
             />
           )}
-        </Popover>
-      </div>
-
-      <div className={styles.postDetailPage__container}>
-        <div>
-          <PostContent
-            pageId={pageId}
-            post={post}
-            eventCreatorId={eventCreatorId}
-            className={styles.postDetailPage__postContent}
-            category={category ?? AmityPostCategory.GENERAL}
-            style={AmityPostContentComponentStyle.DETAIL}
-            hideTarget={hideTarget}
-            onPollPostDeleted={() => setFailedToShow(true)}
-            expandAllContent
-          />
+          <div ref={commentListRef} className={styles.postDetailPage__comments}>
+            {post && (
+              <CommentList
+                pageId={pageId}
+                eventCreatorId={eventCreatorId}
+                referenceId={post.postId}
+                referenceType="post"
+                onClickReply={handleReplyClick}
+                community={interactionCommunity}
+                limit={COMMENT_LIST_LIMIT}
+                commentCount={post.commentsCount}
+                highlightedCommentId={commentId}
+                parentId={effectiveParentId}
+                parantId={parentId}
+                showReplyCommentAt={showReplyCommentAt}
+                replyTargetCommentId={
+                  replyL0AncestorId ? replyParentIdOverride ?? replyComment?.commentId : undefined
+                }
+                renderReplyComment={(comment) => {
+                  // For desktop: the inline compose bar is placed under the L0 comment that anchors the reply.
+                  // - When replying to L0 directly: effectiveL0Id = replyComment.commentId (= the L0 id itself)
+                  // - When replying to L1 or L2: replyL0AncestorId is set to the L0 id by handleReplyClick
+                  const effectiveL0Id = replyL0AncestorId ?? replyComment?.commentId;
+                  if (replyComment && comment.commentId === effectiveL0Id && isDesktop) {
+                    const composerMarginLeft = replyComment.parentId ? '2.5rem' : '0';
+                    return (
+                      <div style={{ marginLeft: composerMarginLeft }}>
+                        <CommentComposer
+                          pageId={pageId}
+                          referenceId={post.postId}
+                          referenceType={'post'}
+                          replyTo={replyComment}
+                          parentIdOverride={replyParentIdOverride}
+                          onCancelReply={() => {
+                            setReplyComment(undefined);
+                            setReplyParentIdOverride(undefined);
+                            setReplyL0AncestorId(undefined);
+                          }}
+                          community={interactionCommunity}
+                          isFromCommentClick={isFromCommentClick}
+                        />
+                      </div>
+                    );
+                  }
+                }}
+              />
+            )}
+          </div>
         </div>
-        {isDesktop && canSeeCommentComposer && (
+        {!isDesktop && canSeeCommentComposer && (
           <CommentComposer
             pageId={pageId}
             referenceId={post.postId}
@@ -359,82 +430,17 @@ export function PostDetailPage({
               setReplyParentIdOverride(undefined);
               setReplyL0AncestorId(undefined);
             }}
-            community={community}
+            community={interactionCommunity}
             containerClassName={
               post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
             }
             isFromCommentClick={isFromCommentClick}
+            replyTo={replyComment}
+            parentIdOverride={replyParentIdOverride}
+            externalError={deletedReplyError}
           />
         )}
-        <div ref={commentListRef} className={styles.postDetailPage__comments}>
-          {post && (
-            <CommentList
-              pageId={pageId}
-              eventCreatorId={eventCreatorId}
-              referenceId={post.postId}
-              referenceType="post"
-              onClickReply={handleReplyClick}
-              community={community}
-              limit={COMMENT_LIST_LIMIT}
-              commentCount={post.commentsCount}
-              highlightedCommentId={commentId}
-              parentId={effectiveParentId}
-              parantId={parentId}
-              showReplyCommentAt={showReplyCommentAt}
-              replyTargetCommentId={
-                replyL0AncestorId ? replyParentIdOverride ?? replyComment?.commentId : undefined
-              }
-              renderReplyComment={(comment) => {
-                // For desktop: the inline compose bar is placed under the L0 comment that anchors the reply.
-                // - When replying to L0 directly: effectiveL0Id = replyComment.commentId (= the L0 id itself)
-                // - When replying to L1 or L2: replyL0AncestorId is set to the L0 id by handleReplyClick
-                const effectiveL0Id = replyL0AncestorId ?? replyComment?.commentId;
-                if (replyComment && comment.commentId === effectiveL0Id && isDesktop) {
-                  const composerMarginLeft = replyComment.parentId ? '2.5rem' : '0';
-                  return (
-                    <div style={{ marginLeft: composerMarginLeft }}>
-                      <CommentComposer
-                        pageId={pageId}
-                        referenceId={post.postId}
-                        referenceType={'post'}
-                        replyTo={replyComment}
-                        parentIdOverride={replyParentIdOverride}
-                        onCancelReply={() => {
-                          setReplyComment(undefined);
-                          setReplyParentIdOverride(undefined);
-                          setReplyL0AncestorId(undefined);
-                        }}
-                        community={community}
-                        isFromCommentClick={isFromCommentClick}
-                      />
-                    </div>
-                  );
-                }
-              }}
-            />
-          )}
-        </div>
       </div>
-      {!isDesktop && canSeeCommentComposer && (
-        <CommentComposer
-          pageId={pageId}
-          referenceId={post.postId}
-          referenceType={'post'}
-          onCancelReply={() => {
-            setReplyComment(undefined);
-            setReplyParentIdOverride(undefined);
-            setReplyL0AncestorId(undefined);
-          }}
-          community={community}
-          containerClassName={
-            post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
-          }
-          isFromCommentClick={isFromCommentClick}
-          replyTo={replyComment}
-          parentIdOverride={replyParentIdOverride}
-          externalError={deletedReplyError}
-        />
-      )}
-    </div>
+    </FeedVideoAutoplayHost>
   );
 }

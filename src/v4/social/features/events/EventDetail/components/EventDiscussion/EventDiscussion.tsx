@@ -33,6 +33,7 @@ import {
   AmityPostContentComponentStyle,
 } from '~/v4/social/components/PostContent/PostContent';
 import styles from './EventDiscussion.module.css';
+import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
 
 type EventDiscussionProps = {
   pageId?: string;
@@ -127,121 +128,123 @@ export function EventDiscussion({ pageId = '*', event }: EventDiscussionProps) {
   if (isExcluded) return null;
 
   return (
-    <section data-testid={accessibilityId} style={themeStyles} className={styles.eventDiscussion}>
-      {event?.targetCommunity?.isJoined && !isVisitorOrBot && isDesktop && (
-        <PostComposer
-          isDisableStory
-          isDisableEvent
-          pageId={pageId}
-          onClickPost={() => {
-            openPopup({
-              pageId,
-              view: 'desktop',
-              isDismissable: false,
-              onClose: ({ close }) => discardPostCreation({ pageId, onDiscard: close }),
-              headerClassName: styles.eventDiscussion__composerPopupHeader,
-              header: (
-                <CommunityDisplayName
-                  pageId={pageId}
-                  typography="Headline"
-                  displayName={event.title}
-                />
-              ),
-              children: (
-                <PostComposerPage
-                  mode={Mode.CREATE}
-                  targetType="community"
-                  community={discussionCommunity as Amity.Community}
-                  targetId={event.discussionCommunityId!}
-                />
-              ),
-            });
-          }}
-          onClickPoll={() => {
-            openPopup({
-              pageId,
-              view: 'desktop',
-              isDismissable: false,
-              header: <Typography.Headline>{choosePollTypeLabel}</Typography.Headline>,
-              children: ({ close }) => (
-                <PollTypeSelection
-                  onClickNext={close}
-                  targetType="community"
-                  targetName={event.title}
-                  target={event.targetCommunity}
-                  targetId={event.discussionCommunityId!}
-                />
-              ),
-            });
-          }}
-          onClickLivestream={() => {
-            AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
-              targetType: 'community',
-              targetId: event.discussionCommunityId!,
-            });
-          }}
-        />
-      )}
-      <div className={styles.eventDiscussion__posts}>
-        {!isLoadingFirstPage &&
-          posts.filter((post) => post.postId !== event.postId).length === 0 && (
-            <EmptyContent
-              variant="container"
-              text={emptyFeedLabel}
-              defaultIcon={() => <EmptyPost className={styles.emptyUserFeed__emptyIcon} />}
-            />
-          )}
-        {posts.length > 0 &&
-          posts
-            .filter((post) => post.postId !== event.postId)
-            .map((post) => {
-              return (
-                <PostContent
-                  hideTarget
-                  post={post}
-                  pageId={pageId}
-                  key={post.postId}
-                  eventCreatorId={event.userId}
-                  onPollPostDeleted={() => refresh()}
-                  category={AmityPostCategory.GENERAL}
-                  className={styles.eventDiscussion__post}
-                  style={AmityPostContentComponentStyle.FEED}
-                  onClick={(context) => {
-                    AmityEventDetailPageBehavior?.goToPostDetailPage?.({
-                      postId: post.postId,
-                      commentId: context?.commentId,
-                      parentId: context?.parentId,
-                      eventCreatorId: event.userId,
-                      selectedReplyComment: context?.selectedReplyComment,
-                      showReplyCommentAt: context?.showReplyCommentAt,
-                      isFromCommentClick: context?.isFromCommentClick,
-                    });
-                  }}
-                />
-              );
-            })}
-        {(isLoadingFirstPage || isLoading) &&
-          Array.from({ length: 3 }).map((_, index) => <PostSkeleton key={index} />)}
-        {!isLoadingFirstPage && !isLoading && hasMore && (
-          <div ref={(node) => setIntersectionNode(node)} />
+    <FeedVideoAutoplayHost>
+      <section data-testid={accessibilityId} style={themeStyles} className={styles.eventDiscussion}>
+        {event?.targetCommunity?.isJoined && !isVisitorOrBot && isDesktop && (
+          <PostComposer
+            isDisableStory
+            isDisableEvent
+            pageId={pageId}
+            onClickPost={() => {
+              openPopup({
+                pageId,
+                view: 'desktop',
+                isDismissable: false,
+                onClose: ({ close }) => discardPostCreation({ pageId, onDiscard: close }),
+                headerClassName: styles.eventDiscussion__composerPopupHeader,
+                header: (
+                  <CommunityDisplayName
+                    pageId={pageId}
+                    typography="Headline"
+                    displayName={event.title}
+                  />
+                ),
+                children: (
+                  <PostComposerPage
+                    mode={Mode.CREATE}
+                    targetType="community"
+                    community={discussionCommunity as Amity.Community}
+                    targetId={event.discussionCommunityId!}
+                  />
+                ),
+              });
+            }}
+            onClickPoll={() => {
+              openPopup({
+                pageId,
+                view: 'desktop',
+                isDismissable: false,
+                header: <Typography.Headline>{choosePollTypeLabel}</Typography.Headline>,
+                children: ({ close }) => (
+                  <PollTypeSelection
+                    onClickNext={close}
+                    targetType="community"
+                    targetName={event.title}
+                    target={event.targetCommunity}
+                    targetId={event.discussionCommunityId!}
+                  />
+                ),
+              });
+            }}
+            onClickLivestream={() => {
+              AmityEventDetailPageBehavior?.goToCreateLivestreamPage?.({
+                targetType: 'community',
+                targetId: event.discussionCommunityId!,
+              });
+            }}
+          />
         )}
-      </div>
-      {!isDesktop && event?.targetCommunity?.isJoined && !isVisitorOrBot && (
-        <FloatingActionButton
-          icon={Plus}
-          onPress={() =>
-            setDrawerData({
-              content: (
-                <Menu container="drawer">
-                  {actions.map((action) => (
-                    <Menu.Item {...action} key={action.id} />
-                  ))}
-                </Menu>
-              ),
-            })
-          }
-        />
-      )}
-    </section>
+        <div className={styles.eventDiscussion__posts}>
+          {!isLoadingFirstPage &&
+            posts.filter((post) => post.postId !== event.postId).length === 0 && (
+              <EmptyContent
+                variant="container"
+                text={emptyFeedLabel}
+                defaultIcon={() => <EmptyPost className={styles.emptyUserFeed__emptyIcon} />}
+              />
+            )}
+          {posts.length > 0 &&
+            posts
+              .filter((post) => post.postId !== event.postId)
+              .map((post) => {
+                return (
+                  <PostContent
+                    hideTarget
+                    post={post}
+                    pageId={pageId}
+                    key={post.postId}
+                    eventCreatorId={event.userId}
+                    onPollPostDeleted={() => refresh()}
+                    category={AmityPostCategory.GENERAL}
+                    className={styles.eventDiscussion__post}
+                    style={AmityPostContentComponentStyle.FEED}
+                    onClick={(context) => {
+                      AmityEventDetailPageBehavior?.goToPostDetailPage?.({
+                        postId: post.postId,
+                        commentId: context?.commentId,
+                        parentId: context?.parentId,
+                        eventCreatorId: event.userId,
+                        selectedReplyComment: context?.selectedReplyComment,
+                        showReplyCommentAt: context?.showReplyCommentAt,
+                        isFromCommentClick: context?.isFromCommentClick,
+                      });
+                    }}
+                  />
+                );
+              })}
+          {(isLoadingFirstPage || isLoading) &&
+            Array.from({ length: 3 }).map((_, index) => <PostSkeleton key={index} />)}
+          {!isLoadingFirstPage && !isLoading && hasMore && (
+            <div ref={(node) => setIntersectionNode(node)} />
+          )}
+        </div>
+        {!isDesktop && event?.targetCommunity?.isJoined && !isVisitorOrBot && (
+          <FloatingActionButton
+            icon={Plus}
+            onPress={() =>
+              setDrawerData({
+                content: (
+                  <Menu container="drawer">
+                    {actions.map((action) => (
+                      <Menu.Item {...action} key={action.id} />
+                    ))}
+                  </Menu>
+                ),
+              })
+            }
+          />
+        )}
+      </section>
+    </FeedVideoAutoplayHost>
   );
 }

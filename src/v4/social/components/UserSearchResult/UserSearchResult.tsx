@@ -61,7 +61,9 @@ export const UserSearchResult = ({
                 <UserSearchItemSkeleton key={index} pageId={pageId} componentId={componentId} />
               ))
             : null}
-          {!isLoading && userCollection.length === 0 && <EmptySearchResult />}
+          {!isLoading && userCollection.length === 0 && (
+            <EmptySearchResult data-testid={`${pageId}/${componentId}/no_results`} />
+          )}
           <div ref={(node) => setIntersectionNode(node)} />
         </NoInternetConnectionHoc>
       )}

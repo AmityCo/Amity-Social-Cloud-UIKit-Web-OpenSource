@@ -260,6 +260,12 @@
     "*/comment_tray_component/*": {
       "theme": {}
     },
+    "*/post_comment/*": {
+      "theme": {}
+    },
+    "*/comment_bubble/*": {
+      "theme": {}
+    },
     "*/story_tab_component/*": {
       "theme": {}
     },

@@ -18,5 +18,6 @@ export type BannerProps = {
   loading?: boolean;
   onPress?: () => void;
   onPressLabel?: string;
+  onPressTestId?: string;
   className?: string;
 };

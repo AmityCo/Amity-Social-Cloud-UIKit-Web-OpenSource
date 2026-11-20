@@ -1,3 +1,4 @@
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import React from 'react';
 import { resolveString } from '~/v4/core/localization';
 import User from '~/v4/icons/User';
@@ -29,7 +30,7 @@ export const JoinRequestContent = ({
   isLoading,
   refresh,
 }: JoinRequestContentProps) => {
-  const componentId = 'join_request_content';
+  const componentId = COMPONENT_ID.JOIN_REQUEST_CONTENT;
 
   const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     componentId,
@@ -68,7 +69,10 @@ export const JoinRequestContent = ({
       {joinRequests &&
         joinRequests.length > 0 &&
         joinRequests.map((joinRequest) => (
-          <div className={styles.joinRequestContent__container}>
+          <div
+            className={styles.joinRequestContent__container}
+            data-testid={`${pageId}/${componentId}/join_request_item`}
+          >
             <div className={styles.joinRequestContent__content}>
               <UserAvatar
                 pageId={pageId}

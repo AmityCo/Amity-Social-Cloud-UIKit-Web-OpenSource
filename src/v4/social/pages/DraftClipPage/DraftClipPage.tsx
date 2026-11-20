@@ -27,7 +27,7 @@ export const DraftClipPage = ({ targetId, targetType, community }: DraftClipPage
   const { themeStyles, accessibilityId, isExcluded } = useAmityPage({ pageId });
   const { file, isMuted, isAspectFill, setFile, setIsMuted, setIsAspectFill, setClipThumbnail } =
     useClipContext();
-  const { files, isLoading, videoThumbnail, uploadFile } = useFilePostUpload(pageId);
+  const { files, isLoading, videoThumbnail, uploadFile } = useFilePostUpload({ pageId });
 
   const { confirm, info } = useConfirmContext();
   const { onBack } = useNavigation();

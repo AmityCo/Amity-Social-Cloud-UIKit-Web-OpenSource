@@ -1,3 +1,4 @@
+import { COMPONENT_ID } from '~/v4/constants/customization';
 import React, { useEffect, useRef, useState } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
 import { Typography } from '~/v4/core/components';
@@ -65,7 +66,7 @@ interface CommentProps {
   // support inline comment behavior - behavior when click show reply
   onClickShowReply?: () => void;
   testId?: string;
-  isHost?: boolean;
+  eventCreatorId?: Amity.Event['userId'];
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
   /** The L1 comment ID currently being replied to — used to position the inline
    *  composer directly after that specific L1 in the ReplyCommentList. */
@@ -77,7 +78,7 @@ interface CommentProps {
 
 export const Comment = ({
   pageId = '*',
-  componentId = 'comment_bubble',
+  componentId = COMPONENT_ID.COMMENT_BUBBLE,
   comment,
   community,
   onClickReply,
@@ -89,7 +90,7 @@ export const Comment = ({
   onClickShowReply,
   maxLines,
   testId,
-  isHost,
+  eventCreatorId,
   renderReplyComment,
   replyTargetCommentId,
   parantId,
@@ -133,6 +134,7 @@ export const Comment = ({
     community,
     userId: comment.creator?.userId,
   });
+  const isHost = !!eventCreatorId && eventCreatorId === comment.userId;
 
   const isBrandUser = comment.creator?.isBrand ?? false;
 
@@ -457,10 +459,7 @@ export const Comment = ({
           </div>
         </div>
       ) : (
-        <div
-          className={clsx(styles.postComment, isHighlighted && styles.postComment__bounce)}
-          data-testid={testId}
-        >
+        <div className={styles.postComment} data-highlighted={isHighlighted} data-testid={testId}>
           <UserAvatar
             pageId={pageId}
             componentId={componentId}
@@ -502,7 +501,7 @@ export const Comment = ({
                 </Button>
 
                 {isHost ? (
-                  <EventHostBadge withLabel />
+                  <EventHostBadge pageId={pageId} componentId={componentId} withLabel />
                 ) : (
                   isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
                 )}
@@ -604,9 +603,12 @@ export const Comment = ({
                         componentId={componentId}
                         timestamp={comment.createdAt}
                       />
-                      <span data-testid={`${pageId}/${componentId}/comment_edited_text`}>
+                      <Typography.Caption
+                        as="span"
+                        data-testid={`${pageId}/${componentId}/comment_edited_text`}
+                      >
                         {comment.createdAt !== comment.editedAt && ` ${editedSuffixText}`}
-                      </span>
+                      </Typography.Caption>
                     </Typography.Caption>
                     <ReactionButton
                       pageId={pageId}
@@ -703,6 +705,7 @@ export const Comment = ({
             pageId={pageId}
             componentId={componentId}
             community={community ?? undefined}
+            eventCreatorId={eventCreatorId}
             referenceId={comment.referenceId}
             referenceType={comment.referenceType}
             parentId={comment.commentId}

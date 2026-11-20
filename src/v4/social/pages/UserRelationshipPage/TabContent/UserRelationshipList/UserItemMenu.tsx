@@ -31,6 +31,12 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
   const { isReportedByMe, isFetching } = useUserReportedByMe(user);
   const { online } = useNetworkState();
   const notification = useNotifications();
+  const reportLabel = useString('amity_social_button_report_user');
+  const unreportLabel = useString('amity_social_button_unreport_user');
+  const blockLabel = useString('amity_social_button_block_user');
+  const reportFailedText = useString('amity_social_toast_user_report_failed');
+  const unreportFailedText = useString('amity_social_toast_user_unreport_failed');
+  const blockFailedText = useString('amity_social_toast_user_block_failed');
 
   return (
     <div className={styles.userItem__menuContainer}>
@@ -49,7 +55,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
               removeDrawerData();
               if (!online) {
                 notification.info({
-                  content: `Failed to ${isReportedByMe ? 'unreport' : 'report'} user. Please try again.`,
+                  content: isReportedByMe ? unreportFailedText : reportFailedText,
                 });
                 return;
               }
@@ -59,9 +65,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
           >
             <Flag className={styles.userItem__menuButton__icon} />
             <Typography.BodyBold className={styles.userItem__menuButton__label}>
-              {isReportedByMe
-                ? useString('amity_social_button_unreport_user')
-                : useString('amity_social_button_report_user')}
+              {isReportedByMe ? unreportLabel : reportLabel}
             </Typography.BodyBold>
           </Button>
           <Button
@@ -73,7 +77,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
               removeDrawerData();
               if (!online) {
                 notification.info({
-                  content: useString('amity_social_toast_user_block_failed'),
+                  content: blockFailedText,
                 });
                 return;
               }
@@ -87,7 +91,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
           >
             <BlockedUser className={styles.userItem__menuButton__icon} />
             <Typography.BodyBold className={styles.userItem__menuButton__label}>
-              {useString('amity_social_button_block_user')}
+              {blockLabel}
             </Typography.BodyBold>
           </Button>
         </>

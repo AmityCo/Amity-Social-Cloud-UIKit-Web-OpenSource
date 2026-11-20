@@ -123,7 +123,7 @@ export const PollPostComposerPage = ({
     isLoading,
     handleAltTextChange,
     retryUpload,
-  } = useFilePostUpload(pageId);
+  } = useFilePostUpload({ pageId, isAllowedDuplicate: true });
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
@@ -604,9 +604,12 @@ export const PollPostComposerPage = ({
         <TextField name="question" className={styles.pollPostComposerPage__pollQuestion}>
           <Label className={styles.pollPostComposerPage__pollQuestion__label}>
             <PollQuestionTitle pageId={pageId} />
-            <span className={styles.pollPostComposerPage__pollQuestion__limit}>
+            <Typography.Caption
+              as="span"
+              className={styles.pollPostComposerPage__pollQuestion__limit}
+            >
               {textValue.text.length}/{MAX_POLL_QUESTION_LENGTH}
-            </span>
+            </Typography.Caption>
           </Label>
           <PostTextField
             data-input-validation={textValue.text.length <= MAX_POLL_QUESTION_LENGTH}

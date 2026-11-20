@@ -35,6 +35,7 @@ interface VideoPlayerControlsProps {
   onClickProductTagBadge?: () => void;
   mutedOverride?: boolean;
   onToggleMute?: () => void;
+  autoPlay?: boolean;
 }
 
 const formatTime = (seconds: number): string => {
@@ -60,10 +61,12 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
       onClickProductTagBadge,
       mutedOverride,
       onToggleMute,
+      autoPlay = false,
     },
     ref,
   ) => {
-    const [isPlaying, setIsPlaying] = useState(false);
+    // An auto-play start shows as playing while it loads, not as paused.
+    const [isPlaying, setIsPlaying] = useState(autoPlay);
     const [isMuted, setIsMuted] = useState(false);
     const displayMuted = onToggleMute ? !!mutedOverride : isMuted;
     const [currentTime, setCurrentTime] = useState(0);
@@ -101,12 +104,15 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
       const handlePlay = () => setIsPlaying(true);
       const handlePause = () => setIsPlaying(false);
       const handleVolumeChange = () => setIsMuted(video.muted);
+      // Auto-play starts as soon as it can play through; still paused then means it was blocked.
+      const handleCanPlayThrough = () => setIsPlaying(!video.paused);
 
       video.addEventListener('timeupdate', handleTimeUpdate);
       video.addEventListener('durationchange', handleDurationChange);
       video.addEventListener('play', handlePlay);
       video.addEventListener('pause', handlePause);
       video.addEventListener('volumechange', handleVolumeChange);
+      video.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
 
       // Initialize values
       setDuration(video.duration || 0);
@@ -119,6 +125,7 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
         video.removeEventListener('play', handlePlay);
         video.removeEventListener('pause', handlePause);
         video.removeEventListener('volumechange', handleVolumeChange);
+        video.removeEventListener('canplaythrough', handleCanPlayThrough);
       };
     }, [videoRef]);
 
@@ -267,6 +274,9 @@ export const VideoPlayerControls = forwardRef<VideoPlayerControlsRef, VideoPlaye
               className={styles.videoPlayerControls__button}
               onPress={onToggleMute ?? toggleMute}
               variant="default"
+              aria-label={displayMuted ? 'Unmute' : 'Mute'}
+              data-testid="video_player/sound_button"
+              data-state={displayMuted ? 'muted' : 'sound_on'}
             >
               {displayMuted ? (
                 <UnMuted

@@ -15,3 +15,4 @@ export * from './collections/useUserFeed';
 export * from './useLinkToPost';
 export * from './posts';
 export * from './queries';
+export { useInteractionCommunity } from './useInteractionCommunity';

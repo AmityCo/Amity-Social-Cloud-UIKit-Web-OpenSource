@@ -1,3 +1,7 @@
+.viewStoryPage {
+  display: contents;
+}
+
 .overlayLeft {
   position: absolute;
   top: 0;

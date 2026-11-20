@@ -33,6 +33,7 @@ type ImageViewerProps = {
   pageId?: string;
   onClose(): void;
   post?: Amity.Post;
+  posts?: Amity.Post[];
   images?: ImageViewerImage[];
   elementId?: string;
   componentId?: string;
@@ -44,7 +45,8 @@ type ImageViewerProps = {
 };
 
 export function ImageViewer({
-  post,
+  post: initialPost,
+  posts,
   images,
   onClose,
   target,
@@ -56,10 +58,11 @@ export function ImageViewer({
   feedSources,
   indexRef,
 }: ImageViewerProps) {
-  const { isOwner } = usePostPermissions({ post });
   const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
+  const post = posts ? posts[selectedImageIndex] : initialPost;
+  const { isOwner } = usePostPermissions({ post });
   const swiperRef = useRef<SwiperCore | null>(null);
   const { goToPostDetailPage } = useNavigation();
 
@@ -80,14 +83,19 @@ export function ImageViewer({
 
   const slides: ImageViewerImage[] = useImages
     ? images
-    : isParentPost
-      ? (post?.childrenPosts ?? []).map((child) => ({
-          file: child.getImageInfo() as Amity.File<'image'>,
-          productTags: child.productTags,
+    : posts
+      ? posts.map((galleryPost) => ({
+          file: galleryPost.getImageInfo() as Amity.File<'image'>,
+          productTags: galleryPost.productTags,
         }))
-      : post?.getImageInfo()
-        ? [{ file: post.getImageInfo() as Amity.File<'image'>, productTags: post.productTags }]
-        : [];
+      : isParentPost
+        ? (post?.childrenPosts ?? []).map((child) => ({
+            file: child.getImageInfo() as Amity.File<'image'>,
+            productTags: child.productTags,
+          }))
+        : post?.getImageInfo()
+          ? [{ file: post.getImageInfo() as Amity.File<'image'>, productTags: post.productTags }]
+          : [];
 
   const total = slides.length;
   const imageFile = slides[selectedImageIndex]?.file;

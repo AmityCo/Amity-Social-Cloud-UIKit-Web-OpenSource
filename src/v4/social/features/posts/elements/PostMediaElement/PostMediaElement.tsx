@@ -1,6 +1,14 @@
-import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MutableRefObject,
+  type SyntheticEvent,
+} from 'react';
 import type SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Mousewheel } from 'swiper/modules';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -15,6 +23,11 @@ import ChevronRight from '~/v4/icons/ChevronRight';
 import VideoControl from '~/v4/icons/VideoControl';
 import { ProductTagBadge } from '~/v4/social/features/product-tagged/internal-components/ProductTagBadge/ProductTagBadge';
 import { useShowProductTagList } from '~/v4/social/features/product-tagged/hooks';
+import { useFeedVideoAutoplay } from '~/v4/social/features/feed-video-autoplay';
+import {
+  FeedVideoAutoPlayElement,
+  getFeedVideoStatusId,
+} from '~/v4/social/features/posts/elements/FeedVideoAutoPlayElement';
 import {
   getFrameRatio,
   getVideoDisplayDims,
@@ -78,7 +91,9 @@ export function PostMediaElement({
 }: PostMediaElementProps) {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
   const { isDesktop } = useResponsive();
-  const [current, setCurrent] = useState(0);
+  const { getCarouselIndex, saveCarouselIndex } = useFeedVideoAutoplay();
+  const [initialIndex] = useState(() => getCarouselIndex(parentPostId) ?? 0);
+  const [current, setCurrent] = useState(initialIndex);
   const swiperRef = useRef<SwiperCore | null>(null);
   const draggedRef = useRef(false);
 
@@ -116,6 +131,7 @@ export function PostMediaElement({
             pageId={pageId}
             componentId={componentId}
             parentPostId={parentPostId}
+            isCurrent
             onPress={() => handleFrameClick(0)}
           />
         </div>
@@ -128,7 +144,10 @@ export function PostMediaElement({
       <div className={styles.postMedia__track}>
         <Swiper
           className={styles.postMedia__swiper}
+          modules={[Mousewheel]}
+          mousewheel={{ forceToAxis: true, releaseOnEdges: true, thresholdDelta: 20 }}
           slidesPerView={1}
+          initialSlide={initialIndex}
           threshold={SWIPE_COMMIT_PX}
           onSwiper={(swiper: SwiperCore) => {
             swiperRef.current = swiper;
@@ -148,7 +167,10 @@ export function PostMediaElement({
               draggedRef.current = false;
             });
           }}
-          onSlideChange={(swiper: SwiperCore) => setCurrent(swiper.activeIndex)}
+          onSlideChange={(swiper: SwiperCore) => {
+            setCurrent(swiper.activeIndex);
+            saveCarouselIndex(parentPostId, swiper.activeIndex);
+          }}
         >
           {mediaPosts.map((post, index) => (
             <SwiperSlide key={post.postId} className={styles.postMedia__slide}>
@@ -160,6 +182,7 @@ export function PostMediaElement({
                 pageId={pageId}
                 componentId={componentId}
                 parentPostId={parentPostId}
+                isCurrent={index === current}
                 onPress={() => handleFrameClick(index)}
               />
             </SwiperSlide>
@@ -231,8 +254,17 @@ type PositionCounterProps = {
 };
 
 function PositionCounter({ current, total }: PositionCounterProps) {
+  const stopPropagation = (event: SyntheticEvent) => event.stopPropagation();
+
   return (
-    <div className={styles.postMedia__counter} aria-hidden="true">
+    <div
+      className={styles.postMedia__counter}
+      aria-hidden="true"
+      onPointerDown={stopPropagation}
+      onMouseDown={stopPropagation}
+      onTouchStart={stopPropagation}
+      onClick={stopPropagation}
+    >
       <Typography.Body className={styles.postMedia__counterLabel}>
         {current + 1}/{total}
       </Typography.Body>
@@ -248,6 +280,7 @@ type MediaFrameProps = {
   pageId: string;
   componentId: string;
   parentPostId: string;
+  isCurrent: boolean;
   onPress: () => void;
 };
 
@@ -259,6 +292,7 @@ function MediaFrame({
   pageId,
   componentId,
   parentPostId,
+  isCurrent,
   onPress,
 }: MediaFrameProps) {
   const { showProductTagList } = useShowProductTagList({
@@ -272,17 +306,35 @@ function MediaFrame({
   const altText = post.dataType === 'image' ? post.getImageInfo()?.altText : undefined;
 
   return (
-    <Button
-      onPress={onPress}
-      className={styles.postMedia__frame}
-      style={{ aspectRatio }}
-      data-testid={`${pageId}/${componentId}/post_media`}
-      aria-label={formatAltText({ total, current: index + 1, altText })}
-    >
-      {post.dataType === 'image' ? (
-        <ImageMedia post={post as Amity.Post<'image'>} />
-      ) : (
-        <VideoMedia post={post as Amity.Post<'video'>} />
+    <div className={styles.postMedia__frame} style={{ aspectRatio }}>
+      <Button
+        onPress={onPress}
+        className={styles.postMedia__frameButton}
+        data-testid={`${pageId}/${componentId}/post_media`}
+        aria-label={formatAltText({ total, current: index + 1, altText })}
+        aria-describedby={post.dataType === 'video' ? getFeedVideoStatusId(post.postId) : undefined}
+      >
+        {post.dataType === 'image' ? (
+          <ImageMedia post={post as Amity.Post<'image'>} />
+        ) : (
+          <VideoMedia post={post as Amity.Post<'video'>} />
+        )}
+      </Button>
+      {post.dataType === 'video' && (
+        <FeedVideoAutoPlayElement
+          key={post.postId}
+          autoplayKey={post.postId}
+          source={{
+            kind: 'video',
+            fileId: (post.data as Amity.ContentDataVideo | undefined)?.videoFileId?.original,
+          }}
+          isEligible={isCurrent}
+          playIcon={
+            <div className={styles.postMedia__playButton}>
+              <VideoControl className={styles.postMedia__playIcon} />
+            </div>
+          }
+        />
       )}
       {productTags.length > 0 && (
         <ProductTagBadge
@@ -291,7 +343,7 @@ function MediaFrame({
           onClick={() => showProductTagList(productTags)}
         />
       )}
-    </Button>
+    </div>
   );
 }
 
@@ -336,18 +388,13 @@ function VideoMedia({ post }: VideoMediaProps) {
   if (!thumbnailUrl || isBroken) return <BrokenFrame />;
 
   return (
-    <>
-      <img
-        loading="lazy"
-        className={styles.postMedia__media}
-        src={thumbnailUrl}
-        alt=""
-        onError={() => setIsBroken(true)}
-      />
-      <div className={styles.postMedia__playButton}>
-        <VideoControl className={styles.postMedia__playIcon} />
-      </div>
-    </>
+    <img
+      loading="lazy"
+      className={styles.postMedia__media}
+      src={thumbnailUrl}
+      alt=""
+      onError={() => setIsBroken(true)}
+    />
   );
 }
 

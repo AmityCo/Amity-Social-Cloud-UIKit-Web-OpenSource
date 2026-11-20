@@ -211,24 +211,24 @@ export function LinkValidationPlugin() {
       }
 
       URL_REGEX.lastIndex = 0;
-      const match = URL_REGEX.exec(text);
+      let match: RegExpExecArray | null;
+      while ((match = URL_REGEX.exec(text)) !== null) {
+        const end = match.index + match[0].length;
+
+        // If AutoLinkPlugin would handle this match (separator after match), leave it to AutoLinkPlugin.
+        if (wouldAutoLinkPluginHandle(end, text, node)) continue;
+
+        // If the character after the match is ( or ), the regex stopped due to unbalanced
+        // parentheses (e.g. "http://example.com/path(1"). Reject this partial match and keep
+        // looking, so a later URL in the same text is still detected.
+        if (end < text.length && /[()]/.test(text[end])) continue;
+
+        break;
+      }
       if (!match) return;
 
       const matchStart = match.index;
       const matchEnd = matchStart + match[0].length;
-
-      // If AutoLinkPlugin would handle this match (separator after match), skip.
-      // If AutoLinkPlugin already handled it, the text node is gone and we won't reach here.
-      if (wouldAutoLinkPluginHandle(matchEnd, text, node)) {
-        return;
-      }
-
-      // If the character after the match is ( or ), the regex stopped due to unbalanced
-      // parentheses. The user likely intended the whole thing as one URL (e.g. "http://example.com/path(1").
-      // Since it's invalid, reject the partial match entirely — don't create a link.
-      if (matchEnd < text.length && /[()]/.test(text[matchEnd])) {
-        return;
-      }
 
       const url =
         match[0].startsWith('http') || match[0].startsWith('ftp') || match[0].startsWith('mailto')
