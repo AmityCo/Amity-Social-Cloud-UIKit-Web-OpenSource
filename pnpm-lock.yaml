@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.33.2-1e78722.0
-        version: 7.33.2-1e78722.0
+        specifier: ^7.34.0
+        version: 7.34.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -354,8 +354,8 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@amityco/ts-sdk@7.33.2-1e78722.0':
-    resolution: {integrity: sha512-13384EuE7jBIdE4mA/p5bhAnPdg5ZrCspivRzJpycBaBmLV3tvsyEWW35C63idISb92WX/E5PPwg0B0DYbnvnQ==}
+  '@amityco/ts-sdk@7.34.0':
+    resolution: {integrity: sha512-Z23tRUv91PIQuxePjqq9l7O8f1BBvDHQ51mAIw6W1EjqaR+AWxrpt+ZyKei8jrum7ug4TetTx/f9uygdaszUyg==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -5635,6 +5635,7 @@ packages:
   image-size@0.5.5:
     resolution: {integrity: sha512-6TDAlDPZxUFCv+fuOkIoXT/V/f3Qbq8e37p+YOiYrUv3v9cc3/6x78VdfPgFVaB9dZYeLUfKgHRebpkm/oP2VQ==}
     engines: {node: '>=0.10.0'}
+    deprecated: Please migrate to image-size@2.x
     hasBin: true
 
   immutable@4.3.6:
@@ -8812,7 +8813,7 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@amityco/ts-sdk@7.33.2-1e78722.0':
+  '@amityco/ts-sdk@7.34.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)
