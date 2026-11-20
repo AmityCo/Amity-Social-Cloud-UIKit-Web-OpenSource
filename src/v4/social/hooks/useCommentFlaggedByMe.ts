@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CommentRepository } from '@amityco/ts-sdk';
+import { CommentRepository, AmityContentFlagReasonType } from '@amityco/ts-sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -7,12 +7,14 @@ import { resolveString } from '~/v4/core/localization';
 
 export const useCommentFlaggedByMe = ({
   commentId,
-  reasonReport,
+  reason,
+  detail,
   onCloseMenu,
   isReplyComment,
 }: {
   commentId: string;
-  reasonReport?: Amity.ContentFlagReason;
+  reason?: AmityContentFlagReasonType;
+  detail?: string;
   onCloseMenu?: () => void;
   isReplyComment?: boolean;
 }): {
@@ -39,7 +41,9 @@ export const useCommentFlaggedByMe = ({
   const { mutateAsync: mutateReportComment, isPending: isFlagLoading } = useMutation({
     mutationFn: async () => {
       if (commentId == null) return;
-      return CommentRepository.flagComment(commentId, reasonReport);
+      return reason
+        ? CommentRepository.flagComment(commentId, { reason, detail })
+        : CommentRepository.flagComment(commentId);
     },
     onSuccess: () => {
       success({

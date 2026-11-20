@@ -1,11 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useString, resolveString } from '~/v4/core/localization';
-import {
-  AmitySharableContentType,
-  ContentFlagReasonEnum,
-  PollRepository,
-  PostRepository,
-} from '@amityco/ts-sdk';
+import { AmitySharableContentType, PollRepository, PostRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -152,7 +147,6 @@ export const PostMenu = ({
 
   const { isFlaggedByMe, isLoading, mutateUnReportPost } = usePostFlaggedByMe({
     post,
-    reasonReport: ContentFlagReasonEnum.Others,
     isFlaggable: showReportPostButton,
 
     onUnreportSuccess: () => {

@@ -1,4 +1,4 @@
-import { Client as ASCClient } from '@amityco/ts-sdk';
+import { Client as ASCClient, AmityAutoSubscription } from '@amityco/ts-sdk';
 import { NetworkConfig } from './providers/CustomizationProvider';
 import { v4 as uuid } from 'uuid';
 
@@ -172,6 +172,8 @@ export class AmityUIKitManager {
         ...authSignatureParams,
         sessionHandler: bindedSessionHandlder,
       });
+
+    ASCClient.enableAutoSubscriptions([AmityAutoSubscription.USER]);
 
     this.stateChangeHandler = ASCClient.onSessionStateChange(
       (state: Amity.SessionStates, reason?: Amity.TokenTerminationReason) => {

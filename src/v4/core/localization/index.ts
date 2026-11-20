@@ -36,5 +36,11 @@ export type { LocaleContextValue, LocaleProviderProps } from './LocaleProvider';
 
 export { useString } from './useString';
 
+export {
+  resolveReportReasonLabel,
+  getReportReasonLabelKey,
+  REPORT_REASON_LABEL_KEY_PREFIX,
+} from './reportReasonLabel';
+
 export { defaultLocaleBundle } from './defaults/en';
 export { defaultLocaleMap } from './defaultLocaleMap';

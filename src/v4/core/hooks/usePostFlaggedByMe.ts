@@ -1,4 +1,4 @@
-import { PostRepository } from '@amityco/ts-sdk';
+import { AmityContentFlagReasonType, PostRepository } from '@amityco/ts-sdk';
 import {
   UseMutateAsyncFunction,
   useMutation,
@@ -9,7 +9,8 @@ import useSDK from './useSDK';
 
 export const usePostFlaggedByMe = ({
   post,
-  reasonReport,
+  reason,
+  detail,
   isFlaggable,
   onReportSuccess,
   onReportError,
@@ -17,7 +18,8 @@ export const usePostFlaggedByMe = ({
   onUnreportError,
 }: {
   post?: Amity.Post;
-  reasonReport?: Amity.ContentFlagReason;
+  reason?: AmityContentFlagReasonType;
+  detail?: string;
   isFlaggable: boolean;
   onReportSuccess?: () => void;
   onReportError?: (error: Error) => void;
@@ -46,7 +48,10 @@ export const usePostFlaggedByMe = ({
   const { mutateAsync: mutateReportPost, isPending } = useMutation({
     networkMode: 'always',
     mutationFn: async () => {
-      return PostRepository.flagPost(post?.postId ?? '', reasonReport);
+      const postId = post?.postId ?? '';
+      return reason
+        ? PostRepository.flagPost(postId, { reason, detail })
+        : PostRepository.flagPost(postId);
     },
     onMutate: async () => {
       await queryClient.cancelQueries({

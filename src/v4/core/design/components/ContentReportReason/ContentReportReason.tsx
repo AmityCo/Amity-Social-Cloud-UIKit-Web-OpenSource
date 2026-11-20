@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import { useString, resolveString } from '~/v4/core/localization';
-import { ContentFlagReasonEnum } from '@amityco/ts-sdk';
+import { AmityContentFlagReasonType } from '@amityco/ts-sdk';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import { Selection } from '~/v4/core/design/atoms/Selection';
@@ -15,6 +15,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './ContentReportReason.module.css';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
+import { useReportReasons } from '~/v4/core/hooks/useReportReasons';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 import { useFlagMessageQuery } from '~/v4/chat/hooks/queries';
@@ -48,7 +49,7 @@ export const ContentReportReason = ({
 
   const [isShowOthersOption, setIsShowOthersOption] = useState(false);
   const [otherReasonText, setOtherReasonText] = useState('');
-  const [selectedReason, setSelectedReason] = useState<Amity.ContentFlagReason | undefined>(
+  const [selectedReason, setSelectedReason] = useState<AmityContentFlagReasonType | undefined>(
     undefined,
   );
   const [isError, setIsError] = useState(false);
@@ -70,22 +71,26 @@ export const ContentReportReason = ({
   const closeButtonText = useString('amity_social_modal_dialog_close_button');
   const submitButtonText = useString('amity_social_button_report_submit_button');
 
+  const reportDetail =
+    selectedReason === AmityContentFlagReasonType.Others ? otherReasonText : undefined;
+
   const handleSubmitReport = () => {
     if (post) return mutateReportPost();
     if (comment) return mutateReportComment();
     if (message)
       return reportMessage({
-        reason: selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
+        reason: selectedReason,
+        detail: reportDetail,
         onSuccess: handleCloseReportReason,
       });
     return;
   };
 
   const handleRadioChange = (value: string) => {
-    const reason = value as ContentFlagReasonEnum;
+    const reason = value as AmityContentFlagReasonType;
     setSelectedReason(reason);
 
-    if (reason === ContentFlagReasonEnum.Others) {
+    if (reason === AmityContentFlagReasonType.Others) {
       setIsShowOthersOption(true);
     }
   };
@@ -101,8 +106,8 @@ export const ContentReportReason = ({
     mutateReportPost,
   } = usePostFlaggedByMe({
     post,
-    reasonReport:
-      selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
+    reason: selectedReason,
+    detail: reportDetail,
     isFlaggable: showReportPostButton,
     onReportSuccess: () => {
       success({ content: postReportedText });
@@ -138,8 +143,8 @@ export const ContentReportReason = ({
     isFlagLoading: isReportCommentLoading,
   } = useCommentFlaggedByMe({
     commentId: comment?.commentId as string,
-    reasonReport:
-      selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
+    reason: selectedReason,
+    detail: reportDetail,
     onCloseMenu: handleCloseReportReason,
     isReplyComment: comment?.parentId != null,
   });
@@ -175,49 +180,7 @@ export const ContentReportReason = ({
     }
   }, [online]);
 
-  const reportReasons = useMemo(() => {
-    const reasons = [
-      {
-        value: ContentFlagReasonEnum.CommunityGuidelines,
-        labelKey: 'amity_social_label_report_reason_community_guidelines',
-      },
-      {
-        value: ContentFlagReasonEnum.HarassmentOrBullying,
-        labelKey: 'amity_social_label_report_reason_harassment_or_bullying',
-      },
-      {
-        value: ContentFlagReasonEnum.SelfHarmOrSuicide,
-        labelKey: 'amity_social_label_report_reason_self_harm_or_suicide',
-      },
-      {
-        value: ContentFlagReasonEnum.ViolenceOrThreateningContent,
-        labelKey: 'amity_social_label_report_reason_violence_or_threatening',
-      },
-      {
-        value: ContentFlagReasonEnum.SellingRestrictedItems,
-        labelKey: 'amity_social_label_report_reason_selling_restricted',
-      },
-      {
-        value: ContentFlagReasonEnum.SexualContentOrNudity,
-        labelKey: 'amity_social_label_report_reason_sexual_content_or_nudity',
-      },
-      {
-        value: ContentFlagReasonEnum.SpamOrScams,
-        labelKey: 'amity_social_label_report_reason_spam_or_scams',
-      },
-      {
-        value: ContentFlagReasonEnum.FalseInformation,
-        labelKey: 'amity_social_label_report_reason_false_information',
-      },
-      {
-        value: ContentFlagReasonEnum.Others,
-        labelKey: 'amity_social_button_others',
-        hasAngleRight: true,
-      },
-    ];
-
-    return reasons;
-  }, []);
+  const reportReasons = useReportReasons();
 
   return (
     <div
@@ -290,26 +253,24 @@ export const ContentReportReason = ({
                   value={selectedReason ?? null}
                   onChange={handleRadioChange}
                 >
-                  {reportReasons
-                    .filter((reason) => !reason.hasAngleRight)
-                    .map((reason) => (
-                      <Selection.Radio
-                        key={reason.value}
-                        value={reason.value}
-                        isDisabled={isReportPostLoading || isReportCommentLoading}
-                        className={styles.contentReportReason__radio}
-                      >
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          {resolveString(reason.labelKey)}
-                        </Typography.BodyBold>
-                      </Selection.Radio>
-                    ))}
+                  {reportReasons.map(({ reason, key, label }) => (
+                    <Selection.Radio
+                      key={key}
+                      value={reason}
+                      isDisabled={isReportPostLoading || isReportCommentLoading}
+                      className={styles.contentReportReason__radio}
+                    >
+                      <Typography.BodyBold className={styles.contentReportReason__option}>
+                        {label}
+                      </Typography.BodyBold>
+                    </Selection.Radio>
+                  ))}
                 </Selection.RadioGroup>
                 <AriaButton
                   type="button"
                   className={styles.contentReportReason__othersRow}
                   onPress={() => {
-                    setSelectedReason(ContentFlagReasonEnum.Others);
+                    setSelectedReason(AmityContentFlagReasonType.Others);
                     setIsShowOthersOption(true);
                   }}
                   aria-label={othersTitle}
