@@ -22,6 +22,7 @@ export const Banner = forwardRef<HTMLDivElement, BannerProps>(function Banner(
     loading = false,
     onPress,
     onPressLabel,
+    onPressTestId,
     className,
   },
   ref,
@@ -97,7 +98,12 @@ export const Banner = forwardRef<HTMLDivElement, BannerProps>(function Banner(
         <div className={styles.banner__leadingController}>{leadingController}</div>
       )}
       {onPress ? (
-        <AriaButton className={styles.banner__body} onPress={onPress} aria-label={onPressLabel}>
+        <AriaButton
+          className={styles.banner__body}
+          onPress={onPress}
+          aria-label={onPressLabel}
+          data-testid={onPressTestId}
+        >
           {body}
         </AriaButton>
       ) : (

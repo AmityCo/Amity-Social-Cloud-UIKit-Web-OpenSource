@@ -34,10 +34,21 @@
 }
 
 .clipContent__videoContainer {
-  cursor: pointer;
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.clipContent__videoButton {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 .clipContent__videoCover {
@@ -55,6 +66,7 @@
 .clipContent__playButtonCover {
   position: absolute;
   inset: 0;
+  pointer-events: none;
   border-radius: 0 0 0.5rem;
   text-align: center;
   display: flex;

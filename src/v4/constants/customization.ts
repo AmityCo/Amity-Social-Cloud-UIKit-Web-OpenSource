@@ -50,6 +50,7 @@ export const PAGE_ID = {
   LIVESTREAM_BANNED_PAGE: 'livestream_banned_page',
   LIVESTREAM_PLAYER_PAGE: 'livestream_player_page',
   LIVESTREAM_UNSUPPORTED_PAGE: 'livestream_unsupported_page',
+  AUTOPLAY_SETTING_PAGE: 'autoplay_setting_page',
 } as const;
 
 export const COMPONENT_ID = {
@@ -104,6 +105,8 @@ export const COMPONENT_ID = {
   EDIT_COMMENT_COMPONENT: 'edit_comment_component',
   HYPER_LINK_CONFIG_COMPONENT: 'hyper_link_config_component',
   COMMENT_TRAY_COMPONENT: 'comment_tray_component',
+  POST_COMMENT: 'post_comment',
+  COMMENT_BUBBLE: 'comment_bubble',
   STORY_TAB_COMPONENT: 'story_tab_component',
   INVITATION_SECTION: 'invitation_section',
   JOIN_REQUEST_CONTENT: 'join_request_content',

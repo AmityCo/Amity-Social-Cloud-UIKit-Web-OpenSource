@@ -46,6 +46,29 @@
   color: var(--asc-color-base-default);
 }
 
+.userMenu__sectionTitle {
+  display: block;
+  padding: 0.5rem 0;
+  color: var(--asc-color-base-shade1);
+}
+
+.userMenu__autoplay__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+  color: var(--asc-color-base-default);
+}
+
+.userMenu__autoplay__text {
+  flex: 1;
+  text-align: start;
+  color: var(--asc-color-base-default);
+}
+
+.userMenu__autoplay__value {
+  color: var(--asc-color-base-shade1);
+}
+
 @media screen and (width >=48em) {
   .userMenu {
     padding: 0.5rem 0;
@@ -53,5 +76,9 @@
 
   .userMenu__button {
     padding: 0.75rem 1rem;
+  }
+
+  .userMenu__sectionTitle {
+    padding: 0.5rem 1rem;
   }
 }

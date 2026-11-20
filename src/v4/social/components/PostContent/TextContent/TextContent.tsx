@@ -108,7 +108,7 @@ export const TextContent = ({
             <TextWithMention
               pageId={pageId}
               componentId={componentId}
-              data-testid="poll-post-question"
+              testId="post-description"
               data={{ text: text }}
               mentionees={mentionees}
               metadata={{ mentioned, hashtagged }}

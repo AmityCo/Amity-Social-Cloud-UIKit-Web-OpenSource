@@ -14,6 +14,8 @@ import {
   PostContent,
 } from '~/v4/social/components/PostContent/PostContent';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
+import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 
 interface CommunityPinProps {
   pageId?: string;
@@ -21,7 +23,7 @@ interface CommunityPinProps {
 }
 
 export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) => {
-  const componentId = 'community_pin';
+  const componentId = COMPONENT_ID.COMMUNITY_PIN;
   const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
     pageId,
     componentId,
@@ -161,31 +163,33 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
   };
 
   return (
-    <div
-      data-testid={accessibilityId}
-      className={styles.communityPin__container}
-      style={themeStyles}
-    >
-      <NoInternetConnectionHoc
-        page="feed"
-        refresh={refresh}
-        className={styles.communityPin__noInternet}
+    <FeedVideoAutoplayHost>
+      <div
+        data-testid={accessibilityId}
+        className={styles.communityPin__container}
+        style={themeStyles}
       >
-        {isMemberPrivateCommunity || community?.isPublic ? (
-          isLoading ? (
-            <CommunityFeedPostContentSkeleton />
-          ) : renderablePinnedPostCount > 0 ? (
-            <>
-              {renderAnnouncementPost()}
-              {renderPinnedPost()}
-            </>
+        <NoInternetConnectionHoc
+          page="feed"
+          refresh={refresh}
+          className={styles.communityPin__noInternet}
+        >
+          {isMemberPrivateCommunity || community?.isPublic ? (
+            isLoading ? (
+              <CommunityFeedPostContentSkeleton />
+            ) : renderablePinnedPostCount > 0 ? (
+              <>
+                {renderAnnouncementPost()}
+                {renderPinnedPost()}
+              </>
+            ) : (
+              <EmptyPinnedPost />
+            )
           ) : (
-            <EmptyPinnedPost />
-          )
-        ) : (
-          <LockPrivateContent />
-        )}
-      </NoInternetConnectionHoc>
-    </div>
+            <LockPrivateContent />
+          )}
+        </NoInternetConnectionHoc>
+      </div>
+    </FeedVideoAutoplayHost>
   );
 };

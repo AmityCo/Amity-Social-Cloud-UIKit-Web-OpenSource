@@ -64,6 +64,7 @@ import { PinnedProductOverlay } from '~/v4/social/features/product-tagged/intern
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useEvent } from '~/v4/social/features/events/hooks';
 import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
+import { useFeedVideoAutoplayOverlay } from '~/v4/social/features/feed-video-autoplay';
 
 export type LiveStreamPlayerPageProps = {
   post?: Amity.Post;
@@ -212,6 +213,8 @@ export function LiveStreamPlayerPage({ post, roomId, goToDetailPage }: LiveStrea
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Use the hook at page level to manage video state
+  useFeedVideoAutoplayOverlay();
+
   const {
     isLoading,
     isPoorConnection,

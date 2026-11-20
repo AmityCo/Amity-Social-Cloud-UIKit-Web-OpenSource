@@ -367,6 +367,12 @@ export const defaultConfig: DefaultConfig = {
     '*/comment_tray_component/*': {
       theme: {},
     },
+    '*/post_comment/*': {
+      theme: {},
+    },
+    '*/comment_bubble/*': {
+      theme: {},
+    },
     '*/comment_tray_component/comment_bubble_deleted_view': {
       comment_bubble_deleted_icon: 'comment_bubble_deleted.png',
     },
@@ -803,6 +809,11 @@ export const defaultConfig: DefaultConfig = {
     },
     'blocked_users_page/*/title': {},
     'blocked_users_page/*/user_list_unblock_user_button': {},
+    'autoplay_setting_page/*/*': {},
+    'autoplay_setting_page/*/back_button': {
+      image: 'ArrowLeft',
+    },
+    'autoplay_setting_page/*/title': {},
     'community_setup_page/*/*': {},
     'community_setup_page/*/close_button': {
       image: 'value',

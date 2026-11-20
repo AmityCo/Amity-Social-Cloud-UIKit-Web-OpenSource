@@ -271,7 +271,7 @@ export const CommentList = ({
           <Comment
             pageId={pageId}
             comment={comment}
-            isHost={eventCreatorId === comment.userId}
+            eventCreatorId={eventCreatorId}
             onClickReply={(params) => onClickReply?.(params)}
             componentId={componentId}
             community={community}
@@ -292,7 +292,7 @@ export const CommentList = ({
           <Comment
             pageId={pageId}
             comment={highlightedComment}
-            isHost={eventCreatorId === highlightedComment.userId}
+            eventCreatorId={eventCreatorId}
             onClickReply={(params) => onClickReply?.(params)}
             componentId={componentId}
             community={community}
@@ -316,7 +316,7 @@ export const CommentList = ({
           <div key={(item as Amity.Comment).commentId}>
             <Comment
               pageId={pageId}
-              isHost={eventCreatorId === item.userId}
+              eventCreatorId={eventCreatorId}
               comment={item as Amity.Comment}
               onClickReply={(params) => onClickReply?.(params)}
               componentId={componentId}

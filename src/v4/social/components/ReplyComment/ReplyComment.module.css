@@ -80,7 +80,7 @@
   max-width: max-content;
 }
 
-.postReplyComment__contentHighlighted {
+.postReplyComment__content[data-highlighted='true'] {
   animation: highlight-reply 3s ease forwards;
 }
 

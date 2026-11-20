@@ -252,6 +252,7 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             className={styles.communityInviteMemberPage__checkboxGroup}
             checkboxes={filteredUsers.map((user) => ({
               value: user.userId,
+              'data-testid': `${pageId}/*/member_checkbox`,
               label: <MemberLabel pageId={pageId} user={user} />,
             }))}
             onChange={(value) => {

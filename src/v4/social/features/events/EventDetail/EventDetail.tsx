@@ -135,6 +135,7 @@ export function EventDetail({ eventId, pop, showCreatedSuccessSheet }: EventDeta
                       {
                         value: EventDetailTab.Discussion,
                         label: Discussion,
+                        accessibilityId: 'event-discussion-tab',
                         content: () => null,
                       },
                     ]),
@@ -162,6 +163,7 @@ export function EventDetail({ eventId, pop, showCreatedSuccessSheet }: EventDeta
                   {
                     value: EventDetailTab.Discussion,
                     label: Discussion,
+                    accessibilityId: 'event-discussion-tab',
                     content: () => <EventDiscussion pageId={pageId} event={event} />,
                   },
                 ]),

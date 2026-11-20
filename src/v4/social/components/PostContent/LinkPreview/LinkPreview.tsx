@@ -56,20 +56,18 @@ export function LinkPreview({
 
   const previewContent = (
     <>
-      {previewData.data?.imageUrl && (
-        <div className={styles.linkPreview__top}>
-          {!imageError ? (
-            <img
-              src={previewData.data.imageUrl}
-              alt={previewData.data.title || 'Link preview'}
-              className={styles.linkPreview__object}
-              onError={handleImageError}
-            />
-          ) : (
-            <UnableToPreview />
-          )}
-        </div>
-      )}
+      <div className={styles.linkPreview__top}>
+        {previewData.data?.imageUrl && !imageError ? (
+          <img
+            src={previewData.data.imageUrl}
+            alt={previewData.data.title || 'Link preview'}
+            className={styles.linkPreview__object}
+            onError={handleImageError}
+          />
+        ) : (
+          <UnableToPreview />
+        )}
+      </div>
 
       <div className={styles.linkPreview__bottom}>
         <Typography.BodyBold className={styles.linkPreview__title}>

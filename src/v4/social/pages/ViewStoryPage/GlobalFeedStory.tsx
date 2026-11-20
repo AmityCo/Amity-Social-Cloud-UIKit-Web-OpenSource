@@ -24,7 +24,7 @@ import { FileTrigger } from 'react-aria-components';
 import { useMotionValue, motion } from 'framer-motion';
 import { PageTypes } from '~/v4/core/providers/NavigationProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import styles from './StoryPage.module.css';
+import styles from './ViewStoryPage.module.css';
 
 const MIN_IMAGE_DURATION = 5000; // 5 seconds
 const MAX_IMAGE_DURATION = 10000; // 10 seconds
@@ -61,7 +61,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   onSwipeDown,
   onClickCommunity,
 }) => {
-  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({ pageId });
+  const { themeStyles, isExcluded } = useAmityPage({ pageId });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
   const { client, currentUserId } = useSDK();
@@ -71,7 +71,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const dragEventTarget = useRef(new EventTarget());
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [lastSeenIndex, setLastSeenIndex] = useState(-1);
+  const jumpedToUnseenTargetIdRef = useRef<string | null>(null);
+  const unseenJumpRef = useRef<{ storyId: string; index: number } | null>(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -79,14 +80,17 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { stories, refresh } = useGetActiveStoriesByTarget({
-    targetType: 'community',
-    targetId,
-    options: {
-      orderBy: 'asc',
-      sortBy: 'createdAt',
+  const { stories, refresh } = useGetActiveStoriesByTarget(
+    {
+      targetType: 'community',
+      targetId,
+      options: {
+        orderBy: 'asc',
+        sortBy: 'createdAt',
+      },
     },
-  });
+    { fresh: true },
+  );
 
   const globalFeedRenderers = useMemo(
     () =>
@@ -331,17 +335,33 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   }, [currentStory, stories]);
 
   useEffect(() => {
-    if (stories.filter(isStory).every((story) => story?.isSeen)) return;
-    if (lastSeenIndex !== 0) return;
-    const firstUnseenStoryIndex = stories.findIndex((story) =>
-      isStory(story) ? !story?.isSeen : false,
-    );
-
-    if (firstUnseenStoryIndex !== -1) {
-      setLastSeenIndex(firstUnseenStoryIndex);
+    if (jumpedToUnseenTargetIdRef.current !== targetId) {
+      const targetStories = stories.filter(isStory);
+      if (targetStories.length === 0 || targetStories[0].targetId !== targetId) return;
+      jumpedToUnseenTargetIdRef.current = targetId;
+      const firstUnseenStoryIndex = stories.findIndex((story) =>
+        isStory(story) ? !story?.isSeen : false,
+      );
+      const firstUnseenStory = stories[firstUnseenStoryIndex];
+      if (!isStory(firstUnseenStory)) return;
+      unseenJumpRef.current = { storyId: firstUnseenStory.storyId, index: firstUnseenStoryIndex };
       setCurrentIndex(firstUnseenStoryIndex);
+      return;
     }
-  }, [stories]);
+
+    const unseenJump = unseenJumpRef.current;
+    if (!unseenJump) return;
+    const jumpedStoryIndex = stories.findIndex(
+      (story) => isStory(story) && story.storyId === unseenJump.storyId,
+    );
+    if (currentIndex !== unseenJump.index || jumpedStoryIndex === -1) {
+      unseenJumpRef.current = null;
+      return;
+    }
+    if (jumpedStoryIndex === unseenJump.index) return;
+    unseenJumpRef.current = { ...unseenJump, index: jumpedStoryIndex };
+    setCurrentIndex(jumpedStoryIndex);
+  }, [stories, targetId]);
 
   useEffect(() => {
     if (!file) return;
@@ -369,12 +389,11 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   if (isExcluded) return null;
 
   return (
-    <div className={clsx(styles.storyWrapper)} data-testid={accessibilityId} style={themeStyles}>
+    <div className={clsx(styles.storyWrapper)} style={themeStyles}>
       <ArrowLeftButton onClick={previousStory} />
       <motion.div
         id={targetRootId}
         ref={motionRef}
-        data-testid={accessibilityId}
         initial={{ y: 0 }}
         drag="y"
         whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}

@@ -1,0 +1,13 @@
+{
+  "name": "ui-kit-web-qa",
+  "private": true,
+  "description": "Playwright end-to-end cases for the Web UIKit, run against the local Storybook.",
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^20.14.0"
+  }
+}

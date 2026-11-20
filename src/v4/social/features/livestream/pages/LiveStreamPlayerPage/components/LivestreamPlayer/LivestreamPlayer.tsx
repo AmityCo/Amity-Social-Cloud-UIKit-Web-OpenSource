@@ -1,5 +1,6 @@
-import React, { forwardRef, useMemo, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './LivestreamPlayer.module.css';
+import { Typography } from '~/v4/core/components';
 import {
   LivestreamOverlay,
   LiveStreamTerminatedThumbnail,
@@ -18,6 +19,10 @@ import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { TagProductsButton } from '~/v4/social/features/livestream/internal-components/TagProductsButton/TagProductsButton';
 import { AmitySharableContentType } from '@amityco/ts-sdk';
+import {
+  useFeedVideoAutoplay,
+  useFeedVideoSoundState,
+} from '~/v4/social/features/feed-video-autoplay';
 
 interface LivestreamPlayerProps {
   themeStyles?: React.CSSProperties;
@@ -70,10 +75,73 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
     const { room, livestreamPost } = useLivestreamData();
     const { setDrawerData, removeDrawerData } = useDrawer();
     const [isDragging, setIsDragging] = useState(false);
+    const { getPlayback, savePlayback } = useFeedVideoAutoplay();
+    const [isMuted, setIsMuted] = useFeedVideoSoundState(false);
+    const recordedVideoRef = useRef<HTMLVideoElement>(null);
+    const [nextSegment, setNextSegment] = useState<number>();
+    const recordedUrls = useMemo(
+      () =>
+        (room?.recordedPlaybackInfos ?? [])
+          .map((info) => info.url)
+          .filter((url): url is string => !!url),
+      [room?.recordedPlaybackInfos],
+    );
+    // The room loads after the first render, so read the feed position once its id is known.
+    const recordedStart = useMemo(() => {
+      const playback = room?.roomId ? getPlayback(room.roomId) : undefined;
+      if (!playback || playback.isEnded) return { segment: 0, position: 0 };
+      return { segment: playback.segment ?? 0, position: playback.position };
+    }, [room?.roomId, getPlayback]);
+    const segment = Math.min(
+      nextSegment ?? recordedStart.segment,
+      Math.max(0, recordedUrls.length - 1),
+    );
+    const recordedInitialTime = nextSegment === undefined ? recordedStart.position : 0;
     const isHidden = isEnded || isTerminated || isUserBanned;
-    const recordedVideoUrl = useMemo(() => {
-      return room?.recordedPlaybackInfos?.[0]?.url;
-    }, [room?.recordedPlaybackInfos]);
+    const recordedVideoUrl = recordedUrls[segment];
+
+    useEffect(() => {
+      const video = recordedVideoRef.current;
+      const roomId = room?.roomId;
+      if (!isRecorded || !video || !roomId) return;
+
+      const isLastSegment = segment >= recordedUrls.length - 1;
+      // Keep what the events last saw: on close the player is torn down and no longer reports `ended`.
+      let playback =
+        video.readyState === HTMLMediaElement.HAVE_NOTHING
+          ? getPlayback(roomId)
+          : { position: video.currentTime, isEnded: video.ended, segment };
+      const savePosition = () => {
+        if (video.readyState === HTMLMediaElement.HAVE_NOTHING) return;
+        playback = { position: video.currentTime, isEnded: video.ended, segment };
+        savePlayback(roomId, playback);
+      };
+      const handleEnded = () => {
+        if (isLastSegment) {
+          savePosition();
+          return;
+        }
+        playback = { position: 0, isEnded: false, segment: segment + 1 };
+        savePlayback(roomId, playback);
+        setNextSegment(segment + 1);
+      };
+
+      video.addEventListener('timeupdate', savePosition);
+      video.addEventListener('ended', handleEnded);
+      return () => {
+        video.removeEventListener('timeupdate', savePosition);
+        video.removeEventListener('ended', handleEnded);
+        if (playback) savePlayback(roomId, playback);
+      };
+    }, [
+      isRecorded,
+      recordedVideoUrl,
+      room?.roomId,
+      getPlayback,
+      savePlayback,
+      segment,
+      recordedUrls.length,
+    ]);
 
     const recordedThumbnailUrl = useMemo(() => {
       return room?.recordedPlaybackInfos?.[0]?.thumbnailUrl;
@@ -83,11 +151,18 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
       <>
         {isRecorded && recordedVideoUrl ? (
           <VideoPlayer
+            key={segment}
             displayMode={isDesktop ? DisplayModeEnum.DESKTOP : DisplayModeEnum.MOBILE}
             url={recordedVideoUrl}
             thumbnailUrl={recordedThumbnailUrl}
             useHls={!!recordedVideoUrl}
             autoPlay={true}
+            isMuted={isMuted}
+            initialTime={recordedInitialTime}
+            externalVideoRef={recordedVideoRef}
+            onClickMute={() => setIsMuted(!isMuted)}
+            onSoundRefused={() => setIsMuted(true)}
+            onReplay={segment > 0 ? () => setNextSegment(0) : undefined}
             pageId={pageId}
             productTags={productTags}
             postId={room?.post?.postId}
@@ -162,7 +237,9 @@ export const LivestreamPlayer = forwardRef<HTMLVideoElement, LivestreamPlayerPro
                 aria-label="Paused"
               >
                 <PauseIcon className={styles.liveStreamPlayer__pauseIndicatorIcon} />
-                <span className={styles.liveStreamPlayer__pauseIndicatorLabel}>Paused</span>
+                <Typography.CaptionBold className={styles.liveStreamPlayer__pauseIndicatorLabel}>
+                  Paused
+                </Typography.CaptionBold>
               </div>
             )}
           </>

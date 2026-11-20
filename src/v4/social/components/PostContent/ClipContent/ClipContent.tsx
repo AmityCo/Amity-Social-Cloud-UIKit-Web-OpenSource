@@ -4,6 +4,10 @@ import { useImage } from '~/v4/core/hooks/useImage';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import VideoControl from '~/v4/icons/VideoControl';
+import {
+  FeedVideoAutoPlayElement,
+  getFeedVideoStatusId,
+} from '~/v4/social/features/posts/elements/FeedVideoAutoPlayElement';
 import styles from './ClipContent.module.css';
 
 const ClipThumbnail = ({
@@ -48,27 +52,37 @@ const Clip = ({
   onClipClick: () => void;
 }) => {
   return (
-    <Button
-      onPress={() => onClipClick()}
-      className={styles.clipContent__videoContainer}
-      data-testid={`${pageId}/${componentId}/post_video`}
-    >
-      <ClipThumbnail
-        fileId={post.data?.thumbnailFileId || ''}
-        placeholder={
-          <div className={styles.clipContent__skeleton}>
-            <VideoControl className={styles.clipContent__skeleton__icon} />
+    <div className={styles.clipContent__videoContainer}>
+      <Button
+        onPress={() => onClipClick()}
+        className={styles.clipContent__videoButton}
+        data-testid={`${pageId}/${componentId}/post_video`}
+        aria-describedby={getFeedVideoStatusId(post.postId)}
+      >
+        <ClipThumbnail
+          fileId={post.data?.thumbnailFileId || ''}
+          placeholder={
+            <div className={styles.clipContent__skeleton}>
+              <VideoControl className={styles.clipContent__skeleton__icon} />
+            </div>
+          }
+          displayMode={post.data?.displayMode || 'fill'}
+        />
+      </Button>
+      <FeedVideoAutoPlayElement
+        key={post.postId}
+        autoplayKey={post.postId}
+        source={{ kind: 'clip', fileId: post.data?.fileId, isMuted: post.data?.isMuted }}
+        fitVideo={post.data?.displayMode === 'fit'}
+        playIcon={
+          <div className={styles.clipContent__playButtonCover}>
+            <div className={styles.clipContent__playButton}>
+              <VideoControl className={styles.clipContent__playButton__icon} />
+            </div>
           </div>
         }
-        displayMode={post.data?.displayMode || 'fill'}
       />
-
-      <div className={styles.clipContent__playButtonCover}>
-        <div className={styles.clipContent__playButton}>
-          <VideoControl className={styles.clipContent__playButton__icon} />
-        </div>
-      </div>
-    </Button>
+    </div>
   );
 };
 

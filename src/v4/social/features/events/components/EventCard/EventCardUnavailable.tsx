@@ -19,6 +19,7 @@ export function EventCardUnavailable({ size = 'lg', variant = 'card' }: EventCar
       data-size={size}
       data-variant={variant}
       data-state="deleted"
+      data-testid="event-card-deleted"
       className={styles.eventCard}
       onClick={stopBubble}
       onPointerDown={stopBubble}

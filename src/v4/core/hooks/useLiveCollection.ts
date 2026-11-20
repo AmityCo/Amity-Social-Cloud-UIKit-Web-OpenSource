@@ -8,6 +8,7 @@ function useLiveCollection<TCallback, TParams>({
   callback = () => {},
   config,
   shouldCall = true,
+  fresh,
 }: {
   fetcher: (
     params: Amity.LiveCollectionParams<TParams>,
@@ -18,6 +19,7 @@ function useLiveCollection<TCallback, TParams>({
   callback?: Amity.LiveCollectionCallback<TCallback>;
   config?: Amity.LiveCollectionConfig;
   shouldCall?: boolean;
+  fresh?: boolean;
 }): {
   items: TCallback[];
   isLoading: boolean;
@@ -83,6 +85,7 @@ function useLiveCollection<TCallback, TParams>({
       fetcher,
       params,
       callback: callbackFn,
+      fresh,
     });
 
     unsubscribeRef.current = unsubscribe;

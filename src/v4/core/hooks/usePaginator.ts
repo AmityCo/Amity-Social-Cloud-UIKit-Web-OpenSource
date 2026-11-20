@@ -144,6 +144,7 @@ export const usePaginator = <TCallback, TParams>({
   callback = () => {},
   config,
   shouldCall = true,
+  fresh,
   placement,
   communityId,
   pageSize,
@@ -158,6 +159,7 @@ export const usePaginator = <TCallback, TParams>({
   callback?: Amity.LiveCollectionCallback<TCallback | Amity.Ad>;
   config?: Amity.LiveCollectionConfig;
   shouldCall?: boolean;
+  fresh?: boolean;
   placement: Amity.AdPlacement;
   communityId?: string;
   pageSize: number;
@@ -184,6 +186,7 @@ export const usePaginator = <TCallback, TParams>({
     params,
     config,
     shouldCall,
+    fresh,
   });
 
   const itemWithAds = useMemo(() => combineItemsWithAds(items).flatMap((item) => item), [items]);

@@ -4,7 +4,7 @@ import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
-import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
+import { ViewStoryPage } from '~/v4/social/pages/ViewStoryPage';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 import styles from './Application.module.css';
@@ -36,6 +36,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
 import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
 import { BlockedUserPage } from '~/v4/social/pages/BlockedUserPage/BlockedUserPage';
+import { AutoplaySettingPage } from '~/v4/social/pages/AutoplaySettingPage';
 import { CommunitySetupPage } from '~/v4/social/pages/CommunitySetupPage';
 import { CommunityAddMemberPage } from '~/v4/social/pages/CommunityAddMemberPage/CommunityAddMemberPage';
 import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
@@ -185,6 +186,7 @@ const Application = () => {
         )}
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
+        {page.type === PageTypes.AutoplaySettingPage && <AutoplaySettingPage />}
         {page.type === PageTypes.CreateLivestreamPage && <CreateLivestreamPage {...page.context} />}
         {page.type === PageTypes.LivestreamTargetSelectionPage && <LivestreamTargetSelectionPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}

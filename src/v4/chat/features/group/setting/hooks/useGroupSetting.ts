@@ -164,6 +164,7 @@ export function useGroupSetting({ channelId }: GroupSettingPageProps) {
       label: allMembersLabel,
       onPress: handleOpenAllMembers,
       ariaLabel: allMembersLabel,
+      testId: 'group-settings-all-members',
       visible: true,
     },
     {

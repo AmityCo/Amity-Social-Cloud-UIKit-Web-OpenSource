@@ -25,6 +25,7 @@ export function Header({ isViewerModerator, onBack, onAddMember }: HeaderProps) 
             size={32}
             onPress={onAddMember}
             aria-label="Add member"
+            data-testid="group-member-list-add-member-button"
           />
         ) : undefined
       }

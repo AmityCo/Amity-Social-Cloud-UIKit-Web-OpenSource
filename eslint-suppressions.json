@@ -79,11 +79,6 @@
       "count": 1
     }
   },
-  "src/v4/social/elements/EventHostBadge/EventHostBadge.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 1
-    }
-  },
   "src/v4/social/elements/PostTextField/PostTextField.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 2
@@ -229,11 +224,6 @@
       "count": 6
     }
   },
-  "src/v4/social/internal-components/Lexical/plugins/MentionPlugin.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 4
-    }
-  },
   "src/v4/social/internal-components/MemberList/MemberList.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 3
@@ -309,11 +299,6 @@
       "count": 2
     }
   },
-  "src/v4/social/internal-components/UserMenu/UserMenu.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 3
-    }
-  },
   "src/v4/social/internal-components/VideoHeader/VideoHeader.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 2
@@ -347,11 +332,6 @@
   "src/v4/social/pages/UserPendingFollowRequestPage/PendingUserItem/PendingUserItem.tsx": {
     "react-hooks/rules-of-hooks": {
       "count": 2
-    }
-  },
-  "src/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserItemMenu.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 4
     }
   },
   "src/v4/social/pages/UserRelationshipPage/TabContent/UserRelationshipList/UserRelationshipList.tsx": {

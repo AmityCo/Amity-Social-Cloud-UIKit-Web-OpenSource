@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './StoryTabGlobalFeed.module.css';
 import { StoryTabItem } from './StoryTabItem';
 import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { GlobalFeedStorySkeleton } from '~/v4/social/internal-components/Skeleton';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 
 const STORIES_PER_PAGE = 10;
 
@@ -29,13 +29,14 @@ export const StoryTabGlobalFeed = ({
     pageId,
     componentId,
   });
-  const { stories, isLoading, hasMore, loadMoreStories, refresh } = useGlobalStoryTargets({
+  const { stories, isLoading, loadMoreStories, refresh } = useGlobalStoryTargets({
     seenState: 'smart' as Amity.StorySeenQuery,
     limit: STORIES_PER_PAGE,
   });
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<HTMLDivElement>(null);
+  const [sentinel, setSentinel] = useState<HTMLDivElement | null>(null);
+
+  useIntersectionObserver({ node: sentinel, onIntersect: loadMoreStories });
 
   useEffect(() => {
     refresh();
@@ -49,39 +50,12 @@ export const StoryTabGlobalFeed = ({
     onStoriesChange?.(stories);
   }, [stories]);
 
-  useEffect(() => {
-    if (!containerRef.current) {
-      return;
-    }
-    const intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        const lastStory = entries[0];
-
-        if (lastStory.isIntersecting && hasMore) {
-          loadMoreStories();
-        }
-      },
-      { root: containerRef.current, rootMargin: '0px', threshold: 0.9 },
-    );
-
-    return () => {
-      if (intersectionObserver) {
-        intersectionObserver.disconnect();
-      }
-    };
-  }, [containerRef?.current]);
-
   if (isExcluded) return null;
 
   if (!isLoading && stories?.length === 0) return null;
 
   return (
-    <div
-      data-testid={accessibilityId}
-      style={themeStyles}
-      className={styles.storyTabContainer}
-      ref={containerRef}
-    >
+    <div data-testid={accessibilityId} style={themeStyles} className={styles.storyTabContainer}>
       {stories.map((story) => {
         return (
           <StoryTabItem
@@ -102,7 +76,7 @@ export const StoryTabGlobalFeed = ({
         );
       })}
 
-      <div ref={observerRef} style={{ height: '1px', width: '1px' }} />
+      <div ref={setSentinel} style={{ height: '1px', width: '1px' }} />
     </div>
   );
 };

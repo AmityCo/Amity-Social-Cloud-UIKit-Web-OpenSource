@@ -72,12 +72,12 @@
 
 .progressBarContainer:active .progressBarBackground,
 .progressBarContainer.dragging .progressBarBackground {
-  height: 6px;
+  height: 0.375rem;
 }
 
 .progressBarContainer:active .progressBarFill,
 .progressBarContainer.dragging .progressBarFill {
-  height: 6px;
+  height: 0.375rem;
 }
 
 /* Drag position indicator */
@@ -99,6 +99,6 @@
 
 .productTagBadge {
   display: flex;
-  justify-content: end;
+  justify-content: start;
   margin-bottom: 1rem;
 }

@@ -189,6 +189,7 @@ export const CommunityAddMemberPage = ({
             className={styles.communityAddMemberPage__searchIcon}
           />
           <Input
+            data-testid={`${pageId}/*/search_input`}
             className={styles.communityAddMemberPage__searchInput}
             type="text"
             placeholder={resolveString('amity_social_placeholder_search_user_hint')}
@@ -239,8 +240,12 @@ export const CommunityAddMemberPage = ({
           }}
           checkboxes={filteredUsers.map((user) => ({
             value: user.userId,
+            'data-testid': `${pageId}/*/member_checkbox`,
             label: (
-              <div className={styles.communityAddMemberPage__checkboxLabel}>
+              <div
+                data-testid={`${pageId}/*/member-label-${user.userId}`}
+                className={styles.communityAddMemberPage__checkboxLabel}
+              >
                 <div className={styles.communityAddMemberPage__memberAvatar}>
                   <UserAvatar
                     userId={user.userId}

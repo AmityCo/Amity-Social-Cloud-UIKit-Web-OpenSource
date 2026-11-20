@@ -18,6 +18,7 @@ import {
   AllCategoriesPage,
   CommunitiesByCategoryPage,
   BlockedUserPage,
+  AutoplaySettingPage,
   CommunitySetupPage,
   CommunityAddMemberPage,
   CommunityProfilePage,
@@ -162,6 +163,8 @@ const PageRenderer = ({ children }: PageRendererProps) => {
       return <UserPendingFollowRequestPage />;
     case PageTypes.BlockedUsersPage:
       return <BlockedUserPage />;
+    case PageTypes.AutoplaySettingPage:
+      return <AutoplaySettingPage />;
     case PageTypes.LiveStreamTerminatedPage:
       return <LivestreamTerminatedPage />;
     case PageTypes.LiveStreamBannedPage:

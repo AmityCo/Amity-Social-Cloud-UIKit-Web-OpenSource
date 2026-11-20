@@ -10,6 +10,7 @@ type SettingMenuProps = {
   trailingText?: string;
   destructive?: boolean;
   ariaLabel?: string;
+  testId?: string;
   onPress: () => void;
 };
 
@@ -19,6 +20,7 @@ export function SettingMenu({
   trailingText,
   destructive = false,
   ariaLabel,
+  testId,
   onPress,
 }: SettingMenuProps) {
   return (
@@ -28,6 +30,7 @@ export function SettingMenu({
       onPress={onPress}
       data-destructive={destructive ? 'true' : 'false'}
       aria-label={ariaLabel ?? label}
+      data-testid={testId}
     >
       {destructive ? (
         <Typography.BodyBold className={styles.settingMenu__destructiveLabel}>

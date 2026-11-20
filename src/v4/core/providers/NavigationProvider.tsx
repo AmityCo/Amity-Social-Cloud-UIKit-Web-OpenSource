@@ -95,6 +95,7 @@ type Page =
     }
   | { type: PageTypes.UserPendingFollowRequestPage; context: { userId: string } }
   | { type: PageTypes.BlockedUsersPage }
+  | { type: PageTypes.AutoplaySettingPage }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
   | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string; keyword?: string } }
   | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
@@ -317,6 +318,7 @@ type ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
   goToBlockedUsersPage: () => void;
+  goToAutoplaySettingPage: () => void;
   goToPostDetailPage: (context: GoToPostDetailPageParams) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string, keyword?: string) => void;
@@ -454,6 +456,7 @@ let defaultValue: ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
+  goToAutoplaySettingPage: () => {},
   goToPostDetailPage: (context: GoToPostDetailPageParams) => {},
   goToViewStoryPage: (context: {
     targetId: string;
@@ -562,6 +565,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
+    goToAutoplaySettingPage: () => console.log(`NavigationContext goToAutoplaySettingPage()`),
     goToPostDetailPage: ({
       postId,
       hideTarget,
@@ -1004,6 +1008,16 @@ export default function NavigationProvider({
   const goToBlockedUsersPage = useCallback(() => {
     const next = {
       type: PageTypes.BlockedUsersPage,
+    };
+
+    if (onChangePage) return onChangePage(next);
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToAutoplaySettingPage = useCallback(() => {
+    const next = {
+      type: PageTypes.AutoplaySettingPage,
     };
 
     if (onChangePage) return onChangePage(next);
@@ -1725,6 +1739,7 @@ export default function NavigationProvider({
         goToUserRelationshipPage,
         goToPendingFollowRequestPage,
         goToBlockedUsersPage,
+        goToAutoplaySettingPage,
         goToLiveStreamTerminatedPage,
         goToLiveStreamBannedPage,
         goToLiveStreamPlayerPage,

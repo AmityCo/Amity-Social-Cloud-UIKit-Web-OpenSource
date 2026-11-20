@@ -174,6 +174,14 @@ export function MentionPlugin<
 }) {
   const [editor] = useLexicalComposerContext();
   const { info } = useConfirmContext();
+  const tooManyUsersTitle = useString('amity_social_too_many_users_mentioned');
+  const tooManyUsersMessage = useString(
+    'amity_social_modal_dialog_content_too_many_users_mentioned',
+  );
+  const productTagLimitTitle = useString(
+    'amity_social_modal_dialog_title_product_tag_limit_reached',
+  );
+  const productTagLimitMessage = useString('amity_social_modal_dialog_product_tag_limit');
 
   const options: MentionTypeaheadOption<TData>[] = useMemo(
     () =>
@@ -202,13 +210,9 @@ export function MentionPlugin<
           const currentMentionCount = countMentions();
           if (currentMentionCount >= maxMentions) {
             info({
-              title: mentionLimitTitle ?? useString('amity_social_too_many_users_mentioned'),
+              title: mentionLimitTitle ?? tooManyUsersTitle,
               content:
-                mentionLimitMessage ??
-                useString('amity_social_modal_dialog_content_too_many_users_mentioned').replace(
-                  '%d',
-                  String(maxMentions),
-                ),
+                mentionLimitMessage ?? tooManyUsersMessage.replace('%d', String(maxMentions)),
             });
             closeMenu();
             return;
@@ -220,8 +224,8 @@ export function MentionPlugin<
           const currentMentionCount = countMentions('product');
           if (currentMentionCount >= maxUniqueProductMentions) {
             info({
-              title: useString('amity_social_modal_dialog_title_product_tag_limit_reached'),
-              content: useString('amity_social_modal_dialog_product_tag_limit'),
+              title: productTagLimitTitle,
+              content: productTagLimitMessage,
             });
             closeMenu();
             return;
@@ -239,7 +243,18 @@ export function MentionPlugin<
         closeMenu();
       });
     },
-    [editor, maxMentions, maxUniqueProductMentions, info],
+    [
+      editor,
+      maxMentions,
+      maxUniqueProductMentions,
+      info,
+      mentionLimitTitle,
+      mentionLimitMessage,
+      tooManyUsersTitle,
+      tooManyUsersMessage,
+      productTagLimitTitle,
+      productTagLimitMessage,
+    ],
   );
 
   const checkForMentionMatch = useCallback(

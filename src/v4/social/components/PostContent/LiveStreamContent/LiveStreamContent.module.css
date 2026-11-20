@@ -13,9 +13,19 @@
   height: 2.5rem;
   position: absolute;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-.liveStreamContent[data-idle='true'] {
+.liveStreamContent__button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.liveStreamContent__button[data-idle='true'] {
   cursor: default;
 }
 
@@ -25,12 +35,13 @@
   z-index: 0;
   position: absolute;
   display: inline-block;
+  pointer-events: none;
 }
 
 .liveStreamContent__taggedProducts {
   position: absolute;
   bottom: 0.75rem;
-  right: 0.5rem;
+  left: 0.5rem;
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;

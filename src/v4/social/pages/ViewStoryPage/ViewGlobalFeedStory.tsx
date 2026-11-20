@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
-import { GlobalFeedStory } from '~/v4/social/pages/StoryPage/GlobalFeedStory';
+import { GlobalFeedStory } from '~/v4/social/pages/ViewStoryPage/GlobalFeedStory';
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 
 export const ViewGlobalFeedStoryPage = ({

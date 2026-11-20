@@ -275,7 +275,9 @@ export const PollContent: FC<PollContentProps> = ({
               {calculateRemainingFromMs(poll.closedIn)}
             </Typography.CaptionBold>
           ) : (
-            <Typography.CaptionBold>{pollEndedLabel}</Typography.CaptionBold>
+            <Typography.CaptionBold data-testid="poll-ended-label">
+              {pollEndedLabel}
+            </Typography.CaptionBold>
           )}
         </div>
         {poll.isVoted && !isPollEnded && (

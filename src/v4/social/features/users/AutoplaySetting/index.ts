@@ -1,0 +1,1 @@
+export { AutoplaySetting } from './AutoplaySetting';

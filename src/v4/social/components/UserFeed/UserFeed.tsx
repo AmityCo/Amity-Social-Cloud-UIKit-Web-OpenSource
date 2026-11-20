@@ -18,6 +18,8 @@ import styles from './UserFeed.module.css';
 import useUserFeed from '~/v4/social/hooks/collections/useUserFeed';
 import { FeedDataTypeEnum, FeedSourceEnum } from '@amityco/ts-sdk';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
+import { COMPONENT_ID } from '~/v4/constants/customization';
 
 interface UserFeedProps {
   userId: string;
@@ -50,7 +52,7 @@ const UserFeedPostContentSkeleton: React.FC = () => {
 };
 
 export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: UserFeedProps) => {
-  const componentId = 'user_feed';
+  const componentId = COMPONENT_ID.USER_FEED;
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { AmityUserFeedComponentBehavior } = usePageBehavior();
   const { accessibilityId, themeStyles, isExcluded } = useAmityComponent({
@@ -147,19 +149,21 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
   };
 
   return (
-    <div data-testid={accessibilityId} style={themeStyles} className={styles.userFeed}>
-      <NoInternetConnectionHoc page="feed" refresh={refresh}>
-        <div className={styles.userFeed__container}>
-          {renderUserFeed()}
-          {isLoading && <UserFeedPostContentSkeleton />}
-          {hasMore && (
-            <div
-              ref={(node) => setIntersectionNode(node)}
-              className={styles.userFeed__observerTarget}
-            />
-          )}
-        </div>
-      </NoInternetConnectionHoc>
-    </div>
+    <FeedVideoAutoplayHost>
+      <div data-testid={accessibilityId} style={themeStyles} className={styles.userFeed}>
+        <NoInternetConnectionHoc page="feed" refresh={refresh}>
+          <div className={styles.userFeed__container}>
+            {renderUserFeed()}
+            {isLoading && <UserFeedPostContentSkeleton />}
+            {hasMore && (
+              <div
+                ref={(node) => setIntersectionNode(node)}
+                className={styles.userFeed__observerTarget}
+              />
+            )}
+          </div>
+        </NoInternetConnectionHoc>
+      </div>
+    </FeedVideoAutoplayHost>
   );
 };

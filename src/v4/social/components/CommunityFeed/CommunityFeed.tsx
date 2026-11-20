@@ -21,6 +21,7 @@ import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
 import styles from './CommunityFeed.module.css';
 import { FeedDataTypeEnum } from '@amityco/ts-sdk';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
 
 export const CommunityFeedPostContentSkeleton = () => {
   return (
@@ -313,34 +314,36 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   };
 
   return (
-    <div
-      data-testid={accessibilityId}
-      className={styles.communityFeed__container}
-      style={themeStyles}
-    >
-      <NoInternetConnectionHoc
-        page="feed"
-        refresh={() => {
-          refreshPosts();
-          refreshPinnedPosts();
-        }}
-        className={styles.communityFeed__noInternet}
+    <FeedVideoAutoplayHost>
+      <div
+        data-testid={accessibilityId}
+        className={styles.communityFeed__container}
+        style={themeStyles}
       >
-        <>
-          {community?.isJoined || community?.isPublic ? (
-            <>
-              {renderAnnouncementPost()}
-              {renderPublicCommunityFeed()}
-            </>
-          ) : isLoading ? (
-            Array.from({ length: 3 }).map((_, index) => (
-              <CommunityFeedPostContentSkeleton key={index} />
-            ))
-          ) : (
-            <LockPrivateContent />
-          )}
-        </>
-      </NoInternetConnectionHoc>
-    </div>
+        <NoInternetConnectionHoc
+          page="feed"
+          refresh={() => {
+            refreshPosts();
+            refreshPinnedPosts();
+          }}
+          className={styles.communityFeed__noInternet}
+        >
+          <>
+            {community?.isJoined || community?.isPublic ? (
+              <>
+                {renderAnnouncementPost()}
+                {renderPublicCommunityFeed()}
+              </>
+            ) : isLoading ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <CommunityFeedPostContentSkeleton key={index} />
+              ))
+            ) : (
+              <LockPrivateContent />
+            )}
+          </>
+        </NoInternetConnectionHoc>
+      </div>
+    </FeedVideoAutoplayHost>
   );
 };

@@ -4,6 +4,8 @@
 }
 
 .communityPin__feed {
+  /* Grid items default to min-width: auto, which lets a Swiper carousel grow without bound. */
+  min-width: 0;
   padding-bottom: 0.75rem;
   background-color: var(--asc-color-base-shade4);
 }

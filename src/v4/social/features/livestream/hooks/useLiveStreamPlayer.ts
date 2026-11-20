@@ -18,7 +18,10 @@ export const useLiveStreamPlayer = ({
   controlsAutoHideMs,
 }: UseLiveStreamPlayerParams) => {
   const { client } = useSDK();
-  const [muted, setMuted] = useState(true);
+  // The live player plays with sound, as on the other platforms (solution R-SESSION-MUTE).
+  const [muted, setMuted] = useState(false);
+  const hasStartedRef = useRef(false);
+  const isSoundBlockedRef = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPoorConnection, setIsPoorConnection] = useState(false);
   const [playerInitialized, setPlayerInitialized] = useState(false);
@@ -63,9 +66,19 @@ export const useLiveStreamPlayer = ({
     }
   }, [videoRef]);
 
+  // When the browser refused sound, the member's first tap turns it on and does nothing else.
+  const unmuteIfBlocked = useCallback(() => {
+    const video = videoRef?.current;
+    if (!video || !isSoundBlockedRef.current) return false;
+    isSoundBlockedRef.current = false;
+    video.muted = false;
+    return true;
+  }, [videoRef]);
+
   const togglePlayPause = useCallback(() => {
     const video = videoRef?.current;
     if (!video) return;
+    if (unmuteIfBlocked()) return;
     if (video.paused) {
       if (room?.status === 'live' || room?.status === 'waitingReconnect') {
         seekToLiveEdge();
@@ -74,7 +87,7 @@ export const useLiveStreamPlayer = ({
     } else {
       video.pause();
     }
-  }, [videoRef, room?.status, seekToLiveEdge]);
+  }, [videoRef, room?.status, seekToLiveEdge, unmuteIfBlocked]);
 
   /**
    * Return the player to a plain-viewer state. Leaving the co-host stage pauses the video
@@ -96,13 +109,14 @@ export const useLiveStreamPlayer = ({
   }, [videoRef, cancelHideControls, room?.status, seekToLiveEdge]);
 
   const toggleControls = useCallback(() => {
+    if (unmuteIfBlocked()) return;
     setShowControls((prev) => {
       const next = !prev;
       if (next && !isPaused) scheduleHideControls();
       else cancelHideControls();
       return next;
     });
-  }, [scheduleHideControls, cancelHideControls, isPaused]);
+  }, [scheduleHideControls, cancelHideControls, isPaused, unmuteIfBlocked]);
 
   const setUpHLS = (
     player: HTMLVideoElement,
@@ -202,13 +216,15 @@ export const useLiveStreamPlayer = ({
     }
 
     // Basic player setup
+    hasStartedRef.current = false;
+    isSoundBlockedRef.current = false;
     player.muted = muted;
     player.autoplay = true;
     player.playsInline = true;
     player.setAttribute('playsinline', ''); // prevent fullscreen on iOS
     player.setAttribute('webkit-playsinline', '');
 
-    player.onvolumechange = () => setMuted(!player.muted);
+    player.onvolumechange = () => setMuted(player.muted);
 
     player.classList.add(styles.liveStreamPlayer__video);
     player.setAttribute('data-is-live', room?.status === 'live' ? 'true' : 'false');
@@ -261,10 +277,26 @@ export const useLiveStreamPlayer = ({
     setIsPoorConnection(false);
   };
 
-  const handleCanPlay = () => {
+  const handleCanPlay = (event: Event) => {
     clearTimeout(loadingTimerRef.current!);
     setIsLoading(false);
     setIsPoorConnection(false);
+    startWithSound(event.currentTarget as HTMLVideoElement);
+  };
+
+  // A browser may refuse sound without a fresh tap; then the stream plays muted (solution
+  // R-SESSION-MUTE, Web) until the member's next tap turns the sound on.
+  const startWithSound = (player: HTMLVideoElement) => {
+    if (hasStartedRef.current || !player.paused) return;
+    hasStartedRef.current = true;
+    player.play().catch((error: unknown) => {
+      if (!(error instanceof DOMException) || error.name !== 'NotAllowedError' || player.muted) {
+        return;
+      }
+      isSoundBlockedRef.current = true;
+      player.muted = true;
+      player.play().catch(() => {});
+    });
   };
 
   const handlePlay = () => {
