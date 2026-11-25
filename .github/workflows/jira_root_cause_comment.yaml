@@ -1,0 +1,73 @@
+name: Jira root cause comment
+
+# After a PR merged to develop has been deployed to Staging by the "Staging release
+# pipeline", posts its Root Cause, Solution and build info as a comment on the Jira
+# ticket(s) in the PR title.
+#
+# Example comment:
+#   ✅ Fixed and merged to develop
+#   PR: #1983 (merged 2026-11-19)
+#   Branch: fix/PDT-7252-feed-video-headphones · Merge commit: 0082c742
+#   Root Cause: …            ← "**Root Cause :**" in the PR description
+#   Solution: …              ← "**Solution :**" (falls back to "**Description :**")
+#   Build version: Staging link, develop@<sha> on top of @amityco/ui-kit@<version>,
+#                  ts-sdk version, release from the Release/<date> label
+#
+# Skipped (with a notice, never a failure): no merged PR for the commit, no real
+# PDT-#### key in the title (PDT-0000 does not count), no Root Cause, or the ticket
+# already has a comment linking this PR (re-runs are safe).
+#
+# Logic lives in .github/scripts/jira-root-cause-comment.mjs.
+#
+# Manual run: Actions → "Jira root cause comment" → Run workflow, give a PR number
+# (tick dry_run to only print the comment in the log).
+#
+# Required secrets:
+#   JIRA_BASE_URL    https://socialplus.atlassian.net
+#   JIRA_USER        email of the account that posts the comment
+#   JIRA_API_TOKEN   API token of that account
+
+on:
+  workflow_run:
+    workflows: ['Staging release pipeline']
+    types: [completed]
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Merged PR number to comment for'
+        required: true
+      dry_run:
+        description: 'Only print the comment, do not post to Jira'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  comment:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/scripts
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Post root cause to Jira
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_NUMBER: ${{ github.event.inputs.pr_number }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          STAGING_RUN_URL: ${{ github.event.workflow_run.html_url }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER: ${{ secrets.JIRA_USER }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: node .github/scripts/jira-root-cause-comment.mjs
