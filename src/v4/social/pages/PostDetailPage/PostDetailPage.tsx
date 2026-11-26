@@ -24,13 +24,14 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
 import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
-import { AmitySharableContentType, CommentRepository, PostStructureType } from '@amityco/ts-sdk';
+import { AmitySharableContentType, CommentRepository } from '@amityco/ts-sdk';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
+import { isUnsupportedMediaPost } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 export interface PostDetailPageProps {
   id: string;
@@ -276,9 +277,7 @@ export function PostDetailPage({
     community?.isDeleted ||
     post?.isDeleted ||
     failedToShow ||
-    post?.structureType === PostStructureType.AUDIO ||
-    post?.structureType === PostStructureType.FILE ||
-    post?.structureType === PostStructureType.MIXED
+    isUnsupportedMediaPost(post)
   )
     return <FailedToShow pageId={pageId} />;
 
