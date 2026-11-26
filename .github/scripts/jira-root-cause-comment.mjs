@@ -157,6 +157,8 @@ export function toWiki(md) {
     .join('\n')
     .replace(/\*\*(.+?)\*\*/g, '*$1*')
     .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '[$1|$2]');
+  // The NUL characters are the placeholders `keep` put around each code span above.
+  // eslint-disable-next-line no-control-regex
   return s.replace(/\u0000(\d+)\u0000/g, (_, i) => codes[Number(i)]);
 }
 

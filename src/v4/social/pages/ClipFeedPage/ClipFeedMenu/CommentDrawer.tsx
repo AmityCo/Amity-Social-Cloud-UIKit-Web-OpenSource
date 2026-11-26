@@ -4,6 +4,7 @@ import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentC
 import { CommentList } from '~/v4/social/components/CommentList/CommentList';
 import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { DrawerContainer } from '~/v4/core/components/Drawer';
+import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
 import styles from './ClipFeedMenu.module.css';
 
 type CommentDrawerProps = {
@@ -34,7 +35,7 @@ export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerPr
     <DrawerProvider>
       <div
         className={styles.clipFeedMenu__commentContainer}
-        data-no-comment={post?.commentsCount === 0}
+        data-no-comment={post ? getPostCommentCount(post) === 0 : undefined}
       >
         {post && (
           <CommentList
@@ -43,7 +44,7 @@ export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerPr
             referenceType="post"
             onClickReply={handleReplyClick}
             community={community}
-            commentCount={post.commentsCount}
+            commentCount={getPostCommentCount(post)}
             commentListClassName={styles.clipFeedMenu__commentListContainer}
             refreshOnNewComment
           />

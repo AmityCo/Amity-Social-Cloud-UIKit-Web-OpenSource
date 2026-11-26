@@ -23,6 +23,7 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
+import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
 import { AmitySharableContentType, CommentRepository, PostStructureType } from '@amityco/ts-sdk';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import useSDK from '~/v4/core/hooks/useSDK';
@@ -366,7 +367,9 @@ export function PostDetailPage({
               }}
               community={interactionCommunity}
               containerClassName={
-                post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+                post && getPostCommentCount(post) <= 0
+                  ? styles.postDetailPage__commentList__container
+                  : undefined
               }
               isFromCommentClick={isFromCommentClick}
             />
@@ -381,7 +384,7 @@ export function PostDetailPage({
                 onClickReply={handleReplyClick}
                 community={interactionCommunity}
                 limit={COMMENT_LIST_LIMIT}
-                commentCount={post.commentsCount}
+                commentCount={getPostCommentCount(post)}
                 highlightedCommentId={commentId}
                 parentId={effectiveParentId}
                 parantId={parentId}
@@ -432,7 +435,9 @@ export function PostDetailPage({
             }}
             community={interactionCommunity}
             containerClassName={
-              post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+              post && getPostCommentCount(post) <= 0
+                ? styles.postDetailPage__commentList__container
+                : undefined
             }
             isFromCommentClick={isFromCommentClick}
             replyTo={replyComment}
