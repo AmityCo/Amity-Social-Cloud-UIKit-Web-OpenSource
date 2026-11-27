@@ -27,6 +27,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import styles from './PostContent.module.css';
 import { getPostEventId, isEventPost, isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
 import { EventCard } from '~/v4/social/features/events/components/EventCard';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
 import { Share } from '~/v4/icons/Share';
@@ -174,9 +175,10 @@ export const PostContent = ({
   });
   const reactionElement = useAmityElement({ pageId, componentId, elementId: 'reaction_button' });
   const commentElement = useAmityElement({ pageId, componentId, elementId: 'comment_button' });
+  const commentsCount = getPostCommentCount(post);
   const hasEngagementSummary =
     (post?.reactionsCount > 0 && !reactionElement.isExcluded) ||
-    (post?.commentsCount > 0 && !commentElement.isExcluded);
+    (commentsCount > 0 && !commentElement.isExcluded);
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
   const { confirm } = useConfirmContext();
@@ -739,7 +741,7 @@ export const PostContent = ({
               </Button>
             )}
 
-            {post?.commentsCount > 0 && !commentElement.isExcluded && (
+            {commentsCount > 0 && !commentElement.isExcluded && (
               <Button
                 data-testid={`${pageId}/${componentId}/comment_count`}
                 variant="default"
@@ -749,10 +751,10 @@ export const PostContent = ({
                   data-testid={`${pageId}/${componentId}/comment_count`}
                   className={styles.postContent__commentsCount}
                 >
-                  {(post?.commentsCount === 1
+                  {(commentsCount === 1
                     ? commentCountSingularLabel
                     : commentCountPluralLabel
-                  ).replace('%d', millify(post?.commentsCount) || '0')}
+                  ).replace('%d', millify(commentsCount) || '0')}
                 </Typography.Caption>
               </Button>
             )}
@@ -779,7 +781,7 @@ export const PostContent = ({
                   pageId={pageId}
                   componentId={componentId}
                   commentsCount={
-                    style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                    style === AmityPostContentComponentStyle.FEED ? commentsCount : undefined
                   }
                   buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
                   defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}

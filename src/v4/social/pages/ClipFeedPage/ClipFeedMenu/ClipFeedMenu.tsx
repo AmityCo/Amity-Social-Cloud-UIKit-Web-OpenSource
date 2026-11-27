@@ -12,6 +12,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CommentDrawer } from './CommentDrawer';
 import LikeTransparent from '~/v4/icons/LikeTransparent';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 type ClipFeedMenuProps = {
@@ -121,7 +122,7 @@ export const ClipFeedMenu = ({
         <CommentButton
           pageId={pageId}
           componentId={componentId}
-          commentsCount={post?.commentsCount}
+          commentsCount={getPostCommentCount(post)}
           buttonClassName={styles.clipFeedMenu__commentButton}
           commentsCountClassName={styles.clipFeedMenu__commentsCount}
           defaultIconClassName={styles.clipFeedMenu__commentIcon}

@@ -1,6 +1,7 @@
 import { PostRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
+import { withoutUnsupportedMediaPosts } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 type useSearchPostWithHashtagCollectionParams = Parameters<
   typeof PostRepository.searchPostsByHashtag
@@ -44,7 +45,7 @@ export default function useSearchPostWithHashtagCollection({
           setIsLoading(loading);
 
           if (!loading && data) {
-            setItems([...data]);
+            setItems(withoutUnsupportedMediaPosts([...data]));
             setHasMore(hasNextPage);
             loadMoreRef.current = hasNextPage ? onNextPage : null;
           }

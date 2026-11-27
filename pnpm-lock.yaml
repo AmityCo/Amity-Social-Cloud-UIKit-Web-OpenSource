@@ -148,8 +148,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: ^7.34.0
-        version: 7.34.0
+        specifier: ^7.34.1
+        version: 7.34.1
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -354,8 +354,8 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@amityco/ts-sdk@7.34.0':
-    resolution: {integrity: sha512-Z23tRUv91PIQuxePjqq9l7O8f1BBvDHQ51mAIw6W1EjqaR+AWxrpt+ZyKei8jrum7ug4TetTx/f9uygdaszUyg==}
+  '@amityco/ts-sdk@7.34.1':
+    resolution: {integrity: sha512-PgCL1pNf5NKj+YvZuvtWSIubw4GxFKX5I3hofHRsQNtX0v0udW8tnnRaQw011tiFpX911PGNuZDrJbVe8Z44qg==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -8763,7 +8763,7 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@amityco/ts-sdk@7.34.0':
+  '@amityco/ts-sdk@7.34.1':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.12.0(debug@4.4.1)

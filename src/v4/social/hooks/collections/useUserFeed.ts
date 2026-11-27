@@ -1,5 +1,6 @@
 import { FeedRepository } from '@amityco/ts-sdk';
 import { useLiveCollectionV4 } from '~/v4/core/hooks/useLiveCollectionV4';
+import { withoutUnsupportedMediaPosts } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 const QUERY_LIMIT = 20;
 
@@ -17,14 +18,7 @@ export default function useUserFeed(
     shouldCall: enabled && !!userId,
   });
 
-  // Filter out posts with children type 'file' or 'audio'
-  const filteredPosts = items.filter((post) => {
-    const children = post.childrenPosts || [];
-    const hasFileOrAudioChild = children.some(
-      (child) => child.dataType === 'file' || child.dataType === 'audio',
-    );
-    return !hasFileOrAudioChild;
-  });
+  const filteredPosts = withoutUnsupportedMediaPosts(items);
 
   return {
     ...rest,
