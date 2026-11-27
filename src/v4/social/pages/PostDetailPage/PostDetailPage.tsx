@@ -23,13 +23,15 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
-import { AmitySharableContentType, CommentRepository, PostStructureType } from '@amityco/ts-sdk';
+import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
+import { AmitySharableContentType, CommentRepository } from '@amityco/ts-sdk';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { EVENT_LISTENER } from '~/v4/social/constants/eventListener';
 import { useSdkEffect } from '~/v4/core/hooks/useSdkEffect';
 import { FeedVideoAutoplayHost } from '~/v4/social/features/feed-video-autoplay';
+import { isUnsupportedMediaPost } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 export interface PostDetailPageProps {
   id: string;
@@ -275,9 +277,7 @@ export function PostDetailPage({
     community?.isDeleted ||
     post?.isDeleted ||
     failedToShow ||
-    post?.structureType === PostStructureType.AUDIO ||
-    post?.structureType === PostStructureType.FILE ||
-    post?.structureType === PostStructureType.MIXED
+    isUnsupportedMediaPost(post)
   )
     return <FailedToShow pageId={pageId} />;
 
@@ -366,7 +366,9 @@ export function PostDetailPage({
               }}
               community={interactionCommunity}
               containerClassName={
-                post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+                post && getPostCommentCount(post) <= 0
+                  ? styles.postDetailPage__commentList__container
+                  : undefined
               }
               isFromCommentClick={isFromCommentClick}
             />
@@ -381,7 +383,7 @@ export function PostDetailPage({
                 onClickReply={handleReplyClick}
                 community={interactionCommunity}
                 limit={COMMENT_LIST_LIMIT}
-                commentCount={post.commentsCount}
+                commentCount={getPostCommentCount(post)}
                 highlightedCommentId={commentId}
                 parentId={effectiveParentId}
                 parantId={parentId}
@@ -432,7 +434,9 @@ export function PostDetailPage({
             }}
             community={interactionCommunity}
             containerClassName={
-              post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+              post && getPostCommentCount(post) <= 0
+                ? styles.postDetailPage__commentList__container
+                : undefined
             }
             isFromCommentClick={isFromCommentClick}
             replyTo={replyComment}

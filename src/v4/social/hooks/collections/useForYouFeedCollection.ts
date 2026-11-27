@@ -1,5 +1,6 @@
 import { FeedRepository } from '@amityco/ts-sdk';
 import { useLiveCollectionV4 } from '~/v4/core/hooks/useLiveCollectionV4';
+import { withoutUnsupportedMediaPosts } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 type UseForYouFeedCollectionOptions = {
   shouldCall?: boolean;
@@ -14,7 +15,7 @@ export function useForYouFeedCollection({
   });
 
   return {
-    posts: items,
+    posts: withoutUnsupportedMediaPosts(items),
     ...rest,
   };
 }

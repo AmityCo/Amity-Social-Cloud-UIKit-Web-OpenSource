@@ -1,7 +1,8 @@
-import { PostRepository, PostStructureType } from '@amityco/ts-sdk';
+import { PostRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import { postsForModules } from '~/v4/social/utils/postsForModules';
+import { isUnsupportedMediaPost } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 export default function useGlobalPinnedPostsCollection() {
   // `getGlobalPinnedPosts` takes no dataTypes either, and these arrive at the
@@ -18,13 +19,7 @@ export default function useGlobalPinnedPostsCollection() {
 
   return {
     globalFeaturedPosts: items
-      .filter(
-        (pinnedPost) =>
-          pinnedPost.post &&
-          pinnedPost.post?.structureType !== PostStructureType.AUDIO &&
-          pinnedPost.post?.structureType !== PostStructureType.FILE &&
-          pinnedPost.post?.structureType !== PostStructureType.MIXED,
-      )
+      .filter((pinnedPost) => pinnedPost.post && !isUnsupportedMediaPost(pinnedPost.post))
       .filter(
         (pinnedPost) =>
           postsForModules([pinnedPost.post], { isPollEnabled, isLiveEnabled }).length > 0,

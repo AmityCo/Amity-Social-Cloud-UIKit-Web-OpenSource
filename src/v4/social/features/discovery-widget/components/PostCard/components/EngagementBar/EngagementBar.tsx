@@ -4,6 +4,7 @@ import { Typography } from '~/v4/core/components';
 import { useString } from '~/v4/core/localization';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
+import { getPostCommentCount } from '~/v4/social/utils/getPostCommentCount';
 import styles from './EngagementBar.module.css';
 
 type EngagementBarProps = {
@@ -15,7 +16,7 @@ export function EngagementBar({ post }: EngagementBarProps) {
 
   const reactions = post.reactions ?? {};
   const reactionsCount = post.reactionsCount ?? 0;
-  const commentsCount = post.commentsCount ?? 0;
+  const commentsCount = getPostCommentCount(post);
 
   const reactionCountPlural = useString('amity_social_label_reaction_count_plural');
   const commentCountPlural = useString('amity_social_button_feed_comment_count_plural');

@@ -1,7 +1,8 @@
-import { PostRepository, PostStructureType } from '@amityco/ts-sdk';
+import { PostRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 import { useFeatureEnabled } from '~/v4/core/providers/CustomizationProvider';
 import { postsForModules } from '~/v4/social/utils/postsForModules';
+import { isUnsupportedMediaPost } from '~/v4/social/utils/isUnsupportedMediaPost';
 
 export default function usePinnedPostsCollection({
   communityId,
@@ -27,12 +28,7 @@ export default function usePinnedPostsCollection({
 
   return {
     pinnedPost: items
-      .filter(
-        (pinnedPost) =>
-          pinnedPost.post?.structureType !== PostStructureType.AUDIO &&
-          pinnedPost.post?.structureType !== PostStructureType.FILE &&
-          pinnedPost.post?.structureType !== PostStructureType.MIXED,
-      )
+      .filter((pinnedPost) => !isUnsupportedMediaPost(pinnedPost.post))
       .filter(
         (pinnedPost) =>
           !pinnedPost.post ||
